@@ -1,0 +1,201 @@
+@charset "utf-8";
+
+/* ---------------------- */
+/* initialize rule        */
+/* ---------------------- */
+@import url("default.css");
+/* ---------------------- */
+/* end of initialize rule */
+/* ---------------------- */
+
+h1 {
+    margin: 0px 0px 0px 0px;
+    text-align: center;
+    vertical-align: center;
+}
+h2 {
+    margin: 0px 5px 5px 0px;
+    color: #E7EFFF;
+    background-color: #00108C;
+    font-weight: bold;
+    font-size: 150%;
+    margin: 3px 3px 30px 3px;
+    padding: 5px 3px 3px 30px;
+    background-image: url("../img/h2.png");
+}
+h3 {
+    font-size: 120%;
+    font-weight: bold;
+    background-color: #E7EFFF;
+    padding: 3px 3px 3px 10px;
+    margin: 5px 0px 5px 0px;
+    border-color: #00108C;
+    border-style: solid;
+    border-width: 0px 0px 1px 15px;
+    background-image: url("../img/h3.png");
+}
+hr {
+    width: 100%;
+}
+.message {
+    margin: 0px 0px 0px 30px;
+}
+
+table {
+    margin:10px;
+}
+
+table tr th{
+    padding:3px;
+    background:#EEE;
+    border-bottom:1px solid gray;
+}
+
+table tr td {
+    padding:3px;
+    border-bottom:1px dashed gray;
+}
+input, textarea {
+    width: 400px;
+}
+input.checkbox, input.radio {
+    width: 20px;
+}
+
+input.number {
+    width: 40px;
+}
+input.button {
+    width: 100px;
+}
+#mainmenu {
+    width:100%;
+    margin:0px 0px 0px 0px;
+    text-align: center;
+}
+
+#mainmenu li {
+    margin:0px 0px 0px 0px;
+    list-style:none;
+    padding:3px 10px;
+    float:left;
+}
+#subject {
+}
+#ticket_list {
+    width: 95%;
+    margin: 10px;
+}
+#ticket_list table {
+    width: 95%;
+}
+#ticket_history {
+    width: 95%;
+    margin: 10px;
+}
+#ticket_history table {
+    width: 95%;
+}
+#ticket_history td.title {
+/*     background-image: url("img/h3.png"); */
+    font-weight: bold;
+    color: #00108C;
+    font-size: 110%;
+    text-align: center;
+    font-weight: bold;
+    background:#EEE;
+    border-bottom:1px solid gray;
+    white-space: nowrap;
+}
+#ticket_history th {
+    white-space: nowrap;
+    width: 150px;
+}
+#ticket_history td {
+    vertical-align: top;
+}
+#input_form {
+    margin: 10px;
+    width: 95%;
+}
+#input_form th {
+    vertical-align: top;
+    width: 150px;
+}
+#input_form textarea {
+    height: 200px;
+}
+div {
+}
+#delete_form_area {
+    margin: 10px;
+    width: 95%;
+}
+#setting_form {
+    margin: 10px;
+    width: 95%;
+}
+#condition_form {
+    margin: 10px;
+    width: 95%;
+}
+table.list_item, table.list_item td, table.list_item th {
+  margin: 0px;
+  border: none;
+}
+.list_item th {
+  width: 110px;
+}
+table.list_item th.close {
+  width: 100px;
+}
+table.list_item th.delete {
+  width: 40px;
+}
+.list_item input.text {
+  width: 100px;
+}
+.list_item input.checkbox {
+}
+#top {
+    margin: 10px;
+    width: 95%;
+}
+#new_item {
+    margin: 10px;
+    width: 95%;
+}
+#delete_item {
+    margin: 10px;
+    width: 95%;
+}
+.top_edit {
+    width: 95%;
+    text-align: right;
+}
+#edit_top {
+    width: 95%;
+    height: 300px;
+}
+.ticket_property {
+    color: #00108C;
+}
+
+#ticket_newest {
+    margin: 10px;
+    width: 95%;
+}
+#ticket_newest table {
+    width: 95%;
+}
+#ticket_newest th {
+    white-space: nowrap;
+    width: 150px;
+}
+.required {
+    color: red;
+}
+.error {
+    color: red;
+    font-weight: bold;
+}
