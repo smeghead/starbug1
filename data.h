@@ -48,6 +48,7 @@ typedef struct _element_type {
   int id;
   int type;
   int ticket_property;
+  int reply_property;
   int required;
   char name[DEFAULT_LENGTH];
   char description[DEFAULT_LENGTH];
@@ -69,8 +70,10 @@ enum bt_ELEMTYPE {
 };
 enum bt_ELEMENT_ID {
     ELEM_ID_TITLE = 1,
-    ELEM_ID_SENDER = 2
+    ELEM_ID_SENDER = 2,
+    ELEM_ID_STATUS = 3
 };
+#define BASIC_ELEMENT_MAX 3
 
 typedef struct _condition {
   int element_type_id;

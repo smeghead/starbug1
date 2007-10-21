@@ -32,8 +32,7 @@ static int contains(char* const, const char*);
 enum MODE {
     MODE_INVALID,
     MODE_REGISTER,
-    MODE_REPLY,
-    MODE_DELETE
+    MODE_REPLY
 };
 
 int get_mode()
@@ -43,8 +42,6 @@ int get_mode()
     if (strlen(mode) > 0) return MODE_REGISTER;
     cgiFormStringNoNewlines("reply", mode, MODE_LENGTH);
     if (strlen(mode) > 0) return MODE_REPLY;
-    cgiFormStringNoNewlines("delete", mode, MODE_LENGTH);
-    if (strlen(mode) > 0) return MODE_DELETE;
     return MODE_INVALID;
 }
 void register_actions()
@@ -326,7 +323,7 @@ void output_form_element(bt_element* element, bt_element_type* e_type)
             items = db_get_list_item(e_type->id);
             /* リストの要素数をカウントする */
             for (list_count = 0,i = items; i != NULL; i = i->next,list_count++);
-            o("<select class=\"element\" size=\"%d\" id=\"field", list_count);
+            o("<select class=\"element\" size=\"%d\" id=\"field", list_count + 1);
             h(id); o("\" name=\"field"); h(id); o("\" multiple=\"multiple\">\n");
 
             o("<option value=\"\"></options>");
@@ -381,6 +378,8 @@ void register_action()
     {
         bt_element_type* e_type = db_get_element_types(1);
         for (; e_type != NULL; e_type = e_type->next) {
+            /* 返信専用属性は表示しない。 */
+            if (e_type->reply_property == 1) continue;
             o("\t<tr>\n");
             o("\t\t<th>");
             h(e_type->name);
@@ -543,14 +542,6 @@ void reply_action()
             "<input class=\"button\" type=\"submit\" name=\"reply\" value=\"返信\" />&nbsp;&nbsp;&nbsp;\n"
             "</form>\n"
             "</div>\n");
-    o(      "<div id=\"delete_form_area\">\n");
-    o(      "<h3>チケット削除</h3>\n");
-    o(      "<div class=\"message\">チケットを削除する場合は、以下の削除ボタンをクリックしてください。</div>\n");
-    o(      "\t<form id=\"delete_form\" name=\"delete_form\" action=\"%s/register_submit\" method=\"post\">\n", cgiScriptName);
-    o(      "\t\t<input class=\"button\" type=\"submit\" name=\"delete\" value=\"削除\" />\n");
-    o(      "\t\t<input type=\"hidden\" name=\"ticket_id\" value=\"%s\" />\n", ticket_id);
-    o(      "\t</form>\n");
-    o(      "</div>\n");
     db_finish();
     output_footer();
 }
@@ -569,6 +560,8 @@ void register_submit_action()
     int mode = get_mode();
     char** multi;
 
+    if (mode == MODE_INVALID)
+        die("reqired invalid mode.");
     ticket = (bt_message*)xalloc(sizeof(bt_message));
     db_init();
     db_begin();
@@ -643,9 +636,6 @@ void register_submit_action()
             db_register_ticket(ticket);
         else
             db_reply_ticket(ticket);
-    } else if (mode == MODE_DELETE) {
-        /* delete */
-        db_delete_ticket(ticket);
     }
     db_commit();
     db_finish();
@@ -658,8 +648,6 @@ void register_submit_action()
         o("<div class=\"message\">登録しました</div>\n");
     else if (mode == MODE_REPLY)
         o("<div class=\"message\">返信しました</div>\n");
-    else if (mode == MODE_DELETE)
-        o("<div class=\"message\">削除しました</div>\n");
     else
         o("<div class=\"message\">感染しました。嘘</div>\n");
     o(      "</div>\n");

@@ -93,12 +93,9 @@ void display_action()
     bt_project* project;
     bt_element_type* e_types;
 
-    d("aaa1:::\n");
     db_init();
     project = db_get_project();
-    d("aaa2:::\n");
     output_header(project, "management.js");
-    d("aaa3:::\n");
 
     o("<h2>%s 管理ツール</h2>", project->name);
     o("<div id=\"setting_form\">\n");
@@ -155,16 +152,14 @@ void display_action()
     o("\t\t</table>\n");
     o("\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
     o("\t\t<h3>項目設定</h3>\n");
-    o("\t\t<div class=\"message\">チケットID、投稿日時は編集できません。件名、投稿者は、基本属性のため編集に制限があります。(削除不可、チケット属性変更不可)</div>\n");
+    o("\t\t<div class=\"message\">チケットID、投稿日時は編集できません。件名、投稿者、状態は、基本属性のため編集に制限があります。(削除不可、チケット属性、返信専用属性変更不可)</div>\n");
     o("\t\t<div class=\"message\"><a href=\"%s/new_item\">新規項目の追加</a></div>\n", cgiScriptName);
 
-    d("aaa4:::\n" );
     e_types = db_get_element_types(1);
-    d("aaa5:::\n" );
     for (; e_types != NULL; e_types = e_types->next) {
         bt_list_item* items = db_get_list_item(e_types->id);
-    d("aaa4:::%d\n", e_types->id);
         o("\t\t<hr />\n");
+        o("\t\t<h4>"); h(e_types->name); o("</h4>\n");
         o("\t\t<input type=\"hidden\" name=\"field_ids\" value=\"%d\" />\n", e_types->id);
         o("\t\t<table summary=\"project table\">\n");
         o("\t\t\t<tr>\n");
@@ -197,8 +192,17 @@ void display_action()
         o("\t\t\t\t<th>チケット属性</th>\n");
         o("\t\t\t\t<td>\n");
         o("\t\t\t\t\t<input id=\"field%d.ticket_property\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.ticket_property\" ", e_types->id, e_types->id);
-        o(                  "value=\"1\" %s %s />\n", e_types->ticket_property == 1 ? "checked=\"checked\"" : "", e_types->id < 3 ? "disabled=\"disabled\"" : "");
+        o(                  "value=\"1\" %s %s />\n", e_types->ticket_property == 1 ? "checked=\"checked\"" : "", e_types->id <= BASIC_ELEMENT_MAX ? "disabled=\"disabled\"" : "");
         o("\t\t\t\t\t<label for=\"field%d.ticket_property\">チケット属性とする。</label>\n", e_types->id);
+        o("\t\t\t\t\t<div class=\"description\">新規の登録時には、入力項目としないかどうかです。チェックした場合、新規の登録時には、入力項目になりません。</div>\n");
+        o("\t\t\t\t</td>\n");
+        o("\t\t\t</tr>\n");
+        o("\t\t\t<tr>\n");
+        o("\t\t\t\t<th>返信専用属性</th>\n");
+        o("\t\t\t\t<td>\n");
+        o("\t\t\t\t\t<input id=\"field%d.reply_property\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.reply_property\" ", e_types->id, e_types->id);
+        o(                  "value=\"1\" %s %s />\n", e_types->reply_property == 1 ? "checked=\"checked\"" : "", e_types->id <= BASIC_ELEMENT_MAX ? "disabled=\"disabled\"" : "");
+        o("\t\t\t\t\t<label for=\"field%d.reply_property\">返信専用属性とする。</label>\n", e_types->id);
         o("\t\t\t\t\t<div class=\"description\">返信の属性としてではなくチケット自体の属性として定義するかどうかです。</div>\n");
         o("\t\t\t\t</td>\n");
         o("\t\t\t</tr>\n");
@@ -295,8 +299,8 @@ void display_action()
         o("\t\t\t\t</td>\n");
         o("\t\t\t</tr>\n");
         o("\t\t</table>\n");
-        if (e_types->id > 3) {
-            /* 予約項目は削除できないようにする。 */
+        if (e_types->id >= BASIC_ELEMENT_MAX) {
+            /* 基本項目は削除できないようにする。 */
             o("\t\t<div class=\"message\"><a href=\"%s/delete_item/%d\">", cgiScriptName, e_types->id);o("この項目(");h(e_types->name);o(")の削除</a></div>\n");
         }
     }
@@ -381,6 +385,16 @@ void update_elements()
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
         d("field%s.ticket_property: %s\n", id, value);
         e_type->ticket_property = atoi(value);
+
+        sprintf(name, "field%s.reply_property", id);
+        cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+        d("field%s.reply_property: %s\n", id, value);
+        e_type->reply_property = atoi(value);
+
+        sprintf(name, "field%s.reply_property", id);
+        cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+        d("field%s.reply_property: %s\n", id, value);
+        e_type->reply_property = atoi(value);
 
         sprintf(name, "field%s.required", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
@@ -488,6 +502,15 @@ void new_item_action()
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t\t<tr>\n");
+    o("\t\t\t\t<th>返信専用属性</th>\n");
+    o("\t\t\t\t<td>\n");
+    o("\t\t\t\t\t<input id=\"field.reply_property\" class=\"checkbox\" type=\"checkbox\" name=\"field.reply_property\" ");
+    o(                  "value=\"1\" />\n");
+    o("\t\t\t\t\t<label for=\"field.reply_property\">返信専用属性とする。</label>\n");
+    o("\t\t\t\t\t<div class=\"description\">新規の登録時には、入力項目としないかどうかです。チェックした場合、新規の登録時には、入力項目になりません。</div>\n");
+    o("\t\t\t\t</td>\n");
+    o("\t\t\t</tr>\n");
+    o("\t\t\t<tr>\n");
     o("\t\t\t\t<th>項目種別</th>\n");
     o("\t\t\t\t<td>\n");
     o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" type=\"radio\" name=\"field.type\" ", ELEM_TEXT);
@@ -513,7 +536,7 @@ void new_item_action()
             "type=\"radio\" name=\"field.type\" ", ELEM_LIST_MULTI);
     o(                  "value=\"%d\" />\n", ELEM_LIST_MULTI);
     o("\t\t\t\t\t<label for=\"field.type%d\" class=\"description\">複数選択可能リスト(select[multiple=multiple])</label><br />\n", ELEM_LIST_MULTI);
-    o("\t\t\t\t\t<div class=\"description\">項目を入力する時の入力形式です。</div>\n");
+    o("\t\t\t\t\t<div class=\"description\">項目を入力する時の入力形式です。項目種別は、追加後に変更することができません。</div>\n");
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
             o("\t\t\t<tr>\n");
@@ -588,6 +611,10 @@ void new_item_submit_action()
     cgiFormStringNoNewlines("field.ticket_property", value, DEFAULT_LENGTH);
     e_type->ticket_property = atoi(value);
     d("ticket_property: %d\n", e_type->ticket_property);
+
+    cgiFormStringNoNewlines("field.reply_property", value, DEFAULT_LENGTH);
+    e_type->reply_property = atoi(value);
+    d("reply_property: %d\n", e_type->reply_property);
 
     cgiFormStringNoNewlines("field.display_in_list", value, DEFAULT_LENGTH);
     e_type->display_in_list = atoi(value);

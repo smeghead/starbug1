@@ -19,9 +19,9 @@ bt_element_type* db_get_element_types(int all)
     sqlite3_stmt *stmt = NULL;
 
     if (all) {
-        sql = "select id, type, ticket_property, required, element_name, description, display_in_list, sort from element_type order by sort";
+        sql = "select id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort from element_type order by sort";
     } else {
-        sql = "select id, type, ticket_property, required, element_name, description, display_in_list, sort from element_type where display_in_list = 1 order by sort";
+        sql = "select id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort from element_type where display_in_list = 1 order by sort";
     }
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
     // stmtの内部バッファを一旦クリア
@@ -40,11 +40,12 @@ bt_element_type* db_get_element_types(int all)
         e->id = sqlite3_column_int(stmt, 0);
         e->type = sqlite3_column_int(stmt, 1);
         e->ticket_property = sqlite3_column_int(stmt, 2);
-        e->required = sqlite3_column_int(stmt, 3);
-        strcpy(e->name, sqlite3_column_text(stmt, 4));
-        strcpy(e->description, sqlite3_column_text(stmt, 5));
-        e->display_in_list = sqlite3_column_int(stmt, 6);
-        e->sort = sqlite3_column_int(stmt, 7);
+        e->reply_property = sqlite3_column_int(stmt, 3);
+        e->required = sqlite3_column_int(stmt, 4);
+        strcpy(e->name, sqlite3_column_text(stmt, 5));
+        strcpy(e->description, sqlite3_column_text(stmt, 6));
+        e->display_in_list = sqlite3_column_int(stmt, 7);
+        e->sort = sqlite3_column_int(stmt, 8);
         e->next = NULL;
     }
     d("sssss: \n");
@@ -70,7 +71,7 @@ bt_element_type* db_get_element_type(int id)
     sqlite3_stmt *stmt = NULL;
 
     d("%d\n", id);
-    sql = "select id, type, ticket_property, required, element_name, description, display_in_list, sort "
+    sql = "select id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort "
         "from element_type "
         "where id = ? "
         "order by sort";
@@ -86,11 +87,12 @@ bt_element_type* db_get_element_type(int id)
         e->id = sqlite3_column_int(stmt, 0);
         e->type = sqlite3_column_int(stmt, 1);
         e->ticket_property = sqlite3_column_int(stmt, 2);
-        e->required = sqlite3_column_int(stmt, 3);
-        strcpy(e->name, sqlite3_column_text(stmt, 4));
-        strcpy(e->description, sqlite3_column_text(stmt, 5));
-        e->display_in_list = sqlite3_column_int(stmt, 6);
-        e->sort = sqlite3_column_int(stmt, 7);
+        e->reply_property = sqlite3_column_int(stmt, 3);
+        e->required = sqlite3_column_int(stmt, 4);
+        strcpy(e->name, sqlite3_column_text(stmt, 5));
+        strcpy(e->description, sqlite3_column_text(stmt, 6));
+        e->display_in_list = sqlite3_column_int(stmt, 7);
+        e->sort = sqlite3_column_int(stmt, 8);
         e->next = NULL;
         break;
     }
@@ -666,15 +668,27 @@ void db_update_project(bt_project* project)
 }
 void db_update_element_type(bt_element_type* e_type)
 {
-    /* 基本属性の場合、ticket_propertyは編集させない。 */
-    if (e_type->id == ELEM_ID_TITLE) 
-        e_type->ticket_property = 1;
-    if (e_type->id == ELEM_ID_SENDER)
-        e_type->ticket_property = 0;
+    /* 基本項目の場合、ticket_propertyとreply_propertyは編集させない。 */
+    switch (e_type->id) {
+        case ELEM_ID_TITLE:
+            e_type->ticket_property = 1;
+            e_type->reply_property = 0;
+            break;
+        case ELEM_ID_SENDER:
+            e_type->ticket_property = 0;
+            e_type->reply_property = 0;
+            break;
+        case ELEM_ID_STATUS:
+            e_type->ticket_property = 1;
+            e_type->reply_property = 0;
+            break;
+    }
     if (exec_query(
             "update element_type set "
-            "ticket_property = ?, required = ?, element_name = ?, description = ?, sort = ?, display_in_list = ? where id = ?",
+            "ticket_property = ?, reply_property = ?, required = ?, element_name = ?, description = ?, sort = ?, display_in_list = ? "
+            "where id = ?",
             COLUMN_TYPE_INT, e_type->ticket_property,
+            COLUMN_TYPE_INT, e_type->reply_property,
             COLUMN_TYPE_INT, e_type->required,
             COLUMN_TYPE_TEXT, e_type->name,
             COLUMN_TYPE_TEXT, e_type->description,
@@ -719,10 +733,11 @@ int db_register_element_type(bt_element_type* e_type)
 {
     int ret;
     exec_query(
-            "insert into element_type (id, type, ticket_property, required, element_name, description, display_in_list, sort)"
-            "values (NULL, ?, ?, ?, ?, ?, ?, ?)",
+            "insert into element_type (id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort)"
+            "values (NULL, ?, ?, ?, ?, ?, ?, ?, ?)",
             COLUMN_TYPE_INT, e_type->type,
             COLUMN_TYPE_INT, e_type->ticket_property,
+            COLUMN_TYPE_INT, e_type->reply_property,
             COLUMN_TYPE_INT, e_type->required,
             COLUMN_TYPE_TEXT, e_type->name,
             COLUMN_TYPE_TEXT, e_type->description,

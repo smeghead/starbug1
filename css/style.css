@@ -123,13 +123,9 @@ input.button {
     width: 150px;
 }
 #input_form textarea {
-    height: 200px;
+    height: 100px;
 }
 div {
-}
-#delete_form_area {
-    margin: 10px;
-    width: 95%;
 }
 #setting_form {
     margin: 10px;
@@ -162,10 +158,6 @@ table.list_item th.delete {
     width: 95%;
 }
 #new_item {
-    margin: 10px;
-    width: 95%;
-}
-#delete_item {
     margin: 10px;
     width: 95%;
 }
