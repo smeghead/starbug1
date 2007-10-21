@@ -191,3 +191,15 @@ table.list_item th.delete {
     color: red;
     font-weight: bold;
 }
+#state_index {
+    width:100%;
+    margin:0px 0px 0px 0px;
+    text-align: center;
+}
+
+#state_index li {
+    margin:0px 0px 0px 0px;
+    list-style:none;
+    padding:0px 10px;
+    float:left;
+}

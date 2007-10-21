@@ -8,6 +8,7 @@
 #define die(msg)    {d("ERROR: %s:%d %s\n", __FILE__, __LINE__, msg); exit(1);}
 #define h(str)      cgiHtmlEscape(str)
 #define v(str)      cgiValueEscape(str)
+void u(char*);
 typedef struct _action {
     char* action_name;
     void (*action_func)(void);

@@ -285,8 +285,6 @@ bt_message* db_search_tickets(bt_condition* conditions)
 
     // stmtのSQLを実行し、結果を一列づつ取得
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
-        const unsigned char* sender;
-        const unsigned char* subject;
         const unsigned char* registerdate;
         if (i == NULL) {
             i = incidnets = (bt_message*)xalloc(sizeof(bt_message));
@@ -522,8 +520,6 @@ bt_message* db_get_ticket(int ticket_id)
     if (SQLITE_ROW != (r = sqlite3_step(stmt))) {
         goto error;
     } else {
-        const unsigned char* sender;
-        const unsigned char* subject;
         const unsigned char* registerdate;
         incidnet = (bt_message*)xalloc(sizeof(bt_message));
         incidnet->id = sqlite3_column_int(stmt, 0);
@@ -754,4 +750,57 @@ void db_delete_element_type(int id)
             "delete from element_type where id = ?",
             COLUMN_TYPE_INT, id,
             COLUMN_TYPE_END);
+}
+bt_state* db_get_states()
+{
+    bt_state* states = NULL;
+    bt_state* s = NULL;
+    int r;
+    char buffer[VALUE_LENGTH];
+    char sql[DEFAULT_LENGTH];
+    sqlite3_stmt *stmt = NULL;
+
+    d("asdf: \n");
+    sprintf(sql, 
+            "select e.str_val as name, count(t.id) as count "
+            "from ticket as t "
+            "inner join element as e "
+            " on t.id = e.ticket_id and "
+            "  (e.reply_id = (select max(id) from reply where ticket_id = t.id)"
+            "    or ((select count(id) from reply where ticket_id = t.id) = 0 and e.reply_id is null))"
+            "inner join list_item as li on e.element_type_id = li.element_type_id and li.name = e.str_val "
+            "where e.element_type_id = %d group by e.str_val order by li.sort", ELEM_ID_STATUS);
+    d("sql: %s\n", sql);
+    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+    // stmtの内部バッファを一旦クリア
+    sqlite3_reset(stmt);
+
+    d("aa: \n");
+    // stmtのSQLを実行し、結果を一列づつ取得
+    while (SQLITE_ROW == (r = sqlite3_step(stmt))){
+    d("aa1: \n");
+        if (s == NULL) {
+            s = states = (bt_state*)xalloc(sizeof(bt_state));
+        } else {
+            s->next = (bt_state*)xalloc(sizeof(bt_state));
+            s = s->next;
+        }
+        strcpy(s->name, sqlite3_column_text(stmt, 0));
+        s->count = sqlite3_column_int(stmt, 1);
+        s->next = NULL;
+    d("aa2: \n");
+    }
+    if (SQLITE_DONE != r)
+        goto error;
+
+    d("aa3: \n");
+    // stmt を開放
+    sqlite3_finalize(stmt);
+
+    return states;
+
+error:
+    d("ERR: %s\n", sqlite3_errmsg(db));
+    sqlite3_close(db);
+    die("failed to db_get_states.");
 }

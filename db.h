@@ -24,5 +24,6 @@ void db_delete_list_item(int);
 void db_register_list_item(bt_list_item*);
 int db_register_element_type(bt_element_type*);
 void db_delete_element_type(int);
+bt_state* db_get_states();
 
 #endif

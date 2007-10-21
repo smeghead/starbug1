@@ -81,6 +81,13 @@ typedef struct _condition {
   struct _condition* next;
 } bt_condition;
 
+typedef struct _state {
+  int id;
+  char name[DEFAULT_LENGTH];
+  int count;
+  struct _state* next;
+} bt_state;
+
 bt_element* bt_element_create();
 void bt_element_destroy(bt_element*);
 

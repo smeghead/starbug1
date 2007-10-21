@@ -119,6 +119,7 @@ void list_action()
     bt_condition* conditions = NULL;
     bt_condition* c = NULL;
     bt_project* project;
+    bt_state* states;
 
     db_init();
     project = db_get_project();
@@ -147,6 +148,20 @@ void list_action()
     }
         d("condition val: %d\n", conditions);
     tickets = db_search_tickets(conditions);
+    states = db_get_states();
+    /* stateの表示 */
+    o("<div id=\"state_index\">\n");
+    o("\t<ul>\n");
+    for (; states != NULL; states = states->next) {
+        o("\t\t<li>\n");
+        o("\t\t\t<a href=\"%s/list?field%d=", cgiScriptName, ELEM_ID_STATUS); u(states->name); o("\">");
+        h(states->name);
+        o("\t\t\t</a>\n");
+        o("(%d)", states->count);
+        o("\t\t</li>\n");
+    }
+    o("\t</ul>\n");
+    o("</div>\n");
     o("<div id=\"condition_form\">\n");
     o("<h3>検索条件</h3>\n");
     o("<form action=\"%s/list\" method=\"get\">\n", cgiScriptName);
