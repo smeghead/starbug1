@@ -8,8 +8,6 @@
 body,tbody {
     margin: 0px 10px 0px 10px;
     font-size: 90%;
-    *font-size: x-small;
-    *font: x-small;
 }
 
 table {

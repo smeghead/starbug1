@@ -4,7 +4,7 @@
 #include "data.h"
 
 #define o(...) fprintf(cgiOut, __VA_ARGS__)
-#define d(...) fprintf(stderr, __VA_ARGS__)
+#define d(...) fprintf(stderr, "DEBUG: %s:%d", __FILE__, __LINE__); fprintf(stderr, __VA_ARGS__)
 #define die(msg)    {d("ERROR: %s:%d %s\n", __FILE__, __LINE__, msg); exit(1);}
 #define h(str)      cgiHtmlEscape(str)
 #define v(str)      cgiValueEscape(str)

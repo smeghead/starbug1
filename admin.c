@@ -40,8 +40,7 @@ void output_header(bt_project* project, char* script_name)
 {
     cgiHeaderContentType("text/html; charset=utf-8;");
     /* Top of the page */
-    o(      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-            "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"
+    o(      "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"
             "<html xml:lang=\"ja\" lang=\"ja\" xmlns=\"http://www.w3.org/1999/xhtml\">\n"
             "<head>\n"
             "\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n"
@@ -369,42 +368,30 @@ void update_elements()
 
         sprintf(name, "field%s.name", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-        d("field%s.name: %s\n", id, value);
         strcpy(e_type->name, value);
 
         sprintf(name, "field%s.description", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-        d("field%s.description: %s\n", id, value);
         strcpy(e_type->description, value);
 
         sprintf(name, "field%s.ticket_property", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-        d("field%s.ticket_property: %s\n", id, value);
         e_type->ticket_property = atoi(value);
 
         sprintf(name, "field%s.reply_property", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-        d("field%s.reply_property: %s\n", id, value);
-        e_type->reply_property = atoi(value);
-
-        sprintf(name, "field%s.reply_property", id);
-        cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-        d("field%s.reply_property: %s\n", id, value);
         e_type->reply_property = atoi(value);
 
         sprintf(name, "field%s.required", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-        d("field%s.required: %s\n", id, value);
         e_type->required = atoi(value);
 
         sprintf(name, "field%s.display_in_list", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-        d("field%s.display_in_list: %s\n", id, value);
         e_type->display_in_list = atoi(value);
 
         sprintf(name, "field%s.sort", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-        d("field%s.sort: %s\n", id, value);
         e_type->sort = atoi(value);
 
         db_update_element_type(e_type);
@@ -592,29 +579,22 @@ void new_item_submit_action()
     project = db_get_project();
 
     cgiFormStringNoNewlines("field.name", e_type->name, DEFAULT_LENGTH);
-    d("name: %s\n", e_type->name);
 
     cgiFormStringNoNewlines("field.description", e_type->description, DEFAULT_LENGTH);
-    d("description: %s\n", e_type->description);
 
     cgiFormStringNoNewlines("field.type", value, DEFAULT_LENGTH);
     e_type->type = atoi(value);
-    d("type: %d\n", e_type->type);
 
     cgiFormStringNoNewlines("field.ticket_property", value, DEFAULT_LENGTH);
     e_type->ticket_property = atoi(value);
-    d("ticket_property: %d\n", e_type->ticket_property);
 
     cgiFormStringNoNewlines("field.reply_property", value, DEFAULT_LENGTH);
     e_type->reply_property = atoi(value);
-    d("reply_property: %d\n", e_type->reply_property);
 
     cgiFormStringNoNewlines("field.display_in_list", value, DEFAULT_LENGTH);
     e_type->display_in_list = atoi(value);
-    d("display_in_list: %d\n", e_type->display_in_list);
     cgiFormStringNoNewlines("field.sort", value, DEFAULT_LENGTH);
     e_type->sort = atoi(value);
-    d("sort: %d\n", e_type->sort);
     e_type_id = db_register_element_type(e_type);
     switch (e_type->type) {
         case ELEM_LIST_SINGLE:

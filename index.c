@@ -61,8 +61,7 @@ void output_header(bt_project* project, char* script_name)
 {
     cgiHeaderContentType("text/html; charset=utf-8;");
     /* Top of the page */
-    o(      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-            "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"
+    o(      "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"
             "<html xml:lang=\"ja\" lang=\"ja\" xmlns=\"http://www.w3.org/1999/xhtml\">\n"
             "<head>\n"
             "\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n"
@@ -345,10 +344,8 @@ void output_form_element(bt_element* element, bt_element_type* e_type)
 static int contains(char* const value, const char* name)
 {
     char* p = value;
-    d("const: [%s], [%s]\n", value, name);
     do {
         if (*p == '\t') p++;
-        d("const: %s\n", p);
         if (strncmp(p, name, strlen(name)) == 0)
             return 1;
     } while ((p = strstr(p, "\t")) != NULL);
@@ -447,8 +444,8 @@ void reply_action()
             o("\t</tr>\n");
         }
     }
-    o(      "</table>\n
-            </div>");
+    o(      "</table>\n"
+            "</div>");
     last_elements = elements = db_get_elements(iid, 0);
 
     o(      "<div id=\"ticket_history\">\n"

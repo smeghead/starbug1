@@ -1,3 +1,5 @@
+#include <string.h>
+#include <stdlib.h>
 #include <sys/stat.h>
 #include "util.h"
 #include "dbutil.h"
@@ -162,6 +164,7 @@ int exec_query(const char* sql, ...)
             sqlite3_bind_text(stmt, i + 1, value, strlen(value), NULL);
         }
     }
+    va_end(ap);
 
     // stmtのSQLを実行
     while (SQLITE_DONE != sqlite3_step(stmt)){
@@ -175,6 +178,7 @@ int exec_query(const char* sql, ...)
 
 error:
     d("ERR: %s\n", sqlite3_errmsg(db));
+    sqlite3_finalize(stmt);
     sqlite3_close(db);
     die("failed to exec_query.");
 }
@@ -205,6 +209,7 @@ int exec_query_scalar_int(const char* sql, ...)
             sqlite3_bind_text(stmt, i + 1, value, strlen(value), NULL);
         }
     }
+    va_end(ap);
     r = sqlite3_step(stmt);
     if (r == SQLITE_ROW){
         int_value = sqlite3_column_int(stmt, 0);
@@ -219,6 +224,7 @@ int exec_query_scalar_int(const char* sql, ...)
 
 error:
     d("ERR: %s\n", sqlite3_errmsg(db));
+    sqlite3_finalize(stmt);
     sqlite3_close(db);
     die("failed to exec_query_scalar_int.");
 }

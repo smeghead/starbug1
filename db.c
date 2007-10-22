@@ -31,7 +31,6 @@ bt_element_type* db_get_element_types(int all)
     e = NULL;
     // stmtのSQLを実行し、結果を一列づつ取得
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
-        d("e->id \n");
         if (e == NULL) {
             e = elements = (bt_element_type*)xalloc(sizeof(bt_element_type));
         } else {
@@ -49,11 +48,9 @@ bt_element_type* db_get_element_types(int all)
         e->sort = sqlite3_column_int(stmt, 8);
         e->next = NULL;
     }
-    d("sssss: \n");
     if (SQLITE_DONE != r)
         goto error;
 
-    d("sssss: \n");
     // stmt を開放
     sqlite3_finalize(stmt);
 
@@ -71,7 +68,6 @@ bt_element_type* db_get_element_type(int id)
     const char *sql;
     sqlite3_stmt *stmt = NULL;
 
-    d("%d\n", id);
     sql = "select id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort "
         "from element_type "
         "where id = ? "
@@ -163,7 +159,6 @@ void db_register_ticket(bt_message* ticket)
     bt_element* elements;
 
     set_date_string(registerdate);
-    d("%s\n", registerdate);
 
     exec_query("insert into ticket(id, registerdate, closed, deleted) "
             "values (NULL, ?, 0, 0)",
@@ -172,7 +167,6 @@ void db_register_ticket(bt_message* ticket)
 
     ticket_id = sqlite3_last_insert_rowid(db);
 
-    d("pass2");
     elements = ticket->elements;
     for (; elements != NULL; elements = elements->next) {
         exec_query("insert into element(id, ticket_id, element_type_id, str_val) values (NULL, ?, ?, ?)",
@@ -323,7 +317,6 @@ bt_element* db_get_last_elements_4_list(int ticket_id)
     if (reply_id == INVALID_INT)
         die("failed to reply_id.");
 
-    d("reply_id: %d\n", reply_id);
     if (reply_id == 0)
         sql = "select element.id, element_type_id, str_val "
             "from element "
@@ -388,7 +381,6 @@ bt_element* db_get_last_elements(int ticket_id)
     if (reply_id == INVALID_INT)
         die("failed to reply_id.");
 
-    d("reply_id: %d\n", reply_id);
     if (reply_id == 0)
         sql = "select element.id, element_type_id, str_val "
             "from element "
@@ -446,7 +438,6 @@ bt_element* db_get_elements(int ticket_id, int reply_id)
     sqlite3_stmt *stmt = NULL;
     int r;
 
-    d("inc: %d, reply %d\n", ticket_id, reply_id);
     if (reply_id == 0) {
         sql = "select e.id, e.element_type_id, e.str_val "
             "from element as e "
@@ -480,7 +471,6 @@ bt_element* db_get_elements(int ticket_id, int reply_id)
         e->id = sqlite3_column_int(stmt, 0);
         e->element_type_id = sqlite3_column_int(stmt, 1);
         str_val = sqlite3_column_text(stmt, 2);
-        d("id: %d  val: %s\n", e->id, str_val);
         if (str_val != NULL) {
             e->str_val = (char*)xalloc(sizeof(char) * strlen(str_val) + 1);
             strcpy(e->str_val, str_val);
@@ -634,12 +624,10 @@ bt_project* db_get_project()
         strcpy(project->notify_address, sqlite3_column_text(stmt, 6));
         break;
     }
-    d("project->id \n");
 
     // stmt を開放
     sqlite3_finalize(stmt);
 
-    d("project->name: %s \n", project->name);
     return project;
 }
 void db_update_project(bt_project* project)
@@ -754,7 +742,6 @@ bt_state* db_get_states()
     char sql[DEFAULT_LENGTH];
     sqlite3_stmt *stmt = NULL;
 
-    d("asdf: \n");
     sprintf(sql, 
             "select e.str_val as name, count(t.id) as count "
             "from ticket as t "
@@ -764,15 +751,12 @@ bt_state* db_get_states()
             "    or ((select count(id) from reply where ticket_id = t.id) = 0 and e.reply_id is null))"
             "inner join list_item as li on e.element_type_id = li.element_type_id and li.name = e.str_val "
             "where e.element_type_id = %d group by e.str_val order by li.sort", ELEM_ID_STATUS);
-    d("sql: %s\n", sql);
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
     // stmtの内部バッファを一旦クリア
     sqlite3_reset(stmt);
 
-    d("aa: \n");
     // stmtのSQLを実行し、結果を一列づつ取得
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
-    d("aa1: \n");
         if (s == NULL) {
             s = states = (bt_state*)xalloc(sizeof(bt_state));
         } else {
@@ -782,12 +766,10 @@ bt_state* db_get_states()
         strcpy(s->name, sqlite3_column_text(stmt, 0));
         s->count = sqlite3_column_int(stmt, 1);
         s->next = NULL;
-    d("aa2: \n");
     }
     if (SQLITE_DONE != r)
         goto error;
 
-    d("aa3: \n");
     // stmt を開放
     sqlite3_finalize(stmt);
 
