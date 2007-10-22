@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "data.h"
 #include "util.h"
 
@@ -16,7 +17,7 @@ int mail_send(bt_project* project, bt_message* message, bt_element* elements, bt
             strlen(project->admin_address) == 0 ||
             strlen(project->notify_address) == 0) {
         d("invalid settings. gave up to send mail.");
-        return 0;
+        return -1;
     }
     strcpy(server, project->smtp_server);
     strcpy(from, project->notify_address);

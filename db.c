@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 #include <sys/time.h>
 #include <sqlite3.h>
@@ -101,11 +102,6 @@ bt_element_type* db_get_element_type(int id)
     sqlite3_finalize(stmt);
 
     return e;
-
-error:
-    d("ERR: %s\n", sqlite3_errmsg(db));
-    sqlite3_close(db);
-    die("failed to db_get_element_type.");
 }
 
 bt_list_item* db_get_list_item(int element_type)
@@ -257,7 +253,7 @@ char* get_search_sql_string(bt_condition* conditions, char* sql_string)
         for (i = 0, cond = conditions; cond != NULL; cond = cond->next, i++) {
             char val[DEFAULT_LENGTH];
             if (i) strcat(sql_string, " and ");
-            sprintf(val, " (e%d.element_type_id = ? and e%d.str_val like '%' || ? || '%') ", i + 1, i + 1);
+            sprintf(val, " (e%d.element_type_id = ? and e%d.str_val like '%%' || ? || '%%') ", i + 1, i + 1);
             strcat(sql_string, val);
         }
     }
@@ -554,7 +550,6 @@ bt_message* db_get_reply(int reply_id)
     if (SQLITE_ROW != (r = sqlite3_step(stmt))) {
         goto error;
     } else {
-        const unsigned char* sender;
         const unsigned char* registerdate;
         incidnet = (bt_message*)xalloc(sizeof(bt_message));
         incidnet->id = sqlite3_column_int(stmt, 0);
@@ -756,7 +751,6 @@ bt_state* db_get_states()
     bt_state* states = NULL;
     bt_state* s = NULL;
     int r;
-    char buffer[VALUE_LENGTH];
     char sql[DEFAULT_LENGTH];
     sqlite3_stmt *stmt = NULL;
 

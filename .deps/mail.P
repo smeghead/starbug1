@@ -11,7 +11,9 @@ mail.o: mail.c /usr/include/stdio.h /usr/include/features.h \
  /usr/include/endian.h /usr/include/bits/endian.h \
  /usr/include/sys/select.h /usr/include/bits/select.h \
  /usr/include/bits/sigset.h /usr/include/bits/time.h \
- /usr/include/sys/sysmacros.h /usr/include/alloca.h data.h util.h \
+ /usr/include/sys/sysmacros.h /usr/include/alloca.h \
+ /usr/include/string.h /usr/include/bits/string.h \
+ /usr/include/bits/string2.h data.h util.h \
  /usr/local/include/sqlite3.h
 mail.c :
 /usr/include/stdio.h :
@@ -41,6 +43,9 @@ mail.c :
 /usr/include/bits/time.h :
 /usr/include/sys/sysmacros.h :
 /usr/include/alloca.h :
+/usr/include/string.h :
+/usr/include/bits/string.h :
+/usr/include/bits/string2.h :
 data.h :
 util.h :
 /usr/local/include/sqlite3.h :

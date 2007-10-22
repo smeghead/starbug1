@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <cgic.h>
 #include "wiki.h"
 #include "util.h"
 

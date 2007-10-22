@@ -135,7 +135,6 @@ void list_action()
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
         d("condition: [%s]\n", value);
         if (strlen(value) == 0) continue;
-        d("pass? condition val: %d\n", conditions);
         if (c == NULL) {
             c = conditions = (bt_condition*)xalloc(sizeof(bt_condition));
         } else {
@@ -146,7 +145,6 @@ void list_action()
         strcpy(c->value, value);
         c->next = NULL;
     }
-        d("condition val: %d\n", conditions);
     tickets = db_search_tickets(conditions);
     states = db_get_states();
     /* stateの表示 */
@@ -205,10 +203,10 @@ void list_action()
             for (; elements != NULL; elements = elements->next) {
                 o("\t\t<td>");
                 if (elements->element_type_id == ELEM_ID_TITLE)
-                    o("<a href=\"%s/reply/%d\">", cgiScriptName, tickets->id, tickets->id);
+                    o("<a href=\"%s/reply/%d\">", cgiScriptName, tickets->id);
                 h(elements->str_val);
                 if (elements->element_type_id == ELEM_ID_TITLE)
-                    o("</a>", cgiScriptName, tickets->id, tickets->id);
+                    o("</a>");
                 o("&nbsp;</td>\n");
             }
             o("\t\t<td>"); h(tickets->registerdate); o("&nbsp;</td>\n");
@@ -227,8 +225,6 @@ void output_form_element_4_condition(char* value, bt_element_type* e_type)
 {
     char id[DEFAULT_LENGTH];
     bt_list_item* items;
-    bt_list_item* i;
-    int list_count;
 
     sprintf(id, "%d", e_type->id);
     switch (e_type->type) {
@@ -560,7 +556,7 @@ void register_submit_action()
     bt_project* project;
     bt_element_type* e_type;
     bt_element* elements = NULL;
-    bt_element* e;
+    bt_element* e = NULL;
     bt_message* ticket;
     char ticket_id[DEFAULT_LENGTH];
     int mode = get_mode();

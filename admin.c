@@ -57,7 +57,7 @@ void output_header(bt_project* project, char* script_name)
     o(      "</head>\n"
             "<body>\n"
             "<h1 id=\"toptitle\" title=\"Starbug1 管理ツール\"><a href=\"http://sourceforge.jp/projects/starbug1/\"><img src=\"%s/../img/title.jpg\" alt=\"Starbug1\" /></a></h1>\n"
-            "<ul id=\"mainmenu\">\n", cgiScriptName, cgiScriptName);
+            "<ul id=\"mainmenu\">\n", cgiScriptName);
     o(      "\t<li><a href=\"%s\">管理ツール</a></li>\n", cgiScriptName);
     o(      "\t<li><a href=\"%s/../index.cgi\">", cgiScriptName);h(project->name); o("トップへ</a></li>\n");
     o(      "\t<li><a href=\"%s/../db/starbug1.db\">バックアップ</a></li>\n", cgiScriptName);
@@ -323,7 +323,6 @@ void update_action()
 {
     bt_project* project;
     char smtp_port[DEFAULT_LENGTH];
-    char elements_count[DEFAULT_LENGTH];
 
     db_init();
     db_begin();
@@ -464,10 +463,8 @@ void update_elements()
 }
 void new_item_action()
 {
-    char path_info[DEFAULT_LENGTH];
-    int iid, *reply_ids, i;
     bt_project* project;
-    bt_element_type* e_type;
+    int i;
 
     db_init();
     project = db_get_project();
@@ -664,7 +661,7 @@ void delete_item_action()
 {
     char path_info[DEFAULT_LENGTH];
     char* e_type_id;
-    int iid, *reply_ids, i;
+    int iid;
     bt_project* project;
     bt_element_type* e_type;
 
@@ -697,9 +694,8 @@ void delete_item_submit_action()
 {
     char path_info[DEFAULT_LENGTH];
     char* e_type_id;
-    int iid, *reply_ids, i;
+    int iid;
     bt_project* project;
-    bt_element_type* e_type;
 
     strcpy(path_info, cgiPathInfo);
     e_type_id = strchr(path_info + 1, '/');

@@ -141,7 +141,7 @@ void create_tables()
  */
 int exec_query(const char* sql, ...)
 {
-    int i, loop;
+    int i, loop = 0;
     va_list ap;
     int type;
     sqlite3_stmt *stmt = NULL;
