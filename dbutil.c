@@ -1,3 +1,4 @@
+#include <sys/stat.h>
 #include "util.h"
 #include "dbutil.h"
 
@@ -17,6 +18,7 @@ void db_init()
 {
   int exists_db_file = (fexist(db_name) == 1);
 
+  mkdir("db", 0755);
   if (SQLITE_OK != sqlite3_open(db_name, &db)) {
     d("sqlite3 init error.");
   }

@@ -56,7 +56,7 @@ void output_header(bt_project* project, char* script_name)
     }
     o(      "</head>\n"
             "<body>\n"
-            "<h1 id=\"toptitle\" title=\"Starbug1 管理ツール\"><img src=\"%s/../img/title.jpg\" alt=\"Starbug1\" /></h1>\n"
+            "<h1 id=\"toptitle\" title=\"Starbug1 管理ツール\"><a href=\"http://sourceforge.jp/projects/starbug1/\"><img src=\"%s/../img/title.jpg\" alt=\"Starbug1\" /></a></h1>\n"
             "<ul id=\"mainmenu\">\n", cgiScriptName, cgiScriptName);
     o(      "\t<li><a href=\"%s\">管理ツール</a></li>\n", cgiScriptName);
     o(      "\t<li><a href=\"%s/../index.cgi\">", cgiScriptName);h(project->name); o("トップへ</a></li>\n");

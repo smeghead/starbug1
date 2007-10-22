@@ -4,13 +4,14 @@ use warnings;
 
 use Getopt::Std;
 use Net::SMTP;
+use Encode;
 
 sub get_options {
   my $o = {};
-  getopts('x:s:f:t:p:u:h', $o);
+  getopts('x:f:t:p:h', $o);
   if ($o->{h}) {
     print <<EOF;
- usage: $0 -s <subject> -f <from_address> -t <to_address> -x <smtp_server> -p <smtp_port> -u <url>
+ usage: $0 -f <from_address> -t <to_address> -x <smtp_server> -p <smtp_port>
 EOF
     die;
   }
@@ -18,16 +19,14 @@ EOF
   die "ERROR: specify to address."  if (!$o->{t});
   die "ERROR: specify from address."  if (!$o->{f});
   return {
-    subject => $o->{s},
     from => $o->{f},
     to => $o->{t},
     server => $o->{x},
     port => $o->{p} || 25,
-    url => $o->{u}
   };
 }
 sub mail_send {
-  my ($opts, $content) = @_;
+  my ($opts, $subject, $content) = @_;
   my $smtp = new Net::SMTP(
     $opts->{server},
     Port => $opts->{port}
@@ -44,7 +43,9 @@ sub mail_send {
   $smtp->datasend("Date: " . $date . "\n");
   $smtp->datasend("To: $opts->{to}\n");
   $smtp->datasend("From: $opts->{from}\n");
-  $smtp->datasend("Subject: $opts->{subject}\n");
+  $smtp->datasend("Subject: $subject\n");
+  $smtp->datasend("Content-Type: text/plain; charset=iso-2022-jp\n");
+  $smtp->datasend("Content-Transfer-Encoding: 7bit\n");
   $smtp->datasend("\n");
   $smtp->datasend($content);
   $smtp->datasend("\n");
@@ -56,11 +57,8 @@ sub mail_send {
 sub main {
   my $opts = get_options();
   my $url = $opts->{url} || '';
-  my $content = <<EOD;
-ticket was upgraded. 
-check this url.
- 
-EOD
+  my $content = $ENV{'SB_CONTENT'};
+  from_to($content, 'utf-8', 'iso-2022-jp');
   mail_send($opts, $content);
 }
 main();

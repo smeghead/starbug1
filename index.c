@@ -7,6 +7,7 @@
 #include "dbutil.h"
 #include "util.h"
 #include "wiki.h"
+#include "mail.h"
 
 
 /* prototype declares */
@@ -23,7 +24,6 @@ void default_action();
 void output_header(bt_project* project, char* script_name);
 void output_footer();
 int cgiMain();
-char* get_value(bt_element* elements, int element_type);
 void output_form_element(bt_element* element, bt_element_type* e_type);
 void output_form_element_4_condition(char*, bt_element_type*);
 int get_mode();
@@ -76,7 +76,7 @@ void output_header(bt_project* project, char* script_name)
     }
     o(      "</head>\n"
             "<body>\n"
-            "<h1 id=\"toptitle\" title=\"Starbug1\"><img src=\"%s/../img/title.jpg\" alt=\"Starbug1\" /></h1>\n"
+            "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://sourceforge.jp/projects/starbug1/\"><img src=\"%s/../img/title.jpg\" alt=\"Starbug1\" /></a></h1>\n"
             "<ul id=\"mainmenu\">\n", cgiScriptName);
     o(      "\t<li><a href=\"%s\">トップ</a></li>\n", cgiScriptName);
     o(      "\t<li><a href=\"%s/list\">一覧</a></li>\n", cgiScriptName);
@@ -220,15 +220,6 @@ void list_action()
     output_footer();
     db_finish();
 }
-char* get_value(bt_element* elements, int element_type)
-{
-    for (;elements != NULL; elements = elements->next) {
-        if (elements->element_type_id == element_type) {
-            return elements->str_val;
-        }
-    }
-    return NULL;
-}
 /**
  * form要素を表示する。
  */
@@ -260,7 +251,7 @@ void output_form_element_4_condition(char* value, bt_element_type* e_type)
             o("\">\n");
             items = db_get_list_item(e_type->id);
 
-            o("<option value=\"\"></options>");
+            o("<option value=\"\">&nbsp;</option>");
             for (; items != NULL; items = items->next) {
                 o("<option value=\"");
                 v(items->name);
@@ -320,7 +311,7 @@ void output_form_element(bt_element* element, bt_element_type* e_type)
             o("\">\n");
             items = db_get_list_item(e_type->id);
 
-            o("<option value=\"\"></options>");
+            o("<option value=\"\">&nbsp;</option>");
             for (; items != NULL; items = items->next) {
                 o("<option value=\"");
                 v(items->name);
@@ -341,7 +332,7 @@ void output_form_element(bt_element* element, bt_element_type* e_type)
             o("<select class=\"element\" size=\"%d\" id=\"field", list_count + 1);
             h(id); o("\" name=\"field"); h(id); o("\" multiple=\"multiple\">\n");
 
-            o("<option value=\"\"></options>");
+            o("<option value=\"\">&nbsp;</option>");
             for (; items != NULL; items = items->next) {
                 o("<option value=\"");
                 v(items->name);
@@ -575,6 +566,7 @@ void register_submit_action()
     int mode = get_mode();
     char** multi;
 
+    project = db_get_project();
     if (mode == MODE_INVALID)
         die("reqired invalid mode.");
     ticket = (bt_message*)xalloc(sizeof(bt_message));
@@ -652,9 +644,10 @@ void register_submit_action()
         else
             db_reply_ticket(ticket);
     }
+    /* mail */
+    mail_send(project, ticket, elements, e_type);
     db_commit();
     db_finish();
-    project = db_get_project();
     output_header(project, NULL);
     o(      "<h2>処理完了</h2>\n"
             "<div id=\"complete_message\">\n"

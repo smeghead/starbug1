@@ -14,7 +14,7 @@ index.o: index.c /usr/include/stdio.h /usr/include/features.h \
  /usr/include/sys/select.h /usr/include/bits/select.h \
  /usr/include/bits/sigset.h /usr/include/bits/time.h \
  /usr/include/sys/sysmacros.h /usr/include/alloca.h data.h db.h \
- /usr/local/include/sqlite3.h dbutil.h util.h wiki.h
+ /usr/local/include/sqlite3.h dbutil.h util.h wiki.h mail.h
 index.c :
 /usr/include/stdio.h :
 /usr/include/features.h :
@@ -53,3 +53,4 @@ db.h :
 dbutil.h :
 util.h :
 wiki.h :
+mail.h :
