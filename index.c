@@ -133,7 +133,6 @@ void list_action()
 
         sprintf(name, "field%d", e->id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-        d("condition: [%s]\n", value);
         if (strlen(value) == 0) continue;
         if (c == NULL) {
             c = conditions = (bt_condition*)xalloc(sizeof(bt_condition));
@@ -169,7 +168,6 @@ void list_action()
         char value[DEFAULT_LENGTH];
         sprintf(name, "field%d", e->id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-        d("value: %s\n", value);
 
         o("<tr>\n");
         o("\t<th>"); h(e->name); o("</th>\n");
@@ -332,7 +330,6 @@ void output_form_element(bt_element* element, bt_element_type* e_type)
             for (; items != NULL; items = items->next) {
                 o("<option value=\"");
                 v(items->name);
-                d("%s\n", items->name);
                 if (contains(value, items->name))
                     o("\" selected=\"selected\">");
                 else
@@ -439,7 +436,6 @@ void reply_action()
     {
         bt_element_type* e_type = element_types;
         for (; e_type != NULL; e_type = e_type->next) {
-            d("tp:%d\n", e_type->ticket_property);
             if (e_type->ticket_property == 0) continue;
             o("\t<tr>\n");
             o("\t\t<th>");
@@ -464,7 +460,6 @@ void reply_action()
             "\t</tr>\n");
     {
         bt_element_type* e_type = element_types;
-        d("list3: \n");
         for (; e_type != NULL; e_type = e_type->next) {
             o("\t<tr>\n");
             o("\t\t<th>");
@@ -476,7 +471,6 @@ void reply_action()
             o("\t</tr>\n");
         }
     }
-    d("list4: \n");
     o("</table>\n");
     reply_ids = db_get_reply_ids(iid);
     /* 返信の表示 */
@@ -562,12 +556,12 @@ void register_submit_action()
     int mode = get_mode();
     char** multi;
 
-    project = db_get_project();
     if (mode == MODE_INVALID)
         die("reqired invalid mode.");
     ticket = (bt_message*)xalloc(sizeof(bt_message));
     db_init();
     db_begin();
+    project = db_get_project();
     e_type = db_get_element_types(1);
     cgiFormStringNoNewlines("ticket_id", ticket_id, DEFAULT_LENGTH);
     if (mode == MODE_REGISTER)
@@ -604,7 +598,6 @@ void register_submit_action()
                 case ELEM_LIST_SINGLE:
                     sprintf(name, "field%d", e_type->id);
                     cgiFormString(name, value, VALUE_LENGTH);
-                    d("select:::%s\n", value);
                     e->str_val = (char*)xalloc(sizeof(char) * strlen(value) + 1);
                     strcpy(e->str_val, value);
                     break;
@@ -616,7 +609,6 @@ void register_submit_action()
                         int i = 0;
                         int len = 0;
                         while (multi[i]) {
-                            d("multi:%s\n", multi[i]);
                             len += strlen(multi[i]) + 1;
                             /* VALUE_LENGTH を超えない範囲で連結していく。
                              * 通常超えないはず */
@@ -629,7 +621,6 @@ void register_submit_action()
                     }
                     e->str_val = (char*)xalloc(sizeof(char) * strlen(value) + 1);
                     strcpy(e->str_val, value);
-                    d("select:::%s\n", value);
                     cgiStringArrayFree(multi);
                     break;
             }

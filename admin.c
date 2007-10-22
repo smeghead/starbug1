@@ -38,7 +38,6 @@ void register_actions()
 
 void output_header(bt_project* project, char* script_name)
 {
-    d("scriptname: %s\n", cgiScriptName);
     cgiHeaderContentType("text/html; charset=utf-8;");
     /* Top of the page */
     o(      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -181,7 +180,6 @@ void display_action()
         o("\t\t\t<tr>\n");
         o("\t\t\t\t<th>必須項目</th>\n");
         o("\t\t\t\t<td>\n");
-        d("required:%d\n", e_types->required);
         o("\t\t\t\t\t<input id=\"field%d.required\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.required\" ", e_types->id, e_types->id);
         o(                  "value=\"1\" %s />\n", e_types->required == 1 ? "checked=\"checked\"" : "");
         o("\t\t\t\t\t<label for=\"field%d.required\">必須項目とする。</label>\n", e_types->id);
@@ -364,7 +362,6 @@ void update_elements()
         char name[DEFAULT_LENGTH];
         char value[DEFAULT_LENGTH];
         bt_list_item* items = NULL;
-        d("ids:%s\n", id);
 
         e_type = db_get_element_type(atoi(id));
 /*         e_type = (bt_element_type*)xalloc(sizeof(bt_element_type)); */
@@ -432,7 +429,6 @@ void update_elements()
                     items->sort = atoi(value);
                     sprintf(name, "field%d.list_item%d.delete", e_type->id, items->id);
                     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-                    d("delete: %s\n", value);
                     if (atoi(value) == 1)
                         db_delete_list_item(items->id);
                     else
@@ -629,16 +625,13 @@ void new_item_submit_action()
                 item->element_type_id = e_type_id;
                 sprintf(name, "field.list_item_new%d.name", i);
                 cgiFormStringNoNewlines(name, item->name, DEFAULT_LENGTH);
-                d("name: %s\n", item->name);
                 if (strlen(item->name) > 0) {
                     sprintf(name, "field.list_item_new%d.close", i);
                     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                     item->close = atoi(value);
-                    d("close: %d\n", item->close);
                     sprintf(name, "field.list_item_new%d.sort", i);
                     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                     item->sort = atoi(value);
-                    d("sort: %d\n", item->sort);
                     db_register_list_item(item);
                 }
             }
@@ -673,9 +666,7 @@ void delete_item_action()
     project = db_get_project();
     output_header(project, "delete_item.js");
 
-    d("delete_item:%d\n", iid);
     e_type = db_get_element_type(iid);
-    d("delete_item name:%s\n", e_type->name);
     o("<h2>%s 管理ツール</h2>", project->name);
     o(      "<div id=\"delete_item/%d\">\n", iid);
     o(      "<h3>項目(");h(e_type->name);o(")の削除</h3>\n"
@@ -686,7 +677,6 @@ void delete_item_action()
             "<input class=\"button\" type=\"submit\" value=\"削除\" />\n"
             "</form>\n", cgiScriptName, iid);
     o(      "</div>\n");
-    d("delete_item name:%s\n", e_type->name);
     db_finish();
     output_footer();
 }
@@ -699,14 +689,12 @@ void delete_item_submit_action()
 
     strcpy(path_info, cgiPathInfo);
     e_type_id = strchr(path_info + 1, '/');
-    d("e_type_id:%s\n", e_type_id);
     if (e_type_id) e_type_id++;
     iid = atoi(e_type_id);
     db_init();
     project = db_get_project();
     output_header(project, NULL);
 
-    d("delete_item:%d\n", iid);
     db_delete_element_type(iid);
     o("<h2>%s 管理ツール</h2>", project->name);
     o(      "<h2>処理完了</h2>\n"
