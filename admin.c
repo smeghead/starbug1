@@ -144,10 +144,18 @@ void display_action()
     o("\t\t\t\t<th>通知先アドレス</th>\n");
     o("\t\t\t\t<td>\n");
     o("\t\t\t\t\t<input type=\"text\" name=\"project.notify_address\" value=\"");h(project->notify_address);o("\" maxlength=\"1023\" />\n");
-    o("\t\t\t\t\t<div class=\"description\">投稿があったときに通知を行なうメールアドレスです。</div>\n");
+    o("\t\t\t\t\t<div class=\"description\">投稿があったときに通知を行なうメールアドレスです。メーリングリストなどを指定してください。</div>\n");
+    o("\t\t\t\t</td>\n");
+    o("\t\t\t</tr>\n");
+    o("\t\t\t<tr>\n");
+    o("\t\t\t\t<th>管理者アドレス</th>\n");
+    o("\t\t\t\t<td>\n");
+    o("\t\t\t\t\t<input type=\"text\" name=\"project.admin_address\" value=\"");h(project->admin_address);o("\" maxlength=\"1023\" />\n");
+    o("\t\t\t\t\t<div class=\"description\">メール通知のfromに指定されるメールアドレスです。</div>\n");
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t</table>\n");
+    o("\t\t<div class=\"description\">smtp_server、smtp_port、通知先アドレス、管理者アドレスが設定されている場合のみ、投稿時に通知先アドレスへのメール送信を行ないます。</div>\n");
     o("\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
     o("\t\t<h3>項目設定</h3>\n");
     o("\t\t<div class=\"message\">チケットID、投稿日時は編集できません。件名、投稿者、状態は、基本属性のため編集に制限があります。(削除不可、チケット属性、返信専用属性変更不可)</div>\n");
@@ -332,6 +340,7 @@ void update_action()
     cgiFormStringNoNewlines("project.smtp_port", smtp_port, DEFAULT_LENGTH);
     project->smtp_port = atoi(smtp_port);
     cgiFormStringNoNewlines("project.notify_address", project->notify_address, DEFAULT_LENGTH);
+    cgiFormStringNoNewlines("project.admin_address", project->admin_address, DEFAULT_LENGTH);
 
     db_update_project(project);
 
