@@ -5,6 +5,7 @@ use warnings;
 use Getopt::Std;
 use Net::SMTP;
 use Encode;
+use HTTP::Date qw(time2str);
 
 sub get_options {
     my $o = {};
@@ -38,9 +39,8 @@ sub mail_send {
     $smtp->mail($opts->{from});
     $smtp->to($opts->{to});
 
-    my $date = localtime();
     $smtp->data();
-    $smtp->datasend("Date: " . $date . "\n");
+    $smtp->datasend("Date: " . HTTP::Date::time2str() . "\n");
     $smtp->datasend("To: $opts->{to}\n");
     $smtp->datasend("From: $opts->{from}\n");
     $smtp->datasend("Subject: $subject\n");
