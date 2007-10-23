@@ -90,7 +90,8 @@ void output_header(bt_project* project, char* script_name)
 void output_footer()
 {
     /* Finish up the page */
-    o(      "<hr />\n"
+    o(      "<div id=\"footer\">\n"
+            "<hr />\n"
             "<div align=\"right\">\n"
             "<p>\n"
             "\t<a href=\"http://validator.w3.org/check?uri=referer\">\n"
@@ -99,6 +100,7 @@ void output_footer()
             "</p>\n"
             "<div><address>Powered by cgic.</address></div>\n"
             "<div><address>Copyright smeghead 2007.</address></div>\n"
+            "</div>\n"
             "</div>\n"
             "</body>\n</html>\n");
 }
@@ -656,19 +658,61 @@ void register_submit_action()
 void default_action()
 {
     bt_project* project;
+    bt_message* tickets;
+    bt_state* states;
+
     db_init();
     project = db_get_project();
     output_header(project, NULL);
+    states = db_get_states();
+    o(      "<div id=\"info\">\n");
+    /* 最新情報の表示 */
+    o(      "<div id=\"top_newest\">\n");
+    o(      "<h4>最新情報</h4>\n");
+    o(      "\t<ul>\n");
+    tickets = db_search_tickets(NULL);
+    if (tickets != NULL) {
+        int i;
+        for (i = 0; tickets != NULL; tickets = tickets->next) {
+            bt_element* elements = db_get_last_elements_4_list(tickets->id);
+            o("\t\t<li>\n");
+            o("\t\t\t<a href=\"%s/reply/%d=", cgiScriptName, tickets->id); o("\">");
+            h(get_element_value_by_id(elements, ELEM_ID_TITLE));
+            o(      "</a>\n");
+            o("\t\t</li>\n");
+            if (++i > 10) break;
+        }
+    }
+    o(      "\t</ul>\n");
+    o(      "</div>\n");
+    /* stateの表示 */
+    o(      "<div id=\"top_state_index\">\n");
+    o(      "<h4>状態別件数</h4>\n");
+    o(      "\t<ul>\n");
+    for (; states != NULL; states = states->next) {
+        o("\t\t<li>\n");
+        o("\t\t\t<a href=\"%s/list?field%d=", cgiScriptName, ELEM_ID_STATUS); u(states->name); o("\">");
+        h(states->name);
+        o("\t\t\t</a>\n");
+        o("(%d)", states->count);
+        o("\t\t</li>\n");
+    }
+    o(      "\t</ul>\n");
+    o(      "</div>\n");
+    o(      "</div>\n");
     db_finish();
-    o(      "<h2>");h(project->name);o("&nbsp;</h2>\n"
-            "<div id=\"top\">\n"
-            "<div id=\"description\">");h(project->description);o("</div>\n"
-            "<div class=\"top_edit\"><a href=\"%s/edit_top\">トップページの編集</a></div>\n", cgiScriptName);
+    o(      "<div id=\"main\">\n");
+    o(      "<h2>");h(project->name);o("&nbsp;</h2>\n");
+    o(      "<div id=\"main_body\">\n"
+            "<div id=\"description\">");h(project->description);o("</div>\n");
     o(      "<div id=\"message\">\n"
             "Starbug1は、快適な動作をすることに主眼を置いたバグトラッキングツールです。"
             "影舞のように簡単に使えて痒いところに手が届くようになるといいと思います。\n"
             "</div>\n");
+    o(      "<div class=\"top_edit\"><a href=\"%s/edit_top\">トップページの編集</a></div>\n", cgiScriptName);
     wiki_out("wiki/top.wiki");
+    o(      "</div>\n");
+    o(      "</div>\n");
     o(      "</div>\n");
     output_footer();
 }
@@ -676,7 +720,6 @@ void default_action()
 void rss_action()
 {
     bt_message* tickets;
-    bt_element_type* e;
     bt_project* project;
 
     db_init();
@@ -688,14 +731,14 @@ void rss_action()
             "\t\txmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" \n"
             "\t\txml:lang=\"ja\">\n"
             "\n"
-            "\t<channel rdf:about=\"http://");h(project->home_url);o("%s/rss\">\n", cgiScriptName);
+            "\t<channel rdf:about=\"");h(project->home_url);o("%s/rss\">\n", cgiScriptName);
     o(      "\t\t<title>");h(project->name); o(" - Starbug1</title>\n"
-            "\t\t<link>http://");h(project->home_url);o("/bt/</link>\n");
+            "\t\t<link>");h(project->home_url);o("/bt/</link>\n");
     o(      "\t\t<description>");h(project->description);o("</description>\n"
             "\t\t<items>\n"
             "\t\t\t<rdf:Seq>\n");
-    o(      "\t\t\t\t<rdf:li rdf:resource=\"http://");h(project->host_name);o("%s/list\"/>\n", cgiScriptName);
-    o(      "\t\t\t\t<rdf:li rdf:resource=\"http://");h(project->host_name);o("%s/register\"/>\n", cgiScriptName);
+    o(      "\t\t\t\t<rdf:li rdf:resource=\"");h(project->host_name);o("%s/list\"/>\n", cgiScriptName);
+    o(      "\t\t\t\t<rdf:li rdf:resource=\"");h(project->host_name);o("%s/register\"/>\n", cgiScriptName);
     o(      "\t\t\t</rdf:Seq>\n"
             "\t\t</items>\n"
             "\t</channel>\n");
@@ -703,17 +746,16 @@ void rss_action()
     tickets = db_search_tickets(NULL);
     if (tickets != NULL) {
         int i;
-        e = db_get_element_types(0);
         for (i = 0; tickets != NULL; tickets = tickets->next) {
             bt_element* elements = db_get_last_elements_4_list(tickets->id);
-            o(      "\t<item rdf:about=\"http://");h(project->home_url);o("%s/reply/%d\">\n", cgiScriptName, tickets->id);
+            o(      "\t<item rdf:about=\"");h(project->home_url);o("%s/reply/%d\">\n", cgiScriptName, tickets->id);
             o(      "\t\t<title>ID:%5d ", tickets->id);
-/*             h(tickets->subject); */
+            h(get_element_value_by_id(elements, ELEM_ID_TITLE));
             o(      "</title>\n");
-            o(      "\t\t<link>http://");h(project->home_url);o("%s/reply/%d</link>\n", cgiScriptName, tickets->id);
+            o(      "\t\t<link>");h(project->home_url);o("%s/reply/%d</link>\n", cgiScriptName, tickets->id);
             o(      "\t\t<description>");
             o(      "投稿者: ");
-/*             h(tickets->sender); */
+            h(get_element_value_by_id(elements, ELEM_ID_SENDER));
             h("<br>");
             o(      "投稿日: ");
             h(tickets->registerdate);

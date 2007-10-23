@@ -82,16 +82,8 @@ input.button {
 }
 #subject {
 }
-#ticket_list {
-    width: 95%;
-    margin: 10px;
-}
 #ticket_list table {
     width: 95%;
-}
-#ticket_history {
-    width: 95%;
-    margin: 10px;
 }
 #ticket_history table {
     width: 95%;
@@ -114,10 +106,6 @@ input.button {
 #ticket_history td {
     vertical-align: top;
 }
-#input_form {
-    margin: 10px;
-    width: 95%;
-}
 #input_form th {
     vertical-align: top;
     width: 150px;
@@ -127,10 +115,10 @@ input.button {
 }
 div {
 }
-#setting_form {
-    margin: 10px;
-    width: 95%;
-}
+#ticket_list,
+#ticket_history,
+#input_form,
+#setting_form,
 #condition_form {
     margin: 10px;
     width: 95%;
@@ -153,9 +141,54 @@ table.list_item th.delete {
 }
 .list_item input.checkbox {
 }
-#top {
+#info,
+#top_state_index,
+#top_newest,
+#top,
+#main_body {
     margin: 10px;
     width: 95%;
+}
+#info {
+    font-size: 70%;
+    margin: 0px;
+    padding: 0px;
+    width: 20%;
+    float: right;
+}
+#top_newest,
+#top_state_index {
+    margin: 10px;
+    padding: 0px;
+    border: #ff5500 solid 1px;
+}
+#top_newest h4,
+#top_state_index h4 {
+    background-color: #ff5500;
+    color: white;
+    margin: 0px;
+    padding: 0px;
+    text-align: center;
+    font-weight: bold;
+}
+#top_newest li,
+#top_state_index li {
+    margin: 5px;
+    padding: 5px;
+}
+#main {
+    width: 75%;
+    float: left;
+}
+#main h3 {
+    width: 95%;
+}
+#footer {
+    clear : both;
+}
+#info ul,
+#info li {
+    margin:0px 0px 0px 0px;
 }
 #new_item {
     margin: 10px;
