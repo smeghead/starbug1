@@ -25,11 +25,9 @@ bt_element_type* db_get_element_types(int all)
         sql = "select id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort from element_type where display_in_list = 1 order by sort";
     }
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
-    // stmtの内部バッファを一旦クリア
     sqlite3_reset(stmt);
 
     e = NULL;
-    // stmtのSQLを実行し、結果を一列づつ取得
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         if (e == NULL) {
             e = elements = (bt_element_type*)xalloc(sizeof(bt_element_type));
@@ -51,7 +49,6 @@ bt_element_type* db_get_element_types(int all)
     if (SQLITE_DONE != r)
         goto error;
 
-    // stmt を開放
     sqlite3_finalize(stmt);
 
     return elements;
@@ -73,12 +70,10 @@ bt_element_type* db_get_element_type(int id)
         "where id = ? "
         "order by sort";
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
-    // stmtの内部バッファを一旦クリア
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, id);
 
     e = NULL;
-    // stmtのSQLを実行し、結果を一列づつ取得
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         e = (bt_element_type*)xalloc(sizeof(bt_element_type));
         e->id = sqlite3_column_int(stmt, 0);
@@ -94,7 +89,6 @@ bt_element_type* db_get_element_type(int id)
         break;
     }
 
-    // stmt を開放
     sqlite3_finalize(stmt);
 
     return e;
@@ -109,11 +103,9 @@ bt_list_item* db_get_list_item(int element_type)
     sqlite3_stmt *stmt = NULL;
 
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
-    // stmtの内部バッファを一旦クリア
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, element_type);
 
-    // stmtのSQLを実行し、結果を一列づつ取得
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         if (i == NULL) {
             i = items = (bt_list_item*)xalloc(sizeof(bt_list_item));
@@ -130,7 +122,6 @@ bt_list_item* db_get_list_item(int element_type)
     if (SQLITE_DONE != r)
         goto error;
 
-    // stmt を開放
     sqlite3_finalize(stmt);
 
     return items;
@@ -235,11 +226,16 @@ char* get_search_sql_string(bt_condition* conditions, char* sql_string)
     strcpy(sql_string, 
             "select distinct "
             " t.id, t.registerdate "
-            "from ticket as t "
-            "inner join element as e on t.id = e.ticket_id ");
+            "from ticket as t ");
     for (i = 0, cond = conditions; cond != NULL; cond = cond->next, i++) {
         char val[DEFAULT_LENGTH];
-        sprintf(val, " inner join element as e%d on t.id = e%d.ticket_id ", i + 1, i + 1);
+        int n = i + 1;
+        sprintf(val,
+                " inner join element as e%d on t.id = e%d.ticket_id and "
+                " (e%d.reply_id = (select max(id) from reply where ticket_id = t.id) "
+                " or "
+                " ((select count(id) from reply where ticket_id = t.id) = 0 and e%d.reply_id is null)) ",
+                n, n, n, n);
         strcat(sql_string, val);
     }
     if (conditions != NULL) {
@@ -266,14 +262,12 @@ bt_message* db_search_tickets(bt_condition* conditions)
     sqlite3_stmt *stmt = NULL;
 
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
-    // stmtの内部バッファを一旦クリア
     sqlite3_reset(stmt);
     for (n = 1; conditions != NULL; conditions = conditions->next) {
         sqlite3_bind_int(stmt, n++, conditions->element_type_id);
         sqlite3_bind_text(stmt, n++, conditions->value, strlen(conditions->value), NULL);
     }
 
-    // stmtのSQLを実行し、結果を一列づつ取得
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         const unsigned char* registerdate;
         if (i == NULL) {
@@ -291,7 +285,6 @@ bt_message* db_search_tickets(bt_condition* conditions)
     if (SQLITE_DONE != r)
         goto error;
 
-    // stmt を開放
     sqlite3_finalize(stmt);
 
 
@@ -328,13 +321,11 @@ bt_element* db_get_last_elements_4_list(int ticket_id)
             "inner join element_type on element.element_type_id = element_type.id "
             "where ticket_id = ? and reply_id = ? and element_type.display_in_list = 1";
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
-    // stmtの内部バッファを一旦クリア
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, ticket_id);
     if (reply_id != -1)
         sqlite3_bind_int(stmt, 2, reply_id);
 
-    // stmtのSQLを実行し、結果を一列づつ取得
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         const unsigned char* str_val;
         if (e == NULL) {
@@ -355,7 +346,6 @@ bt_element* db_get_last_elements_4_list(int ticket_id)
     if (SQLITE_DONE != r)
         goto error;
 
-    // stmt を開放
     sqlite3_finalize(stmt);
 
     return elements;
@@ -392,13 +382,11 @@ bt_element* db_get_last_elements(int ticket_id)
             "inner join element_type on element.element_type_id = element_type.id "
             "where ticket_id = ? and reply_id = ?";
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
-    // stmtの内部バッファを一旦クリア
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, ticket_id);
     if (reply_id != -1)
         sqlite3_bind_int(stmt, 2, reply_id);
 
-    // stmtのSQLを実行し、結果を一列づつ取得
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         const unsigned char* str_val;
         if (e == NULL) {
@@ -419,7 +407,6 @@ bt_element* db_get_last_elements(int ticket_id)
     if (SQLITE_DONE != r)
         goto error;
 
-    // stmt を開放
     sqlite3_finalize(stmt);
 
     return elements;
@@ -452,14 +439,12 @@ bt_element* db_get_elements(int ticket_id, int reply_id)
             "order by et.sort";
     }
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
-    // stmtの内部バッファを一旦クリア
     sqlite3_reset(stmt);
     if (reply_id == 0)
         sqlite3_bind_int(stmt, 1, ticket_id);
     else
         sqlite3_bind_int(stmt, 1, reply_id);
 
-    // stmtのSQLを実行し、結果を一列づつ取得
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         const unsigned char* str_val;
         if (e == NULL) {
@@ -480,7 +465,6 @@ bt_element* db_get_elements(int ticket_id, int reply_id)
     if (SQLITE_DONE != r)
         goto error;
 
-    // stmt を開放
     sqlite3_finalize(stmt);
 
     return elements;
@@ -498,11 +482,9 @@ bt_message* db_get_ticket(int ticket_id)
     sqlite3_stmt *stmt = NULL;
 
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
-    // stmtの内部バッファを一旦クリア
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, ticket_id);
 
-    // stmtのSQLを実行し、結果を一列づつ取得
     if (SQLITE_ROW != (r = sqlite3_step(stmt))) {
         goto error;
     } else {
@@ -515,7 +497,6 @@ bt_message* db_get_ticket(int ticket_id)
         incidnet->next = NULL;
     }
 
-    // stmt を開放
     sqlite3_finalize(stmt);
     return incidnet;
 
@@ -532,11 +513,9 @@ bt_message* db_get_reply(int reply_id)
     sqlite3_stmt *stmt = NULL;
 
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
-    // stmtの内部バッファを一旦クリア
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, reply_id);
 
-    // stmtのSQLを実行し、結果を一列づつ取得
     if (SQLITE_ROW != (r = sqlite3_step(stmt))) {
         goto error;
     } else {
@@ -549,7 +528,6 @@ bt_message* db_get_reply(int reply_id)
         incidnet->next = NULL;
     }
 
-    // stmt を開放
     sqlite3_finalize(stmt);
     return incidnet;
 
@@ -566,7 +544,6 @@ int* db_get_reply_ids(int ticket_id)
     sqlite3_stmt *stmt = NULL;
 
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
-    // stmtの内部バッファを一旦クリア
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, ticket_id);
 
@@ -574,14 +551,12 @@ int* db_get_reply_ids(int ticket_id)
         goto error;
     }
     reply_ids = (int*)xalloc(sizeof(int) * (sqlite3_column_int(stmt, 0) + 1));
-    // stmt を開放
     sqlite3_finalize(stmt);
 
     sql = "select id from reply where ticket_id = ? order by id";
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, ticket_id);
-    // stmtのSQLを実行し、結果を一列づつ取得
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         reply_ids[i++] = sqlite3_column_int(stmt, 0);
     }
@@ -589,7 +564,6 @@ int* db_get_reply_ids(int ticket_id)
     if (SQLITE_DONE != r)
         goto error;
 
-    // stmt を開放
     sqlite3_finalize(stmt);
 
     return reply_ids;
@@ -609,10 +583,8 @@ bt_project* db_get_project()
 
     sql = "select name, description, home_url, host_name, smtp_server, smtp_port, notify_address, admin_address from project";
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
-    // stmtの内部バッファを一旦クリア
     sqlite3_reset(stmt);
 
-    // stmtのSQLを実行し、結果を一列づつ取得
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         project = (bt_project*)xalloc(sizeof(bt_project));
         strcpy(project->name, sqlite3_column_text(stmt, 0));
@@ -626,7 +598,6 @@ bt_project* db_get_project()
         break;
     }
 
-    // stmt を開放
     sqlite3_finalize(stmt);
 
     return project;
@@ -755,10 +726,8 @@ bt_state* db_get_states()
             "inner join list_item as li on e.element_type_id = li.element_type_id and li.name = e.str_val "
             "where e.element_type_id = %d group by e.str_val order by li.sort", ELEM_ID_STATUS);
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
-    // stmtの内部バッファを一旦クリア
     sqlite3_reset(stmt);
 
-    // stmtのSQLを実行し、結果を一列づつ取得
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         if (s == NULL) {
             s = states = (bt_state*)xalloc(sizeof(bt_state));
@@ -773,7 +742,6 @@ bt_state* db_get_states()
     if (SQLITE_DONE != r)
         goto error;
 
-    // stmt を開放
     sqlite3_finalize(stmt);
 
     return states;
