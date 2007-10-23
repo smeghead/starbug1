@@ -41,7 +41,7 @@ textarea {
 =======================================*/
 
 body {
-    color: #333;
+    color: #222;
     background-color: #fff;
     font-family: Arial, Helvetica, sans-serif;
 }
@@ -98,7 +98,7 @@ pre {
     border: 1px dotted #aaa;
     width: 90%;
     overflow: scroll;
-    color: #333;
+    color: #222;
     background-color: #f5f5f5;
     font-family: "Osaka−等幅", monospace;
 }
@@ -135,13 +135,13 @@ blockquote[cite]:after {
     padding: 0.8em 20px;
     display: block; 
     content: attr(cite);
-    color: #333;
+    color: #222;
     text-align: right;
 }
 
 cite {
     display: block;
-    color: #333;
+    color: #222;
     text-align: right;
 }
 
@@ -178,11 +178,11 @@ kbd {
 =======================================*/
 
 a:link {
-    color: #005585;
+    color: #0051E9;
 }
 
 a:visited {
-    color: #818f98;
+    color: #005585;
 }
 
 a:hover {
