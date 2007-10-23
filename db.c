@@ -607,7 +607,7 @@ bt_project* db_get_project()
     const char *sql;
     sqlite3_stmt *stmt = NULL;
 
-    sql = "select name, description, home_url, host_name, smtp_server, smtp_port, notify_address from project";
+    sql = "select name, description, home_url, host_name, smtp_server, smtp_port, notify_address, admin_address from project";
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
     // stmtの内部バッファを一旦クリア
     sqlite3_reset(stmt);
@@ -622,6 +622,7 @@ bt_project* db_get_project()
         strcpy(project->smtp_server, sqlite3_column_text(stmt, 4));
         project->smtp_port = sqlite3_column_int(stmt, 5);
         strcpy(project->notify_address, sqlite3_column_text(stmt, 6));
+        strcpy(project->admin_address, sqlite3_column_text(stmt, 7));
         break;
     }
 
@@ -634,7 +635,8 @@ void db_update_project(bt_project* project)
 {
     if (exec_query(
             "update project set "
-            "name = ?, description = ?, home_url = ?, host_name = ?, smtp_server = ?, smtp_port = ?, notify_address = ?",
+            "name = ?, description = ?, home_url = ?, host_name = ?, "
+            "smtp_server = ?, smtp_port = ?, notify_address = ?, admin_address = ?",
             COLUMN_TYPE_TEXT, project->name,
             COLUMN_TYPE_TEXT, project->description,
             COLUMN_TYPE_TEXT, project->home_url,
@@ -642,6 +644,7 @@ void db_update_project(bt_project* project)
             COLUMN_TYPE_TEXT, project->smtp_server,
             COLUMN_TYPE_INT, project->smtp_port,
             COLUMN_TYPE_TEXT, project->notify_address,
+            COLUMN_TYPE_TEXT, project->admin_address,
             COLUMN_TYPE_END) != 1)
         die("no project to update? or too many?");
 }

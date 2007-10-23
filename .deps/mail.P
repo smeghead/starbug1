@@ -13,8 +13,8 @@ mail.o: mail.c /usr/include/stdio.h /usr/include/features.h \
  /usr/include/bits/sigset.h /usr/include/bits/time.h \
  /usr/include/sys/sysmacros.h /usr/include/alloca.h \
  /usr/include/string.h /usr/include/bits/string.h \
- /usr/include/bits/string2.h data.h util.h \
- /usr/local/include/sqlite3.h
+ /usr/include/bits/string2.h /usr/local/include/cgic.h data.h util.h \
+ /usr/local/include/sqlite3.h mail.h
 mail.c :
 /usr/include/stdio.h :
 /usr/include/features.h :
@@ -46,6 +46,8 @@ mail.c :
 /usr/include/string.h :
 /usr/include/bits/string.h :
 /usr/include/bits/string2.h :
+/usr/local/include/cgic.h :
 data.h :
 util.h :
 /usr/local/include/sqlite3.h :
+mail.h :

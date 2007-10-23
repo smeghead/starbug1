@@ -551,6 +551,7 @@ void register_submit_action()
     bt_message* ticket;
     char ticket_id[DEFAULT_LENGTH];
     int mode = get_mode();
+    int mail_result;
     char** multi;
 
     if (mode == MODE_INVALID)
@@ -629,7 +630,11 @@ void register_submit_action()
             db_reply_ticket(ticket);
     }
     /* mail */
-    mail_send(project, ticket, elements, e_type);
+    e_type = db_get_element_types(1);
+    if (mail_result = mail_send(project, ticket, elements, e_type)) {
+        if (mail_result != MAIL_GAVE_UP)
+            die("mail send error.");
+    }
     db_commit();
     db_finish();
     output_header(project, NULL);

@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <cgic.h>
 #include "data.h"
 #include "util.h"
+#include "mail.h"
 
 int mail_send(bt_project* project, bt_message* message, bt_element* elements, bt_element_type* e_types)
 {
@@ -12,34 +14,44 @@ int mail_send(bt_project* project, bt_message* message, bt_element* elements, bt
     char to[DEFAULT_LENGTH];
     char subject[DEFAULT_LENGTH];
     char content[VALUE_LENGTH];
-    char env_value[DEFAULT_LENGTH];
+    char header[DEFAULT_LENGTH];
+    char footer[DEFAULT_LENGTH];
     if (strlen(project->smtp_server) == 0 ||
             strlen(project->admin_address) == 0 ||
             strlen(project->notify_address) == 0) {
         d("invalid settings. gave up to send mail.");
-        return -1;
+        return MAIL_GAVE_UP;
     }
     strcpy(server, project->smtp_server);
     strcpy(from, project->notify_address);
     strcpy(to, project->admin_address);
-    sprintf(subject, "[%s:%d] %s", 
+    sprintf(subject, "SB_SUBJECT=[%s:%d] %s", 
             project->name, 
             message->id,
             get_element_value_by_id(elements, ELEM_ID_TITLE));
-    sprintf(env_value, "SB_SUBJECT=%s", subject);
-    putenv(env_value);
+    d("subject is %s\n", subject);
+    putenv(subject);
+    sprintf(header, 
+            "SB_CONTENT=[%s]ã§ãƒã‚±ãƒƒãƒˆæƒ…å ±ãŒæ›´æ–°ã•ã‚Œã¾ã—ãŸã€‚\n"
+            "ä»¥ä¸‹ã®URLã‹ã‚‰ç¢ºèªã—ã¦ãã ã•ã„ã€‚\n"
+            " %s%s/reply/%d\n\n",
+            project->name, project->host_name, cgiScriptName, message->id);
+    strcat(content, header);
     strcat(content, 
-            "¹¹¿·¤µ¤ì¤Þ¤·¤¿¡£\n"
-            "¹¹¿·ÆâÍÆ¤Ï°Ê²¼¤Ç¤¹¡£\n"
-            "----------------------------------------------\n");
+            "æ›´æ–°å†…å®¹ã¯ä»¥ä¸‹ã§ã™ã€‚\n"
+            "--------------------------------------------------------------\n");
     for (; e_types != NULL; e_types = e_types->next) {
         strcat(content, e_types->name);
-        strcat(content, ":\n");
+        strcat(content, ":");
         strcat(content, get_element_value(elements, e_types));
         strcat(content, "\n\n");
     }
-    sprintf(env_value, "SB_CONTENT=%s", content);
-    putenv(env_value);
+    sprintf(footer, 
+            "--------------------------------------------------------------\n"
+            "by starbug1(%s).\n"
+            "--------------------------------------------------------------\n", project->home_url);
+    strcat(content, footer);
+    putenv(content);
     sprintf(command,
             "script/smtp.pl "
             "-x '%s' "
@@ -47,5 +59,7 @@ int mail_send(bt_project* project, bt_message* message, bt_element* elements, bt
             "-f '%s' "
             "-t '%s' ",
             server, project->smtp_port, from, to);
+    d("command: %s\n", command);
     return system(command);
+
 }
