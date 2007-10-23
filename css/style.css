@@ -237,3 +237,15 @@ table.list_item th.delete {
     padding:0px 10px 0px 10px;
     float:left;
 }
+#field_list {
+    width:100%;
+    margin:0px 0px 0px 0px;
+    text-align: center;
+}
+
+#field_list li {
+    margin:0px 0px 0px 0px;
+    list-style:none;
+    padding:3px 10px;
+    float:left;
+}

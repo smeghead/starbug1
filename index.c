@@ -200,10 +200,14 @@ void list_action()
             o("\t<tr>\n");
             o("\t\t<td><a href=\"%s/reply/%d\">%d</a></td>\n", cgiScriptName, tickets->id, tickets->id);
             for (; elements != NULL; elements = elements->next) {
+                char sender[DEFAULT_LENGTH];
                 o("\t\t<td>");
                 if (elements->element_type_id == ELEM_ID_TITLE)
                     o("<a href=\"%s/reply/%d\">", cgiScriptName, tickets->id);
-                h(elements->str_val);
+                if (elements->element_type_id == ELEM_ID_SENDER)
+                    hmail(db_get_original_sender(tickets->id, sender)); /* 最初の投稿者を表示する。 */
+                else
+                    h(elements->str_val);
                 if (elements->element_type_id == ELEM_ID_TITLE)
                     o("</a>");
                 o("&nbsp;</td>\n");
@@ -268,7 +272,7 @@ void output_form_element_4_condition(char* value, bt_element_type* e_type)
 void output_form_element(bt_element* element, bt_element_type* e_type)
 {
     char id[DEFAULT_LENGTH];
-    char* value;
+    char* value = "";
     bt_list_item* items;
     bt_list_item* i;
     int list_count;
@@ -277,7 +281,12 @@ void output_form_element(bt_element* element, bt_element_type* e_type)
     if (element != NULL) {
         value = element->str_val;
     } else {
-        value = "";
+        char* user_name = getenv("REMOTE_USER");
+        /* 投稿者のフィールドは、basic認証が行なわれていればそのユーザ名を表示する。 */
+        if (e_type->id == ELEM_ID_SENDER && user_name)
+            value = user_name;
+        else
+            value = "";
     }
     switch (e_type->type) {
         case ELEM_TEXT:
@@ -465,7 +474,10 @@ void reply_action()
             h(e_type->name);
             o("&nbsp;</th>\n");
             o("\t\t<td>");
-            hm(get_element_value(elements, e_type));
+            if (e_type->id == ELEM_ID_SENDER) 
+                hmail(get_element_value(elements, e_type));
+            else
+                hm(get_element_value(elements, e_type));
             o("&nbsp;</td>\n");
             o("\t</tr>\n");
         }
@@ -489,7 +501,10 @@ void reply_action()
                 h(e_type->name);
                 o(      "&nbsp;</th>\n"
                         "\t\t<td>");
-                hm(get_element_value(elements, e_type));
+                if (e_type->id == ELEM_ID_SENDER) 
+                    hmail(get_element_value(elements, e_type));
+                else
+                    hm(get_element_value(elements, e_type));
                 o(      "&nbsp;</td>\n"
                         "\t</tr>\n");
             }
@@ -633,7 +648,7 @@ void register_submit_action()
     }
     /* mail */
     e_type = db_get_element_types(1);
-    if (mail_result = mail_send(project, ticket, elements, e_type)) {
+    if ((mail_result = mail_send(project, ticket, elements, e_type)) != 0) {
         if (mail_result != MAIL_GAVE_UP)
             die("mail send error.");
     }
@@ -747,6 +762,7 @@ void rss_action()
     if (tickets != NULL) {
         int i;
         for (i = 0; tickets != NULL; tickets = tickets->next) {
+            char sender[DEFAULT_LENGTH];
             bt_element* elements = db_get_last_elements_4_list(tickets->id);
             o(      "\t<item rdf:about=\"");h(project->home_url);o("%s/reply/%d\">\n", cgiScriptName, tickets->id);
             o(      "\t\t<title>ID:%5d ", tickets->id);
@@ -755,7 +771,7 @@ void rss_action()
             o(      "\t\t<link>");h(project->home_url);o("%s/reply/%d</link>\n", cgiScriptName, tickets->id);
             o(      "\t\t<description>");
             o(      "投稿者: ");
-            h(get_element_value_by_id(elements, ELEM_ID_SENDER));
+            hmail(db_get_original_sender(tickets->id, sender));
             h("<br>");
             o(      "投稿日: ");
             h(tickets->registerdate);

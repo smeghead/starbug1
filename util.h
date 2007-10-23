@@ -17,6 +17,7 @@ typedef struct _action {
 void register_action_actions(char*, void func(void));
 void exec_action();
 void hm(char*);
+void hmail(char*);
 char* get_element_value(bt_element*, bt_element_type*);
 
 #endif

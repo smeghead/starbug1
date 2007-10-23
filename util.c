@@ -99,6 +99,44 @@ void hm(char *s)
 {
 	cgiHtmlEscapeDataMultiLine(s, (int) strlen(s));
 }
+static cgiFormResultType cgiHtmlEscapeDataMailaddress(char *data, int len)
+{
+	while (len--) {
+		if (*data == '<') {
+			TRYPUTC('&');
+			TRYPUTC('l');
+			TRYPUTC('t');
+			TRYPUTC(';');
+		} else if (*data == '&') {
+			TRYPUTC('&');
+			TRYPUTC('a');
+			TRYPUTC('m');
+			TRYPUTC('p');
+			TRYPUTC(';');
+		} else if (*data == '>') {
+			TRYPUTC('&');
+			TRYPUTC('g');
+			TRYPUTC('t');
+			TRYPUTC(';');
+		} else if (*data == '@') {
+			TRYPUTC(' ');
+			TRYPUTC('_');
+			TRYPUTC('a');
+			TRYPUTC('t');
+			TRYPUTC('_');
+			TRYPUTC(' ');
+		} else {
+			TRYPUTC(*data);
+		}
+		data++;
+	}
+	return cgiFormSuccess;
+}
+
+void hmail(char *s)
+{
+	cgiHtmlEscapeDataMailaddress(s, (int) strlen(s));
+}
 
 /* 失敗
 #define list_add(target, type) \

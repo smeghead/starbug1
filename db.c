@@ -247,7 +247,7 @@ char* get_search_sql_string(bt_condition* conditions, char* sql_string)
             strcat(sql_string, val);
         }
     }
-    strcat(sql_string, " order by registerdate desc ");
+    strcat(sql_string, " order by t.registerdate desc ");
     d("sql: %s\n", sql_string);
 
     return sql_string;
@@ -294,6 +294,30 @@ error:
     d("ERR: %s\n", sqlite3_errmsg(db));
     sqlite3_close(db);
     die("failed to db_search_tickets.");
+}
+char* db_get_original_sender(int ticket_id, char* buf)
+{
+    bt_element* elements = NULL;
+    bt_element* e = NULL;
+    const char *sql;
+    sqlite3_stmt *stmt = NULL;
+    int r;
+
+    sql = "select str_val "
+        "from element "
+        "where ticket_id = ? and reply_id is null and element_type_id = ?";
+    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+    sqlite3_reset(stmt);
+    sqlite3_bind_int(stmt, 1, ticket_id);
+    sqlite3_bind_int(stmt, 2, ELEM_ID_SENDER);
+
+    while (SQLITE_ROW == (r = sqlite3_step(stmt))){
+        strcpy(buf, sqlite3_column_text(stmt, 0));
+        break;
+    }
+    sqlite3_finalize(stmt);
+
+    return buf;
 }
 bt_element* db_get_last_elements_4_list(int ticket_id)
 {

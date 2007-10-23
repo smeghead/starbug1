@@ -89,6 +89,7 @@ int cgiMain() {
 void display_action()
 {
     bt_project* project;
+    bt_element_type* element_types;
     bt_element_type* e_types;
 
     db_init();
@@ -161,10 +162,17 @@ void display_action()
     o("\t\t<div class=\"message\">チケットID、投稿日時は編集できません。件名、投稿者、状態は、基本属性のため編集に制限があります。(削除不可、チケット属性、返信専用属性変更不可)</div>\n");
     o("\t\t<div class=\"message\"><a href=\"%s/new_item\">新規項目の追加</a></div>\n", cgiScriptName);
 
-    e_types = db_get_element_types(1);
+    e_types = element_types = db_get_element_types(1);
+    o("\t\t<ul id=\"field_list\">\n");
+    for (; e_types != NULL; e_types = e_types->next) {
+        o("\t\t<li><a href=\"#field%d\">", e_types->id); h(e_types->name); o("</a></li>\n");
+    }
+    o("\t\t</ul>\n");
+    e_types = element_types;
     for (; e_types != NULL; e_types = e_types->next) {
         bt_list_item* items = db_get_list_item(e_types->id);
         o("\t\t<hr />\n");
+        o("\t\t<a name=\"field%d\" />\n", e_types->id);
         o("\t\t<h4>"); h(e_types->name); o("</h4>\n");
         o("\t\t<input type=\"hidden\" name=\"field_ids\" value=\"%d\" />\n", e_types->id);
         o("\t\t<table summary=\"project table\">\n");
