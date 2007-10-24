@@ -207,7 +207,7 @@ void display_action()
         o("\t\t\t\t\t<input id=\"field%d.ticket_property\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.ticket_property\" ", e_types->id, e_types->id);
         o(                  "value=\"1\" %s %s />\n", e_types->ticket_property == 1 ? "checked=\"checked\"" : "", e_types->id <= BASIC_ELEMENT_MAX ? "disabled=\"disabled\"" : "");
         o("\t\t\t\t\t<label for=\"field%d.ticket_property\">チケット属性とする。</label>\n", e_types->id);
-        o("\t\t\t\t\t<div class=\"description\">新規の登録時には、入力項目としないかどうかです。チェックした場合、新規の登録時には、入力項目になりません。</div>\n");
+        o("\t\t\t\t\t<div class=\"description\">返信の属性としてではなくチケット自体の属性として定義するかどうかです。</div>\n");
         o("\t\t\t\t</td>\n");
         o("\t\t\t</tr>\n");
         o("\t\t\t<tr>\n");
@@ -216,7 +216,7 @@ void display_action()
         o("\t\t\t\t\t<input id=\"field%d.reply_property\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.reply_property\" ", e_types->id, e_types->id);
         o(                  "value=\"1\" %s %s />\n", e_types->reply_property == 1 ? "checked=\"checked\"" : "", e_types->id <= BASIC_ELEMENT_MAX ? "disabled=\"disabled\"" : "");
         o("\t\t\t\t\t<label for=\"field%d.reply_property\">返信専用属性とする。</label>\n", e_types->id);
-        o("\t\t\t\t\t<div class=\"description\">返信の属性としてではなくチケット自体の属性として定義するかどうかです。</div>\n");
+        o("\t\t\t\t\t<div class=\"description\">新規の登録時には、入力項目としないかどうかです。チェックした場合、新規の登録時には、入力項目になりません。</div>\n");
         o("\t\t\t\t</td>\n");
         o("\t\t\t</tr>\n");
         o("\t\t\t<tr>\n");
@@ -519,7 +519,7 @@ void new_item_action()
     o("\t\t\t\t\t<label for=\"field.type%d\" class=\"description\">複数行テキスト(textarea)</label><br />\n", ELEM_TEXTAREA);
     o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" "
             "type=\"radio\" name=\"field.type\" ", ELEM_CHECKBOX);
-    o(                  "value=\"%d\" />\n", ELEM_CHECKBOX);
+    o(                  "value=\"%d\" disabled=\"disabled\" />\n", ELEM_CHECKBOX);
     o("\t\t\t\t\t<label for=\"field.type%d\" class=\"description\">真偽値(input[type=checkbox])</label><br />\n", ELEM_CHECKBOX);
     o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" "
             "type=\"radio\" name=\"field.type\" ", ELEM_RADIO);
@@ -533,6 +533,10 @@ void new_item_action()
             "type=\"radio\" name=\"field.type\" ", ELEM_LIST_MULTI);
     o(                  "value=\"%d\" />\n", ELEM_LIST_MULTI);
     o("\t\t\t\t\t<label for=\"field.type%d\" class=\"description\">複数選択可能リスト(select[multiple=multiple])</label><br />\n", ELEM_LIST_MULTI);
+    o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" "
+            "type=\"radio\" name=\"field.type\" ", ELEM_UPLOADFILE);
+    o(                  "value=\"%d\" />\n", ELEM_UPLOADFILE);
+    o("\t\t\t\t\t<label for=\"field.type%d\" class=\"description\">ファイル(input[type=file])</label><br />\n", ELEM_UPLOADFILE);
     o("\t\t\t\t\t<div class=\"description\">項目を入力する時の入力形式です。項目種別は、追加後に変更することができません。</div>\n");
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");

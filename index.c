@@ -19,6 +19,7 @@ void reply_action();
 void help_action();
 void edit_top_action();
 void edit_top_submit_action();
+void download_action();
 void rss_action();
 void default_action();
 void output_header(bt_project* project, char* script_name);
@@ -53,6 +54,7 @@ void register_actions()
     register_action_actions("help", help_action);
     register_action_actions("edit_top", edit_top_action);
     register_action_actions("edit_top_submit", edit_top_submit_action);
+    register_action_actions("download", download_action);
     register_action_actions("rss", rss_action);
     register_action_actions("default", default_action);
 }
@@ -187,8 +189,7 @@ void list_action()
         o(      "<table summary=\"ticket list\">\n"
                 "\t<tr>\n"
                 "\t\t<th>ID</th>\n");
-        e = e_types;
-        for (; e != NULL; e = e->next) {
+        for (e = e_types; e != NULL; e = e->next) {
             o("\t\t<th>");
             h(e->name);
             o("</th>\n");
@@ -199,16 +200,16 @@ void list_action()
             bt_element* elements = db_get_last_elements_4_list(tickets->id);
             o("\t<tr>\n");
             o("\t\t<td><a href=\"%s/reply/%d\">%d</a></td>\n", cgiScriptName, tickets->id, tickets->id);
-            for (; elements != NULL; elements = elements->next) {
+            for (e = e_types; e != NULL; e = e->next) {
                 char sender[DEFAULT_LENGTH];
                 o("\t\t<td>");
-                if (elements->element_type_id == ELEM_ID_TITLE)
+                if (e->id == ELEM_ID_TITLE)
                     o("<a href=\"%s/reply/%d\">", cgiScriptName, tickets->id);
-                if (elements->element_type_id == ELEM_ID_SENDER)
+                if (e->id == ELEM_ID_SENDER)
                     hmail(db_get_original_sender(tickets->id, sender)); /* 最初の投稿者を表示する。 */
                 else
-                    h(elements->str_val);
-                if (elements->element_type_id == ELEM_ID_TITLE)
+                    h(get_element_value_by_id(elements, e->id));
+                if (e->id == ELEM_ID_TITLE)
                     o("</a>");
                 o("&nbsp;</td>\n");
             }
@@ -350,6 +351,13 @@ void output_form_element(bt_element* element, bt_element_type* e_type)
             o("</select>\n");
 
             break;
+        case ELEM_UPLOADFILE:
+            o("<input type=\"file\" class=\"element\" id=\"field");
+            h(id);
+            o("\" name=\"field");
+            h(id);
+            o("\" />\n");
+            break;
     }
 }
 static int contains(char* const value, const char* name)
@@ -380,7 +388,7 @@ void register_action()
             "<h3>チケット登録</h3>\n"
             "<div class=\"message\">新規チケットを登録する場合は、以下のフォームを記入し登録ボタンをクリックしてください。</div>\n"
             "<div class=\"message\">※必須項目の入力チェックは、javascriptで行なっています。</div>\n");
-    o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/register_submit\" method=\"post\">\n", cgiScriptName);
+    o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName);
     o(      "<table summary=\"input infomation\">\n");
     {
         bt_element_type* e_type = db_get_element_types(1);
@@ -496,15 +504,25 @@ void reply_action()
         {
             bt_element_type* e_type = element_types;
             for (; e_type != NULL; e_type = e_type->next) {
+                char* value = get_element_value(elements, e_type);
                 o(      "\t<tr>\n"
                         "\t\t<th>");
                 h(e_type->name);
                 o(      "&nbsp;</th>\n"
                         "\t\t<td>");
-                if (e_type->id == ELEM_ID_SENDER) 
-                    hmail(get_element_value(elements, e_type));
-                else
-                    hm(get_element_value(elements, e_type));
+                switch (e_type->id) {
+                    case ELEM_ID_SENDER:
+                        hmail(value);
+                        break;
+                    default:
+                        if (e_type->type == ELEM_UPLOADFILE) {
+                            if (strlen(value)) {
+                                o("<a href=\"%s/download/%d/", cgiScriptName, get_element_id(elements, e_type)); u(value); o("\" target=\"_blank\">");h(value); o("</a>\n");
+                            }
+                        } else {
+                            hm(value);
+                        }
+                }
                 o(      "&nbsp;</td>\n"
                         "\t</tr>\n");
             }
@@ -515,7 +533,7 @@ void reply_action()
     /* フォームの表示 */
     o(      "<div id=\"input_form\">\n"
             "<h3>チケット返信</h3>\n");
-    o(      "<form id=\"reply_form\" name=\"reply_form\" action=\"%s/register_submit\" method=\"post\">\n", cgiScriptName);
+    o(      "<form id=\"reply_form\" name=\"reply_form\" action=\"%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName);
     o(      "<input type=\"hidden\" name=\"ticket_id\" value=\"%s\" />\n", ticket_id);
     o(      "<div class=\"message\">返信を行なう場合は、以下のフォールに内容を記入して返信ボタンをクリックしてください。</div>\n"
             "<div class=\"message\">※必須項目の入力チェックは、javascriptで行なっています。</div>\n"
@@ -597,6 +615,7 @@ void register_submit_action()
             }
             e->next = NULL;
             e->element_type_id = e_type->id;
+            e->is_file = 0;
             switch (e_type->type) {
                 case ELEM_TEXT:
                     sprintf(name, "field%d", e_type->id);
@@ -637,6 +656,15 @@ void register_submit_action()
                     e->str_val = (char*)xalloc(sizeof(char) * strlen(value) + 1);
                     strcpy(e->str_val, value);
                     cgiStringArrayFree(multi);
+                    break;
+                case ELEM_UPLOADFILE:
+                    sprintf(name, "field%d", e_type->id);
+                    cgiFormFileName(name, value, VALUE_LENGTH);
+                    e->str_val = (char*)xalloc(sizeof(char) * strlen(value) + 1);
+                    strcpy(e->str_val, get_filename_without_path(value));
+                    if (strlen(e->str_val)) {
+                        e->is_file = 1;
+                    }
                     break;
             }
         }
@@ -841,4 +869,41 @@ void edit_top_submit_action()
     o("<div class=\"message\">更新しました</div>\n");
     o(      "</div>\n");
     output_footer();
+}
+void download_action()
+{
+    bt_element_file* file;
+    char path_info[DEFAULT_LENGTH];
+    char* element_id_str;
+    int element_id;
+    bt_project* project;
+    int i;
+    char* p;
+
+    strcpy(path_info, cgiPathInfo);
+    element_id_str = strchr(path_info + 1, '/');
+    if (element_id_str) element_id_str++;
+    element_id = atoi(element_id_str);
+    d("element_id: %d\n", element_id);
+
+    db_init();
+    file = db_get_element_file(element_id);
+    if (!file) goto error;
+    o("Content-Type: %s\r\n", file->content_type);
+    o("Content-Length: %d\r\n", file->size);
+    o("Content-Disposition: attachment;\r\n");
+    o("\r\n");
+
+    p = file->blob;
+    for (i = 0; i < file->size; i++) {
+        d("%c", *p);
+        fputc(*p, cgiOut);
+        p++;
+    }
+    db_finish();
+
+error:
+    cgiHeaderContentType("text/plain; charset=utf-8;");
+    o("error: ファイルがありません。");
+
 }

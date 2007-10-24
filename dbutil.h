@@ -17,6 +17,7 @@ int exec_query_scalar_int(const char* sql, ...);
 enum COLUMN_TYPE {
     COLUMN_TYPE_INT,
     COLUMN_TYPE_TEXT,
+    COLUMN_TYPE_BLOB,
     COLUMN_TYPE_END
 };
 #endif

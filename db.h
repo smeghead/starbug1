@@ -26,5 +26,6 @@ int db_register_element_type(bt_element_type*);
 void db_delete_element_type(int);
 bt_state* db_get_states();
 char* db_get_original_sender(int, char*);
+bt_element_file* db_get_element_file(int);
 
 #endif

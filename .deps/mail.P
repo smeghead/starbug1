@@ -14,7 +14,7 @@ mail.o: mail.c /usr/include/stdio.h /usr/include/features.h \
  /usr/include/sys/sysmacros.h /usr/include/alloca.h \
  /usr/include/string.h /usr/include/bits/string.h \
  /usr/include/bits/string2.h /usr/local/include/cgic.h data.h util.h \
- /usr/local/include/sqlite3.h mail.h
+ /usr/local/include/sqlite3.h dbutil.h mail.h
 mail.c :
 /usr/include/stdio.h :
 /usr/include/features.h :
@@ -50,4 +50,5 @@ mail.c :
 data.h :
 util.h :
 /usr/local/include/sqlite3.h :
+dbutil.h :
 mail.h :

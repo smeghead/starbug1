@@ -22,7 +22,7 @@ void db_init()
 
   mkdir("db", 0755);
   if (SQLITE_OK != sqlite3_open(db_name, &db)) {
-    d("sqlite3 init error.");
+    die("sqlite3 init error.");
   }
   if (!exists_db_file)
     create_tables();
@@ -135,6 +135,14 @@ void create_tables()
             " element_type_id integer, "
             " str_val text"
             ");", COLUMN_TYPE_END);
+    exec_query("create table element_file("
+            " id integer not null primary key, "
+            " element_id integer not null, "
+            " filename text, "
+            " size integer, "
+            " content_type text, "
+            " content blob "
+            ");", COLUMN_TYPE_END);
     db_commit();
 }
 
@@ -148,20 +156,31 @@ int exec_query(const char* sql, ...)
     int type;
     sqlite3_stmt *stmt = NULL;
 
+    d("sql %s\n", sql);
+    d("sqllen %d\n", strlen(sql));
+    d("stmt %X\n", stmt);
+    d("db %X\n", db);
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+    d("sql prepare\n");
     sqlite3_reset(stmt);
 
     va_start(ap,sql);
     for(i = 0; (type = va_arg(ap, int)) != COLUMN_TYPE_END; i++){
+        d("exec_query %d\n", i);
         if (type == COLUMN_TYPE_INT) {
             int value = va_arg(ap, int);
-            d("type: %d = %d\n", type, value);
+/*             d("type: %d = %d\n", type, value); */
             sqlite3_bind_int(stmt, i + 1, value);
         } else if (type == COLUMN_TYPE_TEXT) {
             char* value = va_arg(ap, char*);
-            d("type: %d = %s\n", type, value);
+/*             d("type: %d = %s\n", type, value); */
             if (value == NULL) goto error;
             sqlite3_bind_text(stmt, i + 1, value, strlen(value), NULL);
+        } else if (type == COLUMN_TYPE_BLOB) {
+            bt_element_file* content = va_arg(ap, bt_element_file*);
+        d("exec_query bt_element_file %d\n", i);
+            if (content == NULL) goto error;
+            sqlite3_bind_blob(stmt, i + 1, content->blob, content->size, NULL);
         }
     }
     va_end(ap);
@@ -200,11 +219,11 @@ int exec_query_scalar_int(const char* sql, ...)
     for(i = 0; (type = va_arg(ap, int)) != COLUMN_TYPE_END; i++){
         if (type == COLUMN_TYPE_INT) {
             int value = va_arg(ap, int);
-            d("type: %d = %d\n", type, value);
+/*             d("type: %d = %d\n", type, value); */
             sqlite3_bind_int(stmt, i + 1, value);
         } else if (type == COLUMN_TYPE_TEXT) {
             char* value = va_arg(ap, char*);
-            d("type: %d = %s\n", type, value);
+/*             d("type: %d = %s\n", type, value); */
             if (value == NULL) goto error;
             sqlite3_bind_text(stmt, i + 1, value, strlen(value), NULL);
         }

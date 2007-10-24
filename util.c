@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdlib.h>
@@ -202,4 +203,108 @@ unsigned long url_encode(unsigned char* csource, unsigned char* cbuffer, unsigne
     }
     return lresultcount;                                            /* cbuffer に書き込んだ文字列のサイズを返す */
 }
+char* get_filename_without_path(char* path)
+{
+    char* p = path;
+    char* c;
+    if (strlen(p) == 0) return p;
+    while (c = strstr(p, "\\")) {
+        p = ++c;
+    }
+    while (c = strstr(p, "/")) {
+        p = ++c;
+    }
+    d("%s\n", p);
+    return p;
+}
+char* get_upload_filename(int element_id, char* buf)
+{
+    char name[DEFAULT_LENGTH];
+    sprintf(name, "field%d", element_id);
+    cgiFormFileName(name, buf, DEFAULT_LENGTH);
+    return buf;
+}
+int get_upload_size(int element_id)
+{
+    char name[DEFAULT_LENGTH];
+    int size;
+    sprintf(name, "field%d", element_id);
+    cgiFormFileSize(name, &size);
+    return size;
+}
+char* get_upload_content_type(int element_id, char* buf)
+{
+    char name[DEFAULT_LENGTH];
+    sprintf(name, "field%d", element_id);
+    cgiFormFileContentType(name, buf, DEFAULT_LENGTH);
+    return buf;
+}
+bt_element_file* get_upload_content(int element_id)
+{
+    int got = 0;
+    char* buffer_org;
+    char* buffer;
+    char b[DEFAULT_LENGTH];
+    char name[DEFAULT_LENGTH];
+    cgiFilePtr file;
+    bt_element_file* content = (bt_element_file*)xalloc(sizeof(bt_element_file));
+    content->size = get_upload_size(element_id);
+    buffer = buffer_org = (char*)xalloc(sizeof(char) * content->size);
+    sprintf(name, "field%d", element_id);
+    if (cgiFormFileOpen(name, &file) != cgiFormSuccess) {
+        die("Could not open the file.");
+    }
 
+    while (cgiFormFileRead(file, b, sizeof(b), &got) == cgiFormSuccess) {
+        char* p = b;
+        int i;
+        for (i = 0; i < got; i++) {
+            *buffer = *p;
+            buffer++;
+            p++;
+        }
+    }
+    content->blob = buffer_org;
+    /* TODO close file. */
+    cgiFormFileClose(file);
+    return content;
+}
+
+/* static unsigned char *base64 = (unsigned char *)"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"; */
+
+/* static void enclode_char(unsigned long bb, int srclen, unsigned char *dest, int j) */
+/* { */
+/*     int x, i, base; */
+
+/*     for ( i = srclen; i < 2; i++ )  */
+/*         bb <<= 8; */
+/*     for ( base = 18, x = 0; x < srclen + 2; x++, base -= 6) { */
+/*         dest[j++] = base64[ (unsigned long)((bb>>base) & 0x3F) ]; */
+/*     } */
+/*     for ( i = x; i < 4; i++ ) { */
+/*         dest[j++] = (unsigned char)'='; */
+/*     } */
+/* } */
+
+/* void base64_encode(const unsigned char *src, unsigned char *dest) */
+/* { */
+/*     unsigned char *p = (char *)src; */
+/*     unsigned long bb = (unsigned long)0; */
+/*     int i = 0, j = 0; */
+
+/*     while (*p) { */
+/*         bb <<= 8; */
+/*         bb |= (unsigned long)*p; */
+
+/*         if (i == 2) { */
+/*             enclode_char(bb, i, dest, j); */
+/*             j = j + 4; */
+/*             i = 0; */
+/*             bb = 0; */
+/*         } else */
+/*             i++; */
+/*         p++; */
+/*     } */
+/*     if (i) */
+/*         enclode_char(bb, i - 1, dest, j); */
+/* } */

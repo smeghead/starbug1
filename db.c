@@ -202,6 +202,7 @@ void db_reply_ticket(bt_message* ticket)
 
     elements = ticket->elements;
     for (; elements != NULL; elements = elements->next) {
+        int element_id;
         exec_query("insert into element(id, ticket_id, reply_id, element_type_id, str_val)"
                 "values (NULL, ?, ?, ?, ?)",
                 COLUMN_TYPE_INT, ticket->id,
@@ -209,6 +210,28 @@ void db_reply_ticket(bt_message* ticket)
                 COLUMN_TYPE_INT, elements->element_type_id,
                 COLUMN_TYPE_TEXT, elements->str_val,
                 COLUMN_TYPE_END);
+        element_id = sqlite3_last_insert_rowid(db);
+        if (elements->is_file) {
+            int size;
+            char filename[DEFAULT_LENGTH];
+            char content_type[DEFAULT_LENGTH];
+            char* fname;
+            char* ctype;
+            bt_element_file* content;
+            fname = get_upload_filename(elements->element_type_id, filename);
+            size = get_upload_size(elements->element_type_id);
+            ctype = get_upload_content_type(elements->element_type_id, content_type);
+            content = get_upload_content(elements->element_type_id);
+            d("fname: %s size: %d\n", fname, size);
+            if (exec_query("insert into element_file(id, element_id, filename, size, content_type, content) values (NULL, ?, ?, ?, ?, ?) ",
+                    COLUMN_TYPE_INT, element_id,
+                    COLUMN_TYPE_TEXT, fname,
+                    COLUMN_TYPE_INT, size,
+                    COLUMN_TYPE_TEXT, content_type,
+                    COLUMN_TYPE_BLOB, content,
+                    COLUMN_TYPE_END) == 0)
+                die("insert failed.");
+        }
     }
 }
 void db_delete_ticket(bt_message* ticket)
@@ -774,4 +797,44 @@ error:
     d("ERR: %s\n", sqlite3_errmsg(db));
     sqlite3_close(db);
     die("failed to db_get_states.");
+}
+bt_element_file* db_get_element_file(int element_id)
+{
+    bt_element_file* file;
+    int r;
+    const char *sql;
+    sqlite3_stmt *stmt = NULL;
+
+    sql = "select id, element_id, filename, size, content_type, content "
+        "from element_file "
+        "where element_id = ? ";
+    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+    sqlite3_reset(stmt);
+    sqlite3_bind_int(stmt, 1, element_id);
+
+    file = NULL;
+    while (SQLITE_ROW == (r = sqlite3_step(stmt))){
+        int len;
+        char* p_src;
+        char* p_dist;
+        file = (bt_element_file*)xalloc(sizeof(bt_element_file));
+        file->id = sqlite3_column_int(stmt, 0);
+        file->element_id = sqlite3_column_int(stmt, 1);
+        strcpy(file->name, sqlite3_column_text(stmt, 2));
+        file->size = sqlite3_column_int(stmt, 3);
+        strcpy(file->content_type, sqlite3_column_text(stmt, 4));
+        len = sqlite3_column_bytes(stmt, 5);
+        p_dist = file->blob = (char*)xalloc(sizeof(char) * len);
+        p_src = (char*)sqlite3_column_blob(stmt, 5);
+        while (len--) {
+            *p_dist = *p_src;
+            p_dist++;
+            p_src++;
+        }
+        break;
+    }
+
+    sqlite3_finalize(stmt);
+
+    return file;
 }

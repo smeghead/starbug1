@@ -47,3 +47,12 @@ char* get_element_value_by_id(bt_element* elements, int type)
     }
     return "";
 }
+int get_element_id(bt_element* elements, bt_element_type* e_type)
+{
+    bt_element* elems = elements;
+    for (; elems != NULL; elems = elems->next) {
+        if (e_type->id == elems->element_type_id)
+            return elems->id;
+    }
+    return -1;
+}

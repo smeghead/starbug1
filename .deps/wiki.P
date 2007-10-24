@@ -14,7 +14,7 @@ wiki.o: wiki.c /usr/include/stdio.h /usr/include/features.h \
  /usr/include/sys/sysmacros.h /usr/include/alloca.h \
  /usr/include/string.h /usr/include/bits/string.h \
  /usr/include/bits/string2.h /usr/local/include/cgic.h wiki.h util.h \
- /usr/local/include/sqlite3.h data.h
+ /usr/local/include/sqlite3.h data.h dbutil.h
 wiki.c :
 /usr/include/stdio.h :
 /usr/include/features.h :
@@ -51,3 +51,4 @@ wiki.h :
 util.h :
 /usr/local/include/sqlite3.h :
 data.h :
+dbutil.h :

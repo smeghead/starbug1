@@ -2,9 +2,10 @@
 #define UTIL_H
 #include <sqlite3.h>
 #include "data.h"
+#include "dbutil.h"
 
 #define o(...) fprintf(cgiOut, __VA_ARGS__)
-#define d(...) fprintf(stderr, "DEBUG: %s:%d", __FILE__, __LINE__); fprintf(stderr, __VA_ARGS__)
+#define d(...) {FILE *fp; char s[DEFAULT_LENGTH]; fp = fopen("debug.log", "a");fprintf(fp, __VA_ARGS__);fclose(fp);}
 #define die(msg)    {d("ERROR: %s:%d %s\n", __FILE__, __LINE__, msg); exit(1);}
 #define h(str)      cgiHtmlEscape(str)
 #define v(str)      cgiValueEscape(str)
@@ -19,5 +20,10 @@ void exec_action();
 void hm(char*);
 void hmail(char*);
 char* get_element_value(bt_element*, bt_element_type*);
+char* get_filename_without_path(char*);
+char* get_upload_filename(int, char*);
+int get_upload_size(int);
+char* get_upload_content_type(int, char*);
+bt_element_file* get_upload_content(int);
 
 #endif

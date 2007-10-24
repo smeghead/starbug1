@@ -25,6 +25,7 @@ typedef struct _element {
   int ticket_id;
   int element_type_id;
   char* str_val;
+  int is_file;
   struct _element* next;
 } bt_element;
 
@@ -57,6 +58,15 @@ typedef struct _element_type {
   bt_list_item* list_item;
   struct _element_type* next;
 } bt_element_type;
+
+typedef struct _element_file {
+    int id;
+    int element_id;
+    char name[DEFAULT_LENGTH];
+    int size;
+    char content_type[DEFAULT_LENGTH];
+    char* blob;
+} bt_element_file;
 
 enum bt_ELEMTYPE {
   ELEM_TEXT,
