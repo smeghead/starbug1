@@ -535,7 +535,7 @@ void reply_action()
             "<h3>チケット返信</h3>\n");
     o(      "<form id=\"reply_form\" name=\"reply_form\" action=\"%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName);
     o(      "<input type=\"hidden\" name=\"ticket_id\" value=\"%s\" />\n", ticket_id);
-    o(      "<div class=\"message\">返信を行なう場合は、以下のフォールに内容を記入して返信ボタンをクリックしてください。</div>\n"
+    o(      "<div class=\"message\">返信を行なう場合は、以下のフォームに内容を記入して返信ボタンをクリックしてください。</div>\n"
             "<div class=\"message\">※必須項目の入力チェックは、javascriptで行なっています。</div>\n"
             "<table summary=\"input table\">\n");
     {
