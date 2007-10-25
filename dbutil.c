@@ -157,28 +157,20 @@ int exec_query(const char* sql, ...)
     sqlite3_stmt *stmt = NULL;
 
     d("sql %s\n", sql);
-    d("sqllen %d\n", strlen(sql));
-    d("stmt %X\n", stmt);
-    d("db %X\n", db);
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
-    d("sql prepare\n");
     sqlite3_reset(stmt);
 
     va_start(ap,sql);
     for(i = 0; (type = va_arg(ap, int)) != COLUMN_TYPE_END; i++){
-        d("exec_query %d\n", i);
         if (type == COLUMN_TYPE_INT) {
             int value = va_arg(ap, int);
-/*             d("type: %d = %d\n", type, value); */
             sqlite3_bind_int(stmt, i + 1, value);
         } else if (type == COLUMN_TYPE_TEXT) {
             char* value = va_arg(ap, char*);
-/*             d("type: %d = %s\n", type, value); */
             if (value == NULL) goto error;
             sqlite3_bind_text(stmt, i + 1, value, strlen(value), NULL);
         } else if (type == COLUMN_TYPE_BLOB) {
             bt_element_file* content = va_arg(ap, bt_element_file*);
-        d("exec_query bt_element_file %d\n", i);
             if (content == NULL) goto error;
             sqlite3_bind_blob(stmt, i + 1, content->blob, content->size, NULL);
         }

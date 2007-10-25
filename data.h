@@ -105,6 +105,7 @@ bt_message* bt_ticket_create();
 void bt_ticket_destroy(bt_message*);
 char* get_element_value_by_id(bt_element*, int);
 char* get_element_value(bt_element*, bt_element_type*);
+int get_element_id(bt_element*, bt_element_type*);
 
 void* xalloc(size_t);
 

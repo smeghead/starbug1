@@ -401,7 +401,7 @@ void register_action()
             if (e_type->required) {
                 o("<span class=\"required\">※</span>");
             }
-            o("</th><td>");
+            o("</th><td>\n");
             o("\t\t\t<div id=\"field%d.required\" required=\"%d\" class=\"error\"></div>\n", e_type->id, e_type->required);
             output_form_element(elements, e_type);
             if (elements != NULL)
@@ -452,13 +452,26 @@ void reply_action()
     {
         bt_element_type* e_type = element_types;
         for (; e_type != NULL; e_type = e_type->next) {
+            char* value = get_element_value(elements, e_type);
             if (e_type->ticket_property == 0) continue;
             o("\t<tr>\n");
             o("\t\t<th>");
             h(e_type->name);
             o("&nbsp;</th>\n");
             o("\t\t<td>");
-            hm(get_element_value(elements, e_type));
+            switch (e_type->id) {
+                case ELEM_ID_SENDER:
+                    hmail(value);
+                    break;
+                default:
+                    if (e_type->type == ELEM_UPLOADFILE) {
+                        if (strlen(value)) {
+                            o("<a href=\"%s/download/%d/", cgiScriptName, get_element_id(elements, e_type)); u(value); o("\" target=\"_blank\">");h(value); o("</a>\n");
+                        }
+                    } else {
+                        hm(value);
+                    }
+            }
             o("&nbsp;</td>\n");
             o("\t</tr>\n");
         }
@@ -477,15 +490,26 @@ void reply_action()
     {
         bt_element_type* e_type = element_types;
         for (; e_type != NULL; e_type = e_type->next) {
+            char* value = get_element_value(elements, e_type);
             o("\t<tr>\n");
             o("\t\t<th>");
             h(e_type->name);
             o("&nbsp;</th>\n");
             o("\t\t<td>");
-            if (e_type->id == ELEM_ID_SENDER) 
-                hmail(get_element_value(elements, e_type));
-            else
-                hm(get_element_value(elements, e_type));
+            switch (e_type->id) {
+                case ELEM_ID_SENDER:
+                    hmail(value);
+                    break;
+                default:
+                    if (e_type->type == ELEM_UPLOADFILE) {
+                        if (strlen(value)) {
+                            o("<a href=\"%s/download/%d/", cgiScriptName, get_element_id(elements, e_type)); u(value); o("\" target=\"_blank\">");h(value); o("</a>\n");
+                        }
+                    } else {
+                        hm(value);
+                    }
+                    break;
+            }
             o("&nbsp;</td>\n");
             o("\t</tr>\n");
         }
@@ -877,7 +901,6 @@ void download_action()
     char path_info[DEFAULT_LENGTH];
     char* element_id_str;
     int element_id;
-    bt_project* project;
     int i;
     char* p;
 

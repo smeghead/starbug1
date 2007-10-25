@@ -322,8 +322,6 @@ error:
 }
 char* db_get_original_sender(int ticket_id, char* buf)
 {
-    bt_element* elements = NULL;
-    bt_element* e = NULL;
     const char *sql;
     sqlite3_stmt *stmt = NULL;
     int r;

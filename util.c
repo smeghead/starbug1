@@ -208,10 +208,10 @@ char* get_filename_without_path(char* path)
     char* p = path;
     char* c;
     if (strlen(p) == 0) return p;
-    while (c = strstr(p, "\\")) {
+    while ((c = strstr(p, "\\")) != NULL) {
         p = ++c;
     }
-    while (c = strstr(p, "/")) {
+    while ((c = strstr(p, "/")) != NULL) {
         p = ++c;
     }
     d("%s\n", p);
