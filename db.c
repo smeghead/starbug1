@@ -411,6 +411,7 @@ bt_element* db_get_last_elements_4_list(int ticket_id)
             e->str_val = (char*)xalloc(sizeof(char) * strlen(str_val) + 1);
             strcpy(e->str_val, str_val);
         }
+        e->reply_id = reply_id;
         e->next = NULL;
     }
     if (SQLITE_DONE != r)

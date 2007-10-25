@@ -239,6 +239,7 @@ table.list_item th.delete {
 }
 #field_list {
     width:100%;
+    height:30px;
     margin:0px 0px 0px 0px;
     text-align: center;
 }

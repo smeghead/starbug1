@@ -23,6 +23,7 @@ bt_project project;
 typedef struct _element {
   int id;
   int ticket_id;
+  int reply_id;
   int element_type_id;
   char* str_val;
   int is_file;

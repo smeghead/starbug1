@@ -195,9 +195,12 @@ void list_action()
             o("</th>\n");
         }
         o("\t\t<th>投稿日時</th>\n");
+        o("\t\t<th>最終更新日時</th>\n");
         o("\t</tr>\n");
         for (; tickets != NULL; tickets = tickets->next) {
+            int reply_id;
             bt_element* elements = db_get_last_elements_4_list(tickets->id);
+            reply_id = elements->reply_id;
             o("\t<tr>\n");
             o("\t\t<td><a href=\"%s/reply/%d\">%d</a></td>\n", cgiScriptName, tickets->id, tickets->id);
             for (e = e_types; e != NULL; e = e->next) {
@@ -214,6 +217,13 @@ void list_action()
                 o("&nbsp;</td>\n");
             }
             o("\t\t<td>"); h(tickets->registerdate); o("&nbsp;</td>\n");
+
+            o("\t\t<td>");
+            if (reply_id > 0) {
+                bt_message* reply = db_get_reply(reply_id);
+                h(reply->registerdate);
+            }
+            o("&nbsp;</td>\n");
             o("\t</tr>\n");
         }
         o("</table>\n");
