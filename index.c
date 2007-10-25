@@ -925,6 +925,7 @@ void download_action()
         p++;
     }
     db_finish();
+    return;
 
 error:
     cgiHeaderContentType("text/plain; charset=utf-8;");
