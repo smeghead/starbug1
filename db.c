@@ -160,11 +160,34 @@ int db_register_ticket(bt_message* ticket)
 
     elements = ticket->elements;
     for (; elements != NULL; elements = elements->next) {
+        int element_id;
         exec_query("insert into element(id, ticket_id, element_type_id, str_val) values (NULL, ?, ?, ?)",
                 COLUMN_TYPE_INT, ticket_id,
                 COLUMN_TYPE_INT, elements->element_type_id,
                 COLUMN_TYPE_TEXT, elements->str_val,
                 COLUMN_TYPE_END);
+        element_id = sqlite3_last_insert_rowid(db);
+        if (elements->is_file) {
+            int size;
+            char filename[DEFAULT_LENGTH];
+            char content_type[DEFAULT_LENGTH];
+            char* fname;
+            char* ctype;
+            bt_element_file* content;
+            fname = get_upload_filename(elements->element_type_id, filename);
+            size = get_upload_size(elements->element_type_id);
+            ctype = get_upload_content_type(elements->element_type_id, content_type);
+            content = get_upload_content(elements->element_type_id);
+            d("fname: %s size: %d\n", fname, size);
+            if (exec_query("insert into element_file(id, element_id, filename, size, content_type, content) values (NULL, ?, ?, ?, ?, ?) ",
+                    COLUMN_TYPE_INT, element_id,
+                    COLUMN_TYPE_TEXT, fname,
+                    COLUMN_TYPE_INT, size,
+                    COLUMN_TYPE_TEXT, content_type,
+                    COLUMN_TYPE_BLOB, content,
+                    COLUMN_TYPE_END) == 0)
+                die("insert failed.");
+        }
     }
     return ticket_id;
 }
