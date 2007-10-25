@@ -143,9 +143,9 @@ void set_date_string(char* buf)
             tp->tm_year + 1900, tp->tm_mon + 1, tp->tm_mday,
             tp->tm_hour, tp->tm_min, tp->tm_sec);
 }
-void db_register_ticket(bt_message* ticket)
+int db_register_ticket(bt_message* ticket)
 {
-    int ticket_id;
+    int ticket_id = 0;
     char registerdate[20];
     bt_element* elements;
 
@@ -166,8 +166,9 @@ void db_register_ticket(bt_message* ticket)
                 COLUMN_TYPE_TEXT, elements->str_val,
                 COLUMN_TYPE_END);
     }
+    return ticket_id;
 }
-void db_reply_ticket(bt_message* ticket)
+int db_reply_ticket(bt_message* ticket)
 {
     int reply_id, closed = 0;
     char registerdate[20];
@@ -233,6 +234,7 @@ void db_reply_ticket(bt_message* ticket)
                 die("insert failed.");
         }
     }
+    return reply_id;
 }
 void db_delete_ticket(bt_message* ticket)
 {

@@ -6,8 +6,8 @@
 bt_element_type* db_get_element_types(int);
 bt_element_type* db_get_element_type(int);
 bt_list_item* db_get_list_item(int);
-void db_register_ticket(bt_message*);
-void db_reply_ticket(bt_message*);
+int db_register_ticket(bt_message*);
+int db_reply_ticket(bt_message*);
 void db_delete_ticket(bt_message*);
 bt_message* db_search_tickets(bt_condition*);
 bt_element* db_get_elements(int, int);

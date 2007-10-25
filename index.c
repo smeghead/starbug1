@@ -669,10 +669,11 @@ void register_submit_action()
             }
         }
         ticket->elements = elements;
-        if (mode == MODE_REGISTER)
-            db_register_ticket(ticket);
-        else
+        if (mode == MODE_REGISTER) {
+            ticket->id = db_register_ticket(ticket);
+        } else {
             db_reply_ticket(ticket);
+        }
     }
     /* mail */
     e_type = db_get_element_types(1);
