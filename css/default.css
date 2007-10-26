@@ -215,7 +215,8 @@ dt {
 
 dd {
     margin-bottom: 0.6em;
-    color: #666;
+    margin-left: 2.0em;
+    color: #222;
 }
 
 li li,

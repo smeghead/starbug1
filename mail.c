@@ -23,8 +23,8 @@ int mail_send(bt_project* project, bt_message* message, bt_element* elements, bt
         return MAIL_GAVE_UP;
     }
     strcpy(server, project->smtp_server);
-    strcpy(from, project->notify_address);
-    strcpy(to, project->admin_address);
+    strcpy(from, project->admin_address);
+    strcpy(to, project->notify_address);
     sprintf(subject, "SB_SUBJECT=[%s:%d] %s", 
             project->name, 
             message->id,

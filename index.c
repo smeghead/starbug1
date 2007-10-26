@@ -81,6 +81,7 @@ void output_header(bt_project* project, char* script_name)
             "<ul id=\"mainmenu\">\n", cgiScriptName);
     o(      "\t<li><a href=\"%s\">トップ</a></li>\n", cgiScriptName);
     o(      "\t<li><a href=\"%s/list\">一覧</a></li>\n", cgiScriptName);
+    o(      "\t<li><a href=\"%s/list/search\">検索</a></li>\n", cgiScriptName);
     o(      "\t<li><a href=\"%s/register\">新規登録</a></li>\n", cgiScriptName);
     o(      "\t<li><a href=\"%s/rss\">RSSフィード</a></li>\n", cgiScriptName);
     o(      "\t<li><a href=\"%s/help\">ヘルプ</a></li>\n", cgiScriptName);
@@ -116,6 +117,7 @@ int cgiMain() {
  */
 void list_action()
 {
+    char path_info[DEFAULT_LENGTH];
     bt_message* tickets;
     bt_element_type* e_types;
     bt_element_type* e;
@@ -123,10 +125,13 @@ void list_action()
     bt_condition* c = NULL;
     bt_project* project;
     bt_state* states;
+    int mode_search = (strlen(cgiPathInfo) > strlen("/list/")) ? 1 : 0;
 
+    d("mode_search %d\n", mode_search);
+    strcpy(path_info, cgiPathInfo);
     db_init();
     project = db_get_project();
-    output_header(project, NULL);
+    output_header(project, "list.js");
     e_types = db_get_element_types(0);
     o("<h2>"); h(project->name); o(" - チケット一覧</h2>\n");
     /* 検索 */
@@ -160,11 +165,14 @@ void list_action()
         o("(%d)", states->count);
         o("\t\t</li>\n");
     }
+    o("<li><a href=\"%s/list%s\" id=\"display_search_condition\">検索条件を%s</a></li>\n", cgiScriptName, 
+            mode_search ? "" : "/search",
+            mode_search ? "閉じる" : "開く");
     o("\t</ul>\n");
     o("</div>\n");
-    o("<div id=\"condition_form\">\n");
+    o("<div id=\"condition_form\" style=\"%s\" >\n", mode_search ? "" : "display: none;");
     o("<h3>検索条件</h3>\n");
-    o("<form action=\"%s/list\" method=\"get\">\n", cgiScriptName);
+    o("<form action=\"%s/list/search\" method=\"get\">\n", cgiScriptName);
     o(      "<table summary=\"condition table\">\n");
     for (e = e_types; e != NULL; e = e->next) {
         char name[DEFAULT_LENGTH];
@@ -186,6 +194,8 @@ void list_action()
     o("<div id=\"ticket_list\">\n");
     o("<h3>チケット一覧</h3>\n");
     if (tickets != NULL) {
+        if (!conditions)
+            o(      "<div class=\"description\">クローズ扱いのチケットは表示されていません。</div>\n");
         o(      "<table summary=\"ticket list\">\n"
                 "\t<tr>\n"
                 "\t\t<th>ID</th>\n");
@@ -791,7 +801,6 @@ void default_action()
     wiki_out("wiki/top.wiki");
     o(      "</div>\n");
     o(      "</div>\n");
-    o(      "</div>\n");
     output_footer();
 }
 
@@ -882,6 +891,15 @@ void edit_top_action()
             "<div>&nbsp;</div>\n"
             "<input class=\"button\" type=\"submit\" value=\"更新\" />\n"
             "</form>");
+    o(      "<div>\n");
+    o(      "<h3>超簡易wikiのサポートする文法</h3>\n");
+    o(      "<ul>\n");
+    o(      "<li>行頭に*を記述した行は、大見出しになります。</li>\n");
+    o(      "<li>行頭に**を記述した行は、見出しになります。</li>\n");
+    o(      "<li>行頭に-を記述した行は、箇条書きになります。</li>\n");
+    o(      "<li>行頭に----を記述した行は、区切り線になります。</li>\n");
+    o(      "</ul>\n");
+    o(      "</div>\n");
     o(      "</div>\n");
     output_footer();
 }

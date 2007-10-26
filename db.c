@@ -200,16 +200,17 @@ int db_reply_ticket(bt_message* ticket)
     elements = ticket->elements;
     for (; elements != NULL; elements = elements->next) {
         int c = exec_query_scalar_int("select close from list_item "
-                "inner join element_type on element_type.type = list_item.element_type_id "
                 "where list_item.element_type_id = ? and list_item.name = ?",
                 COLUMN_TYPE_INT, elements->element_type_id,
                 COLUMN_TYPE_TEXT, elements->str_val,
                 COLUMN_TYPE_END);
+        d("element_type_id:%d str_val %s\n", elements->element_type_id, elements->str_val);
         if (c != INVALID_INT && c != 0) {
             closed = 1;
             break;
         }
     }
+    d("closed:%d\n", closed);
     set_date_string(registerdate);
     if (exec_query("update ticket set closed = ? where id = ?",
             COLUMN_TYPE_INT, closed,
@@ -294,6 +295,8 @@ char* get_search_sql_string(bt_condition* conditions, char* sql_string)
             sprintf(val, " (e%d.element_type_id = ? and e%d.str_val like '%%' || ? || '%%') ", i + 1, i + 1);
             strcat(sql_string, val);
         }
+    } else {
+        strcat(sql_string, " where t.closed = 0 ");
     }
     strcat(sql_string, " order by t.registerdate desc ");
     d("sql: %s\n", sql_string);
