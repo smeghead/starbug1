@@ -56,3 +56,12 @@ int get_element_id(bt_element* elements, bt_element_type* e_type)
     }
     return -1;
 }
+int get_element_lid_by_id(bt_element* elements, int id)
+{
+    bt_element* elems = elements;
+    for (; elems != NULL; elems = elems->next) {
+        if (id == elems->element_type_id)
+            return elems->list_item_id;
+    }
+    return -1;
+}

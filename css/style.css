@@ -250,3 +250,27 @@ table.list_item th.delete {
     padding:3px 10px;
     float:left;
 }
+/* 新規 */
+#ticket_list td.field3-1 {
+    background-color: lightpink;
+}
+/* 受付済 */
+#ticket_list td.field3-2 {
+    background-color: peachpuff;
+}
+/* 修正済 */
+#ticket_list td.field3-3 {
+    background-color: lightyellow;
+}
+/* 保留 */
+#ticket_list td.field3-4 {
+    background-color: peachpuff;
+}
+/* 完了 */
+#ticket_list td.field3-5 {
+    background-color: lightcyan;
+}
+/* 破棄 */
+#ticket_list td.field3-6 {
+    background-color: slategray;
+}

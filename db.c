@@ -384,14 +384,16 @@ bt_element* db_get_last_elements_4_list(int ticket_id)
         die("failed to reply_id.");
 
     if (reply_id == 0)
-        sql = "select element.id, element_type_id, str_val "
+        sql = "select element.id, element.element_type_id, element.str_val, list_item.id "
             "from element "
             "inner join element_type on element.element_type_id = element_type.id "
+            "left join list_item on list_item.element_type_id = element.element_type_id and list_item.name = element.str_val "
             "where ticket_id = ? and reply_id is null and element_type.display_in_list = 1";
     else
-        sql = "select element.id, element_type_id, str_val "
+        sql = "select element.id, element.element_type_id, element.str_val, list_item.id "
             "from element "
             "inner join element_type on element.element_type_id = element_type.id "
+            "left join list_item on list_item.element_type_id = element.element_type_id and list_item.name = element.str_val "
             "where ticket_id = ? and reply_id = ? and element_type.display_in_list = 1";
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
     sqlite3_reset(stmt);
@@ -414,6 +416,7 @@ bt_element* db_get_last_elements_4_list(int ticket_id)
             e->str_val = (char*)xalloc(sizeof(char) * strlen(str_val) + 1);
             strcpy(e->str_val, str_val);
         }
+        e->list_item_id = sqlite3_column_int(stmt, 3);
         e->reply_id = reply_id;
         e->next = NULL;
     }

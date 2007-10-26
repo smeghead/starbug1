@@ -215,7 +215,7 @@ void list_action()
             o("\t\t<td><a href=\"%s/reply/%d\">%d</a></td>\n", cgiScriptName, tickets->id, tickets->id);
             for (e = e_types; e != NULL; e = e->next) {
                 char sender[DEFAULT_LENGTH];
-                o("\t\t<td>");
+                o("\t\t<td class=\"field%d-%d\">", e->id, get_element_lid_by_id(elements, e->id));
                 if (e->id == ELEM_ID_TITLE)
                     o("<a href=\"%s/reply/%d\">", cgiScriptName, tickets->id);
                 if (e->id == ELEM_ID_SENDER)
@@ -632,6 +632,9 @@ void register_submit_action()
     int mode = get_mode();
     int mail_result;
     char** multi;
+/*     char url[DEFAULT_LENGTH]; */
+/*     char param[DEFAULT_LENGTH]; */
+/*     char parambuf[DEFAULT_LENGTH]; */
 
     if (mode == MODE_INVALID)
         die("reqired invalid mode.");
@@ -727,6 +730,16 @@ void register_submit_action()
     }
     db_commit();
     db_finish();
+    
+/*     sprintf(url, "%s/list?message=", cgiScriptName); */
+/*     strcpy(param, "登録しました。"); */
+/*     if (mode == MODE_REGISTER) */
+/*         strcpy(param, "登録しました。"); */
+/*     else if (mode == MODE_REPLY) */
+/*         strcpy(param, "返信しました。"); */
+/*     url_encode(param, parambuf, DEFAULT_LENGTH); */
+/*     strcat(url, parambuf); */
+/*     cgiHeaderLocation(url); */
     output_header(project, NULL);
     o(      "<h2>処理完了</h2>\n"
             "<div id=\"complete_message\">\n"
@@ -913,9 +926,9 @@ void edit_top_submit_action()
 
     db_init();
     project = db_get_project();
-    output_header(project, NULL);
     db_finish();
 
+    output_header(project, NULL);
     o(      "<h2>処理完了</h2>\n"
             "<div id=\"complete_message\">\n"
             "<h3>おつかれさまでした。</h3>\n");
