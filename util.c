@@ -308,3 +308,21 @@ bt_element_file* get_upload_content(int element_id)
 /*     if (i) */
 /*         enclode_char(bb, i - 1, dest, j); */
 /* } */
+void redirect(char* path, char* message)
+{
+    char redirecturi[DEFAULT_LENGTH];
+    char uri[DEFAULT_LENGTH];
+    char param[DEFAULT_LENGTH];
+    char parambuf[DEFAULT_LENGTH];
+
+    strcpy(uri, path);
+    if (message) {
+        strcpy(param, message);
+        url_encode(param, parambuf, DEFAULT_LENGTH);
+        strcat(uri, "?message=");
+        strcat(uri, parambuf);
+    }
+    sprintf(redirecturi, "%s%s", cgiScriptName, uri);
+    o("Status: 302 Temporary Redirection\r\n");
+    cgiHeaderLocation(redirecturi);
+}

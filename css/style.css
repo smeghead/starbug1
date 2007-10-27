@@ -274,3 +274,11 @@ table.list_item th.delete {
 #ticket_list td.field3-6 {
     background-color: slategray;
 }
+div.complete_message {
+    border: 1px #228B22 solid;
+    margin: 15px 3px 15px 3px;
+    padding: 5px 5px 5px 20px;
+    background-color: #DDFFDD;
+    width: 350px;
+    -moz-border-radius: 8px;
+}

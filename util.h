@@ -26,5 +26,6 @@ int get_upload_size(int);
 char* get_upload_content_type(int, char*);
 bt_element_file* get_upload_content(int);
 unsigned long url_encode(unsigned char*, unsigned char*, unsigned long);
+void redirect(char*, char*);
 
 #endif

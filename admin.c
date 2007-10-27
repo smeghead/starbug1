@@ -109,11 +109,17 @@ int cgiMain() {
 void menu_action()
 {
     bt_project* project;
+    char message[DEFAULT_LENGTH];
 
     db_init();
     project = db_get_project();
     output_header(project, NULL);
 
+    cgiFormStringNoNewlines("message", message, DEFAULT_LENGTH);
+    if (strlen(message) > 0) {
+        d("message\n");
+        o("<div class=\"complete_message\">"); h(message); o("&nbsp;</div>\n");
+    }
     o("<h2>%s 管理ツール</h2>", project->name);
     o("<div id=\"admin_menu\">\n");
     o("\t<dl>\n");
@@ -175,13 +181,7 @@ void project_submit_action()
     project = db_get_project();
     db_commit();
     db_finish();
-    output_header(project, NULL);
-    o(      "<h2>処理完了</h2>\n"
-            "<div id=\"complete_message\">\n"
-            "<h3>おつかれさまでした。</h3>\n");
-        o("<div class=\"message\">更新しました</div>\n");
-    o(      "</div>\n");
-    output_footer();
+    redirect("", "更新しました");
 }
 /**
  * 環境設定の設定画面をを表示するaction。
@@ -272,13 +272,7 @@ void env_submit_action()
     project = db_get_project();
     db_commit();
     db_finish();
-    output_header(project, NULL);
-    o(      "<h2>処理完了</h2>\n"
-            "<div id=\"complete_message\">\n"
-            "<h3>おつかれさまでした。</h3>\n");
-        o("<div class=\"message\">更新しました</div>\n");
-    o(      "</div>\n");
-    output_footer();
+    redirect("", "更新しました");
 }
 /**
  * 項目設定画面をを表示するaction。
@@ -479,13 +473,7 @@ void items_submit_action()
     update_elements();
     db_commit();
     db_finish();
-    output_header(project, NULL);
-    o(      "<h2>処理完了</h2>\n"
-            "<div id=\"complete_message\">\n"
-            "<h3>おつかれさまでした。</h3>\n");
-        o("<div class=\"message\">更新しました</div>\n");
-    o(      "</div>\n");
-    output_footer();
+    redirect("", "更新しました");
 }
 /**
  * 管理画面をを表示するaction。
@@ -762,13 +750,7 @@ void update_action()
     update_elements();
     db_commit();
     db_finish();
-    output_header(project, NULL);
-    o(      "<h2>処理完了</h2>\n"
-            "<div id=\"complete_message\">\n"
-            "<h3>おつかれさまでした。</h3>\n");
-        o("<div class=\"message\">更新しました</div>\n");
-    o(      "</div>\n");
-    output_footer();
+    redirect("", "更新しました");
 }
 
 void update_elements()
@@ -1044,18 +1026,7 @@ void new_item_submit_action()
             }
             break;
     }
-    output_header(project, NULL);
-    o("<h2>%s 管理ツール</h2>", project->name);
-    o(      "<h2>処理完了</h2>\n"
-            "<div id=\"complete_message\">\n"
-            "<h3>おつかれさまでした。</h3>\n");
-        o("<div class=\"message\">追加しました</div>\n");
-    o(      "</div>\n");
-
-    
-    db_commit();
-    db_finish();
-    output_footer();
+    redirect("", "追加しました");
 }
 void delete_item_action()
 {
@@ -1103,11 +1074,5 @@ void delete_item_submit_action()
     output_header(project, NULL);
 
     db_delete_element_type(iid);
-    o("<h2>%s 管理ツール</h2>", project->name);
-    o(      "<h2>処理完了</h2>\n"
-            "<div id=\"complete_message\">\n"
-            "<h3>おつかれさまでした。</h3>\n");
-        o("<div class=\"message\">削除しました</div>\n");
-    db_finish();
-    output_footer();
+    redirect("", "削除しました");
 }

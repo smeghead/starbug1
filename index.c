@@ -126,12 +126,18 @@ void list_action()
     bt_project* project;
     bt_state* states;
     int mode_search = (strlen(cgiPathInfo) > strlen("/list/")) ? 1 : 0;
+    char message[DEFAULT_LENGTH];
 
     d("mode_search %d\n", mode_search);
     strcpy(path_info, cgiPathInfo);
     db_init();
     project = db_get_project();
     output_header(project, "list.js");
+    cgiFormStringNoNewlines("message", message, DEFAULT_LENGTH);
+    if (strlen(message) > 0) {
+        d("message\n");
+        o("<div class=\"complete_message\">"); h(message); o("&nbsp;</div>\n");
+    }
     e_types = db_get_element_types(0);
     o("<h2>"); h(project->name); o(" - チケット一覧</h2>\n");
     /* 検索 */
@@ -241,6 +247,7 @@ void list_action()
     o("</div>\n");
     output_footer();
     db_finish();
+    d("fine\n");
 }
 /**
  * form要素を表示する。
@@ -549,6 +556,10 @@ void reply_action()
             bt_element_type* e_type = element_types;
             for (; e_type != NULL; e_type = e_type->next) {
                 char* value = get_element_value(elements, e_type);
+                char* last_value = get_element_value(last_elements, e_type);
+                /* チケット属性で、直前の値と同じ項目は表示しない。 */
+                if (e_type->ticket_property && strcmp(value, last_value) == 0)
+                    continue;
                 o(      "\t<tr>\n"
                         "\t\t<th>");
                 h(e_type->name);
@@ -730,28 +741,11 @@ void register_submit_action()
     }
     db_commit();
     db_finish();
-    
-/*     sprintf(url, "%s/list?message=", cgiScriptName); */
-/*     strcpy(param, "登録しました。"); */
-/*     if (mode == MODE_REGISTER) */
-/*         strcpy(param, "登録しました。"); */
-/*     else if (mode == MODE_REPLY) */
-/*         strcpy(param, "返信しました。"); */
-/*     url_encode(param, parambuf, DEFAULT_LENGTH); */
-/*     strcat(url, parambuf); */
-/*     cgiHeaderLocation(url); */
-    output_header(project, NULL);
-    o(      "<h2>処理完了</h2>\n"
-            "<div id=\"complete_message\">\n"
-            "<h3>おつかれさまでした。</h3>\n");
+
     if (mode == MODE_REGISTER)
-        o("<div class=\"message\">登録しました</div>\n");
+        redirect("/list", "登録しました。");
     else if (mode == MODE_REPLY)
-        o("<div class=\"message\">返信しました</div>\n");
-    else
-        o("<div class=\"message\">感染しました。嘘</div>\n");
-    o(      "</div>\n");
-    output_footer();
+        redirect("/list", "返信しました。");
 }
 /**
  * デフォルトのaction。
@@ -896,8 +890,8 @@ void edit_top_action()
     o(      "<h2>トップページの編集</h2>\n"
             "<div id=\"top\">\n"
             "<h3>トップページの編集</h3>\n"
-            "<div id=\"message\">簡易wikiの文法でトップページのコンテンツの編集を行ない、更新ボタンをクリックしてください。</div>"
-            "<form action=\"%s/edit_top_submit\" method=\"post\">\n", cgiScriptName);
+            "<div id=\"message\">簡易wikiの文法でトップページのコンテンツの編集を行ない、更新ボタンをクリックしてください。</div>\n"
+            "<form id=\"edit_top_form\" action=\"%s/edit_top_submit\" method=\"post\">\n", cgiScriptName);
     o(      "<textarea name=\"edit_top\" id=\"edit_top\" rows=\"3\" cols=\"10\">");
     wiki_content_out("wiki/top.wiki");
     o(      "</textarea>\n"
@@ -928,13 +922,7 @@ void edit_top_submit_action()
     project = db_get_project();
     db_finish();
 
-    output_header(project, NULL);
-    o(      "<h2>処理完了</h2>\n"
-            "<div id=\"complete_message\">\n"
-            "<h3>おつかれさまでした。</h3>\n");
-    o("<div class=\"message\">更新しました</div>\n");
-    o(      "</div>\n");
-    output_footer();
+    redirect("", NULL);
 }
 void download_action()
 {
