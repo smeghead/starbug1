@@ -60,7 +60,7 @@ void output_header(bt_project* project, char* script_name)
             "<html xml:lang=\"ja\" lang=\"ja\" xmlns=\"http://www.w3.org/1999/xhtml\">\n"
             "<head>\n"
             "\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n"
-            "<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\" />\n"
+            "\t<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\" />\n"
             "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />"
             "\t<title>Starbug1 管理ツール</title>\n");
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName);
@@ -70,6 +70,7 @@ void output_header(bt_project* project, char* script_name)
     }
     o(      "</head>\n"
             "<body>\n"
+            "<a name=\"top\" />\n"
             "<h1 id=\"toptitle\" title=\"Starbug1 管理ツール\"><a href=\"http://sourceforge.jp/projects/starbug1/\"><img src=\"%s/../img/title.jpg\" alt=\"Starbug1\" /></a></h1>\n"
             "<ul id=\"mainmenu\">\n", cgiScriptName);
     o(      "\t<li><a href=\"%s\">管理ツールメニュー</a></li>\n", cgiScriptName);
@@ -307,6 +308,7 @@ void items_action()
         o("\t\t<hr />\n");
         o("\t\t<a name=\"field%d\" />\n", e_types->id);
         o("\t\t<h4>"); h(e_types->name); o("</h4>\n");
+        o("\t\t<div class=\"item_navigation\"><a href=\"#top\">このページのトップへ</a></div>\n");
         o("\t\t<input type=\"hidden\" name=\"field_ids\" value=\"%d\" />\n", e_types->id);
         o("\t\t<table summary=\"project table\">\n");
         o("\t\t\t<tr>\n");

@@ -282,3 +282,8 @@ div.complete_message {
     width: 350px;
     -moz-border-radius: 8px;
 }
+div.item_navigation {
+    width: 95%;
+    font-size: 80%;
+    text-align: right;
+}
