@@ -2,30 +2,10 @@
 use strict;
 use warnings;
 
-use Getopt::Std;
 use Net::SMTP;
 use Encode;
 use HTTP::Date qw(time2str);
 
-sub get_options {
-    my $o = {};
-    getopts('x:f:t:p:h', $o);
-    if ($o->{h}) {
-        print <<EOF;
-        usage: $0 -f <from_address> -t <to_address> -x <smtp_server> -p <smtp_port>
-EOF
-        die;
-    }
-    die "ERROR: specify smtp_server."  if (!$o->{x});
-    die "ERROR: specify to address."  if (!$o->{t});
-    die "ERROR: specify from address."  if (!$o->{f});
-    return {
-        from => $o->{f},
-        to => $o->{t},
-        server => $o->{x},
-        port => $o->{p} || 25,
-    };
-}
 sub mail_send {
     my ($opts, $subject, $content) = @_;
     my $smtp = new Net::SMTP(
@@ -55,15 +35,17 @@ sub mail_send {
 }
 
 sub main {
-    my $opts = get_options();
-    my $url = $opts->{url} || '';
+    my $opts = {
+        from => $ENV{'SB_FROM'},
+        to => $ENV{'SB_TO'},
+        server => $ENV{'SB_SERVER'},
+        port => $ENV{'SB_PORT'} || 25,
+    };
     my $subject = $ENV{'SB_SUBJECT'};
     my $content = $ENV{'SB_CONTENT'};
     Encode::from_to($subject, 'utf8', 'iso-2022-jp');
     Encode::from_to($content, 'utf8', 'iso-2022-jp');
-    mail_send($opts,
-    $subject,
-    $content);
+    mail_send($opts, $subject, $content);
 }
 main();
 

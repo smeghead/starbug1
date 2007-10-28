@@ -6,12 +6,12 @@
 #include "util.h"
 #include "mail.h"
 
+static void put_env(char*, char*);
+
 int mail_send(bt_project* project, bt_message* message, bt_element* elements, bt_element_type* e_types)
 {
     char command[DEFAULT_LENGTH];
-    char server[DEFAULT_LENGTH];
-    char from[DEFAULT_LENGTH];
-    char to[DEFAULT_LENGTH];
+    char port[DEFAULT_LENGTH];
     char subject[DEFAULT_LENGTH];
     char content[VALUE_LENGTH];
     char header[DEFAULT_LENGTH];
@@ -22,17 +22,19 @@ int mail_send(bt_project* project, bt_message* message, bt_element* elements, bt
         d("invalid settings. gave up to send mail.");
         return MAIL_GAVE_UP;
     }
-    strcpy(server, project->smtp_server);
-    strcpy(from, project->admin_address);
-    strcpy(to, project->notify_address);
-    sprintf(subject, "SB_SUBJECT=[%s:%d] %s", 
+    put_env("SB_SERVER", project->smtp_server);
+    sprintf(port, "%d", project->smtp_port);
+    put_env("SB_PORT", port);
+    put_env("SB_FROM", project->admin_address);
+    put_env("SB_TO", project->notify_address);
+    sprintf(subject, "[%s:%d] %s", 
             project->name, 
             message->id,
             get_element_value_by_id(elements, ELEM_ID_TITLE));
     d("subject is %s\n", subject);
-    putenv(subject);
+    put_env("SB_SUBJECT", subject);
     sprintf(header, 
-            "SB_CONTENT=[%s]でチケット情報が更新されました。\n"
+            "[%s]でチケット情報が更新されました。\n"
             "以下のURLから確認してください。\n"
             " %s%s/reply/%d\n\n",
             project->name, project->host_name, cgiScriptName, message->id);
@@ -51,15 +53,15 @@ int mail_send(bt_project* project, bt_message* message, bt_element* elements, bt
             "by starbug1(%s).\n"
             "--------------------------------------------------------------\n", project->home_url);
     strcat(content, footer);
-    putenv(content);
-    sprintf(command,
-            "script/smtp.pl "
-            "-x '%s' "
-            "-p %d "
-            "-f '%s' "
-            "-t '%s' ",
-            server, project->smtp_port, from, to);
+    put_env("SB_CONTENT", content);
+    sprintf(command, "script/smtp.pl");
     d("command: %s\n", command);
     return system(command);
 
+}
+static void put_env(char* name, char* value)
+{
+    char val[VALUE_LENGTH];
+    sprintf(val, "%s=%s", name, value);
+    putenv(val);
 }
