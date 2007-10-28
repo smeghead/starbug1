@@ -6,6 +6,7 @@
 #include "db.h"
 #include "dbutil.h"
 #include "util.h"
+#include "css.h"
 
 #define VALUE_LENGTH 1048575
 #define MODE_LENGTH 128
@@ -22,6 +23,7 @@ void env_submit_action();
 void items_action();
 void items_submit_action();
 void style_action();
+void style_submit_action();
 void display_action();
 void update_action();
 void new_item_action();
@@ -42,7 +44,8 @@ void register_actions()
     register_action_actions("env_submit", env_submit_action);
     register_action_actions("items", items_action);
     register_action_actions("items_submit", items_submit_action);
-/*     register_action_actions("style", style_action); */
+    register_action_actions("style", style_action);
+    register_action_actions("style_submit", style_submit_action);
     register_action_actions("display", display_action);
     register_action_actions("update", update_action);
     register_action_actions("new_item", new_item_action);
@@ -64,6 +67,7 @@ void output_header(bt_project* project, char* script_name)
             "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />"
             "\t<title>Starbug1 管理ツール</title>\n");
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName);
+    o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/user.css\" />\n", cgiScriptName);
     if (script_name) {
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/prototype.js\"></script>\n", cgiScriptName);
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/%s\"></script>\n", cgiScriptName, script_name);
@@ -77,7 +81,7 @@ void output_header(bt_project* project, char* script_name)
     o(      "\t\t<li><a href=\"%s/project\">プロジェクトの設定</a></li>\n", cgiScriptName);
     o(      "\t\t<li><a href=\"%s/env\">環境設定</a></li>\n", cgiScriptName);
     o(      "\t\t<li><a href=\"%s/items\">項目設定</a></li>\n", cgiScriptName);
-    o(      "\t\t<li><a href=\"%s/css\">スタイル設定</a></li>\n", cgiScriptName);
+    o(      "\t\t<li><a href=\"%s/style\">スタイル設定</a></li>\n", cgiScriptName);
     o(      "\t<li><a href=\"%s/../db/starbug1.db\">バックアップ</a></li>\n", cgiScriptName);
     o(      "\t<li><a href=\"%s/../index.cgi\">", cgiScriptName);h(project->name); o("トップへ</a></li>\n");
     o(      "</ul>\n"
@@ -127,7 +131,7 @@ void menu_action()
     o("\t\t<dt><a href=\"%s/project\">プロジェクト設定</a></dt><dd>プロジェクトの基本的な情報の設定です。</dd>\n", cgiScriptName);
     o("\t\t<dt><a href=\"%s/env\">環境設定</a></dt><dd>URLやメール関連の設定です。</dd>\n", cgiScriptName);
     o("\t\t<dt><a href=\"%s/items\">項目設定</a></dt><dd>チケットの項目についての設定です。</dd>\n", cgiScriptName);
-    o("\t\t<dt><a href=\"%s/css\">スタイル設定</a></dt><dd>スタイルシートの設定です。</dd>\n", cgiScriptName);
+    o("\t\t<dt><a href=\"%s/style\">スタイル設定</a></dt><dd>スタイルシートの設定です。</dd>\n", cgiScriptName);
     o("\t</dl>\n");
     o("</div>\n");
 
@@ -1077,4 +1081,34 @@ void delete_item_submit_action()
 
     db_delete_element_type(iid);
     redirect("", "削除しました");
+}
+void style_action()
+{
+    bt_project* project;
+    db_init();
+    project = db_get_project();
+    output_header(project, "style.js");
+    db_finish();
+    o(      "<h2>スタイル編集</h2>\n"
+            "<div id=\"top\">\n"
+            "<h3>スタイルシートの編集</h3>\n"
+            "<div id=\"message\">スタイルシートの編集を行ない、更新ボタンをクリックしてください。</div>\n"
+            "<form id=\"edit_css_form\" action=\"%s/style_submit\" method=\"post\">\n", cgiScriptName);
+    o(      "<textarea name=\"edit_css\" id=\"edit_top\" rows=\"3\" cols=\"10\">");
+    css_content_out("css/user.css");
+    o(      "</textarea>\n"
+            "<div>&nbsp;</div>\n"
+            "<input class=\"button\" type=\"submit\" value=\"更新\" />\n"
+            "</form>");
+    o(      "</div>\n");
+    output_footer();
+}
+void style_submit_action()
+{
+    char value[VALUE_LENGTH];
+
+    cgiFormString("edit_css", value, VALUE_LENGTH);
+    css_save("css/user.css", value);
+
+    redirect("", NULL);
 }

@@ -16,7 +16,7 @@ wiki.o: wiki.c wiki.h util.h data.h dbutil.h
 index.cgi: data.o dbutil.o db.o util.o wiki.o mail.o index.o
 	$(CC) -o $@ $^ $(LFLAGS)
 
-admin.cgi: data.o dbutil.o db.o util.o wiki.o admin.o
+admin.cgi: data.o dbutil.o db.o util.o css.o admin.o
 	$(CC) -o $@ $^ $(LFLAGS)
 
 .PHONY: clean

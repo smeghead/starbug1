@@ -71,6 +71,7 @@ void output_header(bt_project* project, char* script_name)
             "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />"
             "\t<title>Starbug1</title>\n");
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName);
+    o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/user.css\" />\n", cgiScriptName);
     if (script_name) {
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/prototype.js\"></script>\n", cgiScriptName);
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/%s\"></script>\n", cgiScriptName, script_name);
@@ -643,9 +644,6 @@ void register_submit_action()
     int mode = get_mode();
     int mail_result;
     char** multi;
-/*     char url[DEFAULT_LENGTH]; */
-/*     char param[DEFAULT_LENGTH]; */
-/*     char parambuf[DEFAULT_LENGTH]; */
 
     if (mode == MODE_INVALID)
         die("reqired invalid mode.");
@@ -799,10 +797,6 @@ void default_action()
     o(      "<h2>");h(project->name);o("&nbsp;</h2>\n");
     o(      "<div id=\"main_body\">\n"
             "<div id=\"description\">");h(project->description);o("</div>\n");
-    o(      "<div id=\"message\">\n"
-            "Starbug1は、快適な動作をすることに主眼を置いたバグトラッキングツールです。"
-            "影舞のように簡単に使えて痒いところに手が届くようになるといいと思います。\n"
-            "</div>\n");
     o(      "<div class=\"top_edit\"><a href=\"%s/edit_top\">トップページの編集</a></div>\n", cgiScriptName);
     wiki_out("wiki/top.wiki");
     o(      "</div>\n");
@@ -910,14 +904,9 @@ void edit_top_action()
 void edit_top_submit_action()
 {
     char value[VALUE_LENGTH];
-    bt_project* project;
 
     cgiFormString("edit_top", value, VALUE_LENGTH);
     wiki_save("wiki/top.wiki", value);
-
-    db_init();
-    project = db_get_project();
-    db_finish();
 
     redirect("", NULL);
 }

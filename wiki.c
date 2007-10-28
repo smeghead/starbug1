@@ -14,34 +14,6 @@ void text_out(char*);
 void element_out_without_content(char*);
 void element_out(char*, char*);
 
-/* char pre[100][MAX_WIDTH]; */
-/* void pre_clear() { */
-/*     int i; */
-/*     for (i = 0; i < 100; i++) { */
-/*         strcpy(pre[i], ""); */
-/*     } */
-/* } */
-/* void pre_add(char* str) */
-/* { */
-/*     int i; */
-/*     for (i = 0; i < 100; i++) { */
-/*         if (strcmp(pre[i], "") == 0) { */
-/*             strcpy(pre[i], str); */
-/*             break; */
-/*         } */
-/*     } */
-/* } */
-/* void pre_flush() */
-/* { */
-/*     int i; */
-/*     if (strcmp(pre[0], "") == 0) return; */
-/*     printf("<pre>\n"); */
-/*     for (i = 0; i < 100; i++) { */
-/*         printf("%s", pre[i]); */
-/*     } */
-/*     printf("</pre>\n"); */
-/*     pre_clear(); */
-/* } */
 char text[100][MAX_WIDTH];
 enum BUF_TYPE_ENUM {
     TYPE_TEXT,
