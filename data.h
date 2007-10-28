@@ -33,6 +33,7 @@ typedef struct _element {
 
 typedef struct _message {
   int id;
+  int reply_id;
   char registerdate[20];
   bt_element* elements;
   struct _message* next;

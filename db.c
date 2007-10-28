@@ -305,7 +305,7 @@ char* get_search_sql_string(bt_condition* conditions, char* sql_string)
 }
 bt_message* db_search_tickets(bt_condition* conditions)
 {
-    bt_message* incidnets = NULL;
+    bt_message* tichets = NULL;
     bt_message* i = NULL;
     int r, n;
     char buffer[VALUE_LENGTH];
@@ -322,7 +322,7 @@ bt_message* db_search_tickets(bt_condition* conditions)
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         const unsigned char* registerdate;
         if (i == NULL) {
-            i = incidnets = (bt_message*)xalloc(sizeof(bt_message));
+            i = tichets = (bt_message*)xalloc(sizeof(bt_message));
         } else {
             i->next = (bt_message*)xalloc(sizeof(bt_message));
             i = i->next;
@@ -339,7 +339,7 @@ bt_message* db_search_tickets(bt_condition* conditions)
     sqlite3_finalize(stmt);
 
 
-    return incidnets;
+    return tichets;
 
 error:
     d("ERR: %s\n", sqlite3_errmsg(db));
@@ -867,4 +867,51 @@ bt_element_file* db_get_element_file(int element_id)
     sqlite3_finalize(stmt);
 
     return file;
+}
+bt_message* db_get_newest_information(int limit)
+{
+    bt_message* tichets = NULL;
+    bt_message* i = NULL;
+    int r;
+    char sql[DEFAULT_LENGTH];
+    sqlite3_stmt *stmt = NULL;
+    
+    sprintf(sql, 
+            "select id, reply_id, registerdate "
+            "from ( "
+            "    select id as id, null as reply_id, registerdate from ticket "
+            "    union "
+            "    select ticket_id as id, id as reply_id, registerdate  from reply "
+            " ) "
+            "order by registerdate "
+            "limit %d ", limit);
+
+    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+    sqlite3_reset(stmt);
+
+    while (SQLITE_ROW == (r = sqlite3_step(stmt))){
+        const unsigned char* registerdate;
+        if (i == NULL) {
+            i = tichets = (bt_message*)xalloc(sizeof(bt_message));
+        } else {
+            i->next = (bt_message*)xalloc(sizeof(bt_message));
+            i = i->next;
+        }
+        i->id = sqlite3_column_int(stmt, 0);
+        i->reply_id = sqlite3_column_int(stmt, 1);
+        registerdate = sqlite3_column_text(stmt, 2);
+        if (registerdate != NULL)
+            strcpy(i->registerdate, registerdate);
+        i->next = NULL;
+    }
+    if (SQLITE_DONE != r)
+        goto error;
+
+    sqlite3_finalize(stmt);
+    return tichets;
+
+error:
+    d("ERR: %s\n", sqlite3_errmsg(db));
+    sqlite3_close(db);
+    die("failed to db_get_newest_information.");
 }

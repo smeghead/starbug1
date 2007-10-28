@@ -765,17 +765,16 @@ void default_action()
     o(      "<div id=\"top_newest\">\n");
     o(      "<h4>最新情報</h4>\n");
     o(      "\t<ul>\n");
-    tickets = db_search_tickets(NULL);
+    tickets = db_get_newest_information(10);
+    d("p\n");
     if (tickets != NULL) {
-        int i;
-        for (i = 0; tickets != NULL; tickets = tickets->next) {
+        for (; tickets != NULL; tickets = tickets->next) {
             bt_element* elements = db_get_last_elements_4_list(tickets->id);
             o("\t\t<li>\n");
             o("\t\t\t<a href=\"%s/reply/%d=", cgiScriptName, tickets->id); o("\">");
             h(get_element_value_by_id(elements, ELEM_ID_TITLE));
             o(      "</a>\n");
             o("\t\t</li>\n");
-            if (++i > 10) break;
         }
     }
     o(      "\t</ul>\n");
@@ -837,10 +836,9 @@ void rss_action()
             "\t\t</items>\n"
             "\t</channel>\n");
 
-    tickets = db_search_tickets(NULL);
+    tickets = db_get_newest_information(10);
     if (tickets != NULL) {
-        int i;
-        for (i = 0; tickets != NULL; tickets = tickets->next) {
+        for (; tickets != NULL; tickets = tickets->next) {
             char sender[DEFAULT_LENGTH];
             bt_element* elements = db_get_last_elements_4_list(tickets->id);
             o(      "\t<item rdf:about=\"");h(project->home_url);o("%s/reply/%d\">\n", cgiScriptName, tickets->id);
@@ -848,20 +846,19 @@ void rss_action()
             h(get_element_value_by_id(elements, ELEM_ID_TITLE));
             o(      "</title>\n");
             o(      "\t\t<link>");h(project->home_url);o("%s/reply/%d</link>\n", cgiScriptName, tickets->id);
-            o(      "\t\t<description>");
+            o(      "\t\t<description><![CDATA[\n");
             o(      "投稿者: ");
             hmail(db_get_original_sender(tickets->id, sender));
-            h("<br>");
+            o("\n");
             o(      "投稿日: ");
             h(tickets->registerdate);
-            h("<br>");
+            o("\n");
             for (; elements != NULL; elements = elements->next) {
                 h(elements->str_val);
-                h("<br>");
+                o("\n");
             }
-            o(      "</description>\n"
+            o(      "]]></description>\n"
                     "\t</item>\n");
-            if (++i > 10) break;
         }
     }
     o(      "</rdf:RDF>\n");
