@@ -1,0 +1,43 @@
+インストール方法
+
+注意執筆中リリースしていないので、まだ、おすすめできませんが、無理矢理動かす
+ことはできるかもしれません。 Starbug1は、sqlite3、cgicを使用しています。
+
+sqlite3のインストール
+
+* http://www.sqlite.org/ から、 sqlite-3.5.1.tar.gz をダウンロードする。
+
+$ wget http://www.sqlite.org/sqlite-3.5.1.tar.gz
+
+* 適当な場所に展開し、コンパイル、インストールする。
+
+$ tar zxf sqlite-3.5.1.tar.gz
+$ cd sqlite-3.5.1
+$ ./configure --disable-tcl
+$ make
+$ su
+# make install
+
+cgicのインストール
+
+* http://www.boutell.com/cgic/ から cgic205.tar.gz をダウンロードする。
+
+$ wget http://www.boutell.com/cgic/cgic205.tar.gz
+
+* 適当な場所に展開し、コンパイル、インストールする。
+
+$ tar zxf cgic205.tar.gz
+$ make
+$ su
+# make install
+
+Starbug1のインストール
+
+* cvsリポジトリからソースを取得する。
+
+$ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/starbug1 login
+$ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/starbug1 checkout starbug1
+$ cd starbug1
+$ make
+
+執筆中
