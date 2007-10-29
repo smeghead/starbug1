@@ -15,7 +15,7 @@ void register_actions();
 void list_action();
 void register_submit_action();
 void register_action();
-void reply_action();
+void ticket_action();
 void help_action();
 void edit_top_action();
 void edit_top_submit_action();
@@ -50,7 +50,8 @@ void register_actions()
     register_action_actions("list", list_action);
     register_action_actions("register", register_action);
     register_action_actions("register_submit", register_submit_action);
-    register_action_actions("reply", reply_action);
+    register_action_actions("ticket", ticket_action);
+    register_action_actions("reply", ticket_action);
     register_action_actions("help", help_action);
     register_action_actions("edit_top", edit_top_action);
     register_action_actions("edit_top_submit", edit_top_submit_action);
@@ -219,12 +220,12 @@ void list_action()
             bt_element* elements = db_get_last_elements_4_list(tickets->id);
             reply_id = elements->reply_id;
             o("\t<tr>\n");
-            o("\t\t<td><a href=\"%s/reply/%d\">%d</a></td>\n", cgiScriptName, tickets->id, tickets->id);
+            o("\t\t<td><a href=\"%s/ticket/%d\">%d</a></td>\n", cgiScriptName, tickets->id, tickets->id);
             for (e = e_types; e != NULL; e = e->next) {
                 char sender[DEFAULT_LENGTH];
                 o("\t\t<td class=\"field%d-%d\">", e->id, get_element_lid_by_id(elements, e->id));
                 if (e->id == ELEM_ID_TITLE)
-                    o("<a href=\"%s/reply/%d\">", cgiScriptName, tickets->id);
+                    o("<a href=\"%s/ticket/%d\">", cgiScriptName, tickets->id);
                 if (e->id == ELEM_ID_SENDER)
                     hmail(db_get_original_sender(tickets->id, sender)); /* 最初の投稿者を表示する。 */
                 else
@@ -449,7 +450,7 @@ void register_action()
 /**
  * 返信画面を表示するaction。
  */
-void reply_action()
+void ticket_action()
 {
     char path_info[DEFAULT_LENGTH];
     char* ticket_id;
@@ -771,7 +772,7 @@ void default_action()
         for (; tickets != NULL; tickets = tickets->next) {
             bt_element* elements = db_get_last_elements_4_list(tickets->id);
             o("\t\t<li>\n");
-            o("\t\t\t<a href=\"%s/reply/%d=", cgiScriptName, tickets->id); o("\">");
+            o("\t\t\t<a href=\"%s/ticket/%d", cgiScriptName, tickets->id); o("\">");
             h(get_element_value_by_id(elements, ELEM_ID_TITLE));
             o(      "</a>\n");
             o("\t\t</li>\n");
@@ -837,11 +838,11 @@ void rss_action()
         for (; tickets != NULL; tickets = tickets->next) {
             char sender[DEFAULT_LENGTH];
             bt_element* elements = db_get_last_elements_4_list(tickets->id);
-            o(      "\t<item rdf:about=\"");h(project->home_url);o("%s/reply/%d\">\n", cgiScriptName, tickets->id);
+            o(      "\t<item rdf:about=\"");h(project->home_url);o("%s/ticket/%d\">\n", cgiScriptName, tickets->id);
             o(      "\t\t<title>ID:%5d ", tickets->id);
             h(get_element_value_by_id(elements, ELEM_ID_TITLE));
             o(      "</title>\n");
-            o(      "\t\t<link>");h(project->home_url);o("%s/reply/%d</link>\n", cgiScriptName, tickets->id);
+            o(      "\t\t<link>");h(project->home_url);o("%s/ticket/%d</link>\n", cgiScriptName, tickets->id);
             o(      "\t\t<description><![CDATA[\n");
             o(      "投稿者: ");
             hmail(db_get_original_sender(tickets->id, sender));
