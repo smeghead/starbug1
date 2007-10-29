@@ -883,7 +883,7 @@ bt_message* db_get_newest_information(int limit)
             "    union "
             "    select ticket_id as id, id as reply_id, registerdate  from reply "
             " ) "
-            "order by registerdate "
+            "order by registerdate desc "
             "limit %d ", limit);
 
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);

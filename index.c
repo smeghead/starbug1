@@ -546,6 +546,7 @@ void reply_action()
     reply_ids = db_get_reply_ids(iid);
     /* 返信の表示 */
     for (i = 0; reply_ids[i] != 0; i++) {
+        bt_element* previous = last_elements;
         reply = db_get_reply(reply_ids[i]);
         last_elements = elements = db_get_elements(iid, reply_ids[i]);
 
@@ -557,9 +558,10 @@ void reply_action()
             bt_element_type* e_type = element_types;
             for (; e_type != NULL; e_type = e_type->next) {
                 char* value = get_element_value(elements, e_type);
-                char* last_value = get_element_value(last_elements, e_type);
+                char* last_value = get_element_value(previous, e_type);
+                d("old: %s new: %s = %d\n", last_value, value, strcmp(value, last_value));
                 /* チケット属性で、直前の値と同じ項目は表示しない。 */
-                if (e_type->ticket_property && strcmp(value, last_value) == 0)
+                if (e_type->ticket_property == 1 && strcmp(value, last_value) == 0)
                     continue;
                 o(      "\t<tr>\n"
                         "\t\t<th>");
