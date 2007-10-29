@@ -1,2 +1,2 @@
 ErrorDocument 500 /bt/error.html
-Options -ExecCGI
+Options +ExecCGI

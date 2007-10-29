@@ -217,7 +217,11 @@ table.list_item th.delete {
     white-space: nowrap;
     width: 150px;
 }
-.required {
+th.required {
+    border-left-color: crimson;
+    border-left-width: 3px;
+}
+span.required {
     color: red;
 }
 .error {

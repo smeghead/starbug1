@@ -424,7 +424,7 @@ void register_action()
             /* 返信専用属性は表示しない。 */
             if (e_type->reply_property == 1) continue;
             o("\t<tr>\n");
-            o("\t\t<th>");
+            o("\t\t<th %s>", e_type->required ? "class=\"required\"" : "");
             h(e_type->name);
             if (e_type->required) {
                 o("<span class=\"required\">※</span>");
@@ -599,8 +599,8 @@ void reply_action()
     {
         bt_element_type* e_type = element_types;
         for (; e_type != NULL; e_type = e_type->next) {
-            o("\t<tr>\n"
-                    "\t\t<th>");
+            o("\t<tr>\n");
+            o("\t\t<th %s>", e_type->required ? "class=\"required\"" : "");
             if (e_type->ticket_property)
                 o("&nbsp;<span class=\"ticket_property\" title=\"チケット属性\">");
             h(e_type->name);
@@ -947,5 +947,4 @@ void download_action()
 error:
     cgiHeaderContentType("text/plain; charset=utf-8;");
     o("error: ファイルがありません。");
-
 }

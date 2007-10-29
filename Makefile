@@ -19,8 +19,11 @@ index.cgi: data.o dbutil.o db.o util.o wiki.o mail.o index.o
 admin.cgi: data.o dbutil.o db.o util.o css.o admin.o
 	$(CC) -o $@ $^ $(LFLAGS)
 
-.PHONY: clean
+.PHONY: clean dist
 clean:
 	rm *.o index.cgi admin.cgi
 
+dist: default
+	mkdir -p dist/starbug1
+	cp -r js css img wiki script .htaccess *.cgi dist/starbug1
 
