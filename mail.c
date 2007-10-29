@@ -61,7 +61,7 @@ int mail_send(bt_project* project, bt_message* message, bt_element* elements, bt
 }
 static void put_env(char* name, char* value)
 {
-    char val[VALUE_LENGTH];
+    char* val = (char*)xalloc(sizeof(char) * VALUE_LENGTH);
     sprintf(val, "%s=%s", name, value);
     putenv(val);
 }
