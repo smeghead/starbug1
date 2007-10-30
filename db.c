@@ -268,7 +268,7 @@ void db_delete_ticket(bt_message* ticket)
         die("no ticket to update?");
 }
 
-char* get_search_sql_string(bt_condition* conditions, char* sql_string)
+char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* sql_string)
 {
     bt_condition* cond;
     int i;
@@ -287,6 +287,17 @@ char* get_search_sql_string(bt_condition* conditions, char* sql_string)
                 n, n, n, n);
         strcat(sql_string, val);
     }
+    if (sort) {
+        char val[DEFAULT_LENGTH];
+        int n = i + 1;
+        sprintf(val,
+                " inner join element as e%d on t.id = e%d.ticket_id and e%d.element_type_id = %d and "
+                " (e%d.reply_id = (select max(id) from reply where ticket_id = t.id) "
+                " or "
+                " ((select count(id) from reply where ticket_id = t.id) = 0 and e%d.reply_id is null)) ",
+                n, n, n, sort->element_type_id, n, n);
+        strcat(sql_string, val);
+    }
     if (conditions != NULL) {
         strcat(sql_string, " where ");
         for (i = 0, cond = conditions; cond != NULL; cond = cond->next, i++) {
@@ -298,18 +309,24 @@ char* get_search_sql_string(bt_condition* conditions, char* sql_string)
     } else {
         strcat(sql_string, " where t.closed = 0 ");
     }
-    strcat(sql_string, " order by t.registerdate desc ");
+    strcat(sql_string, " order by ");
+    if (sort) {
+        char column[DEFAULT_LENGTH];
+        sprintf(column, "e%d.str_val %s, ", i + 1, strstr(sort->value, "reverse") ? "desc" : "asc");
+        strcat(sql_string, column);
+    }
+    strcat(sql_string, "t.registerdate desc ");
     d("sql: %s\n", sql_string);
 
     return sql_string;
 }
-bt_message* db_search_tickets(bt_condition* conditions)
+bt_message* db_search_tickets(bt_condition* conditions, bt_condition* sorts)
 {
     bt_message* tichets = NULL;
     bt_message* i = NULL;
     int r, n;
     char buffer[VALUE_LENGTH];
-    char *sql = get_search_sql_string(conditions, buffer);
+    char *sql = get_search_sql_string(conditions, sorts, buffer);
     sqlite3_stmt *stmt = NULL;
 
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);

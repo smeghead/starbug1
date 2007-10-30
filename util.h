@@ -4,9 +4,6 @@
 #include "data.h"
 #include "dbutil.h"
 
-#define cgi_uri cgiScriptName
-#define app_uri cgiScriptName
-
 #define o(...) fprintf(cgiOut, __VA_ARGS__)
 #define d(...) {FILE *fp = fopen("debug.log", "a");fprintf(fp, __VA_ARGS__);fclose(fp);}
 #define die(msg)    {d("ERROR: %s:%d %s\n", __FILE__, __LINE__, msg); exit(1);}

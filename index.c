@@ -29,6 +29,8 @@ void output_form_element(bt_element* element, bt_element_type* e_type);
 void output_form_element_4_condition(char*, bt_element_type*);
 int get_mode();
 static int contains(char* const, const char*);
+void remove_sort(char*, char*);
+void remove_rsort(char*, char*);
 
 enum MODE {
     MODE_INVALID,
@@ -125,10 +127,12 @@ void list_action()
     bt_element_type* e;
     bt_condition* conditions = NULL;
     bt_condition* c = NULL;
+    bt_condition* sort = NULL;
     bt_project* project;
     bt_state* states;
     int mode_search = (strlen(cgiPathInfo) > strlen("/list/")) ? 1 : 0;
     char message[DEFAULT_LENGTH];
+    char sortstr[DEFAULT_LENGTH];
 
     d("mode_search %d\n", mode_search);
     strcpy(path_info, cgiPathInfo);
@@ -160,7 +164,19 @@ void list_action()
         strcpy(c->value, value);
         c->next = NULL;
     }
-    tickets = db_search_tickets(conditions);
+    cgiFormStringNoNewlines("sort", sortstr, DEFAULT_LENGTH);
+    if (strlen(sortstr) > 0) {
+        sort = (bt_condition*)xalloc(sizeof(bt_condition));
+        sort->element_type_id = atoi(sortstr);
+    } else {
+        cgiFormStringNoNewlines("rsort", sortstr, DEFAULT_LENGTH);
+        if (strlen(sortstr) > 0) {
+            sort = (bt_condition*)xalloc(sizeof(bt_condition));
+            sort->element_type_id = atoi(sortstr);
+            strcpy(sort->value, "reverse");
+        }
+    }
+    tickets = db_search_tickets(conditions, sort);
     states = db_get_states();
     /* stateの表示 */
     o("<div id=\"state_index\">\n");
@@ -202,18 +218,23 @@ void list_action()
     o("<div id=\"ticket_list\">\n");
     o("<h3>チケット一覧</h3>\n");
     if (tickets != NULL) {
+        char query_string_temp[DEFAULT_LENGTH];
+        char query_string[DEFAULT_LENGTH];
+        char* reverse = strstr(cgiQueryString, "rsort=");
+        remove_rsort(cgiQueryString, query_string_temp);
+        remove_sort(query_string_temp, query_string);
         if (!conditions)
             o(      "<div class=\"description\">クローズ扱いのチケットは表示されていません。</div>\n");
         o(      "<table summary=\"ticket list\">\n"
                 "\t<tr>\n"
-                "\t\t<th>ID</th>\n");
+                "\t\t<th><a href=\"%s/list?%ssort=-1&amp;%s\">ID</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
         for (e = e_types; e != NULL; e = e->next) {
-            o("\t\t<th>");
+            o("\t\t<th><a href=\"%s/list?%ssort=%d&amp;%s\">", cgiScriptName, reverse ? "" : "r", e->id, query_string);
             h(e->name);
-            o("</th>\n");
+            o("</a></th>\n");
         }
-        o("\t\t<th>投稿日時</th>\n");
-        o("\t\t<th>最終更新日時</th>\n");
+        o("\t\t<th><a href=\"%s/list?%ssort=-2&amp;%s\">投稿日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+        o("\t\t<th><a href=\"%s/list?%ssort=-3&amp;%s\">最終更新日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
         o("\t</tr>\n");
         for (; tickets != NULL; tickets = tickets->next) {
             int reply_id;
@@ -948,4 +969,44 @@ void download_action()
 error:
     cgiHeaderContentType("text/plain; charset=utf-8;");
     o("error: ファイルがありません。");
+}
+void remove_sort(char* query_string, char* buf)
+{
+    char* rest;
+    char* sub = strstr(query_string, "sort=");
+    d("query_string: %s\n", query_string);
+    if (sub == NULL) {
+        strcpy(buf, query_string);
+        d("buf1\n");
+        return;
+    }
+    strncat(buf, query_string, sub - query_string);
+    rest = strchr(sub, '&');
+    if (rest == NULL) {
+        return;
+    }
+    d("sub: %s\n", sub);
+    d("rest: %s\n", rest);
+    strcat(buf, ++rest);
+    d("buf: %s\n", buf);
+}
+void remove_rsort(char* query_string, char* buf)
+{
+    char* rest;
+    char* sub = strstr(query_string, "rsort=");
+    d("query_string: %s\n", query_string);
+    if (sub == NULL) {
+        strcpy(buf, query_string);
+        d("buf1\n");
+        return;
+    }
+    strncat(buf, query_string, sub - query_string);
+    rest = strchr(sub, '&');
+    if (rest == NULL) {
+        return;
+    }
+    d("sub: %s\n", sub);
+    d("rest: %s\n", rest);
+    strcat(buf, ++rest);
+    d("buf: %s\n", buf);
 }

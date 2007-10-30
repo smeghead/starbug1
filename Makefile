@@ -23,7 +23,9 @@ admin.cgi: data.o dbutil.o db.o util.o css.o admin.o
 clean:
 	rm *.o index.cgi admin.cgi
 
-dist: default
+webapp: default
 	mkdir -p dist/starbug1
 	cp -r js css img wiki script .htaccess *.cgi dist/starbug1
+	find dist/starbug1 -name '*.cgi' -exec chmod +x {} \;
+	find dist/starbug1 -name '*.pl' -exec chmod +x {} \;
 
