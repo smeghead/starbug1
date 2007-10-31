@@ -1110,5 +1110,5 @@ void style_submit_action()
     cgiFormString("edit_css", value, VALUE_LENGTH);
     css_save("css/user.css", value);
 
-    redirect("", NULL);
+    redirect("", "更新しました。");
 }
