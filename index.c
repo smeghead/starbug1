@@ -541,6 +541,7 @@ void ticket_action()
         bt_element_type* e_type = element_types;
         for (; e_type != NULL; e_type = e_type->next) {
             char* value = get_element_value(elements, e_type);
+            if (e_type->reply_property) continue;
             o("\t<tr>\n");
             o("\t\t<th>");
             h(e_type->name);

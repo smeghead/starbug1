@@ -212,10 +212,16 @@ table.list_item th.delete {
 }
 #ticket_newest table {
     width: 95%;
+    border-color: #666;
 }
 #ticket_newest th {
     white-space: nowrap;
     width: 150px;
+    background-color: #ddd;
+}
+#ticket_newest td {
+    border-color: #666;
+    border-bottom:1px dashed #666;
 }
 th.required {
     border-left-color: crimson;
@@ -291,4 +297,3 @@ div.item_navigation {
     font-size: 80%;
     text-align: right;
 }
-
