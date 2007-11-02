@@ -212,16 +212,13 @@ table.list_item th.delete {
 }
 #ticket_newest table {
     width: 95%;
-    border-color: #666;
 }
 #ticket_newest th {
     white-space: nowrap;
     width: 150px;
-    background-color: #ddd;
+    background-color: #d9d9d9;
 }
 #ticket_newest td {
-    border-color: #666;
-    border-bottom:1px dashed #666;
 }
 th.required {
     border-left-color: crimson;
@@ -246,6 +243,9 @@ span.required {
     list-style:none;
     padding:0px 10px 0px 10px;
     float:left;
+}
+#state_index form {
+    display:inline;
 }
 #field_list {
     width:100%;

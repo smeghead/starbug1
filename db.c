@@ -268,14 +268,15 @@ void db_delete_ticket(bt_message* ticket)
         die("no ticket to update?");
 }
 
-char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* sql_string)
+char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* q, char* sql_string)
 {
     bt_condition* cond;
     int i;
     strcpy(sql_string, 
             "select distinct "
             " t.id, t.registerdate "
-            "from ticket as t ");
+            "from ticket as t "
+            "inner join element as e on t.id = e.ticket_id");
     for (i = 0, cond = conditions; cond != NULL; cond = cond->next, i++) {
         char val[DEFAULT_LENGTH];
         int n = i + 1;
@@ -309,6 +310,9 @@ char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* 
     } else {
         strcat(sql_string, " where t.closed = 0 ");
     }
+    if (q) {
+        strcat(sql_string, " and e.str_val like '%' || ? || '%' ");
+    }
     strcat(sql_string, " order by ");
     if (sort) {
         char column[DEFAULT_LENGTH];
@@ -320,13 +324,13 @@ char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* 
 
     return sql_string;
 }
-bt_message* db_search_tickets(bt_condition* conditions, bt_condition* sorts)
+bt_message* db_search_tickets(bt_condition* conditions, char* q, bt_condition* sorts)
 {
     bt_message* tichets = NULL;
     bt_message* i = NULL;
     int r, n;
     char buffer[VALUE_LENGTH];
-    char *sql = get_search_sql_string(conditions, sorts, buffer);
+    char *sql = get_search_sql_string(conditions, sorts, q, buffer);
     sqlite3_stmt *stmt = NULL;
 
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
@@ -334,6 +338,9 @@ bt_message* db_search_tickets(bt_condition* conditions, bt_condition* sorts)
     for (n = 1; conditions != NULL; conditions = conditions->next) {
         sqlite3_bind_int(stmt, n++, conditions->element_type_id);
         sqlite3_bind_text(stmt, n++, conditions->value, strlen(conditions->value), NULL);
+    }
+    if (q) {
+        sqlite3_bind_text(stmt, n++, q, strlen(q), NULL);
     }
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
@@ -570,7 +577,7 @@ error:
 }
 bt_message* db_get_ticket(int ticket_id)
 {
-    bt_message* incidnet = NULL;
+    bt_message* ticket = NULL;
     int r;
     const char *sql = "select id, registerdate from ticket where id = ?";
     sqlite3_stmt *stmt = NULL;
@@ -580,28 +587,24 @@ bt_message* db_get_ticket(int ticket_id)
     sqlite3_bind_int(stmt, 1, ticket_id);
 
     if (SQLITE_ROW != (r = sqlite3_step(stmt))) {
-        goto error;
+        d("no ticket.\n");
+        return NULL;
     } else {
         const unsigned char* registerdate;
-        incidnet = (bt_message*)xalloc(sizeof(bt_message));
-        incidnet->id = sqlite3_column_int(stmt, 0);
+        ticket = (bt_message*)xalloc(sizeof(bt_message));
+        ticket->id = sqlite3_column_int(stmt, 0);
         registerdate = sqlite3_column_text(stmt, 1);
         if (registerdate != NULL)
-            strcpy(incidnet->registerdate, registerdate);
-        incidnet->next = NULL;
+            strcpy(ticket->registerdate, registerdate);
+        ticket->next = NULL;
     }
 
     sqlite3_finalize(stmt);
-    return incidnet;
-
-error:
-    d("ERR: %s\n", sqlite3_errmsg(db));
-    sqlite3_close(db);
-    die("failed to db_get_ticket.");
+    return ticket;
 }
 bt_message* db_get_reply(int reply_id)
 {
-    bt_message* incidnet = NULL;
+    bt_message* ticket = NULL;
     int r;
     const char *sql = "select id, registerdate from reply where id = ?";
     sqlite3_stmt *stmt = NULL;
@@ -614,16 +617,16 @@ bt_message* db_get_reply(int reply_id)
         goto error;
     } else {
         const unsigned char* registerdate;
-        incidnet = (bt_message*)xalloc(sizeof(bt_message));
-        incidnet->id = sqlite3_column_int(stmt, 0);
+        ticket = (bt_message*)xalloc(sizeof(bt_message));
+        ticket->id = sqlite3_column_int(stmt, 0);
         registerdate = sqlite3_column_text(stmt, 1);
         if (registerdate != NULL)
-            strcpy(incidnet->registerdate, registerdate);
-        incidnet->next = NULL;
+            strcpy(ticket->registerdate, registerdate);
+        ticket->next = NULL;
     }
 
     sqlite3_finalize(stmt);
-    return incidnet;
+    return ticket;
 
 error:
     d("ERR: %s\n", sqlite3_errmsg(db));
@@ -715,7 +718,7 @@ void db_update_project(bt_project* project)
 }
 void db_update_element_type(bt_element_type* e_type)
 {
-    /* åŸºæœ¬é …ç›®ã®å ´åˆã€ticket_propertyã¨reply_propertyã¯ç·¨é›†ã•ã›ãªã„ã€‚ */
+    /* ´ðËÜ¹àÌÜ¤Î¾ì¹ç¡¢ticket_property¤Èreply_property¤ÏÊÔ½¸¤µ¤»¤Ê¤¤¡£ */
     switch (e_type->id) {
         case ELEM_ID_TITLE:
             e_type->ticket_property = 1;

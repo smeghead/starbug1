@@ -133,7 +133,16 @@ void list_action()
     int mode_search = (strlen(cgiPathInfo) > strlen("/list/")) ? 1 : 0;
     char message[DEFAULT_LENGTH];
     char sortstr[DEFAULT_LENGTH];
+    char id[DEFAULT_LENGTH];
+    char q[DEFAULT_LENGTH];
 
+    cgiFormStringNoNewlines("id", id, DEFAULT_LENGTH);
+    if (strlen(id) > 0) {
+        char uri[DEFAULT_LENGTH];
+        sprintf(uri, "/ticket/%s", id);
+        redirect(uri, NULL);
+    }
+    
     d("mode_search %d\n", mode_search);
     strcpy(path_info, cgiPathInfo);
     db_init();
@@ -164,6 +173,7 @@ void list_action()
         strcpy(c->value, value);
         c->next = NULL;
     }
+    cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
     cgiFormStringNoNewlines("sort", sortstr, DEFAULT_LENGTH);
     if (strlen(sortstr) > 0) {
         sort = (bt_condition*)xalloc(sizeof(bt_condition));
@@ -176,7 +186,7 @@ void list_action()
             strcpy(sort->value, "reverse");
         }
     }
-    tickets = db_search_tickets(conditions, sort);
+    tickets = db_search_tickets(conditions, q, sort);
     states = db_get_states();
     /* stateの表示 */
     o("<div id=\"state_index\">\n");
@@ -189,10 +199,17 @@ void list_action()
         o("(%d)", states->count);
         o("\t\t</li>\n");
     }
-    o("<li><a href=\"%s/list%s\" id=\"display_search_condition\">検索条件を%s</a></li>\n", cgiScriptName, 
+    o("\t\t<li><a href=\"%s/list%s\" id=\"display_search_condition\">検索条件を%s</a></li>\n", cgiScriptName, 
             mode_search ? "" : "/search",
             mode_search ? "閉じる" : "開く");
+    o("\t\t<li>\n");
+    o("\t\t\t<form action=\"%s/list\" method=\"get\">\n", cgiScriptName);
+    o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" />\n");
+    o("\t\t\t\t<input type=\"submit\" class=\"button\" value=\"ID指定で表示\" />\n");
+    o("\t\t\t</form>\n");
+    o("\t\t</li>\n");
     o("\t</ul>\n");
+    o("<br clear=\"all\" />\n");
     o("</div>\n");
     o("<div id=\"condition_form\" style=\"%s\" >\n", mode_search ? "" : "display: none;");
     o("<h3>検索条件</h3>\n");
@@ -211,6 +228,13 @@ void list_action()
         o("\t</td>\n");
         o("</tr>\n");
     }
+        o("<tr>\n");
+        o("\t<th>キーワード検索</th>\n");
+        o("\t<td>\n"); 
+        o("\t\t<input type=\"text\" name=\"q\" value=\""); v(q); o("\" />\n");
+        o("\t\t<div id=\"message\">全ての項目から検索を行ないます。</div>\n");
+        o("\t</td>\n");
+        o("</tr>\n");
     o("</table>\n");
     o("<input class=\"button\" type=\"submit\" value=\"検索\" />");
     o("</form>\n");
@@ -227,14 +251,17 @@ void list_action()
             o(      "<div class=\"description\">クローズ扱いのチケットは表示されていません。</div>\n");
         o(      "<table summary=\"ticket list\">\n"
                 "\t<tr>\n"
-                "\t\t<th><a href=\"%s/list?%ssort=-1&amp;%s\">ID</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+                "\t\t<th>ID</th>\n");
+/*                 "\t\t<th><a href=\"%s/list?%ssort=-1&amp;%s\">ID</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string); */
         for (e = e_types; e != NULL; e = e->next) {
             o("\t\t<th><a href=\"%s/list?%ssort=%d&amp;%s\">", cgiScriptName, reverse ? "" : "r", e->id, query_string);
             h(e->name);
             o("</a></th>\n");
         }
-        o("\t\t<th><a href=\"%s/list?%ssort=-2&amp;%s\">投稿日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
-        o("\t\t<th><a href=\"%s/list?%ssort=-3&amp;%s\">最終更新日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+        o("\t\t<th>投稿日時</th>\n");
+        o("\t\t<th>最終更新日時</th>\n");
+/*         o("\t\t<th><a href=\"%s/list?%ssort=-2&amp;%s\">投稿日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string); */
+/*         o("\t\t<th><a href=\"%s/list?%ssort=-3&amp;%s\">最終更新日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string); */
         o("\t</tr>\n");
         for (; tickets != NULL; tickets = tickets->next) {
             int reply_id;
@@ -487,10 +514,21 @@ void ticket_action()
     ticket_id = strchr(path_info + 1, '/');
     if (ticket_id) ticket_id++;
     iid = atoi(ticket_id);
+    d("id:%d\n", iid);
+    if (!iid) {
+        redirect("/list", "存在しないIDが指定されました。");
+            return;
+    }
     db_init();
     project = db_get_project();
     output_header(project, "reply.js");
+    d("id:%d\n", iid);
     ticket = db_get_ticket(iid);
+    d("id:%d\n", iid);
+    if (!ticket) {
+        redirect("/list", "存在しないIDが指定されました。");
+        return;
+    }
     element_types = db_get_element_types(1);
     elements = db_get_last_elements(iid);
     o("<h2 id=\"subject\">"); h(project->name); o(" - ID:%5d ", ticket->id);
@@ -582,7 +620,6 @@ void ticket_action()
             for (; e_type != NULL; e_type = e_type->next) {
                 char* value = get_element_value(elements, e_type);
                 char* last_value = get_element_value(previous, e_type);
-                d("old: %s new: %s = %d\n", last_value, value, strcmp(value, last_value));
                 /* チケット属性で、直前の値と同じ項目は表示しない。 */
                 if (e_type->ticket_property == 1 && strcmp(value, last_value) == 0)
                     continue;

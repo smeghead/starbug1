@@ -9,7 +9,7 @@ bt_list_item* db_get_list_item(int);
 int db_register_ticket(bt_message*);
 int db_reply_ticket(bt_message*);
 void db_delete_ticket(bt_message*);
-bt_message* db_search_tickets(bt_condition*, bt_condition*);
+bt_message* db_search_tickets(bt_condition*, char*, bt_condition*);
 bt_element* db_get_elements(int, int);
 bt_element* db_get_last_elements_4_list(int);
 bt_element* db_get_last_elements(int);
