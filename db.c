@@ -317,11 +317,10 @@ char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* 
         strcat(sql_string, " where ");
         if (!strlen(q)) {
             strcat(sql_string, "  t.closed = 0 ");
-            i++;
         }
     }
     if (strlen(q)) {
-        if (i != 0)
+        if (!conditions)
             strcat(sql_string, " and ");
         strcat(sql_string, " e.str_val like '%' || ? || '%' ");
     }
