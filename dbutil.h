@@ -7,6 +7,7 @@
 void db_init();
 void db_finish();
 void db_begin();
+void db_rollback();
 void db_commit();
 
 int exec_query(const char* sql,...);

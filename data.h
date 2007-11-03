@@ -6,6 +6,7 @@
 #define VALUE_LENGTH 1048575
 #define MODE_LENGTH 128
 #define DEFAULT_LENGTH 1024
+#define MAX_FILE_SIZE 512
 
 typedef struct _project {
   char name[DEFAULT_LENGTH];

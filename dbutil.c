@@ -37,6 +37,10 @@ void db_begin()
 {
     exec_query("begin;", COLUMN_TYPE_END);
 }
+void db_rollback()
+{
+    exec_query("rollback;", COLUMN_TYPE_END);
+}
 void db_commit()
 {
     exec_query("commit;", COLUMN_TYPE_END);

@@ -245,23 +245,32 @@ void list_action()
         char query_string_temp[DEFAULT_LENGTH];
         char query_string[DEFAULT_LENGTH];
         char* reverse = strstr(cgiQueryString, "rsort=");
+        bt_message* t = tickets;
+        int hit_count;
+        /* count */
+        for (hit_count = 0; t != NULL; t = t->next) hit_count++;
+
         remove_rsort(cgiQueryString, query_string_temp);
         remove_sort(query_string_temp, query_string);
+        o(      "<div class=\"description\">");
         if (!conditions)
-            o(      "<div class=\"description\">クローズ扱いのチケットは表示されていません。</div>\n");
+            o(      "クローズ扱いのチケットは表示されていません。");
+        o(      "%d件表示しています。\n", hit_count);
+        o(      "</div>\n");
         o(      "<table summary=\"ticket list\">\n"
                 "\t<tr>\n"
-                "\t\t<th>ID</th>\n");
-/*                 "\t\t<th><a href=\"%s/list?%ssort=-1&amp;%s\">ID</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string); */
+                "\t\t<th><a href=\"%s/list?%ssort=-1&amp;%s\">ID</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
         for (e = e_types; e != NULL; e = e->next) {
-            o("\t\t<th><a href=\"%s/list?%ssort=%d&amp;%s\">", cgiScriptName, reverse ? "" : "r", e->id, query_string);
+            o("\t\t<th>\n");
+            if (e->id != ELEM_ID_SENDER) /* 投稿者は特別に最初の投稿者を表示しているので、最終投稿者でソートした結果を表示するとおかしくなる。ソートさせないようにしておく。 */
+                o("\t\t\t<a href=\"%s/list?%ssort=%d&amp;%s\">", cgiScriptName, reverse ? "" : "r", e->id, query_string);
             h(e->name);
-            o("</a></th>\n");
+            if (e->id != ELEM_ID_SENDER)  /* 投稿者は特別に最初の投稿者を表示しているので、最終投稿者でソートした結果を表示するとおかしくなる。ソートさせないようにしておく。 */
+                o("</a>\n");
+            o("\t\t</th>\n");
         }
-        o("\t\t<th>投稿日時</th>\n");
-        o("\t\t<th>最終更新日時</th>\n");
-/*         o("\t\t<th><a href=\"%s/list?%ssort=-2&amp;%s\">投稿日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string); */
-/*         o("\t\t<th><a href=\"%s/list?%ssort=-3&amp;%s\">最終更新日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string); */
+        o("\t\t<th><a href=\"%s/list?%ssort=-2&amp;%s\">投稿日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+        o("\t\t<th><a href=\"%s/list?%ssort=-3&amp;%s\">最終更新日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
         o("\t</tr>\n");
         for (; tickets != NULL; tickets = tickets->next) {
             int reply_id;
@@ -777,6 +786,9 @@ void register_submit_action()
                     break;
                 case ELEM_UPLOADFILE:
                     sprintf(name, "field%d", e_type->id);
+                    if (get_upload_size(e_type->id) > MAX_FILE_SIZE * 1024) {
+                        goto file_size_error;
+                    }
                     cgiFormFileName(name, value, VALUE_LENGTH);
                     e->str_val = (char*)xalloc(sizeof(char) * strlen(value) + 1);
                     strcpy(e->str_val, get_filename_without_path(value));
@@ -806,6 +818,15 @@ void register_submit_action()
         redirect("/list", "登録しました。");
     else if (mode == MODE_REPLY)
         redirect("/list", "返信しました。");
+    return;
+
+file_size_error:
+    db_rollback();
+    db_finish();
+    output_header(project, NULL);
+    o("<h1>エラー発生</h1>\n");
+    o("<div class=\"message\">ファイルサイズが大きすぎます。%dkbより大きいファイルは登録できません。ブラウザの戻るボタンで戻ってください。</div>\n", MAX_FILE_SIZE);
+    output_footer();
 }
 /**
  * デフォルトのaction。

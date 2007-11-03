@@ -273,10 +273,16 @@ char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* 
     bt_condition* cond;
     int i;
     strcpy(sql_string, 
-            "select distinct "
-            " t.id, t.registerdate "
-            "from ticket as t "
-            "inner join element as e on t.id = e.ticket_id");
+            "select  "
+            " t.id, t.registerdate, max(r.registerdate) as last_registerdate "
+            "from ticket as t ");
+    if (strlen(q))
+        strcat(sql_string, "inner join element as e on t.id = e.ticket_id ");
+
+/*             "inner join element as e_4_sender " */
+/*             " on (t.id = e_4_sender.ticket_id " */
+/*             "    and e_4_sender.reply_id is null) " */
+    strcat(sql_string, "left join reply as r on t.id = r.ticket_id ");
     for (i = 0, cond = conditions; cond != NULL; cond = cond->next, i++) {
         char val[DEFAULT_LENGTH];
         int n = i + 1;
@@ -288,7 +294,7 @@ char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* 
                 n, n, n, n);
         strcat(sql_string, val);
     }
-    if (sort) {
+    if (sort && sort->element_type_id > 0) { /* 特殊項目の場合は、省く */
         char val[DEFAULT_LENGTH];
         int n = i + 1;
         sprintf(val,
@@ -299,7 +305,7 @@ char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* 
                 n, n, n, sort->element_type_id, n, n);
         strcat(sql_string, val);
     }
-    if (conditions != NULL) {
+    if (conditions) {
         strcat(sql_string, " where ");
         for (i = 0, cond = conditions; cond != NULL; cond = cond->next, i++) {
             char val[DEFAULT_LENGTH];
@@ -308,15 +314,37 @@ char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* 
             strcat(sql_string, val);
         }
     } else {
-        strcat(sql_string, " where t.closed = 0 ");
+        strcat(sql_string, " where ");
+        if (!strlen(q)) {
+            strcat(sql_string, "  t.closed = 0 ");
+            i++;
+        }
     }
-    if (q) {
-        strcat(sql_string, " and e.str_val like '%' || ? || '%' ");
+    if (strlen(q)) {
+        if (i != 0)
+            strcat(sql_string, " and ");
+        strcat(sql_string, " e.str_val like '%' || ? || '%' ");
     }
+    strcat(sql_string, " group by t.id, t.registerdate ");
     strcat(sql_string, " order by ");
     if (sort) {
         char column[DEFAULT_LENGTH];
-        sprintf(column, "e%d.str_val %s, ", i + 1, strstr(sort->value, "reverse") ? "desc" : "asc");
+        char sort_type[DEFAULT_LENGTH];
+        sprintf(sort_type, "%s", strstr(sort->value, "reverse") ? "desc" : "asc");
+        switch (sort->element_type_id) {
+            case -1:
+                sprintf(column, "t.id %s, ", sort_type);
+                break;
+            case -2:
+                sprintf(column, "t.registerdate %s, ", sort_type);
+                break;
+            case -3:
+                sprintf(column, "last_registerdate %s, ", sort_type);
+                break;
+            default:
+                sprintf(column, "e%d.str_val %s, ", i + 1, sort_type);
+                break;
+        }
         strcat(sql_string, column);
     }
     strcat(sql_string, "t.registerdate desc ");
