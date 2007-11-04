@@ -32,12 +32,50 @@ $ su
 # make install
 
 Starbug1のインストール
-
-* cvsリポジトリからソースを取得する。
-
+* ソースを取得する。
+Downloadから最新ソースを取得する。https://sourceforge.jp/projects/starbug1/
+上から取得できない場合や、リポジトリにアクセスしたい場合は、、cvsリポジトリ
+からソースを取得する。
 $ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/starbug1 login
 $ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/starbug1 checkout starbug1
+
+* コンパイル
+$ tar zxf starbug-x.x.x-alpha.tar.gz
 $ cd starbug1
 $ make
+$ make webapp
 
-執筆中
+dist/starbug1 ディレクトリに、webアプリ一式が生成されます。
+Starbug1の配置
+
+* Webサーバ(動作確認しているのはapache)のDocumentRoot配下に dist/starbug1 ディ
+  レクトリを配置します。
+
+$ su
+# cp -r dist/starbug1 /home/httpd/html
+
+* dist/starbug1 配下をcgi実行ユーザの権限に変更します。
+
+# cd /home/httpd/html
+# chown -R apache:apache starbug1
+
+* .htaccessを適切に編集します。
+
+# cat .htaccess
+ErrorDocument 500 /starbug1/error.html
+DirectoryIndex index.cgi
+Options +ExecCGI
+AuthUserFile /etc/starbug1/.htpasswd
+AuthGroupFile /dev/null
+AuthName "Please enter your ID and password"
+AuthType Basic
+Require valid-user
+
+上の例では、basic認証の設定を行なっています。basic認証を使用する場合、
+htpasswdなどでパスワードファイルへのユーザの登録を行なってください。
+httpd.confを編集できる場合は、同等の設定を、httpd.confで行なう方が望ましいで
+す。
+
+* http://(server_name)/starbug1/ にアクセスします。 
+
+トップ画面が表示されれば、インストール成功です。 
