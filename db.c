@@ -320,7 +320,7 @@ char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* 
         }
     }
     if (strlen(q)) {
-        if (!conditions)
+        if (conditions) /* conditionsが指定れていれば、1つ以上条件が設定されているとみなす。綺麗じゃないので修正するつもり。  */
             strcat(sql_string, " and ");
         strcat(sql_string, " e.str_val like '%' || ? || '%' ");
     }
