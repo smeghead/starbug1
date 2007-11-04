@@ -1,2 +1,2 @@
-ErrorDocument 500 /bt/error.html
+ErrorDocument 500 /starbug1/error.html
 Options +ExecCGI

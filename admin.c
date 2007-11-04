@@ -247,6 +247,7 @@ void env_action()
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t</table>\n");
+    o("\t\t<div class=\"description\">サーバ名、通知先アドレス、管理者アドレスが入力されていない場合、メール通知機能は機能しません。</div>\n");
     o("\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
     o("\t</form>\n");
     o("</div>\n");
@@ -337,7 +338,7 @@ void items_action()
         o("\t\t\t\t\t<input id=\"field%d.required\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.required\" ", e_types->id, e_types->id);
         o(                  "value=\"1\" %s />\n", e_types->required == 1 ? "checked=\"checked\"" : "");
         o("\t\t\t\t\t<label for=\"field%d.required\">必須項目とする。</label>\n", e_types->id);
-        o("\t\t\t\t\t<div class=\"description\">入力しないと投稿できない属性とするかどうかです。</div>\n");
+        o("\t\t\t\t\t<div class=\"description\">入力しないと投稿できない属性とするかどうかです。ただし、チェックはJavaScriptで行なうのみです。</div>\n");
         o("\t\t\t\t</td>\n");
         o("\t\t\t</tr>\n");
         o("\t\t\t<tr>\n");
