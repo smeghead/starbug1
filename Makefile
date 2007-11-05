@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS= -I. -g -O2 -Wall
-LFLAGS = -lsqlite3 -lcgic -static
+LFLAGS = -lsqlite3 -lcgic
 
 default: index.cgi admin.cgi
 
