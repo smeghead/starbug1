@@ -295,8 +295,8 @@ void list_action()
 
             o("\t\t<td>");
             if (reply_id > 0) {
-                bt_message* reply = db_get_reply(reply_id);
-                h(reply->registerdate);
+/*                 bt_message* reply = db_get_reply(reply_id); */
+/*                 h(reply->registerdate); */
             }
             o("&nbsp;</td>\n");
             o("\t</tr>\n");

@@ -143,30 +143,70 @@ void set_date_string(char* buf)
             tp->tm_year + 1900, tp->tm_mon + 1, tp->tm_mday,
             tp->tm_hour, tp->tm_min, tp->tm_sec);
 }
+void create_message_insert_sql(bt_element* elements, char* buf)
+{
+    bt_element* e;
+    strcpy(buf, "insert into message(id, ticket_id, registerdate");
+    for (e = elements; e != NULL; e = e->next) {
+        char statement[16];
+        sprintf(statement, ", field%d", e->element_type_id);
+        strcat(buf, statement);
+    }
+    strcat(buf, ") values (NULL, ?, ?");
+    for (e = elements; e != NULL; e = e->next) {
+        strcat(buf, ", ?");
+    }
+    strcat(buf, ")");
+}
 int db_register_ticket(bt_message* ticket)
 {
     int ticket_id = 0;
     char registerdate[20];
     bt_element* elements;
+    bt_element* e;
+    char sql[DEFAULT_LENGTH];
+    int i, loop = 0;
+    sqlite3_stmt *stmt = NULL;
+    int message_id;
 
     set_date_string(registerdate);
 
-    exec_query("insert into ticket(id, registerdate, closed, deleted) "
-            "values (NULL, ?, 0, 0)",
+    exec_query("insert into ticket(id, registerdate, closed) "
+            "values (NULL, ?, 0)",
             COLUMN_TYPE_TEXT, registerdate,
             COLUMN_TYPE_END);
 
     ticket_id = sqlite3_last_insert_rowid(db);
 
     elements = ticket->elements;
+    create_message_insert_sql(elements, sql);
+    d("%s\n", sql);
+
+    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+    sqlite3_reset(stmt);
+    i = 1;
+    sqlite3_bind_int(stmt, i++, ticket_id);
+    sqlite3_bind_text(stmt, i++, registerdate, strlen(registerdate), NULL);
+    for (e = elements; e != NULL; e = e->next) {
+        sqlite3_bind_text(stmt, i++, e->str_val, strlen(e->str_val), NULL);
+    }
+    while (SQLITE_DONE != sqlite3_step(stmt)){
+        if (loop++ > 1000)
+            goto error;
+    }
+    message_id = sqlite3_last_insert_rowid(db);
+    sqlite3_finalize(stmt);
+    /* message_id を更新する。 */
+    exec_query("update ticket set original_message_id = ?, last_message_id = ? "
+            "where id = ?",
+            COLUMN_TYPE_INT, message_id,
+            COLUMN_TYPE_INT, message_id,
+            COLUMN_TYPE_INT, ticket_id,
+            COLUMN_TYPE_END);
+
+    elements = ticket->elements;
+    /* 添付ファイルの登録 */
     for (; elements != NULL; elements = elements->next) {
-        int element_id;
-        exec_query("insert into element(id, ticket_id, element_type_id, str_val) values (NULL, ?, ?, ?)",
-                COLUMN_TYPE_INT, ticket_id,
-                COLUMN_TYPE_INT, elements->element_type_id,
-                COLUMN_TYPE_TEXT, elements->str_val,
-                COLUMN_TYPE_END);
-        element_id = sqlite3_last_insert_rowid(db);
         if (elements->is_file) {
             int size;
             char filename[DEFAULT_LENGTH];
@@ -179,8 +219,12 @@ int db_register_ticket(bt_message* ticket)
             ctype = get_upload_content_type(elements->element_type_id, content_type);
             content = get_upload_content(elements->element_type_id);
             d("fname: %s size: %d\n", fname, size);
-            if (exec_query("insert into element_file(id, element_id, filename, size, content_type, content) values (NULL, ?, ?, ?, ?, ?) ",
-                    COLUMN_TYPE_INT, element_id,
+            if (exec_query(
+                        "insert into element_file("
+                        " id, message_id, element_type_id, filename, size, content_type, content"
+                        ") values (NULL, ?, ?, ?, ?, ?, ?) ",
+                    COLUMN_TYPE_INT, message_id,
+                    COLUMN_TYPE_INT, elements->element_type_id,
                     COLUMN_TYPE_TEXT, fname,
                     COLUMN_TYPE_INT, size,
                     COLUMN_TYPE_TEXT, content_type,
@@ -190,6 +234,12 @@ int db_register_ticket(bt_message* ticket)
         }
     }
     return ticket_id;
+
+error:
+    d("ERR: %s\n", sqlite3_errmsg(db));
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+    die("failed to db_register_ticket.");
 }
 int db_reply_ticket(bt_message* ticket)
 {
@@ -270,82 +320,96 @@ void db_delete_ticket(bt_message* ticket)
 
 char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* q, char* sql_string)
 {
-    bt_condition* cond;
-    int i;
+/*     bt_condition* cond; */
+/*     int i; */
     strcpy(sql_string, 
             "select  "
-            " t.id, t.registerdate, max(r.registerdate) as last_registerdate "
-            "from ticket as t ");
-    if (strlen(q))
-        strcat(sql_string, "inner join element as e on t.id = e.ticket_id ");
+            " t.id, t.registerdate, m.registerdate as last_registerdate "
+            "from ticket as t "
+            "inner join message as m on m.id = t.last_message_id ");
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*     if (strlen(q)) */
+/*         strcat(sql_string, "inner join element as e on t.id = e.ticket_id "); */
 
 /*             "inner join element as e_4_sender " */
 /*             " on (t.id = e_4_sender.ticket_id " */
 /*             "    and e_4_sender.reply_id is null) " */
-    strcat(sql_string, "left join reply as r on t.id = r.ticket_id ");
-    for (i = 0, cond = conditions; cond != NULL; cond = cond->next, i++) {
-        char val[DEFAULT_LENGTH];
-        int n = i + 1;
-        sprintf(val,
-                " inner join element as e%d on t.id = e%d.ticket_id and "
-                " (e%d.reply_id = (select max(id) from reply where ticket_id = t.id) "
-                " or "
-                " ((select count(id) from reply where ticket_id = t.id) = 0 and e%d.reply_id is null)) ",
-                n, n, n, n);
-        strcat(sql_string, val);
-    }
-    if (sort && sort->element_type_id > 0) { /* 特殊項目の場合は、省く */
-        char val[DEFAULT_LENGTH];
-        int n = i + 1;
-        sprintf(val,
-                " inner join element as e%d on t.id = e%d.ticket_id and e%d.element_type_id = %d and "
-                " (e%d.reply_id = (select max(id) from reply where ticket_id = t.id) "
-                " or "
-                " ((select count(id) from reply where ticket_id = t.id) = 0 and e%d.reply_id is null)) ",
-                n, n, n, sort->element_type_id, n, n);
-        strcat(sql_string, val);
-    }
-    if (conditions) {
-        strcat(sql_string, " where ");
-        for (i = 0, cond = conditions; cond != NULL; cond = cond->next, i++) {
-            char val[DEFAULT_LENGTH];
-            if (i) strcat(sql_string, " and ");
-            sprintf(val, " (e%d.element_type_id = ? and e%d.str_val like '%%' || ? || '%%') ", i + 1, i + 1);
-            strcat(sql_string, val);
-        }
-    } else {
-        strcat(sql_string, " where ");
-        if (!strlen(q)) {
-            strcat(sql_string, "  t.closed = 0 ");
-        }
-    }
-    if (strlen(q)) {
-        if (conditions) /* conditionsが指定れていれば、1つ以上条件が設定されているとみなす。綺麗じゃないので修正するつもり。  */
-            strcat(sql_string, " and ");
-        strcat(sql_string, " e.str_val like '%' || ? || '%' ");
-    }
-    strcat(sql_string, " group by t.id, t.registerdate ");
+/*     strcat(sql_string, "left join reply as r on t.id = r.ticket_id "); */
+/*     for (i = 0, cond = conditions; cond != NULL; cond = cond->next, i++) { */
+/*         char val[DEFAULT_LENGTH]; */
+/*         int n = i + 1; */
+/*         sprintf(val, */
+/*                 " inner join element as e%d on t.id = e%d.ticket_id and " */
+/*                 " (e%d.reply_id in (select max(id) from reply group by ticket_id)" */
+/*                 " or " */
+/*                 " (not exists (select id from reply where ticket_id = t.id) and e%d.reply_id is null)) ", */
+/*                 n, n, n, n); */
+/*         strcat(sql_string, val); */
+/*     } */
+/*     if (sort && sort->element_type_id > 0) { |+特殊項目の場合は、省く+| */
+/*         char val[DEFAULT_LENGTH]; */
+/*         int n = i + 1; */
+/*         sprintf(val, */
+/*                 " inner join element as e%d on t.id = e%d.ticket_id and e%d.element_type_id = %d and " */
+/*                 " (e%d.reply_id in (select max(id) from reply group by ticket_id)" */
+/*                 " or " */
+/*                 " (not exists (select id from reply where ticket_id = t.id) and e%d.reply_id is null)) ", */
+/*                 n, n, n, sort->element_type_id, n, n); */
+/*         strcat(sql_string, val); */
+/*     } */
+/*     if (conditions) { */
+/*         strcat(sql_string, " where "); */
+/*         for (i = 0, cond = conditions; cond != NULL; cond = cond->next, i++) { */
+/*             char val[DEFAULT_LENGTH]; */
+/*             if (i) strcat(sql_string, " and "); */
+/*             sprintf(val, " (e%d.element_type_id = ? and e%d.str_val like '%%' || ? || '%%') ", i + 1, i + 1); */
+/*             strcat(sql_string, val); */
+/*         } */
+/*     } else { */
+/*         strcat(sql_string, " where "); */
+/*         if (!strlen(q)) { */
+/*             strcat(sql_string, "  t.closed = 0 "); */
+/*         } */
+/*     } */
+/*     if (strlen(q)) { */
+/*         if (conditions) |+conditionsが指定れていれば、1つ以上条件が設定されているとみなす。綺麗じゃないので修正するつもり。 +| */
+/*             strcat(sql_string, " and "); */
+/*         strcat(sql_string, " e.str_val like '%' || ? || '%' "); */
+/*     } */
+/*     strcat(sql_string, " group by t.id, t.registerdate "); */
     strcat(sql_string, " order by ");
-    if (sort) {
-        char column[DEFAULT_LENGTH];
-        char sort_type[DEFAULT_LENGTH];
-        sprintf(sort_type, "%s", strstr(sort->value, "reverse") ? "desc" : "asc");
-        switch (sort->element_type_id) {
-            case -1:
-                sprintf(column, "t.id %s, ", sort_type);
-                break;
-            case -2:
-                sprintf(column, "t.registerdate %s, ", sort_type);
-                break;
-            case -3:
-                sprintf(column, "last_registerdate %s, ", sort_type);
-                break;
-            default:
-                sprintf(column, "e%d.str_val %s, ", i + 1, sort_type);
-                break;
-        }
-        strcat(sql_string, column);
-    }
+/*     if (sort) { */
+/*         char column[DEFAULT_LENGTH]; */
+/*         char sort_type[DEFAULT_LENGTH]; */
+/*         sprintf(sort_type, "%s", strstr(sort->value, "reverse") ? "desc" : "asc"); */
+/*         switch (sort->element_type_id) { */
+/*             case -1: */
+/*                 sprintf(column, "t.id %s, ", sort_type); */
+/*                 break; */
+/*             case -2: */
+/*                 sprintf(column, "t.registerdate %s, ", sort_type); */
+/*                 break; */
+/*             case -3: */
+/*                 sprintf(column, "last_registerdate %s, ", sort_type); */
+/*                 break; */
+/*             default: */
+/*                 sprintf(column, "e%d.str_val %s, ", i + 1, sort_type); */
+/*                 break; */
+/*         } */
+/*         strcat(sql_string, column); */
+/*     } */
     strcat(sql_string, "t.registerdate desc ");
     d("sql: %s\n", sql_string);
 
@@ -419,57 +483,57 @@ char* db_get_original_sender(int ticket_id, char* buf)
 
     return buf;
 }
+void create_columns_exp(bt_element_type* element_types, char* buf)
+{
+    for (; element_types != NULL; element_types = element_types->next) {
+        char column_name[DEFAULT_LENGTH];
+        sprintf(column_name, ", field%d ", element_types->id);
+        strcat(buf, column_name);
+    }
+}
 bt_element* db_get_last_elements_4_list(int ticket_id)
 {
-    int reply_id = 0;
     bt_element* elements = NULL;
     bt_element* e = NULL;
-    const char *sql;
+    char sql[DEFAULT_LENGTH] = "";
     sqlite3_stmt *stmt = NULL;
     int r;
+    char columns[DEFAULT_LENGTH] = "";
+    bt_element_type* element_types;
 
-    reply_id = exec_query_scalar_int("select max(id) from reply where ticket_id = ?",
-            COLUMN_TYPE_INT, ticket_id,
-            COLUMN_TYPE_END);
-    if (reply_id == INVALID_INT)
-        die("failed to reply_id.");
-
-    if (reply_id == 0)
-        sql = "select element.id, element.element_type_id, element.str_val, list_item.id "
-            "from element "
-            "inner join element_type on element.element_type_id = element_type.id "
-            "left join list_item on list_item.element_type_id = element.element_type_id and list_item.name = element.str_val "
-            "where ticket_id = ? and reply_id is null and element_type.display_in_list = 1";
-    else
-        sql = "select element.id, element.element_type_id, element.str_val, list_item.id "
-            "from element "
-            "inner join element_type on element.element_type_id = element_type.id "
-            "left join list_item on list_item.element_type_id = element.element_type_id and list_item.name = element.str_val "
-            "where ticket_id = ? and reply_id = ? and element_type.display_in_list = 1";
+    d("ticket_id:%d\n", ticket_id);
+    element_types = db_get_element_types(0);
+    create_columns_exp(element_types, columns);
+    strcpy(sql, "select t.id ");
+    strcat(sql, columns);
+    strcat(sql, 
+        "from ticket as t "
+        "inner join message as m on m.id = t.last_message_id "
+        "where t.id = ?");
+    d("sql:%s\n", sql);
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, ticket_id);
-    if (reply_id != -1)
-        sqlite3_bind_int(stmt, 2, reply_id);
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
-        const unsigned char* str_val;
-        if (e == NULL) {
-            e = elements = (bt_element*)xalloc(sizeof(bt_element));
-        } else {
-            e->next = (bt_element*)xalloc(sizeof(bt_element));
-            e = e->next;
+        unsigned char* str_val;
+        int i = 1;
+        for (; element_types != NULL; element_types = element_types->next) {
+            if (e == NULL) {
+                e = elements = (bt_element*)xalloc(sizeof(bt_element));
+            } else {
+                e->next = (bt_element*)xalloc(sizeof(bt_element));
+                e = e->next;
+            }
+            e->id = sqlite3_column_int(stmt, 0);
+            e->element_type_id = i;
+            str_val = sqlite3_column_text(stmt, i++);
+            if (str_val != NULL) {
+                e->str_val = (char*)xalloc(sizeof(char) * strlen(str_val) + 1);
+                strcpy(e->str_val, str_val);
+            }
+            e->next = NULL;
         }
-        e->id = sqlite3_column_int(stmt, 0);
-        e->element_type_id = sqlite3_column_int(stmt, 1);
-        str_val = sqlite3_column_text(stmt, 2);
-        if (str_val != NULL) {
-            e->str_val = (char*)xalloc(sizeof(char) * strlen(str_val) + 1);
-            strcpy(e->str_val, str_val);
-        }
-        e->list_item_id = sqlite3_column_int(stmt, 3);
-        e->reply_id = reply_id;
-        e->next = NULL;
     }
     if (SQLITE_DONE != r)
         goto error;
@@ -841,14 +905,10 @@ bt_state* db_get_states()
     sqlite3_stmt *stmt = NULL;
 
     sprintf(sql, 
-            "select e.str_val as name, count(t.id) as count "
+            "select m.field%d as name, count(t.id) as count "
             "from ticket as t "
-            "inner join element as e "
-            " on t.id = e.ticket_id and "
-            "  (e.reply_id = (select max(id) from reply where ticket_id = t.id)"
-            "    or ((select count(id) from reply where ticket_id = t.id) = 0 and e.reply_id is null))"
-            "inner join list_item as li on e.element_type_id = li.element_type_id and li.name = e.str_val "
-            "where e.element_type_id = %d group by e.str_val order by li.sort", ELEM_ID_STATUS);
+            "inner join message as m "
+            " on m.id = t.last_message_id ", ELEM_ID_STATUS);
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
     sqlite3_reset(stmt);
 

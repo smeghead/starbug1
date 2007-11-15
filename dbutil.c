@@ -71,33 +71,34 @@ void create_tables()
             " required integer, "
             " element_name text, "
             " description text, "
+            " default_value text, "
             " display_in_list integer, "
             " sort integer "
             ");", COLUMN_TYPE_END);
     exec_query(
-            "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort) "
-            "values (1, 0, 1, 0, 1, '件名', '内容を簡潔に表すような件名を入力してください。', 1, 1);", COLUMN_TYPE_END);
+            "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
+            "values (1, 0, 1, 0, 1, '件名', '内容を簡潔に表すような件名を入力してください。', '', 1, 1);", COLUMN_TYPE_END);
     exec_query(
-            "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort) "
-            "values (2, 0, 0, 0, 1, '投稿者', 'メールアドレスを入力してください。', 1, 2);", COLUMN_TYPE_END);
+            "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
+            "values (2, 0, 0, 0, 1, '投稿者', 'メールアドレスを入力してください。', '', 1, 2);", COLUMN_TYPE_END);
     exec_query(
-            "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort) "
-            "values (3, 5, 1, 0, 1, '状態', '状態を選択してください。', 1, 3);", COLUMN_TYPE_END);
+            "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
+            "values (3, 5, 1, 0, 1, '状態', '状態を選択してください。', '新規', 1, 3);", COLUMN_TYPE_END);
     exec_query(
-            "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort) "
-            "values (4, 6, 1, 0, 0, 'カテゴリ', 'カテゴリを選択してください。', 1, 4);", COLUMN_TYPE_END);
+            "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
+            "values (4, 6, 1, 0, 0, 'カテゴリ', 'カテゴリを選択してください。', '', 1, 4);", COLUMN_TYPE_END);
     exec_query(
-            "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort) "
-            "values (5, 5, 1, 0, 0, '優先度', '優先度を選択してください。', 1, 5);", COLUMN_TYPE_END);
+            "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
+            "values (5, 5, 1, 0, 0, '優先度', '優先度を選択してください。', '', 1, 5);", COLUMN_TYPE_END);
     exec_query(
-            "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort) "
-            "values (6, 1, 1, 0, 1, '詳細', '的確に記述してください。', 0, 6);", COLUMN_TYPE_END);
+            "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
+            "values (6, 1, 1, 0, 1, '詳細', '的確に記述してください。', '', 0, 6);", COLUMN_TYPE_END);
     exec_query(
-            "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort) "
-            "values (7, 1, 1, 0, 0, '再現手順', '問題を再現させるための条件と手順を記述してください。', 0, 7);", COLUMN_TYPE_END);
+            "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
+            "values (7, 1, 1, 0, 0, '再現手順', '問題を再現させるための条件と手順を記述してください。', '', 0, 7);", COLUMN_TYPE_END);
     exec_query(
-            "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort) "
-            "values (8, 1, 0, 1, 0, 'コメント', 'コメントを記述してください。', 0, 8);", COLUMN_TYPE_END);
+            "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
+            "values (8, 1, 0, 1, 0, 'コメント', 'コメントを記述してください。', '', 0, 8);", COLUMN_TYPE_END);
     exec_query(
             "create table list_item( "
             " id integer not null primary key, "
@@ -122,29 +123,41 @@ void create_tables()
     exec_query(
             "create table ticket("
             " id integer not null primary key, "
+            " original_message_id integer, "
+            " last_message_id integer, "
             " registerdate text, "
-            " closed integer, "
-            " deleted integer"
+            " closed integer "
             ");", COLUMN_TYPE_END);
-    exec_query("create table reply("
+    exec_query(
+            "create table message("
             " id integer not null primary key, "
             " ticket_id integer, "
-            " sender text, "
+            " field1 text, "
+            " field2 text, "
+            " field3 text, "
+            " field4 text, "
+            " field5 text, "
+            " field6 text, "
+            " field7 text, "
+            " field8 text, "
             " registerdate text"
             ");", COLUMN_TYPE_END);
-    exec_query("create table element("
+    exec_query(
+            "create table element("
             " id integer not null primary key, "
             " ticket_id integer not null, "
             " reply_id integer, "
             " element_type_id integer, "
             " str_val text"
             ");", COLUMN_TYPE_END);
-    exec_query("create table element_file("
+    exec_query(
+            "create table element_file("
             " id integer not null primary key, "
-            " element_id integer not null, "
+            " message_id integer not null, "
+            " element_type_id integer not null, "
             " filename text, "
             " size integer, "
-            " content_type text, "
+            " mime_type text, "
             " content blob "
             ");", COLUMN_TYPE_END);
     db_commit();
