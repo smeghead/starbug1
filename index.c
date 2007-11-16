@@ -505,7 +505,7 @@ void register_action()
     output_footer();
 }
 /**
- * 返信画面を表示するaction。
+ * チケット詳細画面を表示するaction。
  */
 void ticket_action()
 {
@@ -523,7 +523,6 @@ void ticket_action()
     ticket_id = strchr(path_info + 1, '/');
     if (ticket_id) ticket_id++;
     iid = atoi(ticket_id);
-    d("id:%d\n", iid);
     if (!iid) {
         redirect("/list", "存在しないIDが指定されました。");
             return;
@@ -531,14 +530,13 @@ void ticket_action()
     db_init();
     project = db_get_project();
     output_header(project, "reply.js");
-    d("id:%d\n", iid);
     ticket = db_get_ticket(iid);
-    d("id:%d\n", iid);
     if (!ticket) {
         redirect("/list", "存在しないIDが指定されました。");
         return;
     }
     element_types = db_get_element_types(1);
+    d("aaa id:%d\n", iid);
     elements = db_get_last_elements(iid);
     o("<h2 id=\"subject\">"); h(project->name); o(" - ID:%5d ", ticket->id);
     h(get_element_value_by_id(elements, ELEM_ID_TITLE));
@@ -575,54 +573,54 @@ void ticket_action()
     }
     o(      "</table>\n"
             "</div>");
-    last_elements = elements = db_get_elements(iid, 0);
+/*     last_elements = elements = db_get_elements(iid, 0); */
 
     o(      "<div id=\"ticket_history\">\n"
-            "<h3>チケット履歴</h3>\n"
-            "<table summary=\"reply table\">\n");
-    /* 投稿の表示 */
-    o(      "\t<tr>\n"
-            "\t\t<td colspan=\"2\" class=\"title\">投稿 ["); h(ticket->registerdate); o("]</td>\n"
-            "\t</tr>\n");
-    {
-        bt_element_type* e_type = element_types;
-        for (; e_type != NULL; e_type = e_type->next) {
-            char* value = get_element_value(elements, e_type);
-            if (e_type->reply_property) continue;
-            o("\t<tr>\n");
-            o("\t\t<th>");
-            h(e_type->name);
-            o("&nbsp;</th>\n");
-            o("\t\t<td>");
-            switch (e_type->id) {
-                case ELEM_ID_SENDER:
-                    hmail(value);
-                    break;
-                default:
-                    if (e_type->type == ELEM_UPLOADFILE) {
-                        if (strlen(value)) {
-                            o("<a href=\"%s/download/%d/", cgiScriptName, get_element_id(elements, e_type)); u(value); o("\" target=\"_blank\">");h(value); o("</a>\n");
-                        }
-                    } else {
-                        hm(value);
-                    }
-                    break;
-            }
-            o("&nbsp;</td>\n");
-            o("\t</tr>\n");
-        }
-    }
-    o("</table>\n");
-    reply_ids = db_get_reply_ids(iid);
+            "<h3>チケット履歴</h3>\n");
+/*             "<table summary=\"reply table\">\n"); */
+/*     |+投稿の表示+| */
+/*     o(      "\t<tr>\n" */
+/*             "\t\t<td colspan=\"2\" class=\"title\">投稿 ["); h(ticket->registerdate); o("]</td>\n" */
+/*             "\t</tr>\n"); */
+/*     { */
+/*         bt_element_type* e_type = element_types; */
+/*         for (; e_type != NULL; e_type = e_type->next) { */
+/*             char* value = get_element_value(elements, e_type); */
+/*             if (e_type->reply_property) continue; */
+/*             o("\t<tr>\n"); */
+/*             o("\t\t<th>"); */
+/*             h(e_type->name); */
+/*             o("&nbsp;</th>\n"); */
+/*             o("\t\t<td>"); */
+/*             switch (e_type->id) { */
+/*                 case ELEM_ID_SENDER: */
+/*                     hmail(value); */
+/*                     break; */
+/*                 default: */
+/*                     if (e_type->type == ELEM_UPLOADFILE) { */
+/*                         if (strlen(value)) { */
+/*                             o("<a href=\"%s/download/%d/", cgiScriptName, get_element_id(elements, e_type)); u(value); o("\" target=\"_blank\">");h(value); o("</a>\n"); */
+/*                         } */
+/*                     } else { */
+/*                         hm(value); */
+/*                     } */
+/*                     break; */
+/*             } */
+/*             o("&nbsp;</td>\n"); */
+/*             o("\t</tr>\n"); */
+/*         } */
+/*     } */
+/*     o("</table>\n"); */
+    reply_ids = db_get_message_ids(iid);
     /* 返信の表示 */
     for (i = 0; reply_ids[i] != 0; i++) {
         bt_element* previous = last_elements;
-        reply = db_get_reply(reply_ids[i]);
-        last_elements = elements = db_get_elements(iid, reply_ids[i]);
+        reply = db_get_message(reply_ids[i]);
+        last_elements = elements = db_get_elements(reply_ids[i]);
 
         o(      "<table summary=\"reply table\">\n");
         o(      "\t<tr>\n"
-                "\t\t<td colspan=\"2\" class=\"title\">返信: %d ", i + 1); o("["); h(reply->registerdate); o("]</td>\n"
+                "\t\t<td colspan=\"2\" class=\"title\">投稿: %d ", i + 1); o("["); h(reply->registerdate); o("]</td>\n"
                 "\t</tr>\n");
         {
             bt_element_type* e_type = element_types;
@@ -799,11 +797,7 @@ void register_submit_action()
             }
         }
         ticket->elements = elements;
-        if (mode == MODE_REGISTER) {
-            ticket->id = db_register_ticket(ticket);
-        } else {
-            db_reply_ticket(ticket);
-        }
+        ticket->id = db_register_ticket(ticket);
     }
     /* mail */
     e_type = db_get_element_types(1);
