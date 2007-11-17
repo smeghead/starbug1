@@ -22,7 +22,6 @@ typedef struct _project {
 bt_project project;
 
 typedef struct _element {
-  int id;
   int ticket_id;
   int reply_id;
   int element_type_id;
@@ -83,9 +82,12 @@ enum bt_ELEMTYPE {
   ELEM_UPLOADFILE
 };
 enum bt_ELEMENT_ID {
+    ELEM_ID_ID = -1,
     ELEM_ID_TITLE = 1,
     ELEM_ID_SENDER = 2,
-    ELEM_ID_STATUS = 3
+    ELEM_ID_STATUS = 3,
+    ELEM_ID_REGISTERDATE = -2,
+    ELEM_ID_LASTREGISTERDATE = -3,
 };
 #define BASIC_ELEMENT_MAX 3
 
@@ -109,7 +111,7 @@ bt_message* bt_ticket_create();
 void bt_ticket_destroy(bt_message*);
 char* get_element_value_by_id(bt_element*, int);
 char* get_element_value(bt_element*, bt_element_type*);
-int get_element_id(bt_element*, bt_element_type*);
+// int get_element_id(bt_element*, bt_element_type*);
 int get_element_lid_by_id(bt_element*, int);
 
 void* xalloc(size_t);

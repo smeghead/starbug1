@@ -11,7 +11,6 @@ bt_element* bt_element_create()
     d("memory error.");
     die("memory error.");
   }
-  e->id = -1;
   e->ticket_id = -1;
   e->element_type_id = -1;
   e->str_val = (char*)xalloc(sizeof(char) * 1);
@@ -47,15 +46,15 @@ char* get_element_value_by_id(bt_element* elements, int type)
     }
     return "";
 }
-int get_element_id(bt_element* elements, bt_element_type* e_type)
-{
-    bt_element* elems = elements;
-    for (; elems != NULL; elems = elems->next) {
-        if (e_type->id == elems->element_type_id)
-            return elems->id;
-    }
-    return -1;
-}
+/* int get_element_id(bt_element* elements, bt_element_type* e_type) */
+/* { */
+/*     bt_element* elems = elements; */
+/*     for (; elems != NULL; elems = elems->next) { */
+/*         if (e_type->id == elems->element_type_id) */
+/*             return elems->id; */
+/*     } */
+/*     return -1; */
+/* } */
 int get_element_lid_by_id(bt_element* elements, int id)
 {
     bt_element* elems = elements;

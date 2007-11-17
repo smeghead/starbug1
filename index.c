@@ -273,11 +273,14 @@ void list_action()
         o("\t\t<th><a href=\"%s/list?%ssort=-3&amp;%s\">最終更新日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
         o("\t</tr>\n");
         for (; tickets != NULL; tickets = tickets->next) {
-            int reply_id;
             bt_element* elements = db_get_last_elements_4_list(tickets->id);
-            reply_id = elements->reply_id;
             o("\t<tr>\n");
-            o("\t\t<td><a href=\"%s/ticket/%d\">%d</a></td>\n", cgiScriptName, tickets->id, tickets->id);
+            o("\t\t<td class=\"field%d-%d\"><a href=\"%s/ticket/%s\">%s</a></td>", 
+                    ELEM_ID_ID, 
+                    get_element_lid_by_id(elements, ELEM_ID_ID), 
+                    cgiScriptName, 
+                    get_element_value_by_id(elements, ELEM_ID_ID), 
+                    get_element_value_by_id(elements, ELEM_ID_ID));
             for (e = e_types; e != NULL; e = e->next) {
                 char sender[DEFAULT_LENGTH];
                 o("\t\t<td class=\"field%d-%d\">", e->id, get_element_lid_by_id(elements, e->id));
@@ -291,14 +294,8 @@ void list_action()
                     o("</a>");
                 o("&nbsp;</td>\n");
             }
-            o("\t\t<td>"); h(tickets->registerdate); o("&nbsp;</td>\n");
-
-            o("\t\t<td>");
-            if (reply_id > 0) {
-/*                 bt_message* reply = db_get_reply(reply_id); */
-/*                 h(reply->registerdate); */
-            }
-            o("&nbsp;</td>\n");
+            o("\t\t<td>"); h(get_element_value_by_id(elements, ELEM_ID_REGISTERDATE)); o("&nbsp;</td>\n");
+            o("\t\t<td>"); h(get_element_value_by_id(elements, ELEM_ID_LASTREGISTERDATE)); o("&nbsp;</td>\n");
             o("\t</tr>\n");
         }
         o("</table>\n");
@@ -512,11 +509,11 @@ void ticket_action()
     char path_info[DEFAULT_LENGTH];
     char* ticket_id;
     bt_message* ticket;
-    bt_message* reply;
+    bt_message* message;
     bt_element* elements = NULL;
     bt_element* last_elements = NULL;
     bt_element_type* element_types;
-    int iid, *reply_ids, i;
+    int iid, *message_ids, i;
     bt_project* project;
 
     strcpy(path_info, cgiPathInfo);
@@ -561,7 +558,7 @@ void ticket_action()
                 default:
                     if (e_type->type == ELEM_UPLOADFILE) {
                         if (strlen(value)) {
-                            o("<a href=\"%s/download/%d/", cgiScriptName, get_element_id(elements, e_type)); u(value); o("\" target=\"_blank\">");h(value); o("</a>\n");
+                            o("<a href=\"%s/download/%d/", cgiScriptName, -1 /* TODO get_element_id(elements, e_type)*/); u(value); o("\" target=\"_blank\">");h(value); o("</a>\n");
                         }
                     } else {
                         hm(value);
@@ -611,16 +608,16 @@ void ticket_action()
 /*         } */
 /*     } */
 /*     o("</table>\n"); */
-    reply_ids = db_get_message_ids(iid);
-    /* 返信の表示 */
-    for (i = 0; reply_ids[i] != 0; i++) {
+    message_ids = db_get_message_ids(iid);
+    /* 履歴の表示 */
+    for (i = 0; message_ids[i] != 0; i++) {
         bt_element* previous = last_elements;
-        reply = db_get_message(reply_ids[i]);
-        last_elements = elements = db_get_elements(reply_ids[i]);
+        message = db_get_message(message_ids[i]);
+        last_elements = elements = db_get_elements(message_ids[i]);
 
         o(      "<table summary=\"reply table\">\n");
         o(      "\t<tr>\n"
-                "\t\t<td colspan=\"2\" class=\"title\">投稿: %d ", i + 1); o("["); h(reply->registerdate); o("]</td>\n"
+                "\t\t<td colspan=\"2\" class=\"title\">投稿: %d ", i + 1); o("["); h(message->registerdate); o("]</td>\n"
                 "\t</tr>\n");
         {
             bt_element_type* e_type = element_types;
@@ -642,7 +639,7 @@ void ticket_action()
                     default:
                         if (e_type->type == ELEM_UPLOADFILE) {
                             if (strlen(value)) {
-                                o("<a href=\"%s/download/%d/", cgiScriptName, get_element_id(elements, e_type)); u(value); o("\" target=\"_blank\">");h(value); o("</a>\n");
+                                o("<a href=\"%s/download/%d/", cgiScriptName, -1 /* TODO get_element_id(elements, e_type) */); u(value); o("\" target=\"_blank\">");h(value); o("</a>\n");
                             }
                         } else {
                             hm(value);
