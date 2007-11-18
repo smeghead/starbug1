@@ -7,7 +7,6 @@ bt_element_type* db_get_element_types(int);
 bt_element_type* db_get_element_type(int);
 bt_list_item* db_get_list_item(int);
 int db_register_ticket(bt_message*);
-int db_reply_ticket(bt_message*);
 void db_delete_ticket(bt_message*);
 bt_message* db_search_tickets(bt_condition*, char*, bt_condition*);
 bt_element* db_get_elements(int);
@@ -25,7 +24,6 @@ void db_register_list_item(bt_list_item*);
 int db_register_element_type(bt_element_type*);
 void db_delete_element_type(int);
 bt_state* db_get_states();
-char* db_get_original_sender(int, char*);
 bt_element_file* db_get_element_file(int);
 bt_message* db_get_newest_information(int);
 

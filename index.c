@@ -275,19 +275,18 @@ void list_action()
         for (; tickets != NULL; tickets = tickets->next) {
             bt_element* elements = db_get_last_elements_4_list(tickets->id);
             o("\t<tr>\n");
-            o("\t\t<td class=\"field%d-%d\"><a href=\"%s/ticket/%s\">%s</a></td>", 
+            o("\t\t<td class=\"field%d-%d\"><a href=\"%s/ticket/%s\">%s</a></td>\n", 
                     ELEM_ID_ID, 
                     get_element_lid_by_id(elements, ELEM_ID_ID), 
                     cgiScriptName, 
                     get_element_value_by_id(elements, ELEM_ID_ID), 
                     get_element_value_by_id(elements, ELEM_ID_ID));
             for (e = e_types; e != NULL; e = e->next) {
-                char sender[DEFAULT_LENGTH];
                 o("\t\t<td class=\"field%d-%d\">", e->id, get_element_lid_by_id(elements, e->id));
                 if (e->id == ELEM_ID_TITLE)
                     o("<a href=\"%s/ticket/%d\">", cgiScriptName, tickets->id);
                 if (e->id == ELEM_ID_SENDER)
-                    hmail(db_get_original_sender(tickets->id, sender)); /* 最初の投稿者を表示する。 */
+                    hmail(get_element_value_by_id(elements, ELEM_ID_ORG_SENDER)); /* 最初の投稿者を表示する。 */
                 else
                     h(get_element_value_by_id(elements, e->id));
                 if (e->id == ELEM_ID_TITLE)
@@ -907,7 +906,6 @@ void rss_action()
     tickets = db_get_newest_information(10);
     if (tickets != NULL) {
         for (; tickets != NULL; tickets = tickets->next) {
-            char sender[DEFAULT_LENGTH];
             bt_element* elements = db_get_last_elements_4_list(tickets->id);
             o(      "\t<item rdf:about=\"");h(project->home_url);o("%s/ticket/%d\">\n", cgiScriptName, tickets->id);
             o(      "\t\t<title>ID:%5d ", tickets->id);
@@ -916,7 +914,7 @@ void rss_action()
             o(      "\t\t<link>");h(project->home_url);o("%s/ticket/%d</link>\n", cgiScriptName, tickets->id);
             o(      "\t\t<description><![CDATA[\n");
             o(      "投稿者: ");
-            hmail(db_get_original_sender(tickets->id, sender));
+            hmail(get_element_value_by_id(elements, ELEM_ID_ORG_SENDER));
             o("\n");
             o(      "投稿日: ");
             h(tickets->registerdate);

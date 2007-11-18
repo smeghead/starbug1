@@ -21,7 +21,7 @@ bt_element* bt_element_create()
 void* xalloc(size_t sz)
 {
     void* p;
-    p = malloc(sz);
+    p = calloc(1, sz);
     if (!p) {
         d("memory error!!");
         die("memory error.");
@@ -46,15 +46,6 @@ char* get_element_value_by_id(bt_element* elements, int type)
     }
     return "";
 }
-/* int get_element_id(bt_element* elements, bt_element_type* e_type) */
-/* { */
-/*     bt_element* elems = elements; */
-/*     for (; elems != NULL; elems = elems->next) { */
-/*         if (e_type->id == elems->element_type_id) */
-/*             return elems->id; */
-/*     } */
-/*     return -1; */
-/* } */
 int get_element_lid_by_id(bt_element* elements, int id)
 {
     bt_element* elems = elements;

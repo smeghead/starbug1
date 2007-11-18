@@ -167,7 +167,7 @@ int db_register_ticket(bt_message* ticket)
     int i, loop = 0, closed = 0;
     sqlite3_stmt *stmt = NULL;
     int message_id;
-    int register_mode = ticket->id == 0;
+    int register_mode = ticket->id == -1;
 
     set_date_string(registerdate);
 
@@ -274,103 +274,6 @@ error:
     sqlite3_close(db);
     die("failed to db_register_ticket.");
 }
-int db_reply_ticket(bt_message* ticket)
-{
-    return -1;
-/*     int reply_id, closed = 0, i; */
-/*     char registerdate[20]; */
-/*     bt_element* elements; */
-/*     char sql[DEFAULT_LENGTH]; */
-/*     sqlite3_stmt *stmt = NULL; */
-/*     int message_id; */
-
-/*     elements = ticket->elements; */
-/*     for (; elements != NULL; elements = elements->next) { */
-/*         int c = exec_query_scalar_int("select close from list_item " */
-/*                 "where list_item.element_type_id = ? and list_item.name = ?", */
-/*                 COLUMN_TYPE_INT, elements->element_type_id, */
-/*                 COLUMN_TYPE_TEXT, elements->str_val, */
-/*                 COLUMN_TYPE_END); */
-/*         d("element_type_id:%d str_val %s\n", elements->element_type_id, elements->str_val); */
-/*         if (c != INVALID_INT && c != 0) { */
-/*             closed = 1; */
-/*             break; */
-/*         } */
-/*     } */
-/*     d("closed:%d\n", closed); */
-/*     set_date_string(registerdate); */
-/*     if (exec_query("update ticket set closed = ? where id = ?", */
-/*             COLUMN_TYPE_INT, closed, */
-/*             COLUMN_TYPE_INT, ticket->id, */
-/*             COLUMN_TYPE_END) != 1) */
-/*         die("no ticket to update?"); */
-
-/* |+    exec_query("insert into reply (id, ticket_id, registerdate) values (NULL, ?, ?)",+| */
-/* |+            COLUMN_TYPE_INT, ticket->id,+| */
-/* |+            COLUMN_TYPE_TEXT, registerdate,+| */
-/* |+            COLUMN_TYPE_END);+| */
-
-/* |+    reply_id = sqlite3_last_insert_rowid(db);+| */
-
-/*     elements = ticket->elements; */
-/*     create_message_insert_sql(elements, sql); */
-/*     d("%s\n", sql); */
-
-/*     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL); */
-/*     sqlite3_reset(stmt); */
-/*     i = 1; */
-/*     sqlite3_bind_int(stmt, i++, ticket->id); */
-/*     sqlite3_bind_text(stmt, i++, registerdate, strlen(registerdate), NULL); */
-/*     for (e = elements; e != NULL; e = e->next) { */
-/*         sqlite3_bind_text(stmt, i++, e->str_val, strlen(e->str_val), NULL); */
-/*     } */
-/*     while (SQLITE_DONE != sqlite3_step(stmt)){ */
-/*         if (loop++ > 1000) */
-/*             goto error; */
-/*     } */
-/*     message_id = sqlite3_last_insert_rowid(db); */
-/*     sqlite3_finalize(stmt); */
-/*     |+message_id を更新する。+| */
-/*     exec_query("update ticket set original_message_id = ?, last_message_id = ? " */
-/*             "where id = ?", */
-/*             COLUMN_TYPE_INT, message_id, */
-/*             COLUMN_TYPE_INT, message_id, */
-/*             COLUMN_TYPE_INT, ticket_id, */
-/*             COLUMN_TYPE_END); */
-/*     for (; elements != NULL; elements = elements->next) { */
-/*         int element_id; */
-/* |+        exec_query("insert into message(id, ticket_id, reply_id, element_type_id, str_val)"+| */
-/* |+                "values (NULL, ?, ?, ?, ?)",+| */
-/* |+                COLUMN_TYPE_INT, ticket->id,+| */
-/* |+                COLUMN_TYPE_INT, reply_id,+| */
-/* |+                COLUMN_TYPE_INT, elements->element_type_id,+| */
-/* |+                COLUMN_TYPE_TEXT, elements->str_val,+| */
-/* |+                COLUMN_TYPE_END);+| */
-/* |+        element_id = sqlite3_last_insert_rowid(db);+| */
-/*         if (elements->is_file) { */
-/*             int size; */
-/*             char filename[DEFAULT_LENGTH]; */
-/*             char content_type[DEFAULT_LENGTH]; */
-/*             char* fname; */
-/*             char* ctype; */
-/*             bt_element_file* content; */
-/*             fname = get_upload_filename(elements->element_type_id, filename); */
-/*             size = get_upload_size(elements->element_type_id); */
-/*             ctype = get_upload_content_type(elements->element_type_id, content_type); */
-/*             content = get_upload_content(elements->element_type_id); */
-/*             d("fname: %s size: %d\n", fname, size); */
-/*             if (exec_query("insert into element_file(id, element_id, filename, size, content_type, content) values (NULL, ?, ?, ?, ?, ?) ", */
-/*                     COLUMN_TYPE_INT, element_id, */
-/*                     COLUMN_TYPE_TEXT, fname, */
-/*                     COLUMN_TYPE_INT, size, */
-/*                     COLUMN_TYPE_TEXT, content_type, */
-/*                     COLUMN_TYPE_BLOB, content, */
-/*                     COLUMN_TYPE_END) == 0) */
-/*                 die("insert failed."); */
-/*         } */
-/*     } */
-/*     return reply_id; */
-}
 void db_delete_ticket(bt_message* ticket)
 {
     if (exec_query("update ticket set deleted = 1 where id = ?",
@@ -391,6 +294,8 @@ char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* 
 
 
 
+    if (!conditions)
+        strcat(sql_string, "where t.closed = 0 ");
 
 
 
@@ -522,34 +427,19 @@ error:
     sqlite3_close(db);
     die("failed to db_search_tickets.");
 }
-char* db_get_original_sender(int ticket_id, char* buf)
-{
-    const char *sql;
-    sqlite3_stmt *stmt = NULL;
-    int r;
-
-    sql = "select str_val "
-        "from element "
-        "where ticket_id = ? and reply_id is null and element_type_id = ?";
-    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
-    sqlite3_reset(stmt);
-    sqlite3_bind_int(stmt, 1, ticket_id);
-    sqlite3_bind_int(stmt, 2, ELEM_ID_SENDER);
-
-    while (SQLITE_ROW == (r = sqlite3_step(stmt))){
-        strcpy(buf, sqlite3_column_text(stmt, 0));
-        break;
-    }
-    sqlite3_finalize(stmt);
-
-    return buf;
-}
-void create_columns_exp(bt_element_type* element_types, char* buf)
+void create_columns_exp(bt_element_type* element_types, char* table_name, char* buf)
 {
     for (; element_types != NULL; element_types = element_types->next) {
         char column_name[DEFAULT_LENGTH];
-        sprintf(column_name, ", field%d ", element_types->id);
+        sprintf(column_name, ", %s.field%d ", table_name, element_types->id);
         strcat(buf, column_name);
+    }
+}
+static void set_str_val(bt_element* e, const unsigned char* str_val)
+{
+    if (str_val != NULL) {
+        e->str_val = (char*)xalloc(sizeof(char) * strlen(str_val) + 1);
+        strcpy(e->str_val, str_val);
     }
 }
 bt_element* db_get_last_elements_4_list(int ticket_id)
@@ -557,67 +447,57 @@ bt_element* db_get_last_elements_4_list(int ticket_id)
     bt_element* elements = NULL;
     bt_element* e = NULL;
     char sql[DEFAULT_LENGTH] = "";
+    char sql_suf[DEFAULT_LENGTH] = "";
     sqlite3_stmt *stmt = NULL;
     int r;
     char columns[DEFAULT_LENGTH] = "";
     bt_element_type* element_types;
 
-    d("ticket_id:%d\n", ticket_id);
     element_types = db_get_element_types(0);
-    create_columns_exp(element_types, columns);
-    strcpy(sql, "select t.id ");
+    create_columns_exp(element_types, "last_m", columns);
+    sprintf(sql, "select t.id, org_m.field%d, l.id ", ELEM_ID_SENDER);
     strcat(sql, columns);
-    strcat(sql, 
-            "  , t.registerdate, m.registerdate "
+    sprintf(sql_suf, 
+            "  , t.registerdate, last_m.registerdate "
             "from ticket as t "
-            "inner join message as m on m.id = t.last_message_id "
-            "where t.id = ?");
+            "inner join message as last_m on last_m.id = t.last_message_id "
+            "inner join message as org_m on org_m.id = t.original_message_id "
+            "left join list_item as l on l.element_type_id = %d and l.name = last_m.field%d "
+            "where t.id = ?", ELEM_ID_STATUS, ELEM_ID_STATUS);
+    strcat(sql, sql_suf);
     d("sql:%s\n", sql);
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, ticket_id);
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
-        const unsigned char* str_val;
         int i = 0;
+        const unsigned char* status_id;
         /* ID */
         e = elements = (bt_element*)xalloc(sizeof(bt_element));
-        e->element_type_id = -1;
-        str_val = sqlite3_column_text(stmt, i++);
-        if (str_val != NULL) {
-            e->str_val = (char*)xalloc(sizeof(char) * strlen(str_val) + 1);
-            strcpy(e->str_val, str_val);
-            d("id: %s\n", str_val);
-        }
+        e->element_type_id = ELEM_ID_ID;
+        set_str_val(e, sqlite3_column_text(stmt, i++));
+        /* 初回投稿者 */
+        e = e->next = (bt_element*)xalloc(sizeof(bt_element));
+        e->element_type_id = ELEM_ID_ORG_SENDER;
+        set_str_val(e, sqlite3_column_text(stmt, i++));
+        /* status item_list id */
+        status_id = sqlite3_column_text(stmt, i++);
         for (; element_types != NULL; element_types = element_types->next) {
             e = e->next = (bt_element*)xalloc(sizeof(bt_element));
             e->element_type_id = element_types->id;
-            str_val = sqlite3_column_text(stmt, i++);
-            if (str_val != NULL) {
-                e->str_val = (char*)xalloc(sizeof(char) * strlen(str_val) + 1);
-                strcpy(e->str_val, str_val);
-                d("field%d: %s\n", i, str_val);
-            }
-            e->next = NULL;
+            set_str_val(e, sqlite3_column_text(stmt, i++));
+            if (element_types->id == ELEM_ID_STATUS && status_id != 0)
+                e->list_item_id = atoi(status_id); /* 状態のスタイルシートのために、list_item.idを設定 */
         }
         /* 投稿日時 */
         e = e->next = (bt_element*)xalloc(sizeof(bt_element));
-        e->element_type_id = -2;
-        str_val = sqlite3_column_text(stmt, i++);
-        if (str_val != NULL) {
-            e->str_val = (char*)xalloc(sizeof(char) * strlen(str_val) + 1);
-            strcpy(e->str_val, str_val);
-            d("registerdate: %s\n", str_val);
-        }
+        e->element_type_id = ELEM_ID_REGISTERDATE;
+        set_str_val(e, sqlite3_column_text(stmt, i++));
         /* 最終更新日時 */
         e = e->next = (bt_element*)xalloc(sizeof(bt_element));
-        e->element_type_id = -3;
-        str_val = sqlite3_column_text(stmt, i++);
-        if (str_val != NULL) {
-            e->str_val = (char*)xalloc(sizeof(char) * strlen(str_val) + 1);
-            strcpy(e->str_val, str_val);
-            d("lastregisterdate: %s\n", str_val);
-        }
+        e->element_type_id = ELEM_ID_LASTREGISTERDATE;
+        set_str_val(e, sqlite3_column_text(stmt, i++));
         e->next = NULL;
     }
     if (SQLITE_DONE != r)
@@ -644,7 +524,7 @@ bt_element* db_get_last_elements(int ticket_id)
     char columns[DEFAULT_LENGTH] = "";
 
     element_types = db_get_element_types(1);
-    create_columns_exp(element_types, columns);
+    create_columns_exp(element_types, "m", columns);
     strcpy(sql, "select t.id");
     strcat(sql, columns);
     strcat(sql,
@@ -699,7 +579,7 @@ bt_element* db_get_elements(int message_id)
     bt_element_type* element_types;
 
     element_types = db_get_element_types(1);
-    create_columns_exp(element_types, columns);
+    create_columns_exp(element_types, "m", columns);
 
     strcpy(sql, "select m.id");
     strcat(sql, columns);
