@@ -11,6 +11,8 @@
 extern const char* db_name;
 extern sqlite3 *db;
 
+void create_columns_exp(bt_element_type*, char*, char*);
+
 bt_element_type* db_get_element_types(int all)
 {
     bt_element_type* elements = NULL;
@@ -282,79 +284,52 @@ void db_delete_ticket(bt_message* ticket)
         die("no ticket to update?");
 }
 
+void create_columns_like_exp(bt_element_type* element_types, char* table_name, char* buf)
+{
+    strcpy(buf, "");
+    for (; element_types != NULL; element_types = element_types->next) {
+        char column_name[DEFAULT_LENGTH];
+        if (strlen(buf))
+            strcat(buf, "or ");
+        sprintf(column_name, "%s.field%d like '%%' || ? || '%%' ", table_name, element_types->id);
+        strcat(buf, column_name);
+    }
+}
 char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* q, char* sql_string)
 {
-/*     bt_condition* cond; */
-/*     int i; */
+    int i;
     strcpy(sql_string, 
-            "select  "
+            "select distinct "
             " t.id, t.registerdate, m.registerdate as last_registerdate "
             "from ticket as t "
             "inner join message as m on m.id = t.last_message_id ");
 
+    if (strlen(q))
+        strcat(sql_string, "inner join message as m_all on m_all.ticket_id = t.id ");
 
+    strcat(sql_string, "where ");
+    if (conditions) {
+        bt_condition* cond;
+        for (i = 0, cond = conditions; cond != NULL; cond = cond->next, i++) {
+            char val[DEFAULT_LENGTH];
+            if (i) strcat(sql_string, " and ");
+            sprintf(val, " (m.field%d like '%%' || ? || '%%') ", conditions->element_type_id);
+            strcat(sql_string, val);
+        }
+    }
+    if (strlen(q)) {
+        char columns[DEFAULT_LENGTH];
+        bt_element_type* element_types = db_get_element_types(1);
+        create_columns_like_exp(element_types, "m_all", columns);
+        if (conditions)
+            strcat(sql_string, " and ");
+        strcat(sql_string, "(");
+        strcat(sql_string, columns);
+        strcat(sql_string, ")");
+    }
+    if (!conditions && !strlen(q))
+        strcat(sql_string, "t.closed = 0 ");
 
-    if (!conditions)
-        strcat(sql_string, "where t.closed = 0 ");
-
-
-
-
-
-
-
-
-
-
-/*     if (strlen(q)) */
-/*         strcat(sql_string, "inner join element as e on t.id = e.ticket_id "); */
-
-/*             "inner join element as e_4_sender " */
-/*             " on (t.id = e_4_sender.ticket_id " */
-/*             "    and e_4_sender.reply_id is null) " */
-/*     strcat(sql_string, "left join reply as r on t.id = r.ticket_id "); */
-/*     for (i = 0, cond = conditions; cond != NULL; cond = cond->next, i++) { */
-/*         char val[DEFAULT_LENGTH]; */
-/*         int n = i + 1; */
-/*         sprintf(val, */
-/*                 " inner join element as e%d on t.id = e%d.ticket_id and " */
-/*                 " (e%d.reply_id in (select max(id) from reply group by ticket_id)" */
-/*                 " or " */
-/*                 " (not exists (select id from reply where ticket_id = t.id) and e%d.reply_id is null)) ", */
-/*                 n, n, n, n); */
-/*         strcat(sql_string, val); */
-/*     } */
-/*     if (sort && sort->element_type_id > 0) { |+特殊項目の場合は、省く+| */
-/*         char val[DEFAULT_LENGTH]; */
-/*         int n = i + 1; */
-/*         sprintf(val, */
-/*                 " inner join element as e%d on t.id = e%d.ticket_id and e%d.element_type_id = %d and " */
-/*                 " (e%d.reply_id in (select max(id) from reply group by ticket_id)" */
-/*                 " or " */
-/*                 " (not exists (select id from reply where ticket_id = t.id) and e%d.reply_id is null)) ", */
-/*                 n, n, n, sort->element_type_id, n, n); */
-/*         strcat(sql_string, val); */
-/*     } */
-/*     if (conditions) { */
-/*         strcat(sql_string, " where "); */
-/*         for (i = 0, cond = conditions; cond != NULL; cond = cond->next, i++) { */
-/*             char val[DEFAULT_LENGTH]; */
-/*             if (i) strcat(sql_string, " and "); */
-/*             sprintf(val, " (e%d.element_type_id = ? and e%d.str_val like '%%' || ? || '%%') ", i + 1, i + 1); */
-/*             strcat(sql_string, val); */
-/*         } */
-/*     } else { */
-/*         strcat(sql_string, " where "); */
-/*         if (!strlen(q)) { */
-/*             strcat(sql_string, "  t.closed = 0 "); */
-/*         } */
-/*     } */
-/*     if (strlen(q)) { */
-/*         if (conditions) |+conditionsが指定れていれば、1つ以上条件が設定されているとみなす。綺麗じゃないので修正するつもり。 +| */
-/*             strcat(sql_string, " and "); */
-/*         strcat(sql_string, " e.str_val like '%' || ? || '%' "); */
-/*     } */
-/*     strcat(sql_string, " group by t.id, t.registerdate "); */
     strcat(sql_string, " order by ");
 /*     if (sort) { */
 /*         char column[DEFAULT_LENGTH]; */
@@ -393,11 +368,15 @@ bt_message* db_search_tickets(bt_condition* conditions, char* q, bt_condition* s
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
     sqlite3_reset(stmt);
     for (n = 1; conditions != NULL; conditions = conditions->next) {
-        sqlite3_bind_int(stmt, n++, conditions->element_type_id);
         sqlite3_bind_text(stmt, n++, conditions->value, strlen(conditions->value), NULL);
     }
     if (q) {
-        sqlite3_bind_text(stmt, n++, q, strlen(q), NULL);
+        bt_element_type* element_types = db_get_element_types(1);
+        bt_element_type* et;
+        for (et = element_types; et != NULL; et = et->next) {
+            d("cond %s\n", q);
+            sqlite3_bind_text(stmt, n++, q, strlen(q), NULL);
+        }
     }
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
