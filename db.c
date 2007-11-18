@@ -299,8 +299,8 @@ char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* 
 {
     int i;
     strcpy(sql_string, 
-            "select distinct "
-            " t.id, t.registerdate, m.registerdate as last_registerdate "
+            "select "
+            " t.id  "
             "from ticket as t "
             "inner join message as m on m.id = t.last_message_id ");
 
@@ -330,6 +330,7 @@ char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* 
     if (!conditions && !strlen(q))
         strcat(sql_string, "t.closed = 0 ");
 
+    strcat(sql_string, " group by t.id ");
     strcat(sql_string, " order by ");
 /*     if (sort) { */
 /*         char column[DEFAULT_LENGTH]; */
@@ -364,13 +365,14 @@ bt_message* db_search_tickets(bt_condition* conditions, char* q, bt_condition* s
     char buffer[VALUE_LENGTH];
     char *sql = get_search_sql_string(conditions, sorts, q, buffer);
     sqlite3_stmt *stmt = NULL;
+    char date[20];
 
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
     sqlite3_reset(stmt);
     for (n = 1; conditions != NULL; conditions = conditions->next) {
         sqlite3_bind_text(stmt, n++, conditions->value, strlen(conditions->value), NULL);
     }
-    if (q) {
+    if (strlen(q)) {
         bt_element_type* element_types = db_get_element_types(1);
         bt_element_type* et;
         for (et = element_types; et != NULL; et = et->next) {
@@ -379,8 +381,8 @@ bt_message* db_search_tickets(bt_condition* conditions, char* q, bt_condition* s
         }
     }
 
+    set_date_string(date); d("time: %s\n", date);
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
-        const unsigned char* registerdate;
         if (i == NULL) {
             i = tichets = (bt_message*)xalloc(sizeof(bt_message));
         } else {
@@ -388,11 +390,9 @@ bt_message* db_search_tickets(bt_condition* conditions, char* q, bt_condition* s
             i = i->next;
         }
         i->id = sqlite3_column_int(stmt, 0);
-        registerdate = sqlite3_column_text(stmt, 1);
-        if (registerdate != NULL)
-            strcpy(i->registerdate, registerdate);
         i->next = NULL;
     }
+    set_date_string(date); d("time: %s\n", date);
     if (SQLITE_DONE != r)
         goto error;
 
@@ -431,6 +431,7 @@ bt_element* db_get_last_elements_4_list(int ticket_id)
     int r;
     char columns[DEFAULT_LENGTH] = "";
     bt_element_type* element_types;
+    char date[20];
 
     element_types = db_get_element_types(0);
     create_columns_exp(element_types, "last_m", columns);
@@ -449,6 +450,7 @@ bt_element* db_get_last_elements_4_list(int ticket_id)
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, ticket_id);
 
+    set_date_string(date); d("begin\ttime: %s\n", date);
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         int i = 0;
         const unsigned char* status_id;
@@ -479,6 +481,7 @@ bt_element* db_get_last_elements_4_list(int ticket_id)
         set_str_val(e, sqlite3_column_text(stmt, i++));
         e->next = NULL;
     }
+    set_date_string(date); d("end\ttime: %s\n", date);
     if (SQLITE_DONE != r)
         goto error;
 

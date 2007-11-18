@@ -24,6 +24,8 @@ void db_init()
   if (SQLITE_OK != sqlite3_open(db_name, &db)) {
     die("sqlite3 init error.");
   }
+  sqlite3_exec(db, "pragma case_sensitive_like=on", NULL, NULL, NULL);
+
   if (!exists_db_file)
     create_tables();
 }
@@ -76,6 +78,8 @@ void create_tables()
             " sort integer "
             ");", COLUMN_TYPE_END);
     exec_query(
+            "create index index_element_type_0 on element_type (id, type, display_in_list, sort)", COLUMN_TYPE_END);
+    exec_query(
             "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
             "values (1, 0, 1, 0, 1, '件名', '内容を簡潔に表すような件名を入力してください。', '', 1, 1);", COLUMN_TYPE_END);
     exec_query(
@@ -107,6 +111,8 @@ void create_tables()
             " close integer, "
             " sort integer "
             ");", COLUMN_TYPE_END);
+    exec_query(
+            "create index index_list_item_0 on list_item (id, sort)", COLUMN_TYPE_END);
     exec_query("insert into list_item(id, element_type_id, name, close, sort) values (1, 3, '新規', 0, 1);", COLUMN_TYPE_END);
     exec_query("insert into list_item(id, element_type_id, name, close, sort) values (2, 3, '受付済', 0, 2);", COLUMN_TYPE_END);
     exec_query("insert into list_item(id, element_type_id, name, close, sort) values (3, 3, '修正済', 0, 3);", COLUMN_TYPE_END);
@@ -129,6 +135,8 @@ void create_tables()
             " closed integer "
             ");", COLUMN_TYPE_END);
     exec_query(
+            "create index index_ticket_0 on ticket (id, last_message_id, last_message_id, closed)", COLUMN_TYPE_END);
+    exec_query(
             "create table message("
             " id integer not null primary key, "
             " ticket_id integer, "
@@ -143,13 +151,7 @@ void create_tables()
             " registerdate text"
             ");", COLUMN_TYPE_END);
     exec_query(
-            "create table element("
-            " id integer not null primary key, "
-            " ticket_id integer not null, "
-            " reply_id integer, "
-            " element_type_id integer, "
-            " str_val text"
-            ");", COLUMN_TYPE_END);
+            "create index index_message_all on message (id, field1, field2, field3, field4, field5, field6, field7, field8, registerdate);", COLUMN_TYPE_END);
     exec_query(
             "create table element_file("
             " id integer not null primary key, "

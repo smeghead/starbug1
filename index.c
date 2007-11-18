@@ -232,7 +232,7 @@ void list_action()
         o("\t<th>キーワード検索</th>\n");
         o("\t<td>\n"); 
         o("\t\t<input type=\"text\" name=\"q\" value=\""); v(q); o("\" />\n");
-        o("\t\t<div id=\"message\">全ての項目から検索を行ないます。</div>\n");
+        o("\t\t<div id=\"message\">履歴も含めて全ての項目から検索を行ないます。</div>\n");
         o("\t</td>\n");
         o("</tr>\n");
     o("</table>\n");
@@ -253,7 +253,7 @@ void list_action()
         remove_rsort(cgiQueryString, query_string_temp);
         remove_sort(query_string_temp, query_string);
         o(      "<div class=\"description\">");
-        if (!conditions)
+        if (!conditions && !strlen(q))
             o(      "クローズ扱いのチケットは表示されていません。");
         o(      "%d件表示しています。\n", hit_count);
         o(      "</div>\n");
