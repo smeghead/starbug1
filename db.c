@@ -313,7 +313,7 @@ char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* 
         for (i = 0, cond = conditions; cond != NULL; cond = cond->next, i++) {
             char val[DEFAULT_LENGTH];
             if (i) strcat(sql_string, " and ");
-            sprintf(val, " (m.field%d like '%%' || ? || '%%') ", conditions->element_type_id);
+            sprintf(val, " (m.field%d like '%%' || ? || '%%') ", cond->element_type_id);
             strcat(sql_string, val);
         }
     }
