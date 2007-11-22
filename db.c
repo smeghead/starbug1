@@ -197,7 +197,6 @@ int db_register_ticket(bt_message* ticket)
         }
     }
     d("closed:%d\n", closed);
-    set_date_string(registerdate);
     /* クローズ状態に変更されていた場合は、closedに1を設定する。 */
     if (exec_query("update ticket set closed = ? where id = ?",
             COLUMN_TYPE_INT, closed,
@@ -298,9 +297,9 @@ void create_columns_like_exp(bt_element_type* element_types, char* table_name, c
 char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* q, char* sql_string)
 {
     int i;
-    strcpy(sql_string, 
+    strcpy(sql_string,
             "select "
-            " t.id  "
+            " t.id "
             "from ticket as t "
             "inner join message as m on m.id = t.last_message_id ");
 
@@ -357,18 +356,9 @@ char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* 
 
     return sql_string;
 }
-bt_message* db_search_tickets(bt_condition* conditions, char* q, bt_condition* sorts)
+int set_conditions(sqlite3_stmt* stmt, bt_condition* conditions, char* q)
 {
-    bt_message* tichets = NULL;
-    bt_message* i = NULL;
-    int r, n;
-    char buffer[VALUE_LENGTH];
-    char *sql = get_search_sql_string(conditions, sorts, q, buffer);
-    sqlite3_stmt *stmt = NULL;
-    char date[20];
-
-    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
-    sqlite3_reset(stmt);
+    int n;
     for (n = 1; conditions != NULL; conditions = conditions->next) {
         sqlite3_bind_text(stmt, n++, conditions->value, strlen(conditions->value), NULL);
     }
@@ -380,11 +370,30 @@ bt_message* db_search_tickets(bt_condition* conditions, char* q, bt_condition* s
             sqlite3_bind_text(stmt, n++, q, strlen(q), NULL);
         }
     }
+    return n;
+}
+bt_search_result* db_search_tickets(bt_condition* conditions, char* q, bt_condition* sorts, int page)
+{
+    bt_message* i = NULL;
+    int r, n;
+    char buffer[VALUE_LENGTH];
+    char *sql = get_search_sql_string(conditions, sorts, q, buffer);
+    sqlite3_stmt *stmt = NULL;
+    char date[20];
+    bt_search_result* result = (bt_search_result*)xalloc(sizeof(bt_search_result));
+
+    strcat(sql, " limit ? offset ? ");
+    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+    sqlite3_reset(stmt);
+    n = set_conditions(stmt, conditions, q);
+    sqlite3_bind_int(stmt, n++, LIST_PER_PAGE);
+    sqlite3_bind_int(stmt, n++, page * LIST_PER_PAGE);
 
     set_date_string(date); d("time: %s\n", date);
+    /* 1ページ分のticket_idを取得する。 */
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         if (i == NULL) {
-            i = tichets = (bt_message*)xalloc(sizeof(bt_message));
+            i = result->messages = (bt_message*)xalloc(sizeof(bt_message));
         } else {
             i->next = (bt_message*)xalloc(sizeof(bt_message));
             i = i->next;
@@ -396,10 +405,28 @@ bt_message* db_search_tickets(bt_condition* conditions, char* q, bt_condition* s
     if (SQLITE_DONE != r)
         goto error;
 
+    /* hit件数を取得する。 */
+    {
+        char buf[DEFAULT_LENGTH];
+        char* s;
+        strcpy(sql, "select count(*) from (");
+        s = get_search_sql_string(conditions, sorts, q, buf);
+        strcat(sql, s);
+        strcat(sql, ")");
+        sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+        sqlite3_reset(stmt);
+        n = set_conditions(stmt, conditions, q);
+        while (SQLITE_ROW == (r = sqlite3_step(stmt))){
+            result->hit_count = sqlite3_column_int(stmt, 0);
+            d("hit_count:%d\n", result->hit_count);
+        }
+        if (SQLITE_DONE != r)
+            goto error;
+    }
+
     sqlite3_finalize(stmt);
 
-
-    return tichets;
+    return result;
 
 error:
     d("ERR: %s\n", sqlite3_errmsg(db));
@@ -527,7 +554,6 @@ bt_element* db_get_last_elements(int ticket_id)
                 e->next = (bt_element*)xalloc(sizeof(bt_element));
                 e = e->next;
             }
-/*             e->id = sqlite3_column_int(stmt, 0); */
             e->element_type_id = element_types->id;
             str_val = sqlite3_column_text(stmt, i++);
             if (str_val != NULL) {
@@ -845,7 +871,8 @@ bt_state* db_get_states()
             "select m.field%d as name, count(t.id) as count "
             "from ticket as t "
             "inner join message as m "
-            " on m.id = t.last_message_id ", ELEM_ID_STATUS);
+            " on m.id = t.last_message_id "
+            "group by m.field%d" , ELEM_ID_STATUS, ELEM_ID_STATUS);
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
     sqlite3_reset(stmt);
 

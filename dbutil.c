@@ -24,7 +24,8 @@ void db_init()
   if (SQLITE_OK != sqlite3_open(db_name, &db)) {
     die("sqlite3 init error.");
   }
-  sqlite3_exec(db, "pragma case_sensitive_like=on", NULL, NULL, NULL);
+/*   exec_query("PRAGMA default_cache_size = 2000;", COLUMN_TYPE_END); */
+/*   exec_query("PRAGMA case_sensitive_like = 1;", COLUMN_TYPE_END); */
 
   if (!exists_db_file)
     create_tables();
@@ -150,8 +151,6 @@ void create_tables()
             " field8 text, "
             " registerdate text"
             ");", COLUMN_TYPE_END);
-    exec_query(
-            "create index index_message_all on message (id, field1, field2, field3, field4, field5, field6, field7, field8, registerdate);", COLUMN_TYPE_END);
     exec_query(
             "create table element_file("
             " id integer not null primary key, "

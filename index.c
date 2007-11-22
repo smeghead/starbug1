@@ -122,7 +122,7 @@ int cgiMain() {
 void list_action()
 {
     char path_info[DEFAULT_LENGTH];
-    bt_message* tickets;
+    bt_search_result* result;
     bt_element_type* e_types;
     bt_element_type* e;
     bt_condition* conditions = NULL;
@@ -145,8 +145,11 @@ void list_action()
     
     d("mode_search %d\n", mode_search);
     strcpy(path_info, cgiPathInfo);
+    d("search begin\n");
     db_init();
+    d("search begin1\n");
     project = db_get_project();
+    d("search begin2\n");
     output_header(project, "list.js");
     cgiFormStringNoNewlines("message", message, DEFAULT_LENGTH);
     if (strlen(message) > 0) {
@@ -186,8 +189,10 @@ void list_action()
             strcpy(sort->value, "reverse");
         }
     }
-    tickets = db_search_tickets(conditions, q, sort);
+    result = db_search_tickets(conditions, q, sort, 0);
+    d("db_search_tickets end\n");
     states = db_get_states();
+    d("db_get_states end\n");
     /* stateの表示 */
     o("<div id=\"state_index\">\n");
     o("\t<ul>\n");
@@ -239,23 +244,21 @@ void list_action()
     o("<input class=\"button\" type=\"submit\" value=\"検索\" />");
     o("</form>\n");
     o("</div>\n");
+    fflush(cgiOut);
     o("<div id=\"ticket_list\">\n");
     o("<h3>チケット一覧</h3>\n");
-    if (tickets != NULL) {
+    if (result->messages != NULL) {
         char query_string_temp[DEFAULT_LENGTH];
         char query_string[DEFAULT_LENGTH];
         char* reverse = strstr(cgiQueryString, "rsort=");
-        bt_message* t = tickets;
-        int hit_count;
-        /* count */
-        for (hit_count = 0; t != NULL; t = t->next) hit_count++;
+        bt_message* t = result->messages;
 
         remove_rsort(cgiQueryString, query_string_temp);
         remove_sort(query_string_temp, query_string);
         o(      "<div class=\"description\">");
         if (!conditions && !strlen(q))
             o(      "クローズ扱いのチケットは表示されていません。");
-        o(      "%d件表示しています。\n", hit_count);
+        o(      "%d件ヒットしました。\n", result->hit_count);
         o(      "</div>\n");
         o(      "<table summary=\"ticket list\">\n"
                 "\t<tr>\n"
@@ -272,8 +275,8 @@ void list_action()
         o("\t\t<th><a href=\"%s/list?%ssort=-2&amp;%s\">投稿日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
         o("\t\t<th><a href=\"%s/list?%ssort=-3&amp;%s\">最終更新日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
         o("\t</tr>\n");
-        for (; tickets != NULL; tickets = tickets->next) {
-            bt_element* elements = db_get_last_elements_4_list(tickets->id);
+        for (t = result->messages; t != NULL; t = t->next) {
+            bt_element* elements = db_get_last_elements_4_list(t->id);
             o("\t<tr>\n");
             o("\t\t<td class=\"field%d-%d\"><a href=\"%s/ticket/%s\">%s</a></td>\n", 
                     ELEM_ID_ID, 
@@ -284,7 +287,7 @@ void list_action()
             for (e = e_types; e != NULL; e = e->next) {
                 o("\t\t<td class=\"field%d-%d\">", e->id, get_element_lid_by_id(elements, e->id));
                 if (e->id == ELEM_ID_TITLE)
-                    o("<a href=\"%s/ticket/%d\">", cgiScriptName, tickets->id);
+                    o("<a href=\"%s/ticket/%d\">", cgiScriptName, t->id);
                 if (e->id == ELEM_ID_SENDER)
                     hmail(get_element_value_by_id(elements, ELEM_ID_ORG_SENDER)); /* 最初の投稿者を表示する。 */
                 else

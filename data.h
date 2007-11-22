@@ -7,6 +7,7 @@
 #define MODE_LENGTH 128
 #define DEFAULT_LENGTH 1024
 #define MAX_FILE_SIZE 512
+#define LIST_PER_PAGE 30
 
 typedef struct _project {
   char name[DEFAULT_LENGTH];
@@ -97,6 +98,12 @@ typedef struct _condition {
   char value[DEFAULT_LENGTH];
   struct _condition* next;
 } bt_condition;
+
+typedef struct _search_result {
+  int hit_count;
+  int page;
+  struct _message* messages;
+} bt_search_result;
 
 typedef struct _state {
   int id;
