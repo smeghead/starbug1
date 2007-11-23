@@ -301,7 +301,8 @@ char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* 
             "select "
             " t.id "
             "from ticket as t "
-            "inner join message as m on m.id = t.last_message_id ");
+            "inner join message as m on m.id = t.last_message_id "
+            "inner join message as org_m on org_m.id = t.original_message_id ");
 
     if (strlen(q))
         strcat(sql_string, "inner join message as m_all on m_all.ticket_id = t.id ");
@@ -312,7 +313,9 @@ char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* 
         for (i = 0, cond = conditions; cond != NULL; cond = cond->next, i++) {
             char val[DEFAULT_LENGTH];
             if (i) strcat(sql_string, " and ");
-            sprintf(val, " (m.field%d like '%%' || ? || '%%') ", cond->element_type_id);
+            sprintf(val, " (%sm.field%d like '%%' || ? || '%%') ", 
+                    cond->element_type_id == ELEM_ID_SENDER ? "org_" : "", /* Åê¹Æ¼Ô¤Ï½é²óÅê¹Æ¼Ô¤¬¸¡º÷ÂÐ¾Ý¤Ë¤Ê¤ë¡£ */
+                    cond->element_type_id);
             strcat(sql_string, val);
         }
     }
@@ -331,26 +334,29 @@ char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* 
 
     strcat(sql_string, " group by t.id ");
     strcat(sql_string, " order by ");
-/*     if (sort) { */
-/*         char column[DEFAULT_LENGTH]; */
-/*         char sort_type[DEFAULT_LENGTH]; */
-/*         sprintf(sort_type, "%s", strstr(sort->value, "reverse") ? "desc" : "asc"); */
-/*         switch (sort->element_type_id) { */
-/*             case -1: */
-/*                 sprintf(column, "t.id %s, ", sort_type); */
-/*                 break; */
-/*             case -2: */
-/*                 sprintf(column, "t.registerdate %s, ", sort_type); */
-/*                 break; */
-/*             case -3: */
-/*                 sprintf(column, "last_registerdate %s, ", sort_type); */
-/*                 break; */
-/*             default: */
-/*                 sprintf(column, "e%d.str_val %s, ", i + 1, sort_type); */
-/*                 break; */
-/*         } */
-/*         strcat(sql_string, column); */
-/*     } */
+    if (sort) {
+        char column[DEFAULT_LENGTH];
+        char sort_type[DEFAULT_LENGTH];
+        sprintf(sort_type, "%s", strstr(sort->value, "reverse") ? "desc" : "asc");
+        switch (sort->element_type_id) {
+            case -1:
+                sprintf(column, "t.id %s, ", sort_type);
+                break;
+            case -2:
+                sprintf(column, "t.registerdate %s, ", sort_type);
+                break;
+            case -3:
+                sprintf(column, "m.registerdate %s, ", sort_type);
+                break;
+            case ELEM_ID_SENDER:
+                sprintf(column, "org_m.field%d %s, ", sort->element_type_id, sort_type);
+                break;
+            default:
+                sprintf(column, "field%d %s, ", sort->element_type_id, sort_type);
+                break;
+        }
+        strcat(sql_string, column);
+    }
     strcat(sql_string, "t.registerdate desc ");
     d("sql: %s\n", sql_string);
 

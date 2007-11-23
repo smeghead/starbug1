@@ -310,11 +310,9 @@ void list_action()
                 "\t\t<th><a href=\"%s/list?%ssort=-1&amp;%s\">ID</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
         for (e = e_types; e != NULL; e = e->next) {
             o("\t\t<th>\n");
-            if (e->id != ELEM_ID_SENDER) /* 投稿者は特別に最初の投稿者を表示しているので、最終投稿者でソートした結果を表示するとおかしくなる。ソートさせないようにしておく。 */
-                o("\t\t\t<a href=\"%s/list?%ssort=%d&amp;%s\">", cgiScriptName, reverse ? "" : "r", e->id, query_string);
+            o("\t\t\t<a href=\"%s/list?%ssort=%d&amp;%s\">", cgiScriptName, reverse ? "" : "r", e->id, query_string);
             h(e->name);
-            if (e->id != ELEM_ID_SENDER)  /* 投稿者は特別に最初の投稿者を表示しているので、最終投稿者でソートした結果を表示するとおかしくなる。ソートさせないようにしておく。 */
-                o("</a>\n");
+            o("</a>\n");
             o("\t\t</th>\n");
         }
         o("\t\t<th><a href=\"%s/list?%ssort=-2&amp;%s\">投稿日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
