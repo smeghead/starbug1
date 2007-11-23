@@ -29,8 +29,7 @@ void output_form_element(bt_element* element, bt_element_type* e_type);
 void output_form_element_4_condition(char*, bt_element_type*);
 int get_mode();
 static int contains(char* const, const char*);
-void remove_sort(char*, char*);
-void remove_rsort(char*, char*);
+void remove_parameter(char*, char*, char*);
 
 enum MODE {
     MODE_INVALID,
@@ -116,6 +115,52 @@ int cgiMain() {
     exec_action();
     return 0;
 }
+void output_navigater(bt_search_result* result, char* query_string)
+{
+    int i;
+    if (result->hit_count < LIST_PER_PAGE) return;
+    o("<div class=\"navigater\">\n");
+    if (result->page > 0)
+        o("<a href=\"%s/list?p=%d&amp;%s\">&lt;&lt;</a>\n", cgiScriptName, result->page - 1, query_string);
+    for (i = 0; i * LIST_PER_PAGE < result->hit_count; i++) {
+        if (i == result->page)
+            o("%d\n", i + 1);
+        else
+            o("<a href=\"%s/list?p=%d&amp;%s\">%d</a>\n", cgiScriptName, i, query_string, i + 1);
+    }
+    if (result->page * LIST_PER_PAGE < result->hit_count - LIST_PER_PAGE)
+        o("<a href=\"%s/list?p=%d&amp;%s\">&gt;&gt;</a>\n", cgiScriptName, result->page + 1, query_string);
+    o("</div>\n");
+}
+char* format_query_string(char* buffer)
+{
+    char **array, **arrayStep;
+    if (cgiFormEntries(&array) != cgiFormSuccess) {
+        return "";
+    }
+    strcpy(buffer, "");
+    arrayStep = array;
+    while (*arrayStep) {
+        if (strcmp(*arrayStep, "rsort") != 0 &&
+                strcmp(*arrayStep, "sort") != 0 &&
+                strcmp(*arrayStep, "p") != 0) {
+            char name[DEFAULT_LENGTH];
+            char value[DEFAULT_LENGTH];
+            char encodedvalue[DEFAULT_LENGTH];
+            strcpy(name, *arrayStep);
+            cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+            url_encode(value, encodedvalue, DEFAULT_LENGTH);
+            strcat(buffer, name);
+            strcat(buffer, "=");
+            strcat(buffer, encodedvalue);
+            strcat(buffer, "&amp;");
+        }
+        arrayStep++;
+    }
+    cgiStringArrayFree(array);
+
+    return buffer;
+}
 /**
  * 一覧を表示するaction。
  */
@@ -135,6 +180,7 @@ void list_action()
     char sortstr[DEFAULT_LENGTH];
     char id[DEFAULT_LENGTH];
     char q[DEFAULT_LENGTH];
+    char p[DEFAULT_LENGTH];
 
     cgiFormStringNoNewlines("id", id, DEFAULT_LENGTH);
     if (strlen(id) > 0) {
@@ -189,10 +235,9 @@ void list_action()
             strcpy(sort->value, "reverse");
         }
     }
-    result = db_search_tickets(conditions, q, sort, 0);
-    d("db_search_tickets end\n");
+    cgiFormStringNoNewlines("p", p, DEFAULT_LENGTH);
+    result = db_search_tickets(conditions, q, sort, atoi(p));
     states = db_get_states();
-    d("db_get_states end\n");
     /* stateの表示 */
     o("<div id=\"state_index\">\n");
     o("\t<ul>\n");
@@ -248,18 +293,18 @@ void list_action()
     o("<div id=\"ticket_list\">\n");
     o("<h3>チケット一覧</h3>\n");
     if (result->messages != NULL) {
-        char query_string_temp[DEFAULT_LENGTH];
-        char query_string[DEFAULT_LENGTH];
+        char query_string_buffer[DEFAULT_LENGTH];
+        char* query_string;
         char* reverse = strstr(cgiQueryString, "rsort=");
         bt_message* t = result->messages;
 
-        remove_rsort(cgiQueryString, query_string_temp);
-        remove_sort(query_string_temp, query_string);
+        query_string = format_query_string(query_string_buffer);
         o(      "<div class=\"description\">");
         if (!conditions && !strlen(q))
             o(      "クローズ扱いのチケットは表示されていません。");
         o(      "%d件ヒットしました。\n", result->hit_count);
         o(      "</div>\n");
+        output_navigater(result, query_string);
         o(      "<table summary=\"ticket list\">\n"
                 "\t<tr>\n"
                 "\t\t<th><a href=\"%s/list?%ssort=-1&amp;%s\">ID</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
@@ -301,6 +346,7 @@ void list_action()
             o("\t</tr>\n");
         }
         o("</table>\n");
+        output_navigater(result, query_string);
     }
     o("</div>\n");
     output_footer();
@@ -1021,14 +1067,16 @@ error:
     cgiHeaderContentType("text/plain; charset=utf-8;");
     o("error: ファイルがありません。");
 }
-void remove_sort(char* query_string, char* buf)
+void remove_parameter(char* param_name, char* query_string, char* buf)
 {
     char* rest;
-    char* sub = strstr(query_string, "sort=");
-    d("query_string: %s\n", query_string);
+    char* sub;
+    char param_eq[DEFAULT_LENGTH];
+    strcpy(param_eq, param_name);
+    strcat(param_eq, "=");
+    sub = strstr(query_string, param_eq);
     if (sub == NULL) {
         strcpy(buf, query_string);
-        d("buf1\n");
         return;
     }
     strncat(buf, query_string, sub - query_string);
@@ -1036,28 +1084,45 @@ void remove_sort(char* query_string, char* buf)
     if (rest == NULL) {
         return;
     }
-    d("sub: %s\n", sub);
-    d("rest: %s\n", rest);
     strcat(buf, ++rest);
-    d("buf: %s\n", buf);
 }
-void remove_rsort(char* query_string, char* buf)
-{
-    char* rest;
-    char* sub = strstr(query_string, "rsort=");
-    d("query_string: %s\n", query_string);
-    if (sub == NULL) {
-        strcpy(buf, query_string);
-        d("buf1\n");
-        return;
-    }
-    strncat(buf, query_string, sub - query_string);
-    rest = strchr(sub, '&');
-    if (rest == NULL) {
-        return;
-    }
-    d("sub: %s\n", sub);
-    d("rest: %s\n", rest);
-    strcat(buf, ++rest);
-    d("buf: %s\n", buf);
-}
+/* void remove_sort(char* query_string, char* buf) */
+/* { */
+/*     char* rest; */
+/*     char* sub = strstr(query_string, "sort="); */
+/*     d("query_string: %s\n", query_string); */
+/*     if (sub == NULL) { */
+/*         strcpy(buf, query_string); */
+/*         d("buf1\n"); */
+/*         return; */
+/*     } */
+/*     strncat(buf, query_string, sub - query_string); */
+/*     rest = strchr(sub, '&'); */
+/*     if (rest == NULL) { */
+/*         return; */
+/*     } */
+/*     d("sub: %s\n", sub); */
+/*     d("rest: %s\n", rest); */
+/*     strcat(buf, ++rest); */
+/*     d("buf: %s\n", buf); */
+/* } */
+/* void remove_rsort(char* query_string, char* buf) */
+/* { */
+/*     char* rest; */
+/*     char* sub = strstr(query_string, "rsort="); */
+/*     d("query_string: %s\n", query_string); */
+/*     if (sub == NULL) { */
+/*         strcpy(buf, query_string); */
+/*         d("buf1\n"); */
+/*         return; */
+/*     } */
+/*     strncat(buf, query_string, sub - query_string); */
+/*     rest = strchr(sub, '&'); */
+/*     if (rest == NULL) { */
+/*         return; */
+/*     } */
+/*     d("sub: %s\n", sub); */
+/*     d("rest: %s\n", rest); */
+/*     strcat(buf, ++rest); */
+/*     d("buf: %s\n", buf); */
+/* } */

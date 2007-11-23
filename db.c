@@ -387,6 +387,7 @@ bt_search_result* db_search_tickets(bt_condition* conditions, char* q, bt_condit
     sqlite3_reset(stmt);
     n = set_conditions(stmt, conditions, q);
     sqlite3_bind_int(stmt, n++, LIST_PER_PAGE);
+    d("page: %d\n", page);
     sqlite3_bind_int(stmt, n++, page * LIST_PER_PAGE);
 
     set_date_string(date); d("time: %s\n", date);
@@ -426,6 +427,7 @@ bt_search_result* db_search_tickets(bt_condition* conditions, char* q, bt_condit
 
     sqlite3_finalize(stmt);
 
+    result->page = page;
     return result;
 
 error:

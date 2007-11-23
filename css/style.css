@@ -304,3 +304,11 @@ div.item_navigation {
 #ticket_list th a:hover {
     text-decoration: underline;
 }
+div.navigater {
+    font-weight: bold;
+    padding: 5px 50px 5px 50px;
+    text-align: right;
+}
+div.navigater a {
+    font-weight: bold;
+}
