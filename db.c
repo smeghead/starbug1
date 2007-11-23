@@ -8,6 +8,12 @@
 #include "util.h"
 #include "dbutil.h"
 
+#define ERROR_LABEL error: \
+    d("ERR: %s\n", sqlite3_errmsg(db)); \
+    sqlite3_finalize(stmt); \
+    sqlite3_close(db); \
+    die("failed to dbaccess.");
+
 extern const char* db_name;
 extern sqlite3 *db;
 
@@ -26,7 +32,7 @@ bt_element_type* db_get_element_types(int all)
     } else {
         sql = "select id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort from element_type where display_in_list = 1 order by sort";
     }
-    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
 
     e = NULL;
@@ -55,10 +61,7 @@ bt_element_type* db_get_element_types(int all)
 
     return elements;
 
-error:
-    d("ERR: %s\n", sqlite3_errmsg(db));
-    sqlite3_close(db);
-    die("failed to db_get_element_types.");
+ERROR_LABEL
 }
 bt_element_type* db_get_element_type(int id)
 {
@@ -71,7 +74,7 @@ bt_element_type* db_get_element_type(int id)
         "from element_type "
         "where id = ? "
         "order by sort";
-    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, id);
 
@@ -94,6 +97,7 @@ bt_element_type* db_get_element_type(int id)
     sqlite3_finalize(stmt);
 
     return e;
+ERROR_LABEL
 }
 
 bt_list_item* db_get_list_item(int element_type)
@@ -104,7 +108,7 @@ bt_list_item* db_get_list_item(int element_type)
     const char *sql = "select id, name, close, sort from list_item where element_type_id = ? order by sort";
     sqlite3_stmt *stmt = NULL;
 
-    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, element_type);
 
@@ -128,10 +132,7 @@ bt_list_item* db_get_list_item(int element_type)
 
     return items;
 
-error:
-    d("ERR: %s\n", sqlite3_errmsg(db));
-    sqlite3_close(db);
-    die("failed to db_get_list_item.");
+ERROR_LABEL
 }
 
 void set_date_string(char* buf)
@@ -208,7 +209,7 @@ int db_register_ticket(bt_message* ticket)
     create_message_insert_sql(elements, sql);
     d("%s\n", sql);
 
-    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     i = 1;
     sqlite3_bind_int(stmt, i++, ticket->id);
@@ -269,11 +270,7 @@ int db_register_ticket(bt_message* ticket)
     }
     return ticket->id;
 
-error:
-    d("ERR: %s\n", sqlite3_errmsg(db));
-    sqlite3_finalize(stmt);
-    sqlite3_close(db);
-    die("failed to db_register_ticket.");
+ERROR_LABEL
 }
 void db_delete_ticket(bt_message* ticket)
 {
@@ -372,7 +369,6 @@ int set_conditions(sqlite3_stmt* stmt, bt_condition* conditions, char* q)
         bt_element_type* element_types = db_get_element_types(1);
         bt_element_type* et;
         for (et = element_types; et != NULL; et = et->next) {
-            d("cond %s\n", q);
             sqlite3_bind_text(stmt, n++, q, strlen(q), NULL);
         }
     }
@@ -385,18 +381,15 @@ bt_search_result* db_search_tickets(bt_condition* conditions, char* q, bt_condit
     char buffer[VALUE_LENGTH];
     char *sql = get_search_sql_string(conditions, sorts, q, buffer);
     sqlite3_stmt *stmt = NULL;
-    char date[20];
     bt_search_result* result = (bt_search_result*)xalloc(sizeof(bt_search_result));
 
     strcat(sql, " limit ? offset ? ");
-    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     n = set_conditions(stmt, conditions, q);
     sqlite3_bind_int(stmt, n++, LIST_PER_PAGE);
-    d("page: %d\n", page);
     sqlite3_bind_int(stmt, n++, page * LIST_PER_PAGE);
 
-    set_date_string(date); d("time: %s\n", date);
     /* 1ページ分のticket_idを取得する。 */
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         if (i == NULL) {
@@ -408,7 +401,6 @@ bt_search_result* db_search_tickets(bt_condition* conditions, char* q, bt_condit
         i->id = sqlite3_column_int(stmt, 0);
         i->next = NULL;
     }
-    set_date_string(date); d("time: %s\n", date);
     if (SQLITE_DONE != r)
         goto error;
 
@@ -420,12 +412,11 @@ bt_search_result* db_search_tickets(bt_condition* conditions, char* q, bt_condit
         s = get_search_sql_string(conditions, sorts, q, buf);
         strcat(sql, s);
         strcat(sql, ")");
-        sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+        if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
         sqlite3_reset(stmt);
         n = set_conditions(stmt, conditions, q);
         while (SQLITE_ROW == (r = sqlite3_step(stmt))){
             result->hit_count = sqlite3_column_int(stmt, 0);
-            d("hit_count:%d\n", result->hit_count);
         }
         if (SQLITE_DONE != r)
             goto error;
@@ -435,11 +426,7 @@ bt_search_result* db_search_tickets(bt_condition* conditions, char* q, bt_condit
 
     result->page = page;
     return result;
-
-error:
-    d("ERR: %s\n", sqlite3_errmsg(db));
-    sqlite3_close(db);
-    die("failed to db_search_tickets.");
+ERROR_LABEL
 }
 void create_columns_exp(bt_element_type* element_types, char* table_name, char* buf)
 {
@@ -466,7 +453,6 @@ bt_element* db_get_last_elements_4_list(int ticket_id)
     int r;
     char columns[DEFAULT_LENGTH] = "";
     bt_element_type* element_types;
-    char date[20];
 
     element_types = db_get_element_types(0);
     create_columns_exp(element_types, "last_m", columns);
@@ -480,12 +466,10 @@ bt_element* db_get_last_elements_4_list(int ticket_id)
             "left join list_item as l on l.element_type_id = %d and l.name = last_m.field%d "
             "where t.id = ?", ELEM_ID_STATUS, ELEM_ID_STATUS);
     strcat(sql, sql_suf);
-    d("sql:%s\n", sql);
-    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, ticket_id);
 
-    set_date_string(date); d("begin\ttime: %s\n", date);
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         int i = 0;
         const unsigned char* status_id;
@@ -516,19 +500,13 @@ bt_element* db_get_last_elements_4_list(int ticket_id)
         set_str_val(e, sqlite3_column_text(stmt, i++));
         e->next = NULL;
     }
-    set_date_string(date); d("end\ttime: %s\n", date);
     if (SQLITE_DONE != r)
         goto error;
 
     sqlite3_finalize(stmt);
 
     return elements;
-
-error:
-    d("ERR: %s\n", sqlite3_errmsg(db));
-    sqlite3_close(db);
-    die("failed to db_get_last_elements_4_list.");
-    return NULL;
+ERROR_LABEL
 }
 bt_element* db_get_last_elements(int ticket_id)
 {
@@ -548,7 +526,7 @@ bt_element* db_get_last_elements(int ticket_id)
             "from ticket as t "
             "inner join message as m on m.id = t.last_message_id "
             "where ticket_id = ?");
-    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, ticket_id);
 
@@ -577,12 +555,7 @@ bt_element* db_get_last_elements(int ticket_id)
     sqlite3_finalize(stmt);
 
     return elements;
-
-error:
-    d("ERR: %s\n", sqlite3_errmsg(db));
-    sqlite3_close(db);
-    die("failed to db_get_last_elements.");
-    return NULL;
+ERROR_LABEL
 }
 bt_element* db_get_elements(int message_id)
 {
@@ -602,7 +575,7 @@ bt_element* db_get_elements(int message_id)
     strcat(sql,
             "from message as m "
             "where m.id = ? ");
-    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, message_id);
 
@@ -632,10 +605,7 @@ bt_element* db_get_elements(int message_id)
 
     return elements;
 
-error:
-    d("ERR: %s\n", sqlite3_errmsg(db));
-    sqlite3_close(db);
-    die("failed to db_get_elements.");
+ERROR_LABEL
 }
 bt_message* db_get_ticket(int ticket_id)
 {
@@ -644,7 +614,7 @@ bt_message* db_get_ticket(int ticket_id)
     const char *sql = "select id, registerdate from ticket where id = ?";
     sqlite3_stmt *stmt = NULL;
 
-    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, ticket_id);
 
@@ -663,6 +633,7 @@ bt_message* db_get_ticket(int ticket_id)
 
     sqlite3_finalize(stmt);
     return ticket;
+ERROR_LABEL
 }
 bt_message* db_get_message(int reply_id)
 {
@@ -671,7 +642,7 @@ bt_message* db_get_message(int reply_id)
     const char *sql = "select id, registerdate from message where id = ?";
     sqlite3_stmt *stmt = NULL;
 
-    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, reply_id);
 
@@ -690,10 +661,7 @@ bt_message* db_get_message(int reply_id)
     sqlite3_finalize(stmt);
     return message;
 
-error:
-    d("ERR: %s\n", sqlite3_errmsg(db));
-    sqlite3_close(db);
-    die("failed to db_get_reply.");
+ERROR_LABEL
 }
 int* db_get_message_ids(int ticket_id)
 {
@@ -702,7 +670,7 @@ int* db_get_message_ids(int ticket_id)
     const char *sql = "select count(*) from message as m where m.ticket_id = ?";
     sqlite3_stmt *stmt = NULL;
 
-    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, ticket_id);
 
@@ -713,7 +681,7 @@ int* db_get_message_ids(int ticket_id)
     sqlite3_finalize(stmt);
 
     sql = "select id from message as m where m.ticket_id = ? order by m.registerdate";
-    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, ticket_id);
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
@@ -727,10 +695,7 @@ int* db_get_message_ids(int ticket_id)
 
     return message_ids;
 
-error:
-    d("ERR: %s\n", sqlite3_errmsg(db));
-    sqlite3_close(db);
-    die("failed to db_get_message_ids.");
+ERROR_LABEL
 }
 
 bt_project* db_get_project()
@@ -741,7 +706,7 @@ bt_project* db_get_project()
     sqlite3_stmt *stmt = NULL;
 
     sql = "select name, description, home_url, host_name, smtp_server, smtp_port, notify_address, admin_address from project";
-    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
@@ -760,6 +725,7 @@ bt_project* db_get_project()
     sqlite3_finalize(stmt);
 
     return project;
+ERROR_LABEL
 }
 void db_update_project(bt_project* project)
 {
@@ -881,7 +847,7 @@ bt_state* db_get_states()
             "inner join message as m "
             " on m.id = t.last_message_id "
             "group by m.field%d" , ELEM_ID_STATUS, ELEM_ID_STATUS);
-    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
@@ -902,10 +868,7 @@ bt_state* db_get_states()
 
     return states;
 
-error:
-    d("ERR: %s\n", sqlite3_errmsg(db));
-    sqlite3_close(db);
-    die("failed to db_get_states.");
+ERROR_LABEL
 }
 bt_element_file* db_get_element_file(int element_id)
 {
@@ -917,7 +880,7 @@ bt_element_file* db_get_element_file(int element_id)
     sql = "select id, element_id, filename, size, content_type, content "
         "from element_file "
         "where element_id = ? ";
-    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, element_id);
 
@@ -946,6 +909,7 @@ bt_element_file* db_get_element_file(int element_id)
     sqlite3_finalize(stmt);
 
     return file;
+ERROR_LABEL
 }
 bt_message* db_get_newest_information(int limit)
 {
@@ -956,16 +920,13 @@ bt_message* db_get_newest_information(int limit)
     sqlite3_stmt *stmt = NULL;
     
     sprintf(sql, 
-            "select id, reply_id, registerdate "
-            "from ( "
-            "    select id as id, null as reply_id, registerdate from ticket "
-            "    union "
-            "    select ticket_id as id, id as reply_id, registerdate  from reply "
-            " ) "
-            "order by registerdate desc "
+            "select t.id, m.registerdate "
+            "from ticket as t "
+            "inner join message as m on m.id = t.last_message_id "
+            "order by m.registerdate desc "
             "limit %d ", limit);
 
-    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
@@ -977,8 +938,7 @@ bt_message* db_get_newest_information(int limit)
             i = i->next;
         }
         i->id = sqlite3_column_int(stmt, 0);
-        i->reply_id = sqlite3_column_int(stmt, 1);
-        registerdate = sqlite3_column_text(stmt, 2);
+        registerdate = sqlite3_column_text(stmt, 1);
         if (registerdate != NULL)
             strcpy(i->registerdate, registerdate);
         i->next = NULL;
@@ -989,8 +949,5 @@ bt_message* db_get_newest_information(int limit)
     sqlite3_finalize(stmt);
     return tichets;
 
-error:
-    d("ERR: %s\n", sqlite3_errmsg(db));
-    sqlite3_close(db);
-    die("failed to db_get_newest_information.");
+ERROR_LABEL
 }

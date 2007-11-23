@@ -122,7 +122,6 @@ void menu_action()
 
     cgiFormStringNoNewlines("message", message, DEFAULT_LENGTH);
     if (strlen(message) > 0) {
-        d("message\n");
         o("<div class=\"complete_message\">"); h(message); o("&nbsp;</div>\n");
     }
     o("<h2>%s 管理ツール</h2>", project->name);

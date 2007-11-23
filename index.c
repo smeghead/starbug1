@@ -189,17 +189,12 @@ void list_action()
         redirect(uri, NULL);
     }
     
-    d("mode_search %d\n", mode_search);
     strcpy(path_info, cgiPathInfo);
-    d("search begin\n");
     db_init();
-    d("search begin1\n");
     project = db_get_project();
-    d("search begin2\n");
     output_header(project, "list.js");
     cgiFormStringNoNewlines("message", message, DEFAULT_LENGTH);
     if (strlen(message) > 0) {
-        d("message\n");
         o("<div class=\"complete_message\">"); h(message); o("&nbsp;</div>\n");
     }
     e_types = db_get_element_types(0);
@@ -349,7 +344,6 @@ void list_action()
     o("</div>\n");
     output_footer();
     db_finish();
-    d("fine\n");
 }
 /**
  * form要素を表示する。
@@ -579,7 +573,6 @@ void ticket_action()
         return;
     }
     element_types = db_get_element_types(1);
-    d("aaa id:%d\n", iid);
     elements = db_get_last_elements(iid);
     o("<h2 id=\"subject\">"); h(project->name); o(" - ID:%5d ", ticket->id);
     h(get_element_value_by_id(elements, ELEM_ID_TITLE));
@@ -884,7 +877,6 @@ void default_action()
     o(      "<h4>最新情報</h4>\n");
     o(      "\t<ul>\n");
     tickets = db_get_newest_information(10);
-    d("p\n");
     if (tickets != NULL) {
         for (; tickets != NULL; tickets = tickets->next) {
             bt_element* elements = db_get_last_elements_4_list(tickets->id);

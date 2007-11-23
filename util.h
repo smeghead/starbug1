@@ -6,7 +6,7 @@
 
 #define o(...) fprintf(cgiOut, __VA_ARGS__)
 #define d(...) {FILE *fp = fopen("debug.log", "a");fprintf(fp, __VA_ARGS__);fclose(fp);}
-#define die(msg)    {d("ERROR: %s:%d %s\n", __FILE__, __LINE__, msg); exit(1);}
+#define die(msg)    {d("ERROR: %s(%d) %s %s\n", __FILE__, __LINE__, __FUNCTION__, msg); exit(1);}
 #define h(str)      cgiHtmlEscape(str)
 #define v(str)      cgiValueEscape(str)
 void u(char*);
