@@ -170,7 +170,7 @@ int db_register_ticket(bt_message* ticket)
     set_date_string(registerdate);
 
     if (register_mode) {
-        /* ø∑µ¨§ŒæÏπÁ§œ°¢ticket•∆°º•÷•Î§À•Ï•≥°º•…§Ú¡ﬁ∆˛§π§Î°£ */
+        /* Êñ∞Ë¶è„ÅÆÂ†¥Âêà„ÅØ„ÄÅticket„ÉÜ„Éº„Éñ„É´„Å´„É¨„Ç≥„Éº„Éâ„ÇíÊåøÂÖ•„Åô„Çã„ÄÇ */
         exec_query("insert into ticket(id, registerdate, closed) "
                 "values (NULL, ?, 0)",
                 COLUMN_TYPE_TEXT, registerdate,
@@ -178,7 +178,7 @@ int db_register_ticket(bt_message* ticket)
 
         ticket->id = sqlite3_last_insert_rowid(db);
     }
-    /* •Ø•Ì°º•∫§Œæı¬÷§À —ππ§µ§Ï§ø§´§…§¶§´§Ú»ΩƒÍ§π§Î°£ */
+    /* „ÇØ„É≠„Éº„Ç∫„ÅÆÁä∂ÊÖã„Å´Â§âÊõ¥„Åï„Çå„Åü„Åã„Å©„ÅÜ„Åã„ÇíÂà§ÂÆö„Åô„Çã„ÄÇ */
     elements = ticket->elements;
     for (; elements != NULL; elements = elements->next) {
         int c = exec_query_scalar_int("select close from list_item "
@@ -193,7 +193,7 @@ int db_register_ticket(bt_message* ticket)
         }
     }
     d("closed:%d\n", closed);
-    /* •Ø•Ì°º•∫æı¬÷§À —ππ§µ§Ï§∆§§§øæÏπÁ§œ°¢closed§À1§Ú¿ﬂƒÍ§π§Î°£ */
+    /* „ÇØ„É≠„Éº„Ç∫Áä∂ÊÖã„Å´Â§âÊõ¥„Åï„Çå„Å¶„ÅÑ„ÅüÂ†¥Âêà„ÅØ„ÄÅclosed„Å´1„ÇíË®≠ÂÆö„Åô„Çã„ÄÇ */
     if (exec_query("update ticket set closed = ? where id = ?",
             COLUMN_TYPE_INT, closed,
             COLUMN_TYPE_INT, ticket->id,
@@ -218,7 +218,7 @@ int db_register_ticket(bt_message* ticket)
     }
     message_id = sqlite3_last_insert_rowid(db);
     sqlite3_finalize(stmt);
-    /* message_id §Úππø∑§π§Î°£ */
+    /* message_id „ÇíÊõ¥Êñ∞„Åô„Çã„ÄÇ */
     if (register_mode) {
         exec_query("update ticket set original_message_id = ?, last_message_id = ? "
                 "where id = ?",
@@ -235,7 +235,7 @@ int db_register_ticket(bt_message* ticket)
     }
 
     elements = ticket->elements;
-    /* ≈∫…’•’•°•§•Î§Œ≈–œø */
+    /* Ê∑ª‰ªò„Éï„Ç°„Ç§„É´„ÅÆÁôªÈå≤ */
     for (; elements != NULL; elements = elements->next) {
         if (elements->is_file) {
             int size;
@@ -306,7 +306,7 @@ char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* 
             char val[DEFAULT_LENGTH];
             if (i) strcat(sql_string, " and ");
             sprintf(val, " (%sm.field%d like '%%' || ? || '%%') ", 
-                    cond->element_type_id == ELEM_ID_SENDER ? "org_" : "", /* ≈Íπ∆º‘§œΩÈ≤Û≈Íπ∆º‘§¨∏°∫˜¬–æ›§À§ §Î°£ */
+                    cond->element_type_id == ELEM_ID_SENDER ? "org_" : "", /* ÊäïÁ®øËÄÖ„ÅØÂàùÂõûÊäïÁ®øËÄÖ„ÅåÊ§úÁ¥¢ÂØæË±°„Å´„Å™„Çã„ÄÇ */
                     cond->element_type_id);
             strcat(sql_string, val);
         }
@@ -385,7 +385,7 @@ bt_search_result* db_search_tickets(bt_condition* conditions, char* q, bt_condit
     sqlite3_bind_int(stmt, n++, LIST_PER_PAGE);
     sqlite3_bind_int(stmt, n++, page * LIST_PER_PAGE);
 
-    /* 1•⁄°º•∏ ¨§Œticket_id§ÚºË∆¿§π§Î°£ */
+    /* 1„Éö„Éº„Ç∏ÂàÜ„ÅÆticket_id„ÇíÂèñÂæó„Åô„Çã„ÄÇ */
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         if (i == NULL) {
             i = result->messages = (bt_message*)xalloc(sizeof(bt_message));
@@ -399,7 +399,7 @@ bt_search_result* db_search_tickets(bt_condition* conditions, char* q, bt_condit
     if (SQLITE_DONE != r)
         goto error;
 
-    /* hit∑ÔøÙ§ÚºË∆¿§π§Î°£ */
+    /* hit‰ª∂Êï∞„ÇíÂèñÂæó„Åô„Çã„ÄÇ */
     {
         char buf[DEFAULT_LENGTH];
         char* s;
@@ -472,7 +472,7 @@ bt_element* db_get_last_elements_4_list(int ticket_id)
         e = elements = (bt_element*)xalloc(sizeof(bt_element));
         e->element_type_id = ELEM_ID_ID;
         set_str_val(e, sqlite3_column_text(stmt, i++));
-        /* ΩÈ≤Û≈Íπ∆º‘ */
+        /* ÂàùÂõûÊäïÁ®øËÄÖ */
         e = e->next = (bt_element*)xalloc(sizeof(bt_element));
         e->element_type_id = ELEM_ID_ORG_SENDER;
         set_str_val(e, sqlite3_column_text(stmt, i++));
@@ -483,13 +483,13 @@ bt_element* db_get_last_elements_4_list(int ticket_id)
             e->element_type_id = element_types->id;
             set_str_val(e, sqlite3_column_text(stmt, i++));
             if (element_types->id == ELEM_ID_STATUS && status_id != 0)
-                e->list_item_id = atoi(status_id); /* æı¬÷§Œ•π•ø•§•Î•∑°º•»§Œ§ø§·§À°¢list_item.id§Ú¿ﬂƒÍ */
+                e->list_item_id = atoi(status_id); /* Áä∂ÊÖã„ÅÆ„Çπ„Çø„Ç§„É´„Ç∑„Éº„Éà„ÅÆ„Åü„ÇÅ„Å´„ÄÅlist_item.id„ÇíË®≠ÂÆö */
         }
-        /* ≈Íπ∆∆¸ª˛ */
+        /* ÊäïÁ®øÊó•ÊôÇ */
         e = e->next = (bt_element*)xalloc(sizeof(bt_element));
         e->element_type_id = ELEM_ID_REGISTERDATE;
         set_str_val(e, sqlite3_column_text(stmt, i++));
-        /* ∫«Ω™ππø∑∆¸ª˛ */
+        /* ÊúÄÁµÇÊõ¥Êñ∞Êó•ÊôÇ */
         e = e->next = (bt_element*)xalloc(sizeof(bt_element));
         e->element_type_id = ELEM_ID_LASTREGISTERDATE;
         set_str_val(e, sqlite3_column_text(stmt, i++));
@@ -741,7 +741,7 @@ void db_update_project(bt_project* project)
 }
 void db_update_element_type(bt_element_type* e_type)
 {
-    /* ¥À‹π‡Ã‹§ŒæÏπÁ°¢ticket_property§»reply_property§œ ‘Ω∏§µ§ª§ §§°£ */
+    /* Âü∫Êú¨È†ÖÁõÆ„ÅÆÂ†¥Âêà„ÄÅticket_property„Å®reply_property„ÅØÁ∑®ÈõÜ„Åï„Åõ„Å™„ÅÑ„ÄÇ */
     switch (e_type->id) {
         case ELEM_ID_TITLE:
             e_type->ticket_property = 1;
@@ -820,12 +820,12 @@ int db_register_element_type(bt_element_type* e_type)
             COLUMN_TYPE_INT, e_type->sort,
             COLUMN_TYPE_END);
 
-    /* column§Œƒ…≤√ */
+    /* column„ÅÆËøΩÂä† */
     element_type_id = sqlite3_last_insert_rowid(db);
     sprintf(field_name, "field%d", element_type_id);
     strcpy(sql, "alter table message add column ");
     strcat(sql, field_name);
-    strcat(sql, " text ");
+    strcat(sql, " text not null default '' ");
     exec_query(sql, COLUMN_TYPE_END);
     return element_type_id;
 }
@@ -849,7 +849,10 @@ bt_state* db_get_states()
             "from ticket as t "
             "inner join message as m "
             " on m.id = t.last_message_id "
-            "group by m.field%d" , ELEM_ID_STATUS, ELEM_ID_STATUS);
+            "inner join list_item as l "
+            " on l.name = m.m.field%d "
+            "group by m.field%d "
+            "order by l.sort ", ELEM_ID_STATUS, ELEM_ID_STATUS, ELEM_ID_STATUS);
     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
 

@@ -6,7 +6,12 @@
 #include "util.h"
 #include "mail.h"
 
-static void put_env(char*, char*);
+static void put_env(char* name, char* value)
+{
+    char* val = (char*)xalloc(sizeof(char) * VALUE_LENGTH);
+    sprintf(val, "%s=%s", name, value);
+    putenv(val);
+}
 
 int mail_send(bt_project* project, bt_message* message, bt_element* elements, bt_element_type* e_types)
 {
@@ -17,6 +22,7 @@ int mail_send(bt_project* project, bt_message* message, bt_element* elements, bt
     char header[DEFAULT_LENGTH];
     char footer[DEFAULT_LENGTH];
 
+    d("mail_send\n");
     if (strlen(project->smtp_server) == 0 ||
             strlen(project->admin_address) == 0 ||
             strlen(project->notify_address) == 0) {
@@ -58,11 +64,4 @@ int mail_send(bt_project* project, bt_message* message, bt_element* elements, bt
     sprintf(command, "script/smtp.pl");
     d("command: %s\n", command);
     return system(command);
-
-}
-static void put_env(char* name, char* value)
-{
-    char* val = (char*)xalloc(sizeof(char) * VALUE_LENGTH);
-    sprintf(val, "%s=%s", name, value);
-    putenv(val);
 }

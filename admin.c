@@ -1078,11 +1078,13 @@ void delete_item_submit_action()
     if (e_type_id) e_type_id++;
     iid = atoi(e_type_id);
     db_init();
-    project = db_get_project();
-    output_header(project, NULL);
+    db_begin();
 
     db_delete_element_type(iid);
+    db_commit();
     redirect("", "削除しました");
+    db_finish();
+
 }
 void style_action()
 {

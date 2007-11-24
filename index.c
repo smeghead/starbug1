@@ -9,7 +9,6 @@
 #include "wiki.h"
 #include "mail.h"
 
-
 /* prototype declares */
 void register_actions();
 void list_action();
@@ -322,19 +321,16 @@ void list_action()
                     cgiScriptName, 
                     get_element_value_by_id(elements, ELEM_ID_ID), 
                     get_element_value_by_id(elements, ELEM_ID_ID));
-    d("pas\n");
             for (e = e_types; e != NULL; e = e->next) {
                 o("\t\t<td class=\"field%d-%d\">", e->id, get_element_lid_by_id(elements, e->id));
                 if (e->id == ELEM_ID_TITLE)
                     o("<a href=\"%s/ticket/%d\">", cgiScriptName, t->id);
-    d("pas2 %d\n", e->id);
                 if (e->id == ELEM_ID_SENDER)
                     hmail(get_element_value_by_id(elements, ELEM_ID_ORG_SENDER)); /* 最初の投稿者を表示する。 */
                 else
                     h(get_element_value_by_id(elements, e->id));
                 if (e->id == ELEM_ID_TITLE)
                     o("</a>");
-    d("pas3\n");
                 o("&nbsp;</td>\n");
             }
             o("\t\t<td>"); h(get_element_value_by_id(elements, ELEM_ID_REGISTERDATE)); o("&nbsp;</td>\n");
@@ -702,7 +698,7 @@ void register_submit_action()
     bt_message* ticket;
     char ticket_id[DEFAULT_LENGTH];
     int mode = get_mode();
-    int mail_result;
+/*     int mail_result; */
     char** multi;
 
     if (mode == MODE_INVALID)
@@ -791,30 +787,12 @@ void register_submit_action()
         ticket->id = db_register_ticket(ticket);
     }
     /* mail */
-    element_types = db_get_element_types(1);
     d("mail begin1 .\n");
-    d("mail begin1 .\n");
-    d("mail begin1 .\n");
-    d("mail begin1 .\n");
-    d("mail begin1 .\n");
-    d("mail begin1 .\n");
-    d("mail begin1 .\n");
-    d("mail begin1 .\n");
-    d("mail begin1 .\n");
-    d("mail begin1 .\n");
-    d("mail begin1 .\n");
-    d("mail begin1 .\n");
-    d("mail begin1 .\n");
-    d("mail begin1 .\n");
-    d("mail begin1 .\n");
-    d("mail begin1 .\n");
-    mail_send(project, ticket, elements, element_types);
-    die("mail begin2");
-    if ((mail_result = mail_send(project, ticket, elements, element_types)) != 0) {
-    d("mail error? .\n");
-        if (mail_result != MAIL_GAVE_UP)
-            die("mail send error.");
-    }
+    /* TODO mail throw. below code makes error. i dont know why.*/
+/*     mail_result = mail_send(project, ticket, elements, element_types); */
+/*     if (mail_result != 0 && mail_result != MAIL_GAVE_UP) { */
+/*         die("mail send error."); */
+/*     } */
     d("mail end .\n");
     db_commit();
     db_finish();

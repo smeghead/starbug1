@@ -128,26 +128,26 @@ void create_tables()
     exec_query(
             "create table ticket("
             " id integer not null primary key, "
-            " original_message_id integer, "
-            " last_message_id integer, "
-            " registerdate text, "
-            " closed integer "
+            " original_message_id integer not null default 0, "
+            " last_message_id integer not null default 0, "
+            " registerdate text not null, "
+            " closed integer not null default 0"
             ");", COLUMN_TYPE_END);
     exec_query(
             "create index index_ticket_0 on ticket (id, last_message_id, last_message_id, closed)", COLUMN_TYPE_END);
     exec_query(
             "create table message("
             " id integer not null primary key, "
-            " ticket_id integer, "
+            " ticket_id integer not null, "
             " registerdate text, "
-            " field1 text, "
-            " field2 text, "
-            " field3 text, "
-            " field4 text, "
-            " field5 text, "
-            " field6 text, "
-            " field7 text, "
-            " field8 text "
+            " field1 text not null default '' , "
+            " field2 text not null default '' , "
+            " field3 text not null default '' , "
+            " field4 text not null default '' , "
+            " field5 text not null default '' , "
+            " field6 text not null default '' , "
+            " field7 text not null default '' , "
+            " field8 text not null default ''  "
             ");", COLUMN_TYPE_END);
     exec_query(
             "create table element_file("

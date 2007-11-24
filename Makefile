@@ -13,7 +13,7 @@ mail.o: mail.c data.h util.h dbutil.h mail.h
 util.o: util.c util.h data.h dbutil.h
 wiki.o: wiki.c wiki.h util.h data.h dbutil.h
 
-index.cgi: data.o dbutil.o db.o util.o wiki.o mail.o index.o
+index.cgi: data.o dbutil.o db.o mail.o util.o wiki.o index.o
 	$(CC) -o $@ $^ $(LFLAGS)
 
 admin.cgi: data.o dbutil.o db.o util.o css.o admin.o
