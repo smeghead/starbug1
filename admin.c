@@ -1071,7 +1071,6 @@ void delete_item_submit_action()
     char path_info[DEFAULT_LENGTH];
     char* e_type_id;
     int iid;
-    bt_project* project;
 
     strcpy(path_info, cgiPathInfo);
     e_type_id = strchr(path_info + 1, '/');
@@ -1109,10 +1108,11 @@ void style_action()
 }
 void style_submit_action()
 {
-    char value[VALUE_LENGTH];
+    char* value = (char*)xalloc(sizeof(char) * VALUE_LENGTH);
 
     cgiFormString("edit_css", value, VALUE_LENGTH);
     css_save("css/user.css", value);
 
     redirect("", "更新しました。");
+    free(value);
 }

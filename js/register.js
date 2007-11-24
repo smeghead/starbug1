@@ -1,51 +1,48 @@
 Event.observe(window, 'load', initPage);
+Event.observe(window, 'error', 
+function(e) {
+    window.status = "javascript error - starbug1 " + ex.toString();
+    if (e.preventDefault) {
+        e.preventDefault();
+    } else {
+        event.returnValue = false;
+    }
+    return false;
+});
 
 function initPage(e) {
     var required_fields = new Array();
     Event.observe('register_form', 'submit', 
         function(e) {
-            try {
-                if (!check_input_value(required_fields)) {
-                    alert('入力されていない必須項目があります。確認してください。');
-                    if (e.preventDefault) {
-                        e.preventDefault();
-                    } else {
-                        event.returnValue = false;
-                    }
-                    return false;
+            if (!check_input_value(required_fields)) {
+                alert('入力されていない必須項目があります。確認してください。');
+                if (e.preventDefault) {
+                    e.preventDefault();
+                } else {
+                    event.returnValue = false;
                 }
-                var dedide = confirm('登録します。よろしいですか？');
-                if (!dedide) {
-                    if (e.preventDefault) {
-                        e.preventDefault();
-                    } else {
-                        event.returnValue = false;
-                    }
-                }
-                return dedide;
-            } catch (ex) {
-                window.status = "javascript error - starbug1 " + ex.toString();
+                return false;
+            }
+            var dedide = confirm('登録します。よろしいですか？');
+            if (!dedide) {
                 if (e.preventDefault) {
                     e.preventDefault();
                 } else {
                     event.returnValue = false;
                 }
             }
+            return dedide;
         }
     );
-    try {
-        var i = 1;
-        while (true) {
-            var field = $('field' + i++);
-            if (field == undefined) break;
-            var required = $(field.id + '.required');
-            if (required == undefined) break;
-            if (required.getAttribute('required') == 1) {
-                required_fields.push(field);
-            }
+    var i = 1;
+    while (true) {
+        var field = $('field' + i++);
+        if (field == undefined) break;
+        var required = $(field.id + '.required');
+        if (required == undefined) break;
+        if (required.getAttribute('required') == 1) {
+            required_fields.push(field);
         }
-    } catch (ex) {
-        window.status = "javascript error - starbug1 " + ex.toString();
     }
 }
 function check_input_value(fields) {
@@ -56,6 +53,7 @@ function check_input_value(fields) {
             if (empty) {
                 $(f.id + '.required').innerHTML = "必須項目です。入力してください。";
                 elem.style.display = "block";
+                f.focus();
             } else {
                 $(f.id + '.required').innerHTML = "";
                 elem.style.display = "none";

@@ -143,9 +143,9 @@ char* format_query_string(char* buffer)
         if (strcmp(*arrayStep, "rsort") != 0 &&
                 strcmp(*arrayStep, "sort") != 0 &&
                 strcmp(*arrayStep, "p") != 0) {
-            char name[DEFAULT_LENGTH];
-            char value[DEFAULT_LENGTH];
-            char encodedvalue[DEFAULT_LENGTH];
+            char name[DEFAULT_LENGTH] = "";
+            char value[DEFAULT_LENGTH] = "";
+            char encodedvalue[DEFAULT_LENGTH] = "";
             strcpy(name, *arrayStep);
             cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
             url_encode(value, encodedvalue, DEFAULT_LENGTH);
@@ -283,7 +283,7 @@ void list_action()
     o("<input class=\"button\" type=\"submit\" value=\"検索\" />");
     o("</form>\n");
     o("</div>\n");
-/*     fflush(cgiOut); */
+    fflush(cgiOut);
     o("<div id=\"ticket_list\">\n");
     o("<h3>チケット一覧</h3>\n");
     if (result->messages != NULL) {
@@ -421,7 +421,7 @@ void output_form_element(bt_element* element, bt_element_type* e_type)
             o("<textarea class=\"element\" id=\"field%d\" name=\"field%d\" rows=\"3\" cols=\"10\">",
                     e_type->id, e_type->id);
             v(value);
-            o("&nbsp;</textarea>\n");
+            o("</textarea>\n");
             break;
         case ELEM_LIST_SINGLE:
             o("<select class=\"element\" id=\"field%d\" name=\"field%d\">\n",
@@ -698,7 +698,7 @@ void register_submit_action()
     bt_message* ticket;
     char ticket_id[DEFAULT_LENGTH];
     int mode = get_mode();
-/*     int mail_result; */
+    int mail_result;
     char** multi;
 
     if (mode == MODE_INVALID)
@@ -714,10 +714,11 @@ void register_submit_action()
     else
         ticket->id = atoi(ticket_id);
     if (mode == MODE_REGISTER || mode == MODE_REPLY) {
+        char* value = (char*)xalloc(sizeof(char) * VALUE_LENGTH); /* 1M */
         /* register, reply */
         for (e_type = element_types; e_type != NULL; e_type = e_type->next) {
             char name[DEFAULT_LENGTH] = "";
-            char value[VALUE_LENGTH] = ""; /* 1M */
+            strcpy(value, "");
 
             if (elements == NULL) {
                 e = elements = (bt_element*)xalloc(sizeof(bt_element));
@@ -783,16 +784,19 @@ void register_submit_action()
                     break;
             }
         }
+        free(value);
         ticket->elements = elements;
         ticket->id = db_register_ticket(ticket);
     }
     /* mail */
     d("mail begin1 .\n");
+    d("test %d\n", get_test_int(project, ticket, elements, element_types));
     /* TODO mail throw. below code makes error. i dont know why.*/
-/*     mail_result = mail_send(project, ticket, elements, element_types); */
-/*     if (mail_result != 0 && mail_result != MAIL_GAVE_UP) { */
-/*         die("mail send error."); */
-/*     } */
+    mail_result = mail_send(project, ticket, elements, element_types);
+    d("mail done %d .\n", mail_result);
+    if (mail_result != 0 && mail_result != MAIL_GAVE_UP) {
+        die("mail send error.");
+    }
     d("mail end .\n");
     db_commit();
     db_finish();
@@ -1030,43 +1034,3 @@ void remove_parameter(char* param_name, char* query_string, char* buf)
     }
     strcat(buf, ++rest);
 }
-/* void remove_sort(char* query_string, char* buf) */
-/* { */
-/*     char* rest; */
-/*     char* sub = strstr(query_string, "sort="); */
-/*     d("query_string: %s\n", query_string); */
-/*     if (sub == NULL) { */
-/*         strcpy(buf, query_string); */
-/*         d("buf1\n"); */
-/*         return; */
-/*     } */
-/*     strncat(buf, query_string, sub - query_string); */
-/*     rest = strchr(sub, '&'); */
-/*     if (rest == NULL) { */
-/*         return; */
-/*     } */
-/*     d("sub: %s\n", sub); */
-/*     d("rest: %s\n", rest); */
-/*     strcat(buf, ++rest); */
-/*     d("buf: %s\n", buf); */
-/* } */
-/* void remove_rsort(char* query_string, char* buf) */
-/* { */
-/*     char* rest; */
-/*     char* sub = strstr(query_string, "rsort="); */
-/*     d("query_string: %s\n", query_string); */
-/*     if (sub == NULL) { */
-/*         strcpy(buf, query_string); */
-/*         d("buf1\n"); */
-/*         return; */
-/*     } */
-/*     strncat(buf, query_string, sub - query_string); */
-/*     rest = strchr(sub, '&'); */
-/*     if (rest == NULL) { */
-/*         return; */
-/*     } */
-/*     d("sub: %s\n", sub); */
-/*     d("rest: %s\n", rest); */
-/*     strcat(buf, ++rest); */
-/*     d("buf: %s\n", buf); */
-/* } */

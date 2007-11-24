@@ -15,17 +15,18 @@ static void put_env(char* name, char* value)
 
 int mail_send(bt_project* project, bt_message* message, bt_element* elements, bt_element_type* e_types)
 {
-    char command[DEFAULT_LENGTH];
+    int error_code;
+    char command[DEFAULT_LENGTH] = "script/smtp.pl";
     char port[DEFAULT_LENGTH];
     char subject[DEFAULT_LENGTH];
-    char content[VALUE_LENGTH];
+    char* content;
     char header[DEFAULT_LENGTH];
     char footer[DEFAULT_LENGTH];
 
-    d("mail_send\n");
-    if (strlen(project->smtp_server) == 0 ||
-            strlen(project->admin_address) == 0 ||
-            strlen(project->notify_address) == 0) {
+    content = (char*)xalloc(sizeof(char) * VALUE_LENGTH);
+    if (strcmp(project->smtp_server, "") == 0 ||
+            strcmp(project->admin_address, "") == 0 ||
+            strcmp(project->notify_address, "") == 0) {
         d("invalid settings. gave up to send mail.");
         return MAIL_GAVE_UP;
     }
@@ -61,7 +62,13 @@ int mail_send(bt_project* project, bt_message* message, bt_element* elements, bt
             "--------------------------------------------------------------\n", project->home_url);
     strcat(content, footer);
     put_env("SB_CONTENT", content);
-    sprintf(command, "script/smtp.pl");
     d("command: %s\n", command);
-    return system(command);
+    error_code = system(command);
+    free(content);
+    return error_code;
+}
+int get_test_int(bt_project* project, bt_message* message, bt_element* elements, bt_element_type* e_types)
+{
+    d("get_test_int\n");
+    return 1;
 }
