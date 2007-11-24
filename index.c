@@ -284,7 +284,7 @@ void list_action()
     o("<input class=\"button\" type=\"submit\" value=\"検索\" />");
     o("</form>\n");
     o("</div>\n");
-    fflush(cgiOut);
+/*     fflush(cgiOut); */
     o("<div id=\"ticket_list\">\n");
     o("<h3>チケット一覧</h3>\n");
     if (result->messages != NULL) {
@@ -322,16 +322,19 @@ void list_action()
                     cgiScriptName, 
                     get_element_value_by_id(elements, ELEM_ID_ID), 
                     get_element_value_by_id(elements, ELEM_ID_ID));
+    d("pas\n");
             for (e = e_types; e != NULL; e = e->next) {
                 o("\t\t<td class=\"field%d-%d\">", e->id, get_element_lid_by_id(elements, e->id));
                 if (e->id == ELEM_ID_TITLE)
                     o("<a href=\"%s/ticket/%d\">", cgiScriptName, t->id);
+    d("pas2 %d\n", e->id);
                 if (e->id == ELEM_ID_SENDER)
                     hmail(get_element_value_by_id(elements, ELEM_ID_ORG_SENDER)); /* 最初の投稿者を表示する。 */
                 else
                     h(get_element_value_by_id(elements, e->id));
                 if (e->id == ELEM_ID_TITLE)
                     o("</a>");
+    d("pas3\n");
                 o("&nbsp;</td>\n");
             }
             o("\t\t<td>"); h(get_element_value_by_id(elements, ELEM_ID_REGISTERDATE)); o("&nbsp;</td>\n");
@@ -395,13 +398,12 @@ void output_form_element_4_condition(char* value, bt_element_type* e_type)
  */
 void output_form_element(bt_element* element, bt_element_type* e_type)
 {
-    char id[DEFAULT_LENGTH];
     char* value = "";
     bt_list_item* items;
     bt_list_item* i;
     int list_count;
 
-    sprintf(id, "%d", e_type->id);
+    d("pass \n");
     if (element != NULL) {
         value = element->str_val;
     } else {
@@ -414,33 +416,22 @@ void output_form_element(bt_element* element, bt_element_type* e_type)
     }
     switch (e_type->type) {
         case ELEM_TEXT:
-            o("<input type=\"text\" class=\"element\" id=\"field");
-            h(id);
-            o("\" name=\"field");
-            h(id);
-            o("\" value=\"");
+            o("<input type=\"text\" class=\"element\" id=\"field%d\" name=\"field%d\" value=\"",
+                    e_type->id, e_type->id);
             v(value);
             o("\" />\n");
             break;
         case ELEM_TEXTAREA:
-            o("<textarea class=\"element\" id=\"field");
-            h(id);
-            o("\" name=\"field");
-            h(id);
-            o("\" rows=\"3\" cols=\"10\">");
+            o("<textarea class=\"element\" id=\"field%d\" name=\"field%d\" rows=\"3\" cols=\"10\">",
+                    e_type->id, e_type->id);
             v(value);
-            o("</textarea>\n");
+            o("&nbsp;</textarea>\n");
             break;
         case ELEM_LIST_SINGLE:
-            o("<select class=\"element\" id=\"field");
-            h(id);
-            o("\" name=\"field");
-            h(id);
-            o("\">\n");
-            items = db_get_list_item(e_type->id);
-
+            o("<select class=\"element\" id=\"field%d\" name=\"field%d\">\n",
+                    e_type->id, e_type->id);
             o("<option value=\"\">&nbsp;</option>");
-            for (; items != NULL; items = items->next) {
+            for (items = db_get_list_item(e_type->id); items != NULL; items = items->next) {
                 o("<option value=\"");
                 v(items->name);
                 if (!strcmp(value, items->name))
@@ -457,8 +448,8 @@ void output_form_element(bt_element* element, bt_element_type* e_type)
             items = db_get_list_item(e_type->id);
             /* リストの要素数をカウントする */
             for (list_count = 0,i = items; i != NULL; i = i->next,list_count++);
-            o("<select class=\"element\" size=\"%d\" id=\"field", list_count + 1);
-            h(id); o("\" name=\"field"); h(id); o("\" multiple=\"multiple\">\n");
+            o("<select class=\"element\" size=\"%d\" id=\"field%d", list_count + 1, e_type->id);
+            o("\" name=\"field%d\" multiple=\"multiple\">\n", e_type->id);
 
             o("<option value=\"\">&nbsp;</option>");
             for (; items != NULL; items = items->next) {
@@ -475,13 +466,11 @@ void output_form_element(bt_element* element, bt_element_type* e_type)
 
             break;
         case ELEM_UPLOADFILE:
-            o("<input type=\"file\" class=\"element\" id=\"field");
-            h(id);
-            o("\" name=\"field");
-            h(id);
-            o("\" />\n");
+            o("<input type=\"file\" class=\"element\" id=\"field%d\" name=\"field%d\" />\n",
+                    e_type->id, e_type->id);
             break;
     }
+    d("passed \n");
 }
 static int contains(char* const value, const char* name)
 {
@@ -609,44 +598,8 @@ void ticket_action()
     }
     o(      "</table>\n"
             "</div>");
-/*     last_elements = elements = db_get_elements(iid, 0); */
-
     o(      "<div id=\"ticket_history\">\n"
             "<h3>チケット履歴</h3>\n");
-/*             "<table summary=\"reply table\">\n"); */
-/*     |+投稿の表示+| */
-/*     o(      "\t<tr>\n" */
-/*             "\t\t<td colspan=\"2\" class=\"title\">投稿 ["); h(ticket->registerdate); o("]</td>\n" */
-/*             "\t</tr>\n"); */
-/*     { */
-/*         bt_element_type* e_type = element_types; */
-/*         for (; e_type != NULL; e_type = e_type->next) { */
-/*             char* value = get_element_value(elements, e_type); */
-/*             if (e_type->reply_property) continue; */
-/*             o("\t<tr>\n"); */
-/*             o("\t\t<th>"); */
-/*             h(e_type->name); */
-/*             o("&nbsp;</th>\n"); */
-/*             o("\t\t<td>"); */
-/*             switch (e_type->id) { */
-/*                 case ELEM_ID_SENDER: */
-/*                     hmail(value); */
-/*                     break; */
-/*                 default: */
-/*                     if (e_type->type == ELEM_UPLOADFILE) { */
-/*                         if (strlen(value)) { */
-/*                             o("<a href=\"%s/download/%d/", cgiScriptName, get_element_id(elements, e_type)); u(value); o("\" target=\"_blank\">");h(value); o("</a>\n"); */
-/*                         } */
-/*                     } else { */
-/*                         hm(value); */
-/*                     } */
-/*                     break; */
-/*             } */
-/*             o("&nbsp;</td>\n"); */
-/*             o("\t</tr>\n"); */
-/*         } */
-/*     } */
-/*     o("</table>\n"); */
     message_ids = db_get_message_ids(iid);
     /* 履歴の表示 */
     for (i = 0; message_ids[i] != 0; i++) {
@@ -659,10 +612,11 @@ void ticket_action()
                 "\t\t<td colspan=\"2\" class=\"title\">投稿: %d ", i + 1); o("["); h(message->registerdate); o("]</td>\n"
                 "\t</tr>\n");
         {
-            bt_element_type* e_type = element_types;
-            for (; e_type != NULL; e_type = e_type->next) {
+            bt_element_type* e_type;
+            for (e_type = element_types; e_type != NULL; e_type = e_type->next) {
                 char* value = get_element_value(elements, e_type);
                 char* last_value = get_element_value(previous, e_type);
+
                 /* チケット属性で、直前の値と同じ項目は表示しない。 */
                 if (e_type->ticket_property == 1 && strcmp(value, last_value) == 0)
                     continue;
@@ -741,6 +695,7 @@ void ticket_action()
 void register_submit_action()
 {
     bt_project* project;
+    bt_element_type* element_types;
     bt_element_type* e_type;
     bt_element* elements = NULL;
     bt_element* e = NULL;
@@ -756,7 +711,7 @@ void register_submit_action()
     db_init();
     db_begin();
     project = db_get_project();
-    e_type = db_get_element_types(1);
+    element_types = db_get_element_types(1);
     cgiFormStringNoNewlines("ticket_id", ticket_id, DEFAULT_LENGTH);
     if (mode == MODE_REGISTER)
         ticket->id = -1;
@@ -764,7 +719,7 @@ void register_submit_action()
         ticket->id = atoi(ticket_id);
     if (mode == MODE_REGISTER || mode == MODE_REPLY) {
         /* register, reply */
-        for (; e_type != NULL; e_type = e_type->next) {
+        for (e_type = element_types; e_type != NULL; e_type = e_type->next) {
             char name[DEFAULT_LENGTH] = "";
             char value[VALUE_LENGTH] = ""; /* 1M */
 
@@ -836,13 +791,34 @@ void register_submit_action()
         ticket->id = db_register_ticket(ticket);
     }
     /* mail */
-    e_type = db_get_element_types(1);
-    if ((mail_result = mail_send(project, ticket, elements, e_type)) != 0) {
+    element_types = db_get_element_types(1);
+    d("mail begin1 .\n");
+    d("mail begin1 .\n");
+    d("mail begin1 .\n");
+    d("mail begin1 .\n");
+    d("mail begin1 .\n");
+    d("mail begin1 .\n");
+    d("mail begin1 .\n");
+    d("mail begin1 .\n");
+    d("mail begin1 .\n");
+    d("mail begin1 .\n");
+    d("mail begin1 .\n");
+    d("mail begin1 .\n");
+    d("mail begin1 .\n");
+    d("mail begin1 .\n");
+    d("mail begin1 .\n");
+    d("mail begin1 .\n");
+    mail_send(project, ticket, elements, element_types);
+    die("mail begin2");
+    if ((mail_result = mail_send(project, ticket, elements, element_types)) != 0) {
+    d("mail error? .\n");
         if (mail_result != MAIL_GAVE_UP)
             die("mail send error.");
     }
+    d("mail end .\n");
     db_commit();
     db_finish();
+    d("all end .\n");
 
     if (mode == MODE_REGISTER)
         redirect("/list", "登録しました。");

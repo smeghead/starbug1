@@ -8,11 +8,6 @@
 #include "util.h"
 #include "dbutil.h"
 
-#define ERROR_LABEL error: \
-    d("ERR: %s\n", sqlite3_errmsg(db)); \
-    sqlite3_finalize(stmt); \
-    sqlite3_close(db); \
-    die("failed to dbaccess.");
 
 extern const char* db_name;
 extern sqlite3 *db;
@@ -349,7 +344,7 @@ char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* 
                 sprintf(column, "org_m.field%d %s, ", sort->element_type_id, sort_type);
                 break;
             default:
-                sprintf(column, "field%d %s, ", sort->element_type_id, sort_type);
+                sprintf(column, "m.field%d %s, ", sort->element_type_id, sort_type);
                 break;
         }
         strcat(sql_string, column);
@@ -809,7 +804,9 @@ void db_register_list_item(bt_list_item* item)
 }
 int db_register_element_type(bt_element_type* e_type)
 {
-    int ret;
+    char field_name[DEFAULT_LENGTH];
+    char sql[DEFAULT_LENGTH];
+    int element_type_id;
     exec_query(
             "insert into element_type (id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort)"
             "values (NULL, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -823,8 +820,14 @@ int db_register_element_type(bt_element_type* e_type)
             COLUMN_TYPE_INT, e_type->sort,
             COLUMN_TYPE_END);
 
-    ret = sqlite3_last_insert_rowid(db);
-    return ret;
+    /* column¤ÎÄÉ²Ã */
+    element_type_id = sqlite3_last_insert_rowid(db);
+    sprintf(field_name, "field%d", element_type_id);
+    strcpy(sql, "alter table message add column ");
+    strcat(sql, field_name);
+    strcat(sql, " text ");
+    exec_query(sql, COLUMN_TYPE_END);
+    return element_type_id;
 }
 void db_delete_element_type(int id)
 {

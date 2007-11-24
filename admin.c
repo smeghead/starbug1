@@ -1032,6 +1032,8 @@ void new_item_submit_action()
             }
             break;
     }
+    db_commit();
+    db_finish();
     redirect("", "追加しました");
 }
 void delete_item_action()

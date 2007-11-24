@@ -4,6 +4,12 @@
 #include <sqlite3.h>
 #include <stdarg.h>
 
+#define ERROR_LABEL error: \
+    d("ERR: %s\n", sqlite3_errmsg(db)); \
+    sqlite3_finalize(stmt); \
+    sqlite3_close(db); \
+    die("failed to dbaccess.");
+
 void db_init();
 void db_finish();
 void db_begin();

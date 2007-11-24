@@ -16,6 +16,7 @@ int mail_send(bt_project* project, bt_message* message, bt_element* elements, bt
     char content[VALUE_LENGTH];
     char header[DEFAULT_LENGTH];
     char footer[DEFAULT_LENGTH];
+
     if (strlen(project->smtp_server) == 0 ||
             strlen(project->admin_address) == 0 ||
             strlen(project->notify_address) == 0) {

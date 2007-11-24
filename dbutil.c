@@ -24,8 +24,6 @@ void db_init()
   if (SQLITE_OK != sqlite3_open(db_name, &db)) {
     die("sqlite3 init error.");
   }
-/*   exec_query("PRAGMA default_cache_size = 2000;", COLUMN_TYPE_END); */
-/*   exec_query("PRAGMA case_sensitive_like = 1;", COLUMN_TYPE_END); */
 
   if (!exists_db_file)
     create_tables();
@@ -141,6 +139,7 @@ void create_tables()
             "create table message("
             " id integer not null primary key, "
             " ticket_id integer, "
+            " registerdate text, "
             " field1 text, "
             " field2 text, "
             " field3 text, "
@@ -148,8 +147,7 @@ void create_tables()
             " field5 text, "
             " field6 text, "
             " field7 text, "
-            " field8 text, "
-            " registerdate text"
+            " field8 text "
             ");", COLUMN_TYPE_END);
     exec_query(
             "create table element_file("
@@ -174,8 +172,8 @@ int exec_query(const char* sql, ...)
     int type;
     sqlite3_stmt *stmt = NULL;
 
-    d("sql %s\n", sql);
-    sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
+    d("sql: %s\n", sql);
+    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
 
     va_start(ap,sql);
@@ -205,11 +203,7 @@ int exec_query(const char* sql, ...)
 
     return sqlite3_changes(db);
 
-error:
-    d("ERR: %s\n", sqlite3_errmsg(db));
-    sqlite3_finalize(stmt);
-    sqlite3_close(db);
-    die("failed to exec_query.");
+ERROR_LABEL
 }
 /**
  * 戻り値が単一のint型の数値であるSQLの実行をラップします。
@@ -251,9 +245,5 @@ int exec_query_scalar_int(const char* sql, ...)
 
     return int_value;
 
-error:
-    d("ERR: %s\n", sqlite3_errmsg(db));
-    sqlite3_finalize(stmt);
-    sqlite3_close(db);
-    die("failed to exec_query_scalar_int.");
+ERROR_LABEL
 }
