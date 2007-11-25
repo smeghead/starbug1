@@ -1,43 +1,31 @@
 Event.observe(window, 'load', initPage);
-Event.observe(window, 'error', 
-function(e) {
-    window.status = "javascript error - starbug1 " + ex.toString();
-    if (e.preventDefault) {
-        e.preventDefault();
-    } else {
-        event.returnValue = false;
-    }
-    return false;
-});
 
 function initPage(e) {
     var required_fields = new Array();
     Event.observe('register_form', 'submit', 
         function(e) {
-            if (!check_input_value(required_fields)) {
-                alert('入力されていない必須項目があります。確認してください。');
-                if (e.preventDefault) {
-                    e.preventDefault();
-                } else {
-                    event.returnValue = false;
+            try {
+                if (!check_input_value(required_fields)) {
+                    alert('入力されていない必須項目があります。確認してください。');
+                    Event.stop(e);
+                    return false;
                 }
-                return false;
+                var dedide = confirm('登録します。よろしいですか？');
+                if (!dedide)
+                    Event.stop(e);
+                return dedide;
+            } catch(ex) {
+                alert('エラーが発生しました。');
+                Event.stop(e);
             }
-            var dedide = confirm('登録します。よろしいですか？');
-            if (!dedide) {
-                if (e.preventDefault) {
-                    e.preventDefault();
-                } else {
-                    event.returnValue = false;
-                }
-            }
-            return dedide;
         }
     );
     var i = 1;
     while (true) {
         var field = $('field' + i++);
         if (field == undefined) break;
+        var required = $(field.id + '.required');
+        if (required == undefined) continue;
         required_fields.push(field);
     }
 }

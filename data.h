@@ -64,7 +64,7 @@ typedef struct _element_file {
     int element_id;
     char name[DEFAULT_LENGTH];
     int size;
-    char content_type[DEFAULT_LENGTH];
+    char mime_type[DEFAULT_LENGTH];
     char* blob;
 } bt_element_file;
 

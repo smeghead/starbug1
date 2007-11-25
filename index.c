@@ -997,7 +997,7 @@ void download_action()
     db_init();
     file = db_get_element_file(element_id);
     if (!file) goto error;
-    o("Content-Type: %s\r\n", file->content_type);
+    o("Content-Type: %s\r\n", file->mime_type);
     o("Content-Length: %d\r\n", file->size);
     o("Content-Disposition: attachment;\r\n");
     o("\r\n");
