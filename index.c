@@ -592,6 +592,7 @@ void ticket_action()
     }
     o(      "</table>\n"
             "</div>");
+    o(      "<div class=\"description\"><a href=\"#reply\">返信する</a></div>\n");
     o(      "<div id=\"ticket_history\">\n"
             "<h3>チケット履歴</h3>\n");
     message_ids = db_get_message_ids(iid);
@@ -637,8 +638,9 @@ void ticket_action()
         }
         o("</table>\n");
     }
-        o(  "</div>\n");
+    o(  "</div>\n");
     /* フォームの表示 */
+    o(      "<a name=\"reply\" />\n");
     o(      "<div id=\"input_form\">\n"
             "<h3>チケット返信</h3>\n");
     o(      "<form id=\"reply_form\" name=\"reply_form\" action=\"%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName);
