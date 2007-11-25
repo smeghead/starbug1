@@ -38,11 +38,7 @@ function initPage(e) {
     while (true) {
         var field = $('field' + i++);
         if (field == undefined) break;
-        var required = $(field.id + '.required');
-        if (required == undefined) break;
-        if (required.getAttribute('required') == 1) {
-            required_fields.push(field);
-        }
+        required_fields.push(field);
     }
 }
 function check_input_value(fields) {

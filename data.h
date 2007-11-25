@@ -23,8 +23,6 @@ typedef struct _project {
 bt_project project;
 
 typedef struct _element {
-  int ticket_id;
-  int reply_id;
   int element_type_id;
   char* str_val;
   int is_file;
@@ -34,8 +32,6 @@ typedef struct _element {
 
 typedef struct _message {
   int id;
-  int reply_id;
-  char registerdate[20];
   bt_element* elements;
   struct _message* next;
 } bt_message;
@@ -112,10 +108,8 @@ typedef struct _state {
   struct _state* next;
 } bt_state;
 
-bt_element* bt_element_create();
 void bt_element_destroy(bt_element*);
 
-bt_message* bt_ticket_create();
 void bt_ticket_destroy(bt_message*);
 char* get_element_value_by_id(bt_element*, int);
 char* get_element_value(bt_element*, bt_element_type*);

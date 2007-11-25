@@ -272,13 +272,13 @@ void list_action()
         o("\t</td>\n");
         o("</tr>\n");
     }
-        o("<tr>\n");
-        o("\t<th>キーワード検索</th>\n");
-        o("\t<td>\n"); 
-        o("\t\t<input type=\"text\" name=\"q\" value=\""); v(q); o("\" />\n");
-        o("\t\t<div id=\"message\">履歴も含めて全ての項目から検索を行ないます。</div>\n");
-        o("\t</td>\n");
-        o("</tr>\n");
+    o("<tr>\n");
+    o("\t<th>キーワード検索</th>\n");
+    o("\t<td>\n"); 
+    o("\t\t<input type=\"text\" name=\"q\" value=\""); v(q); o("\" />\n");
+    o("\t\t<div id=\"message\">履歴も含めて全ての項目から検索を行ないます。</div>\n");
+    o("\t</td>\n");
+    o("</tr>\n");
     o("</table>\n");
     o("<input class=\"button\" type=\"submit\" value=\"検索\" />");
     o("</form>\n");
@@ -392,7 +392,7 @@ void output_form_element_4_condition(char* value, bt_element_type* e_type)
 /**
  * form要素を表示する。
  */
-void output_form_element(bt_element* element, bt_element_type* e_type)
+void output_form_element(bt_element* elements, bt_element_type* e_type)
 {
     char* value = "";
     bt_list_item* items;
@@ -400,8 +400,8 @@ void output_form_element(bt_element* element, bt_element_type* e_type)
     int list_count;
 
     d("pass \n");
-    if (element != NULL) {
-        value = element->str_val;
+    if (elements != NULL) {
+        value = get_element_value(elements, e_type);
     } else {
         char* user_name = getenv("REMOTE_USER");
         /* 投稿者のフィールドは、basic認証が行なわれていればそのユーザ名を表示する。 */
@@ -510,7 +510,8 @@ void register_action()
                 o("<span class=\"required\">※</span>");
             }
             o("</th><td>\n");
-            o("\t\t\t<div id=\"field%d.required\" required=\"%d\" class=\"error\"></div>\n", e_type->id, e_type->required);
+            if (e_type->required)
+                o("\t\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", e_type->id);
             output_form_element(elements, e_type);
             if (elements != NULL)
                 elements = elements->next;
@@ -533,8 +534,6 @@ void ticket_action()
 {
     char path_info[DEFAULT_LENGTH];
     char* ticket_id;
-    bt_message* ticket;
-    bt_message* message;
     bt_element* elements = NULL;
     bt_element* last_elements = NULL;
     bt_element_type* element_types;
@@ -552,14 +551,13 @@ void ticket_action()
     db_init();
     project = db_get_project();
     output_header(project, "reply.js");
-    ticket = db_get_ticket(iid);
-    if (!ticket) {
+    elements = db_get_last_elements(iid);
+    if (!elements) {
         redirect("/list", "存在しないIDが指定されました。");
         return;
     }
     element_types = db_get_element_types(1);
-    elements = db_get_last_elements(iid);
-    o("<h2 id=\"subject\">"); h(project->name); o(" - ID:%5d ", ticket->id);
+    o("<h2 id=\"subject\">"); h(project->name); o(" - ID:%5d ", iid);
     h(get_element_value_by_id(elements, ELEM_ID_TITLE));
     o(" &nbsp;</h2>\n");
     o(      "<div id=\"ticket_newest\">\n"
@@ -600,12 +598,11 @@ void ticket_action()
     /* 履歴の表示 */
     for (i = 0; message_ids[i] != 0; i++) {
         bt_element* previous = last_elements;
-        message = db_get_message(message_ids[i]);
         last_elements = elements = db_get_elements(message_ids[i]);
 
         o(      "<table summary=\"reply table\">\n");
         o(      "\t<tr>\n"
-                "\t\t<td colspan=\"2\" class=\"title\">投稿: %d ", i + 1); o("["); h(message->registerdate); o("]</td>\n"
+                "\t\t<td colspan=\"2\" class=\"title\">投稿: %d ", i + 1); o("["); h(get_element_value_by_id(elements, ELEM_ID_LASTREGISTERDATE)); o("]</td>\n"
                 "\t</tr>\n");
         {
             bt_element_type* e_type;
@@ -662,13 +659,14 @@ void ticket_action()
             if (e_type->ticket_property)
                 o("</span>");
             o("</th>\n\t\t<td>");
-            o("\t\t<div id=\"field%d.required\" required=\"%d\" class=\"error\"></div>\n", e_type->id, e_type->required);
+            if (e_type->required)
+                o("\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", e_type->id);
             if (last_elements != NULL) {
                 if (e_type->ticket_property)
                     output_form_element(last_elements, e_type);
                 else
                     output_form_element(NULL, e_type);
-                last_elements = last_elements->next;
+/*                 last_elements = last_elements->next; */
             } else {
                 output_form_element(NULL, e_type);
             }
@@ -914,7 +912,7 @@ void rss_action()
             hmail(get_element_value_by_id(elements, ELEM_ID_ORG_SENDER));
             o("\n");
             o(      "投稿日: ");
-            h(tickets->registerdate);
+            h(get_element_value_by_id(elements, ELEM_ID_REGISTERDATE));
             o("\n");
             for (; elements != NULL; elements = elements->next) {
                 h(elements->str_val);

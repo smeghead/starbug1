@@ -4,19 +4,6 @@
 #include "data.h"
 #include "util.h"
 
-bt_element* bt_element_create()
-{
-  bt_element* e;
-  if ((e = (bt_element*)malloc(sizeof(bt_element))) == 0) {
-    d("memory error.");
-    die("memory error.");
-  }
-  e->ticket_id = -1;
-  e->element_type_id = -1;
-  e->str_val = (char*)xalloc(sizeof(char) * 1);
-  strcpy(e->str_val, "");
-  return e;
-}
 
 void* xalloc(size_t sz)
 {

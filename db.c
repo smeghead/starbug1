@@ -349,7 +349,7 @@ char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* 
         }
         strcat(sql_string, column);
     }
-    strcat(sql_string, "t.registerdate desc ");
+    strcat(sql_string, "t.registerdate desc, t.id desc ");
     d("sql: %s\n", sql_string);
 
     return sql_string;
@@ -565,7 +565,7 @@ bt_element* db_get_elements(int message_id)
     element_types = db_get_element_types(1);
     create_columns_exp(element_types, "m", columns);
 
-    strcpy(sql, "select m.id");
+    strcpy(sql, "select m.registerdate");
     strcat(sql, columns);
     strcat(sql,
             "from message as m "
@@ -576,14 +576,17 @@ bt_element* db_get_elements(int message_id)
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         const unsigned char* str_val;
-        int i = 1;
+        int i = 0;
+        e = elements = (bt_element*)xalloc(sizeof(bt_element));
+        e->element_type_id = ELEM_ID_LASTREGISTERDATE;
+        str_val = sqlite3_column_text(stmt, i++);
+        if (str_val != NULL) {
+            e->str_val = (char*)xalloc(sizeof(char) * strlen(str_val) + 1);
+            strcpy(e->str_val, str_val);
+        }
         for (; element_types != NULL; element_types = element_types->next) {
-            if (e == NULL) {
-                e = elements = (bt_element*)xalloc(sizeof(bt_element));
-            } else {
-                e->next = (bt_element*)xalloc(sizeof(bt_element));
-                e = e->next;
-            }
+            e->next = (bt_element*)xalloc(sizeof(bt_element));
+            e = e->next;
             e->element_type_id = element_types->id;
             str_val = sqlite3_column_text(stmt, i++);
             if (str_val != NULL) {
@@ -602,62 +605,62 @@ bt_element* db_get_elements(int message_id)
 
 ERROR_LABEL
 }
-bt_message* db_get_ticket(int ticket_id)
-{
-    bt_message* ticket = NULL;
-    int r;
-    const char *sql = "select id, registerdate from ticket where id = ?";
-    sqlite3_stmt *stmt = NULL;
+/* bt_message* db_get_ticket(int ticket_id) */
+/* { */
+/*     bt_message* ticket = NULL; */
+/*     int r; */
+/*     const char *sql = "select id, registerdate from ticket where id = ?"; */
+/*     sqlite3_stmt *stmt = NULL; */
 
-    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
-    sqlite3_reset(stmt);
-    sqlite3_bind_int(stmt, 1, ticket_id);
+/*     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error; */
+/*     sqlite3_reset(stmt); */
+/*     sqlite3_bind_int(stmt, 1, ticket_id); */
 
-    if (SQLITE_ROW != (r = sqlite3_step(stmt))) {
-        d("no ticket.\n");
-        return NULL;
-    } else {
-        const unsigned char* registerdate;
-        ticket = (bt_message*)xalloc(sizeof(bt_message));
-        ticket->id = sqlite3_column_int(stmt, 0);
-        registerdate = sqlite3_column_text(stmt, 1);
-        if (registerdate != NULL)
-            strcpy(ticket->registerdate, registerdate);
-        ticket->next = NULL;
-    }
+/*     if (SQLITE_ROW != (r = sqlite3_step(stmt))) { */
+/*         d("no ticket.\n"); */
+/*         return NULL; */
+/*     } else { */
+/*         const unsigned char* registerdate; */
+/*         ticket = (bt_message*)xalloc(sizeof(bt_message)); */
+/*         ticket->id = sqlite3_column_int(stmt, 0); */
+/*         registerdate = sqlite3_column_text(stmt, 1); */
+/*         if (registerdate != NULL) */
+/*             strcpy(ticket->registerdate, registerdate); */
+/*         ticket->next = NULL; */
+/*     } */
 
-    sqlite3_finalize(stmt);
-    return ticket;
-ERROR_LABEL
-}
-bt_message* db_get_message(int reply_id)
-{
-    bt_message* message = NULL;
-    int r;
-    const char *sql = "select id, registerdate from message where id = ?";
-    sqlite3_stmt *stmt = NULL;
+/*     sqlite3_finalize(stmt); */
+/*     return ticket; */
+/* ERROR_LABEL */
+/* } */
+/* bt_message* db_get_message(int id) */
+/* { */
+/*     bt_message* message = NULL; */
+/*     int r; */
+/*     const char *sql = "select id, registerdate from message where id = ?"; */
+/*     sqlite3_stmt *stmt = NULL; */
 
-    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
-    sqlite3_reset(stmt);
-    sqlite3_bind_int(stmt, 1, reply_id);
+/*     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error; */
+/*     sqlite3_reset(stmt); */
+/*     sqlite3_bind_int(stmt, 1, id); */
 
-    if (SQLITE_ROW != (r = sqlite3_step(stmt))) {
-        goto error;
-    } else {
-        const unsigned char* registerdate;
-        message = (bt_message*)xalloc(sizeof(bt_message));
-        message->id = sqlite3_column_int(stmt, 0);
-        registerdate = sqlite3_column_text(stmt, 1);
-        if (registerdate != NULL)
-            strcpy(message->registerdate, registerdate);
-        message->next = NULL;
-    }
+/*     if (SQLITE_ROW != (r = sqlite3_step(stmt))) { */
+/*         goto error; */
+/*     } else { */
+/*         const unsigned char* registerdate; */
+/*         message = (bt_message*)xalloc(sizeof(bt_message)); */
+/*         message->id = sqlite3_column_int(stmt, 0); */
+/*         registerdate = sqlite3_column_text(stmt, 1); */
+/*         if (registerdate != NULL) */
+/*             strcpy(message->registerdate, registerdate); */
+/*         message->next = NULL; */
+/*     } */
 
-    sqlite3_finalize(stmt);
-    return message;
+/*     sqlite3_finalize(stmt); */
+/*     return message; */
 
-ERROR_LABEL
-}
+/* ERROR_LABEL */
+/* } */
 int* db_get_message_ids(int ticket_id)
 {
     int* message_ids = NULL;
@@ -926,7 +929,7 @@ bt_message* db_get_newest_information(int limit)
     sqlite3_stmt *stmt = NULL;
     
     sprintf(sql, 
-            "select t.id, m.registerdate "
+            "select t.id "
             "from ticket as t "
             "inner join message as m on m.id = t.last_message_id "
             "order by m.registerdate desc "
@@ -936,7 +939,6 @@ bt_message* db_get_newest_information(int limit)
     sqlite3_reset(stmt);
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
-        const unsigned char* registerdate;
         if (i == NULL) {
             i = tichets = (bt_message*)xalloc(sizeof(bt_message));
         } else {
@@ -944,9 +946,6 @@ bt_message* db_get_newest_information(int limit)
             i = i->next;
         }
         i->id = sqlite3_column_int(stmt, 0);
-        registerdate = sqlite3_column_text(stmt, 1);
-        if (registerdate != NULL)
-            strcpy(i->registerdate, registerdate);
         i->next = NULL;
     }
     if (SQLITE_DONE != r)
