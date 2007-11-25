@@ -53,6 +53,7 @@ typedef struct _element_type {
   int required;
   char name[DEFAULT_LENGTH];
   char description[DEFAULT_LENGTH];
+  char default_value[DEFAULT_LENGTH];
   int display_in_list;
   int sort;
   bt_list_item* list_item;

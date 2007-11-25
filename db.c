@@ -24,15 +24,18 @@ static bt_element_type* db_get_element_types(int all)
     sqlite3_stmt *stmt = NULL;
 
     if (all) {
-        sql = "select id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort from element_type order by sort";
+        sql = "select id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort, default_value from element_type order by sort";
     } else {
-        sql = "select id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort from element_type where display_in_list = 1 order by sort";
+        sql = "select id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort, default_value from element_type where display_in_list = 1 order by sort";
     }
+    d("db_get_element_types\n");
     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
+    d("db_get_element_types prepared.\n");
 
     e = NULL;
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
+        unsigned const char* value;
         if (e == NULL) {
             e = elements = (bt_element_type*)xalloc(sizeof(bt_element_type));
         } else {
@@ -48,6 +51,10 @@ static bt_element_type* db_get_element_types(int all)
         strcpy(e->description, sqlite3_column_text(stmt, 6));
         e->display_in_list = sqlite3_column_int(stmt, 7);
         e->sort = sqlite3_column_int(stmt, 8);
+        value = sqlite3_column_text(stmt, 9);
+        if (value != NULL) {
+            strcpy(e->default_value, value);
+        }
         e->next = NULL;
     }
     if (SQLITE_DONE != r)
@@ -55,6 +62,7 @@ static bt_element_type* db_get_element_types(int all)
 
     sqlite3_finalize(stmt);
 
+    d("db_get_element_types maybe ok.\n");
     return elements;
 
 ERROR_LABEL
@@ -707,7 +715,7 @@ void db_update_element_type(bt_element_type* e_type)
     }
     if (exec_query(
             "update element_type set "
-            "ticket_property = ?, reply_property = ?, required = ?, element_name = ?, description = ?, sort = ?, display_in_list = ? "
+            "ticket_property = ?, reply_property = ?, required = ?, element_name = ?, description = ?, sort = ?, display_in_list = ?, default_value = ? "
             "where id = ?",
             COLUMN_TYPE_INT, e_type->ticket_property,
             COLUMN_TYPE_INT, e_type->reply_property,
@@ -716,6 +724,7 @@ void db_update_element_type(bt_element_type* e_type)
             COLUMN_TYPE_TEXT, e_type->description,
             COLUMN_TYPE_INT, e_type->sort,
             COLUMN_TYPE_INT, e_type->display_in_list,
+            COLUMN_TYPE_TEXT, e_type->default_value,
             COLUMN_TYPE_INT, e_type->id,
             COLUMN_TYPE_END) != 1)
         die("no element_type to update?");

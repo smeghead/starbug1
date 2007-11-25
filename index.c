@@ -408,7 +408,7 @@ void output_form_element(bt_element* elements, bt_element_type* e_type)
         if (e_type->id == ELEM_ID_SENDER && user_name)
             value = user_name;
         else
-            value = "";
+            value = e_type->default_value;
     }
     switch (e_type->type) {
         case ELEM_TEXT:
@@ -1007,7 +1007,6 @@ void download_action()
 
     p = file->blob;
     for (i = 0; i < file->size; i++) {
-        d("%c", *p);
         fputc(*p, cgiOut);
         p++;
     }

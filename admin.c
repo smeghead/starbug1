@@ -437,6 +437,13 @@ void items_action()
                 break;
         }
         o("\t\t\t<tr>\n");
+        o("\t\t\t\t<th>デフォルト値</th>\n");
+        o("\t\t\t\t<td>\n");
+        o("\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field%d.default_value\" value=\"%s\" maxlength=\"1000\" />\n", e_types->id, e_types->default_value);
+        o("\t\t\t\t\t<div class=\"description\">投稿画面、返信画面での項目の初期値です。</div>\n");
+        o("\t\t\t\t</td>\n");
+        o("\t\t\t</tr>\n");
+        o("\t\t\t<tr>\n");
         o("\t\t\t\t<th>チケット一覧表示</th>\n");
         o("\t\t\t\t<td>\n");
         o("\t\t\t\t\t<input id=\"field%d.display_in_list\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.display_in_list\" ", e_types->id, e_types->id);
@@ -802,6 +809,10 @@ void update_elements()
         sprintf(name, "field%s.sort", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
         e_type->sort = atoi(value);
+
+        sprintf(name, "field%s.default_value", id);
+        cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+        strcpy(e_type->default_value, value);
 
         db_update_element_type(e_type);
 
