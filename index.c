@@ -196,7 +196,7 @@ void list_action()
     if (strlen(message) > 0) {
         o("<div class=\"complete_message\">"); h(message); o("&nbsp;</div>\n");
     }
-    e_types = db_get_element_types(0);
+    e_types = db_get_element_types_4_list();
     o("<h2>"); h(project->name); o(" - チケット一覧</h2>\n");
     /* 検索 */
     for (e = e_types; e != NULL; e = e->next) {
@@ -499,7 +499,7 @@ void register_action()
     o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName);
     o(      "<table summary=\"input infomation\">\n");
     {
-        bt_element_type* e_type = db_get_element_types(1);
+        bt_element_type* e_type = db_get_element_types_all();
         for (; e_type != NULL; e_type = e_type->next) {
             /* 返信専用属性は表示しない。 */
             if (e_type->reply_property == 1) continue;
@@ -556,7 +556,7 @@ void ticket_action()
         redirect("/list", "存在しないIDが指定されました。");
         return;
     }
-    element_types = db_get_element_types(1);
+    element_types = db_get_element_types_all();
     o("<h2 id=\"subject\">"); h(project->name); o(" - ID:%5d ", iid);
     h(get_element_value_by_id(elements, ELEM_ID_TITLE));
     o(" &nbsp;</h2>\n");
@@ -626,7 +626,10 @@ void ticket_action()
                     default:
                         if (e_type->type == ELEM_UPLOADFILE) {
                             if (strlen(value)) {
-                                o("<a href=\"%s/download/%d/", cgiScriptName, -1 /* TODO get_element_id(elements, e_type) */); u(value); o("\" target=\"_blank\">");h(value); o("</a>\n");
+                                o("<a href=\"%s/download/%d/", 
+                                        cgiScriptName, 
+                                        db_get_element_file_id(message_ids[i], e_type->id)); 
+                                u(value); o("\" target=\"_blank\">");h(value); o("</a>\n");
                             }
                         } else {
                             hm(value);
@@ -707,7 +710,7 @@ void register_submit_action()
     db_init();
     db_begin();
     project = db_get_project();
-    element_types = db_get_element_types(1);
+    element_types = db_get_element_types_all();
     cgiFormStringNoNewlines("ticket_id", ticket_id, DEFAULT_LENGTH);
     if (mode == MODE_REGISTER)
         ticket->id = -1;
@@ -984,18 +987,18 @@ void download_action()
     bt_element_file* file;
     char path_info[DEFAULT_LENGTH];
     char* element_id_str;
-    int element_id;
+    int element_file_id;
     int i;
     char* p;
 
     strcpy(path_info, cgiPathInfo);
     element_id_str = strchr(path_info + 1, '/');
     if (element_id_str) element_id_str++;
-    element_id = atoi(element_id_str);
-    d("element_id: %d\n", element_id);
+    element_file_id = atoi(element_id_str);
+    d("element_file_id: %d\n", element_file_id);
 
     db_init();
-    file = db_get_element_file(element_id);
+    file = db_get_element_file(element_file_id);
     if (!file) goto error;
     o("Content-Type: %s\r\n", file->mime_type);
     o("Content-Length: %d\r\n", file->size);

@@ -299,7 +299,7 @@ void items_action()
     o("\t\t<div class=\"message\">チケットID、投稿日時は編集できません。件名、投稿者、状態は、基本属性のため編集に制限があります。(削除不可、チケット属性、返信専用属性変更不可)</div>\n");
     o("\t\t<div class=\"message\"><a href=\"%s/new_item\">新規項目の追加</a></div>\n", cgiScriptName);
 
-    e_types = element_types = db_get_element_types(1);
+    e_types = element_types = db_get_element_types_all();
     o("\t\t<ul id=\"field_list\">\n");
     for (; e_types != NULL; e_types = e_types->next) {
         o("\t\t<li><a href=\"#field%d\">", e_types->id); h(e_types->name); o("</a></li>\n");
@@ -560,7 +560,7 @@ void display_action()
     o("\t\t<div class=\"message\">チケットID、投稿日時は編集できません。件名、投稿者、状態は、基本属性のため編集に制限があります。(削除不可、チケット属性、返信専用属性変更不可)</div>\n");
     o("\t\t<div class=\"message\"><a href=\"%s/new_item\">新規項目の追加</a></div>\n", cgiScriptName);
 
-    e_types = element_types = db_get_element_types(1);
+    e_types = element_types = db_get_element_types_all();
     o("\t\t<ul id=\"field_list\">\n");
     for (; e_types != NULL; e_types = e_types->next) {
         o("\t\t<li><a href=\"#field%d\">", e_types->id); h(e_types->name); o("</a></li>\n");
@@ -774,8 +774,6 @@ void update_elements()
         bt_list_item* items = NULL;
 
         e_type = db_get_element_type(atoi(id));
-/*         e_type = (bt_element_type*)xalloc(sizeof(bt_element_type)); */
-/*         e_type->id = atoi(id); */
 
         sprintf(name, "field%s.name", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);

@@ -5,6 +5,7 @@
 #include <sys/time.h>
 #include <sqlite3.h>
 #include "data.h"
+#include "db.h"
 #include "util.h"
 #include "dbutil.h"
 
@@ -14,7 +15,7 @@ extern sqlite3 *db;
 
 void create_columns_exp(bt_element_type*, char*, char*);
 
-bt_element_type* db_get_element_types(int all)
+static bt_element_type* db_get_element_types(int all)
 {
     bt_element_type* elements = NULL;
     bt_element_type* e;
@@ -57,6 +58,14 @@ bt_element_type* db_get_element_types(int all)
     return elements;
 
 ERROR_LABEL
+}
+bt_element_type* db_get_element_types_4_list()
+{
+    return db_get_element_types(0);
+}
+bt_element_type* db_get_element_types_all()
+{
+    return db_get_element_types(1);
 }
 bt_element_type* db_get_element_type(int id)
 {
@@ -267,13 +276,6 @@ int db_register_ticket(bt_message* ticket)
 
 ERROR_LABEL
 }
-void db_delete_ticket(bt_message* ticket)
-{
-    if (exec_query("update ticket set deleted = 1 where id = ?",
-            COLUMN_TYPE_INT, ticket->id,
-            COLUMN_TYPE_END) != 1)
-        die("no ticket to update?");
-}
 
 void create_columns_like_exp(bt_element_type* element_types, char* table_name, char* buf)
 {
@@ -313,7 +315,7 @@ char* get_search_sql_string(bt_condition* conditions, bt_condition* sort, char* 
     }
     if (strlen(q)) {
         char columns[DEFAULT_LENGTH];
-        bt_element_type* element_types = db_get_element_types(1);
+        bt_element_type* element_types = db_get_element_types_all();
         create_columns_like_exp(element_types, "m_all", columns);
         if (conditions)
             strcat(sql_string, " and ");
@@ -361,7 +363,7 @@ int set_conditions(sqlite3_stmt* stmt, bt_condition* conditions, char* q)
         sqlite3_bind_text(stmt, n++, conditions->value, strlen(conditions->value), NULL);
     }
     if (strlen(q)) {
-        bt_element_type* element_types = db_get_element_types(1);
+        bt_element_type* element_types = db_get_element_types_all();
         bt_element_type* et;
         for (et = element_types; et != NULL; et = et->next) {
             sqlite3_bind_text(stmt, n++, q, strlen(q), NULL);
@@ -449,7 +451,7 @@ bt_element* db_get_last_elements_4_list(int ticket_id)
     char columns[DEFAULT_LENGTH] = "";
     bt_element_type* element_types;
 
-    element_types = db_get_element_types(0);
+    element_types = db_get_element_types_4_list();
     create_columns_exp(element_types, "last_m", columns);
     sprintf(sql, "select t.id, org_m.field%d, l.id ", ELEM_ID_SENDER);
     strcat(sql, columns);
@@ -513,7 +515,7 @@ bt_element* db_get_last_elements(int ticket_id)
     bt_element_type* element_types;
     char columns[DEFAULT_LENGTH] = "";
 
-    element_types = db_get_element_types(1);
+    element_types = db_get_element_types_all();
     create_columns_exp(element_types, "m", columns);
     strcpy(sql, "select t.id");
     strcat(sql, columns);
@@ -562,7 +564,7 @@ bt_element* db_get_elements(int message_id)
     char columns[DEFAULT_LENGTH] = "";
     bt_element_type* element_types;
 
-    element_types = db_get_element_types(1);
+    element_types = db_get_element_types_all();
     create_columns_exp(element_types, "m", columns);
 
     strcpy(sql, "select m.registerdate");
@@ -605,62 +607,6 @@ bt_element* db_get_elements(int message_id)
 
 ERROR_LABEL
 }
-/* bt_message* db_get_ticket(int ticket_id) */
-/* { */
-/*     bt_message* ticket = NULL; */
-/*     int r; */
-/*     const char *sql = "select id, registerdate from ticket where id = ?"; */
-/*     sqlite3_stmt *stmt = NULL; */
-
-/*     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error; */
-/*     sqlite3_reset(stmt); */
-/*     sqlite3_bind_int(stmt, 1, ticket_id); */
-
-/*     if (SQLITE_ROW != (r = sqlite3_step(stmt))) { */
-/*         d("no ticket.\n"); */
-/*         return NULL; */
-/*     } else { */
-/*         const unsigned char* registerdate; */
-/*         ticket = (bt_message*)xalloc(sizeof(bt_message)); */
-/*         ticket->id = sqlite3_column_int(stmt, 0); */
-/*         registerdate = sqlite3_column_text(stmt, 1); */
-/*         if (registerdate != NULL) */
-/*             strcpy(ticket->registerdate, registerdate); */
-/*         ticket->next = NULL; */
-/*     } */
-
-/*     sqlite3_finalize(stmt); */
-/*     return ticket; */
-/* ERROR_LABEL */
-/* } */
-/* bt_message* db_get_message(int id) */
-/* { */
-/*     bt_message* message = NULL; */
-/*     int r; */
-/*     const char *sql = "select id, registerdate from message where id = ?"; */
-/*     sqlite3_stmt *stmt = NULL; */
-
-/*     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error; */
-/*     sqlite3_reset(stmt); */
-/*     sqlite3_bind_int(stmt, 1, id); */
-
-/*     if (SQLITE_ROW != (r = sqlite3_step(stmt))) { */
-/*         goto error; */
-/*     } else { */
-/*         const unsigned char* registerdate; */
-/*         message = (bt_message*)xalloc(sizeof(bt_message)); */
-/*         message->id = sqlite3_column_int(stmt, 0); */
-/*         registerdate = sqlite3_column_text(stmt, 1); */
-/*         if (registerdate != NULL) */
-/*             strcpy(message->registerdate, registerdate); */
-/*         message->next = NULL; */
-/*     } */
-
-/*     sqlite3_finalize(stmt); */
-/*     return message; */
-
-/* ERROR_LABEL */
-/* } */
 int* db_get_message_ids(int ticket_id)
 {
     int* message_ids = NULL;
@@ -879,19 +825,19 @@ bt_state* db_get_states()
 
 ERROR_LABEL
 }
-bt_element_file* db_get_element_file(int element_id)
+bt_element_file* db_get_element_file(int id)
 {
     bt_element_file* file;
     int r;
     const char *sql;
     sqlite3_stmt *stmt = NULL;
 
-    sql = "select id, element_id, filename, size, mime_type, content "
+    sql = "select id, element_type_id, filename, size, mime_type, content "
         "from element_file "
-        "where element_id = ? ";
+        "where id = ? ";
     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
-    sqlite3_bind_int(stmt, 1, element_id);
+    sqlite3_bind_int(stmt, 1, id);
 
     file = NULL;
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
@@ -900,7 +846,7 @@ bt_element_file* db_get_element_file(int element_id)
         char* p_dist;
         file = (bt_element_file*)xalloc(sizeof(bt_element_file));
         file->id = sqlite3_column_int(stmt, 0);
-        file->element_id = sqlite3_column_int(stmt, 1);
+        file->element_type_id = sqlite3_column_int(stmt, 1);
         strcpy(file->name, sqlite3_column_text(stmt, 2));
         file->size = sqlite3_column_int(stmt, 3);
         strcpy(file->mime_type, sqlite3_column_text(stmt, 4));
@@ -955,4 +901,12 @@ bt_message* db_get_newest_information(int limit)
     return tichets;
 
 ERROR_LABEL
+}
+int db_get_element_file_id(int message_id, int element_type_id)
+{
+    return exec_query_scalar_int("select id from element_file as ef "
+            "where ef.message_id = ? and ef.element_type_id = ?",
+            COLUMN_TYPE_INT, message_id,
+            COLUMN_TYPE_INT, element_type_id,
+            COLUMN_TYPE_END);
 }

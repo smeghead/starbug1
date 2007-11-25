@@ -61,7 +61,7 @@ typedef struct _element_type {
 
 typedef struct _element_file {
     int id;
-    int element_id;
+    int element_type_id;
     char name[DEFAULT_LENGTH];
     int size;
     char mime_type[DEFAULT_LENGTH];
