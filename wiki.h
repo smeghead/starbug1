@@ -6,3 +6,4 @@ void wiki_content_out(char*);
 void wiki_save(char*, char*);
 
 #endif
+/* vim: set ts=4 sw=4 sts=4 expandtab: */

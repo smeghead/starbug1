@@ -2,6 +2,7 @@
 #define DATA_H
 
 #include <stdio.h>
+#include "list.h"
 
 #define VALUE_LENGTH 1048575
 #define MODE_LENGTH 128
@@ -18,9 +19,8 @@ typedef struct _project {
   int smtp_port;
   char notify_address[DEFAULT_LENGTH];
   char admin_address[DEFAULT_LENGTH];
-} bt_project;
+} Project;
 
-bt_project project;
 
 typedef struct _element {
   int element_type_id;
@@ -28,13 +28,12 @@ typedef struct _element {
   int is_file;
   int list_item_id;
   struct _element* next;
-} bt_element;
+} Element;
 
 typedef struct _message {
   int id;
-  bt_element* elements;
-  struct _message* next;
-} bt_message;
+  List* elements;
+} Message;
 
 typedef struct _list_item {
   int id;
@@ -42,8 +41,7 @@ typedef struct _list_item {
   char name[256];
   int close;
   int sort;
-  struct _list_item* next;
-} bt_list_item;
+} ListItem;
 
 typedef struct _element_type {
   int id;
@@ -56,9 +54,8 @@ typedef struct _element_type {
   char default_value[DEFAULT_LENGTH];
   int display_in_list;
   int sort;
-  bt_list_item* list_item;
-  struct _element_type* next;
-} bt_element_type;
+  ListItem* list_item;
+} ElementType;
 
 typedef struct _element_file {
     int id;
@@ -67,9 +64,9 @@ typedef struct _element_file {
     int size;
     char mime_type[DEFAULT_LENGTH];
     char* blob;
-} bt_element_file;
+} ElementFile;
 
-enum bt_ELEMTYPE {
+enum ELEMTYPE {
   ELEM_TEXT,
   ELEM_TEXTAREA,
   ELEM_CHECKBOX,
@@ -79,7 +76,7 @@ enum bt_ELEMTYPE {
   ELEM_LIST_MULTI,
   ELEM_UPLOADFILE
 };
-enum bt_ELEMENT_ID {
+enum ELEMENT_ID {
     ELEM_ID_ID = -1,
     ELEM_ID_TITLE = 1,
     ELEM_ID_SENDER = 2,
@@ -93,31 +90,27 @@ enum bt_ELEMENT_ID {
 typedef struct _condition {
   int element_type_id;
   char value[DEFAULT_LENGTH];
-  struct _condition* next;
-} bt_condition;
+} Condition;
 
 typedef struct _search_result {
   int hit_count;
   int page;
-  struct _message* messages;
-} bt_search_result;
+  List* messages;
+} SearchResult;
 
 typedef struct _state {
   int id;
   char name[DEFAULT_LENGTH];
   int count;
-  struct _state* next;
-} bt_state;
+} State;
 
-void bt_element_destroy(bt_element*);
 
-void bt_ticket_destroy(bt_message*);
-char* get_element_value_by_id(bt_element*, int);
-char* get_element_value(bt_element*, bt_element_type*);
-// int get_element_id(bt_element*, bt_element_type*);
-int get_element_lid_by_id(bt_element*, int);
+char* get_element_value_by_id(List*, int);
+char* get_element_value(List*, ElementType*);
+int get_element_lid_by_id(List*, int);
 
 void* xalloc(size_t);
 
 
 #endif
+/* vim: set ts=4 sw=4 sts=4 expandtab: */

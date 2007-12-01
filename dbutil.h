@@ -28,3 +28,4 @@ enum COLUMN_TYPE {
     COLUMN_TYPE_END
 };
 #endif
+/* vim: set ts=4 sw=4 sts=4 expandtab: */

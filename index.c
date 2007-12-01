@@ -5,6 +5,7 @@
 #include "data.h"
 #include "db.h"
 #include "dbutil.h"
+#include "list.h"
 #include "util.h"
 #include "wiki.h"
 #include "mail.h"
@@ -21,14 +22,13 @@ void edit_top_submit_action();
 void download_action();
 void rss_action();
 void default_action();
-void output_header(bt_project* project, char* script_name);
+void output_header(Project* project, char* script_name);
 void output_footer();
 int cgiMain();
-void output_form_element(bt_element* element, bt_element_type* e_type);
-void output_form_element_4_condition(char*, bt_element_type*);
+void output_form_element(List* element, ElementType* e_type);
+void output_form_element_4_condition(char*, ElementType*);
 int get_mode();
 static int contains(char* const, const char*);
-void remove_parameter(char*, char*, char*);
 
 enum MODE {
     MODE_INVALID,
@@ -60,7 +60,7 @@ void register_actions()
     register_action_actions("default", default_action);
 }
 
-void output_header(bt_project* project, char* script_name)
+void output_header(Project* project, char* script_name)
 {
     cgiHeaderContentType("text/html; charset=utf-8;");
     /* Top of the page */
@@ -114,7 +114,7 @@ int cgiMain() {
     exec_action();
     return 0;
 }
-void output_navigater(bt_search_result* result, char* query_string)
+void output_navigater(SearchResult* result, char* query_string)
 {
     int i;
     if (result->hit_count < LIST_PER_PAGE) return;
@@ -166,20 +166,20 @@ char* format_query_string(char* buffer)
 void list_action()
 {
     char path_info[DEFAULT_LENGTH];
-    bt_search_result* result;
-    bt_element_type* e_types;
-    bt_element_type* e;
-    bt_condition* conditions = NULL;
-    bt_condition* c = NULL;
-    bt_condition* sort = NULL;
-    bt_project* project;
-    bt_state* states;
+    SearchResult* result;
+    List* element_types_a;
+    List* conditions = NULL;
+    Condition* sort = NULL;
+    Project* project;
+    List* states_a;
+    Iterator* it;
     int mode_search = (strlen(cgiPathInfo) > strlen("/list/")) ? 1 : 0;
     char message[DEFAULT_LENGTH];
     char sortstr[DEFAULT_LENGTH];
     char id[DEFAULT_LENGTH];
     char q[DEFAULT_LENGTH];
     char p[DEFAULT_LENGTH];
+    List* messages_a;
 
     cgiFormStringNoNewlines("id", id, DEFAULT_LENGTH);
     if (strlen(id) > 0) {
@@ -196,53 +196,56 @@ void list_action()
     if (strlen(message) > 0) {
         o("<div class=\"complete_message\">"); h(message); o("&nbsp;</div>\n");
     }
-    e_types = db_get_element_types_4_list();
+    list_alloc(element_types_a, ElementType);
+    element_types_a = db_get_element_types_4_list(element_types_a);
     o("<h2>"); h(project->name); o(" - チケット一覧</h2>\n");
     /* 検索 */
-    for (e = e_types; e != NULL; e = e->next) {
+    list_alloc(conditions, Condition);
+    foreach (it, element_types_a) {
+        ElementType* et = it->element;
         char name[DEFAULT_LENGTH];
         char value[DEFAULT_LENGTH];
+        Condition* c;
 
-        sprintf(name, "field%d", e->id);
+        sprintf(name, "field%d", et->id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
         if (strlen(value) == 0) continue;
-        if (c == NULL) {
-            c = conditions = (bt_condition*)xalloc(sizeof(bt_condition));
-        } else {
-            c->next = (bt_condition*)xalloc(sizeof(bt_condition));
-            c = c->next;
-        }
-        c->element_type_id = e->id;
+        c = list_new_element(conditions);
+        c->element_type_id = et->id;
         strcpy(c->value, value);
-        c->next = NULL;
+        list_add(conditions, c);
     }
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
     cgiFormStringNoNewlines("sort", sortstr, DEFAULT_LENGTH);
     if (strlen(sortstr) > 0) {
-        sort = (bt_condition*)xalloc(sizeof(bt_condition));
+        sort = (Condition*)xalloc(sizeof(Condition));
         sort->element_type_id = atoi(sortstr);
     } else {
         cgiFormStringNoNewlines("rsort", sortstr, DEFAULT_LENGTH);
         if (strlen(sortstr) > 0) {
-            sort = (bt_condition*)xalloc(sizeof(bt_condition));
+            sort = (Condition*)xalloc(sizeof(Condition));
             sort->element_type_id = atoi(sortstr);
             strcpy(sort->value, "reverse");
         }
     }
     cgiFormStringNoNewlines("p", p, DEFAULT_LENGTH);
-    result = db_search_tickets(conditions, q, sort, atoi(p));
-    states = db_get_states();
+    list_alloc(messages_a, Message);
+    result = db_search_tickets(conditions, q, sort, atoi(p), messages_a);
+    list_alloc(states_a, State);
+    states_a = db_get_states(states_a);
     /* stateの表示 */
     o("<div id=\"state_index\">\n");
     o("\t<ul>\n");
-    for (; states != NULL; states = states->next) {
+    foreach (it, states_a) {
+        State* s = it->element;
         o("\t\t<li>\n");
-        o("\t\t\t<a href=\"%s/list?field%d=", cgiScriptName, ELEM_ID_STATUS); u(states->name); o("\">");
-        h(states->name);
+        o("\t\t\t<a href=\"%s/list?field%d=", cgiScriptName, ELEM_ID_STATUS); u(s->name); o("\">");
+        h(s->name);
         o("\t\t\t</a>\n");
-        o("(%d)", states->count);
+        o("(%d)", s->count);
         o("\t\t</li>\n");
     }
+    list_free(states_a);
     o("\t\t<li><a href=\"%s/list%s\" id=\"display_search_condition\">検索条件を%s</a></li>\n", cgiScriptName, 
             mode_search ? "" : "/search",
             mode_search ? "閉じる" : "開く");
@@ -259,16 +262,17 @@ void list_action()
     o("<h3>検索条件</h3>\n");
     o("<form action=\"%s/list/search\" method=\"get\">\n", cgiScriptName);
     o(      "<table summary=\"condition table\">\n");
-    for (e = e_types; e != NULL; e = e->next) {
+    foreach (it, element_types_a) {
+        ElementType* et = it->element;
         char name[DEFAULT_LENGTH];
         char value[DEFAULT_LENGTH];
-        sprintf(name, "field%d", e->id);
+        sprintf(name, "field%d", et->id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
 
         o("<tr>\n");
-        o("\t<th>"); h(e->name); o("</th>\n");
+        o("\t<th>"); h(et->name); o("</th>\n");
         o("\t<td>\n"); 
-        output_form_element_4_condition(value, e);
+        output_form_element_4_condition(value, et);
         o("\t</td>\n");
         o("</tr>\n");
     }
@@ -286,11 +290,14 @@ void list_action()
     fflush(cgiOut);
     o("<div id=\"ticket_list\">\n");
     o("<h3>チケット一覧</h3>\n");
-    if (result->messages != NULL) {
+    d("count is %d\n", result->messages->size);
+
+    if (result->messages->size) {
         char query_string_buffer[DEFAULT_LENGTH];
         char* query_string;
         char* reverse = strstr(cgiQueryString, "rsort=");
-        bt_message* t = result->messages;
+        Iterator* it;
+        Iterator* it_msg;
 
         query_string = format_query_string(query_string_buffer);
         o(      "<div class=\"description\">");
@@ -302,39 +309,45 @@ void list_action()
         o(      "<table summary=\"ticket list\">\n"
                 "\t<tr>\n"
                 "\t\t<th><a href=\"%s/list?%ssort=-1&amp;%s\">ID</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
-        for (e = e_types; e != NULL; e = e->next) {
+        foreach (it, element_types_a) {
+            ElementType* et = it->element;
             o("\t\t<th>\n");
-            o("\t\t\t<a href=\"%s/list?%ssort=%d&amp;%s\">", cgiScriptName, reverse ? "" : "r", e->id, query_string);
-            h(e->name);
+            o("\t\t\t<a href=\"%s/list?%ssort=%d&amp;%s\">", cgiScriptName, reverse ? "" : "r", et->id, query_string);
+            h(et->name);
             o("</a>\n");
             o("\t\t</th>\n");
         }
         o("\t\t<th><a href=\"%s/list?%ssort=-2&amp;%s\">投稿日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
         o("\t\t<th><a href=\"%s/list?%ssort=-3&amp;%s\">最終更新日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
         o("\t</tr>\n");
-        for (t = result->messages; t != NULL; t = t->next) {
-            bt_element* elements = db_get_last_elements_4_list(t->id);
+        d("padd\n");
+        foreach (it_msg, result->messages) {
+            Message* message = it_msg->element;
+            List* elements_a;
+            list_alloc(elements_a, Element);
+            elements_a = db_get_last_elements_4_list(message->id, elements_a);
             o("\t<tr>\n");
             o("\t\t<td class=\"field%d-%d\"><a href=\"%s/ticket/%s\">%s</a></td>\n", 
                     ELEM_ID_ID, 
-                    get_element_lid_by_id(elements, ELEM_ID_ID), 
+                    get_element_lid_by_id(elements_a, ELEM_ID_ID), 
                     cgiScriptName, 
-                    get_element_value_by_id(elements, ELEM_ID_ID), 
-                    get_element_value_by_id(elements, ELEM_ID_ID));
-            for (e = e_types; e != NULL; e = e->next) {
-                o("\t\t<td class=\"field%d-%d\">", e->id, get_element_lid_by_id(elements, e->id));
-                if (e->id == ELEM_ID_TITLE)
-                    o("<a href=\"%s/ticket/%d\">", cgiScriptName, t->id);
-                if (e->id == ELEM_ID_SENDER)
-                    hmail(get_element_value_by_id(elements, ELEM_ID_ORG_SENDER)); /* 最初の投稿者を表示する。 */
+                    get_element_value_by_id(elements_a, ELEM_ID_ID), 
+                    get_element_value_by_id(elements_a, ELEM_ID_ID));
+            foreach (it, element_types_a) {
+                ElementType* et = it->element;
+                o("\t\t<td class=\"field%d-%d\">", et->id, get_element_lid_by_id(elements_a, et->id));
+                if (et->id == ELEM_ID_TITLE)
+                    o("<a href=\"%s/ticket/%d\">", cgiScriptName, message->id);
+                if (et->id == ELEM_ID_SENDER)
+                    hmail(get_element_value_by_id(elements_a, ELEM_ID_ORG_SENDER)); /* 最初の投稿者を表示する。 */
                 else
-                    h(get_element_value_by_id(elements, e->id));
-                if (e->id == ELEM_ID_TITLE)
+                    h(get_element_value_by_id(elements_a, et->id));
+                if (et->id == ELEM_ID_TITLE)
                     o("</a>");
                 o("&nbsp;</td>\n");
             }
-            o("\t\t<td>"); h(get_element_value_by_id(elements, ELEM_ID_REGISTERDATE)); o("&nbsp;</td>\n");
-            o("\t\t<td>"); h(get_element_value_by_id(elements, ELEM_ID_LASTREGISTERDATE)); o("&nbsp;</td>\n");
+            o("\t\t<td>"); h(get_element_value_by_id(elements_a, ELEM_ID_REGISTERDATE)); o("&nbsp;</td>\n");
+            o("\t\t<td>"); h(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE)); o("&nbsp;</td>\n");
             o("\t</tr>\n");
         }
         o("</table>\n");
@@ -343,14 +356,18 @@ void list_action()
     o("</div>\n");
     output_footer();
     db_finish();
+    list_free(result->messages);
+    list_free(element_types_a);
+    free(result);
 }
 /**
  * form要素を表示する。
  */
-void output_form_element_4_condition(char* value, bt_element_type* e_type)
+void output_form_element_4_condition(char* value, ElementType* e_type)
 {
     char id[DEFAULT_LENGTH];
-    bt_list_item* items;
+    List* items_a;
+    Iterator* it;
 
     sprintf(id, "%d", e_type->id);
     switch (e_type->type) {
@@ -371,33 +388,35 @@ void output_form_element_4_condition(char* value, bt_element_type* e_type)
             o("\" name=\"field");
             h(id);
             o("\">\n");
-            items = db_get_list_item(e_type->id);
+            list_alloc(items_a, ListItem);
+            items_a = db_get_list_item(e_type->id, items_a);
 
             o("<option value=\"\">&nbsp;</option>");
-            for (; items != NULL; items = items->next) {
+            foreach (it, items_a) {
+                ListItem* item = it->element;
                 o("<option value=\"");
-                v(items->name);
-                if (!strcmp(value, items->name))
+                v(item->name);
+                if (!strcmp(value, item->name))
                     o("\" selected=\"selected\">");
                 else
                     o("\">");
-                h(items->name);
+                h(item->name);
                 o("</option>\n");
             }
             o("</select>\n");
-
+            list_free(items_a);
             break;
     }
 }
 /**
  * form要素を表示する。
  */
-void output_form_element(bt_element* elements, bt_element_type* e_type)
+void output_form_element(List* elements, ElementType* e_type)
 {
     char* value = "";
-    bt_list_item* items;
-    bt_list_item* i;
-    int list_count;
+    List* items_a;
+    Iterator* it;
+    int list_count = 0;
 
     d("pass \n");
     if (elements != NULL) {
@@ -427,37 +446,44 @@ void output_form_element(bt_element* elements, bt_element_type* e_type)
             o("<select class=\"element\" id=\"field%d\" name=\"field%d\">\n",
                     e_type->id, e_type->id);
             o("<option value=\"\">&nbsp;</option>");
-            for (items = db_get_list_item(e_type->id); items != NULL; items = items->next) {
+            list_alloc(items_a, ListItem);
+            items_a = db_get_list_item(e_type->id, items_a);
+            foreach (it, items_a) {
+                ListItem* item = it->element;
                 o("<option value=\"");
-                v(items->name);
-                if (!strcmp(value, items->name))
+                v(item->name);
+                if (!strcmp(value, item->name))
                     o("\" selected=\"selected\">");
                 else
                     o("\">");
-                h(items->name);
+                h(item->name);
                 o("</option>\n");
             }
+            list_free(items_a);
             o("</select>\n");
 
             break;
         case ELEM_LIST_MULTI:
-            items = db_get_list_item(e_type->id);
+            list_alloc(items_a, ListItem);
+            items_a = db_get_list_item(e_type->id, items_a);
             /* リストの要素数をカウントする */
-            for (list_count = 0,i = items; i != NULL; i = i->next,list_count++);
+            foreach (it, items_a) list_count++;
             o("<select class=\"element\" size=\"%d\" id=\"field%d", list_count + 1, e_type->id);
             o("\" name=\"field%d\" multiple=\"multiple\">\n", e_type->id);
 
             o("<option value=\"\">&nbsp;</option>");
-            for (; items != NULL; items = items->next) {
+            foreach (it, items_a) {
+                ListItem* item = it->element;
                 o("<option value=\"");
-                v(items->name);
-                if (contains(value, items->name))
+                v(item->name);
+                if (contains(value, item->name))
                     o("\" selected=\"selected\">");
                 else
                     o("\">");
-                h(items->name);
+                h(item->name);
                 o("</option>\n");
             }
+            list_free(items_a);
             o("</select>\n");
 
             break;
@@ -484,8 +510,8 @@ static int contains(char* const value, const char* name)
 void register_action()
 {
     char path_info[DEFAULT_LENGTH];
-    bt_element* elements = NULL;
-    bt_project* project;
+    List* elements = NULL;
+    Project* project;
 
     strcpy(path_info, cgiPathInfo);
     db_init();
@@ -499,26 +525,31 @@ void register_action()
     o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName);
     o(      "<table summary=\"input infomation\">\n");
     {
-        bt_element_type* e_type = db_get_element_types_all();
-        for (; e_type != NULL; e_type = e_type->next) {
+        List* element_types_a;
+        Iterator* it;
+        list_alloc(element_types_a, ElementType);
+        element_types_a = db_get_element_types_all(element_types_a);
+        foreach (it, element_types_a) {
+            ElementType* et = it->element;
             /* 返信専用属性は表示しない。 */
-            if (e_type->reply_property == 1) continue;
+            if (et->reply_property == 1) continue;
             o("\t<tr>\n");
-            o("\t\t<th %s>", e_type->required ? "class=\"required\"" : "");
-            h(e_type->name);
-            if (e_type->required) {
+            o("\t\t<th %s>", et->required ? "class=\"required\"" : "");
+            h(et->name);
+            if (et->required) {
                 o("<span class=\"required\">※</span>");
             }
             o("</th><td>\n");
-            if (e_type->required)
-                o("\t\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", e_type->id);
-            output_form_element(elements, e_type);
-            if (elements != NULL)
-                elements = elements->next;
-            o("\t\t\t<div class=\"description\">");h(e_type->description);o("&nbsp;</div>\n");
+            if (et->required)
+                o("\t\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
+            output_form_element(elements, et);
+/*             if (elements != NULL) */
+/*                 elements = elements->next; */
+            o("\t\t\t<div class=\"description\">");h(et->description);o("&nbsp;</div>\n");
             o("\t\t</td>\n");
             o("\t</tr>\n");
         }
+        list_free(element_types_a);
     }
     o(      "</table>\n"
             "<input class=\"button\" type=\"submit\" name=\"register\" value=\"登録\" />\n"
@@ -534,11 +565,12 @@ void ticket_action()
 {
     char path_info[DEFAULT_LENGTH];
     char* ticket_id;
-    bt_element* elements = NULL;
-    bt_element* last_elements = NULL;
-    bt_element_type* element_types;
+    List* elements_a = NULL;
+    List* last_elements = NULL;
+    List* element_types_a;
+    Iterator* it;
     int iid, *message_ids, i;
-    bt_project* project;
+    Project* project;
 
     strcpy(path_info, cgiPathInfo);
     ticket_id = strchr(path_info + 1, '/');
@@ -551,93 +583,96 @@ void ticket_action()
     db_init();
     project = db_get_project();
     output_header(project, "reply.js");
-    elements = db_get_last_elements(iid);
-    if (!elements) {
+    list_alloc(elements_a, Element);
+    elements_a = db_get_last_elements(iid, elements_a);
+    if (!elements_a) {
         redirect("/list", "存在しないIDが指定されました。");
         return;
     }
-    element_types = db_get_element_types_all();
+    list_alloc(element_types_a, ElementType);
+    element_types_a = db_get_element_types_all(element_types_a);
     o("<h2 id=\"subject\">"); h(project->name); o(" - ID:%5d ", iid);
-    h(get_element_value_by_id(elements, ELEM_ID_TITLE));
+    h(get_element_value_by_id(elements_a, ELEM_ID_TITLE));
     o(" &nbsp;</h2>\n");
     o(      "<div id=\"ticket_newest\">\n"
             "<h3>チケット最新情報</h3>\n"
             "<table summary=\"newest table\">\n");
-    {
-        bt_element_type* e_type = element_types;
-        for (; e_type != NULL; e_type = e_type->next) {
-            char* value = get_element_value(elements, e_type);
-            if (e_type->ticket_property == 0) continue;
-            o("\t<tr>\n");
-            o("\t\t<th>");
-            h(e_type->name);
-            o("&nbsp;</th>\n");
-            o("\t\t<td>");
-            switch (e_type->id) {
-                case ELEM_ID_SENDER:
-                    hmail(value);
-                    break;
-                default:
-                    if (e_type->type == ELEM_UPLOADFILE) {
-                        if (strlen(value)) {
-                            o("<a href=\"%s/download/%d/", cgiScriptName, -1 /* TODO get_element_id(elements, e_type)*/); u(value); o("\" target=\"_blank\">");h(value); o("</a>\n");
-                        }
-                    } else {
-                        hm(value);
+    foreach (it, element_types_a) {
+        ElementType* et = it->element;
+        char* value = get_element_value(elements_a, et);
+        if (et->ticket_property == 0) continue;
+        o("\t<tr>\n");
+        o("\t\t<th>");
+        h(et->name);
+        o("&nbsp;</th>\n");
+        o("\t\t<td>");
+        switch (et->id) {
+            case ELEM_ID_SENDER:
+                hmail(value);
+                break;
+            default:
+                if (et->type == ELEM_UPLOADFILE) {
+                    if (strlen(value)) {
+                        o("<a href=\"%s/download/%d/", cgiScriptName, -1 /* TODO get_element_id(elements_a, et)*/); u(value); o("\" target=\"_blank\">");h(value); o("</a>\n");
                     }
-            }
-            o("&nbsp;</td>\n");
-            o("\t</tr>\n");
+                } else {
+                    hm(value);
+                }
         }
+        o("&nbsp;</td>\n");
+        o("\t</tr>\n");
     }
     o(      "</table>\n"
             "</div>");
     o(      "<div class=\"description\"><a href=\"#reply\">返信する</a></div>\n");
     o(      "<div id=\"ticket_history\">\n"
             "<h3>チケット履歴</h3>\n");
+    list_free(elements_a);
     message_ids = db_get_message_ids(iid);
     /* 履歴の表示 */
     for (i = 0; message_ids[i] != 0; i++) {
-        bt_element* previous = last_elements;
-        last_elements = elements = db_get_elements(message_ids[i]);
+        List* previous = last_elements;
+        list_alloc(elements_a, Element);
+        last_elements = elements_a = db_get_elements(message_ids[i], elements_a);
+        d("aaaa\n");
 
         o(      "<table summary=\"reply table\">\n");
         o(      "\t<tr>\n"
-                "\t\t<td colspan=\"2\" class=\"title\">投稿: %d ", i + 1); o("["); h(get_element_value_by_id(elements, ELEM_ID_LASTREGISTERDATE)); o("]</td>\n"
+                "\t\t<td colspan=\"2\" class=\"title\">投稿: %d ", i + 1); o("["); h(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE)); o("]</td>\n"
                 "\t</tr>\n");
-        {
-            bt_element_type* e_type;
-            for (e_type = element_types; e_type != NULL; e_type = e_type->next) {
-                char* value = get_element_value(elements, e_type);
-                char* last_value = get_element_value(previous, e_type);
+        d("aaaa\n");
+        foreach (it, element_types_a) {
+            ElementType* et = it->element;
+            char* value = get_element_value(elements_a, et);
+            char* last_value = get_element_value(previous, et);
+        d("aaaa\n");
 
-                /* チケット属性で、直前の値と同じ項目は表示しない。 */
-                if (e_type->ticket_property == 1 && strcmp(value, last_value) == 0)
-                    continue;
-                o(      "\t<tr>\n"
-                        "\t\t<th>");
-                h(e_type->name);
-                o(      "&nbsp;</th>\n"
-                        "\t\t<td>");
-                switch (e_type->id) {
-                    case ELEM_ID_SENDER:
-                        hmail(value);
-                        break;
-                    default:
-                        if (e_type->type == ELEM_UPLOADFILE) {
-                            if (strlen(value)) {
-                                o("<a href=\"%s/download/%d/", 
-                                        cgiScriptName, 
-                                        db_get_element_file_id(message_ids[i], e_type->id)); 
-                                u(value); o("\" target=\"_blank\">");h(value); o("</a>\n");
-                            }
-                        } else {
-                            hm(value);
+            /* チケット属性で、直前の値と同じ項目は表示しない。 */
+            if (et->ticket_property == 1 && strcmp(value, last_value) == 0)
+                continue;
+            o(      "\t<tr>\n"
+                    "\t\t<th>");
+            h(et->name);
+            o(      "&nbsp;</th>\n"
+                    "\t\t<td>");
+            switch (et->id) {
+                case ELEM_ID_SENDER:
+                    hmail(value);
+                    break;
+                default:
+                    if (et->type == ELEM_UPLOADFILE) {
+                        if (strlen(value)) {
+                            o("<a href=\"%s/download/%d/", 
+                                    cgiScriptName, 
+                                    db_get_element_file_id(message_ids[i], et->id)); 
+                            u(value); o("\" target=\"_blank\">");h(value); o("</a>\n");
                         }
-                }
-                o(      "&nbsp;</td>\n"
-                        "\t</tr>\n");
+                    } else {
+                        hm(value);
+                    }
             }
+            o(      "&nbsp;</td>\n"
+                    "\t</tr>\n");
         }
         o("</table>\n");
     }
@@ -651,34 +686,32 @@ void ticket_action()
     o(      "<div class=\"message\">返信を行なう場合は、以下のフォームに内容を記入して返信ボタンをクリックしてください。</div>\n"
             "<div class=\"message\">※必須項目の入力チェックは、javascriptで行なっています。</div>\n"
             "<table summary=\"input table\">\n");
-    {
-        bt_element_type* e_type = element_types;
-        for (; e_type != NULL; e_type = e_type->next) {
-            o("\t<tr>\n");
-            o("\t\t<th %s>", e_type->required ? "class=\"required\"" : "");
-            if (e_type->ticket_property)
-                o("&nbsp;<span class=\"ticket_property\" title=\"チケット属性\">");
-            h(e_type->name);
-            if (e_type->required)
-                o("<span class=\"required\">※</span>");
-            if (e_type->ticket_property)
-                o("</span>");
-            o("</th>\n\t\t<td>");
-            if (e_type->required)
-                o("\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", e_type->id);
-            if (last_elements != NULL) {
-                if (e_type->ticket_property)
-                    output_form_element(last_elements, e_type);
-                else
-                    output_form_element(NULL, e_type);
+    foreach (it, element_types_a) {
+        ElementType* et = it->element;
+        o("\t<tr>\n");
+        o("\t\t<th %s>", et->required ? "class=\"required\"" : "");
+        if (et->ticket_property)
+            o("&nbsp;<span class=\"ticket_property\" title=\"チケット属性\">");
+        h(et->name);
+        if (et->required)
+            o("<span class=\"required\">※</span>");
+        if (et->ticket_property)
+            o("</span>");
+        o("</th>\n\t\t<td>");
+        if (et->required)
+            o("\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
+        if (last_elements != NULL) {
+            if (et->ticket_property)
+                output_form_element(last_elements, et);
+            else
+                output_form_element(NULL, et);
 /*                 last_elements = last_elements->next; */
-            } else {
-                output_form_element(NULL, e_type);
-            }
-            o("\t\t<div class=\"description\">");h(e_type->description);o("&nbsp;</div>\n");
-            o("\t</td>\n");
-            o("\t</tr>\n");
+        } else {
+            output_form_element(NULL, et);
         }
+        o("\t\t<div class=\"description\">");h(et->description);o("&nbsp;</div>\n");
+        o("\t</td>\n");
+        o("\t</tr>\n");
     }
     o(      "</table>\n"
             "<input class=\"button\" type=\"submit\" name=\"reply\" value=\"返信\" />&nbsp;&nbsp;&nbsp;\n"
@@ -686,6 +719,7 @@ void ticket_action()
             "</div>\n");
     db_finish();
     output_footer();
+    list_free(element_types_a);
 }
 /**
  * 登録するaction。
@@ -693,12 +727,11 @@ void ticket_action()
  */
 void register_submit_action()
 {
-    bt_project* project;
-    bt_element_type* element_types;
-    bt_element_type* e_type;
-    bt_element* elements = NULL;
-    bt_element* e = NULL;
-    bt_message* ticket;
+    Project* project;
+    List* element_types_a;
+    Iterator* it;
+    List* elements_a = NULL;
+    Message* ticket;
     char ticket_id[DEFAULT_LENGTH];
     int mode = get_mode();
     int mail_result;
@@ -706,53 +739,50 @@ void register_submit_action()
 
     if (mode == MODE_INVALID)
         die("reqired invalid mode.");
-    ticket = (bt_message*)xalloc(sizeof(bt_message));
+    ticket = (Message*)xalloc(sizeof(Message));
     db_init();
     db_begin();
     project = db_get_project();
-    element_types = db_get_element_types_all();
+    list_alloc(element_types_a, ElementType);
+    element_types_a = db_get_element_types_all(element_types_a);
     cgiFormStringNoNewlines("ticket_id", ticket_id, DEFAULT_LENGTH);
     if (mode == MODE_REGISTER)
         ticket->id = -1;
     else
         ticket->id = atoi(ticket_id);
+    list_alloc(elements_a, Element);
     if (mode == MODE_REGISTER || mode == MODE_REPLY) {
         char* value = (char*)xalloc(sizeof(char) * VALUE_LENGTH); /* 1M */
         /* register, reply */
-        for (e_type = element_types; e_type != NULL; e_type = e_type->next) {
+        foreach (it, element_types_a) {
+            ElementType* et = it->element;
+            Element* e = list_new_element(elements_a);
             char name[DEFAULT_LENGTH] = "";
             strcpy(value, "");
 
-            if (elements == NULL) {
-                e = elements = (bt_element*)xalloc(sizeof(bt_element));
-            } else {
-                e->next = (bt_element*)xalloc(sizeof(bt_element));
-                e = e->next;
-            }
-            e->next = NULL;
-            e->element_type_id = e_type->id;
+            e->element_type_id = et->id;
             e->is_file = 0;
-            switch (e_type->type) {
+            switch (et->type) {
                 case ELEM_TEXT:
-                    sprintf(name, "field%d", e_type->id);
+                    sprintf(name, "field%d", et->id);
                     cgiFormStringNoNewlines(name, value, VALUE_LENGTH);
                     e->str_val = (char*)xalloc(sizeof(char) * strlen(value) + 1);
                     strcpy(e->str_val, value);
                     break;
                 case ELEM_TEXTAREA:
-                    sprintf(name, "field%d", e_type->id);
+                    sprintf(name, "field%d", et->id);
                     cgiFormString(name, value, VALUE_LENGTH);
                     e->str_val = (char*)xalloc(sizeof(char) * strlen(value) + 1);
                     strcpy(e->str_val, value);
                     break;
                 case ELEM_LIST_SINGLE:
-                    sprintf(name, "field%d", e_type->id);
+                    sprintf(name, "field%d", et->id);
                     cgiFormString(name, value, VALUE_LENGTH);
                     e->str_val = (char*)xalloc(sizeof(char) * strlen(value) + 1);
                     strcpy(e->str_val, value);
                     break;
                 case ELEM_LIST_MULTI:
-                    sprintf(name, "field%d", e_type->id);
+                    sprintf(name, "field%d", et->id);
                     if ((cgiFormStringMultiple(name, &multi)) == cgiFormNotFound) {
                         strcpy(value, "");
                     } else {
@@ -774,8 +804,8 @@ void register_submit_action()
                     cgiStringArrayFree(multi);
                     break;
                 case ELEM_UPLOADFILE:
-                    sprintf(name, "field%d", e_type->id);
-                    if (get_upload_size(e_type->id) > MAX_FILE_SIZE * 1024) {
+                    sprintf(name, "field%d", et->id);
+                    if (get_upload_size(et->id) > MAX_FILE_SIZE * 1024) {
                         goto file_size_error;
                     }
                     cgiFormFileName(name, value, VALUE_LENGTH);
@@ -786,16 +816,18 @@ void register_submit_action()
                     }
                     break;
             }
+            list_add(elements_a, e);
         }
         free(value);
-        ticket->elements = elements;
+        ticket->elements = elements_a;
         ticket->id = db_register_ticket(ticket);
     }
     /* mail */
     d("mail begin1 .\n");
-    d("test %d\n", get_test_int(project, ticket, elements, element_types));
     /* TODO mail throw. below code makes error. i dont know why.*/
-    mail_result = mail_send(project, ticket, elements, element_types);
+    mail_result = mail_send(project, ticket, elements_a, element_types_a);
+    list_free(element_types_a);
+    list_free(elements_a);
     d("mail done %d .\n", mail_result);
     if (mail_result != 0 && mail_result != MAIL_GAVE_UP) {
         die("mail send error.");
@@ -824,44 +856,54 @@ file_size_error:
  */
 void default_action()
 {
-    bt_project* project;
-    bt_message* tickets;
-    bt_state* states;
+    Project* project;
+    List* tickets_a;
+    List* states_a;
+    Iterator* it;
 
     db_init();
     project = db_get_project();
     output_header(project, NULL);
-    states = db_get_states();
+    list_alloc(states_a, State);
+    states_a = db_get_states(states_a);
     o(      "<div id=\"info\">\n");
     /* 最新情報の表示 */
     o(      "<div id=\"top_newest\">\n");
     o(      "<h4>最新情報</h4>\n");
     o(      "\t<ul>\n");
-    tickets = db_get_newest_information(10);
-    if (tickets != NULL) {
-        for (; tickets != NULL; tickets = tickets->next) {
-            bt_element* elements = db_get_last_elements_4_list(tickets->id);
+    list_alloc(tickets_a, Message);
+    tickets_a = db_get_newest_information(10, tickets_a);
+    if (tickets_a != NULL) {
+        foreach (it, tickets_a) {
+            Message* ticket = it->element;
+            List* elements_a;
+            list_alloc(elements_a, Element);
+            elements_a = db_get_last_elements_4_list(ticket->id, elements_a);
             o("\t\t<li>\n");
-            o("\t\t\t<a href=\"%s/ticket/%d", cgiScriptName, tickets->id); o("\">");
-            h(get_element_value_by_id(elements, ELEM_ID_TITLE));
+            o("\t\t\t<a href=\"%s/ticket/%d", cgiScriptName, ticket->id); o("\">");
+            h(get_element_value_by_id(elements_a, ELEM_ID_TITLE));
             o(      "</a>\n");
             o("\t\t</li>\n");
+            list_free(elements_a);
         }
     }
+    list_free(tickets_a);
     o(      "\t</ul>\n");
     o(      "</div>\n");
     /* stateの表示 */
     o(      "<div id=\"top_state_index\">\n");
     o(      "<h4>状態別件数</h4>\n");
     o(      "\t<ul>\n");
-    for (; states != NULL; states = states->next) {
+    foreach (it, states_a) {
+        State* s = it->element;
         o("\t\t<li>\n");
-        o("\t\t\t<a href=\"%s/list?field%d=", cgiScriptName, ELEM_ID_STATUS); u(states->name); o("\">");
-        h(states->name);
+        o("\t\t\t<a href=\"%s/list?field%d=", cgiScriptName, ELEM_ID_STATUS); u(s->name); o("\">");
+        h(s->name);
         o("\t\t\t</a>\n");
-        o("(%d)", states->count);
+        o("(%d)", s->count);
         o("\t\t</li>\n");
     }
+    list_free(states_a);
     o(      "\t</ul>\n");
     o(      "</div>\n");
     o(      "</div>\n");
@@ -879,8 +921,9 @@ void default_action()
 
 void rss_action()
 {
-    bt_message* tickets;
-    bt_project* project;
+    List* tickets_a;
+    Iterator* it;
+    Project* project;
 
     db_init();
     project = db_get_project();
@@ -903,36 +946,44 @@ void rss_action()
             "\t\t</items>\n"
             "\t</channel>\n");
 
-    tickets = db_get_newest_information(10);
-    if (tickets != NULL) {
-        for (; tickets != NULL; tickets = tickets->next) {
-            bt_element* elements = db_get_last_elements_4_list(tickets->id);
-            o(      "\t<item rdf:about=\"");h(project->home_url);o("%s/ticket/%d\">\n", cgiScriptName, tickets->id);
-            o(      "\t\t<title>ID:%5d ", tickets->id);
-            h(get_element_value_by_id(elements, ELEM_ID_TITLE));
+    list_alloc(tickets_a, Message);
+    tickets_a = db_get_newest_information(10, tickets_a);
+    if (tickets_a != NULL) {
+        foreach (it, tickets_a) {
+            Message* ticket = it->element;
+            List* elements_a;
+            Iterator* it;
+            list_alloc(elements_a, Element);
+            elements_a = db_get_last_elements_4_list(ticket->id, elements_a);
+            o(      "\t<item rdf:about=\"");h(project->home_url);o("%s/ticket/%d\">\n", cgiScriptName, ticket->id);
+            o(      "\t\t<title>ID:%5d ", ticket->id);
+            h(get_element_value_by_id(elements_a, ELEM_ID_TITLE));
             o(      "</title>\n");
-            o(      "\t\t<link>");h(project->home_url);o("%s/ticket/%d</link>\n", cgiScriptName, tickets->id);
+            o(      "\t\t<link>");h(project->home_url);o("%s/ticket/%d</link>\n", cgiScriptName, ticket->id);
             o(      "\t\t<description><![CDATA[\n");
             o(      "投稿者: ");
-            hmail(get_element_value_by_id(elements, ELEM_ID_ORG_SENDER));
+            hmail(get_element_value_by_id(elements_a, ELEM_ID_ORG_SENDER));
             o("\n");
             o(      "投稿日: ");
-            h(get_element_value_by_id(elements, ELEM_ID_REGISTERDATE));
+            h(get_element_value_by_id(elements_a, ELEM_ID_REGISTERDATE));
             o("\n");
-            for (; elements != NULL; elements = elements->next) {
-                h(elements->str_val);
+            foreach (it, elements_a) {
+                Element* e = it->element;
+                h(e->str_val);
                 o("\n");
             }
+            list_free(elements_a);
             o(      "]]></description>\n"
                     "\t</item>\n");
         }
     }
+    list_free(tickets_a);
     o(      "</rdf:RDF>\n");
     db_finish();
 }
 void help_action()
 {
-    bt_project* project;
+    Project* project;
     db_init();
     project = db_get_project();
     output_header(project, NULL);
@@ -945,7 +996,7 @@ void help_action()
 }
 void edit_top_action()
 {
-    bt_project* project;
+    Project* project;
     db_init();
     project = db_get_project();
     output_header(project, "edit_top.js");
@@ -984,7 +1035,7 @@ void edit_top_submit_action()
 }
 void download_action()
 {
-    bt_element_file* file;
+    ElementFile* file;
     char path_info[DEFAULT_LENGTH];
     char* element_id_str;
     int element_file_id;
@@ -1017,22 +1068,4 @@ error:
     cgiHeaderContentType("text/plain; charset=utf-8;");
     o("error: ファイルがありません。");
 }
-void remove_parameter(char* param_name, char* query_string, char* buf)
-{
-    char* rest;
-    char* sub;
-    char param_eq[DEFAULT_LENGTH];
-    strcpy(param_eq, param_name);
-    strcat(param_eq, "=");
-    sub = strstr(query_string, param_eq);
-    if (sub == NULL) {
-        strcpy(buf, query_string);
-        return;
-    }
-    strncat(buf, query_string, sub - query_string);
-    rest = strchr(sub, '&');
-    if (rest == NULL) {
-        return;
-    }
-    strcat(buf, ++rest);
-}
+/* vim: set ts=4 sw=4 sts=4 expandtab: */

@@ -1,29 +1,31 @@
 #ifndef DB_H
 #define DB_H
 #include <sqlite3.h>
+#include "list.h"
 #include "data.h"
 
-bt_element_type* db_get_element_types_4_list();
-bt_element_type* db_get_element_types_all();
-bt_element_type* db_get_element_type(int);
-bt_list_item* db_get_list_item(int);
-int db_register_ticket(bt_message*);
-void db_delete_ticket(bt_message*);
-bt_search_result* db_search_tickets(bt_condition*, char*, bt_condition*, int);
-bt_element* db_get_elements(int);
-bt_element* db_get_last_elements_4_list(int);
-bt_element* db_get_last_elements(int);
+List* db_get_element_types_4_list(List*);
+List* db_get_element_types_all(List*);
+ElementType* db_get_element_type(int);
+List* db_get_list_item(int, List*);
+int db_register_ticket(Message*);
+void db_delete_ticket(Message*);
+SearchResult* db_search_tickets(List*, char*, Condition*, int, List* messages);
+List* db_get_elements(int, List*);
+List* db_get_last_elements_4_list(int, List*);
+List* db_get_last_elements(int, List*);
 int* db_get_message_ids(int);
-bt_project* db_get_project();
-void db_update_project(bt_project*);
-void db_update_element_type(bt_element_type*);
-void db_update_list_item(bt_list_item*);
+Project* db_get_project();
+void db_update_project(Project*);
+void db_update_element_type(ElementType*);
+void db_update_list_item(ListItem*);
 void db_delete_list_item(int);
-void db_register_list_item(bt_list_item*);
-int db_register_element_type(bt_element_type*);
+void db_register_list_item(ListItem*);
+int db_register_element_type(ElementType*);
 void db_delete_element_type(int);
-bt_state* db_get_states();
-bt_element_file* db_get_element_file(int);
-bt_message* db_get_newest_information(int);
+List* db_get_states(List*);
+ElementFile* db_get_element_file(int);
+List* db_get_newest_information(int, List*);
 int db_get_element_file_id(int, int);
 #endif
+/* vim: set ts=4 sw=4 sts=4 expandtab: */

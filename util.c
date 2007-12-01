@@ -239,7 +239,7 @@ char* get_upload_content_type(int element_id, char* buf)
     cgiFormFileContentType(name, buf, DEFAULT_LENGTH);
     return buf;
 }
-bt_element_file* get_upload_content(int element_id)
+ElementFile* get_upload_content(int element_id)
 {
     int got = 0;
     char* buffer_org;
@@ -247,7 +247,7 @@ bt_element_file* get_upload_content(int element_id)
     char b[DEFAULT_LENGTH];
     char name[DEFAULT_LENGTH];
     cgiFilePtr file;
-    bt_element_file* content = (bt_element_file*)xalloc(sizeof(bt_element_file));
+    ElementFile* content = (ElementFile*)xalloc(sizeof(ElementFile));
     content->size = get_upload_size(element_id);
     buffer = buffer_org = (char*)xalloc(sizeof(char) * content->size);
     sprintf(name, "field%d", element_id);
@@ -326,3 +326,4 @@ void redirect(char* path, char* message)
     o("Status: 302 Temporary Redirection\r\n");
     cgiHeaderLocation(redirecturi);
 }
+/* vim: set ts=4 sw=4 sts=4 expandtab: */

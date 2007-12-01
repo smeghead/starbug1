@@ -19,13 +19,13 @@ void register_action_actions(char*, void func(void));
 void exec_action();
 void hm(char*);
 void hmail(char*);
-char* get_element_value(bt_element*, bt_element_type*);
 char* get_filename_without_path(char*);
 char* get_upload_filename(int, char*);
 int get_upload_size(int);
 char* get_upload_content_type(int, char*);
-bt_element_file* get_upload_content(int);
+ElementFile* get_upload_content(int);
 unsigned long url_encode(unsigned char*, unsigned char*, unsigned long);
 void redirect(char*, char*);
 
 #endif
+/* vim: set ts=4 sw=4 sts=4 expandtab: */

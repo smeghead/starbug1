@@ -13,8 +13,9 @@ static void put_env(char* name, char* value)
     putenv(val);
 }
 
-int mail_send(bt_project* project, bt_message* message, bt_element* elements, bt_element_type* e_types)
+int mail_send(Project* project, Message* message, List* elements, List* element_types)
 {
+    Iterator* it;
     int error_code;
     char command[DEFAULT_LENGTH] = "script/smtp.pl";
     char port[DEFAULT_LENGTH];
@@ -50,10 +51,11 @@ int mail_send(bt_project* project, bt_message* message, bt_element* elements, bt
     strcat(content, 
             "更新内容は以下です。\n"
             "--------------------------------------------------------------\n");
-    for (; e_types != NULL; e_types = e_types->next) {
-        strcat(content, e_types->name);
+    foreach (it, element_types) {
+        ElementType* et = it->element;
+        strcat(content, et->name);
         strcat(content, ":");
-        strcat(content, get_element_value(elements, e_types));
+        strcat(content, get_element_value(elements, et));
         strcat(content, "\n\n");
     }
     sprintf(footer, 
@@ -67,8 +69,4 @@ int mail_send(bt_project* project, bt_message* message, bt_element* elements, bt
     free(content);
     return error_code;
 }
-int get_test_int(bt_project* project, bt_message* message, bt_element* elements, bt_element_type* e_types)
-{
-    d("get_test_int\n");
-    return 1;
-}
+/* vim: set ts=4 sw=4 sts=4 expandtab: */

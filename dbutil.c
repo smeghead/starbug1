@@ -186,7 +186,7 @@ int exec_query(const char* sql, ...)
             if (value == NULL) goto error;
             sqlite3_bind_text(stmt, i + 1, value, strlen(value), NULL);
         } else if (type == COLUMN_TYPE_BLOB) {
-            bt_element_file* content = va_arg(ap, bt_element_file*);
+            ElementFile* content = va_arg(ap, ElementFile*);
             if (content == NULL) goto error;
             sqlite3_bind_blob(stmt, i + 1, content->blob, content->size, NULL);
         }
@@ -247,3 +247,4 @@ int exec_query_scalar_int(const char* sql, ...)
 
 ERROR_LABEL
 }
+/* vim: set ts=4 sw=4 sts=4 expandtab: */

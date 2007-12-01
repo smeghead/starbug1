@@ -29,4 +29,4 @@ void css_save(char* filename, char* content)
     fputs(content, out);
     fclose(out);
 }
-
+/* vim: set ts=4 sw=4 sts=4 expandtab: */
