@@ -243,11 +243,11 @@ int db_register_ticket(Message* ticket)
             char mime_type[DEFAULT_LENGTH];
             char* fname;
             char* ctype;
-            ElementFile* content;
+            ElementFile* content_a;
             fname = get_upload_filename(e->element_type_id, filename);
             size = get_upload_size(e->element_type_id);
             ctype = get_upload_content_type(e->element_type_id, mime_type);
-            content = get_upload_content(e->element_type_id);
+            content_a = get_upload_content(e->element_type_id);
             if (exec_query(
                         "insert into element_file("
                         " id, message_id, element_type_id, filename, size, mime_type, content"
@@ -257,9 +257,11 @@ int db_register_ticket(Message* ticket)
                     COLUMN_TYPE_TEXT, fname,
                     COLUMN_TYPE_INT, size,
                     COLUMN_TYPE_TEXT, mime_type,
-                    COLUMN_TYPE_BLOB, content,
+                    COLUMN_TYPE_BLOB, content_a,
                     COLUMN_TYPE_END) == 0)
                 die("insert failed.");
+            free(content_a->blob);
+            free(content_a);
         }
     }
     return ticket->id;

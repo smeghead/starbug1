@@ -53,7 +53,6 @@ typedef struct _element_type {
   char default_value[DEFAULT_LENGTH];
   int display_in_list;
   int sort;
-  ListItem* list_item;
 } ElementType;
 
 typedef struct _element_file {

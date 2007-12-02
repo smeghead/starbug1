@@ -761,7 +761,7 @@ void register_submit_action()
     List* element_types_a;
     Iterator* it;
     List* elements_a = NULL;
-    Message* ticket;
+    Message* ticket_a;
     char ticket_id[DEFAULT_LENGTH];
     int mode = get_mode();
     int mail_result;
@@ -771,7 +771,7 @@ void register_submit_action()
     cgiFormStringNoNewlines("save2cookie", save2cookie, 2);
     if (mode == MODE_INVALID)
         die("reqired invalid mode.");
-    ticket = (Message*)xalloc(sizeof(Message));
+    ticket_a = (Message*)xalloc(sizeof(Message));
     db_init();
     db_begin();
     project = db_get_project();
@@ -779,9 +779,9 @@ void register_submit_action()
     element_types_a = db_get_element_types_all(element_types_a);
     cgiFormStringNoNewlines("ticket_id", ticket_id, DEFAULT_LENGTH);
     if (mode == MODE_REGISTER)
-        ticket->id = -1;
+        ticket_a->id = -1;
     else
-        ticket->id = atoi(ticket_id);
+        ticket_a->id = atoi(ticket_id);
     list_alloc(elements_a, Element);
     if (mode == MODE_REGISTER || mode == MODE_REPLY) {
         char* value = (char*)xalloc(sizeof(char) * VALUE_LENGTH); /* 1M */
@@ -858,14 +858,15 @@ void register_submit_action()
             list_add(elements_a, e);
         }
         free(value);
-        ticket->elements = elements_a;
-        ticket->id = db_register_ticket(ticket);
+        ticket_a->elements = elements_a;
+        ticket_a->id = db_register_ticket(ticket_a);
     }
     /* mail */
     /* TODO mail throw. below code makes error. i dont know why.*/
-    mail_result = mail_send(project, ticket, elements_a, element_types_a);
+    mail_result = mail_send(project, ticket_a, elements_a, element_types_a);
     list_free(element_types_a);
-    list_free(elements_a);
+    free_element_list(elements_a);
+    free(ticket_a);
     if (mail_result != 0 && mail_result != MAIL_GAVE_UP) {
         die("mail send error.");
     }
@@ -919,7 +920,7 @@ void default_action()
             h(get_element_value_by_id(elements_a, ELEM_ID_TITLE));
             o(      "</a>\n");
             o("\t\t</li>\n");
-            list_free(elements_a);
+            free_element_list(elements_a);
         }
     }
     list_free(tickets_a);
@@ -1007,7 +1008,7 @@ void rss_action()
                 h(e->str_val);
                 o("\n");
             }
-            list_free(elements_a);
+            free_element_list(elements_a);
             o(      "]]></description>\n"
                     "\t</item>\n");
         }
@@ -1070,7 +1071,7 @@ void edit_top_submit_action()
 }
 void download_action()
 {
-    ElementFile* file;
+    ElementFile* file_a;
     char path_info[DEFAULT_LENGTH];
     char* element_id_str;
     int element_file_id;
@@ -1083,19 +1084,21 @@ void download_action()
     element_file_id = atoi(element_id_str);
 
     db_init();
-    file = db_get_element_file(element_file_id);
-    if (!file) goto error;
-    o("Content-Type: %s\r\n", file->mime_type);
-    o("Content-Length: %d\r\n", file->size);
+    file_a = db_get_element_file(element_file_id);
+    if (!file_a) goto error;
+    o("Content-Type: %s\r\n", file_a->mime_type);
+    o("Content-Length: %d\r\n", file_a->size);
     o("Content-Disposition: attachment;\r\n");
     o("\r\n");
 
-    p = file->blob;
-    for (i = 0; i < file->size; i++) {
+    p = file_a->blob;
+    for (i = 0; i < file_a->size; i++) {
         fputc(*p, cgiOut);
         p++;
     }
     db_finish();
+    free(file_a->blob);
+    free(file_a);
     return;
 
 error:

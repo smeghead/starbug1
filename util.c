@@ -326,4 +326,13 @@ void redirect(char* path, char* message)
     o("Status: 302 Temporary Redirection\r\n");
     cgiHeaderLocation(redirecturi);
 }
+void free_element_list(List* elements)
+{
+    Iterator* it;
+    foreach (it, elements) {
+        Element* e = it->element;
+        free(e->str_val);
+    }
+    list_free(elements);
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab: */

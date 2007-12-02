@@ -1,6 +1,7 @@
 #ifndef UTIL_H
 #define UTIL_H
 #include <sqlite3.h>
+#include "list.h"
 #include "data.h"
 #include "dbutil.h"
 
@@ -26,6 +27,7 @@ char* get_upload_content_type(int, char*);
 ElementFile* get_upload_content(int);
 unsigned long url_encode(unsigned char*, unsigned char*, unsigned long);
 void redirect(char*, char*);
+void free_element_list(List*);
 
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab: */
