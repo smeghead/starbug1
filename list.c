@@ -34,10 +34,10 @@ void list_add(List* list, void* new_element)
 {
     if (list->tail == NULL) {
         /* 最初の要素 */
-        list->tail = list->head = (Iterator*)xalloc(sizeof(Iterator));
+        list->tail = list->head = xalloc(sizeof(Iterator));
     } else {
         Iterator* old_tail = list->tail;
-        old_tail->next = (Iterator*)xalloc(sizeof(Iterator));
+        old_tail->next = xalloc(sizeof(Iterator));
         list->tail = old_tail->next;
     }
     list->size++;

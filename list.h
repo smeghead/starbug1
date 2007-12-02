@@ -17,9 +17,9 @@ typedef struct _list {
 /* foreach */
 #define foreach(it, list) for(it = get_iterator(list); iterator_has_value(it); it = iterator_next(it))
 
-/* Linked List¤ÎÀ¸À® */
+/* Linked Listã®ç”Ÿæˆ */
 #define list_alloc(list, type) \
-    list = (List*)xalloc(sizeof(List)); \
+    list = xalloc(sizeof(List)); \
     list->element_size = sizeof(type);
 
 void* list_new_element(List*);
