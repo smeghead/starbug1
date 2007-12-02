@@ -652,7 +652,7 @@ Project* db_get_project()
     const char *sql;
     sqlite3_stmt *stmt = NULL;
 
-    sql = "select name, description, home_url, host_name, smtp_server, smtp_port, notify_address, admin_address from project";
+    sql = "select name, description, home_url, smtp_server, smtp_port, notify_address, admin_address from project";
     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
 
@@ -661,7 +661,6 @@ Project* db_get_project()
         strcpy(project->name, sqlite3_column_text(stmt, 0));
         strcpy(project->description, sqlite3_column_text(stmt, 1));
         strcpy(project->home_url, sqlite3_column_text(stmt, 2));
-        strcpy(project->host_name, sqlite3_column_text(stmt, 3));
         strcpy(project->smtp_server, sqlite3_column_text(stmt, 4));
         project->smtp_port = sqlite3_column_int(stmt, 5);
         strcpy(project->notify_address, sqlite3_column_text(stmt, 6));
@@ -678,12 +677,11 @@ void db_update_project(Project* project)
 {
     if (exec_query(
             "update project set "
-            "name = ?, description = ?, home_url = ?, host_name = ?, "
+            "name = ?, description = ?, home_url = ?, "
             "smtp_server = ?, smtp_port = ?, notify_address = ?, admin_address = ?",
             COLUMN_TYPE_TEXT, project->name,
             COLUMN_TYPE_TEXT, project->description,
             COLUMN_TYPE_TEXT, project->home_url,
-            COLUMN_TYPE_TEXT, project->host_name,
             COLUMN_TYPE_TEXT, project->smtp_server,
             COLUMN_TYPE_INT, project->smtp_port,
             COLUMN_TYPE_TEXT, project->notify_address,
