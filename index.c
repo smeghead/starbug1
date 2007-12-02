@@ -595,6 +595,7 @@ void ticket_action()
         redirect("/list", "存在しないIDが指定されました。");
         return;
     }
+    message_ids_a = db_get_message_ids(iid);
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_all(element_types_a);
     o("<h2 id=\"subject\">"); h(project->name); o(" - ID:%5d ", iid);
@@ -628,13 +629,36 @@ void ticket_action()
         o("&nbsp;</td>\n");
         o("\t</tr>\n");
     }
+    o("\t<tr>\n");
+    o("\t\t<th>全添付ファイル</th>\n");
+    o("\t\t\t<td>\n");
+    for (i = 0; message_ids_a[i] != 0; i++) {
+        List* attachment_elements_a;
+        list_alloc(attachment_elements_a, Element);
+        attachment_elements_a = db_get_elements(message_ids_a[i], attachment_elements_a);
+        foreach (it, element_types_a) {
+            ElementType* et = it->element;
+            if (et->type == ELEM_UPLOADFILE) {
+                char* attachment_file_name = get_element_value(attachment_elements_a, et);
+                if (strlen(attachment_file_name) == 0) continue;
+                o("\t\t<div>\n");
+                o("<a href=\"%s/download/%d/", 
+                        cgiScriptName, 
+                        db_get_element_file_id(message_ids_a[i], et->id)); 
+                u(attachment_file_name); o("\" target=\"_blank\">");h(attachment_file_name); o("</a>\n");
+                o("\t\t&nbsp;</div>\n");
+            }
+        }
+        list_free(attachment_elements_a);
+    }
+    o("\t\t\t</td>\n");
+    o("\t</tr>\n");
     o(      "</table>\n"
             "</div>");
     o(      "<div class=\"description\"><a href=\"#reply\">返信する</a></div>\n");
     o(      "<div id=\"ticket_history\">\n"
             "<h3>チケット履歴</h3>\n");
     list_free(elements_a);
-    message_ids_a = db_get_message_ids(iid);
     /* 履歴の表示 */
     for (i = 0; message_ids_a[i] != 0; i++) {
         List* previous = last_elements;
