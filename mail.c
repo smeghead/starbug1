@@ -46,7 +46,7 @@ int mail_send(Project* project, Message* message, List* elements, List* element_
             "[%s]でチケット情報が更新されました。\n"
             "以下のURLから確認してください。\n"
             " %s%s/reply/%d\n\n",
-            project->name, project->host_name, cgiScriptName, message->id);
+            project->name, cgiServerName, cgiScriptName, message->id);
     strcat(content, header);
     strcat(content, 
             "更新内容は以下です。\n"

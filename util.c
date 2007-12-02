@@ -326,8 +326,4 @@ void redirect(char* path, char* message)
     o("Status: 302 Temporary Redirection\r\n");
     cgiHeaderLocation(redirecturi);
 }
-char* get_host_name()
-{
-    return getenv("HOST");
-}
 /* vim: set ts=4 sw=4 sts=4 expandtab: */

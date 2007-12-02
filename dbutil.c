@@ -54,15 +54,14 @@ void create_tables()
             " name text, "
             " description text, "
             " home_url text, "
-            " host_name text, "
             " smtp_server text, "
             " smtp_port integer, "
             " notify_address text, "
             " admin_address text "
             ");", COLUMN_TYPE_END);
     exec_query(
-            "insert into project(name, description, home_url, host_name, smtp_server, smtp_port, notify_address, admin_address)"
-            "values ('サンプル プロジェクト', 'プロジェクト名と、このプロジェクトの説明は管理ツールで編集してください。', 'http://example.com/', 'localhost', 'localhost', 25, '', '');", COLUMN_TYPE_END);
+            "insert into project(name, description, home_url, smtp_server, smtp_port, notify_address, admin_address)"
+            "values ('サンプル プロジェクト', 'プロジェクト名と、このプロジェクトの説明は管理ツールで編集してください。', 'http://example.com/', 'localhost', 25, '', '');", COLUMN_TYPE_END);
     exec_query(
             "create table element_type("
             " id integer not null primary key, "

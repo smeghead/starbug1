@@ -656,20 +656,23 @@ Project* db_get_project()
     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
 
+    d("a\n");
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         project = (Project*)xalloc(sizeof(Project));
         strcpy(project->name, sqlite3_column_text(stmt, 0));
         strcpy(project->description, sqlite3_column_text(stmt, 1));
         strcpy(project->home_url, sqlite3_column_text(stmt, 2));
-        strcpy(project->smtp_server, sqlite3_column_text(stmt, 4));
-        project->smtp_port = sqlite3_column_int(stmt, 5);
-        strcpy(project->notify_address, sqlite3_column_text(stmt, 6));
-        strcpy(project->admin_address, sqlite3_column_text(stmt, 7));
+        strcpy(project->smtp_server, sqlite3_column_text(stmt, 3));
+        project->smtp_port = sqlite3_column_int(stmt, 4);
+        strcpy(project->notify_address, sqlite3_column_text(stmt, 5));
+        strcpy(project->admin_address, sqlite3_column_text(stmt, 6));
         break;
     }
 
+    d("a\n");
     sqlite3_finalize(stmt);
 
+    d("a\n");
     return project;
 ERROR_LABEL
 }

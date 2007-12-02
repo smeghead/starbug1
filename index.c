@@ -951,8 +951,8 @@ void rss_action()
     o(      "\t\t<description>");h(project->description);o("</description>\n"
             "\t\t<items>\n"
             "\t\t\t<rdf:Seq>\n");
-    o(      "\t\t\t\t<rdf:li rdf:resource=\"");h(project->host_name);o("%s/list\"/>\n", cgiScriptName);
-    o(      "\t\t\t\t<rdf:li rdf:resource=\"");h(project->host_name);o("%s/register\"/>\n", cgiScriptName);
+    o(      "\t\t\t\t<rdf:li rdf:resource=\"");h(cgiServerName);o("%s/list\"/>\n", cgiScriptName);
+    o(      "\t\t\t\t<rdf:li rdf:resource=\"");h(cgiServerName);o("%s/register\"/>\n", cgiScriptName);
     o(      "\t\t\t</rdf:Seq>\n"
             "\t\t</items>\n"
             "\t</channel>\n");
