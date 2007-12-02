@@ -290,7 +290,6 @@ void list_action()
     fflush(cgiOut);
     o("<div id=\"ticket_list\">\n");
     o("<h3>チケット一覧</h3>\n");
-    d("count is %d\n", result->messages->size);
 
     if (result->messages->size) {
         char query_string_buffer[DEFAULT_LENGTH];
@@ -320,7 +319,6 @@ void list_action()
         o("\t\t<th><a href=\"%s/list?%ssort=-2&amp;%s\">投稿日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
         o("\t\t<th><a href=\"%s/list?%ssort=-3&amp;%s\">最終更新日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
         o("\t</tr>\n");
-        d("padd\n");
         foreach (it_msg, result->messages) {
             Message* message = it_msg->element;
             List* elements_a;
@@ -418,16 +416,24 @@ void output_form_element(List* elements, ElementType* e_type)
     Iterator* it;
     int list_count = 0;
 
-    d("pass \n");
     if (elements != NULL) {
         value = get_element_value(elements, e_type);
     } else {
-        char* user_name = getenv("REMOTE_USER");
-        /* 投稿者のフィールドは、basic認証が行なわれていればそのユーザ名を表示する。 */
-        if (e_type->id == ELEM_ID_SENDER && user_name)
-            value = user_name;
-        else
+        if (e_type->id == ELEM_ID_SENDER) {
+            char* user_name = getenv("REMOTE_USER");
+            char sender[DEFAULT_LENGTH];
+            cgiCookieString("starbug1_sender", sender, DEFAULT_LENGTH);
+            if (strlen(sender))
+                /* 投稿者のフィールドは、cookieから値が取得できれば、その値を表示する。 */
+                value = sender;
+            else if (user_name)
+                /* 投稿者のフィールドは、basic認証が行なわれていればそのユーザ名を表示する。 */
+                value = user_name;
+            else 
+                value = e_type->default_value;
+        } else {
             value = e_type->default_value;
+        }
     }
     switch (e_type->type) {
         case ELEM_TEXT:
@@ -492,7 +498,6 @@ void output_form_element(List* elements, ElementType* e_type)
                     e_type->id, e_type->id);
             break;
     }
-    d("passed \n");
 }
 static int contains(char* const value, const char* name)
 {
@@ -510,8 +515,9 @@ static int contains(char* const value, const char* name)
 void register_action()
 {
     char path_info[DEFAULT_LENGTH];
-    List* elements = NULL;
     Project* project;
+    char sender[DEFAULT_LENGTH];
+    cgiCookieString("starbug1_sender", sender, DEFAULT_LENGTH);
 
     strcpy(path_info, cgiPathInfo);
     db_init();
@@ -542,19 +548,19 @@ void register_action()
             o("</th><td>\n");
             if (et->required)
                 o("\t\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
-            output_form_element(elements, et);
-/*             if (elements != NULL) */
-/*                 elements = elements->next; */
+            output_form_element(NULL, et);
             o("\t\t\t<div class=\"description\">");h(et->description);o("&nbsp;</div>\n");
             o("\t\t</td>\n");
             o("\t</tr>\n");
         }
         list_free(element_types_a);
     }
-    o(      "</table>\n"
-            "<input class=\"button\" type=\"submit\" name=\"register\" value=\"登録\" />\n"
+    o(      "</table>\n");
+    o(      "<input class=\"button\" type=\"submit\" name=\"register\" value=\"登録\" />\n"
+            "<input id=\"save2cookie\" type=\"checkbox\" name=\"save2cookie\" class=\"checkbox\" value=\"1\" %s />\n"
+            "<label for=\"save2cookie\">投稿者を保存する。(cookie使用)</label>\n"
             "</form>\n"
-            "</div>\n");
+            "</div>\n", strlen(sender) ? "checked" : "");
     db_finish();
     output_footer();
 }
@@ -569,7 +575,7 @@ void ticket_action()
     List* last_elements = NULL;
     List* element_types_a;
     Iterator* it;
-    int iid, *message_ids, i;
+    int iid, *message_ids_a, i;
     Project* project;
 
     strcpy(path_info, cgiPathInfo);
@@ -628,24 +634,21 @@ void ticket_action()
     o(      "<div id=\"ticket_history\">\n"
             "<h3>チケット履歴</h3>\n");
     list_free(elements_a);
-    message_ids = db_get_message_ids(iid);
+    message_ids_a = db_get_message_ids(iid);
     /* 履歴の表示 */
-    for (i = 0; message_ids[i] != 0; i++) {
+    for (i = 0; message_ids_a[i] != 0; i++) {
         List* previous = last_elements;
         list_alloc(elements_a, Element);
-        last_elements = elements_a = db_get_elements(message_ids[i], elements_a);
-        d("aaaa\n");
+        last_elements = elements_a = db_get_elements(message_ids_a[i], elements_a);
 
         o(      "<table summary=\"reply table\">\n");
         o(      "\t<tr>\n"
                 "\t\t<td colspan=\"2\" class=\"title\">投稿: %d ", i + 1); o("["); h(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE)); o("]</td>\n"
                 "\t</tr>\n");
-        d("aaaa\n");
         foreach (it, element_types_a) {
             ElementType* et = it->element;
             char* value = get_element_value(elements_a, et);
             char* last_value = get_element_value(previous, et);
-        d("aaaa\n");
 
             /* チケット属性で、直前の値と同じ項目は表示しない。 */
             if (et->ticket_property == 1 && strcmp(value, last_value) == 0)
@@ -664,7 +667,7 @@ void ticket_action()
                         if (strlen(value)) {
                             o("<a href=\"%s/download/%d/", 
                                     cgiScriptName, 
-                                    db_get_element_file_id(message_ids[i], et->id)); 
+                                    db_get_element_file_id(message_ids_a[i], et->id)); 
                             u(value); o("\" target=\"_blank\">");h(value); o("</a>\n");
                         }
                     } else {
@@ -676,6 +679,7 @@ void ticket_action()
         }
         o("</table>\n");
     }
+    free(message_ids_a);
     o(  "</div>\n");
     /* フォームの表示 */
     o(      "<a name=\"reply\" />\n");
@@ -715,6 +719,8 @@ void ticket_action()
     }
     o(      "</table>\n"
             "<input class=\"button\" type=\"submit\" name=\"reply\" value=\"返信\" />&nbsp;&nbsp;&nbsp;\n"
+            "<input id=\"save2cookie\" type=\"checkbox\" name=\"save2cookie\" class=\"checkbox\" value=\"1\" />\n"
+            "<label for=\"save2cookie\">投稿者を保存する。(cookie使用)</label>\n"
             "</form>\n"
             "</div>\n");
     db_finish();
@@ -736,7 +742,9 @@ void register_submit_action()
     int mode = get_mode();
     int mail_result;
     char** multi;
+    char save2cookie[2];
 
+    cgiFormStringNoNewlines("save2cookie", save2cookie, 2);
     if (mode == MODE_INVALID)
         die("reqired invalid mode.");
     ticket = (Message*)xalloc(sizeof(Message));
@@ -816,6 +824,13 @@ void register_submit_action()
                     }
                     break;
             }
+            if (e->element_type_id == ELEM_ID_SENDER) {
+                if (strcmp(save2cookie, "1") == 0) {
+                    cgiHeaderCookieSetString("starbug1_sender", e->str_val, 86400 * 30, cgiScriptName, cgiServerName);
+                } else {
+                    cgiHeaderCookieSetString("starbug1_sender", "", 0, cgiScriptName, cgiServerName);
+                }
+            }
             list_add(elements_a, e);
         }
         free(value);
@@ -823,19 +838,15 @@ void register_submit_action()
         ticket->id = db_register_ticket(ticket);
     }
     /* mail */
-    d("mail begin1 .\n");
     /* TODO mail throw. below code makes error. i dont know why.*/
     mail_result = mail_send(project, ticket, elements_a, element_types_a);
     list_free(element_types_a);
     list_free(elements_a);
-    d("mail done %d .\n", mail_result);
     if (mail_result != 0 && mail_result != MAIL_GAVE_UP) {
         die("mail send error.");
     }
-    d("mail end .\n");
     db_commit();
     db_finish();
-    d("all end .\n");
 
     if (mode == MODE_REGISTER)
         redirect("/list", "登録しました。");
@@ -1046,7 +1057,6 @@ void download_action()
     element_id_str = strchr(path_info + 1, '/');
     if (element_id_str) element_id_str++;
     element_file_id = atoi(element_id_str);
-    d("element_file_id: %d\n", element_file_id);
 
     db_init();
     file = db_get_element_file(element_file_id);

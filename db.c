@@ -26,10 +26,8 @@ static List* db_get_element_types(int all, List* elements)
     } else {
         sql = "select id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort, default_value from element_type where display_in_list = 1 order by sort";
     }
-    d("db_get_element_types\n");
     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
-    d("db_get_element_types prepared.\n");
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         unsigned const char* value;
@@ -55,7 +53,6 @@ static List* db_get_element_types(int all, List* elements)
 
     sqlite3_finalize(stmt);
 
-    d("db_get_element_types maybe ok.\n");
     return elements;
 
 ERROR_LABEL
@@ -190,13 +187,11 @@ int db_register_ticket(Message* ticket)
                 COLUMN_TYPE_INT, e->element_type_id,
                 COLUMN_TYPE_TEXT, e->str_val,
                 COLUMN_TYPE_END);
-        d("element_type_id:%d str_val %s\n", e->element_type_id, e->str_val);
         if (c != INVALID_INT && c != 0) {
             closed = 1;
             break;
         }
     }
-    d("closed:%d\n", closed);
     /* クローズ状態に変更されていた場合は、closedに1を設定する。 */
     if (exec_query("update ticket set closed = ? where id = ?",
             COLUMN_TYPE_INT, closed,
@@ -206,7 +201,6 @@ int db_register_ticket(Message* ticket)
 
     elements = ticket->elements;
     create_message_insert_sql(elements, sql);
-    d("%s\n", sql);
 
     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
@@ -254,7 +248,6 @@ int db_register_ticket(Message* ticket)
             size = get_upload_size(e->element_type_id);
             ctype = get_upload_content_type(e->element_type_id, mime_type);
             content = get_upload_content(e->element_type_id);
-            d("fname: %s size: %d\n", fname, size);
             if (exec_query(
                         "insert into element_file("
                         " id, message_id, element_type_id, filename, size, mime_type, content"
@@ -355,7 +348,6 @@ char* get_search_sql_string(List* conditions, Condition* sort, char* q, char* sq
         strcat(sql_string, column);
     }
     strcat(sql_string, "t.registerdate desc, t.id desc ");
-    d("sql: %s\n", sql_string);
 
     return sql_string;
 }

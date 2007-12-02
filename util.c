@@ -206,7 +206,7 @@ unsigned long url_encode(unsigned char* csource, unsigned char* cbuffer, unsigne
 char* get_filename_without_path(char* path)
 {
     char* p = path;
-    char* c;
+    register char* c;
     if (strlen(p) == 0) return p;
     while ((c = strstr(p, "\\")) != NULL) {
         p = ++c;
@@ -325,5 +325,9 @@ void redirect(char* path, char* message)
     sprintf(redirecturi, "%s%s", cgiScriptName, uri);
     o("Status: 302 Temporary Redirection\r\n");
     cgiHeaderLocation(redirecturi);
+}
+char* get_host_name()
+{
+    return getenv("HOST");
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab: */

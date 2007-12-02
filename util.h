@@ -26,6 +26,7 @@ char* get_upload_content_type(int, char*);
 ElementFile* get_upload_content(int);
 unsigned long url_encode(unsigned char*, unsigned char*, unsigned long);
 void redirect(char*, char*);
+char* get_host_name();
 
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab: */
