@@ -359,32 +359,30 @@ void items_action()
         o("\t\t\t\t<td>\n");
         o("\t\t\t\t\t<input type=\"hidden\" name=\"field%d.element_type_id\" value=\"%d\" />\n", et->id, et->type);
         switch (et->type) {
-            case ELEM_TEXT:
+            case ELEM_TYPE_TEXT:
                 o("1行テキスト(input[type=text])");
                 break;
-            case ELEM_TEXTAREA:
+            case ELEM_TYPE_TEXTAREA:
                 o("複数行テキスト(textarea)");
                 break;
-            case ELEM_CHECKBOX:
+            case ELEM_TYPE_CHECKBOX:
                 o("真偽値(input[type=checkbox])");
                 break;
-            case ELEM_RADIO:
-                o("ラジオボタン(input[type=radio])");
-                break;
-            case ELEM_LIST_SINGLE:
+            case ELEM_TYPE_LIST_SINGLE:
                 o("選択リスト(select)");
                 break;
-            case ELEM_LIST_MULTI:
+            case ELEM_TYPE_LIST_MULTI:
                 o("複数選択可能リスト(select[multiple=multiple])");
-            case ELEM_UPLOADFILE:
+                break;
+            case ELEM_TYPE_UPLOADFILE:
                 o("ファイル(input[type=file])");
                 break;
         }
         o("\t\t\t\t</td>\n");
         o("\t\t\t</tr>\n");
         switch (et->type) {
-            case ELEM_LIST_SINGLE:
-            case ELEM_LIST_MULTI:
+            case ELEM_TYPE_LIST_SINGLE:
+            case ELEM_TYPE_LIST_MULTI:
                 o("\t\t\t<tr>\n");
                 o("\t\t\t\t<th>選択要素</th>\n");
                 o("\t\t\t\t<td>\n");
@@ -569,8 +567,8 @@ void update_elements()
 
         /* list_item */
         switch (e_type->type) {
-            case ELEM_LIST_SINGLE:
-            case ELEM_LIST_MULTI:
+            case ELEM_TYPE_LIST_SINGLE:
+            case ELEM_TYPE_LIST_MULTI:
                 /* 選択要素のあるelementだけ、list_itemの更新を行なう。 */
                 list_alloc(items_a, ListItem);
                 items_a = db_get_list_item(e_type->id, items_a);
@@ -667,33 +665,29 @@ void new_item_action()
     o("\t\t\t<tr>\n");
     o("\t\t\t\t<th>項目種別</th>\n");
     o("\t\t\t\t<td>\n");
-    o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" type=\"radio\" name=\"field.type\" ", ELEM_TEXT);
-    o(                  "value=\"%d\" checked=\"checked\" />\n", ELEM_TEXT);
-    o("\t\t\t\t\t<label for=\"field.type%d\" class=\"description\">1行テキスト(input[type=text])</label><br />\n", ELEM_TEXT);
+    o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" type=\"radio\" name=\"field.type\" ", ELEM_TYPE_TEXT);
+    o(                  "value=\"%d\" checked=\"checked\" />\n", ELEM_TYPE_TEXT);
+    o("\t\t\t\t\t<label for=\"field.type%d\" class=\"description\">1行テキスト(input[type=text])</label><br />\n", ELEM_TYPE_TEXT);
     o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" "
-            "type=\"radio\" name=\"field.type\" ", ELEM_TEXTAREA);
-    o(                  "value=\"%d\" />\n", ELEM_TEXTAREA);
-    o("\t\t\t\t\t<label for=\"field.type%d\" class=\"description\">複数行テキスト(textarea)</label><br />\n", ELEM_TEXTAREA);
+            "type=\"radio\" name=\"field.type\" ", ELEM_TYPE_TEXTAREA);
+    o(                  "value=\"%d\" />\n", ELEM_TYPE_TEXTAREA);
+    o("\t\t\t\t\t<label for=\"field.type%d\" class=\"description\">複数行テキスト(textarea)</label><br />\n", ELEM_TYPE_TEXTAREA);
     o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" "
-            "type=\"radio\" name=\"field.type\" ", ELEM_CHECKBOX);
-    o(                  "value=\"%d\" disabled=\"disabled\" />\n", ELEM_CHECKBOX);
-    o("\t\t\t\t\t<label for=\"field.type%d\" class=\"description\">真偽値(input[type=checkbox])</label><br />\n", ELEM_CHECKBOX);
+            "type=\"radio\" name=\"field.type\" ", ELEM_TYPE_CHECKBOX);
+    o(                  "value=\"%d\" />\n", ELEM_TYPE_CHECKBOX);
+    o("\t\t\t\t\t<label for=\"field.type%d\" class=\"description\">真偽値(input[type=checkbox])</label><br />\n", ELEM_TYPE_CHECKBOX);
     o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" "
-            "type=\"radio\" name=\"field.type\" ", ELEM_RADIO);
-    o(                  "value=\"%d\" disabled=\"disabled\" />\n", ELEM_RADIO);
-    o("\t\t\t\t\t<label for=\"field.type%d\" class=\"description\">ラジオボタン(input[type=radio])</label><br />\n", ELEM_RADIO);
+            "type=\"radio\" name=\"field.type\" ", ELEM_TYPE_LIST_SINGLE);
+    o(                  "value=\"%d\" />\n", ELEM_TYPE_LIST_SINGLE);
+    o("\t\t\t\t\t<label for=\"field.type%d\" class=\"description\">選択リスト(select)</label><br />\n", ELEM_TYPE_LIST_SINGLE);
     o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" "
-            "type=\"radio\" name=\"field.type\" ", ELEM_LIST_SINGLE);
-    o(                  "value=\"%d\" />\n", ELEM_LIST_SINGLE);
-    o("\t\t\t\t\t<label for=\"field.type%d\" class=\"description\">選択リスト(select)</label><br />\n", ELEM_LIST_SINGLE);
+            "type=\"radio\" name=\"field.type\" ", ELEM_TYPE_LIST_MULTI);
+    o(                  "value=\"%d\" />\n", ELEM_TYPE_LIST_MULTI);
+    o("\t\t\t\t\t<label for=\"field.type%d\" class=\"description\">複数選択可能リスト(select[multiple=multiple])</label><br />\n", ELEM_TYPE_LIST_MULTI);
     o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" "
-            "type=\"radio\" name=\"field.type\" ", ELEM_LIST_MULTI);
-    o(                  "value=\"%d\" />\n", ELEM_LIST_MULTI);
-    o("\t\t\t\t\t<label for=\"field.type%d\" class=\"description\">複数選択可能リスト(select[multiple=multiple])</label><br />\n", ELEM_LIST_MULTI);
-    o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" "
-            "type=\"radio\" name=\"field.type\" ", ELEM_UPLOADFILE);
-    o(                  "value=\"%d\" />\n", ELEM_UPLOADFILE);
-    o("\t\t\t\t\t<label for=\"field.type%d\" class=\"description\">ファイル(input[type=file])</label><br />\n", ELEM_UPLOADFILE);
+            "type=\"radio\" name=\"field.type\" ", ELEM_TYPE_UPLOADFILE);
+    o(                  "value=\"%d\" />\n", ELEM_TYPE_UPLOADFILE);
+    o("\t\t\t\t\t<label for=\"field.type%d\" class=\"description\">ファイル(input[type=file])</label><br />\n", ELEM_TYPE_UPLOADFILE);
     o("\t\t\t\t\t<div class=\"description\">項目を入力する時の入力形式です。項目種別は、追加後に変更することができません。</div>\n");
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
@@ -775,8 +769,8 @@ void new_item_submit_action()
     e_type->sort = atoi(value);
     e_type_id = db_register_element_type(e_type);
     switch (e_type->type) {
-        case ELEM_LIST_SINGLE:
-        case ELEM_LIST_MULTI:
+        case ELEM_TYPE_LIST_SINGLE:
+        case ELEM_TYPE_LIST_MULTI:
             for (i = 0; i < ADD_ITEM_COUNT; i++) {
                 char name[DEFAULT_LENGTH];
                 ListItem* item = xalloc(sizeof(ListItem));

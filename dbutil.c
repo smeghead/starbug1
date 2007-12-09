@@ -79,28 +79,44 @@ void create_tables()
             "create index index_element_type_0 on element_type (id, type, display_in_list, sort)", COLUMN_TYPE_END);
     exec_query(
             "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
-            "values (1, 0, 1, 0, 1, '件名', '内容を簡潔に表すような件名を入力してください。', '', 1, 1);", COLUMN_TYPE_END);
+            "values (1, ?, 1, 0, 1, '件名', '内容を簡潔に表すような件名を入力してください。', '', 1, 1);", 
+            COLUMN_TYPE_INT, ELEM_TYPE_TEXT,
+            COLUMN_TYPE_END);
     exec_query(
             "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
-            "values (2, 0, 0, 0, 1, '投稿者', 'メールアドレスを入力してください。', '', 1, 2);", COLUMN_TYPE_END);
+            "values (2, ?, 0, 0, 1, '投稿者', 'メールアドレスを入力してください。', '', 1, 2);",
+            COLUMN_TYPE_INT, ELEM_TYPE_TEXT,
+            COLUMN_TYPE_END);
     exec_query(
             "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
-            "values (3, 5, 1, 0, 1, '状態', '状態を選択してください。', '新規', 1, 3);", COLUMN_TYPE_END);
+            "values (3, ?, 1, 0, 1, '状態', '状態を選択してください。', '新規', 1, 3);", 
+            COLUMN_TYPE_INT, ELEM_TYPE_LIST_SINGLE,
+            COLUMN_TYPE_END);
     exec_query(
             "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
-            "values (4, 6, 1, 0, 0, 'カテゴリ', 'カテゴリを選択してください。', '', 1, 4);", COLUMN_TYPE_END);
+            "values (4, ?, 1, 0, 0, 'カテゴリ', 'カテゴリを選択してください。', '', 1, 4);", 
+            COLUMN_TYPE_INT, ELEM_TYPE_LIST_MULTI,
+            COLUMN_TYPE_END);
     exec_query(
             "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
-            "values (5, 5, 1, 0, 0, '優先度', '優先度を選択してください。', '', 1, 5);", COLUMN_TYPE_END);
+            "values (5, ?, 1, 0, 0, '優先度', '優先度を選択してください。', '', 1, 5);", 
+            COLUMN_TYPE_INT, ELEM_TYPE_LIST_SINGLE,
+            COLUMN_TYPE_END);
     exec_query(
             "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
-            "values (6, 1, 1, 0, 1, '詳細', '的確に記述してください。', '', 0, 6);", COLUMN_TYPE_END);
+            "values (6, ?, 1, 0, 1, '詳細', '的確に記述してください。', '', 0, 6);",
+            COLUMN_TYPE_INT, ELEM_TYPE_TEXTAREA,
+            COLUMN_TYPE_END);
     exec_query(
             "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
-            "values (7, 1, 1, 0, 0, '再現手順', '問題を再現させるための条件と手順を記述してください。', '', 0, 7);", COLUMN_TYPE_END);
+            "values (7, ?, 1, 0, 0, '再現手順', '問題を再現させるための条件と手順を記述してください。', '', 0, 7);", 
+            COLUMN_TYPE_INT, ELEM_TYPE_TEXTAREA,
+            COLUMN_TYPE_END);
     exec_query(
             "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
-            "values (8, 1, 0, 1, 0, 'コメント', 'コメントを記述してください。', '', 0, 8);", COLUMN_TYPE_END);
+            "values (8, ?, 0, 1, 0, 'コメント', 'コメントを記述してください。', '', 0, 8);", 
+            COLUMN_TYPE_INT, ELEM_TYPE_TEXTAREA,
+            COLUMN_TYPE_END);
     exec_query(
             "create table list_item( "
             " id integer not null primary key, "
@@ -222,11 +238,11 @@ int exec_query_scalar_int(const char* sql, ...)
     for(i = 0; (type = va_arg(ap, int)) != COLUMN_TYPE_END; i++){
         if (type == COLUMN_TYPE_INT) {
             int value = va_arg(ap, int);
-/*             d("type: %d = %d\n", type, value); */
+            d("type: %d = %d\n", type, value);
             sqlite3_bind_int(stmt, i + 1, value);
         } else if (type == COLUMN_TYPE_TEXT) {
             char* value = va_arg(ap, char*);
-/*             d("type: %d = %s\n", type, value); */
+            d("type(text): %d = %s\n", type, value);
             if (value == NULL) goto error;
             sqlite3_bind_text(stmt, i + 1, value, strlen(value), NULL);
         }

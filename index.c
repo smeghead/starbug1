@@ -369,8 +369,9 @@ void output_form_element_4_condition(char* value, ElementType* e_type)
 
     sprintf(id, "%d", e_type->id);
     switch (e_type->type) {
-        case ELEM_TEXT:
-        case ELEM_TEXTAREA:
+        case ELEM_TYPE_TEXT:
+        case ELEM_TYPE_TEXTAREA:
+        case ELEM_TYPE_CHECKBOX:
             o("<input type=\"text\" class=\"element\" id=\"field");
             h(id);
             o("\" name=\"field");
@@ -379,8 +380,8 @@ void output_form_element_4_condition(char* value, ElementType* e_type)
             v(value);
             o("\" />\n");
             break;
-        case ELEM_LIST_SINGLE:
-        case ELEM_LIST_MULTI:
+        case ELEM_TYPE_LIST_SINGLE:
+        case ELEM_TYPE_LIST_MULTI:
             o("<select class=\"element\" id=\"field");
             h(id);
             o("\" name=\"field");
@@ -436,20 +437,28 @@ void output_form_element(List* elements, ElementType* e_type)
         }
     }
     switch (e_type->type) {
-        case ELEM_TEXT:
+        case ELEM_TYPE_TEXT:
             o("<input type=\"text\" class=\"element\" id=\"field%d\" name=\"field%d\" value=\"",
                     e_type->id, e_type->id);
             v(value);
             o("\" />\n");
             break;
-        case ELEM_TEXTAREA:
-            o("<textarea class=\"element\" id=\"field%d\" name=\"field%d\" rows=\"3\" cols=\"10\">",
+        case ELEM_TYPE_TEXTAREA:
+            o("<textarea id=\"field%d\" name=\"field%d\" rows=\"3\" cols=\"10\">",
                     e_type->id, e_type->id);
             v(value);
             o("</textarea>\n");
             break;
-        case ELEM_LIST_SINGLE:
-            o("<select class=\"element\" id=\"field%d\" name=\"field%d\">\n",
+        case ELEM_TYPE_CHECKBOX:
+            o("<input type=\"checkbox\" id=\"field%d\" class=\"checkbox\" name=\"field%d\" value=\"",
+                    e_type->id, e_type->id); 
+            v(e_type->name);
+            o("\" %s />",
+                    (strlen(value) || strcmp(value, "0") == 0) ? "checked=\"checked\"" : "");
+            o("<label for=\"field%d\">", e_type->id); h(e_type->name); o("</lable>\n");
+            break;
+        case ELEM_TYPE_LIST_SINGLE:
+            o("<select id=\"field%d\" name=\"field%d\">\n",
                     e_type->id, e_type->id);
             o("<option value=\"\">&nbsp;</option>");
             list_alloc(items_a, ListItem);
@@ -469,12 +478,12 @@ void output_form_element(List* elements, ElementType* e_type)
             o("</select>\n");
 
             break;
-        case ELEM_LIST_MULTI:
+        case ELEM_TYPE_LIST_MULTI:
             list_alloc(items_a, ListItem);
             items_a = db_get_list_item(e_type->id, items_a);
             /* リストの要素数をカウントする */
             foreach (it, items_a) list_count++;
-            o("<select class=\"element\" size=\"%d\" id=\"field%d", list_count + 1, e_type->id);
+            o("<select size=\"%d\" id=\"field%d", list_count + 1, e_type->id);
             o("\" name=\"field%d\" multiple=\"multiple\">\n", e_type->id);
 
             o("<option value=\"\">&nbsp;</option>");
@@ -493,7 +502,7 @@ void output_form_element(List* elements, ElementType* e_type)
             o("</select>\n");
 
             break;
-        case ELEM_UPLOADFILE:
+        case ELEM_TYPE_UPLOADFILE:
             o("<input type=\"file\" class=\"element\" id=\"field%d\" name=\"field%d\" />\n",
                     e_type->id, e_type->id);
             break;
@@ -577,6 +586,8 @@ void ticket_action()
     Iterator* it;
     int iid, *message_ids_a, i;
     Project* project;
+    char sender[DEFAULT_LENGTH];
+    cgiCookieString("starbug1_sender", sender, DEFAULT_LENGTH);
 
     strcpy(path_info, cgiPathInfo);
     ticket_id = strchr(path_info + 1, '/');
@@ -618,7 +629,7 @@ void ticket_action()
                 hmail(value);
                 break;
             default:
-                if (et->type == ELEM_UPLOADFILE) {
+                if (et->type == ELEM_TYPE_UPLOADFILE) {
                     if (strlen(value)) {
                         o("<a href=\"%s/download/%d/", cgiScriptName, -1 /* TODO get_element_id(elements_a, et)*/); u(value); o("\" target=\"_blank\">");h(value); o("</a>\n");
                     }
@@ -638,7 +649,7 @@ void ticket_action()
         attachment_elements_a = db_get_elements(message_ids_a[i], attachment_elements_a);
         foreach (it, element_types_a) {
             ElementType* et = it->element;
-            if (et->type == ELEM_UPLOADFILE) {
+            if (et->type == ELEM_TYPE_UPLOADFILE) {
                 char* attachment_file_name = get_element_value(attachment_elements_a, et);
                 if (strlen(attachment_file_name) == 0) continue;
                 o("\t\t<div>\n");
@@ -687,7 +698,7 @@ void ticket_action()
                     hmail(value);
                     break;
                 default:
-                    if (et->type == ELEM_UPLOADFILE) {
+                    if (et->type == ELEM_TYPE_UPLOADFILE) {
                         if (strlen(value)) {
                             o("<a href=\"%s/download/%d/", 
                                     cgiScriptName, 
@@ -743,10 +754,10 @@ void ticket_action()
     }
     o(      "</table>\n"
             "<input class=\"button\" type=\"submit\" name=\"reply\" value=\"返信\" />&nbsp;&nbsp;&nbsp;\n"
-            "<input id=\"save2cookie\" type=\"checkbox\" name=\"save2cookie\" class=\"checkbox\" value=\"1\" />\n"
+            "<input id=\"save2cookie\" type=\"checkbox\" name=\"save2cookie\" class=\"checkbox\" value=\"1\" %s />\n"
             "<label for=\"save2cookie\">投稿者を保存する。(cookie使用)</label>\n"
             "</form>\n"
-            "</div>\n");
+            "</div>\n", strlen(sender) ? "checked" : "");
     db_finish();
     output_footer();
     list_free(element_types_a);
@@ -790,31 +801,33 @@ void register_submit_action()
             ElementType* et = it->element;
             Element* e = list_new_element(elements_a);
             char name[DEFAULT_LENGTH] = "";
+            sprintf(name, "field%d", et->id);
             strcpy(value, "");
 
             e->element_type_id = et->id;
             e->is_file = 0;
             switch (et->type) {
-                case ELEM_TEXT:
-                    sprintf(name, "field%d", et->id);
+                case ELEM_TYPE_TEXT:
                     cgiFormStringNoNewlines(name, value, VALUE_LENGTH);
                     e->str_val = (char*)xalloc(sizeof(char) * strlen(value) + 1);
                     strcpy(e->str_val, value);
                     break;
-                case ELEM_TEXTAREA:
-                    sprintf(name, "field%d", et->id);
+                case ELEM_TYPE_TEXTAREA:
                     cgiFormString(name, value, VALUE_LENGTH);
                     e->str_val = (char*)xalloc(sizeof(char) * strlen(value) + 1);
                     strcpy(e->str_val, value);
                     break;
-                case ELEM_LIST_SINGLE:
-                    sprintf(name, "field%d", et->id);
+                case ELEM_TYPE_CHECKBOX:
                     cgiFormString(name, value, VALUE_LENGTH);
                     e->str_val = (char*)xalloc(sizeof(char) * strlen(value) + 1);
                     strcpy(e->str_val, value);
                     break;
-                case ELEM_LIST_MULTI:
-                    sprintf(name, "field%d", et->id);
+                case ELEM_TYPE_LIST_SINGLE:
+                    cgiFormString(name, value, VALUE_LENGTH);
+                    e->str_val = (char*)xalloc(sizeof(char) * strlen(value) + 1);
+                    strcpy(e->str_val, value);
+                    break;
+                case ELEM_TYPE_LIST_MULTI:
                     if ((cgiFormStringMultiple(name, &multi)) == cgiFormNotFound) {
                         strcpy(value, "");
                     } else {
@@ -835,8 +848,7 @@ void register_submit_action()
                     strcpy(e->str_val, value);
                     cgiStringArrayFree(multi);
                     break;
-                case ELEM_UPLOADFILE:
-                    sprintf(name, "field%d", et->id);
+                case ELEM_TYPE_UPLOADFILE:
                     if (get_upload_size(et->id) > MAX_FILE_SIZE * 1024) {
                         goto file_size_error;
                     }
