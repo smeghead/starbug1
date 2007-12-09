@@ -301,7 +301,7 @@ char* get_search_sql_string(List* conditions, Condition* sort, char* q, char* sq
         foreach (it, conditions) {
             Condition* cond = it->element;
             char val[DEFAULT_LENGTH];
-            if (i) strcat(sql_string, " and ");
+            if (i++) strcat(sql_string, " and ");
             sprintf(val, " (%sm.field%d like '%%' || ? || '%%') ", 
                     cond->element_type_id == ELEM_ID_SENDER ? "org_" : "", /* 投稿者は初回投稿者が検索対象になる。 */
                     cond->element_type_id);
