@@ -59,7 +59,7 @@ void buf_flush()
         if (strcmp(text[i], "") == 0) break;
         if (buf_type == TYPE_LI)
             printf("<li>");
-        printf("%s", text[i]);
+        h(text[i]);
         if (buf_type == TYPE_LI)
             printf("</li>");
     }
@@ -78,7 +78,7 @@ void buf_flush()
 }
 void buf_out(char* str)
 {
-    printf("%s", str);
+    h(str);
 }
 void element_out_without_content(char* tag_name)
 {
