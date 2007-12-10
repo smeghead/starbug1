@@ -241,7 +241,7 @@ void list_action()
         o("\t\t<li>\n");
         o("\t\t\t<a href=\"%s/list?field%d=", cgiScriptName, ELEM_ID_STATUS); u(s->name); o("\">");
         h(s->name);
-        o("\t\t\t</a>\n");
+        o("</a>");
         o("(%d)", s->count);
         o("\t\t</li>\n");
     }
