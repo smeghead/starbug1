@@ -168,7 +168,7 @@ void list_action()
     char path_info[DEFAULT_LENGTH];
     SearchResult* result;
     List* element_types_a;
-    List* conditions = NULL;
+    List* conditions_a = NULL;
     Condition* sort = NULL;
     Project* project;
     List* states_a;
@@ -180,6 +180,7 @@ void list_action()
     char q[DEFAULT_LENGTH];
     char p[DEFAULT_LENGTH];
     List* messages_a;
+    int condition_count = 0;
 
     cgiFormStringNoNewlines("id", id, DEFAULT_LENGTH);
     if (strlen(id) > 0) {
@@ -200,7 +201,7 @@ void list_action()
     element_types_a = db_get_element_types_4_list(element_types_a);
     o("<h2>"); h(project->name); o(" - チケット一覧</h2>\n");
     /* 検索 */
-    list_alloc(conditions, Condition);
+    list_alloc(conditions_a, Condition);
     foreach (it, element_types_a) {
         ElementType* et = it->element;
         char name[DEFAULT_LENGTH];
@@ -210,10 +211,11 @@ void list_action()
         sprintf(name, "field%d", et->id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
         if (strlen(value) == 0) continue;
-        c = list_new_element(conditions);
+        c = list_new_element(conditions_a);
         c->element_type_id = et->id;
         strcpy(c->value, value);
-        list_add(conditions, c);
+        list_add(conditions_a, c);
+        condition_count++;
     }
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
     cgiFormStringNoNewlines("sort", sortstr, DEFAULT_LENGTH);
@@ -230,7 +232,8 @@ void list_action()
     }
     cgiFormStringNoNewlines("p", p, DEFAULT_LENGTH);
     list_alloc(messages_a, Message);
-    result = db_search_tickets(conditions, q, sort, atoi(p), messages_a);
+    result = db_search_tickets(conditions_a, q, sort, atoi(p), messages_a);
+    free(conditions_a);
     list_alloc(states_a, State);
     states_a = db_get_states(states_a);
     /* stateの表示 */
@@ -300,7 +303,7 @@ void list_action()
 
         query_string = format_query_string(query_string_buffer);
         o(      "<div class=\"description\">");
-        if (!conditions && !strlen(q))
+        if (!condition_count && !strlen(q))
             o(      "クローズ扱いのチケットは表示されていません。");
         o(      "%d件ヒットしました。\n", result->hit_count);
         o(      "</div>\n");
