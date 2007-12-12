@@ -5,7 +5,7 @@
 #include "css.h"
 #include "util.h"
 
-#define MAX_WIDTH 10000
+#define MAX_WIDTH 1000
 
 void css_content_out(char* filename)
 {

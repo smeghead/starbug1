@@ -8,9 +8,6 @@
 #include "util.h"
 #include "css.h"
 
-#define VALUE_LENGTH 1048575
-#define MODE_LENGTH 128
-#define DEFAULT_LENGTH 1024
 #define ADD_ITEM_COUNT 5
 
 /* prototype declares */
@@ -865,12 +862,12 @@ void style_action()
 }
 void style_submit_action()
 {
-    char* value = xalloc(sizeof(char) * VALUE_LENGTH);
+    char* value_a = xalloc(sizeof(char) * VALUE_LENGTH);
 
-    cgiFormString("edit_css", value, VALUE_LENGTH);
-    css_save("css/user.css", value);
+    cgiFormString("edit_css", value_a, VALUE_LENGTH);
+    css_save("css/user.css", value_a);
 
     redirect("", "更新しました。");
-    free(value);
+    free(value_a);
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab: */

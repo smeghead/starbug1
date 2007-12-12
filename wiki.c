@@ -5,7 +5,7 @@
 #include "wiki.h"
 #include "util.h"
 
-#define MAX_WIDTH 10000
+#define MAX_WIDTH 1000
 
 void buf_clear();
 void buf_add(int, char*);

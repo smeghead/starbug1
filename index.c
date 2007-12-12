@@ -598,14 +598,15 @@ void ticket_action()
             return;
     }
     db_init();
-    project = db_get_project();
-    output_header(project, "reply.js");
     list_alloc(elements_a, Element);
     elements_a = db_get_last_elements(iid, elements_a);
     if (!elements_a) {
         redirect("/list", "存在しないIDが指定されました。");
         return;
     }
+    project = db_get_project();
+    output_header(project, "reply.js");
+
     message_ids_a = db_get_message_ids(iid);
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_all(element_types_a);
@@ -795,41 +796,41 @@ void register_submit_action()
         ticket_a->id = atoi(ticket_id);
     list_alloc(elements_a, Element);
     if (mode == MODE_REGISTER || mode == MODE_REPLY) {
-        char* value = (char*)xalloc(sizeof(char) * VALUE_LENGTH); /* 1M */
+        char* value_a = (char*)xalloc(sizeof(char) * VALUE_LENGTH); /* 1M */
         /* register, reply */
         foreach (it, element_types_a) {
             ElementType* et = it->element;
             Element* e = list_new_element(elements_a);
             char name[DEFAULT_LENGTH] = "";
             sprintf(name, "field%d", et->id);
-            strcpy(value, "");
+            strcpy(value_a, "");
 
             e->element_type_id = et->id;
             e->is_file = 0;
             switch (et->type) {
                 case ELEM_TYPE_TEXT:
-                    cgiFormStringNoNewlines(name, value, VALUE_LENGTH);
-                    e->str_val = (char*)xalloc(sizeof(char) * strlen(value) + 1);
-                    strcpy(e->str_val, value);
+                    cgiFormStringNoNewlines(name, value_a, VALUE_LENGTH);
+                    e->str_val = (char*)xalloc(sizeof(char) * strlen(value_a) + 1);
+                    strcpy(e->str_val, value_a);
                     break;
                 case ELEM_TYPE_TEXTAREA:
-                    cgiFormString(name, value, VALUE_LENGTH);
-                    e->str_val = (char*)xalloc(sizeof(char) * strlen(value) + 1);
-                    strcpy(e->str_val, value);
+                    cgiFormString(name, value_a, VALUE_LENGTH);
+                    e->str_val = (char*)xalloc(sizeof(char) * strlen(value_a) + 1);
+                    strcpy(e->str_val, value_a);
                     break;
                 case ELEM_TYPE_CHECKBOX:
-                    cgiFormString(name, value, VALUE_LENGTH);
-                    e->str_val = (char*)xalloc(sizeof(char) * strlen(value) + 1);
-                    strcpy(e->str_val, value);
+                    cgiFormString(name, value_a, VALUE_LENGTH);
+                    e->str_val = (char*)xalloc(sizeof(char) * strlen(value_a) + 1);
+                    strcpy(e->str_val, value_a);
                     break;
                 case ELEM_TYPE_LIST_SINGLE:
-                    cgiFormString(name, value, VALUE_LENGTH);
-                    e->str_val = (char*)xalloc(sizeof(char) * strlen(value) + 1);
-                    strcpy(e->str_val, value);
+                    cgiFormString(name, value_a, VALUE_LENGTH);
+                    e->str_val = (char*)xalloc(sizeof(char) * strlen(value_a) + 1);
+                    strcpy(e->str_val, value_a);
                     break;
                 case ELEM_TYPE_LIST_MULTI:
                     if ((cgiFormStringMultiple(name, &multi)) == cgiFormNotFound) {
-                        strcpy(value, "");
+                        strcpy(value_a, "");
                     } else {
                         int i = 0;
                         int len = 0;
@@ -838,23 +839,23 @@ void register_submit_action()
                             /* VALUE_LENGTH を超えない範囲で連結していく。
                              * 通常超えないはず */
                             if (len < VALUE_LENGTH) {
-                                strcat(value, multi[i]);
-                                strcat(value, "\t");
+                                strcat(value_a, multi[i]);
+                                strcat(value_a, "\t");
                             }
                             i++;
                         }
                     }
-                    e->str_val = (char*)xalloc(sizeof(char) * strlen(value) + 1);
-                    strcpy(e->str_val, value);
+                    e->str_val = (char*)xalloc(sizeof(char) * strlen(value_a) + 1);
+                    strcpy(e->str_val, value_a);
                     cgiStringArrayFree(multi);
                     break;
                 case ELEM_TYPE_UPLOADFILE:
                     if (get_upload_size(et->id) > MAX_FILE_SIZE * 1024) {
                         goto file_size_error;
                     }
-                    cgiFormFileName(name, value, VALUE_LENGTH);
-                    e->str_val = (char*)xalloc(sizeof(char) * strlen(value) + 1);
-                    strcpy(e->str_val, get_filename_without_path(value));
+                    cgiFormFileName(name, value_a, VALUE_LENGTH);
+                    e->str_val = (char*)xalloc(sizeof(char) * strlen(value_a) + 1);
+                    strcpy(e->str_val, get_filename_without_path(value_a));
                     if (strlen(e->str_val)) {
                         e->is_file = 1;
                     }
@@ -869,12 +870,11 @@ void register_submit_action()
             }
             list_add(elements_a, e);
         }
-        free(value);
+        free(value_a);
         ticket_a->elements = elements_a;
         ticket_a->id = db_register_ticket(ticket_a);
     }
     /* mail */
-    /* TODO mail throw. below code makes error. i dont know why.*/
     mail_result = mail_send(project, ticket_a, elements_a, element_types_a);
     list_free(element_types_a);
     free_element_list(elements_a);

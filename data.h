@@ -5,7 +5,7 @@
 #include "list.h"
 
 #define VALUE_LENGTH 1048575
-#define MODE_LENGTH 128
+#define MODE_LENGTH 10
 #define DEFAULT_LENGTH 1024
 #define MAX_FILE_SIZE 512
 #define LIST_PER_PAGE 30
