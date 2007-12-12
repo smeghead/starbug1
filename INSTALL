@@ -42,8 +42,8 @@ $ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/starbug1 checkout starbug
 * コンパイル
 $ tar zxf starbug-x.x.x-alpha.tar.gz
 $ cd starbug1
-$ make
-$ make webapp
+$ gmake
+$ gmake webapp
 
 dist/starbug1 ディレクトリに、webアプリ一式が生成されます。
 Starbug1の配置
