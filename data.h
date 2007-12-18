@@ -105,7 +105,6 @@ char* get_element_value_by_id(List*, int);
 char* get_element_value(List*, ElementType*);
 int get_element_lid_by_id(List*, int);
 
-void* xalloc(size_t);
 
 
 #endif

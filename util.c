@@ -10,6 +10,16 @@ static action* get_actions();
 
 action* actions = NULL;
 
+void* xalloc(size_t sz)
+{
+    void* p;
+    p = calloc(1, sz);
+    if (!p) {
+        d("memory error!!");
+        die("memory error.");
+    }
+    return p;
+}
 static action* get_actions()
 {
     return actions;

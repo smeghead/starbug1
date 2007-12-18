@@ -1,13 +1,6 @@
 #include <stdlib.h>
+#include "util.h"
 #include "list.h"
-
-static void* xalloc(size_t sz)
-{
-    void* p;
-    p = calloc(1, sz);
-    if (!p) exit(1);
-    return p;
-}
 
 /* Iteratorに格納する要素のalloc */
 void* list_new_element(List* list)

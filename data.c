@@ -4,16 +4,6 @@
 #include "data.h"
 #include "util.h"
 
-void* xalloc(size_t sz)
-{
-    void* p;
-    p = calloc(1, sz);
-    if (!p) {
-        d("memory error!!");
-        die("memory error.");
-    }
-    return p;
-}
 char* get_element_value(List* elements, ElementType* e_type)
 {
     Iterator* it;

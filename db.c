@@ -658,7 +658,6 @@ Project* db_get_project()
     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
 
-    d("a\n");
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         project = (Project*)xalloc(sizeof(Project));
         strcpy(project->name, sqlite3_column_text(stmt, 0));
@@ -671,10 +670,8 @@ Project* db_get_project()
         break;
     }
 
-    d("a\n");
     sqlite3_finalize(stmt);
 
-    d("a\n");
     return project;
 ERROR_LABEL
 }
