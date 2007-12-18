@@ -66,63 +66,64 @@ void create_tables()
             "create table element_type("
             " id integer not null primary key, "
             " type integer, "
-            " ticket_property integer, "
-            " reply_property integer, "
-            " required integer, "
-            " element_name text, "
+            " ticket_property integer not null default 0, "
+            " reply_property integer not null default 0, "
+            " required integer not null default 0, "
+            " name text, "
             " description text, "
             " default_value text, "
-            " display_in_list integer, "
+            " auto_add_item integer not null default 0, "
+            " display_in_list integer not null default 0, "
             " sort integer "
             ");", COLUMN_TYPE_END);
     exec_query(
             "create index index_element_type_0 on element_type (id, type, display_in_list, sort)", COLUMN_TYPE_END);
     exec_query(
-            "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
-            "values (1, ?, 1, 0, 1, '件名', '内容を簡潔に表すような件名を入力してください。', '', 1, 1);", 
+            "insert into element_type(id, type, ticket_property, reply_property, required, name, description, auto_add_item, default_value, display_in_list, sort) "
+            "values (1, ?, 1, 0, 1, '件名', '内容を簡潔に表すような件名を入力してください。', 0, '', 1, 1);", 
             COLUMN_TYPE_INT, ELEM_TYPE_TEXT,
             COLUMN_TYPE_END);
     exec_query(
-            "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
-            "values (2, ?, 0, 0, 1, '投稿者', 'メールアドレスを入力してください。', '', 1, 2);",
+            "insert into element_type(id, type, ticket_property, reply_property, required, name, description, auto_add_item, default_value, display_in_list, sort) "
+            "values (2, ?, 0, 0, 1, '投稿者', 'メールアドレスを入力してください。', 0, '', 1, 2);",
             COLUMN_TYPE_INT, ELEM_TYPE_TEXT,
             COLUMN_TYPE_END);
     exec_query(
-            "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
-            "values (3, ?, 1, 0, 1, '状態', '状態を選択してください。', '新規', 1, 3);", 
+            "insert into element_type(id, type, ticket_property, reply_property, required, name, description, auto_add_item, default_value, display_in_list, sort) "
+            "values (3, ?, 1, 0, 1, '状態', '状態を選択してください。', 0, '新規', 1, 3);", 
             COLUMN_TYPE_INT, ELEM_TYPE_LIST_SINGLE,
             COLUMN_TYPE_END);
     exec_query(
-            "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
-            "values (4, ?, 1, 0, 0, 'カテゴリ', 'カテゴリを選択してください。', '', 1, 4);", 
+            "insert into element_type(id, type, ticket_property, reply_property, required, name, description, auto_add_item, default_value, display_in_list, sort) "
+            "values (4, ?, 1, 0, 0, 'カテゴリ', 'カテゴリを選択してください。', 1, '', 1, 4);", 
             COLUMN_TYPE_INT, ELEM_TYPE_LIST_MULTI,
             COLUMN_TYPE_END);
     exec_query(
-            "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
-            "values (5, ?, 1, 0, 0, '優先度', '優先度を選択してください。', '', 1, 5);", 
+            "insert into element_type(id, type, ticket_property, reply_property, required, name, description, auto_add_item, default_value, display_in_list, sort) "
+            "values (5, ?, 1, 0, 0, '優先度', '優先度を選択してください。', 0, '', 1, 5);", 
             COLUMN_TYPE_INT, ELEM_TYPE_LIST_SINGLE,
             COLUMN_TYPE_END);
     exec_query(
-            "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
-            "values (6, ?, 1, 0, 1, '詳細', '的確に記述してください。', '', 0, 6);",
+            "insert into element_type(id, type, ticket_property, reply_property, required, name, description, auto_add_item, default_value, display_in_list, sort) "
+            "values (6, ?, 1, 0, 1, '詳細', '的確に記述してください。', 0, '', 0, 6);",
             COLUMN_TYPE_INT, ELEM_TYPE_TEXTAREA,
             COLUMN_TYPE_END);
     exec_query(
-            "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
-            "values (7, ?, 1, 0, 0, '再現手順', '問題を再現させるための条件と手順を記述してください。', '', 0, 7);", 
+            "insert into element_type(id, type, ticket_property, reply_property, required, name, description, auto_add_item, default_value, display_in_list, sort) "
+            "values (7, ?, 1, 0, 0, '再現手順', '問題を再現させるための条件と手順を記述してください。', 0, '', 0, 7);", 
             COLUMN_TYPE_INT, ELEM_TYPE_TEXTAREA,
             COLUMN_TYPE_END);
     exec_query(
-            "insert into element_type(id, type, ticket_property, reply_property, required, element_name, description, default_value, display_in_list, sort) "
-            "values (8, ?, 0, 1, 0, 'コメント', 'コメントを記述してください。', '', 0, 8);", 
+            "insert into element_type(id, type, ticket_property, reply_property, required, name, description, auto_add_item, default_value, display_in_list, sort) "
+            "values (8, ?, 0, 1, 0, 'コメント', 'コメントを記述してください。', 0, '', 0, 8);", 
             COLUMN_TYPE_INT, ELEM_TYPE_TEXTAREA,
             COLUMN_TYPE_END);
     exec_query(
             "create table list_item( "
             " id integer not null primary key, "
-            " element_type_id integer, "
+            " element_type_id integer not null default 0, "
             " name text, "
-            " close integer, "
+            " close integer not null default 0, "
             " sort integer "
             ");", COLUMN_TYPE_END);
     exec_query(

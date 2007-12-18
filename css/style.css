@@ -312,3 +312,9 @@ div.navigater {
 div.navigater a {
     font-weight: bold;
 }
+table.item_table {
+    width: 90%;
+}
+.element_new_item {
+    width: 80px;
+}

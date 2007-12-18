@@ -22,9 +22,9 @@ static List* db_get_element_types(int all, List* elements)
     sqlite3_stmt *stmt = NULL;
 
     if (all) {
-        sql = "select id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort, default_value from element_type order by sort";
+        sql = "select id, type, ticket_property, reply_property, required, name, description, display_in_list, sort, default_value, auto_add_item from element_type order by sort";
     } else {
-        sql = "select id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort, default_value from element_type where display_in_list = 1 order by sort";
+        sql = "select id, type, ticket_property, reply_property, required, name, description, display_in_list, sort, default_value, auto_add_item from element_type where display_in_list = 1 order by sort";
     }
     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
@@ -46,6 +46,7 @@ static List* db_get_element_types(int all, List* elements)
         if (value != NULL) {
             strcpy(e->default_value, value);
         }
+        e->auto_add_item = sqlite3_column_int(stmt, 10);
         list_add(elements, e);
     }
     if (SQLITE_DONE != r)
@@ -72,7 +73,7 @@ ElementType* db_get_element_type(int id)
     const char *sql;
     sqlite3_stmt *stmt = NULL;
 
-    sql = "select id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort "
+    sql = "select id, type, ticket_property, reply_property, required, name, description, auto_add_item, default_value, display_in_list, sort "
         "from element_type "
         "where id = ? "
         "order by sort";
@@ -82,6 +83,7 @@ ElementType* db_get_element_type(int id)
 
     e = NULL;
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
+        const unsigned char* value;
         e = (ElementType*)xalloc(sizeof(ElementType));
         e->id = sqlite3_column_int(stmt, 0);
         e->type = sqlite3_column_int(stmt, 1);
@@ -90,8 +92,12 @@ ElementType* db_get_element_type(int id)
         e->required = sqlite3_column_int(stmt, 4);
         strcpy(e->name, sqlite3_column_text(stmt, 5));
         strcpy(e->description, sqlite3_column_text(stmt, 6));
-        e->display_in_list = sqlite3_column_int(stmt, 7);
-        e->sort = sqlite3_column_int(stmt, 8);
+        e->auto_add_item = sqlite3_column_int(stmt, 7);
+        value = sqlite3_column_text(stmt, 8);
+        if (value != NULL)
+            strcpy(e->default_value, value);
+        e->display_in_list = sqlite3_column_int(stmt, 9);
+        e->sort = sqlite3_column_int(stmt, 10);
         break;
     }
 
@@ -710,7 +716,15 @@ void db_update_element_type(ElementType* e_type)
     }
     if (exec_query(
             "update element_type set "
-            "ticket_property = ?, reply_property = ?, required = ?, element_name = ?, description = ?, sort = ?, display_in_list = ?, default_value = ? "
+            " ticket_property = ?,"
+            " reply_property = ?,"
+            " required = ?,"
+            " name = ?,"
+            " description = ?,"
+            " sort = ?,"
+            " display_in_list = ?,"
+            " default_value = ?, "
+            " auto_add_item = ? "
             "where id = ?",
             COLUMN_TYPE_INT, e_type->ticket_property,
             COLUMN_TYPE_INT, e_type->reply_property,
@@ -720,6 +734,7 @@ void db_update_element_type(ElementType* e_type)
             COLUMN_TYPE_INT, e_type->sort,
             COLUMN_TYPE_INT, e_type->display_in_list,
             COLUMN_TYPE_TEXT, e_type->default_value,
+            COLUMN_TYPE_INT, e_type->auto_add_item,
             COLUMN_TYPE_INT, e_type->id,
             COLUMN_TYPE_END) != 1)
         die("no element_type to update?");
@@ -761,14 +776,15 @@ int db_register_element_type(ElementType* e_type)
     char sql[DEFAULT_LENGTH];
     int element_type_id;
     exec_query(
-            "insert into element_type (id, type, ticket_property, reply_property, required, element_name, description, display_in_list, sort)"
-            "values (NULL, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "insert into element_type (id, type, ticket_property, reply_property, required, name, description, auto_add_item, display_in_list, sort)"
+            "values (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             COLUMN_TYPE_INT, e_type->type,
             COLUMN_TYPE_INT, e_type->ticket_property,
             COLUMN_TYPE_INT, e_type->reply_property,
             COLUMN_TYPE_INT, e_type->required,
             COLUMN_TYPE_TEXT, e_type->name,
             COLUMN_TYPE_TEXT, e_type->description,
+            COLUMN_TYPE_INT, e_type->auto_add_item,
             COLUMN_TYPE_INT, e_type->display_in_list,
             COLUMN_TYPE_INT, e_type->sort,
             COLUMN_TYPE_END);

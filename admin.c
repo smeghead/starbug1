@@ -22,7 +22,6 @@ void items_submit_action();
 void style_action();
 void style_submit_action();
 void display_action();
-void update_action();
 void new_item_action();
 void new_item_submit_action();
 void delete_item_action();
@@ -43,7 +42,6 @@ void register_actions()
     register_action_actions("items_submit", items_submit_action);
     register_action_actions("style", style_action);
     register_action_actions("style_submit", style_submit_action);
-    register_action_actions("update", update_action);
     register_action_actions("new_item", new_item_action);
     register_action_actions("new_item_submit", new_item_submit_action);
     register_action_actions("delete_item", delete_item_action);
@@ -307,7 +305,7 @@ void items_action()
         o("\t\t<h4>"); h(et->name); o("</h4>\n");
         o("\t\t<div class=\"item_navigation\"><a href=\"#top\">このページのトップへ</a></div>\n");
         o("\t\t<input type=\"hidden\" name=\"field_ids\" value=\"%d\" />\n", et->id);
-        o("\t\t<table summary=\"project table\">\n");
+        o("\t\t<table class=\"item_table\" summary=\"item table\">\n");
         o("\t\t\t<tr>\n");
         o("\t\t\t\t<th>項目名</th>\n");
         o("\t\t\t\t<td>\n");
@@ -424,6 +422,10 @@ void items_action()
                 o("\t\t\t\t\t\t</tr>\n");
                 o("\t\t\t\t\t</table>\n");
                 o("\t\t\t\t\t<div class=\"description\">項目種別が選択式の場合の選択肢です。</div>\n");
+                o("\t\t\t\t\t<input id=\"field%d.auto_add_item\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.auto_add_item\" ", et->id, et->id);
+                o(                  "value=\"1\" %s />\n", et->auto_add_item == 1 ? "checked=\"checked\"" : "");
+                o("\t\t\t\t\t<label for=\"field%d.auto_add_item\">投稿時に、新規項目を指定可能とする。</label>\n", et->id);
+                o("\t\t\t\t\t<div class=\"description\">投稿時にテキストボックスを表示し、テキストボックスに入力された場合は、その項目を選択肢に追加する機能を付加するかどうかです。</div>\n");
                 o("\t\t\t\t</td>\n");
                 o("\t\t\t</tr>\n");
                 break;
@@ -482,34 +484,6 @@ void items_submit_action()
     db_finish();
     redirect("", "更新しました");
 }
-/**
- * 更新するaction。
- */
-void update_action()
-{
-    Project* project;
-    char smtp_port[DEFAULT_LENGTH];
-
-    db_init();
-    db_begin();
-    project = db_get_project();
-    cgiFormStringNoNewlines("project.name", project->name, DEFAULT_LENGTH);
-    cgiFormStringNoNewlines("project.description", project->description, DEFAULT_LENGTH);
-    cgiFormStringNoNewlines("project.home_url", project->home_url, DEFAULT_LENGTH);
-    cgiFormStringNoNewlines("project.smtp_server", project->smtp_server, DEFAULT_LENGTH);
-    cgiFormStringNoNewlines("project.smtp_port", smtp_port, DEFAULT_LENGTH);
-    project->smtp_port = atoi(smtp_port);
-    cgiFormStringNoNewlines("project.notify_address", project->notify_address, DEFAULT_LENGTH);
-    cgiFormStringNoNewlines("project.admin_address", project->admin_address, DEFAULT_LENGTH);
-
-    db_update_project(project);
-
-    project = db_get_project();
-    update_elements();
-    db_commit();
-    db_finish();
-    redirect("", "更新しました");
-}
 
 void update_elements()
 {
@@ -528,6 +502,8 @@ void update_elements()
 
         e_type = db_get_element_type(atoi(id));
 
+        d("while id: %s\n", id);
+        d("while\n");
         sprintf(name, "field%s.name", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
         strcpy(e_type->name, value);
@@ -559,6 +535,12 @@ void update_elements()
         sprintf(name, "field%s.default_value", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
         strcpy(e_type->default_value, value);
+
+        sprintf(name, "field%s.auto_add_item", id);
+        cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+        d("auto_add_item: %s\n", value);
+        e_type->auto_add_item = atoi(value);
+        d("auto_add_item: %d\n", e_type->auto_add_item);
 
         db_update_element_type(e_type);
 
@@ -712,6 +694,10 @@ void new_item_action()
             }
             o("\t\t\t\t\t</table>\n");
             o("\t\t\t\t\t<div class=\"description\">項目種別が選択式の場合の選択肢です。</div>\n");
+            o("\t\t\t\t\t<input id=\"field.auto_add_item\" class=\"checkbox\" type=\"checkbox\" name=\"field.auto_add_item\" ");
+            o(                  "value=\"1\" />\n");
+            o("\t\t\t\t\t<label for=\"field.auto_add_item\">投稿時に、新規項目を指定可能とする。</label>\n");
+            o("\t\t\t\t\t<div class=\"description\">投稿時にテキストボックスを表示し、テキストボックスに入力された場合は、その項目を選択肢に追加する機能を付加するかどうかです。</div>\n");
             o("\t\t\t\t</td>\n");
             o("\t\t\t</tr>\n");
     o("\t\t\t<tr>\n");
@@ -762,6 +748,8 @@ void new_item_submit_action()
 
     cgiFormStringNoNewlines("field.display_in_list", value, DEFAULT_LENGTH);
     e_type->display_in_list = atoi(value);
+    cgiFormStringNoNewlines("field.auto_add_item", value, DEFAULT_LENGTH);
+    e_type->auto_add_item = atoi(value);
     cgiFormStringNoNewlines("field.sort", value, DEFAULT_LENGTH);
     e_type->sort = atoi(value);
     e_type_id = db_register_element_type(e_type);

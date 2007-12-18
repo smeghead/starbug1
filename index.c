@@ -463,7 +463,7 @@ void output_form_element(List* elements, ElementType* e_type)
         case ELEM_TYPE_LIST_SINGLE:
             o("<select id=\"field%d\" name=\"field%d\">\n",
                     e_type->id, e_type->id);
-            o("<option value=\"\">&nbsp;</option>");
+            o("<option value=\"\">&nbsp;</option>\n");
             list_alloc(items_a, ListItem);
             items_a = db_get_list_item(e_type->id, items_a);
             foreach (it, items_a) {
@@ -489,7 +489,7 @@ void output_form_element(List* elements, ElementType* e_type)
             o("<select size=\"%d\" id=\"field%d", list_count + 1, e_type->id);
             o("\" name=\"field%d\" multiple=\"multiple\">\n", e_type->id);
 
-            o("<option value=\"\">&nbsp;</option>");
+            o("<option value=\"\">&nbsp;</option>\n");
             foreach (it, items_a) {
                 ListItem* item = it->element;
                 o("<option value=\"");
@@ -508,6 +508,17 @@ void output_form_element(List* elements, ElementType* e_type)
         case ELEM_TYPE_UPLOADFILE:
             o("<input type=\"file\" class=\"element\" id=\"field%d\" name=\"field%d\" />\n",
                     e_type->id, e_type->id);
+            break;
+    }
+    switch (e_type->type) {
+        case ELEM_TYPE_LIST_SINGLE:
+        case ELEM_TYPE_LIST_MULTI:
+            if (e_type->auto_add_item) {
+                /* 新規項目を設定可能である場合、テキストボックスを表示する。 */
+                o("<input type=\"text\" class=\"element_new_item\" id=\"field%d\" name=\"field%d.new_item\" />\n",
+                    e_type->id, e_type->id);
+                o("選択肢を追加する場合はテキストボックスに入力してください。\n");
+            }
             break;
     }
 }
@@ -766,6 +777,16 @@ void ticket_action()
     output_footer();
     list_free(element_types_a);
 }
+void register_list_item(int id, char* name)
+{
+    ListItem* item_a = xalloc(sizeof(ListItem));
+    item_a->element_type_id = id;
+    strcpy(item_a->name, name);
+    item_a->close = 0;
+    item_a->sort = 0;
+    db_register_list_item(item_a);
+    free(item_a);
+}
 /**
  * 登録するaction。
  * 登録モード、編集モード、削除モードがある。
@@ -804,7 +825,9 @@ void register_submit_action()
         foreach (it, element_types_a) {
             ElementType* et = it->element;
             Element* e = list_new_element(elements_a);
+            char name_new_item[DEFAULT_LENGTH] = "";
             char name[DEFAULT_LENGTH] = "";
+            sprintf(name_new_item, "field%d.new_item", et->id);
             sprintf(name, "field%d", et->id);
             strcpy(value_a, "");
 
@@ -827,14 +850,29 @@ void register_submit_action()
                     strcpy(e->str_val, value_a);
                     break;
                 case ELEM_TYPE_LIST_SINGLE:
-                    cgiFormString(name, value_a, VALUE_LENGTH);
-                    e->str_val = (char*)xalloc(sizeof(char) * strlen(value_a) + 1);
-                    strcpy(e->str_val, value_a);
+                    /* 新規選択肢 */
+                    cgiFormString(name_new_item, value_a, VALUE_LENGTH);
+                    if (strlen(value_a)) {
+                        e->str_val = (char*)xalloc(sizeof(char) * strlen(value_a) + 1);
+                        strcpy(e->str_val, value_a);
+                        /* 新しく選択肢を追加 */
+                        register_list_item(et->id, value_a);
+                    } else {
+                        cgiFormString(name, value_a, VALUE_LENGTH);
+                        e->str_val = (char*)xalloc(sizeof(char) * strlen(value_a) + 1);
+                        strcpy(e->str_val, value_a);
+                    }
                     break;
                 case ELEM_TYPE_LIST_MULTI:
-                    if ((cgiFormStringMultiple(name, &multi)) == cgiFormNotFound) {
-                        strcpy(value_a, "");
-                    } else {
+                    /* 新規選択肢 */
+                    cgiFormString(name_new_item, value_a, VALUE_LENGTH);
+                    if (strlen(value_a)) {
+                        e->str_val = (char*)xalloc(sizeof(char) * strlen(value_a) + 1);
+                        strcpy(e->str_val, value_a);
+                        /* 新しく選択肢を追加 */
+                        register_list_item(et->id, value_a);
+                    }
+                    if ((cgiFormStringMultiple(name, &multi)) != cgiFormNotFound) {
                         int i = 0;
                         int len = 0;
                         while (multi[i]) {
