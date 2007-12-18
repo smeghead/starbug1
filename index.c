@@ -22,7 +22,7 @@ void edit_top_submit_action();
 void download_action();
 void rss_action();
 void default_action();
-void output_header(Project* project, char* script_name);
+void output_header(Project*, char*, char*);
 void output_footer();
 int cgiMain();
 void output_form_element(List* element, ElementType* e_type);
@@ -60,7 +60,7 @@ void register_actions()
     register_action_actions("default", default_action);
 }
 
-void output_header(Project* project, char* script_name)
+void output_header(Project* project, char* title, char* script_name)
 {
     cgiHeaderContentType("text/html; charset=utf-8;");
     /* Top of the page */
@@ -70,7 +70,7 @@ void output_header(Project* project, char* script_name)
             "\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n"
             "\t<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\" />\n"
             "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />"
-            "\t<title>Starbug1</title>\n");
+            "\t<title>Starbug1 %s - %s</title>\n", project->name, title);
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName);
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/user.css\" />\n", cgiScriptName);
     if (script_name) {
@@ -192,7 +192,7 @@ void list_action()
     strcpy(path_info, cgiPathInfo);
     db_init();
     project = db_get_project();
-    output_header(project, "list.js");
+    output_header(project, "チケット一覧", "list.js");
     cgiFormStringNoNewlines("message", message, DEFAULT_LENGTH);
     if (strlen(message) > 0) {
         o("<div class=\"complete_message\">"); h(message); o("&nbsp;</div>\n");
@@ -534,7 +534,7 @@ void register_action()
     strcpy(path_info, cgiPathInfo);
     db_init();
     project = db_get_project();
-    output_header(project, "register.js");
+    output_header(project, "新規登録", "register.js");
     o(      "<h2>"); h(project->name);o(" - チケット登録</h2>\n"
             "<div id=\"input_form\">\n"
             "<h3>チケット登録</h3>\n"
@@ -608,7 +608,7 @@ void ticket_action()
         return;
     }
     project = db_get_project();
-    output_header(project, "reply.js");
+    output_header(project, "チケット詳細", "reply.js");
 
     message_ids_a = db_get_message_ids(iid);
     list_alloc(element_types_a, ElementType);
@@ -897,7 +897,7 @@ void register_submit_action()
 file_size_error:
     db_rollback();
     db_finish();
-    output_header(project, NULL);
+    output_header(project, "エラー", NULL);
     o("<h1>エラー発生</h1>\n");
     o("<div class=\"message\">ファイルサイズが大きすぎます。%dkbより大きいファイルは登録できません。ブラウザの戻るボタンで戻ってください。</div>\n", MAX_FILE_SIZE);
     output_footer();
@@ -914,7 +914,7 @@ void default_action()
 
     db_init();
     project = db_get_project();
-    output_header(project, NULL);
+    output_header(project, "トップページ", NULL);
     list_alloc(states_a, State);
     states_a = db_get_states(states_a);
     o(      "<div id=\"info\">\n");
@@ -1037,7 +1037,7 @@ void help_action()
     Project* project;
     db_init();
     project = db_get_project();
-    output_header(project, NULL);
+    output_header(project, "ヘルプ", NULL);
     db_finish();
     o(      "<h2>");h(project->name);o(" - Starbug1</h2>\n"
             "<div id=\"top\">\n");
@@ -1050,7 +1050,7 @@ void edit_top_action()
     Project* project;
     db_init();
     project = db_get_project();
-    output_header(project, "edit_top.js");
+    output_header(project, "トップページの編集", "edit_top.js");
     db_finish();
     o(      "<h2>トップページの編集</h2>\n"
             "<div id=\"top\">\n"

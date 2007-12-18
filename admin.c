@@ -27,7 +27,7 @@ void new_item_action();
 void new_item_submit_action();
 void delete_item_action();
 void delete_item_submit_action();
-void output_header(Project*, char*);
+void output_header(Project*, char*, char*);
 void output_footer();
 int cgiMain();
 void update_elements();
@@ -51,7 +51,7 @@ void register_actions()
     register_action_actions("default", menu_action);
 }
 
-void output_header(Project* project, char* script_name)
+void output_header(Project* project, char* title, char* script_name)
 {
     cgiHeaderContentType("text/html; charset=utf-8;");
     /* Top of the page */
@@ -61,7 +61,7 @@ void output_header(Project* project, char* script_name)
             "\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n"
             "\t<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\" />\n"
             "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />"
-            "\t<title>Starbug1 管理ツール</title>\n");
+            "\t<title>Starbug1 %s 管理ツール - %s</title>\n", project->name, title);
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName);
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/user.css\" />\n", cgiScriptName);
     if (script_name) {
@@ -114,7 +114,7 @@ void menu_action()
 
     db_init();
     project = db_get_project();
-    output_header(project, NULL);
+    output_header(project, "メニュー", NULL);
 
     cgiFormStringNoNewlines("message", message, DEFAULT_LENGTH);
     if (strlen(message) > 0) {
@@ -142,7 +142,7 @@ void project_action()
 
     db_init();
     project = db_get_project();
-    output_header(project, "management.js");
+    output_header(project, "プロジェクト設定", "management.js");
 
     o("<h2>%s 管理ツール</h2>", project->name);
     o("<div id=\"setting_form\">\n");
@@ -192,7 +192,7 @@ void env_action()
 
     db_init();
     project = db_get_project();
-    output_header(project, "management.js");
+    output_header(project, "環境設定", "management.js");
 
     o("<h2>%s 管理ツール</h2>", project->name);
     o("<div id=\"setting_form\">\n");
@@ -278,7 +278,7 @@ void items_action()
 
     db_init();
     project = db_get_project();
-    output_header(project, "management.js");
+    output_header(project, "項目設定", "management.js");
 
     o("<h2>%s 管理ツール</h2>", project->name);
     o("<div id=\"setting_form\">\n");
@@ -620,7 +620,7 @@ void new_item_action()
 
     db_init();
     project = db_get_project();
-    output_header(project, "new_item.js");
+    output_header(project, "新規項目登録", "new_item.js");
 
     o("<h2>%s 管理ツール</h2>", project->name);
     o(      "<div id=\"new_item\">\n"
@@ -804,7 +804,7 @@ void delete_item_action()
     iid = atoi(e_type_id);
     db_init();
     project = db_get_project();
-    output_header(project, "delete_item.js");
+    output_header(project, "項目削除", "delete_item.js");
 
     e_type = db_get_element_type(iid);
     o("<h2>%s 管理ツール</h2>", project->name);
@@ -844,7 +844,7 @@ void style_action()
     Project* project;
     db_init();
     project = db_get_project();
-    output_header(project, "style.js");
+    output_header(project, "スタイル設定", "style.js");
     db_finish();
     o(      "<h2>スタイル編集</h2>\n"
             "<div id=\"top\">\n"
