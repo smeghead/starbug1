@@ -24,6 +24,7 @@ void db_delete_list_item(int);
 void db_register_list_item(ListItem*);
 int db_register_element_type(ElementType*);
 void db_delete_element_type(int);
+List* db_get_states_has_not_close(List*);
 List* db_get_states(List*);
 ElementFile* db_get_element_file(int);
 List* db_get_newest_information(int, List*);

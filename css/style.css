@@ -247,6 +247,22 @@ span.required {
 #state_index form {
     display:inline;
 }
+#state_index_anchor {
+    width:100%;
+    margin:0px 0px 0px 0px;
+    text-align: center;
+    height: 20px;
+}
+
+#state_index_anchor li {
+    margin:0px 0px 0px 0px;
+    list-style:none;
+    padding:0px 10px 0px 10px;
+    float:left;
+}
+#state_index_anchor form {
+    display:inline;
+}
 #field_list {
     width:100%;
     height:30px;

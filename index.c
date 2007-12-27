@@ -284,6 +284,7 @@ void list_action()
         o("(%d)", s->count);
         o("\t\t</li>\n");
     }
+    list_free(states_a);
     o("\t\t<li>\n");
     o("\t\t\t<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
     o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" />\n");
@@ -291,26 +292,46 @@ void list_action()
     o("\t\t\t</form>\n");
     o("\t\t</li>\n");
     o("\t</ul>\n");
-    o("<br clear=\"all\" />\n");
     o("</div>\n");
+    o("<br clear=\"all\" />\n");
     fflush(cgiOut);
     o("<div id=\"ticket_list\">\n");
 
     o("<h3>状態別チケット一覧</h3>\n");
     o("<div class=\"message\">未クローズの状態毎にチケットを表示しています。</div>\n");
+    o("<div id=\"state_index_anchor\">\n");
+    o("\t<ul>\n");
+    list_alloc(states_a, State);
+    states_a = db_get_states_has_not_close(states_a);
     foreach (it, states_a) {
-        State* state = it->element;
+        State* s = it->element;
+        o("\t\t<li>\n");
+        o("\t\t\t<a href=\"#");
+        h(s->name);
+        o("\">");
+        h(s->name);
+        o("</a>");
+        o("\t\t</li>\n");
+    }
+    o("\t</ul>\n");
+    o("</div>\n");
+    o("<br clear=\"all\" />\n");
+    foreach (it, states_a) {
+        State* s = it->element;
 
-        o("<h4>");h(state->name);o("</h4>\n");
+        o("<div>\n");
+        o("<a name=\""); h(s->name); o("\" />\n");
+        o("<h4>");h(s->name);o("</h4>\n");
         /* 検索 */
         list_alloc(conditions_a, Condition);
         list_alloc(messages_a, Message);
-        result = db_get_tickets_by_status(state->name, messages_a);
+        result = db_get_tickets_by_status(s->name, messages_a);
         list_free(conditions_a);
 
         output_ticket_table_status_index(result, element_types_a);
         list_free(result->messages);
         free(result);
+        o("</div>\n");
         fflush(cgiOut);
     }
     list_free(states_a);

@@ -844,6 +844,40 @@ void db_delete_element_type(int id)
             COLUMN_TYPE_INT, id,
             COLUMN_TYPE_END);
 }
+List* db_get_states_has_not_close(List* states)
+{
+    int r;
+    char sql[DEFAULT_LENGTH];
+    sqlite3_stmt *stmt = NULL;
+
+    sprintf(sql, 
+            "select m.field%d as name, count(t.id) as count "
+            "from ticket as t "
+            "inner join message as m "
+            " on m.id = t.last_message_id "
+            "inner join list_item as l "
+            " on l.name = m.m.field%d "
+            "where l.close = 0 "
+            "group by m.field%d "
+            "order by l.sort ", ELEM_ID_STATUS, ELEM_ID_STATUS, ELEM_ID_STATUS);
+    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    sqlite3_reset(stmt);
+
+    while (SQLITE_ROW == (r = sqlite3_step(stmt))){
+        State* s = list_new_element(states);
+        strcpy(s->name, sqlite3_column_text(stmt, 0));
+        s->count = sqlite3_column_int(stmt, 1);
+        list_add(states, s);
+    }
+    if (SQLITE_DONE != r)
+        goto error;
+
+    sqlite3_finalize(stmt);
+
+    return states;
+
+ERROR_LABEL
+}
 List* db_get_states(List* states)
 {
     int r;
