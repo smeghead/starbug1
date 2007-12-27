@@ -11,6 +11,7 @@ List* db_get_list_item(int, List*);
 int db_register_ticket(Message*);
 void db_delete_ticket(Message*);
 SearchResult* db_search_tickets(List*, char*, Condition*, int, List* messages);
+SearchResult* db_get_tickets_by_status(char*, List*);
 List* db_get_elements(int, List*);
 List* db_get_last_elements_4_list(int, List*);
 List* db_get_last_elements(int, List*);

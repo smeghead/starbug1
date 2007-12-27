@@ -13,6 +13,7 @@
 /* prototype declares */
 void register_actions();
 void list_action();
+void search_actoin();
 void register_submit_action();
 void register_action();
 void ticket_action();
@@ -48,6 +49,7 @@ int get_mode()
 void register_actions()
 {
     register_action_actions("list", list_action);
+    register_action_actions("search", search_actoin);
     register_action_actions("register", register_action);
     register_action_actions("register_submit", register_submit_action);
     register_action_actions("ticket", ticket_action);
@@ -83,7 +85,7 @@ void output_header(Project* project, char* title, char* script_name)
             "<ul id=\"mainmenu\">\n", cgiScriptName);
     o(      "\t<li><a href=\"%s\">トップ</a></li>\n", cgiScriptName);
     o(      "\t<li><a href=\"%s/list\">一覧</a></li>\n", cgiScriptName);
-    o(      "\t<li><a href=\"%s/list/search\">検索</a></li>\n", cgiScriptName);
+    o(      "\t<li><a href=\"%s/search\">検索</a></li>\n", cgiScriptName);
     o(      "\t<li><a href=\"%s/register\">新規登録</a></li>\n", cgiScriptName);
     o(      "\t<li><a href=\"%s/rss\">RSSフィード</a></li>\n", cgiScriptName);
     o(      "\t<li><a href=\"%s/help\">ヘルプ</a></li>\n", cgiScriptName);
@@ -160,12 +162,167 @@ char* format_query_string(char* buffer)
 
     return buffer;
 }
+void output_ticket_table_header_no_link(List* element_types)
+{
+    Iterator* it;
+
+    o(      "\t<tr>\n");
+    o(      "\t\t<th>ID</th>\n");
+    foreach (it, element_types) {
+        ElementType* et = it->element;
+        o("\t\t<th>\n");
+        h(et->name);
+        o("\t\t</th>\n");
+    }
+    o("\t\t<th>投稿日時</th>\n");
+    o("\t\t<th>最終更新日時</th>\n");
+    o("\t</tr>\n");
+}
+void output_ticket_table_header(List* element_types, char* query_string)
+{
+    Iterator* it;
+    char* reverse = strstr(cgiQueryString, "rsort=");
+
+    o(      "\t<tr>\n");
+    o(      "\t\t<th><a href=\"%s/list?%ssort=-1&amp;%s\">ID</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    foreach (it, element_types) {
+        ElementType* et = it->element;
+        o("\t\t<th>\n");
+        o("\t\t\t<a href=\"%s/list?%ssort=%d&amp;%s\">", cgiScriptName, reverse ? "" : "r", et->id, query_string);
+        h(et->name);
+        o("</a>\n");
+        o("\t\t</th>\n");
+    }
+    o("\t\t<th><a href=\"%s/list?%ssort=-2&amp;%s\">投稿日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    o("\t\t<th><a href=\"%s/list?%ssort=-3&amp;%s\">最終更新日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    o("\t</tr>\n");
+}
+void output_ticket_table_body(SearchResult* result, List* element_types)
+{
+    Iterator* it;
+    Iterator* it_msg;
+
+    foreach (it_msg, result->messages) {
+        Message* message = it_msg->element;
+        List* elements_a;
+        list_alloc(elements_a, Element);
+        elements_a = db_get_last_elements_4_list(message->id, elements_a);
+        o("\t<tr>\n");
+        o("\t\t<td class=\"field%d-%d\"><a href=\"%s/ticket/%s\">%s</a></td>\n", 
+                ELEM_ID_ID, 
+                get_element_lid_by_id(elements_a, ELEM_ID_ID), 
+                cgiScriptName, 
+                get_element_value_by_id(elements_a, ELEM_ID_ID), 
+                get_element_value_by_id(elements_a, ELEM_ID_ID));
+        foreach (it, element_types) {
+            ElementType* et = it->element;
+            o("\t\t<td class=\"field%d-%d\">", et->id, get_element_lid_by_id(elements_a, et->id));
+            if (et->id == ELEM_ID_TITLE)
+                o("<a href=\"%s/ticket/%d\">", cgiScriptName, message->id);
+            if (et->id == ELEM_ID_SENDER)
+                hmail(get_element_value_by_id(elements_a, ELEM_ID_ORG_SENDER)); /* 最初の投稿者を表示する。 */
+            else
+                h(get_element_value_by_id(elements_a, et->id));
+            if (et->id == ELEM_ID_TITLE)
+                o("</a>");
+            o("&nbsp;</td>\n");
+        }
+        o("\t\t<td>"); h(get_element_value_by_id(elements_a, ELEM_ID_REGISTERDATE)); o("&nbsp;</td>\n");
+        o("\t\t<td>"); h(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE)); o("&nbsp;</td>\n");
+        o("\t</tr>\n");
+    }
+}
+void output_ticket_table_status_index(SearchResult* result, List* element_types)
+{
+    o("<table summary=\"ticket list\">\n");
+    output_ticket_table_header_no_link(element_types);
+    output_ticket_table_body(result, element_types);
+    o("</table>\n");
+}
+void output_ticket_table(SearchResult* result, List* element_types, char* query_string)
+{
+    o("<table summary=\"ticket list\">\n");
+    output_ticket_table_header(element_types, query_string);
+    output_ticket_table_body(result, element_types);
+    o("</table>\n");
+}
 /**
  * 一覧を表示するaction。
  */
 void list_action()
 {
-    char path_info[DEFAULT_LENGTH];
+    SearchResult* result;
+    List* element_types_a;
+    List* conditions_a = NULL;
+    Project* project;
+    List* states_a;
+    Iterator* it;
+    char message[DEFAULT_LENGTH];
+    List* messages_a;
+
+    db_init();
+    project = db_get_project();
+    output_header(project, "チケット一覧", "list.js");
+    cgiFormStringNoNewlines("message", message, DEFAULT_LENGTH);
+    if (strlen(message) > 0) {
+        o("<div class=\"complete_message\">"); h(message); o("&nbsp;</div>\n");
+    }
+    list_alloc(element_types_a, ElementType);
+    element_types_a = db_get_element_types_4_list(element_types_a);
+    o("<h2>"); h(project->name); o(" - チケット一覧</h2>\n");
+    list_alloc(states_a, State);
+    states_a = db_get_states(states_a);
+    /* stateの表示 */
+    o("<div id=\"state_index\">\n");
+    o("\t<ul>\n");
+    foreach (it, states_a) {
+        State* s = it->element;
+        o("\t\t<li>\n");
+        o("\t\t\t<a href=\"%s/list?field%d=", cgiScriptName, ELEM_ID_STATUS); u(s->name); o("\">");
+        h(s->name);
+        o("</a>");
+        o("(%d)", s->count);
+        o("\t\t</li>\n");
+    }
+    o("\t\t<li>\n");
+    o("\t\t\t<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
+    o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" />\n");
+    o("\t\t\t\t<input type=\"submit\" class=\"button\" value=\"ID指定で表示\" />\n");
+    o("\t\t\t</form>\n");
+    o("\t\t</li>\n");
+    o("\t</ul>\n");
+    o("<br clear=\"all\" />\n");
+    o("</div>\n");
+    fflush(cgiOut);
+    o("<div id=\"ticket_list\">\n");
+
+    o("<h3>状態別チケット一覧</h3>\n");
+    foreach (it, states_a) {
+        State* state = it->element;
+
+        o("<h4>");h(state->name);o("</h4>\n");
+        /* 検索 */
+        list_alloc(conditions_a, Condition);
+        list_alloc(messages_a, Message);
+        result = db_get_tickets_by_status(state->name, messages_a);
+        list_free(conditions_a);
+
+        output_ticket_table_status_index(result, element_types_a);
+        list_free(result->messages);
+        free(result);
+        fflush(cgiOut);
+    }
+    list_free(states_a);
+    list_free(element_types_a);
+    o("</div>\n");
+    output_footer();
+    db_finish();
+}
+/**
+ * 検索画面を表示するaction。
+ */
+void search_actoin()
+{
     SearchResult* result;
     List* element_types_a;
     List* conditions_a = NULL;
@@ -173,8 +330,6 @@ void list_action()
     Project* project;
     List* states_a;
     Iterator* it;
-    int mode_search = (strlen(cgiPathInfo) > strlen("/list/")) ? 1 : 0;
-    char message[DEFAULT_LENGTH];
     char sortstr[DEFAULT_LENGTH];
     char id[DEFAULT_LENGTH];
     char q[DEFAULT_LENGTH];
@@ -189,14 +344,9 @@ void list_action()
         redirect(uri, NULL);
     }
     
-    strcpy(path_info, cgiPathInfo);
     db_init();
     project = db_get_project();
     output_header(project, "チケット一覧", "list.js");
-    cgiFormStringNoNewlines("message", message, DEFAULT_LENGTH);
-    if (strlen(message) > 0) {
-        o("<div class=\"complete_message\">"); h(message); o("&nbsp;</div>\n");
-    }
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_4_list(element_types_a);
     o("<h2>"); h(project->name); o(" - チケット一覧</h2>\n");
@@ -249,11 +399,8 @@ void list_action()
         o("\t\t</li>\n");
     }
     list_free(states_a);
-    o("\t\t<li><a href=\"%s/list%s\" id=\"display_search_condition\">検索条件を%s</a></li>\n", cgiScriptName, 
-            mode_search ? "" : "/search",
-            mode_search ? "閉じる" : "開く");
     o("\t\t<li>\n");
-    o("\t\t\t<form action=\"%s/list\" method=\"get\">\n", cgiScriptName);
+    o("\t\t\t<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
     o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" />\n");
     o("\t\t\t\t<input type=\"submit\" class=\"button\" value=\"ID指定で表示\" />\n");
     o("\t\t\t</form>\n");
@@ -261,9 +408,9 @@ void list_action()
     o("\t</ul>\n");
     o("<br clear=\"all\" />\n");
     o("</div>\n");
-    o("<div id=\"condition_form\" style=\"%s\" >\n", mode_search ? "" : "display: none;");
+    o("<div id=\"condition_form\">\n");
     o("<h3>検索条件</h3>\n");
-    o("<form action=\"%s/list/search\" method=\"get\">\n", cgiScriptName);
+    o("<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
     o(      "<table summary=\"condition table\">\n");
     foreach (it, element_types_a) {
         ElementType* et = it->element;
@@ -297,9 +444,6 @@ void list_action()
     if (result->messages->size) {
         char query_string_buffer[DEFAULT_LENGTH];
         char* query_string;
-        char* reverse = strstr(cgiQueryString, "rsort=");
-        Iterator* it;
-        Iterator* it_msg;
 
         query_string = format_query_string(query_string_buffer);
         o(      "<div class=\"description\">");
@@ -308,50 +452,7 @@ void list_action()
         o(      "%d件ヒットしました。\n", result->hit_count);
         o(      "</div>\n");
         output_navigater(result, query_string);
-        o(      "<table summary=\"ticket list\">\n"
-                "\t<tr>\n"
-                "\t\t<th><a href=\"%s/list?%ssort=-1&amp;%s\">ID</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
-        foreach (it, element_types_a) {
-            ElementType* et = it->element;
-            o("\t\t<th>\n");
-            o("\t\t\t<a href=\"%s/list?%ssort=%d&amp;%s\">", cgiScriptName, reverse ? "" : "r", et->id, query_string);
-            h(et->name);
-            o("</a>\n");
-            o("\t\t</th>\n");
-        }
-        o("\t\t<th><a href=\"%s/list?%ssort=-2&amp;%s\">投稿日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
-        o("\t\t<th><a href=\"%s/list?%ssort=-3&amp;%s\">最終更新日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
-        o("\t</tr>\n");
-        foreach (it_msg, result->messages) {
-            Message* message = it_msg->element;
-            List* elements_a;
-            list_alloc(elements_a, Element);
-            elements_a = db_get_last_elements_4_list(message->id, elements_a);
-            o("\t<tr>\n");
-            o("\t\t<td class=\"field%d-%d\"><a href=\"%s/ticket/%s\">%s</a></td>\n", 
-                    ELEM_ID_ID, 
-                    get_element_lid_by_id(elements_a, ELEM_ID_ID), 
-                    cgiScriptName, 
-                    get_element_value_by_id(elements_a, ELEM_ID_ID), 
-                    get_element_value_by_id(elements_a, ELEM_ID_ID));
-            foreach (it, element_types_a) {
-                ElementType* et = it->element;
-                o("\t\t<td class=\"field%d-%d\">", et->id, get_element_lid_by_id(elements_a, et->id));
-                if (et->id == ELEM_ID_TITLE)
-                    o("<a href=\"%s/ticket/%d\">", cgiScriptName, message->id);
-                if (et->id == ELEM_ID_SENDER)
-                    hmail(get_element_value_by_id(elements_a, ELEM_ID_ORG_SENDER)); /* 最初の投稿者を表示する。 */
-                else
-                    h(get_element_value_by_id(elements_a, et->id));
-                if (et->id == ELEM_ID_TITLE)
-                    o("</a>");
-                o("&nbsp;</td>\n");
-            }
-            o("\t\t<td>"); h(get_element_value_by_id(elements_a, ELEM_ID_REGISTERDATE)); o("&nbsp;</td>\n");
-            o("\t\t<td>"); h(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE)); o("&nbsp;</td>\n");
-            o("\t</tr>\n");
-        }
-        o("</table>\n");
+        output_ticket_table(result, element_types_a, query_string);
         output_navigater(result, query_string);
     }
     o("</div>\n");
@@ -537,12 +638,10 @@ static int contains(char* const value, const char* name)
  */
 void register_action()
 {
-    char path_info[DEFAULT_LENGTH];
     Project* project;
     char sender[DEFAULT_LENGTH];
     cgiCookieString("starbug1_sender", sender, DEFAULT_LENGTH);
 
-    strcpy(path_info, cgiPathInfo);
     db_init();
     project = db_get_project();
     output_header(project, "新規登録", "register.js");
