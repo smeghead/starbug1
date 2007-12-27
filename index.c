@@ -81,6 +81,7 @@ void output_header(Project* project, char* title, char* script_name)
     }
     o(      "</head>\n"
             "<body>\n"
+            "<a name=\"top\" />\n"
             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://sourceforge.jp/projects/starbug1/\"><img src=\"%s/../img/title.jpg\" alt=\"Starbug1\" /></a></h1>\n"
             "<ul id=\"mainmenu\">\n", cgiScriptName);
     o(      "\t<li><a href=\"%s\">トップ</a></li>\n", cgiScriptName);
@@ -321,7 +322,7 @@ void list_action()
 
         o("<div>\n");
         o("<a name=\""); h(s->name); o("\" />\n");
-        o("<h4>");h(s->name);o("</h4>\n");
+        o("<h4>");h(s->name);o("&nbsp;<a href=\"#top\">↑</a></h4>\n");
         /* 検索 */
         list_alloc(conditions_a, Condition);
         list_alloc(messages_a, Message);
