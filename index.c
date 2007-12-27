@@ -278,7 +278,7 @@ void list_action()
     foreach (it, states_a) {
         State* s = it->element;
         o("\t\t<li>\n");
-        o("\t\t\t<a href=\"%s/list?field%d=", cgiScriptName, ELEM_ID_STATUS); u(s->name); o("\">");
+        o("\t\t\t<a href=\"%s/search?field%d=", cgiScriptName, ELEM_ID_STATUS); u(s->name); o("\">");
         h(s->name);
         o("</a>");
         o("(%d)", s->count);
@@ -297,6 +297,7 @@ void list_action()
     o("<div id=\"ticket_list\">\n");
 
     o("<h3>状態別チケット一覧</h3>\n");
+    o("<div class=\"message\">未クローズの状態毎にチケットを表示しています。</div>\n");
     foreach (it, states_a) {
         State* state = it->element;
 
@@ -346,10 +347,10 @@ void search_actoin()
     
     db_init();
     project = db_get_project();
-    output_header(project, "チケット一覧", "list.js");
+    output_header(project, "チケット検索", "list.js");
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_4_list(element_types_a);
-    o("<h2>"); h(project->name); o(" - チケット一覧</h2>\n");
+    o("<h2>"); h(project->name); o(" - チケット検索</h2>\n");
     /* 検索 */
     list_alloc(conditions_a, Condition);
     foreach (it, element_types_a) {
@@ -392,7 +393,7 @@ void search_actoin()
     foreach (it, states_a) {
         State* s = it->element;
         o("\t\t<li>\n");
-        o("\t\t\t<a href=\"%s/list?field%d=", cgiScriptName, ELEM_ID_STATUS); u(s->name); o("\">");
+        o("\t\t\t<a href=\"%s/search?field%d=", cgiScriptName, ELEM_ID_STATUS); u(s->name); o("\">");
         h(s->name);
         o("</a>");
         o("(%d)", s->count);

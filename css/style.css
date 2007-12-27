@@ -34,14 +34,6 @@ h3 {
     border-width: 0px 0px 1px 15px;
     background-image: url("../img/h3.png");
 }
-h4 {
-    font-weight: bold;
-    padding: 0px 2px 0px 10px;
-    margin: 3px 0px 3px 3px;
-    border-color: #00108C;
-    border-style: solid;
-    border-width: 0px 0px 2px 0px;
-}
 hr {
     width: 100%;
 }
@@ -328,4 +320,12 @@ table.item_table {
 }
 .element_new_item {
     width: 80px;
+}
+div#ticket_list h4 {
+    font-weight: bold;
+    padding: 0px 2px 0px 10px;
+    margin: 3px 0px 3px 3px;
+    border-color: #00108C;
+    border-style: solid;
+    border-width: 0px 0px 2px 0px;
 }
