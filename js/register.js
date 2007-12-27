@@ -2,16 +2,9 @@ Event.observe(window, 'load', initPage);
 
 function initPage(e) {
     var required_fields = new Array();
-    var status_original = $F('field3');
     Event.observe('register_form', 'submit', 
         function(e) {
             try {
-                if ($F('field3') == status_original) {
-                    if (!confirm('状態が変更されていませんが、間違いないですか？')) {
-                        Event.stop(e);
-                        return false;
-                    }
-                }
                 if (!check_input_value(required_fields)) {
                     alert('入力されていない必須項目があります。確認してください。');
                     Event.stop(e);
