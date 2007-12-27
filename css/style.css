@@ -34,6 +34,14 @@ h3 {
     border-width: 0px 0px 1px 15px;
     background-image: url("../img/h3.png");
 }
+h4 {
+    font-weight: bold;
+    padding: 0px 2px 0px 10px;
+    margin: 3px 0px 3px 3px;
+    border-color: #00108C;
+    border-style: solid;
+    border-width: 0px 0px 1px 0px;
+}
 hr {
     width: 100%;
 }
@@ -303,6 +311,9 @@ div.item_navigation {
 }
 #ticket_list th a:hover {
     text-decoration: underline;
+}
+#ticket_list table tr:hover td {
+    background-color: #E9FEEE;
 }
 div.navigater {
     font-weight: bold;
