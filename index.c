@@ -185,7 +185,7 @@ void output_ticket_table_header(List* element_types, char* query_string)
     char* reverse = strstr(cgiQueryString, "rsort=");
 
     o(      "\t<tr>\n");
-    o(      "\t\t<th><a href=\"%s/list?%ssort=-1&amp;%s\">ID</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    o(      "\t\t<th><a href=\"%s/search?%ssort=-1&amp;%s\">ID</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
     foreach (it, element_types) {
         ElementType* et = it->element;
         o("\t\t<th>\n");
