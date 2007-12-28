@@ -320,15 +320,23 @@ void list_action()
     foreach (it, states_a) {
         State* s = it->element;
 
-        o("<div>\n");
-        o("<a name=\""); h(s->name); o("\" />\n");
-        o("<h4>");h(s->name);o("&nbsp;<a href=\"#top\">↑</a></h4>\n");
         /* 検索 */
         list_alloc(conditions_a, Condition);
         list_alloc(messages_a, Message);
         result = db_get_tickets_by_status(s->name, messages_a);
         list_free(conditions_a);
 
+        o("<a name=\""); h(s->name); o("\" />\n");
+        o("<div>\n");
+        o("<h4 class=\"status\">");h(s->name);o("&nbsp;(%d件)&nbsp;<a href=\"#top\">↑</a></h4>\n", s->count);
+        if (result->hit_count == LIST_PER_PAGE) {
+            o("\t\t<div class=\"description\">最初の%d件のみを表示しています。<a href=\"%s/search?field%d=", 
+                    result->hit_count, 
+                    cgiScriptName,
+                    ELEM_ID_STATUS);
+            u(s->name);
+            o("\">状態が%sである全てのチケットを表示する</a></div>\n", s->name);
+        }
         output_ticket_table_status_index(result, element_types_a);
         list_free(result->messages);
         free(result);

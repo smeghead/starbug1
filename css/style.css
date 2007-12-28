@@ -322,6 +322,7 @@ div.item_navigation {
 }
 #ticket_list table tr:hover td {
     background-color: #E9FEEE;
+    border-bottom: solid #004000 1px;
 }
 div.navigater {
     font-weight: bold;
@@ -337,11 +338,11 @@ table.item_table {
 .element_new_item {
     width: 80px;
 }
-div#ticket_list h4 {
-    font-weight: bold;
+div#ticket_list h4.status  {
     padding: 0px 2px 0px 10px;
-    margin: 3px 0px 3px 3px;
+    margin: 8px 0px 3px 3px;
     border-color: #00108C;
     border-style: solid;
     border-width: 0px 0px 2px 0px;
+    font-weight: bold;
 }

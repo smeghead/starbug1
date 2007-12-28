@@ -381,7 +381,7 @@ int set_conditions(sqlite3_stmt* stmt, List* conditions, char* q)
 }
 SearchResult* db_get_tickets_by_status(char* status, List* messages)
 {
-    int r;
+    int r, n, hit_count = 0;
     char buffer[VALUE_LENGTH];
     char* sql;
     List* conditions;
@@ -395,19 +395,21 @@ SearchResult* db_get_tickets_by_status(char* status, List* messages)
     strcpy(cond_status->value, status);
     list_add(conditions, cond_status);
     sql = get_search_sql_string(conditions, NULL, "", buffer);
+    strcat(sql, " limit ? ");
     d("sql: %s\n", sql);
     result->messages = messages;
 
     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
-    set_conditions(stmt, conditions, "");
+    n = set_conditions(stmt, conditions, "");
+    sqlite3_bind_int(stmt, n++, LIST_PER_PAGE);
 
     /* hitした分のticket_idを取得する。 */
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         Message* message = list_new_element(result->messages);
         message->id = sqlite3_column_int(stmt, 0);
         list_add(result->messages, message);
-        d("a\n");
+        hit_count++;
     }
     if (SQLITE_DONE != r)
         goto error;
@@ -415,6 +417,7 @@ SearchResult* db_get_tickets_by_status(char* status, List* messages)
     sqlite3_finalize(stmt);
 
     list_free(conditions);
+    result->hit_count = hit_count;
     return result;
 ERROR_LABEL
 }
