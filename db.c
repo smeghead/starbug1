@@ -302,7 +302,8 @@ char* get_search_sql_string(List* conditions, Condition* sort, char* q, char* sq
     if (strlen(q))
         strcat(sql_string, "inner join message as m_all on m_all.ticket_id = t.id ");
 
-    strcat(sql_string, "where ");
+    if (conditions->size || strlen(q))
+        strcat(sql_string, "where ");
     if (conditions->size) {
         foreach (it, conditions) {
             Condition* cond = it->element;
@@ -327,8 +328,6 @@ char* get_search_sql_string(List* conditions, Condition* sort, char* q, char* sq
         strcat(sql_string, ")");
         list_free(element_types_a);
     }
-    if (!conditions->size && !strlen(q))
-        strcat(sql_string, "t.closed = 0 ");
 
     strcat(sql_string, " group by t.id ");
     strcat(sql_string, " order by ");

@@ -123,15 +123,15 @@ void output_navigater(SearchResult* result, char* query_string)
     if (result->hit_count < LIST_PER_PAGE) return;
     o("<div class=\"navigater\">\n");
     if (result->page > 0)
-        o("<a href=\"%s/list?p=%d&amp;%s\">&lt;&lt;</a>\n", cgiScriptName, result->page - 1, query_string);
+        o("<a href=\"%s/search?p=%d&amp;%s\">&lt;&lt;</a>\n", cgiScriptName, result->page - 1, query_string);
     for (i = 0; i * LIST_PER_PAGE < result->hit_count; i++) {
         if (i == result->page)
             o("%d\n", i + 1);
         else
-            o("<a href=\"%s/list?p=%d&amp;%s\">%d</a>\n", cgiScriptName, i, query_string, i + 1);
+            o("<a href=\"%s/search?p=%d&amp;%s\">%d</a>\n", cgiScriptName, i, query_string, i + 1);
     }
     if (result->page * LIST_PER_PAGE < result->hit_count - LIST_PER_PAGE)
-        o("<a href=\"%s/list?p=%d&amp;%s\">&gt;&gt;</a>\n", cgiScriptName, result->page + 1, query_string);
+        o("<a href=\"%s/search?p=%d&amp;%s\">&gt;&gt;</a>\n", cgiScriptName, result->page + 1, query_string);
     o("</div>\n");
 }
 char* format_query_string(char* buffer)
@@ -189,13 +189,13 @@ void output_ticket_table_header(List* element_types, char* query_string)
     foreach (it, element_types) {
         ElementType* et = it->element;
         o("\t\t<th>\n");
-        o("\t\t\t<a href=\"%s/list?%ssort=%d&amp;%s\">", cgiScriptName, reverse ? "" : "r", et->id, query_string);
+        o("\t\t\t<a href=\"%s/search?%ssort=%d&amp;%s\">", cgiScriptName, reverse ? "" : "r", et->id, query_string);
         h(et->name);
         o("</a>\n");
         o("\t\t</th>\n");
     }
-    o("\t\t<th><a href=\"%s/list?%ssort=-2&amp;%s\">投稿日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
-    o("\t\t<th><a href=\"%s/list?%ssort=-3&amp;%s\">最終更新日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    o("\t\t<th><a href=\"%s/search?%ssort=-2&amp;%s\">投稿日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    o("\t\t<th><a href=\"%s/search?%ssort=-3&amp;%s\">最終更新日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
     o("\t</tr>\n");
 }
 void output_ticket_table_body(SearchResult* result, List* element_types)
@@ -366,7 +366,6 @@ void search_actoin()
     char q[DEFAULT_LENGTH];
     char p[DEFAULT_LENGTH];
     List* messages_a;
-    int condition_count = 0;
 
     cgiFormStringNoNewlines("id", id, DEFAULT_LENGTH);
     if (strlen(id) > 0) {
@@ -396,7 +395,6 @@ void search_actoin()
         c->element_type_id = et->id;
         strcpy(c->value, value);
         list_add(conditions_a, c);
-        condition_count++;
     }
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
     cgiFormStringNoNewlines("sort", sortstr, DEFAULT_LENGTH);
@@ -478,8 +476,6 @@ void search_actoin()
 
         query_string = format_query_string(query_string_buffer);
         o(      "<div class=\"description\">");
-        if (!condition_count && !strlen(q))
-            o(      "クローズ扱いのチケットは表示されていません。");
         o(      "%d件ヒットしました。\n", result->hit_count);
         o(      "</div>\n");
         output_navigater(result, query_string);
@@ -1116,7 +1112,7 @@ void default_action()
     foreach (it, states_a) {
         State* s = it->element;
         o("\t\t<li>\n");
-        o("\t\t\t<a href=\"%s/list?field%d=", cgiScriptName, ELEM_ID_STATUS); u(s->name); o("\">");
+        o("\t\t\t<a href=\"%s/search?field%d=", cgiScriptName, ELEM_ID_STATUS); u(s->name); o("\">");
         h(s->name);
         o("\t\t\t</a>\n");
         o("(%d)", s->count);
