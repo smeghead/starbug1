@@ -64,6 +64,8 @@ void register_actions()
 
 void output_header(Project* project, char* title, char* script_name)
 {
+    o("Pragma: no-cache\r\n");
+    o("Cache-Control: no-cache\t\n");
     cgiHeaderContentType("text/html; charset=utf-8;");
     /* Top of the page */
     o(      "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"
@@ -85,9 +87,9 @@ void output_header(Project* project, char* title, char* script_name)
             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://sourceforge.jp/projects/starbug1/\"><img src=\"%s/../img/title.jpg\" alt=\"Starbug1\" /></a></h1>\n"
             "<ul id=\"mainmenu\">\n", cgiScriptName);
     o(      "\t<li><a href=\"%s\">トップ</a></li>\n", cgiScriptName);
-    o(      "\t<li><a href=\"%s/list\">一覧</a></li>\n", cgiScriptName);
-    o(      "\t<li><a href=\"%s/search\">検索</a></li>\n", cgiScriptName);
-    o(      "\t<li><a href=\"%s/register\">新規登録</a></li>\n", cgiScriptName);
+    o(      "\t<li><a href=\"%s/list\">状態別チケット一覧</a></li>\n", cgiScriptName);
+    o(      "\t<li><a href=\"%s/register\">チケット登録</a></li>\n", cgiScriptName);
+    o(      "\t<li><a href=\"%s/search\">チケット検索</a></li>\n", cgiScriptName);
     o(      "\t<li><a href=\"%s/rss\">RSSフィード</a></li>\n", cgiScriptName);
     o(      "\t<li><a href=\"%s/help\">ヘルプ</a></li>\n", cgiScriptName);
     o(      "\t<li><a href=\"%s/../admin.cgi\">管理ツール</a></li>\n", cgiScriptName);
@@ -263,14 +265,14 @@ void list_action()
 
     db_init();
     project = db_get_project();
-    output_header(project, "チケット一覧", "list.js");
+    output_header(project, "状態別チケット一覧", "list.js");
     cgiFormStringNoNewlines("message", message, DEFAULT_LENGTH);
     if (strlen(message) > 0) {
         o("<div class=\"complete_message\">"); h(message); o("&nbsp;</div>\n");
     }
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_4_list(element_types_a);
-    o("<h2>"); h(project->name); o(" - チケット一覧</h2>\n");
+    o("<h2>"); h(project->name); o(" - 状態別チケット一覧</h2>\n");
     list_alloc(states_a, State);
     states_a = db_get_states(states_a);
     /* stateの表示 */
@@ -468,7 +470,7 @@ void search_actoin()
     o("</div>\n");
     fflush(cgiOut);
     o("<div id=\"ticket_list\">\n");
-    o("<h3>チケット一覧</h3>\n");
+    o("<h3>検索結果</h3>\n");
 
     if (result->messages->size) {
         char query_string_buffer[DEFAULT_LENGTH];
@@ -671,7 +673,7 @@ void register_action()
 
     db_init();
     project = db_get_project();
-    output_header(project, "新規登録", "register.js");
+    output_header(project, "チケット登録", "register.js");
     o(      "<h2>"); h(project->name);o(" - チケット登録</h2>\n"
             "<div id=\"input_form\">\n"
             "<h3>チケット登録</h3>\n"
