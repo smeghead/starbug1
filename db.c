@@ -142,7 +142,7 @@ void set_date_string(char* buf)
 
     gettimeofday(&tv, NULL);
     tp = localtime(&tv.tv_sec);
-    sprintf(buf, "%04d/%02d/%02d %02d:%02d:%02d",
+    sprintf(buf, "%04d-%02d-%02d %02d:%02d:%02d",
             tp->tm_year + 1900, tp->tm_mon + 1, tp->tm_mday,
             tp->tm_hour, tp->tm_min, tp->tm_sec);
 }
@@ -502,7 +502,8 @@ List* db_get_last_elements_4_list(int ticket_id, List* elements)
     sprintf(sql, "select t.id, org_m.field%d, l.id ", ELEM_ID_SENDER);
     strcat(sql, columns);
     sprintf(sql_suf, 
-            "  , t.registerdate, last_m.registerdate "
+            "  , t.registerdate, last_m.registerdate,  "
+            "  julianday(current_date) - julianday(date(last_m.registerdate)) as passed_date "
             "from ticket as t "
             "inner join message as last_m on last_m.id = t.last_message_id "
             "inner join message as org_m on org_m.id = t.original_message_id "
@@ -546,6 +547,11 @@ List* db_get_last_elements_4_list(int ticket_id, List* elements)
         /* 最終更新日時 */
         e = list_new_element(elements);
         e->element_type_id = ELEM_ID_LASTREGISTERDATE;
+        set_str_val(e, sqlite3_column_text(stmt, i++));
+        list_add(elements, e);
+        /* 最終更新日時からの経過日数 */
+        e = list_new_element(elements);
+        e->element_type_id = ELEM_ID_LASTREGISTERDATE_PASSED;
         set_str_val(e, sqlite3_column_text(stmt, i++));
         list_add(elements, e);
     }

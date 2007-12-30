@@ -179,6 +179,7 @@ void output_ticket_table_header_no_link(List* element_types)
     }
     o("\t\t<th>投稿日時</th>\n");
     o("\t\t<th>最終更新日時</th>\n");
+    o("\t\t<th>放置日数</th>\n");
     o("\t</tr>\n");
 }
 void output_ticket_table_header(List* element_types, char* query_string)
@@ -198,6 +199,7 @@ void output_ticket_table_header(List* element_types, char* query_string)
     }
     o("\t\t<th><a href=\"%s/search?%ssort=-2&amp;%s\">投稿日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
     o("\t\t<th><a href=\"%s/search?%ssort=-3&amp;%s\">最終更新日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    o("\t\t<th><a href=\"%s/search?%ssort=-3&amp;%s\">放置日数</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
     o("\t</tr>\n");
 }
 void output_ticket_table_body(SearchResult* result, List* element_types)
@@ -232,6 +234,7 @@ void output_ticket_table_body(SearchResult* result, List* element_types)
         }
         o("\t\t<td>"); h(get_element_value_by_id(elements_a, ELEM_ID_REGISTERDATE)); o("&nbsp;</td>\n");
         o("\t\t<td>"); h(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE)); o("&nbsp;</td>\n");
+        o("\t\t<td>"); h(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE_PASSED)); o("&nbsp;</td>\n");
         o("\t</tr>\n");
     }
 }
