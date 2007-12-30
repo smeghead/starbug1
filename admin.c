@@ -68,7 +68,7 @@ void output_header(Project* project, char* title, char* script_name)
     }
     o(      "</head>\n"
             "<body>\n"
-            "<a name=\"top\" />\n"
+            "<a name=\"top\"></a>\n"
             "<h1 id=\"toptitle\" title=\"Starbug1 管理ツール\"><a href=\"http://sourceforge.jp/projects/starbug1/\"><img src=\"%s/../img/title.jpg\" alt=\"Starbug1\" /></a></h1>\n"
             "<ul id=\"mainmenu\">\n", cgiScriptName);
     o(      "\t<li><a href=\"%s\">管理ツールメニュー</a></li>\n", cgiScriptName);
@@ -301,7 +301,7 @@ void items_action()
         list_alloc(items_a, ListItem);
         items_a = db_get_list_item(et->id, items_a);
         o("\t\t<hr />\n");
-        o("\t\t<a name=\"field%d\" />\n", et->id);
+        o("\t\t<a name=\"field%d\"></a>\n", et->id);
         o("\t\t<h4>"); h(et->name); o("</h4>\n");
         o("\t\t<div class=\"item_navigation\"><a href=\"#top\">このページのトップへ</a></div>\n");
         o("\t\t<input type=\"hidden\" name=\"field_ids\" value=\"%d\" />\n", et->id);

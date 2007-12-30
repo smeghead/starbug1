@@ -46,7 +46,11 @@ void exec_action()
     char* path_info = cgiPathInfo;
     char action_name[1024];
     action* a;
-    strncpy(action_name, path_info + 1, 1024);
+    if (strlen(path_info) > 1) {
+        strncpy(action_name, path_info + 1, 1024);
+    } else {
+        strcpy(action_name, "");
+    }
     if ((index = strchr(action_name, '/'))) {
         *index = '\0';
     }
@@ -59,10 +63,16 @@ void exec_action()
             return;
         }
     }
-    for (a = get_actions(); a != NULL; a = a->next) {
-        if (!strcmp("default", a->action_name)) {
-            a->action_func();
-            return;
+    if (strlen(action_name) != 0) {
+        /* 知らないactionが指定されたら、リダイレクトする。  */
+        redirect("", NULL);
+    } else {
+        /* path_infoが空なら、default_actionを呼び出す。 */
+        for (a = get_actions(); a != NULL; a = a->next) {
+            if (!strcmp("default", a->action_name)) {
+                a->action_func();
+                return;
+            }
         }
     }
 }

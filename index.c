@@ -83,7 +83,7 @@ void output_header(Project* project, char* title, char* script_name)
     }
     o(      "</head>\n"
             "<body>\n"
-            "<a name=\"top\" />\n"
+            "<a name=\"top\"></a>\n"
             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://sourceforge.jp/projects/starbug1/\"><img src=\"%s/../img/title.jpg\" alt=\"Starbug1\" /></a></h1>\n"
             "<ul id=\"mainmenu\">\n", cgiScriptName);
     o(      "\t<li><a href=\"%s\">トップ</a></li>\n", cgiScriptName);
@@ -328,7 +328,7 @@ void list_action()
         result = db_get_tickets_by_status(s->name, messages_a);
         list_free(conditions_a);
 
-        o("<a name=\""); h(s->name); o("\" />\n");
+        o("<a name=\""); h(s->name); o("\"></a>\n");
         o("<div>\n");
         o("<h4 class=\"status\">");h(s->name);o("&nbsp;(%d件)&nbsp;<a href=\"#top\">↑</a></h4>\n", s->count);
         if (result->hit_count == LIST_PER_PAGE) {
@@ -860,7 +860,7 @@ void ticket_action()
     free(message_ids_a);
     o(  "</div>\n");
     /* フォームの表示 */
-    o(      "<a name=\"reply\" />\n");
+    o(      "<a name=\"reply\"></a>\n");
     o(      "<div id=\"input_form\">\n"
             "<h3>チケット返信</h3>\n");
     o(      "<form id=\"reply_form\" name=\"reply_form\" action=\"%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName);
