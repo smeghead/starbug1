@@ -746,7 +746,7 @@ void ticket_action()
     db_init();
     list_alloc(elements_a, Element);
     elements_a = db_get_last_elements(iid, elements_a);
-    if (!elements_a) {
+    if (elements_a->size == 0) {
         redirect("/list", "存在しないIDが指定されました。");
         return;
     }
