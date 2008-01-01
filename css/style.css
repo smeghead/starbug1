@@ -379,7 +379,7 @@ div#ticket_list h4.status  {
 /* } */
 
 #menu {
-    background: #C9D5E1;
+    background: #D1E1D1;
     float: left;
     list-style: none;
     margin: 0;
@@ -395,7 +395,7 @@ div#ticket_list h4.status  {
     border-right: solid darkblue 1px;
 }
 #menu a {
-    background: #E7F3FF bottom right no-repeat;
+    background: #EFFFEF bottom right no-repeat;
     color: black;
     display: block;
     float: left;

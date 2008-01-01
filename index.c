@@ -84,18 +84,31 @@ void output_header(Project* project, char* title, char* script_name)
     o(      "</head>\n"
             "<body>\n"
             "<a name=\"top\"></a>\n"
-            "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://sourceforge.jp/projects/starbug1/\"><img src=\"%s/../img/title.jpg\" alt=\"Starbug1\" /></a></h1>\n"
-            "<ul id=\"mainmenu\">\n", cgiScriptName);
-    o(      "\t<li><a href=\"%s\">トップ</a></li>\n", cgiScriptName);
-    o(      "\t<li><a href=\"%s/list\">状態別チケット一覧</a></li>\n", cgiScriptName);
-    o(      "\t<li><a href=\"%s/register\">チケット登録</a></li>\n", cgiScriptName);
-    o(      "\t<li><a href=\"%s/search\">チケット検索</a></li>\n", cgiScriptName);
-    o(      "\t<li><a href=\"%s/rss\"><img src=\"%s/../img/rss.gif\" alt=\"rss\" /></a></li>\n", cgiScriptName, cgiScriptName);
-    o(      "\t<li><a href=\"%s/help\">ヘルプ</a></li>\n", cgiScriptName);
-    o(      "\t<li><a href=\"%s/../admin.cgi\">管理ツール</a></li>\n", cgiScriptName);
-    o(      "</ul>\n"
-            "<br clear=\"all\" />\n"
-            "<hr />\n");
+            "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://sourceforge.jp/projects/starbug1/\"><img src=\"%s/../img/title.jpg\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName);
+/*             "<div id=\"mainmenu\">\n" */
+/*             "<ul>\n", cgiScriptName); */
+/*     o(      "\t<li><a href=\"%s\">トップ</a></li>\n", cgiScriptName); */
+/*     o(      "\t<li><a href=\"%s/list\">状態別チケット一覧</a></li>\n", cgiScriptName); */
+/*     o(      "\t<li><a href=\"%s/register\">チケット登録</a></li>\n", cgiScriptName); */
+/*     o(      "\t<li><a href=\"%s/search\">チケット検索</a></li>\n", cgiScriptName); */
+/*     o(      "\t<li><a href=\"%s/rss\">RSS Feed</a></li>\n", cgiScriptName); */
+/*     o(      "\t<li><a href=\"%s/help\">ヘルプ</a></li>\n", cgiScriptName); */
+/*     o(      "\t<li><a href=\"%s/../admin.cgi\">管理ツール</a></li>\n", cgiScriptName); */
+/*     o(      "</ul>\n" */
+/*             "</div>\n" */
+/*             "<br class=\"clearit\" />\n"); */
+    o("<div id=\"mainmenu\">\n");
+    o("<ul id='menu'>\n");
+    o("<li><a href='%s'>トップ</a></li>\n", cgiScriptName);
+    o("<li><a href='%s/list'>状態別チケット</a></li>\n", cgiScriptName);
+    o("<li><a href='%s/register'>チケット登録</a></li>\n", cgiScriptName);
+    o("<li><a href='%s/search'>チケット検索</a></li>\n", cgiScriptName);
+    o("<li><a href='%s/rss'>RSS Feed</a></li>\n", cgiScriptName);
+    o("<li><a href='%s/help'>ヘルプ</a></li>\n", cgiScriptName);
+    o("<li><a href='%s/../admin.cgi'>管理ツール</a></li>\n", cgiScriptName);
+    o("</ul>\n");
+    o("<br clear='all' />\n");
+    o("</div>\n");
 }
 void output_footer()
 {
