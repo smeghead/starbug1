@@ -385,14 +385,14 @@ div#ticket_list h4.status  {
     margin: 0;
     padding: 0;
     width: 100%;
-    border: solid darkblue 1px;
+    border: solid #003F00 1px;
 }
 #menu li {
     float: left;
     font: 87.5% "Lucida Sans Unicode", "Bitstream Vera Sans", "Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica, sans-serif;
     margin: 0;
     padding: 0;
-    border-right: solid darkblue 1px;
+    border-right: solid #003F00 1px;
 }
 #menu a {
     background: #EFFFEF bottom right no-repeat;
