@@ -10,16 +10,16 @@
 
 h1 {
     margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
     text-align: center;
     vertical-align: center;
 }
 h2 {
-    margin: 0px 5px 5px 0px;
     color: #E7EFFF;
     background-color: #00108C;
     font-weight: bold;
     font-size: 150%;
-    margin: 3px 3px 30px 3px;
+    margin: 3px 3px 3px 3px;
     padding: 5px 3px 3px 30px;
     background-image: url("../img/h2.png");
 }
@@ -278,27 +278,27 @@ span.required {
 }
 /* 新規 */
 #ticket_list td.field3-1 {
-    background-color: lightpink;
+    background-color: lightpink !important;
 }
 /* 受付済 */
 #ticket_list td.field3-2 {
-    background-color: peachpuff;
+    background-color: peachpuff !important;
 }
 /* 修正済 */
 #ticket_list td.field3-3 {
-    background-color: lightyellow;
+    background-color: lightyellow !important;
 }
 /* 保留 */
 #ticket_list td.field3-4 {
-    background-color: white;
+    background-color: white !important;
 }
 /* 完了 */
 #ticket_list td.field3-5 {
-    background-color: lightcyan;
+    background-color: lightcyan !important;
 }
 /* 破棄 */
 #ticket_list td.field3-6 {
-    background-color: slategray;
+    background-color: slategray !important;
 }
 div.complete_message {
     border: 1px #228B22 solid;
@@ -340,9 +340,71 @@ table.item_table {
 }
 div#ticket_list h4.status  {
     padding: 0px 2px 0px 10px;
-    margin: 8px 0px 3px 3px;
+    margin: 0px 0px 3px 3px;
     border-color: #00108C;
     border-style: solid;
     border-width: 0px 0px 2px 0px;
     font-weight: bold;
+}
+/* #mainmenu { */
+/*     background: #f7f7f7 url(../topbar_gradient.png) 0 0; */
+/*     border: 1px solid #000; */
+/* |+    font: normal 10px verdana,'Bitstream Vera Sans',helvetica,arial,sans-serif;+| */
+/*     margin: .66em 0 .33em; */
+/*     padding: .2em 0; */
+/* } */
+/* #mainmenu li { border-right: none; padding: .25em 0 } */
+/* #mainmenu :link, #mainmenu :visited { */
+/*     background: url(../dots.gif) 0 0 no-repeat; */
+/*     border-right: 1px solid #fff; */
+/*     border-bottom: none; */
+/*     border-left: 1px solid #555; */
+/*     color: #000; */
+/*     padding: .2em 20px; */
+/* } */
+/* * html #mainmenu :link, * html #mainmenu :visited { background-position: 1px 0 } */
+/* #mainmenu :link:hover, #mainmenu :visited:hover { */
+/*     background-color: #ccc; */
+/*     border-right: 1px solid #ddd; */
+/* } */
+/* #mainmenu .active :link, #mainmenu .active :visited { */
+/*     background: #333 url(../topbar_gradient2.png) 0 0 repeat-x; */
+/*     border-top: none; */
+/*     border-right: 1px solid #000; */
+/*     color: #eee; */
+/*     font-weight: bold; */
+/* } */
+/* #mainmenu .active :link:hover, #mainmenu .active :visited:hover { */
+/*     border-right: 1px solid #000; */
+/* } */
+
+#menu {
+    background: #C9D5E1;
+    float: left;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    border: solid darkblue 1px;
+}
+#menu li {
+    float: left;
+    font: 87.5% "Lucida Sans Unicode", "Bitstream Vera Sans", "Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    border-right: solid darkblue 1px;
+}
+#menu a {
+    background: #E7F3FF bottom right no-repeat;
+    color: black;
+    display: block;
+    float: left;
+    margin: 0;
+    padding: 0px 12px;
+    text-decoration: none;
+}
+#menu a:hover {
+    background: #2580a2 bottom center no-repeat;
+    color: #fff;
+    padding-bottom: 0px;    
 }
