@@ -90,7 +90,7 @@ void output_header(Project* project, char* title, char* script_name)
     o(      "\t<li><a href=\"%s/list\">状態別チケット一覧</a></li>\n", cgiScriptName);
     o(      "\t<li><a href=\"%s/register\">チケット登録</a></li>\n", cgiScriptName);
     o(      "\t<li><a href=\"%s/search\">チケット検索</a></li>\n", cgiScriptName);
-    o(      "\t<li><a href=\"%s/rss\">RSSフィード</a></li>\n", cgiScriptName);
+    o(      "\t<li><a href=\"%s/rss\"><img src=\"%s/../img/rss.gif\" alt=\"rss\" /></a></li>\n", cgiScriptName, cgiScriptName);
     o(      "\t<li><a href=\"%s/help\">ヘルプ</a></li>\n", cgiScriptName);
     o(      "\t<li><a href=\"%s/../admin.cgi\">管理ツール</a></li>\n", cgiScriptName);
     o(      "</ul>\n"
@@ -109,7 +109,7 @@ void output_footer()
             "\t</a>\n"
             "</p>\n"
             "<div><address>Powered by cgic.</address></div>\n"
-            "<div><address>Copyright smeghead 2007.</address></div>\n"
+            "<div><address>Copyright smeghead 2007 - 2008.</address></div>\n"
             "</div>\n"
             "</div>\n"
             "</body>\n</html>\n");

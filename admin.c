@@ -93,7 +93,7 @@ void output_footer()
             "\t</a>\n"
             "</p>\n"
             "<div><address>Powered by cgic.</address></div>\n"
-            "<div><address>Copyright smeghead 2007.</address></div>\n"
+            "<div><address>Copyright smeghead 2007 - 2008.</address></div>\n"
             "</div>\n"
             "</body>\n</html>\n");
 }
