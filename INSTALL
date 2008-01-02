@@ -5,15 +5,16 @@
 
 sqlite3のインストール
 
-* http://www.sqlite.org/ から、 sqlite-3.5.1.tar.gz をダウンロードする。
+* http://www.sqlite.org/ から、 sqlite-3.5.4.tar.gz をダウンロードする。
 
-$ wget http://www.sqlite.org/sqlite-3.5.1.tar.gz
+$ wget http://www.sqlite.org/sqlite-3.5.4.tar.gz
 
 * 適当な場所に展開し、コンパイル、インストールする。
 
-$ tar zxf sqlite-3.5.1.tar.gz
-$ cd sqlite-3.5.1
-$ ./configure --disable-tcl
+$ tar zxf sqlite-3.5.4.tar.gz
+$ mkdir bld
+$ cd bld
+$ ../sqlite-3-5-4/configure --disable-tcl
 $ make
 $ su
 # make install

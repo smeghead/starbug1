@@ -137,7 +137,34 @@ void output_navigater(SearchResult* result, char* query_string)
         o("<a href=\"%s/search?p=%d&amp;%s\">&gt;&gt;</a>\n", cgiScriptName, result->page + 1, query_string);
     o("</div>\n");
 }
-char* format_query_string(char* buffer)
+char* format_query_string_without_page(char* buffer)
+{
+    char **array, **arrayStep;
+    if (cgiFormEntries(&array) != cgiFormSuccess) {
+        return "";
+    }
+    strcpy(buffer, "");
+    arrayStep = array;
+    while (*arrayStep) {
+        if (strcmp(*arrayStep, "p") != 0) {
+            char name[DEFAULT_LENGTH] = "";
+            char value[DEFAULT_LENGTH] = "";
+            char encodedvalue[DEFAULT_LENGTH] = "";
+            strcpy(name, *arrayStep);
+            cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+            url_encode(value, encodedvalue, DEFAULT_LENGTH);
+            strcat(buffer, name);
+            strcat(buffer, "=");
+            strcat(buffer, encodedvalue);
+            strcat(buffer, "&amp;");
+        }
+        arrayStep++;
+    }
+    cgiStringArrayFree(array);
+
+    return buffer;
+}
+char* format_query_string_without_sort_and_page(char* buffer)
 {
     char **array, **arrayStep;
     if (cgiFormEntries(&array) != cgiFormSuccess) {
@@ -183,10 +210,12 @@ void output_ticket_table_header_no_link(List* element_types)
     o("\t\t<th>放置日数</th>\n");
     o("\t</tr>\n");
 }
-void output_ticket_table_header(List* element_types, char* query_string)
+void output_ticket_table_header(List* element_types)
 {
     Iterator* it;
     char* reverse = strstr(cgiQueryString, "rsort=");
+    char query_string_buffer[DEFAULT_LENGTH];
+    char* query_string = format_query_string_without_sort_and_page(query_string_buffer);
 
     o(      "\t<tr>\n");
     o(      "\t\t<th><a href=\"%s/search?%ssort=-1&amp;%s\">ID</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
@@ -246,10 +275,10 @@ void output_ticket_table_status_index(SearchResult* result, List* element_types)
     output_ticket_table_body(result, element_types);
     o("</table>\n");
 }
-void output_ticket_table(SearchResult* result, List* element_types, char* query_string)
+void output_ticket_table(SearchResult* result, List* element_types)
 {
     o("<table summary=\"ticket list\">\n");
-    output_ticket_table_header(element_types, query_string);
+    output_ticket_table_header(element_types);
     output_ticket_table_body(result, element_types);
     o("</table>\n");
 }
@@ -487,12 +516,12 @@ void search_actoin()
         char query_string_buffer[DEFAULT_LENGTH];
         char* query_string;
 
-        query_string = format_query_string(query_string_buffer);
+        query_string = format_query_string_without_page(query_string_buffer);
         o(      "<div class=\"description\">");
         o(      "%d件ヒットしました。\n", result->hit_count);
         o(      "</div>\n");
         output_navigater(result, query_string);
-        output_ticket_table(result, element_types_a, query_string);
+        output_ticket_table(result, element_types_a);
         output_navigater(result, query_string);
     }
     o("</div>\n");
