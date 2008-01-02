@@ -23,7 +23,7 @@ void edit_top_submit_action();
 void download_action();
 void rss_action();
 void default_action();
-void output_header(Project*, char*, char*);
+void output_header(Project*, char*, char*, int);
 void output_footer();
 int cgiMain();
 void output_form_element(List* element, ElementType* e_type);
@@ -62,7 +62,17 @@ void register_actions()
     register_action_actions("default", default_action);
 }
 
-void output_header(Project* project, char* title, char* script_name)
+enum NAVI {
+    NAVI_OTHER,
+    NAVI_TOP,
+    NAVI_LIST,
+    NAVI_REGISTER,
+    NAVI_SEARCH,
+    NAVI_RSS,
+    NAVI_HELP,
+    NAVI_MANAGEMENT
+};
+void output_header(Project* project, char* title, char* script_name, int navi)
 {
     o("Pragma: no-cache\r\n");
     o("Cache-Control: no-cache\t\n");
@@ -87,13 +97,13 @@ void output_header(Project* project, char* title, char* script_name)
             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://sourceforge.jp/projects/starbug1/\"><img src=\"%s/../img/title.jpg\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName);
     o("<div>\n");
     o("<ul id='menu'>\n");
-    o("<li><a href='%s'>トップ</a></li>\n", cgiScriptName);
-    o("<li><a href='%s/list'>状態別チケット</a></li>\n", cgiScriptName);
-    o("<li><a href='%s/register'>チケット登録</a></li>\n", cgiScriptName);
-    o("<li><a href='%s/search'>チケット検索</a></li>\n", cgiScriptName);
-    o("<li><a href='%s/rss'>RSS Feed</a></li>\n", cgiScriptName);
-    o("<li><a href='%s/help'>ヘルプ</a></li>\n", cgiScriptName);
-    o("<li><a href='%s/../admin.cgi'>管理ツール</a></li>\n", cgiScriptName);
+    o("<li><a %s href='%s'>トップ</a></li>\n", navi == NAVI_TOP ? "class=\"current\"" : "", cgiScriptName);
+    o("<li><a %s href='%s/list'>状態別チケット</a></li>\n", navi == NAVI_LIST ? "class=\"current\"" : "", cgiScriptName);
+    o("<li><a %s href='%s/register'>チケット登録</a></li>\n", navi == NAVI_REGISTER ? "class=\"current\"" : "", cgiScriptName);
+    o("<li><a %s href='%s/search'>チケット検索</a></li>\n", navi == NAVI_SEARCH ? "class=\"current\"" : "", cgiScriptName);
+    o("<li><a %s href='%s/rss'>RSS Feed</a></li>\n", navi == NAVI_RSS ? "class=\"current\"" : "", cgiScriptName);
+    o("<li><a %s href='%s/help'>ヘルプ</a></li>\n", navi == NAVI_HELP ? "class=\"current\"" : "", cgiScriptName);
+    o("<li><a %s href='%s/../admin.cgi'>管理ツール</a></li>\n", navi == NAVI_MANAGEMENT ? "class=\"current\"" : "", cgiScriptName);
     o("</ul>\n");
     o("<br clear='all' />\n");
     o("</div>\n");
@@ -298,7 +308,7 @@ void list_action()
 
     db_init();
     project = db_get_project();
-    output_header(project, "状態別チケット一覧", "list.js");
+    output_header(project, "状態別チケット一覧", "list.js", NAVI_LIST);
     cgiFormStringNoNewlines("message", message, DEFAULT_LENGTH);
     if (strlen(message) > 0) {
         o("<div class=\"complete_message\">"); h(message); o("&nbsp;</div>\n");
@@ -334,22 +344,17 @@ void list_action()
     o("<div id=\"ticket_list\">\n");
 
     o("<h3>状態別チケット一覧</h3>\n");
-    o("<div class=\"message\">未クローズの状態毎にチケットを表示しています。</div>\n");
-    o("<div id=\"state_index_anchor\">\n");
-    o("\t<ul>\n");
+    o("<div class=\"message\">未クローズの状態毎にチケットを表示しています。\n");
     list_alloc(states_a, State);
     states_a = db_get_states_has_not_close(states_a);
     foreach (it, states_a) {
         State* s = it->element;
-        o("\t\t<li>\n");
         o("\t\t\t<a href=\"#");
         h(s->name);
         o("\">");
         h(s->name);
         o("</a>");
-        o("\t\t</li>\n");
     }
-    o("\t</ul>\n");
     o("</div>\n");
     o("<br clear=\"all\" />\n");
     foreach (it, states_a) {
@@ -418,7 +423,7 @@ void search_actoin()
     
     db_init();
     project = db_get_project();
-    output_header(project, "チケット検索", "list.js");
+    output_header(project, "チケット検索", "list.js", NAVI_SEARCH);
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_4_list(element_types_a);
     o("<h2>"); h(project->name); o(" - チケット検索</h2>\n");
@@ -713,7 +718,7 @@ void register_action()
 
     db_init();
     project = db_get_project();
-    output_header(project, "チケット登録", "register.js");
+    output_header(project, "チケット登録", "register.js", NAVI_REGISTER);
     o(      "<h2>"); h(project->name);o(" - チケット登録</h2>\n"
             "<div id=\"input_form\">\n"
             "<h3>チケット登録</h3>\n"
@@ -787,7 +792,7 @@ void ticket_action()
         return;
     }
     project = db_get_project();
-    output_header(project, "チケット詳細", "reply.js");
+    output_header(project, "チケット詳細", "reply.js", NAVI_OTHER);
 
     message_ids_a = db_get_message_ids(iid);
     list_alloc(element_types_a, ElementType);
@@ -797,6 +802,7 @@ void ticket_action()
     o(" &nbsp;</h2>\n");
     o(      "<div id=\"ticket_newest\">\n"
             "<h3>チケット最新情報</h3>\n"
+            "<div class=\"description\">チケットの最新情報です。最新チケットのチケット属性の付いている属性と全添付ファイルを表示しています。</div>\n"
             "<table summary=\"newest table\">\n");
     foreach (it, element_types_a) {
         ElementType* et = it->element;
@@ -857,7 +863,8 @@ void ticket_action()
             "</div>");
     o(      "<div class=\"description\"><a href=\"#reply\">返信する</a></div>\n");
     o(      "<div id=\"ticket_history\">\n"
-            "<h3>チケット履歴</h3>\n");
+            "<h3>チケット履歴</h3>\n"
+            "<div class=\"description\">チケットの履歴情報です。</div>\n");
     list_free(elements_a);
     /* 履歴の表示 */
     for (i = 0; message_ids_a[i] != 0; i++) {
@@ -1109,7 +1116,7 @@ void register_submit_action()
 file_size_error:
     db_rollback();
     db_finish();
-    output_header(project, "エラー", NULL);
+    output_header(project, "エラー", NULL, NAVI_OTHER);
     o("<h1>エラー発生</h1>\n");
     o("<div class=\"message\">ファイルサイズが大きすぎます。%dkbより大きいファイルは登録できません。ブラウザの戻るボタンで戻ってください。</div>\n", MAX_FILE_SIZE);
     output_footer();
@@ -1126,7 +1133,7 @@ void default_action()
 
     db_init();
     project = db_get_project();
-    output_header(project, "トップページ", NULL);
+    output_header(project, "トップページ", NULL, NAVI_TOP);
     list_alloc(states_a, State);
     states_a = db_get_states(states_a);
     o(      "<div id=\"info\">\n");
@@ -1249,7 +1256,7 @@ void help_action()
     Project* project;
     db_init();
     project = db_get_project();
-    output_header(project, "ヘルプ", NULL);
+    output_header(project, "ヘルプ", NULL, NAVI_HELP);
     db_finish();
     o(      "<h2>");h(project->name);o(" - Starbug1</h2>\n"
             "<div id=\"top\">\n");
@@ -1262,7 +1269,7 @@ void edit_top_action()
     Project* project;
     db_init();
     project = db_get_project();
-    output_header(project, "トップページの編集", "edit_top.js");
+    output_header(project, "トップページの編集", "edit_top.js", NAVI_OTHER);
     db_finish();
     o(      "<h2>トップページの編集</h2>\n"
             "<div id=\"top\">\n"

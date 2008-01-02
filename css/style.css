@@ -247,22 +247,22 @@ span.required {
 #state_index form {
     display:inline;
 }
-#state_index_anchor {
-    width:100%;
-    margin:0px 0px 0px 0px;
-    text-align: center;
-    height: 20px;
-}
+/* #state_index_anchor { */
+/*     width:100%; */
+/*     margin:0px 0px 0px 0px; */
+/*     text-align: center; */
+/*     height: 20px; */
+/* } */
 
-#state_index_anchor li {
-    margin:0px 0px 0px 0px;
-    list-style:none;
-    padding:0px 10px 0px 10px;
-    float:left;
-}
-#state_index_anchor form {
-    display:inline;
-}
+/* #state_index_anchor li { */
+/*     margin:0px 0px 0px 0px; */
+/*     list-style:none; */
+/*     padding:0px 10px 0px 10px; */
+/*     float:left; */
+/* } */
+/* #state_index_anchor form { */
+/*     display:inline; */
+/* } */
 #field_list {
     width:100%;
     height:30px;
@@ -346,56 +346,26 @@ div#ticket_list h4.status  {
     border-width: 0px 0px 2px 0px;
     font-weight: bold;
 }
-/* #mainmenu { */
-/*     background: #f7f7f7 url(../topbar_gradient.png) 0 0; */
-/*     border: 1px solid #000; */
-/* |+    font: normal 10px verdana,'Bitstream Vera Sans',helvetica,arial,sans-serif;+| */
-/*     margin: .66em 0 .33em; */
-/*     padding: .2em 0; */
-/* } */
-/* #mainmenu li { border-right: none; padding: .25em 0 } */
-/* #mainmenu :link, #mainmenu :visited { */
-/*     background: url(../dots.gif) 0 0 no-repeat; */
-/*     border-right: 1px solid #fff; */
-/*     border-bottom: none; */
-/*     border-left: 1px solid #555; */
-/*     color: #000; */
-/*     padding: .2em 20px; */
-/* } */
-/* * html #mainmenu :link, * html #mainmenu :visited { background-position: 1px 0 } */
-/* #mainmenu :link:hover, #mainmenu :visited:hover { */
-/*     background-color: #ccc; */
-/*     border-right: 1px solid #ddd; */
-/* } */
-/* #mainmenu .active :link, #mainmenu .active :visited { */
-/*     background: #333 url(../topbar_gradient2.png) 0 0 repeat-x; */
-/*     border-top: none; */
-/*     border-right: 1px solid #000; */
-/*     color: #eee; */
-/*     font-weight: bold; */
-/* } */
-/* #mainmenu .active :link:hover, #mainmenu .active :visited:hover { */
-/*     border-right: 1px solid #000; */
-/* } */
 
 #menu {
-    background: #D1E1D1;
+    background: #ccc;
     float: left;
     list-style: none;
     margin: 0;
     padding: 0;
     width: 100%;
-    border: solid #003F00 1px;
+    border: solid #333 1px;
+    margin-bottom: 8px;
 }
 #menu li {
     float: left;
-    font: 87.5% "Lucida Sans Unicode", "Bitstream Vera Sans", "Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica, sans-serif;
+    font-size: 85%;
     margin: 0;
     padding: 0;
     border-right: solid #003F00 1px;
 }
 #menu a {
-    background: #EFFFEF bottom right no-repeat;
+    background: #eee bottom right no-repeat;
     color: black;
     display: block;
     float: left;
@@ -403,8 +373,12 @@ div#ticket_list h4.status  {
     padding: 0px 12px;
     text-decoration: none;
 }
+#menu a.current {
+    background: #666 bottom center no-repeat;
+    color: #fff;
+}
 #menu a:hover {
-    background: #2580a2 bottom center no-repeat;
+    background: #999 bottom center no-repeat;
     color: #fff;
     padding-bottom: 0px;    
 }

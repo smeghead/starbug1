@@ -285,7 +285,6 @@ ElementFile* get_upload_content(int element_id)
         }
     }
     content->blob = buffer_org;
-    /* TODO close file. */
     cgiFormFileClose(file);
     return content;
 }

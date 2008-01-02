@@ -26,7 +26,7 @@ void new_item_action();
 void new_item_submit_action();
 void delete_item_action();
 void delete_item_submit_action();
-void output_header(Project*, char*, char*);
+void output_header(Project*, char*, char*, int);
 void output_footer();
 int cgiMain();
 void update_elements();
@@ -49,7 +49,15 @@ void register_actions()
     register_action_actions("default", menu_action);
 }
 
-void output_header(Project* project, char* title, char* script_name)
+enum NAVI {
+    NAVI_OTHER,
+    NAVI_MENU,
+    NAVI_PROJECT,
+    NAVI_ENV,
+    NAVI_ITEM,
+    NAVI_STYLE
+};
+void output_header(Project* project, char* title, char* script_name, int navi)
 {
     cgiHeaderContentType("text/html; charset=utf-8;");
     /* Top of the page */
@@ -71,11 +79,11 @@ void output_header(Project* project, char* title, char* script_name)
             "<a name=\"top\"></a>\n"
             "<h1 id=\"toptitle\" title=\"Starbug1 管理ツール\"><a href=\"http://sourceforge.jp/projects/starbug1/\"><img src=\"%s/../img/title.jpg\" alt=\"Starbug1\" /></a></h1>\n"
             "<ul id=\"menu\">\n", cgiScriptName);
-    o(      "\t<li><a href=\"%s\">管理ツールメニュー</a></li>\n", cgiScriptName);
-    o(      "\t\t<li><a href=\"%s/project\">プロジェクトの設定</a></li>\n", cgiScriptName);
-    o(      "\t\t<li><a href=\"%s/env\">環境設定</a></li>\n", cgiScriptName);
-    o(      "\t\t<li><a href=\"%s/items\">項目設定</a></li>\n", cgiScriptName);
-    o(      "\t\t<li><a href=\"%s/style\">スタイル設定</a></li>\n", cgiScriptName);
+    o(      "\t<li><a %s href=\"%s\">管理ツールメニュー</a></li>\n", navi == NAVI_MENU ? "class=\"current\"" : "", cgiScriptName);
+    o(      "\t\t<li><a %s href=\"%s/project\">プロジェクトの設定</a></li>\n", navi == NAVI_PROJECT ? "class=\"current\"" : "", cgiScriptName);
+    o(      "\t\t<li><a %s href=\"%s/env\">環境設定</a></li>\n", navi == NAVI_ENV ? "class=\"current\"" : "", cgiScriptName);
+    o(      "\t\t<li><a %s href=\"%s/items\">項目設定</a></li>\n", navi == NAVI_ITEM ? "class=\"current\"" : "", cgiScriptName);
+    o(      "\t\t<li><a %s href=\"%s/style\">スタイル設定</a></li>\n", navi == NAVI_STYLE ? "class=\"current\"" : "", cgiScriptName);
     o(      "\t<li><a href=\"%s/../db/starbug1.db\">バックアップ</a></li>\n", cgiScriptName);
     o(      "\t<li><a href=\"%s/../index.cgi\">", cgiScriptName);h(project->name); o("トップへ</a></li>\n");
     o(      "</ul>\n"
@@ -112,7 +120,7 @@ void menu_action()
 
     db_init();
     project = db_get_project();
-    output_header(project, "メニュー", NULL);
+    output_header(project, "メニュー", NULL, NAVI_MENU);
 
     cgiFormStringNoNewlines("message", message, DEFAULT_LENGTH);
     if (strlen(message) > 0) {
@@ -140,7 +148,7 @@ void project_action()
 
     db_init();
     project = db_get_project();
-    output_header(project, "プロジェクト設定", "management.js");
+    output_header(project, "プロジェクト設定", "management.js", NAVI_PROJECT);
 
     o("<h2>%s 管理ツール</h2>", project->name);
     o("<div id=\"setting_form\">\n");
@@ -190,7 +198,7 @@ void env_action()
 
     db_init();
     project = db_get_project();
-    output_header(project, "環境設定", "management.js");
+    output_header(project, "環境設定", "management.js", NAVI_ENV);
 
     o("<h2>%s 管理ツール</h2>", project->name);
     o("<div id=\"setting_form\">\n");
@@ -276,7 +284,7 @@ void items_action()
 
     db_init();
     project = db_get_project();
-    output_header(project, "項目設定", "management.js");
+    output_header(project, "項目設定", "management.js", NAVI_ITEM);
 
     o("<h2>%s 管理ツール</h2>", project->name);
     o("<div id=\"setting_form\">\n");
@@ -602,7 +610,7 @@ void new_item_action()
 
     db_init();
     project = db_get_project();
-    output_header(project, "新規項目登録", "new_item.js");
+    output_header(project, "新規項目登録", "new_item.js", NAVI_OTHER);
 
     o("<h2>%s 管理ツール</h2>", project->name);
     o(      "<div id=\"new_item\">\n"
@@ -792,7 +800,7 @@ void delete_item_action()
     iid = atoi(e_type_id);
     db_init();
     project = db_get_project();
-    output_header(project, "項目削除", "delete_item.js");
+    output_header(project, "項目削除", "delete_item.js", NAVI_OTHER);
 
     e_type = db_get_element_type(iid);
     o("<h2>%s 管理ツール</h2>", project->name);
@@ -832,7 +840,7 @@ void style_action()
     Project* project;
     db_init();
     project = db_get_project();
-    output_header(project, "スタイル設定", "style.js");
+    output_header(project, "スタイル設定", "style.js", NAVI_STYLE);
     db_finish();
     o(      "<h2>スタイル編集</h2>\n"
             "<div id=\"top\">\n"
