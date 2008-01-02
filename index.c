@@ -228,18 +228,18 @@ void output_ticket_table_header(List* element_types)
     char* query_string = format_query_string_without_sort_and_page(query_string_buffer);
 
     o(      "\t<tr>\n");
-    o(      "\t\t<th><a href=\"%s/search?%ssort=-1&amp;%s\">ID</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    o(      "\t\t<th><a href=\"%s/search?%ssort=-1&amp;%s\" title=\"クリックする度に昇順、降順で並べ替えを行ないます。\">ID</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
     foreach (it, element_types) {
         ElementType* et = it->element;
         o("\t\t<th>\n");
-        o("\t\t\t<a href=\"%s/search?%ssort=%d&amp;%s\">", cgiScriptName, reverse ? "" : "r", et->id, query_string);
+        o("\t\t\t<a href=\"%s/search?%ssort=%d&amp;%s\" title=\"クリックする度に昇順、降順で並べ替えを行ないます。\">", cgiScriptName, reverse ? "" : "r", et->id, query_string);
         h(et->name);
         o("</a>\n");
         o("\t\t</th>\n");
     }
-    o("\t\t<th><a href=\"%s/search?%ssort=-2&amp;%s\">投稿日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
-    o("\t\t<th><a href=\"%s/search?%ssort=-3&amp;%s\">最終更新日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
-    o("\t\t<th><a href=\"%s/search?%ssort=-3&amp;%s\">放置日数</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    o("\t\t<th><a href=\"%s/search?%ssort=-2&amp;%s\" title=\"クリックする度に昇順、降順で並べ替えを行ないます。\">投稿日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    o("\t\t<th><a href=\"%s/search?%ssort=-3&amp;%s\" title=\"クリックする度に昇順、降順で並べ替えを行ないます。\">最終更新日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    o("\t\t<th><a href=\"%s/search?%ssort=-3&amp;%s\" title=\"クリックする度に昇順、降順で並べ替えを行ないます。\">放置日数</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
     o("\t</tr>\n");
 }
 void output_ticket_table_body(SearchResult* result, List* element_types)
@@ -324,7 +324,9 @@ void list_action()
     foreach (it, states_a) {
         State* s = it->element;
         o("\t\t<li>\n");
-        o("\t\t\t<a href=\"%s/search?field%d=", cgiScriptName, ELEM_ID_STATUS); u(s->name); o("\">");
+        o("\t\t\t<a href=\"%s/search?field%d=", cgiScriptName, ELEM_ID_STATUS);
+        u(s->name);
+        o("\" title=\"状態を条件にして検索を行ないます。\">");
         h(s->name);
         o("</a>");
         o("(%d)", s->count);
@@ -333,7 +335,7 @@ void list_action()
     list_free(states_a);
     o("\t\t<li>\n");
     o("\t\t\t<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
-    o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" />\n");
+    o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" />\n");
     o("\t\t\t\t<input type=\"submit\" class=\"button\" value=\"ID指定で表示\" />\n");
     o("\t\t\t</form>\n");
     o("\t\t</li>\n");
@@ -344,14 +346,14 @@ void list_action()
     o("<div id=\"ticket_list\">\n");
 
     o("<h3>状態別チケット一覧</h3>\n");
-    o("<div class=\"message\">未クローズの状態毎にチケットを表示しています。\n");
+    o("<div class=\"description\">未クローズの状態毎にチケットを表示しています。\n");
     list_alloc(states_a, State);
     states_a = db_get_states_has_not_close(states_a);
     foreach (it, states_a) {
         State* s = it->element;
         o("\t\t\t<a href=\"#");
         h(s->name);
-        o("\">");
+        o("\" title=\"ページ内へのリンク\">");
         h(s->name);
         o("</a>");
     }
@@ -370,7 +372,7 @@ void list_action()
         o("<div>\n");
         o("<h4 class=\"status\">");h(s->name);o("&nbsp;(%d件)&nbsp;<a href=\"#top\">↑</a></h4>\n", s->count);
         if (result->hit_count == LIST_PER_PAGE) {
-            o("\t\t<div class=\"description\">新しい%d件のみを表示しています。<a href=\"%s/search?field%d=", 
+            o("\t\t<div class=\"infomation\">新しい%d件のみを表示しています。<a href=\"%s/search?field%d=", 
                     result->hit_count, 
                     cgiScriptName,
                     ELEM_ID_STATUS);
@@ -379,7 +381,7 @@ void list_action()
         }
         output_ticket_table_status_index(result, element_types_a);
         if (result->hit_count == LIST_PER_PAGE) {
-            o("\t\t<div class=\"description\">続きがあります。<a href=\"%s/search?field%d=", 
+            o("\t\t<div class=\"infomation\">続きがあります。<a href=\"%s/search?field%d=", 
                     cgiScriptName,
                     ELEM_ID_STATUS);
             u(s->name);
@@ -468,7 +470,9 @@ void search_actoin()
     foreach (it, states_a) {
         State* s = it->element;
         o("\t\t<li>\n");
-        o("\t\t\t<a href=\"%s/search?field%d=", cgiScriptName, ELEM_ID_STATUS); u(s->name); o("\">");
+        o("\t\t\t<a href=\"%s/search?field%d=", cgiScriptName, ELEM_ID_STATUS);
+        u(s->name);
+        o("\" title=\"状態を条件にして検索を行ないます。\">");
         h(s->name);
         o("</a>");
         o("(%d)", s->count);
@@ -477,7 +481,7 @@ void search_actoin()
     list_free(states_a);
     o("\t\t<li>\n");
     o("\t\t\t<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
-    o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" />\n");
+    o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" />\n");
     o("\t\t\t\t<input type=\"submit\" class=\"button\" value=\"ID指定で表示\" />\n");
     o("\t\t\t</form>\n");
     o("\t\t</li>\n");
@@ -506,7 +510,7 @@ void search_actoin()
     o("\t<th>キーワード検索</th>\n");
     o("\t<td>\n"); 
     o("\t\t<input type=\"text\" name=\"q\" value=\""); v(q); o("\" />\n");
-    o("\t\t<div id=\"message\">履歴も含めて全ての項目から検索を行ないます。</div>\n");
+    o("\t\t<div id=\"description\">履歴も含めて全ての項目から検索を行ないます。</div>\n");
     o("\t</td>\n");
     o("</tr>\n");
     o("</table>\n");
@@ -522,7 +526,7 @@ void search_actoin()
         char* query_string;
 
         query_string = format_query_string_without_page(query_string_buffer);
-        o(      "<div class=\"description\">");
+        o(      "<div class=\"infomation\">");
         o(      "%d件ヒットしました。\n", result->hit_count);
         o(      "</div>\n");
         output_navigater(result, query_string);
@@ -722,8 +726,8 @@ void register_action()
     o(      "<h2>"); h(project->name);o(" - チケット登録</h2>\n"
             "<div id=\"input_form\">\n"
             "<h3>チケット登録</h3>\n"
-            "<div class=\"message\">新規チケットを登録する場合は、以下のフォームを記入し登録ボタンをクリックしてください。</div>\n"
-            "<div class=\"message\">※必須項目の入力チェックは、javascriptで行なっています。</div>\n");
+            "<div class=\"description\">新規チケットを登録する場合は、以下のフォームを記入し登録ボタンをクリックしてください。</div>\n"
+            "<div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div>\n");
     o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName);
     o(      "<table summary=\"input infomation\">\n");
     {
@@ -861,7 +865,7 @@ void ticket_action()
     o("\t</tr>\n");
     o(      "</table>\n"
             "</div>");
-    o(      "<div class=\"description\"><a href=\"#reply\">返信する</a></div>\n");
+    o(      "<div class=\"infomation\"><a href=\"#reply\">返信する</a></div>\n");
     o(      "<div id=\"ticket_history\">\n"
             "<h3>チケット履歴</h3>\n"
             "<div class=\"description\">チケットの履歴情報です。</div>\n");
@@ -918,8 +922,8 @@ void ticket_action()
             "<h3>チケット返信</h3>\n");
     o(      "<form id=\"reply_form\" name=\"reply_form\" action=\"%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName);
     o(      "<input type=\"hidden\" name=\"ticket_id\" value=\"%s\" />\n", ticket_id);
-    o(      "<div class=\"message\">返信を行なう場合は、以下のフォームに内容を記入して返信ボタンをクリックしてください。</div>\n"
-            "<div class=\"message\">※必須項目の入力チェックは、javascriptで行なっています。</div>\n"
+    o(      "<div class=\"description\">返信を行なう場合は、以下のフォームに内容を記入して返信ボタンをクリックしてください。</div>\n"
+            "<div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div>\n"
             "<table summary=\"input table\">\n");
     foreach (it, element_types_a) {
         ElementType* et = it->element;
@@ -1181,7 +1185,7 @@ void default_action()
     o(      "<div id=\"main\">\n");
     o(      "<h2>");h(project->name);o("&nbsp;</h2>\n");
     o(      "<div id=\"main_body\">\n"
-            "<div id=\"description\">");h(project->description);o("</div>\n");
+            "<div class=\"description\">");h(project->description);o("</div>\n");
     o(      "<div class=\"top_edit\"><a href=\"%s/edit_top\">トップページの編集</a></div>\n", cgiScriptName);
     wiki_out("wiki/top.wiki");
     o(      "</div>\n");
@@ -1274,7 +1278,7 @@ void edit_top_action()
     o(      "<h2>トップページの編集</h2>\n"
             "<div id=\"top\">\n"
             "<h3>トップページの編集</h3>\n"
-            "<div id=\"message\">簡易wikiの文法でトップページのコンテンツの編集を行ない、更新ボタンをクリックしてください。</div>\n"
+            "<div id=\"description\">簡易wikiの文法でトップページのコンテンツの編集を行ない、更新ボタンをクリックしてください。</div>\n"
             "<form id=\"edit_top_form\" action=\"%s/edit_top_submit\" method=\"post\">\n", cgiScriptName);
     o(      "<textarea name=\"edit_top\" id=\"edit_top\" rows=\"3\" cols=\"10\">");
     wiki_content_out("wiki/top.wiki");

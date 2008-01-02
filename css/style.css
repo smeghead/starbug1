@@ -335,6 +335,9 @@ div.navigater a {
 table.item_table {
     width: 90%;
 }
+table.item_table th {
+    width: 120px;
+}
 .element_new_item {
     width: 80px;
 }
