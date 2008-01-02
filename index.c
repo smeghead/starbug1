@@ -814,7 +814,13 @@ void ticket_action()
             default:
                 if (et->type == ELEM_TYPE_UPLOADFILE) {
                     if (strlen(value)) {
-                        o("<a href=\"%s/download/%d/", cgiScriptName, -1 /* TODO get_element_id(elements_a, et)*/); u(value); o("\" target=\"_blank\">");h(value); o("</a>\n");
+                        char* id_str = get_element_value_by_id(elements_a, ELEM_ID_ID);
+                        d("id_str: %s\n", id_str);
+                        o("<a href=\"%s/download/%d/", 
+                                cgiScriptName, 
+                                db_get_element_file_id(atoi(id_str), et->id)); 
+                        u(value);
+                        o("\" target=\"_blank\">");h(value); o("</a>\n");
                     }
                 } else {
                     hm(value);

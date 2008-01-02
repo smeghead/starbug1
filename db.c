@@ -575,7 +575,7 @@ List* db_get_last_elements(int ticket_id, List* elements)
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_all(element_types_a);
     create_columns_exp(element_types_a, "m", columns);
-    strcpy(sql, "select t.id");
+    strcpy(sql, "select m.id");
     strcat(sql, columns);
     strcat(sql,
             "from ticket as t "
@@ -587,8 +587,16 @@ List* db_get_last_elements(int ticket_id, List* elements)
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         const unsigned char* str_val;
-        int i = 1;
+        int i = 0;
         Iterator* it;
+        Element* e_id = list_new_element(elements);
+        e_id->element_type_id = ELEM_ID_ID;
+        str_val = sqlite3_column_text(stmt, i++);
+        if (str_val != NULL) {
+            e_id->str_val = (char*)xalloc(sizeof(char) * strlen(str_val) + 1);
+            strcpy(e_id->str_val, str_val);
+        }
+        list_add(elements, e_id);
         foreach (it, element_types_a) {
             ElementType* et = it->element;
             Element* e = list_new_element(elements);
