@@ -336,7 +336,7 @@ void list_action()
         o("<div>\n");
         o("<h4 class=\"status\">");h(s->name);o("&nbsp;(%d件)&nbsp;<a href=\"#top\">↑</a></h4>\n", s->count);
         if (result->hit_count == LIST_PER_PAGE) {
-            o("\t\t<div class=\"description\">最初の%d件のみを表示しています。<a href=\"%s/search?field%d=", 
+            o("\t\t<div class=\"description\">新しい%d件のみを表示しています。<a href=\"%s/search?field%d=", 
                     result->hit_count, 
                     cgiScriptName,
                     ELEM_ID_STATUS);
@@ -344,6 +344,13 @@ void list_action()
             o("\">状態が%sである全てのチケットを表示する</a></div>\n", s->name);
         }
         output_ticket_table_status_index(result, element_types_a);
+        if (result->hit_count == LIST_PER_PAGE) {
+            o("\t\t<div class=\"description\">続きがあります。<a href=\"%s/search?field%d=", 
+                    cgiScriptName,
+                    ELEM_ID_STATUS);
+            u(s->name);
+            o("\">状態が%sである全てのチケットを表示する</a></div>\n", s->name);
+        }
         list_free(result->messages);
         free(result);
         o("</div>\n");
