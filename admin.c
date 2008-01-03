@@ -93,7 +93,8 @@ void output_header(Project* project, char* title, char* script_name, int navi)
 void output_footer()
 {
     /* Finish up the page */
-    o(      "<hr />\n"
+    o(      "<div id=\"footer\">\n"
+            "<hr />\n"
             "<div align=\"right\">\n"
             "<p>\n"
             "\t<a href=\"http://validator.w3.org/check?uri=referer\">\n"
@@ -101,9 +102,10 @@ void output_footer()
             "\t</a>\n"
             "</p>\n"
             "<div><address>Powered by cgic.</address></div>\n"
-            "<div><address>Copyright smeghead 2007 - 2008.</address></div>\n"
+            "<div><address>Starbug1 version: %s. Copyright smeghead 2007 - 2008.</address></div>\n"
             "</div>\n"
-            "</body>\n</html>\n");
+            "</div>\n"
+            "</body>\n</html>\n", VERSION);
 }
 int cgiMain() {
     register_actions();

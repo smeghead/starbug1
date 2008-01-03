@@ -1,18 +1,21 @@
-2007-11-04  smeghead smeghead@users.sourceforge.jp
+2008-01-03  smeghead <smeghead@users.sourceforge.jp>
 
-
-	* 初期plpha版リリース
-
-
-2007-12-09  smeghead smeghead@users.sourceforge.jp
-
-
-	* チケットの件数が増加したときの、応答速度対策のために、
-    データベースのテーブル構成を変更した。
-    * 項目の種別にチェックボックスを選択できるようにした。
+    * β版のリリース
 
 2007-12-10  smeghead smeghead@users.sourceforge.jp
     * 0.0.2-alphaのバグを修正。(キーワード検索以外に2つ以上の検索条件を指定す
     るとエラーが発生する問題を修正。
     * wikiの表示部分でタグ文字列がエスケープされないのを修正。 XSS対策
+
+2007-12-09  smeghead smeghead@users.sourceforge.jp
+
+	* チケットの件数が増加したときの、応答速度対策のために、
+    データベースのテーブル構成を変更した。
+    * 項目の種別にチェックボックスを選択できるようにした。
+
+
+2007-11-04  smeghead smeghead@users.sourceforge.jp
+
+	* 初期plpha版リリース
+
 

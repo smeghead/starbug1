@@ -1,7 +1,7 @@
+VERSION = 0.1.1-beta
 CC = gcc
-CFLAGS= -I/usr/local/include -I. -O3 -Wall
+CFLAGS= -I/usr/local/include -I. -DVERSION=\"${VERSION}\" -O3 -Wall
 LFLAGS = -L/usr/local/lib -lsqlite3 -lcgic
-MINGW_GCC  = "C:/MinGW/bin/gcc.exe"
 
 default: index.cgi admin.cgi
 
@@ -23,7 +23,7 @@ admin.cgi: list.o data.o dbutil.o db.o util.o css.o admin.o
 	$(CC) -o $@ $^ $(LFLAGS)
 	strip $@
 
-.PHONY: clean webapp mingwbat
+.PHONY: clean webapp dist
 clean:
 	rm -f *.o index.cgi admin.cgi
 	rm -rf ./dist
@@ -37,11 +37,15 @@ webapp: default
 	@echo "Creating webapp... done."
 	@echo "    webapp may be dist/starbug1 directory."
 
-mingwbat:
-	make clean
-	make -n \
-		| sed 's#gcc#${MINGW_GCC}#' \
-		| grep -v 'strip' \
-		| grep -v '^make' \
-		> MinGW-compile.bat
+dist:
+	mkdir -p dist
+	cd dist && \
+		cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/starbug1 export -r HEAD starbug1 && \
+		mv starbug1 starbug1-${VERSION} && \
+		tar zcf starbug1-${VERSION}.tar.gz starbug1-${VERSION} && \
+		rm -rf starbug1-${VERSION} && \
+		cd ..
+
+cvsreleasetag:
+	cvs tag starbug1-`echo ${VERSION} | sed 's/\./-/g'`
 
