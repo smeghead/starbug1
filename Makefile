@@ -47,5 +47,6 @@ dist:
 		cd ..
 
 cvsreleasetag:
-	cvs tag starbug1-`echo ${VERSION} | sed 's/\./-/g'`
+	@echo please tag by manual. 
+	@echo " " cvs tag starbug1-`echo ${VERSION} | sed 's/\./-/g'`
 
