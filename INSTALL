@@ -41,7 +41,7 @@ $ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/starbug1 login
 $ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/starbug1 checkout starbug1
 
 * コンパイル
-$ tar zxf starbug-x.x.x-alpha.tar.gz
+$ tar zxf starbug-x.x.x-xxx.tar.gz
 $ cd starbug1
 $ gmake
 $ gmake webapp
