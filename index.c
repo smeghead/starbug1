@@ -688,6 +688,7 @@ void output_form_element(List* elements, ElementType* e_type)
         case ELEM_TYPE_UPLOADFILE:
             o("<input type=\"file\" class=\"element\" id=\"field%d\" name=\"field%d\" />\n",
                     e_type->id, e_type->id);
+            o("<div class=\"description\">ファイルサイズは、%dKb以下になるようにしてください。</div>\n", MAX_FILE_SIZE);
             break;
     }
     switch (e_type->type) {
