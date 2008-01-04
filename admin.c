@@ -87,8 +87,7 @@ void output_header(Project* project, char* title, char* script_name, int navi)
     o(      "\t<li><a href=\"%s/../db/starbug1.db\">バックアップ</a></li>\n", cgiScriptName);
     o(      "\t<li><a href=\"%s/../index.cgi\">", cgiScriptName);h(project->name); o("トップへ</a></li>\n");
     o(      "</ul>\n"
-            "<br clear=\"all\" />\n"
-            "<hr />\n");
+            "<br clear=\"all\" />\n");
 }
 void output_footer()
 {

@@ -1,13 +1,11 @@
 2008-01-04  smeghead <smeghead@users.sourceforge.jp>
 
-    * 管理ツールで、新規項目の追加の際のチケット項目と返信専用属性の説明文が古
-    い状態だったのを修正した。
-
-2008-01-04  smeghead <smeghead@users.sourceforge.jp>
-
     * 管理ツールでのJavaScriptのalertでの確認でキャンセルを押した場合に、その
     ままsubmitされる場合があったのを修正。prototype.jsのEvent.stopメソッドでキ
     ャンセルを行なうように統一した。
+    * 管理ツールで、新規項目の追加の際のチケット項目と返信専用属性の説明文が古
+    い状態だったのを修正した。
+    * クリックという言葉を廃止して押すという表現に統一した。
 
 2008-01-03  smeghead <smeghead@users.sourceforge.jp>
 

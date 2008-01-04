@@ -228,18 +228,18 @@ void output_ticket_table_header(List* element_types)
     char* query_string = format_query_string_without_sort_and_page(query_string_buffer);
 
     o(      "\t<tr>\n");
-    o(      "\t\t<th><a href=\"%s/search?%ssort=-1&amp;%s\" title=\"クリックする度に昇順、降順で並べ替えを行ないます。\">ID</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    o(      "\t\t<th><a href=\"%s/search?%ssort=-1&amp;%s\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">ID</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
     foreach (it, element_types) {
         ElementType* et = it->element;
         o("\t\t<th>\n");
-        o("\t\t\t<a href=\"%s/search?%ssort=%d&amp;%s\" title=\"クリックする度に昇順、降順で並べ替えを行ないます。\">", cgiScriptName, reverse ? "" : "r", et->id, query_string);
+        o("\t\t\t<a href=\"%s/search?%ssort=%d&amp;%s\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">", cgiScriptName, reverse ? "" : "r", et->id, query_string);
         h(et->name);
         o("</a>\n");
         o("\t\t</th>\n");
     }
-    o("\t\t<th><a href=\"%s/search?%ssort=-2&amp;%s\" title=\"クリックする度に昇順、降順で並べ替えを行ないます。\">投稿日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
-    o("\t\t<th><a href=\"%s/search?%ssort=-3&amp;%s\" title=\"クリックする度に昇順、降順で並べ替えを行ないます。\">最終更新日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
-    o("\t\t<th><a href=\"%s/search?%ssort=-3&amp;%s\" title=\"クリックする度に昇順、降順で並べ替えを行ないます。\">放置日数</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    o("\t\t<th><a href=\"%s/search?%ssort=-2&amp;%s\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">投稿日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    o("\t\t<th><a href=\"%s/search?%ssort=-3&amp;%s\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">最終更新日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    o("\t\t<th><a href=\"%s/search?%ssort=-3&amp;%s\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">放置日数</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
     o("\t</tr>\n");
 }
 void output_ticket_table_body(SearchResult* result, List* element_types)
@@ -726,7 +726,7 @@ void register_action()
     o(      "<h2>"); h(project->name);o(" - チケット登録</h2>\n"
             "<div id=\"input_form\">\n"
             "<h3>チケット登録</h3>\n"
-            "<div class=\"description\">新規チケットを登録する場合は、以下のフォームを記入し登録ボタンをクリックしてください。</div>\n"
+            "<div class=\"description\">新規チケットを登録する場合は、以下のフォームを記入し登録ボタンを押してください。</div>\n"
             "<div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div>\n");
     o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName);
     o(      "<table summary=\"input infomation\">\n");
@@ -922,7 +922,7 @@ void ticket_action()
             "<h3>チケット返信</h3>\n");
     o(      "<form id=\"reply_form\" name=\"reply_form\" action=\"%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName);
     o(      "<input type=\"hidden\" name=\"ticket_id\" value=\"%s\" />\n", ticket_id);
-    o(      "<div class=\"description\">返信を行なう場合は、以下のフォームに内容を記入して返信ボタンをクリックしてください。</div>\n"
+    o(      "<div class=\"description\">返信を行なう場合は、以下のフォームに内容を記入して返信ボタンを押してください。</div>\n"
             "<div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div>\n"
             "<table summary=\"input table\">\n");
     foreach (it, element_types_a) {
@@ -1278,7 +1278,7 @@ void edit_top_action()
     o(      "<h2>トップページの編集</h2>\n"
             "<div id=\"top\">\n"
             "<h3>トップページの編集</h3>\n"
-            "<div id=\"description\">簡易wikiの文法でトップページのコンテンツの編集を行ない、更新ボタンをクリックしてください。</div>\n"
+            "<div id=\"description\">簡易wikiの文法でトップページのコンテンツの編集を行ない、更新ボタンを押してください。</div>\n"
             "<form id=\"edit_top_form\" action=\"%s/edit_top_submit\" method=\"post\">\n", cgiScriptName);
     o(      "<textarea name=\"edit_top\" id=\"edit_top\" rows=\"3\" cols=\"10\">");
     wiki_content_out("wiki/top.wiki");
