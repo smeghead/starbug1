@@ -182,6 +182,10 @@ table.list_item th.delete {
 #top_id_search form {
     margin: 8px;
 }
+#top_state_index li,
+#top_newest li {
+    list-style-image: url("../img/li.gif");
+}
 #main {
     width: 75%;
     float: left;
