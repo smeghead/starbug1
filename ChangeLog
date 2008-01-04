@@ -1,5 +1,9 @@
 2008-01-04  smeghead <smeghead@users.sourceforge.jp>
 
+    * メニューのリンクにtitle属性で簡単な説明を追加した。
+
+2008-01-04  smeghead <smeghead@users.sourceforge.jp>
+
     * 管理ツールでのJavaScriptのalertでの確認でキャンセルを押した場合に、その
     ままsubmitされる場合があったのを修正。prototype.jsのEvent.stopメソッドでキ
     ャンセルを行なうように統一した。
