@@ -490,6 +490,7 @@ void search_actoin()
     o("</div>\n");
     o("<div id=\"condition_form\">\n");
     o("<h3>検索条件</h3>\n");
+    o("<div class=\"description\">検索条件を入力して検索ボタンを押してください。</div>\n");
     o("<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
     o(      "<table summary=\"condition table\">\n");
     foreach (it, element_types_a) {

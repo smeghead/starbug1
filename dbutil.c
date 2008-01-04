@@ -85,7 +85,7 @@ void create_tables()
             COLUMN_TYPE_END);
     exec_query(
             "insert into element_type(id, type, ticket_property, reply_property, required, name, description, auto_add_item, default_value, display_in_list, sort) "
-            "values (2, ?, 0, 0, 1, '投稿者', 'メールアドレスを入力してください。', 0, '', 1, 2);",
+            "values (2, ?, 0, 0, 1, '投稿者', '投稿者を入力してください。', 0, '', 1, 2);",
             COLUMN_TYPE_INT, ELEM_TYPE_TEXT,
             COLUMN_TYPE_END);
     exec_query(
