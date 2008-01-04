@@ -1180,6 +1180,14 @@ void default_action()
     list_free(states_a);
     o(      "\t</ul>\n");
     o(      "</div>\n");
+    /* ID検索フォームの表示 */
+    o(      "<div id=\"top_id_search\">\n");
+    o(      "<h4>ID検索</h4>\n");
+    o(      "\t<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
+    o(      "\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" />\n");
+    o(      "\t\t<input type=\"submit\" class=\"button\" value=\"表示\" />\n");
+    o(      "\t</form>\n");
+    o(      "</div>\n");
     o(      "</div>\n");
     db_finish();
     o(      "<div id=\"main\">\n");
