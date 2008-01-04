@@ -624,6 +624,7 @@ void new_item_action()
     o("<h2>%s 管理ツール</h2>", project->name);
     o(      "<div id=\"new_item\">\n"
             "<h3>項目の追加</h3>\n"
+            "<div class=\"description\">チケットに新しい項目を追加します。追加する項目についての情報を入力し、追加ボタンを押してください。</div>\n"
             "<form id=\"new_item_form\" action=\"%s/new_item_submit\" method=\"post\">\n"
             "<table class=\"item_table\" summary=\"new item table\">\n", cgiScriptName);
     o("\t\t\t<tr>\n");
@@ -825,7 +826,7 @@ void delete_item_action()
             "<form id=\"delete_item_form\" action=\"%s/delete_item_submit/%d\" method=\"post\">\n"
             "<div class=\"infomation\"><strong>削除すると元には戻せません。"
             "登録されているチケットの項目についても参照できなくなります。</strong></div>"
-            "<div class=\"infomation\">削除してよければ、削除ボタンをクリックしてください。</div>\n"
+            "<div class=\"infomation\">削除してよければ、削除ボタンを押してください。</div>\n"
             "<input class=\"button\" type=\"submit\" value=\"削除\" />\n"
             "</form>\n", cgiScriptName, iid);
     o(      "</div>\n");
@@ -861,7 +862,7 @@ void style_action()
     o(      "<h2>スタイル編集</h2>\n"
             "<div id=\"top\">\n"
             "<h3>スタイルシートの編集</h3>\n"
-            "<div id=\"description\">スタイルシートの編集を行ない、更新ボタンをクリックしてください。</div>\n"
+            "<div id=\"description\">スタイルシートの編集を行ない、更新ボタンを押してください。</div>\n"
             "<form id=\"edit_css_form\" action=\"%s/style_submit\" method=\"post\">\n", cgiScriptName);
     o(      "<textarea name=\"edit_css\" id=\"edit_top\" rows=\"3\" cols=\"10\">");
     css_content_out("css/user.css");
