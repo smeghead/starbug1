@@ -1,3 +1,9 @@
+2008-01-04  smeghead <smeghead@users.sourceforge.jp>
+
+    * 管理ツールでのJavaScriptのalertでの確認でキャンセルを押した場合に、その
+    ままsubmitされる場合があったのを修正。prototype.jsのEvent.stopメソッドでキ
+    ャンセルを行なうように統一した。
+
 2008-01-03  smeghead <smeghead@users.sourceforge.jp>
 
     * β版のリリース

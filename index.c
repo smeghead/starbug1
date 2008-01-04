@@ -308,7 +308,7 @@ void list_action()
 
     db_init();
     project = db_get_project();
-    output_header(project, "状態別チケット一覧", "list.js", NAVI_LIST);
+    output_header(project, "状態別チケット一覧", NULL, NAVI_LIST);
     cgiFormStringNoNewlines("message", message, DEFAULT_LENGTH);
     if (strlen(message) > 0) {
         o("<div class=\"complete_message\">"); h(message); o("&nbsp;</div>\n");

@@ -3,6 +3,8 @@ Event.observe(window, 'load', initPage);
 function initPage(e) {
     Event.observe('delete_item_form', 'submit', 
         function(e) {
-            return confirm('削除します。よろしいですか？');
+            var dedide = confirm('削除します。よろしいですか？');
+            if (!dedide) Event.stop(e);
+            return dedide;
         });
 }

@@ -3,6 +3,8 @@ Event.observe(window, 'load', initPage);
 function initPage(e) {
     Event.observe('new_item_form', 'submit', 
         function(e) {
-            return confirm('追加します。よろしいですか？');
+            var dedide = confirm('追加します。よろしいですか？');
+            if (!dedide) Event.stop(e);
+            return dedide;
         });
 }
