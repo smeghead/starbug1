@@ -625,7 +625,7 @@ void new_item_action()
     o(      "<div id=\"new_item\">\n"
             "<h3>項目の追加</h3>\n"
             "<form id=\"new_item_form\" action=\"%s/new_item_submit\" method=\"post\">\n"
-            "<table summary=\"new item table\">\n", cgiScriptName);
+            "<table class=\"item_table\" summary=\"new item table\">\n", cgiScriptName);
     o("\t\t\t<tr>\n");
     o("\t\t\t\t<th>項目名</th>\n");
     o("\t\t\t\t<td>\n");
@@ -646,7 +646,11 @@ void new_item_action()
     o("\t\t\t\t\t<input id=\"field.ticket_property\" class=\"checkbox\" type=\"checkbox\" name=\"field.ticket_property\" ");
     o(                  "value=\"1\" />\n");
     o("\t\t\t\t\t<label for=\"field.ticket_property\">チケット属性とする。</label>\n");
-    o("\t\t\t\t\t<div class=\"description\">返信の属性としてではなくチケット自体の属性として定義するかどうかです。</div>\n");
+    o("\t\t\t\t\t<div class=\"description\">\n");
+    o("\t\t\t\t\t\t返信の属性としてではなくチケット自体の属性として定義するかどうかです。\n");
+    o("\t\t\t\t\t\t返信時にチケット属性を指定した項目を書き換えた場合、書き換えた内容がチケット最新情報に表示されるようになります。\n");
+    o("\t\t\t\t\t\tチケット属性を指定していない項目は、チケット最新情報に表示されません。チケット属性を指定していない項目はチケット履歴から参照することになります。\n");
+    o("\t\t\t\t\t</div>\n");
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t\t<tr>\n");
@@ -655,7 +659,10 @@ void new_item_action()
     o("\t\t\t\t\t<input id=\"field.reply_property\" class=\"checkbox\" type=\"checkbox\" name=\"field.reply_property\" ");
     o(                  "value=\"1\" />\n");
     o("\t\t\t\t\t<label for=\"field.reply_property\">返信専用属性とする。</label>\n");
-    o("\t\t\t\t\t<div class=\"description\">新規の登録時には、入力項目としないかどうかです。チェックした場合、新規の登録時には、入力項目になりません。</div>\n");
+    o("\t\t\t\t\t<div class=\"description\">\n");
+    o("\t\t\t\t\t\t新規の登録時には、入力項目としないかどうかです。チェックした場合、新規の登録時には、入力項目になりません。\n");
+    o("\t\t\t\t\t\t返信の時のみ入力できる項目となります。チケットの対応時期などの返信する人でなければわからない項目は、返信専用属性とすることで、新規登録時の不要な入力の手間を減らすことができます。\n");
+    o("\t\t\t\t\t</div>\n");
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t\t<tr>\n");
