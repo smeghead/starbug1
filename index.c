@@ -86,7 +86,7 @@ void output_header(Project* project, char* title, char* script_name, int navi)
             "<head>\n"
             "\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n"
             "\t<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\" />\n"
-            "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />"
+            "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />\n"
             "\t<title>Starbug1 %s - %s</title>\n", project->name, title);
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName);
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/user.css\" />\n", cgiScriptName);
@@ -429,7 +429,7 @@ void search_actoin()
     
     db_init();
     project = db_get_project();
-    output_header(project, "チケット検索", "list.js", NAVI_SEARCH);
+    output_header(project, "チケット検索", NULL, NAVI_SEARCH);
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_4_list(element_types_a);
     o("<h2>"); h(project->name); o(" - チケット検索</h2>\n");

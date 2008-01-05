@@ -1,7 +1,8 @@
 2008-01-05  smeghead <smeghead@users.sourceforge.jp>
 
     * 統計情報のページを追加した。チケット属性のうち、単一選択肢のものと複数選
-    択肢のものについて、何件づつ存在するかを表示するようにた。
+    択肢のものについて、何件づつ存在するかを表示するようにした。
+    * 状態別チケット一覧でlist.jsを読み込んでいたのを削除した。list.jsは削除済
 
 2008-01-04  smeghead <smeghead@users.sourceforge.jp>
 
