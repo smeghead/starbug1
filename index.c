@@ -17,6 +17,7 @@ void search_actoin();
 void register_submit_action();
 void register_action();
 void ticket_action();
+void statistics_action();
 void help_action();
 void edit_top_action();
 void edit_top_submit_action();
@@ -53,6 +54,7 @@ void register_actions()
     register_action_actions("register", register_action);
     register_action_actions("register_submit", register_submit_action);
     register_action_actions("ticket", ticket_action);
+    register_action_actions("statistics", statistics_action);
     register_action_actions("reply", ticket_action);
     register_action_actions("help", help_action);
     register_action_actions("edit_top", edit_top_action);
@@ -70,6 +72,7 @@ enum NAVI {
     NAVI_SEARCH,
     NAVI_RSS,
     NAVI_HELP,
+    NAVI_STATISTICS,
     NAVI_MANAGEMENT
 };
 void output_header(Project* project, char* title, char* script_name, int navi)
@@ -101,6 +104,7 @@ void output_header(Project* project, char* title, char* script_name, int navi)
     o("<li><a %s href='%s/list' title=\"状態別のチケット一覧を参照します\">状態別チケット</a></li>\n", navi == NAVI_LIST ? "class=\"current\"" : "", cgiScriptName);
     o("<li><a %s href='%s/register' title=\"新規にチケットを登録します\">チケット登録</a></li>\n", navi == NAVI_REGISTER ? "class=\"current\"" : "", cgiScriptName);
     o("<li><a %s href='%s/search' title=\"チケットを検索します\">チケット検索</a></li>\n", navi == NAVI_SEARCH ? "class=\"current\"" : "", cgiScriptName);
+    o("<li><a %s href='%s/statistics' title=\"統計情報を表示します\">統計情報</a></li>\n", navi == NAVI_STATISTICS ? "class=\"current\"" : "", cgiScriptName);
     o("<li><a %s href='%s/rss' title=\"RSS Feed\">RSS Feed</a></li>\n", navi == NAVI_RSS ? "class=\"current\"" : "", cgiScriptName);
     o("<li><a %s href='%s/help' title=\"ヘルプを参照します\">ヘルプ</a></li>\n", navi == NAVI_HELP ? "class=\"current\"" : "", cgiScriptName);
     o("<li><a %s href='%s/../admin.cgi' title=\"各種設定を行ないます\">管理ツール</a></li>\n", navi == NAVI_MANAGEMENT ? "class=\"current\"" : "", cgiScriptName);
@@ -1263,6 +1267,55 @@ void rss_action()
     }
     list_free(tickets_a);
     o(      "</rdf:RDF>\n");
+    db_finish();
+}
+void statistics_action()
+{
+    Project* project;
+    List* element_types_a;
+    Iterator* it;
+
+    db_init();
+    project = db_get_project();
+    output_header(project, "統計情報", NULL, NAVI_STATISTICS);
+    o(      "<h2>");h(project->name);o(" - Starbug1</h2>\n");
+    o(      "<div id=\"top\">\n");
+    o(      "<h3>統計情報</h3>\n");
+    o(      "\t<div class=\"description\">統計情報を表示します。</div>\n");
+    list_alloc(element_types_a, ElementType);
+    element_types_a = db_get_element_types_all(element_types_a);
+    foreach (it, element_types_a) {
+        ElementType* et = it->element;
+        List* items_a;
+        Iterator* it_item;
+
+        list_alloc(items_a, State);
+        switch (et->type) {
+            case ELEM_TYPE_LIST_SINGLE:
+                items_a = db_get_statictics(items_a, et->id);
+                goto got_item;
+            case ELEM_TYPE_LIST_MULTI:
+                items_a = db_get_statictics_multi(items_a, et->id);
+got_item:
+                o(      "\t<h4 class=\"item\">");
+                h(et->name);
+                o(      "\t</h4>");
+                o(      "\t<ul>\n");
+                foreach (it_item, items_a) {
+                    State* item = it_item->element;
+                    o(      "\t\t<li>\n");
+                    h(item->name);
+                    o(      "(%d)", item->count);
+                    o(      "\t\t</li>\n");
+                }
+                o(      "\t</ul>\n");
+                break;
+        }
+        list_free(items_a);
+    }
+    list_free(element_types_a);
+    o(      "</div>\n");
+    output_footer();
     db_finish();
 }
 void help_action()

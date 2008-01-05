@@ -26,6 +26,8 @@ int db_register_element_type(ElementType*);
 void db_delete_element_type(int);
 List* db_get_states_has_not_close(List*);
 List* db_get_states(List*);
+List* db_get_statictics_multi(List*, int);
+List* db_get_statictics(List*, int);
 ElementFile* db_get_element_file(int);
 List* db_get_newest_information(int, List*);
 int db_get_element_file_id(int, int);

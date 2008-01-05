@@ -1,3 +1,8 @@
+2008-01-05  smeghead <smeghead@users.sourceforge.jp>
+
+    * 統計情報のページを追加した。チケット属性のうち、単一選択肢のものと複数選
+    択肢のものについて、何件づつ存在するかを表示するようにた。
+
 2008-01-04  smeghead <smeghead@users.sourceforge.jp>
 
     * 管理ツールでのJavaScriptのalertでの確認でキャンセルを押した場合に、その
