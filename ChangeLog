@@ -1,3 +1,8 @@
+2008-01-07  smeghead <smeghead@users.sourceforge.jp>
+
+    * JavaScriptでチェックしているというメッセージを、JavaScriptを使用できない
+    環境の時のみ出力するように変更した。
+
 2008-01-05  smeghead <smeghead@users.sourceforge.jp>
 
     * 統計情報のページを追加した。チケット属性のうち、単一選択肢のものと複数選

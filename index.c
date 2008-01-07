@@ -733,7 +733,7 @@ void register_action()
             "<div id=\"input_form\">\n"
             "<h3>チケット登録</h3>\n"
             "<div class=\"description\">新規チケットを登録する場合は、以下のフォームを記入し登録ボタンを押してください。</div>\n"
-            "<div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div>\n");
+            "<noscript><div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div></noscript>\n");
     o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName);
     o(      "<table summary=\"input infomation\">\n");
     {
@@ -929,7 +929,7 @@ void ticket_action()
     o(      "<form id=\"reply_form\" name=\"reply_form\" action=\"%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName);
     o(      "<input type=\"hidden\" name=\"ticket_id\" value=\"%s\" />\n", ticket_id);
     o(      "<div class=\"description\">返信を行なう場合は、以下のフォームに内容を記入して返信ボタンを押してください。</div>\n"
-            "<div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div>\n"
+            "<noscript><div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div></noscript>\n"
             "<table summary=\"input table\">\n");
     foreach (it, element_types_a) {
         ElementType* et = it->element;
