@@ -1,3 +1,7 @@
+2008-01-09  smeghead <smeghead@users.sourceforge.jp>
+
+    * ボタンを目立つようにcssを変更した。ボタンの色、カーソルなどを変更した。
+
 2008-01-07  smeghead <smeghead@users.sourceforge.jp>
 
     * JavaScriptでチェックしているというメッセージを、JavaScriptを使用できない

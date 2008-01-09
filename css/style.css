@@ -62,11 +62,26 @@ input.checkbox, input.radio {
     width: 20px;
 }
 
+input.date {
+    width: 80px;
+}
 input.number {
     width: 40px;
 }
 input.button {
     width: 100px;
+    background-color: #ddd;
+    border: 1px solid #bbb;
+    border-right-color: #333;
+    border-bottom-color: #333;
+}
+input:hover.button {
+    cursor: pointer;
+    border-color: #666;
+}
+
+input:focus.button {
+    border-color: #000;
 }
 #mainmenu {
     width:100%;
