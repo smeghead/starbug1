@@ -88,8 +88,14 @@ enum ELEM_ID {
 
 typedef struct _condition {
   int element_type_id;
+  int condition_type;
   char value[DEFAULT_LENGTH];
 } Condition;
+enum CONDITION_TYPE {
+    CONDITION_TYPE_NORMAL,
+    CONDITION_TYPE_DATE_FROM,
+    CONDITION_TYPE_DATE_TO
+};
 
 typedef struct _search_result {
   int hit_count;

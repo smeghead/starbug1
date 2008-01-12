@@ -27,8 +27,8 @@ void default_action();
 void output_header(Project*, char*, char*, int);
 void output_footer();
 int cgiMain();
-void output_form_element(List* element, ElementType* e_type);
-void output_form_element_4_condition(char*, ElementType*);
+void output_form_element(List*, ElementType*);
+void output_form_element_4_condition(ElementType*);
 int get_mode();
 static int contains(char* const, const char*);
 
@@ -441,13 +441,39 @@ void search_actoin()
         char value[DEFAULT_LENGTH];
         Condition* c;
 
-        sprintf(name, "field%d", et->id);
-        cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-        if (strlen(value) == 0) continue;
-        c = list_new_element(conditions_a);
-        c->element_type_id = et->id;
-        strcpy(c->value, value);
-        list_add(conditions_a, c);
+        switch (et->type) {
+            case ELEM_TYPE_DATE:
+                /* 日付 from */
+                sprintf(name, "field%d_from", et->id);
+                cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+                if (strlen(value) > 0) {
+                    c = list_new_element(conditions_a);
+                    c->element_type_id = et->id;
+                    c->condition_type = CONDITION_TYPE_DATE_FROM;
+                    strcpy(c->value, value);
+                    list_add(conditions_a, c);
+                }
+                /* 日付 to */
+                sprintf(name, "field%d_to", et->id);
+                cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+                if (strlen(value) > 0) {
+                    c = list_new_element(conditions_a);
+                    c->element_type_id = et->id;
+                    c->condition_type = CONDITION_TYPE_DATE_TO;
+                    strcpy(c->value, value);
+                    list_add(conditions_a, c);
+                }
+                break;
+            default:
+                sprintf(name, "field%d", et->id);
+                cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+                if (strlen(value) == 0) continue;
+                c = list_new_element(conditions_a);
+                c->element_type_id = et->id;
+                c->condition_type = CONDITION_TYPE_NORMAL;
+                strcpy(c->value, value);
+                list_add(conditions_a, c);
+        }
     }
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
     cgiFormStringNoNewlines("sort", sortstr, DEFAULT_LENGTH);
@@ -507,7 +533,7 @@ void search_actoin()
         o("<tr>\n");
         o("\t<th>"); h(et->name); o("</th>\n");
         o("\t<td>\n"); 
-        output_form_element_4_condition(value, et);
+        output_form_element_4_condition(et);
         o("\t</td>\n");
         o("</tr>\n");
     }
@@ -548,14 +574,18 @@ void search_actoin()
 /**
  * form要素を表示する。
  */
-void output_form_element_4_condition(char* value, ElementType* e_type)
+void output_form_element_4_condition(ElementType* et)
 {
     char id[DEFAULT_LENGTH];
     List* items_a;
     Iterator* it;
+    char name[DEFAULT_LENGTH];
+    char value[DEFAULT_LENGTH];
+    sprintf(name, "field%d", et->id);
+    cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
 
-    sprintf(id, "%d", e_type->id);
-    switch (e_type->type) {
+    sprintf(id, "%d", et->id);
+    switch (et->type) {
         case ELEM_TYPE_TEXT:
         case ELEM_TYPE_TEXTAREA:
         case ELEM_TYPE_CHECKBOX:
@@ -575,7 +605,7 @@ void output_form_element_4_condition(char* value, ElementType* e_type)
             h(id);
             o("\">\n");
             list_alloc(items_a, ListItem);
-            items_a = db_get_list_item(e_type->id, items_a);
+            items_a = db_get_list_item(et->id, items_a);
 
             o("<option value=\"\">&nbsp;</option>");
             foreach (it, items_a) {
@@ -593,6 +623,8 @@ void output_form_element_4_condition(char* value, ElementType* e_type)
             list_free(items_a);
             break;
         case ELEM_TYPE_DATE:
+            sprintf(name, "field%d_from", et->id);
+            cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
             o("<input type=\"text\" class=\"date\" id=\"field");
             h(id);
             o("\" name=\"field");
@@ -602,6 +634,8 @@ void output_form_element_4_condition(char* value, ElementType* e_type)
             o("\" />\n");
             o("<a class=\"calender\" href=\"#\" title=\"JavaScriptによる入力支援機能です。\">cale</a>");
             o("〜\n");
+            sprintf(name, "field%d_to", et->id);
+            cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
             o("<input type=\"text\" class=\"date\" id=\"field");
             h(id);
             o("\" name=\"field");
@@ -616,7 +650,7 @@ void output_form_element_4_condition(char* value, ElementType* e_type)
 /**
  * form要素を表示する。
  */
-void output_form_element(List* elements, ElementType* e_type)
+void output_form_element(List* elements, ElementType* et)
 {
     char* value = "";
     List* items_a;
@@ -624,9 +658,9 @@ void output_form_element(List* elements, ElementType* e_type)
     int list_count = 0;
 
     if (elements != NULL) {
-        value = get_element_value(elements, e_type);
+        value = get_element_value(elements, et);
     } else {
-        if (e_type->id == ELEM_ID_SENDER) {
+        if (et->id == ELEM_ID_SENDER) {
             char* user_name = getenv("REMOTE_USER");
             char sender[DEFAULT_LENGTH];
             cgiCookieString("starbug1_sender", sender, DEFAULT_LENGTH);
@@ -637,38 +671,38 @@ void output_form_element(List* elements, ElementType* e_type)
                 /* 投稿者のフィールドは、basic認証が行なわれていればそのユーザ名を表示する。 */
                 value = user_name;
             else 
-                value = e_type->default_value;
+                value = et->default_value;
         } else {
-            value = e_type->default_value;
+            value = et->default_value;
         }
     }
-    switch (e_type->type) {
+    switch (et->type) {
         case ELEM_TYPE_TEXT:
             o("<input type=\"text\" class=\"element\" id=\"field%d\" name=\"field%d\" value=\"",
-                    e_type->id, e_type->id);
+                    et->id, et->id);
             v(value);
             o("\" />\n");
             break;
         case ELEM_TYPE_TEXTAREA:
             o("<textarea id=\"field%d\" name=\"field%d\" rows=\"3\" cols=\"10\">",
-                    e_type->id, e_type->id);
+                    et->id, et->id);
             v(value);
             o("</textarea>\n");
             break;
         case ELEM_TYPE_CHECKBOX:
             o("<input type=\"checkbox\" id=\"field%d\" class=\"checkbox\" name=\"field%d\" value=\"",
-                    e_type->id, e_type->id); 
-            v(e_type->name);
+                    et->id, et->id); 
+            v(et->name);
             o("\" %s />",
                     (strlen(value) || strcmp(value, "0") == 0) ? "checked=\"checked\"" : "");
-            o("<label for=\"field%d\">", e_type->id); h(e_type->name); o("</lable>\n");
+            o("<label for=\"field%d\">", et->id); h(et->name); o("</lable>\n");
             break;
         case ELEM_TYPE_LIST_SINGLE:
             o("<select id=\"field%d\" name=\"field%d\">\n",
-                    e_type->id, e_type->id);
+                    et->id, et->id);
             o("<option value=\"\">&nbsp;</option>\n");
             list_alloc(items_a, ListItem);
-            items_a = db_get_list_item(e_type->id, items_a);
+            items_a = db_get_list_item(et->id, items_a);
             foreach (it, items_a) {
                 ListItem* item = it->element;
                 o("<option value=\"");
@@ -686,11 +720,11 @@ void output_form_element(List* elements, ElementType* e_type)
             break;
         case ELEM_TYPE_LIST_MULTI:
             list_alloc(items_a, ListItem);
-            items_a = db_get_list_item(e_type->id, items_a);
+            items_a = db_get_list_item(et->id, items_a);
             /* リストの要素数をカウントする */
             foreach (it, items_a) list_count++;
-            o("<select size=\"%d\" id=\"field%d", list_count + 1, e_type->id);
-            o("\" name=\"field%d\" multiple=\"multiple\">\n", e_type->id);
+            o("<select size=\"%d\" id=\"field%d", list_count + 1, et->id);
+            o("\" name=\"field%d\" multiple=\"multiple\">\n", et->id);
 
             o("<option value=\"\">&nbsp;</option>\n");
             foreach (it, items_a) {
@@ -710,25 +744,25 @@ void output_form_element(List* elements, ElementType* e_type)
             break;
         case ELEM_TYPE_UPLOADFILE:
             o("<input type=\"file\" class=\"element\" id=\"field%d\" name=\"field%d\" />\n",
-                    e_type->id, e_type->id);
+                    et->id, et->id);
             o("<div class=\"description\">ファイルサイズは、%dKb以下になるようにしてください。</div>\n", MAX_FILE_SIZE);
             break;
         case ELEM_TYPE_DATE:
             o("<input type=\"text\" class=\"date\" id=\"field%d\" name=\"field%d\" value=\"\n",
-                    e_type->id, e_type->id);
+                    et->id, et->id);
             v(value);
             o("\" maxlength=\"10\"/>\n");
             o("<a class=\"calender\" href=\"#\" title=\"JavaScriptによる入力支援機能です。\">cale</a>");
             o("<div class=\"description\">yyyy-mm-dd形式で入力してください。</div>\n");
             break;
     }
-    switch (e_type->type) {
+    switch (et->type) {
         case ELEM_TYPE_LIST_SINGLE:
         case ELEM_TYPE_LIST_MULTI:
-            if (e_type->auto_add_item) {
+            if (et->auto_add_item) {
                 /* 新規項目を設定可能である場合、テキストボックスを表示する。 */
                 o("<input type=\"text\" class=\"element_new_item\" id=\"field%d\" name=\"field%d.new_item\" />\n",
-                    e_type->id, e_type->id);
+                    et->id, et->id);
                 o("選択肢を追加する場合はテキストボックスに入力してください。\n");
             }
             break;

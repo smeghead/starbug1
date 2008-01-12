@@ -508,7 +508,7 @@ void update_elements()
 {
     char** ids;
     int i = -1;
-    ElementType* e_type = NULL;
+    ElementType* et = NULL;
     if ((cgiFormStringMultiple("field_ids", &ids)) == cgiFormNotFound) {
         die("cannot find field_ids.");
     }
@@ -519,71 +519,71 @@ void update_elements()
         List* items_a;
         Iterator* it;
 
-        e_type = db_get_element_type(atoi(id));
+        et = db_get_element_type(atoi(id));
 
         d("while id: %s\n", id);
         d("while\n");
         sprintf(name, "field%s.name", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-        strcpy(e_type->name, value);
+        strcpy(et->name, value);
 
         sprintf(name, "field%s.description", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-        strcpy(e_type->description, value);
+        strcpy(et->description, value);
 
         sprintf(name, "field%s.ticket_property", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-        e_type->ticket_property = atoi(value);
+        et->ticket_property = atoi(value);
 
         sprintf(name, "field%s.reply_property", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-        e_type->reply_property = atoi(value);
+        et->reply_property = atoi(value);
 
         sprintf(name, "field%s.required", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-        e_type->required = atoi(value);
+        et->required = atoi(value);
 
         sprintf(name, "field%s.display_in_list", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-        e_type->display_in_list = atoi(value);
+        et->display_in_list = atoi(value);
 
         sprintf(name, "field%s.sort", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-        e_type->sort = atoi(value);
+        et->sort = atoi(value);
 
         sprintf(name, "field%s.default_value", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-        strcpy(e_type->default_value, value);
+        strcpy(et->default_value, value);
 
         sprintf(name, "field%s.auto_add_item", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
         d("auto_add_item: %s\n", value);
-        e_type->auto_add_item = atoi(value);
-        d("auto_add_item: %d\n", e_type->auto_add_item);
+        et->auto_add_item = atoi(value);
+        d("auto_add_item: %d\n", et->auto_add_item);
 
-        db_update_element_type(e_type);
+        db_update_element_type(et);
 
         /* list_item */
-        switch (e_type->type) {
+        switch (et->type) {
             case ELEM_TYPE_LIST_SINGLE:
             case ELEM_TYPE_LIST_MULTI:
                 /* 選択要素のあるelementだけ、list_itemの更新を行なう。 */
                 list_alloc(items_a, ListItem);
-                items_a = db_get_list_item(e_type->id, items_a);
+                items_a = db_get_list_item(et->id, items_a);
                 foreach (it, items_a) {
                     ListItem* item = it->element;
                     strcpy(name, "");
                     strcpy(value, "");
-                    sprintf(name, "field%d.list_item%d.name", e_type->id, item->id);
+                    sprintf(name, "field%d.list_item%d.name", et->id, item->id);
                     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                     strcpy(item->name, value);
-                    sprintf(name, "field%d.list_item%d.close", e_type->id, item->id);
+                    sprintf(name, "field%d.list_item%d.close", et->id, item->id);
                     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                     item->close = atoi(value);
-                    sprintf(name, "field%d.list_item%d.sort", e_type->id, item->id);
+                    sprintf(name, "field%d.list_item%d.sort", et->id, item->id);
                     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                     item->sort = atoi(value);
-                    sprintf(name, "field%d.list_item%d.delete", e_type->id, item->id);
+                    sprintf(name, "field%d.list_item%d.delete", et->id, item->id);
                     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                     if (atoi(value) == 1)
                         db_delete_list_item(item->id);
@@ -593,16 +593,16 @@ void update_elements()
                 list_free(items_a);
                 strcpy(name, "");
                 strcpy(value, "");
-                sprintf(name, "field%d.list_item_new.name", e_type->id);
+                sprintf(name, "field%d.list_item_new.name", et->id);
                 cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                 if (strlen(value) > 0) {
                     ListItem* item = xalloc(sizeof(ListItem));
-                    item->element_type_id = e_type->id;
+                    item->element_type_id = et->id;
                     strcpy(item->name, value);
-                    sprintf(name, "field%d.list_item_new.close", e_type->id);
+                    sprintf(name, "field%d.list_item_new.close", et->id);
                     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                     item->close = atoi(value);
-                    sprintf(name, "field%d.list_item_new.sort", e_type->id);
+                    sprintf(name, "field%d.list_item_new.sort", et->id);
                     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                     item->sort = atoi(value);
                     db_register_list_item(item);
@@ -610,7 +610,7 @@ void update_elements()
                 break;
         }
 
-        free(e_type);
+        free(et);
     }
     cgiStringArrayFree(ids);
 }
@@ -755,7 +755,7 @@ void new_item_action()
 }
 void new_item_submit_action()
 {
-    ElementType* e_type = xalloc(sizeof(ElementType));
+    ElementType* et = xalloc(sizeof(ElementType));
     Project* project;
     char value[DEFAULT_LENGTH];
     int i, e_type_id;
@@ -764,27 +764,27 @@ void new_item_submit_action()
     db_begin();
     project = db_get_project();
 
-    cgiFormStringNoNewlines("field.name", e_type->name, DEFAULT_LENGTH);
+    cgiFormStringNoNewlines("field.name", et->name, DEFAULT_LENGTH);
 
-    cgiFormStringNoNewlines("field.description", e_type->description, DEFAULT_LENGTH);
+    cgiFormStringNoNewlines("field.description", et->description, DEFAULT_LENGTH);
 
     cgiFormStringNoNewlines("field.type", value, DEFAULT_LENGTH);
-    e_type->type = atoi(value);
+    et->type = atoi(value);
 
     cgiFormStringNoNewlines("field.ticket_property", value, DEFAULT_LENGTH);
-    e_type->ticket_property = atoi(value);
+    et->ticket_property = atoi(value);
 
     cgiFormStringNoNewlines("field.reply_property", value, DEFAULT_LENGTH);
-    e_type->reply_property = atoi(value);
+    et->reply_property = atoi(value);
 
     cgiFormStringNoNewlines("field.display_in_list", value, DEFAULT_LENGTH);
-    e_type->display_in_list = atoi(value);
+    et->display_in_list = atoi(value);
     cgiFormStringNoNewlines("field.auto_add_item", value, DEFAULT_LENGTH);
-    e_type->auto_add_item = atoi(value);
+    et->auto_add_item = atoi(value);
     cgiFormStringNoNewlines("field.sort", value, DEFAULT_LENGTH);
-    e_type->sort = atoi(value);
-    e_type_id = db_register_element_type(e_type);
-    switch (e_type->type) {
+    et->sort = atoi(value);
+    e_type_id = db_register_element_type(et);
+    switch (et->type) {
         case ELEM_TYPE_LIST_SINGLE:
         case ELEM_TYPE_LIST_MULTI:
             for (i = 0; i < ADD_ITEM_COUNT; i++) {
@@ -815,7 +815,7 @@ void delete_item_action()
     char* e_type_id;
     int iid;
     Project* project;
-    ElementType* e_type;
+    ElementType* et;
 
     strcpy(path_info, cgiPathInfo);
     e_type_id = strchr(path_info + 1, '/');
@@ -825,10 +825,10 @@ void delete_item_action()
     project = db_get_project();
     output_header(project, "項目削除", "delete_item.js", NAVI_OTHER);
 
-    e_type = db_get_element_type(iid);
+    et = db_get_element_type(iid);
     o("<h2>%s 管理ツール</h2>", project->name);
     o(      "<div id=\"delete_item/%d\">\n", iid);
-    o(      "<h3>項目(");h(e_type->name);o(")の削除</h3>\n"
+    o(      "<h3>項目(");h(et->name);o(")の削除</h3>\n"
             "<form id=\"delete_item_form\" action=\"%s/delete_item_submit/%d\" method=\"post\">\n"
             "<div class=\"infomation\"><strong>削除すると元には戻せません。"
             "登録されているチケットの項目についても参照できなくなります。</strong></div>"

@@ -309,9 +309,19 @@ char* get_search_sql_string(List* conditions, Condition* sort, char* q, char* sq
             Condition* cond = it->element;
             char val[DEFAULT_LENGTH];
             if (i++) strcat(sql_string, " and ");
-            sprintf(val, " (%sm.field%d like '%%' || ? || '%%') ", 
-                    cond->element_type_id == ELEM_ID_SENDER ? "org_" : "", /* 投稿者は初回投稿者が検索対象になる。 */
-                    cond->element_type_id);
+            switch (cond->condition_type) {
+                case CONDITION_TYPE_DATE_FROM:
+                    sprintf(val, " (length(m.field%d) > 0 and m.field%d >= ?) ", cond->element_type_id, cond->element_type_id);
+                    break;
+                case CONDITION_TYPE_DATE_TO:
+                    sprintf(val, " (length(m.field%d) > 0 and m.field%d <= ?) ", cond->element_type_id, cond->element_type_id);
+                    break;
+                default:
+                    sprintf(val, " (%sm.field%d like '%%' || ? || '%%') ", 
+                            cond->element_type_id == ELEM_ID_SENDER ? "org_" : "", /* 投稿者は初回投稿者が検索対象になる。 */
+                            cond->element_type_id);
+                    break;
+            }
             strcat(sql_string, val);
         }
     }
@@ -356,6 +366,7 @@ char* get_search_sql_string(List* conditions, Condition* sort, char* q, char* sq
     }
     strcat(sql_string, "t.registerdate desc, t.id desc ");
 
+    d("sql: %s\n", sql_string);
     return sql_string;
 }
 int set_conditions(sqlite3_stmt* stmt, List* conditions, char* q)
@@ -752,21 +763,21 @@ void db_update_project(Project* project)
             COLUMN_TYPE_END) != 1)
         die("no project to update? or too many?");
 }
-void db_update_element_type(ElementType* e_type)
+void db_update_element_type(ElementType* et)
 {
     /* 基本項目の場合、ticket_propertyとreply_propertyは編集させない。 */
-    switch (e_type->id) {
+    switch (et->id) {
         case ELEM_ID_TITLE:
-            e_type->ticket_property = 1;
-            e_type->reply_property = 0;
+            et->ticket_property = 1;
+            et->reply_property = 0;
             break;
         case ELEM_ID_SENDER:
-            e_type->ticket_property = 0;
-            e_type->reply_property = 0;
+            et->ticket_property = 0;
+            et->reply_property = 0;
             break;
         case ELEM_ID_STATUS:
-            e_type->ticket_property = 1;
-            e_type->reply_property = 0;
+            et->ticket_property = 1;
+            et->reply_property = 0;
             break;
     }
     if (exec_query(
@@ -781,16 +792,16 @@ void db_update_element_type(ElementType* e_type)
             " default_value = ?, "
             " auto_add_item = ? "
             "where id = ?",
-            COLUMN_TYPE_INT, e_type->ticket_property,
-            COLUMN_TYPE_INT, e_type->reply_property,
-            COLUMN_TYPE_INT, e_type->required,
-            COLUMN_TYPE_TEXT, e_type->name,
-            COLUMN_TYPE_TEXT, e_type->description,
-            COLUMN_TYPE_INT, e_type->sort,
-            COLUMN_TYPE_INT, e_type->display_in_list,
-            COLUMN_TYPE_TEXT, e_type->default_value,
-            COLUMN_TYPE_INT, e_type->auto_add_item,
-            COLUMN_TYPE_INT, e_type->id,
+            COLUMN_TYPE_INT, et->ticket_property,
+            COLUMN_TYPE_INT, et->reply_property,
+            COLUMN_TYPE_INT, et->required,
+            COLUMN_TYPE_TEXT, et->name,
+            COLUMN_TYPE_TEXT, et->description,
+            COLUMN_TYPE_INT, et->sort,
+            COLUMN_TYPE_INT, et->display_in_list,
+            COLUMN_TYPE_TEXT, et->default_value,
+            COLUMN_TYPE_INT, et->auto_add_item,
+            COLUMN_TYPE_INT, et->id,
             COLUMN_TYPE_END) != 1)
         die("no element_type to update?");
 }
@@ -825,7 +836,7 @@ void db_register_list_item(ListItem* item)
             COLUMN_TYPE_INT, item->sort,
             COLUMN_TYPE_END);
 }
-int db_register_element_type(ElementType* e_type)
+int db_register_element_type(ElementType* et)
 {
     char field_name[DEFAULT_LENGTH];
     char sql[DEFAULT_LENGTH];
@@ -833,15 +844,15 @@ int db_register_element_type(ElementType* e_type)
     exec_query(
             "insert into element_type (id, type, ticket_property, reply_property, required, name, description, auto_add_item, display_in_list, sort)"
             "values (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            COLUMN_TYPE_INT, e_type->type,
-            COLUMN_TYPE_INT, e_type->ticket_property,
-            COLUMN_TYPE_INT, e_type->reply_property,
-            COLUMN_TYPE_INT, e_type->required,
-            COLUMN_TYPE_TEXT, e_type->name,
-            COLUMN_TYPE_TEXT, e_type->description,
-            COLUMN_TYPE_INT, e_type->auto_add_item,
-            COLUMN_TYPE_INT, e_type->display_in_list,
-            COLUMN_TYPE_INT, e_type->sort,
+            COLUMN_TYPE_INT, et->type,
+            COLUMN_TYPE_INT, et->ticket_property,
+            COLUMN_TYPE_INT, et->reply_property,
+            COLUMN_TYPE_INT, et->required,
+            COLUMN_TYPE_TEXT, et->name,
+            COLUMN_TYPE_TEXT, et->description,
+            COLUMN_TYPE_INT, et->auto_add_item,
+            COLUMN_TYPE_INT, et->display_in_list,
+            COLUMN_TYPE_INT, et->sort,
             COLUMN_TYPE_END);
 
     /* columnの追加 */

@@ -4,13 +4,13 @@
 #include "data.h"
 #include "util.h"
 
-char* get_element_value(List* elements, ElementType* e_type)
+char* get_element_value(List* elements, ElementType* et)
 {
     Iterator* it;
     if (elements == NULL) return "";
     foreach (it, elements) {
         Element* e = it->element;
-        if (e_type->id == e->element_type_id && e->str_val != NULL)
+        if (et->id == e->element_type_id && e->str_val != NULL)
             return e->str_val;
     }
     return "";
