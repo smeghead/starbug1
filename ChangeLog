@@ -1,3 +1,9 @@
+2008-01-12  smeghead <smeghead@users.sourceforge.jp>
+
+    * 日付の項目を追加した。yyyy-mm-ddで入力してもらうという形にする。現在、管
+    理ツール、チケット登録画面、チケット返信画面での日付の項目の対応を行なった。
+    検索部分の対応は未。
+
 2008-01-09  smeghead <smeghead@users.sourceforge.jp>
 
     * ボタンを目立つようにcssを変更した。ボタンの色、カーソルなどを変更した。

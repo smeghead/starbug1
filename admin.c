@@ -388,6 +388,9 @@ void items_action()
             case ELEM_TYPE_UPLOADFILE:
                 o("ファイル(input[type=file])");
                 break;
+            case ELEM_TYPE_DATE:
+                o("日付(input[type=text])");
+                break;
         }
         o("\t\t\t\t</td>\n");
         o("\t\t\t</tr>\n");
@@ -691,6 +694,10 @@ void new_item_action()
             "type=\"radio\" name=\"field.type\" ", ELEM_TYPE_UPLOADFILE);
     o(                  "value=\"%d\" />\n", ELEM_TYPE_UPLOADFILE);
     o("\t\t\t\t\t<label for=\"field.type%d\">ファイル(input[type=file])</label><br />\n", ELEM_TYPE_UPLOADFILE);
+    o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" "
+            "type=\"radio\" name=\"field.type\" ", ELEM_TYPE_DATE);
+    o(                  "value=\"%d\" />\n", ELEM_TYPE_DATE);
+    o("\t\t\t\t\t<label for=\"field.type%d\">日付(input[type=text])</label><br />\n", ELEM_TYPE_DATE);
     o("\t\t\t\t\t<div class=\"description\">項目を入力する時の入力形式です。項目種別は、追加後に変更することができません。</div>\n");
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");

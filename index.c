@@ -592,6 +592,25 @@ void output_form_element_4_condition(char* value, ElementType* e_type)
             o("</select>\n");
             list_free(items_a);
             break;
+        case ELEM_TYPE_DATE:
+            o("<input type=\"text\" class=\"date\" id=\"field");
+            h(id);
+            o("\" name=\"field");
+            h(id);
+            o("_from\" value=\"");
+            v(value);
+            o("\" />\n");
+            o("<a class=\"calender\" href=\"#\" title=\"JavaScriptによる入力支援機能です。\">cale</a>");
+            o("〜\n");
+            o("<input type=\"text\" class=\"date\" id=\"field");
+            h(id);
+            o("\" name=\"field");
+            h(id);
+            o("_to\" value=\"");
+            v(value);
+            o("\" />\n");
+            o("<a class=\"calender\" href=\"#\" title=\"JavaScriptによる入力支援機能です。\">cale</a>");
+            break;
     }
 }
 /**
@@ -694,6 +713,14 @@ void output_form_element(List* elements, ElementType* e_type)
                     e_type->id, e_type->id);
             o("<div class=\"description\">ファイルサイズは、%dKb以下になるようにしてください。</div>\n", MAX_FILE_SIZE);
             break;
+        case ELEM_TYPE_DATE:
+            o("<input type=\"text\" class=\"date\" id=\"field%d\" name=\"field%d\" value=\"\n",
+                    e_type->id, e_type->id);
+            v(value);
+            o("\" maxlength=\"10\"/>\n");
+            o("<a class=\"calender\" href=\"#\" title=\"JavaScriptによる入力支援機能です。\">cale</a>");
+            o("<div class=\"description\">yyyy-mm-dd形式で入力してください。</div>\n");
+            break;
     }
     switch (e_type->type) {
         case ELEM_TYPE_LIST_SINGLE:
@@ -716,6 +743,28 @@ static int contains(char* const value, const char* name)
             return 1;
     } while ((p = strstr(p, "\t")) != NULL);
     return 0;
+}
+void output_field_information_js(List* element_types) {
+    Iterator* it;
+    o("<script type=\"text/javascript\" src=\"%s/../js/validate.js\"></script>\n", cgiScriptName); 
+    o("<script type=\"text/javascript\">\n"); 
+    o("\tvar required_field_indexs = [\n");
+    foreach (it, element_types) {
+        ElementType* et = it->element;
+        if (et->required) {
+            o("\t%d,\n", et->id);
+        }
+    }
+    o("\t-1];\n");
+    o("\tvar date_field_indexs = [\n");
+    foreach (it, element_types) {
+        ElementType* et = it->element;
+        if (et->type == ELEM_TYPE_DATE) {
+            o("\t%d,\n", et->id);
+        }
+    }
+    o("\t-1];\n");
+    o("</script>\n");
 }
 /**
  * 登録画面を表示するaction。
@@ -754,14 +803,17 @@ void register_action()
             o("</th><td>\n");
             if (et->required)
                 o("\t\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
+            if (et->type == ELEM_TYPE_DATE)
+                o("\t\t<div id=\"field%d.datefield\" class=\"error\"></div>\n", et->id);
             output_form_element(NULL, et);
             o("\t\t\t<div class=\"description\">");h(et->description);o("&nbsp;</div>\n");
             o("\t\t</td>\n");
             o("\t</tr>\n");
         }
+        o("</table>\n");
+        output_field_information_js(element_types_a);
         list_free(element_types_a);
     }
-    o(      "</table>\n");
     o(      "<input class=\"button\" type=\"submit\" name=\"register\" value=\"登録\" />\n"
             "<input id=\"save2cookie\" type=\"checkbox\" name=\"save2cookie\" class=\"checkbox\" value=\"1\" %s />\n"
             "<label for=\"save2cookie\">投稿者を保存する。(cookie使用)</label>\n"
@@ -945,6 +997,8 @@ void ticket_action()
         o("</th>\n\t\t<td>");
         if (et->required)
             o("\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
+        if (et->type == ELEM_TYPE_DATE)
+            o("\t\t<div id=\"field%d.datefield\" class=\"error\"></div>\n", et->id);
         if (last_elements != NULL) {
             if (et->ticket_property)
                 output_form_element(last_elements, et);
@@ -964,6 +1018,7 @@ void ticket_action()
             "<label for=\"save2cookie\">投稿者を保存する。(cookie使用)</label>\n"
             "</form>\n"
             "</div>\n", strlen(sender) ? "checked" : "");
+    output_field_information_js(element_types_a);
     db_finish();
     output_footer();
     list_free(element_types_a);
@@ -1026,6 +1081,7 @@ void register_submit_action()
             e->is_file = 0;
             switch (et->type) {
                 case ELEM_TYPE_TEXT:
+                case ELEM_TYPE_DATE:
                     cgiFormStringNoNewlines(name, value_a, VALUE_LENGTH);
                     e->str_val = (char*)xalloc(sizeof(char) * strlen(value_a) + 1);
                     strcpy(e->str_val, value_a);
