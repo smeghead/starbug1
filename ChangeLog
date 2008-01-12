@@ -5,6 +5,7 @@
     検索部分の対応は未。
     * e_typeという変数名をetに統一した。
     * 日付の項目の検索画面での対応を行なった。
+    * チケット詳細画面の最新情報に、IDの欄を追加した。
 
 2008-01-09  smeghead <smeghead@users.sourceforge.jp>
 

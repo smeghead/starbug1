@@ -900,15 +900,19 @@ void ticket_action()
             "<h3>チケット最新情報</h3>\n"
             "<div class=\"description\">チケットの最新情報です。最新チケットのチケット属性の付いている属性と全添付ファイルを表示しています。</div>\n"
             "<table summary=\"newest table\">\n");
+    o(      "\t<tr>\n");
+    o(      "\t\t<th>ID</th>\n");
+    o(      "\t\t<td>%d</td>\n", iid);
+    o(      "\t</tr>\n");
     foreach (it, element_types_a) {
         ElementType* et = it->element;
         char* value = get_element_value(elements_a, et);
         if (et->ticket_property == 0) continue;
         o("\t<tr>\n");
-        o("\t\t<th>");
+        o("\t\t<th>\n");
         h(et->name);
         o("&nbsp;</th>\n");
-        o("\t\t<td>");
+        o("\t\t<td>\n");
         switch (et->id) {
             case ELEM_ID_SENDER:
                 hmail(value);
