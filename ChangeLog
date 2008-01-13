@@ -1,3 +1,7 @@
+2008-01-13  smeghead <smeghead@users.sourceforge.jp>
+
+    * 検索条件の日付フィールドのmaxlengthを10に指定した。
+
 2008-01-12  smeghead <smeghead@users.sourceforge.jp>
 
     * 日付の項目を追加した。yyyy-mm-ddで入力してもらうという形にする。現在、管

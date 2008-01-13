@@ -631,7 +631,7 @@ void output_form_element_4_condition(ElementType* et)
             h(id);
             o("_from\" value=\"");
             v(value);
-            o("\" />\n");
+            o("\" maxlength=\"10\" />\n");
             o("<a class=\"calender\" href=\"#\" title=\"JavaScriptによる入力支援機能です。\">cale</a>");
             o("〜\n");
             sprintf(name, "field%d_to", et->id);
@@ -642,7 +642,7 @@ void output_form_element_4_condition(ElementType* et)
             h(id);
             o("_to\" value=\"");
             v(value);
-            o("\" />\n");
+            o("\" maxlength=\"10\" />\n");
             o("<a class=\"calender\" href=\"#\" title=\"JavaScriptによる入力支援機能です。\">cale</a>");
             break;
     }
