@@ -1,3 +1,8 @@
+2008-01-14  smeghead <smeghead@users.sourceforge.jp>
+
+    * READMEの文字コードをUTF-8に変更。
+    * INSTALLのネガティブな表記を変更した。
+
 2008-01-13  smeghead <smeghead@users.sourceforge.jp>
 
     * 検索条件の日付フィールドのmaxlengthを10に指定した。
