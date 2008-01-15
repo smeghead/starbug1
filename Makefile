@@ -23,7 +23,7 @@ admin.cgi: list.o data.o dbutil.o db.o util.o css.o admin.o
 	$(CC) -o $@ $^ $(LFLAGS)
 	strip $@
 
-.PHONY: clean webapp dist
+.PHONY: clean webapp dist displayinstalldoc
 clean:
 	rm -f *.o index.cgi admin.cgi
 	rm -rf ./dist
@@ -49,4 +49,7 @@ dist:
 cvsreleasetag:
 	@echo please tag by manual. 
 	@echo " " cvs tag starbug1-`echo ${VERSION} | sed 's/\./-/g'`
+
+displayinstalldoc:
+	w3m -dump http://sourceforge.jp/projects/starbug1/wiki/install
 

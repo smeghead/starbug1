@@ -1,9 +1,12 @@
 Starbug1
 
-Starbug1は、気軽に使える縛りの弱いバグトラッキングシステムです。快適に動作す
-ることを目的としています。
+Starbug1 は、BTS(バグトラッキングシステム)です。項目のカスタマイズ次第で、
+ITS(イシュートラッキングシステム)としても使用できます。
 
 インストールする場合は、INSTALLを参照してください。
+
+Starbug1 SF.jp Wiki
+http://sourceforge.jp/projects/starbug1/wiki/FrontPage
 
 --
 smeghead smeghead@users.sourceforge.jp

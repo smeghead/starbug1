@@ -1,81 +1,125 @@
-уВдуГ│уВ╣уГИуГ╝уГлцЦ╣ц│Х
+едеєе╣е╚б╝еы╩¤╦б
 
-Starbug1уБпуАБsqlite3уАБcgicуВТф╜┐чФиуБЧуБжуБДуБ╛уБЩуАВ
+Starbug1д╧бвsqlite3бвcgicдЄ╗╚═╤д╖д╞ддд▐д╣бг
 
-sqlite3уБоуВдуГ│уВ╣уГИуГ╝уГл
+имимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимим 
 
-* http://www.sqlite.org/ уБЛуВЙуАБ sqlite-3.5.4.tar.gz уВТуГАуВжуГ│уГнуГ╝уГЙуБЩуВЛуАВ
+sqlite3д╬едеєе╣е╚б╝еы
 
-$ wget http://www.sqlite.org/sqlite-3.5.4.tar.gz
+OSд╦бвsqlite3дмедеєе╣е╚б╝еыд╡дьд╞ддды╛ь╣ч(libsqlite3.so, sqlite3.hдм┬╕║▀д╣ды╛ь
+╣ч)д╧бвsqlite3д╬едеєе╣е╚б╝еыд╧╔╘═╫д╟д╣бг
 
-* щБйх╜УуБкха┤цЙАуБлх▒ХщЦЛуБЧуАБуВ│уГ│уГСуВдуГлуАБуВдуГ│уВ╣уГИуГ╝уГлуБЩуВЛуАВ
+ бж http://www.sqlite.org/ длдщбв sqlite-3.5.4.tar.gz дЄе└ежеєеэб╝е╔д╣дыбг
+   
+    $ wget http://www.sqlite.org/sqlite-3.5.4.tar.gz
+    
+ бж ┼м┼Ўд╩╛ь╜ъд╦┼╕│лд╖бве│еєе╤едеыбведеєе╣е╚б╝еыд╣дыбг
+   
+    $ tar zxf sqlite-3.5.4.tar.gz
+    $ mkdir bld
+    $ cd bld
+    $ ../sqlite-3-5-4/configure --disable-tcl
+    $ make
+    $ su
+    # make install
+    
 
-$ tar zxf sqlite-3.5.4.tar.gz
-$ mkdir bld
-$ cd bld
-$ ../sqlite-3-5-4/configure --disable-tcl
-$ make
-$ su
-# make install
+имимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимим 
 
-cgicуБоуВдуГ│уВ╣уГИуГ╝уГл
+cgicд╬едеєе╣е╚б╝еы
 
-* http://www.boutell.com/cgic/ уБЛуВЙ cgic205.tar.gz уВТуГАуВжуГ│уГнуГ╝уГЙуБЩуВЛуАВ
+OSд╦бвcgicl205░╩╛хдмедеєе╣е╚б╝еыд╡дьд╞ддды╛ь╣чд╧бвcgicд╬едеєе╣е╚б╝еыд╧╔╘═╫д╟д╣
+бг
 
-$ wget http://www.boutell.com/cgic/cgic205.tar.gz
+ бж http://www.boutell.com/cgic/ длдщ cgic205.tar.gz дЄе└ежеєеэб╝е╔д╣дыбг
+   
+    $ wget http://www.boutell.com/cgic/cgic205.tar.gz
+    
+ бж ┼м┼Ўд╩╛ь╜ъд╦┼╕│лд╖бве│еєе╤едеыбведеєе╣е╚б╝еыд╣дыбг
+   
+    $ tar zxf cgic205.tar.gz
+    $ cd cgic205
+    $ make
+    $ su
+    # make install
+    
 
-* щБйх╜УуБкха┤цЙАуБлх▒ХщЦЛуБЧуАБуВ│уГ│уГСуВдуГлуАБуВдуГ│уВ╣уГИуГ╝уГлуБЩуВЛуАВ
+имимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимим 
 
-$ tar zxf cgic205.tar.gz
-$ make
-$ su
-# make install
+Starbug1д╬едеєе╣е╚б╝еы
 
-Starbug1уБоуВдуГ│уВ╣уГИуГ╝уГл
-* уВ╜уГ╝уВ╣уВТхПЦх╛ЧуБЩуВЛуАВ
-DownloadуБЛуВЙцЬАцЦ░уВ╜уГ╝уВ╣уВТхПЦх╛ЧуБЩуВЛуАВhttps://sourceforge.jp/projects/starbug1/
-ф╕КуБЛуВЙхПЦх╛ЧуБзуБНуБкуБДха┤хРИуВДуАБуГкуГЭуВ╕уГИуГкуБлуВвуВпуВ╗уВ╣уБЧуБЯуБДха┤хРИуБпуАБуАБcvsуГкуГЭуВ╕уГИуГк
-уБЛуВЙуВ╜уГ╝уВ╣уВТхПЦх╛ЧуБЩуВЛуАВ
-$ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/starbug1 login
-$ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/starbug1 checkout starbug1
+ бж е╜б╝е╣дЄ╝ш╞└д╣дыбг
+     вв Downloadдлдщ║╟┐╖е╜б╝е╣дЄ╝ш╞└д╣дыбгhttps://sourceforge.jp/projects/
+        starbug1/
+     вв ╛хдлдщ╝ш╞└д╟днд╩дд╛ь╣чдфбвеъе▌е╕е╚еъд╦евепе╗е╣д╖д┐дд╛ь╣чд╧бвбвcvsеъе▌е╕
+        е╚еъдлдще╜б╝е╣дЄ╝ш╞└д╣дыбг
+       
+        $ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/starbug1 login
+        Password:  (д╜д╬д▐д▐Enterенб╝дЄ▓бд╖д╞дпд└д╡дд)
+        $ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/starbug1 checkout starbug1
+        
 
-* уВ│уГ│уГСуВдуГл
-$ tar zxf starbug-x.x.x-xxx.tar.gz
-$ cd starbug1
-$ gmake
-$ gmake webapp
+ бж е│еєе╤едеы
+   
+    $ tar zxf starbug-x.x.x-alpha.tar.gz
+    $ cd starbug1
+    $ gmake
+    $ gmake webapp
+    
 
-dist/starbug1 уГЗуВгуГмуВпуГИуГкуБлуАБwebуВвуГЧуГкф╕Ах╝ПуБМчФЯцИРуБХуВМуБ╛уБЩуАВ
-Starbug1уБощЕНч╜о
+dist/starbug1 е╟егеьепе╚еъд╦бвwebеве╫еъ░ь╝░дм└╕└од╡дьд▐д╣бг
 
-* WebуВ╡уГ╝уГР(хЛХф╜Ьчв║шкНуБЧуБжуБДуВЛуБоуБпapache)уБоDocumentRootщЕНф╕ЛуБл dist/starbug1 уГЗуВг
-  уГмуВпуГИуГкуВТщЕНч╜оуБЧуБ╛уБЩуАВ
+Starbug1д╬╟█├╓
 
-$ su
-# cp -r dist/starbug1 /home/httpd/html
+ бж Webе╡б╝е╨(╞░║ю│╬╟зд╖д╞дддыд╬д╧apache)д╬DocumentRoot╟█▓╝д╦ dist/starbug1 е╟
+    егеьепе╚еъдЄ╟█├╓д╖д▐д╣бг
+   
+    $ su
+    # cp -r dist/starbug1 /home/httpd/html
+    
+ бж dist/starbug1 ╟█▓╝дЄcgi╝┬╣╘ецб╝е╢д╬╕в╕┬д╦╩╤╣╣д╖д▐д╣бг
+   
+    # cd /home/httpd/html
+    # chown -R apache:apache starbug1
+    
+ бж .htaccessдЄ┼м└┌д╦╩╘╜╕д╖д▐д╣бг
+   
+    # cat .htaccess
+    ErrorDocument 500 /starbug1/error.html
+    DirectoryIndex index.cgi
+    Options +ExecCGI
+    AuthUserFile /etc/starbug1/.htpasswd
+    AuthGroupFile /dev/null
+    AuthName "Please enter your ID and password"
+    AuthType Basic
+    Require valid-user
+    
 
-* dist/starbug1 щЕНф╕ЛуВТcgiхоЯшбМуГжуГ╝уВ╢уБоцийщЩРуБлхдЙцЫ┤уБЧуБ╛уБЩуАВ
+╛хд╬╬уд╟д╧бвеиещб╝е┌б╝е╕д╬╗╪─ъд╚basic╟з╛┌д╬└▀─ъдЄ╣╘д╩д├д╞ддд▐д╣бгbasic╟з╛┌дЄ╗╚
+═╤д╣ды╛ь╣чбвhtpasswdд╩д╔д╟е╤е╣еяб╝е╔е╒ебедеыд╪д╬ецб╝е╢д╬┼╨╧┐дЄ╣╘д╩д├д╞дпд└д╡дд
+бгhttpd.confдЄ╩╘╜╕д╟днды╛ь╣чд╧бв╞▒┼∙д╬└▀─ъдЄбвhttpd.confд╟╣╘д╩дж╩¤дм╦╛д▐д╖ддд╟
+д╣бг
 
-# cd /home/httpd/html
-# chown -R apache:apache starbug1
+ бж http://(server_name)/starbug1/ д╦евепе╗е╣д╖д▐д╣бг
 
-* .htaccessуВТщБйхИЗуБлч╖ищЫЖуБЧуБ╛уБЩуАВ
+е╚е├е╫▓ш╠╠дм╔╜╝ид╡дьдьд╨бведеєе╣е╚б╝еы└о╕∙д╟д╣бг
 
-# cat .htaccess
-ErrorDocument 500 /starbug1/error.html
-DirectoryIndex index.cgi
-Options +ExecCGI
-AuthUserFile /etc/starbug1/.htpasswd
-AuthGroupFile /dev/null
-AuthName "Please enter your ID and password"
-AuthType Basic
-Require valid-user
+имимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимим 
 
-ф╕КуБоф╛ЛуБзуБпуАБbasicшкНши╝уБошинхоЪуВТшбМуБкуБгуБжуБДуБ╛уБЩуАВbasicшкНши╝уВТф╜┐чФиуБЩуВЛха┤хРИуАБ
-htpasswdуБкуБйуБзуГСуВ╣уГпуГ╝уГЙуГХуВбуВдуГлуБ╕уБоуГжуГ╝уВ╢уБочЩ╗щМ▓уВТшбМуБкуБгуБжуБПуБауБХуБДуАВ
-httpd.confуВТч╖ищЫЖуБзуБНуВЛха┤хРИуБпуАБхРМчнЙуБошинхоЪуВТуАБhttpd.confуБзшбМуБкуБЖцЦ╣уБМцЬЫуБ╛уБЧуБДуБз
-уБЩуАВ
+джд▐дп╞░длд╩дд╛ь╣ч
 
-* http://(server_name)/starbug1/ уБлуВвуВпуВ╗уВ╣уБЧуБ╛уБЩуАВ 
+ бж едеєе╣е╚б╝еы┤░╬╗д╖д┐дмбве╓ещеже╢д╟ http://(server_name)/starbug1/ д╦евепе╗
+    е╣д╣дыд╚еиещб╝дм╚п└╕д╖бвWebе╡б╝е╨д╬еиещб╝еэе░д╦бвб╓Premature end of script
+    headers: index.cgiб╫д╬дшджд╩есе├е╗б╝е╕дм╜╨╬╧д╡дьдыбг
+     вв CGIдЄ╝┬╣╘д╣ды╕в╕┬дмдвдыдл│╬╟зд╖д╞дпд└д╡ддбг░╩▓╝д╬дшджд╩┤╩├▒д╩perlд╬cgi
+        е╣епеъе╫е╚дЄstarbug1е╟егеьепе╚еъд╦╟█├╓д╖╝┬╣╘╕в╕┬дЄ╔╒▓├д╖д╞╞░║юд╣дыдлд╔
+        дждл│╬╟зд╖д╣дыд│д╚д╟бвCGI╝л┬╬дм═н╕·д╦д╩д├д╞дддыдлд╔дждлдЄ│╬╟зд╟днд▐д╣бг
+       
+        #!/usr/bin/perl
+        print "Content-Type: text/plain;\n\nhello.";
+        
+     вв Webе╡б╝е╨е╫еэе╗е╣ецб╝е╢дмбвstarbug1е╟егеьепе╚еъд╦╜ёдн╣■д▀╕в╕┬дмдвдыдл│╬
+        ╟зд╖д╞дпд└д╡ддбге╟б╝е┐е┘б╝е╣е╒ебедеыдЄ│╩╟╝д╣дыд┐дсд╦бвWebе╡б╝е╨е╫еэе╗е╣
+        ецб╝е╢дмstarbug1е╟егеьепе╚еъд╦╜ёдн╣■д▀▓─╟╜д╚д╩д├д╞ддды╔м═╫дмдвдъд▐д╣бг
 
-уГИуГГуГЧчФ╗щЭвуБМшбичд║уБХуВМуВМуБ░уАБуВдуГ│уВ╣уГИуГ╝уГлцИРхКЯуБзуБЩуАВ 
+имимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимимим 
