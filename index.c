@@ -632,7 +632,7 @@ void output_form_element_4_condition(ElementType* et)
             o("_from\" value=\"");
             v(value);
             o("\" maxlength=\"10\" />\n");
-            o("<a class=\"calender\" href=\"#\" title=\"JavaScriptによる入力支援機能です。\">cale</a>");
+/*             o("<a class=\"calender\" href=\"#\" title=\"JavaScriptによる入力支援機能です。\">cale</a>"); */
             o("〜\n");
             sprintf(name, "field%d_to", et->id);
             cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
@@ -643,7 +643,7 @@ void output_form_element_4_condition(ElementType* et)
             o("_to\" value=\"");
             v(value);
             o("\" maxlength=\"10\" />\n");
-            o("<a class=\"calender\" href=\"#\" title=\"JavaScriptによる入力支援機能です。\">cale</a>");
+/*             o("<a class=\"calender\" href=\"#\" title=\"JavaScriptによる入力支援機能です。\">cale</a>"); */
             break;
     }
 }
@@ -752,7 +752,7 @@ void output_form_element(List* elements, ElementType* et)
                     et->id, et->id);
             v(value);
             o("\" maxlength=\"10\"/>\n");
-            o("<a class=\"calender\" href=\"#\" title=\"JavaScriptによる入力支援機能です。\">cale</a>");
+/*             o("<a class=\"calender\" href=\"#\" title=\"JavaScriptによる入力支援機能です。\">cale</a>"); */
             o("<div class=\"description\">yyyy-mm-dd形式で入力してください。</div>\n");
             break;
     }
@@ -1189,6 +1189,7 @@ void register_submit_action()
             }
             if (e->element_type_id == ELEM_ID_SENDER) {
                 if (strcmp(save2cookie, "1") == 0) {
+                    d("set cookie: %s, %s, %s\n", e->str_val, cgiScriptName, cgiServerName);
                     cgiHeaderCookieSetString("starbug1_sender", e->str_val, 86400 * 30, cgiScriptName, cgiServerName);
                 } else {
                     cgiHeaderCookieSetString("starbug1_sender", "", 0, cgiScriptName, cgiServerName);

@@ -4,6 +4,7 @@
     * .htaccessで一般ユーザと管理ユーザのBasic認証の設定を分割した。
     * .htaccessで参照する必要の無いファイルやディレクトリを隠す設定を追加した。
     * INSTALLの.htaccess周りの設定方法を更新した。
+    * ヘルプを更新した。
 
 2008-01-15  smeghead <smeghead@users.sourceforge.jp>
 
