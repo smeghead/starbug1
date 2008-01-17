@@ -1,2 +1,33 @@
+# httpd.conf の設定で、.htaccess内での設定が許されていない項目を、設定しているとInternal Server Errorになることがあります。
+# その場合、httpd.conf で、AllowOverrideを適切に設定してください。
+# (例) AllowOverride AuthConfig FileInfo Options Limit
+# または、全ての設定をhttpd.conf内で行なうようにしてください。
+
+# エラーページの指定
 ErrorDocument 500 /starbug1/error.html
+# CGIの実行許可
 Options +ExecCGI
+
+# 一般ユーザの認証についての設定 
+<Files index.cgi>
+    AuthName      "authentication for guest user."
+    AuthType      Basic
+    AuthUserFile  /etc/starbug1/.guest-passwd
+    Require       valid-user
+</Files>
+
+# 管理ユーザの認証についての設定 
+<Files admin.cgi>
+    AuthName      "authentication for administrator user."
+    AuthType      Basic
+    AuthUserFile  /etc/starbug1/.admin-passwd
+    Require       valid-user
+</Files>
+
+# 隠すファイルやディレクトリ
+<Files "(.*|*.log)">
+    deny from all
+</Files>
+<DirectoryMatch "(wiki|script)">
+    deny from all
+</DirectoryMatch>

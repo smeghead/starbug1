@@ -61,7 +61,7 @@ Starbug1のインストール
 
  ・ コンパイル
    
-    $ tar zxf starbug-x.x.x-alpha.tar.gz
+    $ tar zxf starbug-x.x.x.tar.gz
     $ cd starbug1
     $ gmake
     $ gmake webapp
@@ -84,21 +84,44 @@ Starbug1の配置
     
  ・ .htaccessを適切に編集します。
    
-    # cat .htaccess
+    $ cat .htaccess
+    # エラーページの指定
     ErrorDocument 500 /starbug1/error.html
-    DirectoryIndex index.cgi
+    # CGIの実行許可
     Options +ExecCGI
-    AuthUserFile /etc/starbug1/.htpasswd
-    AuthGroupFile /dev/null
-    AuthName "Please enter your ID and password"
-    AuthType Basic
-    Require valid-user
+    
+    # 一般ユーザの認証についての設定
+    <Files index.cgi>
+        AuthName      "authentication for guest user."
+        AuthType      Basic
+        AuthUserFile  /etc/starbug1/.guest-passwd
+        Require       valid-user
+    </Files>
+    
+    # 管理ユーザの認証についての設定
+    <Files admin.cgi>
+        AuthName      "authentication for administrator user."
+        AuthType      Basic
+        AuthUserFile  /etc/starbug1/.admin-passwd
+        Require       valid-user
+    </Files>
     
 
-上の例では、エラーページの指定とbasic認証の設定を行なっています。basic認証を使
-用する場合、htpasswdなどでパスワードファイルへのユーザの登録を行なってください
-。httpd.confを編集できる場合は、同等の設定を、httpd.confで行なう方が望ましいで
-す。
+各設定を適切に行なってください。
+
+ ・ 
+     □ エラーページの指定
+         ☆ URLを適切に指定してください。アプリのフォルダ名(starbug1)を変更した
+            場合は、エラーページの指定のURLを変更してください。
+     □ CGIの実行許可
+         ☆ 不要であれば、コメントアウトしてください。
+     □ Basic認証
+         ☆ Basic認証を使用する場合、htpasswdなどでパスワードファイルへのユーザ
+            の登録を行なってください。
+         ☆ 一般ユーザと管理ユーザの設定を別々に行なう場合は、両方を正しく設定
+            してください。不要であればコメントアウトしてください。
+         ☆ httpd.confを編集できる場合は、同等の設定を、httpd.confで行なう方が
+            望ましいです。
 
  ・ http://(server_name)/starbug1/ にアクセスします。
 
