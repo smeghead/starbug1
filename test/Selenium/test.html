@@ -10,7 +10,7 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/starbug1/</td>
+	<td>/</td>
 	<td></td>
 </tr>
 <tr>
@@ -837,6 +837,256 @@
 	<td>assertTextPresent</td>
 	<td></td>
 	<td>項目追加した後</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=管理ツール</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td></td>
+	<td>Copyright smeghead 2007</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//dt[3]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td></td>
+	<td>Copyright smeghead 2007</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=新規項目の追加</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td></td>
+	<td>Copyright smeghead 2007</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>field.name</td>
+	<td>期限</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>field.description</td>
+	<td>対応期限です。</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>field.ticket_property</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>field.type6</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>field.display_in_list</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>field.sort</td>
+	<td>12</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//input[@value='追加']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>追加します。よろしいですか？</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=テストサンプル プロジェクトトップへ</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td></td>
+	<td>Copyright smeghead 2007</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=チケット登録</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td></td>
+	<td>Copyright smeghead 2007</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>field1</td>
+	<td>期限を追加した後</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>field2</td>
+	<td>とうこうしゃ</td>
+</tr>
+<tr>
+	<td>addSelection</td>
+	<td>field4</td>
+	<td>label=バッチ処理</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>field5</td>
+	<td>label=高</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>field6</td>
+	<td>期限を設定します。</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>field11</td>
+	<td>2008-01-01</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>register</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>登録します。よろしいですか？</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=テスト件名2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td></td>
+	<td>Copyright smeghead 2007</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>field2</td>
+	<td>とうこうしゃ</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>field3</td>
+	<td>label=受付済</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>field11</td>
+	<td>2008-01-02</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>document.reply_form.reply</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>返信します。よろしいですか？</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=チケット検索</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td></td>
+	<td>Copyright smeghead 2007</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>field11</td>
+	<td>2008-01-01</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='検索']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td></td>
+	<td>Copyright smeghead 2007</td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td></td>
+	<td>期限を追加した後</td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td></td>
+	<td>テスト件名2</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>field11</td>
+	<td>2008-01-02</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='検索']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td></td>
+	<td>Copyright smeghead 2007</td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td></td>
+	<td>テスト件名2</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>field11</td>
+	<td>2008-01-01</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>field11_to</td>
+	<td>2008-01-01</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='検索']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td></td>
+	<td>Copyright smeghead 2007</td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td></td>
+	<td>期限を追加した後</td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td></td>
+	<td>テスト件名2</td>
 </tr>
 
 </tbody></table>
