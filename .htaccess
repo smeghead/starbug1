@@ -25,9 +25,6 @@ Options +ExecCGI
 </Files>
 
 # 隠すファイルやディレクトリ
-<Files "(.*|*.log)">
+<FilesMatch "(^\.|.*\.log|^wiki$|^script$)">
     deny from all
-</Files>
-<DirectoryMatch "(wiki|script)">
-    deny from all
-</DirectoryMatch>
+</FilesMatch>
