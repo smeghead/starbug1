@@ -412,12 +412,10 @@ Condition* create_sort_condition(Condition* sort)
     char sortstr[DEFAULT_LENGTH];
     cgiFormStringNoNewlines("sort", sortstr, DEFAULT_LENGTH);
     if (strlen(sortstr) > 0) {
-        sort = (Condition*)xalloc(sizeof(Condition));
         sort->element_type_id = atoi(sortstr);
     } else {
         cgiFormStringNoNewlines("rsort", sortstr, DEFAULT_LENGTH);
         if (strlen(sortstr) > 0) {
-            sort = (Condition*)xalloc(sizeof(Condition));
             sort->element_type_id = atoi(sortstr);
             strcpy(sort->value, "reverse");
         }
@@ -504,7 +502,7 @@ void search_actoin()
     conditions_a = create_conditions(conditions_a, element_types_a);
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
     sort_a = (Condition*)xalloc(sizeof(Condition));
-    create_sort_condition(sort_a);
+    sort_a = create_sort_condition(sort_a);
     cgiFormStringNoNewlines("p", p, DEFAULT_LENGTH);
     list_alloc(messages_a, Message);
     result = db_search_tickets(conditions_a, q, sort_a, atoi(p), messages_a);
