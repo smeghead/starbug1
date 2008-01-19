@@ -29,6 +29,7 @@ unsigned long url_encode(unsigned char*, unsigned char*, unsigned long);
 void redirect(char*, char*);
 void free_element_list(List*);
 void* xalloc(size_t);
+void csv_field(char*);
 
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab: */

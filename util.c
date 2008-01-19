@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <cgic.h>
+#include <iconv.h>
 #include "util.h"
 
 unsigned long url_encode(unsigned char*, unsigned char*, unsigned long);
@@ -353,5 +354,22 @@ void free_element_list(List* elements)
         free(e->str_val);
     }
     list_free(elements);
+}
+void csv_field(char* src)
+{
+    iconv_t ic;
+    char dist_buf[DEFAULT_LENGTH];
+    size_t src_size, dist_size, ret_len;
+    char* dist = dist_buf;
+
+    src_size = strlen(src) + 1;
+    dist_size = src_size;  /* UTF-8からCP932なので、長さが短かくなることはない。そのためdist_sizeにも同じ長さを指定する。*/
+    /* 文字コード変換処理 *          */
+    ic = iconv_open("CP932", "UTF-8");
+    ret_len = iconv(ic, &src, &src_size, &dist, &dist_size);
+    o("\"");
+    if (ret_len >= 0) v(dist_buf);
+    o("\"");
+    iconv_close(ic);
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab: */

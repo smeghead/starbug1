@@ -341,7 +341,7 @@ char* get_search_sql_string(List* conditions, Condition* sort, char* q, char* sq
 
     strcat(sql_string, " group by t.id ");
     strcat(sql_string, " order by ");
-    if (sort) {
+    if (sort != NULL && sort->element_type_id != 0) {
         char column[DEFAULT_LENGTH];
         char sort_type[DEFAULT_LENGTH];
         sprintf(sort_type, "%s", strstr(sort->value, "reverse") ? "desc" : "asc");
@@ -480,6 +480,34 @@ SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, int
     return result;
 ERROR_LABEL
 }
+SearchResult* db_search_tickets_4_report(List* conditions, char* q, Condition* sorts, List* messages)
+{
+    int r, n;
+    char buffer[VALUE_LENGTH];
+    char* sql = get_search_sql_string(conditions, sorts, q, buffer);
+    sqlite3_stmt *stmt = NULL;
+    SearchResult* result = (SearchResult*)xalloc(sizeof(SearchResult));
+    result->messages = messages;
+
+    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    sqlite3_reset(stmt);
+    n = set_conditions(stmt, conditions, q);
+
+    /* ticket_idを取得する。 */
+    while (SQLITE_ROW == (r = sqlite3_step(stmt))){
+        Message* message = list_new_element(result->messages);
+        message->id = sqlite3_column_int(stmt, 0);
+        list_add(result->messages, message);
+        result->hit_count++;
+    }
+    if (SQLITE_DONE != r)
+        goto error;
+
+    sqlite3_finalize(stmt);
+
+    return result;
+ERROR_LABEL
+}
 void create_columns_exp(List* element_types, char* table_name, char* buf)
 {
     Iterator* it;
@@ -546,7 +574,7 @@ List* db_get_last_elements_4_list(int ticket_id, List* elements)
             e = list_new_element(elements);
             e->element_type_id = et->id;
             set_str_val(e, sqlite3_column_text(stmt, i++));
-            if (et->id == ELEM_ID_STATUS && status_id != 0)
+            if (et->type == ELEM_ID_STATUS && status_id != 0)
                 e->list_item_id = atoi(status_id); /* 状態のスタイルシートのために、list_item.idを設定 */
             list_add(elements, e);
         }

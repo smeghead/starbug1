@@ -22,6 +22,7 @@ void help_action();
 void edit_top_action();
 void edit_top_submit_action();
 void download_action();
+void report_csv_download_action();
 void rss_action();
 void default_action();
 void output_header(Project*, char*, char*, int);
@@ -61,6 +62,7 @@ void register_actions()
     register_action_actions("edit_top_submit", edit_top_submit_action);
     register_action_actions("download", download_action);
     register_action_actions("rss", rss_action);
+    register_action_actions("report_csv_download", report_csv_download_action);
     register_action_actions("default", default_action);
 }
 
@@ -402,6 +404,68 @@ void list_action()
     output_footer();
     db_finish();
 }
+Condition* create_sort_condition(Condition* sort)
+{
+    char sortstr[DEFAULT_LENGTH];
+    cgiFormStringNoNewlines("sort", sortstr, DEFAULT_LENGTH);
+    if (strlen(sortstr) > 0) {
+        sort = (Condition*)xalloc(sizeof(Condition));
+        sort->element_type_id = atoi(sortstr);
+    } else {
+        cgiFormStringNoNewlines("rsort", sortstr, DEFAULT_LENGTH);
+        if (strlen(sortstr) > 0) {
+            sort = (Condition*)xalloc(sizeof(Condition));
+            sort->element_type_id = atoi(sortstr);
+            strcpy(sort->value, "reverse");
+        }
+    }
+    return sort;
+}
+List* create_conditions(List* conditions, List* element_types)
+{
+    Iterator* it;
+    foreach (it, element_types) {
+        ElementType* et = it->element;
+        char name[DEFAULT_LENGTH];
+        char value[DEFAULT_LENGTH];
+        Condition* c;
+
+        switch (et->type) {
+            case ELEM_TYPE_DATE:
+                /* 日付 from */
+                sprintf(name, "field%d_from", et->id);
+                cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+                if (strlen(value) > 0) {
+                    c = list_new_element(conditions);
+                    c->element_type_id = et->id;
+                    c->condition_type = CONDITION_TYPE_DATE_FROM;
+                    strcpy(c->value, value);
+                    list_add(conditions, c);
+                }
+                /* 日付 to */
+                sprintf(name, "field%d_to", et->id);
+                cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+                if (strlen(value) > 0) {
+                    c = list_new_element(conditions);
+                    c->element_type_id = et->id;
+                    c->condition_type = CONDITION_TYPE_DATE_TO;
+                    strcpy(c->value, value);
+                    list_add(conditions, c);
+                }
+                break;
+            default:
+                sprintf(name, "field%d", et->id);
+                cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+                if (strlen(value) == 0) continue;
+                c = list_new_element(conditions);
+                c->element_type_id = et->id;
+                c->condition_type = CONDITION_TYPE_NORMAL;
+                strcpy(c->value, value);
+                list_add(conditions, c);
+        }
+    }
+    return conditions;
+}
 /**
  * 検索画面を表示するaction。
  */
@@ -410,11 +474,10 @@ void search_actoin()
     SearchResult* result;
     List* element_types_a;
     List* conditions_a = NULL;
-    Condition* sort = NULL;
+    Condition* sort_a = NULL;
     Project* project;
     List* states_a;
     Iterator* it;
-    char sortstr[DEFAULT_LENGTH];
     char id[DEFAULT_LENGTH];
     char q[DEFAULT_LENGTH];
     char p[DEFAULT_LENGTH];
@@ -435,63 +498,15 @@ void search_actoin()
     o("<h2>"); h(project->name); o(" - チケット検索</h2>\n");
     /* 検索 */
     list_alloc(conditions_a, Condition);
-    foreach (it, element_types_a) {
-        ElementType* et = it->element;
-        char name[DEFAULT_LENGTH];
-        char value[DEFAULT_LENGTH];
-        Condition* c;
-
-        switch (et->type) {
-            case ELEM_TYPE_DATE:
-                /* 日付 from */
-                sprintf(name, "field%d_from", et->id);
-                cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-                if (strlen(value) > 0) {
-                    c = list_new_element(conditions_a);
-                    c->element_type_id = et->id;
-                    c->condition_type = CONDITION_TYPE_DATE_FROM;
-                    strcpy(c->value, value);
-                    list_add(conditions_a, c);
-                }
-                /* 日付 to */
-                sprintf(name, "field%d_to", et->id);
-                cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-                if (strlen(value) > 0) {
-                    c = list_new_element(conditions_a);
-                    c->element_type_id = et->id;
-                    c->condition_type = CONDITION_TYPE_DATE_TO;
-                    strcpy(c->value, value);
-                    list_add(conditions_a, c);
-                }
-                break;
-            default:
-                sprintf(name, "field%d", et->id);
-                cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-                if (strlen(value) == 0) continue;
-                c = list_new_element(conditions_a);
-                c->element_type_id = et->id;
-                c->condition_type = CONDITION_TYPE_NORMAL;
-                strcpy(c->value, value);
-                list_add(conditions_a, c);
-        }
-    }
+    conditions_a = create_conditions(conditions_a, element_types_a);
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
-    cgiFormStringNoNewlines("sort", sortstr, DEFAULT_LENGTH);
-    if (strlen(sortstr) > 0) {
-        sort = (Condition*)xalloc(sizeof(Condition));
-        sort->element_type_id = atoi(sortstr);
-    } else {
-        cgiFormStringNoNewlines("rsort", sortstr, DEFAULT_LENGTH);
-        if (strlen(sortstr) > 0) {
-            sort = (Condition*)xalloc(sizeof(Condition));
-            sort->element_type_id = atoi(sortstr);
-            strcpy(sort->value, "reverse");
-        }
-    }
+    sort_a = (Condition*)xalloc(sizeof(Condition));
+    create_sort_condition(sort_a);
     cgiFormStringNoNewlines("p", p, DEFAULT_LENGTH);
     list_alloc(messages_a, Message);
-    result = db_search_tickets(conditions_a, q, sort, atoi(p), messages_a);
+    result = db_search_tickets(conditions_a, q, sort_a, atoi(p), messages_a);
     free(conditions_a);
+    free(sort_a);
     list_alloc(states_a, State);
     states_a = db_get_states(states_a);
     /* stateの表示 */
@@ -559,6 +574,9 @@ void search_actoin()
         query_string = format_query_string_without_page(query_string_buffer);
         o(      "<div class=\"infomation\">");
         o(      "%d件ヒットしました。\n", result->hit_count);
+        o(      "<a href=\"%s/report_csv_download?%s\" target=\"_blank\">検索結果をCSVでダウンロードする。</a>\n",
+                cgiScriptName,
+                query_string);
         o(      "</div>\n");
         output_navigater(result, query_string);
         output_ticket_table(result, element_types_a);
@@ -566,6 +584,92 @@ void search_actoin()
     }
     o("</div>\n");
     output_footer();
+    db_finish();
+    list_free(result->messages);
+    list_free(element_types_a);
+    free(result);
+}
+void output_ticket_information_4_csv_report_header(List* element_types)
+{
+    Iterator* it;
+
+    d("zz\n");
+    csv_field("ID"); 
+    d("zz11\n");
+    o(",");
+    d("zz\n");
+    foreach (it, element_types) {
+        ElementType* et = it->element;
+        if (!et->ticket_property) continue;
+        csv_field(et->name); o(",");
+    }
+    d("zz\n");
+    csv_field("投稿日時"); o(",");
+    csv_field("最終更新日時"); o(",");
+    csv_field("放置日数"); o("\r\n");
+}
+void output_ticket_information_4_csv_report(SearchResult* result, List* element_types)
+{
+    Iterator* it;
+    Iterator* it_msg;
+
+    foreach (it_msg, result->messages) {
+        Message* message = it_msg->element;
+        List* elements_a;
+        list_alloc(elements_a, Element);
+        elements_a = db_get_last_elements(message->id, elements_a);
+        csv_field(get_element_value_by_id(elements_a, ELEM_ID_ID)); o(",");
+        foreach (it, element_types) {
+            ElementType* et = it->element;
+            if (!et->ticket_property) continue;
+            csv_field(get_element_value_by_id(elements_a, et->id)); o(",");
+        }
+        csv_field(get_element_value_by_id(elements_a, ELEM_ID_REGISTERDATE)); o(",");
+        csv_field(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE)); o(",");
+        csv_field(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE_PASSED));
+        o("\r\n");
+    }
+}
+/**
+ * CSVレポートをダウンロードするaction。
+ */
+void report_csv_download_action()
+{
+    SearchResult* result;
+    List* element_types_a;
+    List* conditions_a = NULL;
+    Condition* sort_a = NULL;
+    Project* project;
+    List* states_a;
+    char q[DEFAULT_LENGTH];
+    char p[DEFAULT_LENGTH];
+    List* messages_a;
+
+    db_init();
+    project = db_get_project();
+    list_alloc(element_types_a, ElementType);
+
+    element_types_a = db_get_element_types_all(element_types_a);
+    /* 検索 */
+    list_alloc(conditions_a, Condition);
+    conditions_a = create_conditions(conditions_a, element_types_a);
+    cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
+    sort_a = (Condition*)xalloc(sizeof(Condition));
+    create_sort_condition(sort_a);
+    cgiFormStringNoNewlines("p", p, DEFAULT_LENGTH);
+    list_alloc(messages_a, Message);
+    result = db_search_tickets(conditions_a, q, sort_a, atoi(p), messages_a);
+    free(conditions_a);
+    free(sort_a);
+    list_alloc(states_a, State);
+    states_a = db_get_states(states_a);
+
+    o("Content-Disposition: attachment; filename=\"report.csv\"\r\n");
+    cgiHeaderContentType("text/plain; charset=Windows-31J;");
+
+    csv_field(project->name); o("\r\n");
+    output_ticket_information_4_csv_report_header(element_types_a);
+    output_ticket_information_4_csv_report(result, element_types_a);
     db_finish();
     list_free(result->messages);
     list_free(element_types_a);
