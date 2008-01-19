@@ -78,86 +78,86 @@ void exec_action()
     }
 }
 #define TRYPUTC(ch) \
-	{ \
-		if (putc((ch), cgiOut) == EOF) { \
-			return cgiFormIO; \
-		} \
-	} 
+    { \
+        if (putc((ch), cgiOut) == EOF) { \
+            return cgiFormIO; \
+        } \
+    } 
 static cgiFormResultType cgiHtmlEscapeDataMultiLine(char *data, int len)
 {
-	while (len--) {
-		if (*data == '<') {
-			TRYPUTC('&');
-			TRYPUTC('l');
-			TRYPUTC('t');
-			TRYPUTC(';');
-		} else if (*data == '&') {
-			TRYPUTC('&');
-			TRYPUTC('a');
-			TRYPUTC('m');
-			TRYPUTC('p');
-			TRYPUTC(';');
-		} else if (*data == '>') {
-			TRYPUTC('&');
-			TRYPUTC('g');
-			TRYPUTC('t');
-			TRYPUTC(';');
-		} else if (*data == '\n') {
-			TRYPUTC('<');
-			TRYPUTC('b');
-			TRYPUTC('r');
-			TRYPUTC(' ');
-			TRYPUTC('/');
-			TRYPUTC('>');
-		} else {
-			TRYPUTC(*data);
-		}
-		data++;
-	}
-	return cgiFormSuccess;
+    while (len--) {
+        if (*data == '<') {
+            TRYPUTC('&');
+            TRYPUTC('l');
+            TRYPUTC('t');
+            TRYPUTC(';');
+        } else if (*data == '&') {
+            TRYPUTC('&');
+            TRYPUTC('a');
+            TRYPUTC('m');
+            TRYPUTC('p');
+            TRYPUTC(';');
+        } else if (*data == '>') {
+            TRYPUTC('&');
+            TRYPUTC('g');
+            TRYPUTC('t');
+            TRYPUTC(';');
+        } else if (*data == '\n') {
+            TRYPUTC('<');
+            TRYPUTC('b');
+            TRYPUTC('r');
+            TRYPUTC(' ');
+            TRYPUTC('/');
+            TRYPUTC('>');
+        } else {
+            TRYPUTC(*data);
+        }
+        data++;
+    }
+    return cgiFormSuccess;
 }
 
 void hm(char *s)
 {
-	cgiHtmlEscapeDataMultiLine(s, (int) strlen(s));
+    cgiHtmlEscapeDataMultiLine(s, (int) strlen(s));
 }
 static cgiFormResultType cgiHtmlEscapeDataMailaddress(char *data, int len)
 {
-	while (len--) {
-		if (*data == '<') {
-			TRYPUTC('&');
-			TRYPUTC('l');
-			TRYPUTC('t');
-			TRYPUTC(';');
-		} else if (*data == '&') {
-			TRYPUTC('&');
-			TRYPUTC('a');
-			TRYPUTC('m');
-			TRYPUTC('p');
-			TRYPUTC(';');
-		} else if (*data == '>') {
-			TRYPUTC('&');
-			TRYPUTC('g');
-			TRYPUTC('t');
-			TRYPUTC(';');
-		} else if (*data == '@') {
-			TRYPUTC(' ');
-			TRYPUTC('_');
-			TRYPUTC('a');
-			TRYPUTC('t');
-			TRYPUTC('_');
-			TRYPUTC(' ');
-		} else {
-			TRYPUTC(*data);
-		}
-		data++;
-	}
-	return cgiFormSuccess;
+    while (len--) {
+        if (*data == '<') {
+            TRYPUTC('&');
+            TRYPUTC('l');
+            TRYPUTC('t');
+            TRYPUTC(';');
+        } else if (*data == '&') {
+            TRYPUTC('&');
+            TRYPUTC('a');
+            TRYPUTC('m');
+            TRYPUTC('p');
+            TRYPUTC(';');
+        } else if (*data == '>') {
+            TRYPUTC('&');
+            TRYPUTC('g');
+            TRYPUTC('t');
+            TRYPUTC(';');
+        } else if (*data == '@') {
+            TRYPUTC(' ');
+            TRYPUTC('_');
+            TRYPUTC('a');
+            TRYPUTC('t');
+            TRYPUTC('_');
+            TRYPUTC(' ');
+        } else {
+            TRYPUTC(*data);
+        }
+        data++;
+    }
+    return cgiFormSuccess;
 }
 
 void hmail(char *s)
 {
-	cgiHtmlEscapeDataMailaddress(s, (int) strlen(s));
+    cgiHtmlEscapeDataMailaddress(s, (int) strlen(s));
 }
 
 /* 失敗
@@ -290,44 +290,44 @@ ElementFile* get_upload_content(int element_id)
     return content;
 }
 
-/* static unsigned char *base64 = (unsigned char *)"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"; */
+static unsigned char *base64 = (unsigned char *)"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-/* static void enclode_char(unsigned long bb, int srclen, unsigned char *dest, int j) */
-/* { */
-/*     int x, i, base; */
+static void enclode_char(unsigned long bb, int srclen, unsigned char *dest, int j)
+{
+    int x, i, base;
 
-/*     for ( i = srclen; i < 2; i++ )  */
-/*         bb <<= 8; */
-/*     for ( base = 18, x = 0; x < srclen + 2; x++, base -= 6) { */
-/*         dest[j++] = base64[ (unsigned long)((bb>>base) & 0x3F) ]; */
-/*     } */
-/*     for ( i = x; i < 4; i++ ) { */
-/*         dest[j++] = (unsigned char)'='; */
-/*     } */
-/* } */
+    for (i = srclen; i < 2; i++) 
+        bb <<= 8;
+    for (base = 18, x = 0; x < srclen + 2; x++, base -= 6) {
+        dest[j++] = base64[(unsigned long)((bb>>base) & 0x3F)];
+    }
+    for (i = x; i < 4; i++) {
+        dest[j++] = (unsigned char)'=';
+    }
+}
 
-/* void base64_encode(const unsigned char *src, unsigned char *dest) */
-/* { */
-/*     unsigned char *p = (char *)src; */
-/*     unsigned long bb = (unsigned long)0; */
-/*     int i = 0, j = 0; */
+void base64_encode(const unsigned char *src, unsigned char *dest)
+{
+    unsigned char *p = (char *)src;
+    unsigned long bb = (unsigned long)0;
+    int i = 0, j = 0;
 
-/*     while (*p) { */
-/*         bb <<= 8; */
-/*         bb |= (unsigned long)*p; */
+    while (*p) {
+        bb <<= 8;
+        bb |= (unsigned long)*p;
 
-/*         if (i == 2) { */
-/*             enclode_char(bb, i, dest, j); */
-/*             j = j + 4; */
-/*             i = 0; */
-/*             bb = 0; */
-/*         } else */
-/*             i++; */
-/*         p++; */
-/*     } */
-/*     if (i) */
-/*         enclode_char(bb, i - 1, dest, j); */
-/* } */
+        if (i == 2) {
+            enclode_char(bb, i, dest, j);
+            j = j + 4;
+            i = 0;
+            bb = 0;
+        } else {
+            i++;
+        }
+        p++;
+    }
+    if (i) enclode_char(bb, i - 1, dest, j);
+}
 void redirect(char* path, char* message)
 {
     char redirecturi[DEFAULT_LENGTH];
@@ -358,18 +358,49 @@ void free_element_list(List* elements)
 void csv_field(char* src)
 {
     iconv_t ic;
-    char dist_buf[DEFAULT_LENGTH];
-    size_t src_size, dist_size, ret_len;
-    char* dist = dist_buf;
+    char dest_buf[DEFAULT_LENGTH];
+    size_t src_size, dest_size, ret_len;
+    char* dest = dest_buf;
 
     src_size = strlen(src) + 1;
-    dist_size = src_size;  /* UTF-8からCP932なので、長さが短かくなることはない。そのためdist_sizeにも同じ長さを指定する。*/
+    dest_size = src_size;  /* UTF-8からCP932なので、長さが短かくなることはない。そのためdest_sizeにも同じ長さを指定する。*/
     /* 文字コード変換処理 *          */
     ic = iconv_open("CP932", "UTF-8");
-    ret_len = iconv(ic, &src, &src_size, &dist, &dist_size);
+    ret_len = iconv(ic, &src, &src_size, &dest, &dest_size);
     o("\"");
-    if (ret_len >= 0) v(dist_buf);
+    if (ret_len >= 0) v(dest_buf);
     o("\"");
     iconv_close(ic);
+}
+static cgiFormResultType cgiCssClassName(char *data, int len)
+{
+    while (len--) {
+        /* css の classnameとして使用するため、+ と / は出力しない。 */
+        if (*data == '+') {
+        } else if (*data == '/') {
+        } else {
+            TRYPUTC(*data);
+        }
+        data++;
+    }
+    return cgiFormSuccess;
+}
+void css_field(char* str)
+{
+    char src[DEFAULT_LENGTH];
+    char dest[DEFAULT_LENGTH];
+    char* p = src;
+
+    strcpy(src, str);
+    if (strlen(src) > 100) {
+        p += 100;
+        p = '\0';
+    }
+        
+    memset(dest, 0, DEFAULT_LENGTH);
+    d("src:%s\n", src);
+    base64_encode(src, dest);
+    d("base64:%s\n", dest);
+    cgiCssClassName(dest, strlen(dest));
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab: */

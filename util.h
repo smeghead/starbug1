@@ -30,6 +30,7 @@ void redirect(char*, char*);
 void free_element_list(List*);
 void* xalloc(size_t);
 void csv_field(char*);
+void css_field(char*);
 
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab: */

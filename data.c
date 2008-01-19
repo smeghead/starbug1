@@ -26,15 +26,15 @@ char* get_element_value_by_id(List* elements, int type)
     }
     return "";
 }
-int get_element_lid_by_id(List* elements, int id)
-{
-    Iterator* it;
-    if (elements == NULL) return -1;
-    foreach (it, elements) {
-        Element* e = it->element;
-        if (id == e->element_type_id)
-            return e->list_item_id;
-    }
-    return -1;
-}
+/* int get_element_lid_by_id(List* elements, int id) */
+/* { */
+/*     Iterator* it; */
+/*     if (elements == NULL) return -1; */
+/*     foreach (it, elements) { */
+/*         Element* e = it->element; */
+/*         if (id == e->element_type_id) */
+/*             return e->list_item_id; */
+/*     } */
+/*     return -1; */
+/* } */
 /* vim: set ts=4 sw=4 sts=4 expandtab: */

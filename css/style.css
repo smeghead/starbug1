@@ -301,30 +301,6 @@ span.required {
     padding:3px 10px;
     float:left;
 }
-/* 新規 */
-#ticket_list td.field3-1 {
-    background-color: lightpink !important;
-}
-/* 受付済 */
-#ticket_list td.field3-2 {
-    background-color: peachpuff !important;
-}
-/* 修正済 */
-#ticket_list td.field3-3 {
-    background-color: lightyellow !important;
-}
-/* 保留 */
-#ticket_list td.field3-4 {
-    background-color: white !important;
-}
-/* 完了 */
-#ticket_list td.field3-5 {
-    background-color: lightcyan !important;
-}
-/* 破棄 */
-#ticket_list td.field3-6 {
-    background-color: slategray !important;
-}
 div.complete_message {
     border: 1px #228B22 solid;
     margin: 15px 3px 15px 3px;

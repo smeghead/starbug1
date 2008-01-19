@@ -259,21 +259,24 @@ void output_ticket_table_body(SearchResult* result, List* element_types)
         list_alloc(elements_a, Element);
         elements_a = db_get_last_elements_4_list(message->id, elements_a);
         o("\t<tr>\n");
-        o("\t\t<td class=\"field%d-%d\"><a href=\"%s/ticket/%s\">%s</a></td>\n", 
+        o("\t\t<td class=\"field%d-\"><a href=\"%s/ticket/%s\">%s</a></td>\n", 
                 ELEM_ID_ID, 
-                get_element_lid_by_id(elements_a, ELEM_ID_ID), 
                 cgiScriptName, 
                 get_element_value_by_id(elements_a, ELEM_ID_ID), 
                 get_element_value_by_id(elements_a, ELEM_ID_ID));
         foreach (it, element_types) {
             ElementType* et = it->element;
-            o("\t\t<td class=\"field%d-%d\">", et->id, get_element_lid_by_id(elements_a, et->id));
+            char* val = get_element_value_by_id(elements_a, et->id);
+            o("\t\t<td class=\"field%d-", et->id); 
+            if (et->type == ELEM_TYPE_LIST_SINGLE)
+                css_field(val);
+            o("\">");
             if (et->id == ELEM_ID_TITLE)
                 o("<a href=\"%s/ticket/%d\">", cgiScriptName, message->id);
             if (et->id == ELEM_ID_SENDER)
                 hmail(get_element_value_by_id(elements_a, ELEM_ID_ORG_SENDER)); /* 最初の投稿者を表示する。 */
             else
-                h(get_element_value_by_id(elements_a, et->id));
+                h(val);
             if (et->id == ELEM_ID_TITLE)
                 o("</a>");
             o("&nbsp;</td>\n");

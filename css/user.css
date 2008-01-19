@@ -1,3 +1,53 @@
+@charset "utf-8";
+/* ================================ */
+/*  チケット一覧の状態の背景色設定  */
+/* ================================ */
+/* 新規 */
+#ticket_list td.field3-5paw6KaP {
+    background-color: lightpink !important;
+}
+/* 受付済 */
+#ticket_list td.field3-5YX5LuY5riI {
+    background-color: peachpuff !important;
+}
+/* 修正済 */
+#ticket_list td.field3-5Lu5q2j5riI {
+    background-color: lightyellow !important;
+}
+/* 保留 */
+#ticket_list td.field3-5Ld55WZ {
+    background-color: white !important;
+}
+/* 完了 */
+#ticket_list td.field3-5a6M5LqG {
+    background-color: lightcyan !important;
+}
+/* 破棄 */
+#ticket_list td.field3-56C05qOE {
+    background-color: #ccc !important;
+}
+
+/* ================================== */
+/*  チケット一覧の優先度の背景色設定  */
+/* ================================== */
+/* 緊急 */
+#ticket_list td.field5-57eK5oCl {
+    background-color: #FF8A8C !important;
+}
+/* 高 */
+#ticket_list td.field5-6auY {
+    background-color: #FFCB8C !important;
+}
+/* 中 */
+#ticket_list td.field5-5Lit {
+    background-color: #FFFF94 !important;
+}
+/* 低 */
+#ticket_list td.field5-5L2O {
+    background-color: white !important;
+}
+
+
 body {
-/* background-color:  	lightcyan; */
+    /* background-color:    lightcyan; */
 }
