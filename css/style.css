@@ -62,7 +62,7 @@ input.checkbox, input.radio {
     width: 20px;
 }
 
-input.date {
+input.calendar {
     width: 80px;
 }
 input.number {
@@ -394,3 +394,52 @@ div#top h4.item  {
     color: #fff;
     padding-bottom: 0px;    
 }
+#calendar {
+    position:absolute;
+    margin: 0px;
+    padding: 0px;
+}
+#calendar table {
+    border-collapse: collapse;
+    border: solid #0838A5 1px;
+}
+#calendar tbody {
+    font-weight: bold;
+    font-size: 12px;
+    text-align: right;
+}
+#calendar table th,
+#calendar table td {
+    border: 0px;
+    padding: 3px;
+    width: 20px;
+    background-color: #F7F3F7;
+}
+#calendar table td.out, {
+    color: gray;
+}
+#calendar tr.title th {
+    color: white;
+    background-color: #0838A5;
+}
+#calendar tr th {
+    background-color: #AFDBFF;
+}
+#calendar tr.title th.title {
+    text-align: center;
+    width: auto;
+}
+#calendar .day_0 {
+    color: red;
+}
+#calendar .day_6 {
+    color: blue;
+}
+#calendar .selected {
+    background-color: #FFDEAE;
+}
+#calendar .onmouse {
+    background-color: #FF9A31;
+    cursor: pointer;
+}
+

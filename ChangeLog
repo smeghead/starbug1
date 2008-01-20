@@ -1,3 +1,8 @@
+2008-01-20  smeghead <smeghead@users.sourceforge.jp>
+
+    * 日付の項目のJavaScriptでの入力支援機能を作成中。前月、次月への移動はまだ
+    未実装。
+
 2008-01-19  smeghead <smeghead@users.sourceforge.jp>
 
     * レポート機能の追加。検索結果として表示している一覧の内容をCSVでダウンロ

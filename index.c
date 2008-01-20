@@ -32,6 +32,7 @@ void output_form_element(List*, ElementType*);
 void output_form_element_4_condition(ElementType*);
 int get_mode();
 static int contains(char* const, const char*);
+void output_calendar_js();
 
 enum MODE {
     MODE_INVALID,
@@ -493,7 +494,8 @@ void search_actoin()
     
     db_init();
     project = db_get_project();
-    output_header(project, "チケット検索", NULL, NAVI_SEARCH);
+    output_header(project, "チケット検索", "calendar.js", NAVI_SEARCH);
+    output_calendar_js();
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_4_list(element_types_a);
     o("<h2>"); h(project->name); o(" - チケット検索</h2>\n");
@@ -730,25 +732,23 @@ void output_form_element_4_condition(ElementType* et)
         case ELEM_TYPE_DATE:
             sprintf(name, "field%d_from", et->id);
             cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-            o("<input type=\"text\" class=\"date\" id=\"field");
+            o("<input type=\"text\" class=\"calendar\" id=\"field");
             h(id);
             o("\" name=\"field");
             h(id);
             o("_from\" value=\"");
             v(value);
             o("\" maxlength=\"10\" />\n");
-/*             o("<a class=\"calender\" href=\"#\" title=\"JavaScriptによる入力支援機能です。\">cale</a>"); */
             o("〜\n");
             sprintf(name, "field%d_to", et->id);
             cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-            o("<input type=\"text\" class=\"date\" id=\"field");
+            o("<input type=\"text\" class=\"calendar\" id=\"field");
             h(id);
             o("\" name=\"field");
             h(id);
             o("_to\" value=\"");
             v(value);
             o("\" maxlength=\"10\" />\n");
-/*             o("<a class=\"calender\" href=\"#\" title=\"JavaScriptによる入力支援機能です。\">cale</a>"); */
             break;
     }
 }
@@ -853,11 +853,10 @@ void output_form_element(List* elements, ElementType* et)
             o("<div class=\"description\">ファイルサイズは、%dKb以下になるようにしてください。</div>\n", MAX_FILE_SIZE);
             break;
         case ELEM_TYPE_DATE:
-            o("<input type=\"text\" class=\"date\" id=\"field%d\" name=\"field%d\" value=\"\n",
+            o("<input type=\"text\" class=\"calendar\" id=\"field%d\" name=\"field%d\" value=\"\n",
                     et->id, et->id);
             v(value);
             o("\" maxlength=\"10\"/>\n");
-/*             o("<a class=\"calender\" href=\"#\" title=\"JavaScriptによる入力支援機能です。\">cale</a>"); */
             o("<div class=\"description\">yyyy-mm-dd形式で入力してください。</div>\n");
             break;
     }
@@ -882,6 +881,9 @@ static int contains(char* const value, const char* name)
             return 1;
     } while ((p = strstr(p, "\t")) != NULL);
     return 0;
+}
+void output_calendar_js() {
+    o("<script type=\"text/javascript\" src=\"%s/../js/calendar.js\"></script>\n", cgiScriptName); 
 }
 void output_field_information_js(List* element_types) {
     Iterator* it;
@@ -917,6 +919,7 @@ void register_action()
     db_init();
     project = db_get_project();
     output_header(project, "チケット登録", "register.js", NAVI_REGISTER);
+    output_calendar_js();
     o(      "<h2>"); h(project->name);o(" - チケット登録</h2>\n"
             "<div id=\"input_form\">\n"
             "<h3>チケット登録</h3>\n"
@@ -994,6 +997,7 @@ void ticket_action()
     }
     project = db_get_project();
     output_header(project, "チケット詳細", "reply.js", NAVI_OTHER);
+    output_calendar_js();
 
     message_ids_a = db_get_message_ids(iid);
     list_alloc(element_types_a, ElementType);
