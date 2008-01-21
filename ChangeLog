@@ -7,6 +7,8 @@
     IDが出力されるように修正。
     * レポート機能デ、投稿日時、最終更新日時、放置日数が表示されないのを修正し
     た。
+    * calendar.jsで日付をyyyy-mm-ddからyyyy/mm/ddに変換する部分のバグを修正し
+    た。
 
 2008-01-20  smeghead <smeghead@users.sourceforge.jp>
 

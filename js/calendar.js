@@ -45,7 +45,7 @@ Object.extend(Starbug1Calendar.Calendar.prototype, {
     target: null,
     calendar: document.createElement('div'),
     initialize: function(target, dateString) {
-        this.date = new Date(dateString.replace("-", "/"));
+        this.date = new Date(dateString.replace(/-/g, "/"));
         if (isNaN(this.date)) this.date = new Date();
         this.target = $(target);
         this.calendar = Object.extend(this.calendar, {
