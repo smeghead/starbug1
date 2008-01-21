@@ -25,7 +25,6 @@ typedef struct _element {
   int element_type_id;
   char* str_val;
   int is_file;
-  int list_item_id;
   struct _element* next;
 } Element;
 

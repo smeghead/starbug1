@@ -1,3 +1,9 @@
+2008-01-21  smeghead <smeghead@users.sourceforge.jp>
+
+    * チケット一覧での状態の背景の色を変えるために、list_itemテーブルと連結し
+    ていたが、別の方法で背景色を表示するようになった。不要になったので、
+    list_itemテーブルとの連結を行なわないように修正。
+
 2008-01-20  smeghead <smeghead@users.sourceforge.jp>
 
     * 日付の項目のJavaScriptでの入力支援機能を作成中。前月、次月への移動はまだ

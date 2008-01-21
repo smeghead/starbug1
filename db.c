@@ -538,7 +538,7 @@ List* db_get_last_elements_4_list(int ticket_id, List* elements)
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_4_list(element_types_a);
     create_columns_exp(element_types_a, "last_m", columns);
-    sprintf(sql, "select t.id, org_m.field%d, l.id ", ELEM_ID_SENDER);
+    sprintf(sql, "select t.id, org_m.field%d ", ELEM_ID_SENDER);
     strcat(sql, columns);
     sprintf(sql_suf, 
             "  , t.registerdate, last_m.registerdate,  "
@@ -546,8 +546,7 @@ List* db_get_last_elements_4_list(int ticket_id, List* elements)
             "from ticket as t "
             "inner join message as last_m on last_m.id = t.last_message_id "
             "inner join message as org_m on org_m.id = t.original_message_id "
-            "left join list_item as l on l.element_type_id = %d and l.name = last_m.field%d "
-            "where t.id = ?", ELEM_ID_STATUS, ELEM_ID_STATUS);
+            "where t.id = ?");
     strcat(sql, sql_suf);
     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
@@ -555,7 +554,6 @@ List* db_get_last_elements_4_list(int ticket_id, List* elements)
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))) {
         int i = 0;
-        const unsigned char* status_id;
         Element* e;
         /* ID */
         e = list_new_element(elements);
@@ -567,15 +565,11 @@ List* db_get_last_elements_4_list(int ticket_id, List* elements)
         e->element_type_id = ELEM_ID_ORG_SENDER;
         set_str_val(e, sqlite3_column_text(stmt, i++));
         list_add(elements, e);
-        /* status item_list id */
-        status_id = sqlite3_column_text(stmt, i++);
         foreach (it, element_types_a) {
             ElementType* et = it->element;
             e = list_new_element(elements);
             e->element_type_id = et->id;
             set_str_val(e, sqlite3_column_text(stmt, i++));
-            if (et->type == ELEM_ID_STATUS && status_id != 0)
-                e->list_item_id = atoi(status_id); /* 状態のスタイルシートのために、list_item.idを設定 */
             list_add(elements, e);
         }
         /* 投稿日時 */
