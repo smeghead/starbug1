@@ -619,9 +619,11 @@ void output_ticket_information_4_csv_report(SearchResult* result, List* element_
     foreach (it_msg, result->messages) {
         Message* message = it_msg->element;
         List* elements_a;
+        char id_str[DEFAULT_LENGTH];
+        sprintf(id_str, "%d", message->id);
         list_alloc(elements_a, Element);
         elements_a = db_get_last_elements(message->id, elements_a);
-        csv_field(get_element_value_by_id(elements_a, ELEM_ID_ID)); o(",");
+        csv_field(id_str); o(",");
         foreach (it, element_types) {
             ElementType* et = it->element;
             if (!et->ticket_property) continue;

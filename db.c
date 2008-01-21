@@ -610,37 +610,48 @@ List* db_get_last_elements(int ticket_id, List* elements)
     create_columns_exp(element_types_a, "m", columns);
     strcpy(sql, "select m.id");
     strcat(sql, columns);
+    strcat(sql, 
+            "  , t.registerdate, last_m.registerdate,  "
+            "  julianday(current_date) - julianday(date(last_m.registerdate)) as passed_date ");
     strcat(sql,
             "from ticket as t "
+            "inner join message as last_m on last_m.id = t.last_message_id "
             "inner join message as m on m.id = t.last_message_id "
-            "where ticket_id = ?");
+            "where t.id = ?");
     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, ticket_id);
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
-        const unsigned char* str_val;
         int i = 0;
         Iterator* it;
+        Element* e;
         Element* e_id = list_new_element(elements);
         e_id->element_type_id = ELEM_ID_ID;
-        str_val = sqlite3_column_text(stmt, i++);
-        if (str_val != NULL) {
-            e_id->str_val = (char*)xalloc(sizeof(char) * strlen(str_val) + 1);
-            strcpy(e_id->str_val, str_val);
-        }
+        set_str_val(e_id, sqlite3_column_text(stmt, i++));
         list_add(elements, e_id);
         foreach (it, element_types_a) {
             ElementType* et = it->element;
-            Element* e = list_new_element(elements);
+            e = list_new_element(elements);
             e->element_type_id = et->id;
-            str_val = sqlite3_column_text(stmt, i++);
-            if (str_val != NULL) {
-                e->str_val = (char*)xalloc(sizeof(char) * strlen(str_val) + 1);
-                strcpy(e->str_val, str_val);
-            }
+            set_str_val(e, sqlite3_column_text(stmt, i++));
             list_add(elements, e);
         }
+        /* 投稿日時 */
+        e = list_new_element(elements);
+        e->element_type_id = ELEM_ID_REGISTERDATE;
+        set_str_val(e, sqlite3_column_text(stmt, i++));
+        list_add(elements, e);
+        /* 最終更新日時 */
+        e = list_new_element(elements);
+        e->element_type_id = ELEM_ID_LASTREGISTERDATE;
+        set_str_val(e, sqlite3_column_text(stmt, i++));
+        list_add(elements, e);
+        /* 最終更新日時からの経過日数 */
+        e = list_new_element(elements);
+        e->element_type_id = ELEM_ID_LASTREGISTERDATE_PASSED;
+        set_str_val(e, sqlite3_column_text(stmt, i++));
+        list_add(elements, e);
     }
     if (SQLITE_DONE != r)
         goto error;
@@ -674,25 +685,16 @@ List* db_get_elements(int message_id, List* elements)
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         Iterator* it;
-        const unsigned char* str_val;
         int i = 0;
         Element* e = list_new_element(elements);
         e->element_type_id = ELEM_ID_LASTREGISTERDATE;
-        str_val = sqlite3_column_text(stmt, i++);
-        if (str_val != NULL) {
-            e->str_val = (char*)xalloc(sizeof(char) * strlen(str_val) + 1);
-            strcpy(e->str_val, str_val);
-        }
+        set_str_val(e, sqlite3_column_text(stmt, i++));
         list_add(elements, e);
         foreach (it, element_types_a) {
             ElementType* et = it->element;
             e = list_new_element(elements);
             e->element_type_id = et->id;
-            str_val = sqlite3_column_text(stmt, i++);
-            if (str_val != NULL) {
-                e->str_val = (char*)xalloc(sizeof(char) * strlen(str_val) + 1);
-                strcpy(e->str_val, str_val);
-            }
+            set_str_val(e, sqlite3_column_text(stmt, i++));
             list_add(elements, e);
         }
     }
