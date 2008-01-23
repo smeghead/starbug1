@@ -1,3 +1,9 @@
+2008-01-23  smeghead <smeghead@users.sourceforge.jp>
+
+    * 日付入力支援のJavaScriptカレンダーの改良。前月、次月への移動をできるよう
+    にした。
+    * 統計情報のページにグラフを追加した。
+
 2008-01-21  smeghead <smeghead@users.sourceforge.jp>
 
     * チケット一覧での状態の背景の色を変えるために、list_itemテーブルと連結し

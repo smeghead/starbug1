@@ -121,6 +121,7 @@ List* db_get_list_item(int element_type, List* items)
         ListItem* item = list_new_element(items);
         item->id = sqlite3_column_int(stmt, 0);
         strcpy(item->name, sqlite3_column_text(stmt, 1));
+                    d("db: %s\n", item->name);
         item->close = sqlite3_column_int(stmt, 2);
         item->sort = sqlite3_column_int(stmt, 3);
         list_add(items, item);
@@ -969,7 +970,7 @@ List* db_get_statictics_multi(List* states, int element_type_id)
     sqlite3_stmt *stmt = NULL;
 
     sprintf(sql, 
-            "select l.name as name, count(t.id) as count "
+            "select l.id, l.name as name, count(t.id) as count "
             "from ticket as t "
             "inner join message as m "
             " on m.id = t.last_message_id "
@@ -982,8 +983,9 @@ List* db_get_statictics_multi(List* states, int element_type_id)
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         State* s = list_new_element(states);
-        strcpy(s->name, sqlite3_column_text(stmt, 0));
-        s->count = sqlite3_column_int(stmt, 1);
+        s->id = sqlite3_column_int(stmt, 0);
+        strcpy(s->name, sqlite3_column_text(stmt, 1));
+        s->count = sqlite3_column_int(stmt, 2);
         list_add(states, s);
     }
     if (SQLITE_DONE != r)
@@ -1002,7 +1004,7 @@ List* db_get_statictics(List* states, int element_type_id)
     sqlite3_stmt *stmt = NULL;
 
     sprintf(sql, 
-            "select l.name as name, count(t.id) as count "
+            "select l.id, l.name as name, count(t.id) as count "
             "from ticket as t "
             "inner join message as m "
             " on m.id = t.last_message_id "
@@ -1015,8 +1017,9 @@ List* db_get_statictics(List* states, int element_type_id)
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         State* s = list_new_element(states);
-        strcpy(s->name, sqlite3_column_text(stmt, 0));
-        s->count = sqlite3_column_int(stmt, 1);
+        s->id = sqlite3_column_int(stmt, 0);
+        strcpy(s->name, sqlite3_column_text(stmt, 1));
+        s->count = sqlite3_column_int(stmt, 2);
         list_add(states, s);
     }
     if (SQLITE_DONE != r)

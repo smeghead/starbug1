@@ -1,3 +1,10 @@
+if (typeof document.activeElement == "undefined") {
+    Event.observe(document, "focus",
+        function(e) {
+        alert
+            document.activeElement = (e.target.nodeType == Node.TEXT_NODE) ? e.target.parentNode : e.target;
+        }, false);
+}
 var Starbug1Calendar = {
     Calendar: Class.create(),
     Util: Class.create()
@@ -10,13 +17,20 @@ Object.extend(Starbug1Calendar.Util, {
         d.setTime(d.getTime() + (1000 * 60 * 60 * 24 * n));
         return d;
     },
-    getHeaderHtml: function() {
-        return '<tr>' + this.DAY_OF_WEEK.inject(
-            '',
-            function(memo, val, i) {
-                return memo + '<th class="day_' + i + '">' + val + '</th>';
-            }
-        ) + '</tr>';
+    createCalendar: function(date) {
+        return '<table>' +
+            '<tr class="title">' +
+                '<th id="pre">《</th>' +
+                '<th class="title" colspan="5">' + date.getFullYear() + '年' + (date.getMonth() + 1) + '月</th>' +
+                '<th id="next">》</th>' +
+            '</td></tr>' +
+            '<tr>' + this.DAY_OF_WEEK.inject(
+                '',
+                function(memo, val, i) {
+                    return memo + '<th class="day_' + i + '">' + val + '</th>';
+                }
+            ) + '</tr>' +
+            Starbug1Calendar.Util.getDaysHtml(date) + '</table>'
     },
     getDaysHtml: function(date) {
         var firstDate = new Date(date.getYear(), date.getMonth(), 1);
@@ -38,48 +52,45 @@ Object.extend(Starbug1Calendar.Util, {
             currentDate = Starbug1Calendar.Util.getAddedDate(currentDate, 1);
         }
         return buf;
+    },
+    mouseover: function(e){
+        var elem = Event.element(e);
+        elem.orgClassName = elem.className;
+        elem.className = 'onmouse';
+    },
+    mouseout: function(e) {
+        var elem = Event.element(e);
+        elem.className = elem.orgClassName;
     }
 });
 Object.extend(Starbug1Calendar.Calendar.prototype, {
     date: null,
     target: null,
+    notToHide: false,
     calendar: document.createElement('div'),
-    initialize: function(target, dateString) {
-        this.date = new Date(dateString.replace(/-/g, "/"));
-        if (isNaN(this.date)) this.date = new Date();
+    initialize: function(target) {
         this.target = $(target);
-        this.calendar = Object.extend(this.calendar, {
-            id: 'calendar',
-            innerHTML: '<table>' +
-                '<tr class="title">' +
-                    '<th id="pre">《</th>' +
-                    '<th class="title" colspan="5">' + this.date.getFullYear() + '年' + (this.date.getMonth() + 1) + '月</th>' +
-                    '<th id="next">》</th>' +
-                '</td></tr>' +
-                Starbug1Calendar.Util.getHeaderHtml(this.date) +
-                Starbug1Calendar.Util.getDaysHtml(this.date) + '</table>'
-        });
+    },
+    display: function(dateString) {
+        this.date = dateString;
+        if (typeof(dateString) == 'string') {
+            this.date = new Date(dateString.replace(/-/g, "/"));
+        }
+        if (isNaN(this.date)) this.date = new Date();
+        this.calendar.id = 'calendar';
+        this.calendar.innerHTML = Starbug1Calendar.Util.createCalendar(this.date);
         //Point
         var offsets = Position.positionedOffset(this.target);
-        this.calendar.style.posLeft = offsets[0];
-        this.calendar.style.posTop = offsets[1] + this.target.style.height;
+        this.calendar.style.left = offsets[0];
+        this.calendar.style.top = offsets[1] + Element.getHeight(this.target);
         //Event
         var _this = this;
         var selector = new Selector('td');
         selector.findElements(this.calendar).each(
             function(elem){
                 if (elem.className.match('out')) return;
-                Event.observe(elem, 'mouseover', 
-                    function(){
-                        elem.orgClassName = elem.className;
-                        elem.className = 'onmouse';
-                    }
-                );
-                Event.observe(elem, 'mouseout', 
-                    function() {
-                        elem.className = elem.orgClassName;
-                    }
-                );
+                Event.observe(elem, 'mouseover', Starbug1Calendar.Util.mouseover);
+                Event.observe(elem, 'mouseout', Starbug1Calendar.Util.mouseout);
                 Event.observe(elem, 'click', 
                     function() {
                         var y = _this.date.getFullYear();
@@ -88,51 +99,70 @@ Object.extend(Starbug1Calendar.Calendar.prototype, {
                         _this.target.value = y.toPaddedString(4) + '-' +
                             m.toPaddedString(2) + '-' +
                             d.toPaddedString(2);
+                        _this.notToHide = false;
                         _this.hide();
                         _this = undefined;
                     }
                 );
-//                 Event.observe('pre', 'click', 
-//                     function() {
-//                         var date = _this.date.getFullYear() + '-' + (_this.date.getMonth() - 1) + '-' + '01';
-//                         _this = new Starbug1Calendar.Calendar(_this.target, date);
-//                     }
-//                 );
-//                 Event.observe('next', 'click', 
-//                     function() {
-//                         var date = _this.date.getFullYear() + '-' + (_this.date.getMonth() + 1) + '-' + '01';
-//                         _this = new Starbug1Calendar.Calendar(_this.target, date);
-//                     }
-//                 );
             }
         );
         this.target.parentNode.appendChild(this.calendar);
-    },
-    display: function() {
+        Event.observe('pre', 'click', 
+            function() {
+                var firstDate = new Date(_this.date.getYear(), _this.date.getMonth(), 1);
+                var date = Starbug1Calendar.Util.getAddedDate(firstDate, -1); 
+                date.setDate(_this.date.getDate());
+                _this.display(date);
+                _this.notToHide = true;
+            }
+        );
+        Event.observe('pre', 'mouseover', Starbug1Calendar.Util.mouseover);
+        Event.observe('pre', 'mouseout', Starbug1Calendar.Util.mouseout);
+        Event.observe('next', 'click', 
+            function() {
+                var firstDate = new Date(_this.date.getYear(), _this.date.getMonth(), 1);
+                var date = Starbug1Calendar.Util.getAddedDate(firstDate, 32); 
+                date.setDate(_this.date.getDate());
+                _this.display(date);
+                _this.notToHide = true;
+            }
+        );
+        Event.observe('next', 'mouseover', Starbug1Calendar.Util.mouseover);
+        Event.observe('next', 'mouseout', Starbug1Calendar.Util.mouseout);
         Element.show(this.calendar);
+        _this.notToHide = false;
     },
     hide: function() {
-        Element.hide(this.calendar);
+        if (!this.notToHide && 
+                (!document.activeElement || 
+                 !document.activeElement.className ||
+                (document.activeElement.className && 
+                !document.activeElement.className.match('calendar'))))
+            Element.hide(this.calendar);
+    },
+    will_hide: function() {
+        var _this = this;
+        // 日付が選択された場合には、先に選択された処理が行なわれるようにする。
+        setTimeout(function() { _this.hide(); }, 300);
     }
 });
 Event.observe(window, "load", function() {
     var selector = new Selector('input[class=calendar]');
+    var cale;
     selector.findElements().each(
         function(elem) {
-            var cale;
             Event.observe(elem, 'focus', 
                 function() {
-                    cale = new Starbug1Calendar.Calendar(elem, $F(elem));
-                    cale.display();
+                    cale = new Starbug1Calendar.Calendar(elem);
+                    cale.display($F(elem));
                 }
             );
             Event.observe(elem, 'blur', 
                 function() {
-                    // 日付が選択された場合には、先に選択された処理が行なわれるようにする。
-                    setTimeout(function() { if (cale) cale.hide() }, 300);
+                    cale.will_hide();
                 }
             );
         }
     );
 });
-
+//  vim: set ts=4 sw=4 sts=4 expandtab:

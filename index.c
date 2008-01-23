@@ -887,10 +887,15 @@ static int contains(char* const value, const char* name)
 void output_calendar_js() {
     o("<script type=\"text/javascript\" src=\"%s/../js/calendar.js\"></script>\n", cgiScriptName); 
 }
+void output_graph_js() {
+    o("<!--[if IE]><script type=\"text/javascript\" src=\"%s/../js/excanvas-compressed.js\"></script><![endif]-->\n", cgiScriptName);
+    o("<script type=\"text/javascript\" src=\"%s/../js/circle.js\"></script>\n", cgiScriptName); 
+}
 void output_field_information_js(List* element_types) {
     Iterator* it;
     o("<script type=\"text/javascript\" src=\"%s/../js/validate.js\"></script>\n", cgiScriptName); 
     o("<script type=\"text/javascript\">\n"); 
+    o("\t<!--\n");
     o("\tvar required_field_indexs = [\n");
     foreach (it, element_types) {
         ElementType* et = it->element;
@@ -907,6 +912,7 @@ void output_field_information_js(List* element_types) {
         }
     }
     o("\t-1];\n");
+    o("\t// -->\n");
     o("</script>\n");
 }
 /**
@@ -1475,6 +1481,16 @@ void rss_action()
     o(      "</rdf:RDF>\n");
     db_finish();
 }
+State* get_statictics(int element_type_id, List* states)
+{
+    Iterator* it;
+    foreach (it, states) {
+        State* s = it->element;
+        if (element_type_id == s->id)
+            return s;
+    }
+    return NULL;
+}
 void statistics_action()
 {
     Project* project;
@@ -1483,7 +1499,8 @@ void statistics_action()
 
     db_init();
     project = db_get_project();
-    output_header(project, "統計情報", NULL, NAVI_STATISTICS);
+    output_header(project, "統計情報", "graph.js", NAVI_STATISTICS);
+    output_graph_js();
     o(      "<h2>");h(project->name);o(" - Starbug1</h2>\n");
     o(      "<div id=\"top\">\n");
     o(      "<h3>統計情報</h3>\n");
@@ -1493,9 +1510,11 @@ void statistics_action()
     foreach (it, element_types_a) {
         ElementType* et = it->element;
         List* items_a;
+        List* all_items_a;
         Iterator* it_item;
 
         list_alloc(items_a, State);
+        list_alloc(all_items_a, ListItem);
         switch (et->type) {
             case ELEM_TYPE_LIST_SINGLE:
                 items_a = db_get_statictics(items_a, et->id);
@@ -1503,21 +1522,37 @@ void statistics_action()
             case ELEM_TYPE_LIST_MULTI:
                 items_a = db_get_statictics_multi(items_a, et->id);
 got_item:
+                all_items_a = db_get_list_item(et->id, all_items_a);
                 o(      "\t<h4 class=\"item\">");
                 h(et->name);
                 o(      "\t</h4>");
                 o(      "\t<ul>\n");
-                foreach (it_item, items_a) {
-                    State* item = it_item->element;
-                    o(      "\t\t<li>\n");
+                foreach (it_item, all_items_a) {
+                    ListItem* item = it_item->element;
+                    State* s = get_statictics(item->id, items_a);
+                    o(      "\t\t<li>");
                     h(item->name);
-                    o(      "(%d)", item->count);
+                    o(      "(%d)", s == NULL ? 0 : s->count);
                     o(      "\t\t</li>\n");
                 }
                 o(      "\t</ul>\n");
+                o(      "\t\t<script type=\"text/javascript\">\n"); 
+                o(      "\t\t<!--\n");
+                o(      "\t\tvar graph_%d = [\n", et->id);
+                foreach (it_item, items_a) {
+                    State* s = it_item->element;
+                    o("\t\t[\"%s\", %d]", s->name, s == NULL ? 0 : s->count);
+                    if (iterator_next(it_item)) o(",");
+                    o("\n");
+                }
+                o(      "\t\t];\n");
+                o(      "\t\t// -->\n");
+                o(      "\t\t</script>\n"); 
+                o("<div class=\"graph\"><canvas width=\"400\" height=\"300\" id=\"graph_%d\"></canvas></div>\n", et->id);
                 break;
         }
         list_free(items_a);
+        list_free(all_items_a);
     }
     list_free(element_types_a);
     o(      "</div>\n");

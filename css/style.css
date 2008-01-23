@@ -442,4 +442,7 @@ div#top h4.item  {
     background-color: #FF9A31;
     cursor: pointer;
 }
-
+div.graph {
+    width: 400px;
+    height: 300px;
+}
