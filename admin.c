@@ -864,7 +864,6 @@ void style_action()
     db_init();
     project = db_get_project();
     output_header(project, "スタイル設定", "style.js", NAVI_STYLE);
-    db_finish();
     o(      "<h2>スタイル編集</h2>\n"
             "<div id=\"top\">\n"
             "<h3>スタイルシートの編集</h3>\n"
@@ -876,7 +875,39 @@ void style_action()
             "<div>&nbsp;</div>\n"
             "<input class=\"button\" type=\"submit\" value=\"更新\" />\n"
             "</form>");
+    {
+        List* element_types_a;
+        Iterator* it;
+        o(      "<div class=\"description\">以下は、一覧の背景設定用のサンプルです。</div>\n");
+        o(      "<pre>\n");
+        list_alloc(element_types_a, ElementType);
+        element_types_a = db_get_element_types_all(element_types_a);
+        foreach (it, element_types_a) {
+            ElementType* et = it->element;
+            if (et->type == ELEM_TYPE_LIST_SINGLE && et->display_in_list) {
+                List* items_a;
+                Iterator* it_item;
+                list_alloc(items_a, ListItem);
+                items_a = db_get_list_item(et->id, items_a);
+                o(  "/* ================================ */ \n"
+                    "/* チケット一覧の"); h(et->name); o("の背景色設定     */\n");
+                o(  "/* ================================ */ \n");
+                foreach (it_item, items_a) {
+                    ListItem* item = it_item->element;
+                    o("/* "); h(item->name); o(" */\n");
+                    o("#ticket_list td.field%d-", et->id);
+                    css_field(item->name);
+                    o(" {\n");
+                    o(" background-color: lightyellow !important;\n");
+                    o("}\n");
+                }
+            }
+        }
+        list_free(element_types_a);
+        o(      "</pre>\n");
+    }
     o(      "</div>\n");
+    db_finish();
     output_footer();
 }
 void style_submit_action()
