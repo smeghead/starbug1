@@ -1,3 +1,8 @@
+2008-01-24  smeghead <smeghead@users.sourceforge.jp>
+
+    * iconvを使用するようになった際に、FreeBSDでは、リンク時に -liconvが必要だ
+    ったため、Makefileに条件分岐を追加した。
+
 2008-01-23  smeghead <smeghead@users.sourceforge.jp>
 
     * 日付入力支援のJavaScriptカレンダーの改良。前月、次月への移動をできるよう
