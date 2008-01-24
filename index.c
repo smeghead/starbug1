@@ -90,7 +90,7 @@ void output_header(Project* project, char* title, char* script_name, int navi)
             "\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n"
             "\t<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\" />\n"
             "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />\n"
-            "\t<title>Starbug1 %s - %s</title>\n", project->name, title);
+            "\t<title>%s - %s</title>\n", project->name, title);
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName);
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/user.css\" />\n", cgiScriptName);
     if (script_name) {
@@ -1435,7 +1435,7 @@ void rss_action()
             "\t\txml:lang=\"ja\">\n"
             "\n"
             "\t<channel rdf:about=\"");h(project->home_url);o("%s/rss\">\n", cgiScriptName);
-    o(      "\t\t<title>");h(project->name); o(" - Starbug1</title>\n"
+    o(      "\t\t<title>");h(project->name); o("</title>\n"
             "\t\t<link>");h(project->home_url);o("/bt/</link>\n");
     o(      "\t\t<description>");h(project->description);o("</description>\n"
             "\t\t<items>\n"
@@ -1501,7 +1501,7 @@ void statistics_action()
     project = db_get_project();
     output_header(project, "統計情報", "graph.js", NAVI_STATISTICS);
     output_graph_js();
-    o(      "<h2>");h(project->name);o(" - Starbug1</h2>\n");
+    o(      "<h2>");h(project->name);o("</h2>\n");
     o(      "<div id=\"top\">\n");
     o(      "<h3>統計情報</h3>\n");
     o(      "\t<div class=\"description\">統計情報を表示します。</div>\n");
@@ -1571,7 +1571,7 @@ void help_action()
     project = db_get_project();
     output_header(project, "ヘルプ", NULL, NAVI_HELP);
     db_finish();
-    o(      "<h2>");h(project->name);o(" - Starbug1</h2>\n"
+    o(      "<h2>");h(project->name);o("</h2>\n"
             "<div id=\"top\">\n");
     wiki_out("wiki/help.wiki");
     o(      "</div>\n");
