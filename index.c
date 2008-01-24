@@ -1526,6 +1526,8 @@ got_item:
                 o(      "\t<h4 class=\"item\">");
                 h(et->name);
                 o(      "\t</h4>");
+                o("<div class=\"graph\">\n");
+                o("<noscript>JavaScriptでグラフを表示しています。JavaScriptが有効なブラウザで見てください。\n");
                 o(      "\t<ul>\n");
                 foreach (it_item, all_items_a) {
                     ListItem* item = it_item->element;
@@ -1536,19 +1538,22 @@ got_item:
                     o(      "\t\t</li>\n");
                 }
                 o(      "\t</ul>\n");
+                o(      "</noscript>\n");
                 o(      "\t\t<script type=\"text/javascript\">\n"); 
                 o(      "\t\t<!--\n");
                 o(      "\t\tvar graph_%d = [\n", et->id);
                 foreach (it_item, items_a) {
                     State* s = it_item->element;
-                    o("\t\t[\"%s\", %d]", s->name, s == NULL ? 0 : s->count);
+                    int count = s == NULL ? 0 : s->count;
+                    o("\t\t[\"%s\t(%d)\", %d]", s->name, count, count);
                     if (iterator_next(it_item)) o(",");
                     o("\n");
                 }
                 o(      "\t\t];\n");
                 o(      "\t\t// -->\n");
                 o(      "\t\t</script>\n"); 
-                o("<div class=\"graph\"><canvas width=\"400\" height=\"300\" id=\"graph_%d\"></canvas></div>\n", et->id);
+                o("<canvas width=\"400\" height=\"300\" id=\"graph_%d\"></canvas>\n", et->id);
+                o("</div>\n");
                 break;
         }
         list_free(items_a);

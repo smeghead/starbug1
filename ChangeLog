@@ -2,6 +2,9 @@
 
     * iconvを使用するようになった際に、FreeBSDでは、リンク時に -liconvが必要だ
     ったため、Makefileに条件分岐を追加した。
+    * グラフの要素の並び順を降順に変更した。
+    * 文字ベースの統計情報は、JavaScriptが有効でない場合のみ表示されるようにし
+    た。
 
 2008-01-23  smeghead <smeghead@users.sourceforge.jp>
 
