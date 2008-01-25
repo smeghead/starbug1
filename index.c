@@ -24,7 +24,7 @@ void edit_top_submit_action();
 void download_action();
 void report_csv_download_action();
 void rss_action();
-void default_action();
+void top_action();
 void output_header(Project*, char*, char*, int);
 void output_footer();
 int cgiMain();
@@ -64,7 +64,7 @@ void register_actions()
     register_action_actions("download", download_action);
     register_action_actions("rss", rss_action);
     register_action_actions("report_csv_download", report_csv_download_action);
-    register_action_actions("default", default_action);
+    register_action_actions("top", top_action);
 }
 
 enum NAVI {
@@ -103,6 +103,7 @@ void output_header(Project* project, char* title, char* script_name, int navi)
             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://sourceforge.jp/projects/starbug1/\"><img src=\"%s/../img/title.jpg\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName);
     o("<div>\n");
     o("<ul id='menu'>\n");
+    o("<li><a href='%s' title=\"ホームへ移動します\">ホーム</a></li>\n", project->home_url);
     o("<li><a %s href='%s' title=\"トップページへ移動します\">トップ</a></li>\n", navi == NAVI_TOP ? "class=\"current\"" : "", cgiScriptName);
     o("<li><a %s href='%s/list' title=\"状態別のチケット一覧を参照します\">状態別チケット</a></li>\n", navi == NAVI_LIST ? "class=\"current\"" : "", cgiScriptName);
     o("<li><a %s href='%s/register' title=\"新規にチケットを登録します\">チケット登録</a></li>\n", navi == NAVI_REGISTER ? "class=\"current\"" : "", cgiScriptName);
@@ -1346,7 +1347,7 @@ file_size_error:
 /**
  * デフォルトのaction。
  */
-void default_action()
+void top_action()
 {
     Project* project;
     List* tickets_a;
@@ -1407,15 +1408,15 @@ void default_action()
     o(      "\t</form>\n");
     o(      "</div>\n");
     o(      "</div>\n");
-    db_finish();
     o(      "<div id=\"main\">\n");
     o(      "<h2>");h(project->name);o("&nbsp;</h2>\n");
     o(      "<div id=\"main_body\">\n"
             "<div class=\"description\">");h(project->description);o("</div>\n");
     o(      "<div class=\"top_edit\"><a href=\"%s/edit_top\">トップページの編集</a></div>\n", cgiScriptName);
-    wiki_out("wiki/top.wiki");
+    wiki_out("top");
     o(      "</div>\n");
     o(      "</div>\n");
+    db_finish();
     output_footer();
 }
 
@@ -1570,11 +1571,11 @@ void help_action()
     db_init();
     project = db_get_project();
     output_header(project, "ヘルプ", NULL, NAVI_HELP);
-    db_finish();
     o(      "<h2>");h(project->name);o("</h2>\n"
             "<div id=\"top\">\n");
-    wiki_out("wiki/help.wiki");
+    wiki_out("help");
     o(      "</div>\n");
+    db_finish();
     output_footer();
 }
 void edit_top_action()
@@ -1583,14 +1584,13 @@ void edit_top_action()
     db_init();
     project = db_get_project();
     output_header(project, "トップページの編集", "edit_top.js", NAVI_OTHER);
-    db_finish();
     o(      "<h2>トップページの編集</h2>\n"
             "<div id=\"top\">\n"
             "<h3>トップページの編集</h3>\n"
             "<div id=\"description\">簡易wikiの文法でトップページのコンテンツの編集を行ない、更新ボタンを押してください。</div>\n"
             "<form id=\"edit_top_form\" action=\"%s/edit_top_submit\" method=\"post\">\n", cgiScriptName);
     o(      "<textarea name=\"edit_top\" id=\"edit_top\" rows=\"3\" cols=\"10\">");
-    wiki_content_out("wiki/top.wiki");
+    wiki_content_out("top");
     o(      "</textarea>\n"
             "<div>&nbsp;</div>\n"
             "<input class=\"button\" type=\"submit\" value=\"更新\" />\n"
@@ -1605,6 +1605,7 @@ void edit_top_action()
     o(      "</ul>\n");
     o(      "</div>\n");
     o(      "</div>\n");
+    db_finish();
     output_footer();
 }
 void edit_top_submit_action()
@@ -1612,7 +1613,9 @@ void edit_top_submit_action()
     char value[VALUE_LENGTH];
 
     cgiFormString("edit_top", value, VALUE_LENGTH);
-    wiki_save("wiki/top.wiki", value);
+    db_init();
+    wiki_save("top", value);
+    db_finish();
 
     redirect("", NULL);
 }

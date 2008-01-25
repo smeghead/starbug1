@@ -68,9 +68,9 @@ void exec_action()
         /* 知らないactionが指定されたら、リダイレクトする。  */
         redirect("", NULL);
     } else {
-        /* path_infoが空なら、default_actionを呼び出す。 */
+        /* path_infoが空なら、top_actionを呼び出す。 */
         for (a = get_actions(); a != NULL; a = a->next) {
-            if (!strcmp("default", a->action_name)) {
+            if (!strcmp("top", a->action_name)) {
                 a->action_func();
                 return;
             }

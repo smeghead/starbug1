@@ -4,6 +4,7 @@
 #include <cgic.h>
 #include "wiki.h"
 #include "util.h"
+#include "db.h"
 
 #define MAX_WIDTH 1000
 
@@ -91,15 +92,29 @@ void element_out(char* tag_name, char* content)
     buf_out(content);
     printf("</%s>\n", tag_name);
 }
-void wiki_out(char* filename)
+void wiki_out(char* page_name)
 {
-    FILE* in;
+    Wiki* wiki_a = xalloc(sizeof(Wiki));
     char line[MAX_WIDTH];
+    char* c;
+    int last;
+    char* p;
 
-    if ((in  = fopen(filename, "r")) == NULL)
-        die("file open error.");
+    wiki_a = db_get_newest_wiki(page_name, wiki_a);
+        d("a");
+    p = wiki_a->content;
     buf_clear();
-    while (fgets(line, sizeof(line), in)) {
+    while ((c = strchr(p, '\n')) != NULL && ((last = strlen(p)) != 0)) {
+        d("a");
+        if (c) {
+            int len = c - p;
+            strncpy(line, p, len);
+            line[len] = '\0';
+            p += len + 1;
+        } else {
+            strcpy(line, p);
+            p += strlen(p);
+        }
         if (strncmp(line, "**", strlen("**")) == 0) {
             buf_flush();
             element_out("h3", line + strlen("**"));
@@ -120,28 +135,25 @@ void wiki_out(char* filename)
         }
     }
     buf_flush();
-    fclose(in);
+    free(wiki_a->content);
+    free(wiki_a);
 }
-void wiki_content_out(char* filename)
+void wiki_content_out(char* page_name)
 {
-    FILE* in;
-    char line[MAX_WIDTH];
-
-    if ((in  = fopen(filename, "r")) == NULL)
-        die("file open error.");
-    while (fgets(line, sizeof(line), in)) {
-        h(line);
-    }
-    fclose(in);
+    Wiki* wiki_a = xalloc(sizeof(Wiki));
+    wiki_a = db_get_newest_wiki(page_name, wiki_a);
+    h(wiki_a->content);
+    free(wiki_a->content);
+    free(wiki_a);
 }
-void wiki_save(char* filename, char* content)
+void wiki_save(char* page_name, char* content)
 {
-    FILE* out;
-
-    /* TODO ロック処理 */
-    if ((out  = fopen(filename, "w")) == NULL)
-        die("file open error.");
-    fputs(content, out);
-    fclose(out);
+    Wiki* wiki_a = xalloc(sizeof(Wiki));
+    wiki_a->content = xalloc(sizeof(char) * strlen(content) + 1);
+    strcpy(wiki_a->name, page_name);
+    strcpy(wiki_a->content, content);
+    db_register_wiki(wiki_a);
+    free(wiki_a->content);
+    free(wiki_a);
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab: */

@@ -108,6 +108,11 @@ typedef struct _state {
   int count;
 } State;
 
+typedef struct _wiki {
+  int id;
+  char name[DEFAULT_LENGTH];
+  char* content;
+} Wiki;
 
 char* get_element_value_by_id(List*, int);
 char* get_element_value(List*, ElementType*);

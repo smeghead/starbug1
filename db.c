@@ -1109,4 +1109,48 @@ int db_get_element_file_id(int message_id, int element_type_id)
             COLUMN_TYPE_INT, element_type_id,
             COLUMN_TYPE_END);
 }
+void db_register_wiki(Wiki* wiki)
+{
+    char registerdate[20];
+    set_date_string(registerdate);
+    exec_query(
+            "insert into wiki (id, name, content, registerdate)"
+            "values (NULL, ?, ?, ?)",
+            COLUMN_TYPE_TEXT, wiki->name,
+            COLUMN_TYPE_TEXT, wiki->content,
+            COLUMN_TYPE_TEXT, registerdate,
+            COLUMN_TYPE_END);
+}
+Wiki* db_get_newest_wiki(char* page_name, Wiki* wiki)
+{
+    int r;
+    char sql[DEFAULT_LENGTH];
+    sqlite3_stmt *stmt = NULL;
+    
+    sprintf(sql, 
+            "select w.id, w.name, w.content "
+            "from wiki as w "
+            "where name = ? "
+            "order by w.registerdate desc "
+            "limit 1 ");
+
+    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    sqlite3_reset(stmt);
+    sqlite3_bind_text(stmt, 1, page_name, strlen(page_name), NULL);
+
+    while (SQLITE_ROW == (r = sqlite3_step(stmt))) {
+        const unsigned char* value;
+        wiki->id = sqlite3_column_int(stmt, 0);
+        strcpy(wiki->name, sqlite3_column_text(stmt, 1));
+        value = sqlite3_column_text(stmt, 2);
+        wiki->content = xalloc(sizeof(char) * strlen(value) + 1);
+        strcpy(wiki->content, value);
+        break;
+    }
+
+    sqlite3_finalize(stmt);
+    return wiki;
+
+ERROR_LABEL
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab: */

@@ -46,7 +46,7 @@ void register_actions()
     register_action_actions("new_item_submit", new_item_submit_action);
     register_action_actions("delete_item", delete_item_action);
     register_action_actions("delete_item_submit", delete_item_submit_action);
-    register_action_actions("default", menu_action);
+    register_action_actions("top", menu_action);
 }
 
 enum NAVI {
@@ -119,6 +119,7 @@ void menu_action()
     Project* project;
     char message[DEFAULT_LENGTH];
 
+    d("admin\n");
     db_init();
     project = db_get_project();
     output_header(project, "メニュー", NULL, NAVI_MENU);

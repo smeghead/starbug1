@@ -175,6 +175,13 @@ void create_tables()
             " mime_type text, "
             " content blob "
             ");", COLUMN_TYPE_END);
+    exec_query(
+            "create table wiki( "
+            " id integer not null primary key, "
+            " name text, "
+            " content text, "
+            " registerdate text "
+            ");", COLUMN_TYPE_END);
     db_commit();
 }
 
