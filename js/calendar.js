@@ -13,8 +13,7 @@ Object.extend(Starbug1Calendar.Util, {
     DAY_OF_WEEK: ["日", "月", "火", "水", "木", "金", "土"],
     getAddedDate: function(date, n) {
         var d = new Date();
-        d.setTime(date.getTime());
-        d.setTime(d.getTime() + (1000 * 60 * 60 * 24 * n));
+        d.setTime(date.getTime() + (1000 * 60 * 60 * 24 * n));
         return d;
     },
     createCalendar: function(date) {
@@ -32,9 +31,12 @@ Object.extend(Starbug1Calendar.Util, {
             ) + '</tr>' +
             Starbug1Calendar.Util.getDaysHtml(date) + '</table>'
     },
+    getFirstDate: function(date) {
+        return new Date(date.getFullYear(), date.getMonth(), 1);
+    },
     getDaysHtml: function(date) {
-        var firstDate = new Date(date.getYear(), date.getMonth(), 1);
-        var nextFirstDate = new Date(date.getYear(), date.getMonth() + 1, 1);
+        var firstDate = Starbug1Calendar.Util.getFirstDate(date);
+        var nextFirstDate = new Date(date.getFullYear(), date.getMonth() + 1, 1);
         var currentDate = Starbug1Calendar.Util.getAddedDate(firstDate, firstDate.getDay() * -1);
         var endDate = Starbug1Calendar.Util.getAddedDate(nextFirstDate, 4 - firstDate.getDay());
         var buf = "";
@@ -42,7 +44,7 @@ Object.extend(Starbug1Calendar.Util, {
             var dayOfWeek = currentDate.getDay();
             if (dayOfWeek == 0) buf += '<tr>';
             var className = 'day_' + dayOfWeek;
-            if (currentDate.getMonth() != firstDate.getMonth()) {
+            if (currentDate.getMonth() != date.getMonth()) {
                 className += ' out';
             } else if (currentDate.getDate() == date.getDate()) {
                 className += ' selected';
@@ -66,12 +68,16 @@ Object.extend(Starbug1Calendar.Util, {
 Object.extend(Starbug1Calendar.Calendar.prototype, {
     date: null,
     target: null,
-    notToHide: false,
+    timer: null,
     calendar: document.createElement('div'),
     initialize: function(target) {
         this.target = $(target);
     },
     display: function(dateString) {
+        if (this.timer) {
+            clearTimeout(this.timer);
+        }
+        this.calendar.innerHTML = "";
         this.date = dateString;
         if (typeof(dateString) == 'string') {
             this.date = new Date(dateString.replace(/-/g, "/"));
@@ -99,7 +105,6 @@ Object.extend(Starbug1Calendar.Calendar.prototype, {
                         _this.target.value = y.toPaddedString(4) + '-' +
                             m.toPaddedString(2) + '-' +
                             d.toPaddedString(2);
-                        _this.notToHide = false;
                         _this.hide();
                         _this = undefined;
                     }
@@ -109,57 +114,51 @@ Object.extend(Starbug1Calendar.Calendar.prototype, {
         this.target.parentNode.appendChild(this.calendar);
         Event.observe('pre', 'click', 
             function() {
-                var firstDate = new Date(_this.date.getYear(), _this.date.getMonth(), 1);
+                var firstDate = Starbug1Calendar.Util.getFirstDate(_this.date);
                 var date = Starbug1Calendar.Util.getAddedDate(firstDate, -1); 
                 date.setDate(_this.date.getDate());
                 _this.display(date);
-                _this.notToHide = true;
             }
         );
         Event.observe('pre', 'mouseover', Starbug1Calendar.Util.mouseover);
         Event.observe('pre', 'mouseout', Starbug1Calendar.Util.mouseout);
         Event.observe('next', 'click', 
             function() {
-                var firstDate = new Date(_this.date.getYear(), _this.date.getMonth(), 1);
+                var firstDate = Starbug1Calendar.Util.getFirstDate(_this.date);
                 var date = Starbug1Calendar.Util.getAddedDate(firstDate, 32); 
                 date.setDate(_this.date.getDate());
                 _this.display(date);
-                _this.notToHide = true;
             }
         );
         Event.observe('next', 'mouseover', Starbug1Calendar.Util.mouseover);
         Event.observe('next', 'mouseout', Starbug1Calendar.Util.mouseout);
         Element.show(this.calendar);
-        _this.notToHide = false;
     },
     hide: function() {
-        if (!this.notToHide && 
-                (!document.activeElement || 
-                 !document.activeElement.className ||
-                (document.activeElement.className && 
-                !document.activeElement.className.match('calendar'))))
-            Element.hide(this.calendar);
+        Element.hide(this.calendar);
     },
     will_hide: function() {
         var _this = this;
         // 日付が選択された場合には、先に選択された処理が行なわれるようにする。
-        setTimeout(function() { _this.hide(); }, 300);
+        if (!this.timer)
+            this.timer = setTimeout(function() { _this.hide(); }, 200);
+// $('state_index').innerHTML += "setting:" + this.timer;
     }
 });
 Event.observe(window, "load", function() {
     var selector = new Selector('input[class=calendar]');
-    var cale;
     selector.findElements().each(
         function(elem) {
-            Event.observe(elem, 'focus', 
+            Event.observe(elem, 'click', 
                 function() {
                     cale = new Starbug1Calendar.Calendar(elem);
+                    elem.calendar = cale;
                     cale.display($F(elem));
                 }
             );
             Event.observe(elem, 'blur', 
                 function() {
-                    cale.will_hide();
+                    if (elem.calendar) elem.calendar.will_hide();
                 }
             );
         }

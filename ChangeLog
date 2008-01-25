@@ -1,3 +1,9 @@
+2008-01-25  smeghead <smeghead@users.sourceforge.jp>
+
+    * Firefoxで日付入力支援用カレンダーの日付が間違っていたのを修正した。
+    date.getYear()ではなく、date.getFullYear()を使うように修正した。
+    * 日付入力支援用カレンダーのバグ修正。
+
 2008-01-24  smeghead <smeghead@users.sourceforge.jp>
 
     * iconvを使用するようになった際に、FreeBSDでは、リンク時に -liconvが必要だ

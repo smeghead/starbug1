@@ -415,7 +415,7 @@ div#top h4.item  {
     width: 20px;
     background-color: #F7F3F7;
 }
-#calendar table td.out, {
+#calendar table tr td.out {
     color: gray;
 }
 #calendar tr.title th {
