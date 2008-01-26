@@ -1,3 +1,7 @@
+2008-01-26  smeghead <smeghead@users.sourceforge.jp>
+
+    * cookieが保存されない環境がある問題に対して、path指定を、"/"に変更した。
+
 2008-01-25  smeghead <smeghead@users.sourceforge.jp>
 
     * Firefoxで日付入力支援用カレンダーの日付が間違っていたのを修正した。

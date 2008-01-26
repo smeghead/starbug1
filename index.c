@@ -34,6 +34,7 @@ int get_mode();
 static int contains(char* const, const char*);
 void output_calendar_js();
 
+#define COOKIE_SENDER "starbug1_sender"
 enum MODE {
     MODE_INVALID,
     MODE_REGISTER,
@@ -771,7 +772,7 @@ void output_form_element(List* elements, ElementType* et)
         if (et->id == ELEM_ID_SENDER) {
             char* user_name = getenv("REMOTE_USER");
             char sender[DEFAULT_LENGTH];
-            cgiCookieString("starbug1_sender", sender, DEFAULT_LENGTH);
+            cgiCookieString(COOKIE_SENDER, sender, DEFAULT_LENGTH);
             if (strlen(sender))
                 /* 投稿者のフィールドは、cookieから値が取得できれば、その値を表示する。 */
                 value = sender;
@@ -923,7 +924,7 @@ void register_action()
 {
     Project* project;
     char sender[DEFAULT_LENGTH];
-    cgiCookieString("starbug1_sender", sender, DEFAULT_LENGTH);
+    cgiCookieString(COOKIE_SENDER, sender, DEFAULT_LENGTH);
 
     db_init();
     project = db_get_project();
@@ -987,7 +988,7 @@ void ticket_action()
     int iid, *message_ids_a, i;
     Project* project;
     char sender[DEFAULT_LENGTH];
-    cgiCookieString("starbug1_sender", sender, DEFAULT_LENGTH);
+    cgiCookieString(COOKIE_SENDER, sender, DEFAULT_LENGTH);
 
     strcpy(path_info, cgiPathInfo);
     ticket_id = strchr(path_info + 1, '/');
@@ -1308,9 +1309,9 @@ void register_submit_action()
             if (e->element_type_id == ELEM_ID_SENDER) {
                 if (strcmp(save2cookie, "1") == 0) {
                     d("set cookie: %s, %s, %s\n", e->str_val, cgiScriptName, cgiServerName);
-                    cgiHeaderCookieSetString("starbug1_sender", e->str_val, 86400 * 30, cgiScriptName, cgiServerName);
+                    cgiHeaderCookieSetString(COOKIE_SENDER, e->str_val, 86400 * 30, "/", cgiServerName);
                 } else {
-                    cgiHeaderCookieSetString("starbug1_sender", "", 0, cgiScriptName, cgiServerName);
+                    cgiHeaderCookieSetString(COOKIE_SENDER, "", 0, "/", cgiServerName);
                 }
             }
             list_add(elements_a, e);
