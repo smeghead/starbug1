@@ -26,7 +26,7 @@ index.cgi: list.o data.o dbutil.o db.o mail.o util.o wiki.o index.o
 	$(CC) -o $@ $^ $(LFLAGS)
 	strip $@
 
-admin.cgi: list.o data.o dbutil.o db.o util.o css.o admin.o
+admin.cgi: list.o data.o dbutil.o db.o util.o css.o wiki.o admin.o
 	$(CC) -o $@ $^ $(LFLAGS)
 	strip $@
 

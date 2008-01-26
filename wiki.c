@@ -101,11 +101,9 @@ void wiki_out(char* page_name)
     char* p;
 
     wiki_a = db_get_newest_wiki(page_name, wiki_a);
-        d("a");
     p = wiki_a->content;
     buf_clear();
     while ((c = strchr(p, '\n')) != NULL && ((last = strlen(p)) != 0)) {
-        d("a");
         if (c) {
             int len = c - p;
             strncpy(line, p, len);
@@ -115,12 +113,18 @@ void wiki_out(char* page_name)
             strcpy(line, p);
             p += strlen(p);
         }
-        if (strncmp(line, "**", strlen("**")) == 0) {
+        if (strncmp(line, "****", strlen("****")) == 0) {
             buf_flush();
-            element_out("h3", line + strlen("**"));
+            element_out("h6", line + strlen("****"));
+        } else if (strncmp(line, "***", strlen("***")) == 0) {
+            buf_flush();
+            element_out("h5", line + strlen("***"));
+        } else if (strncmp(line, "**", strlen("**")) == 0) {
+            buf_flush();
+            element_out("h4", line + strlen("**"));
         } else if (strncmp(line, "*", strlen("*")) == 0) {
             buf_flush();
-            element_out("h2", line + strlen("*"));
+            element_out("h3", line + strlen("*"));
         } else if (strncmp(line, "----", strlen("----")) == 0) {
             buf_flush();
             element_out_without_content("hr");

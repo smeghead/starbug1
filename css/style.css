@@ -34,6 +34,25 @@ h3 {
     border-width: 0px 0px 1px 15px;
     background-image: url("../img/h3.png");
 }
+div#top h4,
+div#ticket_list h4.status  {
+    padding: 0px 2px 0px 10px;
+    margin: 0px 0px 3px 3px;
+    border-color: #00108C;
+    border-style: solid;
+    border-width: 0px 0px 2px 0px;
+    font-weight: bold;
+}
+h5 {
+    font-weight: bold;
+    margin: 0px 0px 3px 5px;
+}
+h6 {
+    color: #00108C;
+    font-size: 90%;
+    font-weight: bold;
+    margin: 0px 0px 3px 8px;
+}
 hr {
     width: 100%;
 }
@@ -341,22 +360,6 @@ table.item_table th {
 }
 .element_new_item {
     width: 80px;
-}
-div#ticket_list h4.status  {
-    padding: 0px 2px 0px 10px;
-    margin: 0px 0px 3px 3px;
-    border-color: #00108C;
-    border-style: solid;
-    border-width: 0px 0px 2px 0px;
-    font-weight: bold;
-}
-div#top h4.item  {
-    padding: 0px 2px 0px 10px;
-    margin: 0px 0px 3px 3px;
-    border-color: #00108C;
-    border-style: solid;
-    border-width: 0px 0px 2px 0px;
-    font-weight: bold;
 }
 
 #menu {

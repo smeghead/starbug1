@@ -7,6 +7,7 @@
 #include "dbutil.h"
 #include "util.h"
 #include "css.h"
+#include "wiki.h"
 
 #define ADD_ITEM_COUNT 5
 
@@ -26,6 +27,7 @@ void new_item_action();
 void new_item_submit_action();
 void delete_item_action();
 void delete_item_submit_action();
+void admin_help_action();
 void output_header(Project*, char*, char*, int);
 void output_footer();
 int cgiMain();
@@ -46,6 +48,7 @@ void register_actions()
     register_action_actions("new_item_submit", new_item_submit_action);
     register_action_actions("delete_item", delete_item_action);
     register_action_actions("delete_item_submit", delete_item_submit_action);
+    register_action_actions("admin_help", admin_help_action);
     register_action_actions("top", menu_action);
 }
 
@@ -55,7 +58,8 @@ enum NAVI {
     NAVI_PROJECT,
     NAVI_ENV,
     NAVI_ITEM,
-    NAVI_STYLE
+    NAVI_STYLE,
+    NAVI_ADMIN_HELP
 };
 void output_header(Project* project, char* title, char* script_name, int navi)
 {
@@ -85,6 +89,7 @@ void output_header(Project* project, char* title, char* script_name, int navi)
     o(      "\t\t<li><a %s href=\"%s/items\">項目設定</a></li>\n", navi == NAVI_ITEM ? "class=\"current\"" : "", cgiScriptName);
     o(      "\t\t<li><a %s href=\"%s/style\">スタイル設定</a></li>\n", navi == NAVI_STYLE ? "class=\"current\"" : "", cgiScriptName);
     o(      "\t<li><a href=\"%s/../db/starbug1.db\">バックアップ</a></li>\n", cgiScriptName);
+    o(      "\t\t<li><a %s href=\"%s/admin_help\">ヘルプ</a></li>\n", navi == NAVI_ADMIN_HELP ? "class=\"current\"" : "", cgiScriptName);
     o(      "\t<li><a href=\"%s/../index.cgi\">", cgiScriptName);h(project->name); o("トップへ</a></li>\n");
     o(      "</ul>\n"
             "<br clear=\"all\" />\n");
@@ -915,5 +920,18 @@ void style_submit_action()
 
     redirect("", "更新しました。");
     free(value_a);
+}
+void admin_help_action()
+{
+    Project* project;
+    db_init();
+    project = db_get_project();
+    output_header(project, "ヘルプ", NULL, NAVI_ADMIN_HELP);
+    o(      "<h2>");h(project->name);o("</h2>\n"
+            "<div id=\"top\">\n");
+    wiki_out("adminhelp");
+    o(      "</div>\n");
+    db_finish();
+    output_footer();
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab: */

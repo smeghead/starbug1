@@ -7,6 +7,9 @@
     修正した。
     * プロジェクトの説明(project.description)を削除した。トップページの編集が
     可能なので不要と判断した。
+    * helpの更新
+    * 一般ユーザ用と管理ユーザ用のヘルプを分けた。管理ツールにもヘルプを追加し
+    た。
 
 2008-01-25  smeghead <smeghead@users.sourceforge.jp>
 
