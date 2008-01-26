@@ -52,7 +52,6 @@ void create_tables()
     exec_query(
             "create table project( "
             " name text, "
-            " description text, "
             " home_url text, "
             " smtp_server text, "
             " smtp_port integer, "
@@ -60,8 +59,8 @@ void create_tables()
             " admin_address text "
             ");", COLUMN_TYPE_END);
     exec_query(
-            "insert into project(name, description, home_url, smtp_server, smtp_port, notify_address, admin_address)"
-            "values ('サンプル プロジェクト', 'プロジェクト名と、このプロジェクトの説明は管理ツールで編集してください。', 'http://example.com/', 'localhost', 25, '', '');", COLUMN_TYPE_END);
+            "insert into project(name, home_url, smtp_server, smtp_port, notify_address, admin_address)"
+            "values ('サンプル プロジェクト', 'http://example.com/', 'localhost', 25, '', '');", COLUMN_TYPE_END);
     exec_query(
             "create table element_type("
             " id integer not null primary key, "
@@ -182,6 +181,46 @@ void create_tables()
             " content text, "
             " registerdate text "
             ");", COLUMN_TYPE_END);
+    exec_query(
+            "insert into wiki(id, name, content, registerdate) values (NULL, 'top', '"
+            "**編集可能領域\n"
+            "自由に編集できます。右側の「トップページの編集」のリンクから編集してください。色々な用途に使用してください。\n"
+            "-お知らせ\n"
+            "-Starbug1の使い方についての注意事項など\n"
+            "', current_timestamp);", COLUMN_TYPE_END);
+    exec_query(
+            "insert into wiki(id, name, content, registerdate) values (NULL, 'help', '"
+            "**逆引きヘルプ\n"
+            "-チケットを新規に作成するには？\n"
+            "画面上部のメニューの「チケット登録」をクリックしチケット登録画面に移動します。\n"
+            "フォームの各フィールドに値を入力して「登録」ボタンを押すことで新規にチケットを作成することができます。\n"
+            "-チケットを検索するには？\n"
+            "画面上部のメニューの「チケット検索」をクリックしチケット検索画面に移動します。\n"
+            "検索条件を入力して「検索」ボタンを押すことで検索を行なうことができます。\n"
+            "-IDを指定してチケットの情報を見るには？\n"
+            "画面上部のメニューの「チケット登録」をクリックしチケット登録画面に移動します。\n"
+            "「IDを指定で表示」ボタンの左のテキストボックスに、チケットIDを入力し、「IDを指定で表示」ボタンを押すことで、チケット情報\n"
+            "また、同様の「IDを指定で表示」ボタンは、トップ、状態別チケット画面にもあります。\n"
+            "-チケットの詳細情報を見るには？\n"
+            "画面上部のメニューの「状態別チケット」または「チケット検索」からチケット情報の一覧を表示させることができます。\n"
+            "チケット情報の一覧から、詳細情報を見たいチケットのIDか件名のリンクをクリックすることでチケット詳細画面に移動します。\n"
+            "チケット詳細画面では、チケットの最新情報、チケットの履歴を見ることができます。また、チケットに返信することもできます。\n"
+            "-チケットに対して返信を行なうには？\n"
+            "画面上部のメニューの「状態別チケット」または「チケット検索」からチケット情報の一覧を表示させることができます。\n"
+            "チケット情報の一覧から、詳細情報を見たいチケットのIDか件名のリンクをクリックすることでチケット詳細画面に移動します。\n"
+            "チケット詳細画面の下にチケット返信のフォームがありますので、必要な項目を入力して返信ボタンを押してください。\n"
+            "**管理ツール\n"
+            "管理ツールに遷移します。\n"
+            "管理ツールでは以下を編集できます。\n"
+            "-プロジェクト設定\n"
+            "プロジェクトの基本的な情報の設定です。\n"
+            "-環境設定\n"
+            "URLやメール関連の設定です。\n"
+            "-項目設定\n"
+            "チケットの項目についての設定です。\n"
+            "-スタイル設定\n"
+            "スタイルシートの設定です。\n"
+            "', current_timestamp);", COLUMN_TYPE_END);
     db_commit();
 }
 

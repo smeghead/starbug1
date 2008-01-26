@@ -1,6 +1,12 @@
 2008-01-26  smeghead <smeghead@users.sourceforge.jp>
 
     * cookieが保存されない環境がある問題に対して、path指定を、"/"に変更した。
+    * トップページの最新情報、状態別件数のticketが存在しない時に、存在しない旨
+    を表示するようにした。
+    * チケットが存在しないときにグラフ生成のJavaScriptがエラーになっていたのを
+    修正した。
+    * プロジェクトの説明(project.description)を削除した。トップページの編集が
+    可能なので不要と判断した。
 
 2008-01-25  smeghead <smeghead@users.sourceforge.jp>
 
@@ -10,6 +16,12 @@
     * ナビゲーションにホームを追加。管理ツールでは設定可能だったが、実装されて
     いなかった機能。
     * トップページとヘルプ(簡易wiki)をファイルベースからDBに変更した。
+    そのため、以前のバージョンからのアップデート時には、以下のコマンドを入力し
+    てください。
+    # cd ${starbug1のwebアプリのディレクトリ}/db
+    # echo "create table wiki(id integer not null primary key, name text, content text, registerdate text);" | sqlite3 starbug1.db
+    # echo "insert into wiki(id, name, content, registerdate) values (NULL, 'top', 'top content', current_timestamp);" | sqlite3 starbug1.db
+    # echo "insert into wiki(id, name, content, registerdate) values (NULL, 'help', 'help content', current_timestamp);" | sqlite3 starbug1.db
 
 2008-01-24  smeghead <smeghead@users.sourceforge.jp>
 

@@ -161,10 +161,6 @@ void project_action()
     o("\t\t\t\t<th>プロジェクト名</th>\n");
     o("\t\t\t\t<td><input type=\"text\" name=\"project.name\" value=\"");h(project->name);o("\" maxlength=\"1023\" /></td>\n");
     o("\t\t\t</tr>\n");
-    o("\t\t\t<tr>\n");
-    o("\t\t\t\t<th>説明</th>\n");
-    o("\t\t\t\t<td><input type=\"text\" name=\"project.description\" value=\"");h(project->description);o("\" maxlength=\"1023\" /></td>\n");
-    o("\t\t\t</tr>\n");
     o("\t\t</table>\n");
     o("\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
     o("\t</form>\n");
@@ -183,7 +179,6 @@ void project_submit_action()
     db_begin();
     project = db_get_project();
     cgiFormStringNoNewlines("project.name", project->name, DEFAULT_LENGTH);
-    cgiFormStringNoNewlines("project.description", project->description, DEFAULT_LENGTH);
     db_update_project(project);
 
     project = db_get_project();

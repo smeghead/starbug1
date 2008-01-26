@@ -4,7 +4,7 @@ Event.observe(window, "load", function() {
         function(elem) {
             var cg = new html5jp.graph.circle(elem.id);
             if( ! cg ) { return; }
-            eval('cg.draw(' + elem.id + '.sortBy(function(x){return x[1] * -1;}));');
+            eval('if (' + elem.id + '.length) cg.draw(' + elem.id + '.sortBy(function(x){return x[1] * -1;}));');
         }
     );
 });

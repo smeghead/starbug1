@@ -1367,7 +1367,7 @@ void top_action()
     o(      "\t<ul>\n");
     list_alloc(tickets_a, Message);
     tickets_a = db_get_newest_information(10, tickets_a);
-    if (tickets_a != NULL) {
+    if (tickets_a->size) {
         foreach (it, tickets_a) {
             Message* ticket = it->element;
             List* elements_a;
@@ -1380,6 +1380,8 @@ void top_action()
             o("\t\t</li>\n");
             free_element_list(elements_a);
         }
+    } else {
+        o("<li>最新情報がありません。</li>\n");
     }
     list_free(tickets_a);
     o(      "\t</ul>\n");
@@ -1388,14 +1390,18 @@ void top_action()
     o(      "<div id=\"top_state_index\">\n");
     o(      "<h4>状態別件数</h4>\n");
     o(      "\t<ul>\n");
-    foreach (it, states_a) {
-        State* s = it->element;
-        o("\t\t<li>\n");
-        o("\t\t\t<a href=\"%s/search?field%d=", cgiScriptName, ELEM_ID_STATUS); u(s->name); o("\">");
-        h(s->name);
-        o("\t\t\t</a>\n");
-        o("(%d)", s->count);
-        o("\t\t</li>\n");
+    if (states_a->size) {
+        foreach (it, states_a) {
+            State* s = it->element;
+            o("\t\t<li>\n");
+            o("\t\t\t<a href=\"%s/search?field%d=", cgiScriptName, ELEM_ID_STATUS); u(s->name); o("\">");
+            h(s->name);
+            o("\t\t\t</a>\n");
+            o("(%d)", s->count);
+            o("\t\t</li>\n");
+        }
+    } else {
+        o("<li>チケット情報がありません。</li>\n");
     }
     list_free(states_a);
     o(      "\t</ul>\n");
@@ -1411,8 +1417,7 @@ void top_action()
     o(      "</div>\n");
     o(      "<div id=\"main\">\n");
     o(      "<h2>");h(project->name);o("&nbsp;</h2>\n");
-    o(      "<div id=\"main_body\">\n"
-            "<div class=\"description\">");h(project->description);o("</div>\n");
+    o(      "<div id=\"main_body\">\n");
     o(      "<div class=\"top_edit\"><a href=\"%s/edit_top\">トップページの編集</a></div>\n", cgiScriptName);
     wiki_out("top");
     o(      "</div>\n");
@@ -1439,7 +1444,7 @@ void rss_action()
             "\t<channel rdf:about=\"");h(project->home_url);o("%s/rss\">\n", cgiScriptName);
     o(      "\t\t<title>");h(project->name); o("</title>\n"
             "\t\t<link>");h(project->home_url);o("/bt/</link>\n");
-    o(      "\t\t<description>");h(project->description);o("</description>\n"
+    o(      "\t\t<description>");h(project->name);o("</description>\n"
             "\t\t<items>\n"
             "\t\t\t<rdf:Seq>\n");
     o(      "\t\t\t\t<rdf:li rdf:resource=\"");h(cgiServerName);o("%s/list\"/>\n", cgiScriptName);
