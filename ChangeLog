@@ -10,6 +10,7 @@
     * helpの更新
     * 一般ユーザ用と管理ユーザ用のヘルプを分けた。管理ツールにもヘルプを追加し
     た。
+    * 簡易wikiの文法を拡張した。
 
 2008-01-25  smeghead <smeghead@users.sourceforge.jp>
 
