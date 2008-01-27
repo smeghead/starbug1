@@ -665,7 +665,7 @@ void report_csv_download_action()
     create_sort_condition(sort_a);
     cgiFormStringNoNewlines("p", p, DEFAULT_LENGTH);
     list_alloc(messages_a, Message);
-    result = db_search_tickets(conditions_a, q, sort_a, atoi(p), messages_a);
+    result = db_search_tickets_4_report(conditions_a, q, sort_a, messages_a);
     free(conditions_a);
     free(sort_a);
     list_alloc(states_a, State);
@@ -1207,6 +1207,7 @@ void register_submit_action()
     char** multi;
     char save2cookie[2];
 
+    d("start\n");
     cgiFormStringNoNewlines("save2cookie", save2cookie, 2);
     if (mode == MODE_INVALID)
         die("reqired invalid mode.");
