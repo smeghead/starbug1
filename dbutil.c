@@ -9,6 +9,19 @@ sqlite3 *db = NULL;
 
 void create_tables();
 
+int exec_and_wait_4_done(sqlite3_stmt* stmt)
+{
+    int loop = 0, ret;
+
+    while (SQLITE_DONE != (ret = sqlite3_step(stmt))) {
+        if (loop++ > 100000) {
+            d("sql update error. database may be locked.\n");
+            return SQLITE_RETURN_ERROR;
+        }
+    }
+    return SQLITE_RETURN_OK;
+}
+
 static int fexist(const char *filename)
 {
   FILE *fp;
@@ -366,7 +379,7 @@ void create_tables()
  */
 int exec_query(const char* sql, ...)
 {
-    int i, loop = 0;
+    int i;
     va_list ap;
     int type;
     sqlite3_stmt *stmt = NULL;
@@ -393,10 +406,7 @@ int exec_query(const char* sql, ...)
     va_end(ap);
 
     // stmtのSQLを実行
-    while (SQLITE_DONE != sqlite3_step(stmt)){
-        if (loop++ > 1000)
-            goto error;
-    }
+    if (exec_and_wait_4_done(stmt) != SQLITE_RETURN_OK) goto error;
     // stmt を開放
     sqlite3_finalize(stmt);
 
@@ -413,7 +423,7 @@ int exec_query_scalar_int(const char* sql, ...)
     int i, int_value = 0, r;
     va_list ap;
     int type;
-    sqlite3_stmt *stmt = NULL;
+    sqlite3_stmt* stmt = NULL;
 
     sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL);
     sqlite3_reset(stmt);

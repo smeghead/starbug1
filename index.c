@@ -649,7 +649,6 @@ void report_csv_download_action()
     Project* project;
     List* states_a;
     char q[DEFAULT_LENGTH];
-    char p[DEFAULT_LENGTH];
     List* messages_a;
 
     db_init();
@@ -663,7 +662,6 @@ void report_csv_download_action()
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
     sort_a = (Condition*)xalloc(sizeof(Condition));
     create_sort_condition(sort_a);
-    cgiFormStringNoNewlines("p", p, DEFAULT_LENGTH);
     list_alloc(messages_a, Message);
     result = db_search_tickets_4_report(conditions_a, q, sort_a, messages_a);
     free(conditions_a);
@@ -1213,7 +1211,6 @@ void register_submit_action()
         die("reqired invalid mode.");
     ticket_a = (Message*)xalloc(sizeof(Message));
     db_init();
-    db_begin();
     project = db_get_project();
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_all(element_types_a);
@@ -1319,17 +1316,18 @@ void register_submit_action()
         }
         free(value_a);
         ticket_a->elements = elements_a;
+        db_begin();
         ticket_a->id = db_register_ticket(ticket_a);
+        /* mail */
+        mail_result = mail_send(project, ticket_a, elements_a, element_types_a);
+        list_free(element_types_a);
+        free_element_list(elements_a);
+        free(ticket_a);
+        if (mail_result != 0 && mail_result != MAIL_GAVE_UP) {
+            die("mail send error.");
+        }
+        db_commit();
     }
-    /* mail */
-    mail_result = mail_send(project, ticket_a, elements_a, element_types_a);
-    list_free(element_types_a);
-    free_element_list(elements_a);
-    free(ticket_a);
-    if (mail_result != 0 && mail_result != MAIL_GAVE_UP) {
-        die("mail send error.");
-    }
-    db_commit();
     db_finish();
 
     if (mode == MODE_REGISTER)

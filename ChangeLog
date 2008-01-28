@@ -2,6 +2,8 @@
 
     * .htaccessに、初期ページの設定を追加した。
       DirectoryIndex index.cgi
+    * 複数同時投稿のエラー対策を行なった。busy時の再試行回数を、100000回に増や
+    した。この数値は検討する必要があるかもしれない。
 
 2008-01-26  smeghead <smeghead@users.sourceforge.jp>
 

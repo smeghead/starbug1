@@ -121,7 +121,6 @@ List* db_get_list_item(int element_type, List* items)
         ListItem* item = list_new_element(items);
         item->id = sqlite3_column_int(stmt, 0);
         strcpy(item->name, sqlite3_column_text(stmt, 1));
-                    d("db: %s\n", item->name);
         item->close = sqlite3_column_int(stmt, 2);
         item->sort = sqlite3_column_int(stmt, 3);
         list_add(items, item);
@@ -169,7 +168,7 @@ int db_register_ticket(Message* ticket)
     List* elements;
     Iterator* it;
     char sql[DEFAULT_LENGTH];
-    int i, loop = 0, closed = 0;
+    int i, closed = 0;
     sqlite3_stmt *stmt = NULL;
     int message_id;
     int register_mode = ticket->id == -1;
@@ -218,10 +217,7 @@ int db_register_ticket(Message* ticket)
         Element* e = it->element;
         sqlite3_bind_text(stmt, i++, e->str_val, strlen(e->str_val), NULL);
     }
-    while (SQLITE_DONE != sqlite3_step(stmt)){
-        if (loop++ > 1000)
-            goto error;
-    }
+    if (exec_and_wait_4_done(stmt) != SQLITE_RETURN_OK) goto error;
     message_id = sqlite3_last_insert_rowid(db);
     sqlite3_finalize(stmt);
     /* message_id を更新する。 */

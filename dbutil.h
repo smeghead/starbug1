@@ -18,6 +18,7 @@ void db_commit();
 
 int exec_query(const char* sql,...);
 int exec_query_scalar_int(const char* sql, ...);
+int exec_and_wait_4_done(sqlite3_stmt*);
 
 #define INVALID_INT -99999
 
@@ -26,6 +27,10 @@ enum COLUMN_TYPE {
     COLUMN_TYPE_TEXT,
     COLUMN_TYPE_BLOB,
     COLUMN_TYPE_END
+};
+enum SQLITE_RETURN {
+    SQLITE_RETURN_OK,
+    SQLITE_RETURN_ERROR
 };
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab: */
