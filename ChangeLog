@@ -1,3 +1,8 @@
+2008-01-28  smeghead <smeghead@users.sourceforge.jp>
+
+    * .htaccessに、初期ページの設定を追加した。
+      DirectoryIndex index.cgi
+
 2008-01-26  smeghead <smeghead@users.sourceforge.jp>
 
     * cookieが保存されない環境がある問題に対して、path指定を、"/"に変更した。

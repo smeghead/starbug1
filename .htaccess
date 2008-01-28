@@ -7,14 +7,16 @@
 ErrorDocument 500 /starbug1/error.html
 # CGIの実行許可
 Options +ExecCGI
+# 初期ページの設定
+DirectoryIndex index.cgi
 
 # 一般ユーザの認証についての設定 
-<Files index.cgi>
-    AuthName      "authentication for guest user."
-    AuthType      Basic
-    AuthUserFile  /etc/starbug1/.guest-passwd
-    Require       valid-user
-</Files>
+#<Files index.cgi>
+#    AuthName      "authentication for guest user."
+#    AuthType      Basic
+#    AuthUserFile  /etc/starbug1/.guest-passwd
+#    Require       valid-user
+#</Files>
 
 # 管理ユーザの認証についての設定 
 <Files admin.cgi>
