@@ -4,6 +4,7 @@
       DirectoryIndex index.cgi
     * 複数同時投稿のエラー対策を行なった。busy時の再試行回数を、100000回に増や
     した。この数値は検討する必要があるかもしれない。
+    * 状態別チケットページでは、一つの状態で15件表示するようにした。(前は30件)
 
 2008-01-26  smeghead <smeghead@users.sourceforge.jp>
 

@@ -8,7 +8,8 @@
 #define MODE_LENGTH 10
 #define DEFAULT_LENGTH 1024
 #define MAX_FILE_SIZE 512
-#define LIST_PER_PAGE 30
+#define LIST_COUNT_PER_LIST_PAGE 15
+#define LIST_COUNT_PER_SEARCH_PAGE 30
 
 typedef struct _project {
   char name[DEFAULT_LENGTH];

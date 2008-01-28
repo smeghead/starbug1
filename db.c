@@ -409,7 +409,7 @@ SearchResult* db_get_tickets_by_status(char* status, List* messages)
     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     n = set_conditions(stmt, conditions, "");
-    sqlite3_bind_int(stmt, n++, LIST_PER_PAGE);
+    sqlite3_bind_int(stmt, n++, LIST_COUNT_PER_LIST_PAGE);
 
     /* hitした分のticket_idを取得する。 */
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
@@ -441,8 +441,8 @@ SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, int
     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     n = set_conditions(stmt, conditions, q);
-    sqlite3_bind_int(stmt, n++, LIST_PER_PAGE);
-    sqlite3_bind_int(stmt, n++, page * LIST_PER_PAGE);
+    sqlite3_bind_int(stmt, n++, LIST_COUNT_PER_SEARCH_PAGE);
+    sqlite3_bind_int(stmt, n++, page * LIST_COUNT_PER_SEARCH_PAGE);
 
     /* 1ページ分のticket_idを取得する。 */
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){

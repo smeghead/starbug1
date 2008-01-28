@@ -142,17 +142,17 @@ int cgiMain() {
 void output_navigater(SearchResult* result, char* query_string)
 {
     int i;
-    if (result->hit_count < LIST_PER_PAGE) return;
+    if (result->hit_count < LIST_COUNT_PER_SEARCH_PAGE) return;
     o("<div class=\"navigater\">\n");
     if (result->page > 0)
         o("<a href=\"%s/search?p=%d&amp;%s\">&lt;&lt;</a>\n", cgiScriptName, result->page - 1, query_string);
-    for (i = 0; i * LIST_PER_PAGE < result->hit_count; i++) {
+    for (i = 0; i * LIST_COUNT_PER_SEARCH_PAGE < result->hit_count; i++) {
         if (i == result->page)
             o("%d\n", i + 1);
         else
             o("<a href=\"%s/search?p=%d&amp;%s\">%d</a>\n", cgiScriptName, i, query_string, i + 1);
     }
-    if (result->page * LIST_PER_PAGE < result->hit_count - LIST_PER_PAGE)
+    if (result->page * LIST_COUNT_PER_SEARCH_PAGE < result->hit_count - LIST_COUNT_PER_SEARCH_PAGE)
         o("<a href=\"%s/search?p=%d&amp;%s\">&gt;&gt;</a>\n", cgiScriptName, result->page + 1, query_string);
     o("</div>\n");
 }
@@ -383,7 +383,7 @@ void list_action()
         o("<a name=\""); h(s->name); o("\"></a>\n");
         o("<div>\n");
         o("<h4 class=\"status\">");h(s->name);o("&nbsp;(%d件)&nbsp;<a href=\"#top\">↑</a></h4>\n", s->count);
-        if (result->hit_count == LIST_PER_PAGE) {
+        if (result->hit_count == LIST_COUNT_PER_LIST_PAGE) {
             o("\t\t<div class=\"infomation\">新しい%d件のみを表示しています。<a href=\"%s/search?field%d=", 
                     result->hit_count, 
                     cgiScriptName,
@@ -392,7 +392,7 @@ void list_action()
             o("\">状態が%sである全てのチケットを表示する</a></div>\n", s->name);
         }
         output_ticket_table_status_index(result, element_types_a);
-        if (result->hit_count == LIST_PER_PAGE) {
+        if (result->hit_count == LIST_COUNT_PER_LIST_PAGE) {
             o("\t\t<div class=\"infomation\">続きがあります。<a href=\"%s/search?field%d=", 
                     cgiScriptName,
                     ELEM_ID_STATUS);
