@@ -73,7 +73,7 @@ void create_tables()
             ");", COLUMN_TYPE_END);
     exec_query(
             "insert into project(name, home_url, smtp_server, smtp_port, notify_address, admin_address)"
-            "values ('サンプル プロジェクト', 'http://example.com/', 'localhost', 25, '', '');", COLUMN_TYPE_END);
+            "values ('BTS', 'http://example.com/', 'localhost', 25, '', '');", COLUMN_TYPE_END);
     exec_query(
             "create table element_type("
             " id integer not null primary key, "
@@ -145,14 +145,15 @@ void create_tables()
     exec_query("insert into list_item(id, element_type_id, name, close, sort) values (3, 3, '修正済', 0, 3);", COLUMN_TYPE_END);
     exec_query("insert into list_item(id, element_type_id, name, close, sort) values (4, 3, '保留', 0, 4);", COLUMN_TYPE_END);
     exec_query("insert into list_item(id, element_type_id, name, close, sort) values (5, 3, '完了', 1, 5);", COLUMN_TYPE_END);
-    exec_query("insert into list_item(id, element_type_id, name, close, sort) values (6, 3, '破棄', 1, 6);", COLUMN_TYPE_END);
-    exec_query("insert into list_item(id, element_type_id, name, close, sort) values (7, 4, '画面', 0, 1);", COLUMN_TYPE_END);
-    exec_query("insert into list_item(id, element_type_id, name, close, sort) values (8, 4, 'バッチ処理', 0, 2);", COLUMN_TYPE_END);
-    exec_query("insert into list_item(id, element_type_id, name, close, sort) values (9, 4, 'ドキュメント', 0, 3);", COLUMN_TYPE_END);
-    exec_query("insert into list_item(id, element_type_id, name, close, sort) values (10, 5, '緊急', 0, 1);", COLUMN_TYPE_END);
-    exec_query("insert into list_item(id, element_type_id, name, close, sort) values (11, 5, '高', 0, 2);", COLUMN_TYPE_END);
-    exec_query("insert into list_item(id, element_type_id, name, close, sort) values (12, 5, '中', 0, 3);", COLUMN_TYPE_END);
-    exec_query("insert into list_item(id, element_type_id, name, close, sort) values (13, 5, '低', 0, 4);", COLUMN_TYPE_END);
+    exec_query("insert into list_item(id, element_type_id, name, close, sort) values (6, 3, '対応せず', 1, 6);", COLUMN_TYPE_END);
+    exec_query("insert into list_item(id, element_type_id, name, close, sort) values (7, 3, '仕様通り', 1, 7);", COLUMN_TYPE_END);
+    exec_query("insert into list_item(id, element_type_id, name, close, sort) values (8, 4, '画面', 0, 1);", COLUMN_TYPE_END);
+    exec_query("insert into list_item(id, element_type_id, name, close, sort) values (9, 4, 'バッチ処理', 0, 2);", COLUMN_TYPE_END);
+    exec_query("insert into list_item(id, element_type_id, name, close, sort) values (10, 4, 'ドキュメント', 0, 3);", COLUMN_TYPE_END);
+    exec_query("insert into list_item(id, element_type_id, name, close, sort) values (11, 5, '緊急', 0, 1);", COLUMN_TYPE_END);
+    exec_query("insert into list_item(id, element_type_id, name, close, sort) values (12, 5, '高', 0, 2);", COLUMN_TYPE_END);
+    exec_query("insert into list_item(id, element_type_id, name, close, sort) values (13, 5, '中', 0, 3);", COLUMN_TYPE_END);
+    exec_query("insert into list_item(id, element_type_id, name, close, sort) values (14, 5, '低', 0, 4);", COLUMN_TYPE_END);
     exec_query(
             "create table ticket("
             " id integer not null primary key, "

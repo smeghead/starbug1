@@ -26,6 +26,14 @@
 #ticket_list td.field3-56C05qOE {
     background-color: #ccc !important;
 }
+/* 対応せず */
+#ticket_list td.field3-5a5bc44Gb44Ga {
+    background-color: #ccc !important;
+}
+/* 仕様通り */
+#ticket_list td.field3-5LuV5qeY6YCa44KK {
+    background-color: #eee !important;
+}
 
 /* ================================== */
 /*  チケット一覧の優先度の背景色設定  */

@@ -1,3 +1,8 @@
+2008-01-29  smeghead <smeghead@users.sourceforge.jp>
+
+    * 状態名の「破棄」を「対応せず」に変更した。
+    * 状態「仕様通り」を追加した。
+
 2008-01-28  smeghead <smeghead@users.sourceforge.jp>
 
     * .htaccessに、初期ページの設定を追加した。
