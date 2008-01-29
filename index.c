@@ -237,18 +237,18 @@ void output_ticket_table_header(List* element_types)
     char* query_string = format_query_string_without_sort_and_page(query_string_buffer);
 
     o(      "\t<tr>\n");
-    o(      "\t\t<th><a href=\"%s/search?%ssort=-1&amp;%s\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">ID</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    o(      "\t\t<th><a href=\"%s/search?%ssort=-1&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">ID</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
     foreach (it, element_types) {
         ElementType* et = it->element;
         o("\t\t<th>\n");
-        o("\t\t\t<a href=\"%s/search?%ssort=%d&amp;%s\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">", cgiScriptName, reverse ? "" : "r", et->id, query_string);
+        o("\t\t\t<a href=\"%s/search?%ssort=%d&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">", cgiScriptName, reverse ? "" : "r", et->id, query_string);
         h(et->name);
         o("</a>\n");
         o("\t\t</th>\n");
     }
-    o("\t\t<th><a href=\"%s/search?%ssort=-2&amp;%s\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">投稿日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
-    o("\t\t<th><a href=\"%s/search?%ssort=-3&amp;%s\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">最終更新日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
-    o("\t\t<th><a href=\"%s/search?%ssort=-3&amp;%s\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">放置日数</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    o("\t\t<th><a href=\"%s/search?%ssort=-2&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">投稿日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    o("\t\t<th><a href=\"%s/search?%ssort=-3&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">最終更新日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    o("\t\t<th><a href=\"%s/search?%ssort=-3&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">放置日数</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
     o("\t</tr>\n");
 }
 void output_ticket_table_body(SearchResult* result, List* element_types)
@@ -570,6 +570,7 @@ void search_actoin()
     o("</div>\n");
     fflush(cgiOut);
     o("<div id=\"ticket_list\">\n");
+    o("<a name=\"result\"></a>\n");
     o("<h3>検索結果</h3>\n");
 
     if (result->messages->size) {
