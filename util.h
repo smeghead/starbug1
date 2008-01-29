@@ -29,6 +29,7 @@ unsigned long url_encode(unsigned char*, unsigned char*, unsigned long);
 void redirect(char*, char*);
 void free_element_list(List*);
 void* xalloc(size_t);
+void xfree(void*);
 void csv_field(char*);
 void css_field(char*);
 

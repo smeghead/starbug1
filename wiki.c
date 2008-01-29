@@ -139,16 +139,16 @@ void wiki_out(char* page_name)
         }
     }
     buf_flush();
-    free(wiki_a->content);
-    free(wiki_a);
+    xfree(wiki_a->content);
+    xfree(wiki_a);
 }
 void wiki_content_out(char* page_name)
 {
     Wiki* wiki_a = xalloc(sizeof(Wiki));
     wiki_a = db_get_newest_wiki(page_name, wiki_a);
     h(wiki_a->content);
-    free(wiki_a->content);
-    free(wiki_a);
+    xfree(wiki_a->content);
+    xfree(wiki_a);
 }
 void wiki_save(char* page_name, char* content)
 {
@@ -157,7 +157,7 @@ void wiki_save(char* page_name, char* content)
     strcpy(wiki_a->name, page_name);
     strcpy(wiki_a->content, content);
     db_register_wiki(wiki_a);
-    free(wiki_a->content);
-    free(wiki_a);
+    xfree(wiki_a->content);
+    xfree(wiki_a);
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab: */

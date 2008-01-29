@@ -400,7 +400,7 @@ void list_action()
             o("\">状態が%sである全てのチケットを表示する</a></div>\n", s->name);
         }
         list_free(result->messages);
-        free(result);
+        xfree(result);
         o("</div>\n");
         fflush(cgiOut);
     }
@@ -505,13 +505,13 @@ void search_actoin()
     list_alloc(conditions_a, Condition);
     conditions_a = create_conditions(conditions_a, element_types_a);
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
-    sort_a = (Condition*)xalloc(sizeof(Condition));
+    sort_a = xalloc(sizeof(Condition));
     sort_a = create_sort_condition(sort_a);
     cgiFormStringNoNewlines("p", p, DEFAULT_LENGTH);
     list_alloc(messages_a, Message);
     result = db_search_tickets(conditions_a, q, sort_a, atoi(p), messages_a);
-    free(conditions_a);
-    free(sort_a);
+    xfree(conditions_a);
+    xfree(sort_a);
     list_alloc(states_a, State);
     states_a = db_get_states(states_a);
     /* stateの表示 */
@@ -593,7 +593,7 @@ void search_actoin()
     db_finish();
     list_free(result->messages);
     list_free(element_types_a);
-    free(result);
+    xfree(result);
 }
 void output_ticket_information_4_csv_report_header(List* element_types)
 {
@@ -661,12 +661,12 @@ void report_csv_download_action()
     list_alloc(conditions_a, Condition);
     conditions_a = create_conditions(conditions_a, element_types_a);
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
-    sort_a = (Condition*)xalloc(sizeof(Condition));
+    sort_a = xalloc(sizeof(Condition));
     create_sort_condition(sort_a);
     list_alloc(messages_a, Message);
     result = db_search_tickets_4_report(conditions_a, q, sort_a, messages_a);
-    free(conditions_a);
-    free(sort_a);
+    xfree(conditions_a);
+    xfree(sort_a);
     list_alloc(states_a, State);
     states_a = db_get_states(states_a);
 
@@ -679,7 +679,7 @@ void report_csv_download_action()
     db_finish();
     list_free(result->messages);
     list_free(element_types_a);
-    free(result);
+    xfree(result);
 }
 /**
  * form要素を表示する。
@@ -1128,7 +1128,7 @@ void ticket_action()
         }
         o("</table>\n");
     }
-    free(message_ids_a);
+    xfree(message_ids_a);
     o(  "</div>\n");
     /* フォームの表示 */
     o(      "<a name=\"reply\"></a>\n");
@@ -1187,7 +1187,7 @@ void register_list_item(int id, char* name)
     item_a->close = 0;
     item_a->sort = 0;
     db_register_list_item(item_a);
-    free(item_a);
+    xfree(item_a);
 }
 /**
  * 登録するaction。
@@ -1210,7 +1210,7 @@ void register_submit_action()
     cgiFormStringNoNewlines("save2cookie", save2cookie, 2);
     if (mode == MODE_INVALID)
         die("reqired invalid mode.");
-    ticket_a = (Message*)xalloc(sizeof(Message));
+    ticket_a = xalloc(sizeof(Message));
     db_init();
     project = db_get_project();
     list_alloc(element_types_a, ElementType);
@@ -1222,7 +1222,7 @@ void register_submit_action()
         ticket_a->id = atoi(ticket_id);
     list_alloc(elements_a, Element);
     if (mode == MODE_REGISTER || mode == MODE_REPLY) {
-        char* value_a = (char*)xalloc(sizeof(char) * VALUE_LENGTH); /* 1M */
+        char* value_a = xalloc(sizeof(char) * VALUE_LENGTH); /* 1M */
         /* register, reply */
         foreach (it, element_types_a) {
             ElementType* et = it->element;
@@ -1239,30 +1239,30 @@ void register_submit_action()
                 case ELEM_TYPE_TEXT:
                 case ELEM_TYPE_DATE:
                     cgiFormStringNoNewlines(name, value_a, VALUE_LENGTH);
-                    e->str_val = (char*)xalloc(sizeof(char) * strlen(value_a) + 1);
+                    e->str_val = xalloc(sizeof(char) * strlen(value_a) + 1);
                     strcpy(e->str_val, value_a);
                     break;
                 case ELEM_TYPE_TEXTAREA:
                     cgiFormString(name, value_a, VALUE_LENGTH);
-                    e->str_val = (char*)xalloc(sizeof(char) * strlen(value_a) + 1);
+                    e->str_val = xalloc(sizeof(char) * strlen(value_a) + 1);
                     strcpy(e->str_val, value_a);
                     break;
                 case ELEM_TYPE_CHECKBOX:
                     cgiFormString(name, value_a, VALUE_LENGTH);
-                    e->str_val = (char*)xalloc(sizeof(char) * strlen(value_a) + 1);
+                    e->str_val = xalloc(sizeof(char) * strlen(value_a) + 1);
                     strcpy(e->str_val, value_a);
                     break;
                 case ELEM_TYPE_LIST_SINGLE:
                     /* 新規選択肢 */
                     cgiFormString(name_new_item, value_a, VALUE_LENGTH);
                     if (strlen(value_a)) {
-                        e->str_val = (char*)xalloc(sizeof(char) * strlen(value_a) + 1);
+                        e->str_val = xalloc(sizeof(char) * strlen(value_a) + 1);
                         strcpy(e->str_val, value_a);
                         /* 新しく選択肢を追加 */
                         register_list_item(et->id, value_a);
                     } else {
                         cgiFormString(name, value_a, VALUE_LENGTH);
-                        e->str_val = (char*)xalloc(sizeof(char) * strlen(value_a) + 1);
+                        e->str_val = xalloc(sizeof(char) * strlen(value_a) + 1);
                         strcpy(e->str_val, value_a);
                     }
                     break;
@@ -1270,7 +1270,7 @@ void register_submit_action()
                     /* 新規選択肢 */
                     cgiFormString(name_new_item, value_a, VALUE_LENGTH);
                     if (strlen(value_a)) {
-                        e->str_val = (char*)xalloc(sizeof(char) * strlen(value_a) + 1);
+                        e->str_val = xalloc(sizeof(char) * strlen(value_a) + 1);
                         strcpy(e->str_val, value_a);
                         /* 新しく選択肢を追加 */
                         register_list_item(et->id, value_a);
@@ -1289,7 +1289,7 @@ void register_submit_action()
                             i++;
                         }
                     }
-                    e->str_val = (char*)xalloc(sizeof(char) * strlen(value_a) + 1);
+                    e->str_val = xalloc(sizeof(char) * strlen(value_a) + 1);
                     strcpy(e->str_val, value_a);
                     cgiStringArrayFree(multi);
                     break;
@@ -1298,7 +1298,7 @@ void register_submit_action()
                         goto file_size_error;
                     }
                     cgiFormFileName(name, value_a, VALUE_LENGTH);
-                    e->str_val = (char*)xalloc(sizeof(char) * strlen(value_a) + 1);
+                    e->str_val = xalloc(sizeof(char) * strlen(value_a) + 1);
                     strcpy(e->str_val, get_filename_without_path(value_a));
                     if (strlen(e->str_val)) {
                         e->is_file = 1;
@@ -1315,7 +1315,7 @@ void register_submit_action()
             }
             list_add(elements_a, e);
         }
-        free(value_a);
+        xfree(value_a);
         ticket_a->elements = elements_a;
         db_begin();
         ticket_a->id = db_register_ticket(ticket_a);
@@ -1323,7 +1323,7 @@ void register_submit_action()
         mail_result = mail_send(project, ticket_a, elements_a, element_types_a);
         list_free(element_types_a);
         free_element_list(elements_a);
-        free(ticket_a);
+        xfree(ticket_a);
         if (mail_result != 0 && mail_result != MAIL_GAVE_UP) {
             die("mail send error.");
         }
@@ -1655,8 +1655,8 @@ void download_action()
         p++;
     }
     db_finish();
-    free(file_a->blob);
-    free(file_a);
+    xfree(file_a->blob);
+    xfree(file_a);
     return;
 
 error:

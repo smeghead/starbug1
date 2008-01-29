@@ -66,9 +66,8 @@ List* db_get_element_types_all(List* elements)
 {
     return db_get_element_types(1, elements);
 }
-ElementType* db_get_element_type(int id)
+ElementType* db_get_element_type(int id, ElementType* e)
 {
-    ElementType* e;
     int r;
     const char *sql;
     sqlite3_stmt *stmt = NULL;
@@ -81,10 +80,8 @@ ElementType* db_get_element_type(int id)
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, id);
 
-    e = NULL;
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         const unsigned char* value;
-        e = (ElementType*)xalloc(sizeof(ElementType));
         e->id = sqlite3_column_int(stmt, 0);
         e->type = sqlite3_column_int(stmt, 1);
         e->ticket_property = sqlite3_column_int(stmt, 2);
@@ -263,8 +260,8 @@ int db_register_ticket(Message* ticket)
                     COLUMN_TYPE_BLOB, content_a,
                     COLUMN_TYPE_END) == 0)
                 die("insert failed.");
-            free(content_a->blob);
-            free(content_a);
+            xfree(content_a->blob);
+            xfree(content_a);
         }
     }
     return ticket->id;
@@ -394,7 +391,7 @@ SearchResult* db_get_tickets_by_status(char* status, List* messages)
     List* conditions;
     Condition* cond_status;
     sqlite3_stmt *stmt = NULL;
-    SearchResult* result = (SearchResult*)xalloc(sizeof(SearchResult));
+    SearchResult* result = xalloc(sizeof(SearchResult));
 
     list_alloc(conditions, Condition);
     cond_status = list_new_element(conditions);
@@ -434,7 +431,7 @@ SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, int
     char buffer[VALUE_LENGTH];
     char* sql = get_search_sql_string(conditions, sorts, q, buffer);
     sqlite3_stmt *stmt = NULL;
-    SearchResult* result = (SearchResult*)xalloc(sizeof(SearchResult));
+    SearchResult* result = xalloc(sizeof(SearchResult));
     result->messages = messages;
 
     strcat(sql, " limit ? offset ? ");
@@ -483,7 +480,7 @@ SearchResult* db_search_tickets_4_report(List* conditions, char* q, Condition* s
     char buffer[VALUE_LENGTH];
     char* sql = get_search_sql_string(conditions, sorts, q, buffer);
     sqlite3_stmt *stmt = NULL;
-    SearchResult* result = (SearchResult*)xalloc(sizeof(SearchResult));
+    SearchResult* result = xalloc(sizeof(SearchResult));
     result->messages = messages;
 
     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
@@ -518,7 +515,7 @@ void create_columns_exp(List* element_types, char* table_name, char* buf)
 static void set_str_val(Element* e, const unsigned char* str_val)
 {
     if (str_val != NULL) {
-        e->str_val = (char*)xalloc(sizeof(char) * strlen(str_val) + 1);
+        e->str_val = xalloc(sizeof(char) * strlen(str_val) + 1);
         strcpy(e->str_val, str_val);
     }
 }
@@ -719,7 +716,7 @@ int* db_get_message_ids(int ticket_id)
     if (SQLITE_ROW != (r = sqlite3_step(stmt))) {
         goto error;
     }
-    message_ids = (int*)xalloc(sizeof(int) * (sqlite3_column_int(stmt, 0) + 1));
+    message_ids = xalloc(sizeof(int) * (sqlite3_column_int(stmt, 0) + 1));
     sqlite3_finalize(stmt);
 
     sql = "select id from message as m where m.ticket_id = ? order by m.registerdate";
@@ -752,7 +749,7 @@ Project* db_get_project()
     sqlite3_reset(stmt);
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
-        project = (Project*)xalloc(sizeof(Project));
+        project = xalloc(sizeof(Project));
         strcpy(project->name, sqlite3_column_text(stmt, 0));
         strcpy(project->home_url, sqlite3_column_text(stmt, 1));
         strcpy(project->smtp_server, sqlite3_column_text(stmt, 2));
@@ -1044,14 +1041,14 @@ ElementFile* db_get_element_file(int id)
         int len;
         char* p_src;
         char* p_dist;
-        file = (ElementFile*)xalloc(sizeof(ElementFile));
+        file = xalloc(sizeof(ElementFile));
         file->id = sqlite3_column_int(stmt, 0);
         file->element_type_id = sqlite3_column_int(stmt, 1);
         strcpy(file->name, sqlite3_column_text(stmt, 2));
         file->size = sqlite3_column_int(stmt, 3);
         strcpy(file->mime_type, sqlite3_column_text(stmt, 4));
         len = sqlite3_column_bytes(stmt, 5);
-        p_dist = file->blob = (char*)xalloc(sizeof(char) * len);
+        p_dist = file->blob = xalloc(sizeof(char) * len);
         p_src = (char*)sqlite3_column_blob(stmt, 5);
         while (len--) {
             *p_dist = *p_src;

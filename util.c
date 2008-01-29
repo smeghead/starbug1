@@ -11,15 +11,19 @@ static action* get_actions();
 
 action* actions = NULL;
 
-void* xalloc(size_t sz)
+void* xalloc(size_t size)
 {
     void* p;
-    p = calloc(1, sz);
+    p = calloc(1, size);
     if (!p) {
         d("memory error!!");
         die("memory error.");
     }
     return p;
+}
+void xfree(void* p)
+{
+    free(p);
 }
 static action* get_actions()
 {
@@ -29,12 +33,12 @@ void register_action_actions(char* action_name, void func(void))
 {
     action* a;
     if (actions == NULL) {
-        actions = (action*)xalloc(sizeof(action));
+        actions = xalloc(sizeof(action));
         actions->action_name = "__HEAD__";
         actions->next = NULL;
     }
     for (a = actions; a->next != NULL; a = a->next);
-    a->next = (action*)xalloc(sizeof(action));
+    a->next = xalloc(sizeof(action));
     a = a->next;
     a->action_name = action_name;
     a->action_func = func;
@@ -160,15 +164,6 @@ void hmail(char *s)
     cgiHtmlEscapeDataMailaddress(s, (int) strlen(s));
 }
 
-/* 失敗
-#define list_add(target, type) \
-    if (target == NULL) { \
-        target = (type*)xalloc(sizeof(type)); \
-    } else { \
-        target->next = (type*)xalloc(sizeof(type)); \
-        target->next-next = NULL; \
-    }
-*/
 void u(char* str)
 {
     char buf[DEFAULT_LENGTH];
@@ -268,9 +263,9 @@ ElementFile* get_upload_content(int element_id)
     char b[DEFAULT_LENGTH];
     char name[DEFAULT_LENGTH];
     cgiFilePtr file;
-    ElementFile* content = (ElementFile*)xalloc(sizeof(ElementFile));
+    ElementFile* content = xalloc(sizeof(ElementFile));
     content->size = get_upload_size(element_id);
-    buffer = buffer_org = (char*)xalloc(sizeof(char) * content->size);
+    buffer = buffer_org = xalloc(sizeof(char) * content->size);
     sprintf(name, "field%d", element_id);
     if (cgiFormFileOpen(name, &file) != cgiFormSuccess) {
         die("Could not open the file.");
@@ -351,7 +346,7 @@ void free_element_list(List* elements)
     Iterator* it;
     foreach (it, elements) {
         Element* e = it->element;
-        free(e->str_val);
+        xfree(e->str_val);
     }
     list_free(elements);
 }

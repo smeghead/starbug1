@@ -6,7 +6,7 @@
 
 List* db_get_element_types_4_list(List*);
 List* db_get_element_types_all(List*);
-ElementType* db_get_element_type(int);
+ElementType* db_get_element_type(int, ElementType*);
 List* db_get_list_item(int, List*);
 int db_register_ticket(Message*);
 void db_delete_ticket(Message*);

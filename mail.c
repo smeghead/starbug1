@@ -66,7 +66,7 @@ int mail_send(Project* project, Message* message, List* elements, List* element_
     put_env("SB_CONTENT", content);
     d("command: %s\n", command);
     error_code = system(command);
-    free(content);
+    xfree(content);
     return error_code;
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab: */

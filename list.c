@@ -43,8 +43,8 @@ void list_free(List* list)
     while (1) {
         Iterator* old_it = it;
         if (it == NULL) break;
-        if (it->element != NULL) free(it->element);
+        if (it->element != NULL) xfree(it->element);
         it = it->next;
-        free(old_it);
+        xfree(old_it);
     }
 }
