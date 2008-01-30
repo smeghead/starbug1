@@ -102,8 +102,8 @@ void output_header(Project* project, char* title, char* script_name, int navi)
             "<body>\n"
             "<a name=\"top\"></a>\n"
             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://sourceforge.jp/projects/starbug1/\"><img src=\"%s/../img/title.jpg\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName);
-    o("<div>\n");
-    o("<ul id='menu'>\n");
+    o("<div>\n"
+      "<ul id='menu'>\n");
     o("<li><a href='%s' title=\"ホームへ移動します\">ホーム</a></li>\n", project->home_url);
     o("<li><a %s href='%s' title=\"トップページへ移動します\">トップ</a></li>\n", navi == NAVI_TOP ? "class=\"current\"" : "", cgiScriptName);
     o("<li><a %s href='%s/list' title=\"状態別のチケット一覧を参照します\">状態別チケット</a></li>\n", navi == NAVI_LIST ? "class=\"current\"" : "", cgiScriptName);
@@ -113,9 +113,9 @@ void output_header(Project* project, char* title, char* script_name, int navi)
     o("<li><a %s href='%s/rss' title=\"RSS Feed\">RSS Feed</a></li>\n", navi == NAVI_RSS ? "class=\"current\"" : "", cgiScriptName);
     o("<li><a %s href='%s/help' title=\"ヘルプを参照します\">ヘルプ</a></li>\n", navi == NAVI_HELP ? "class=\"current\"" : "", cgiScriptName);
     o("<li><a %s href='%s/../admin.cgi' title=\"各種設定を行ないます\">管理ツール</a></li>\n", navi == NAVI_MANAGEMENT ? "class=\"current\"" : "", cgiScriptName);
-    o("</ul>\n");
-    o("<br clear='all' />\n");
-    o("</div>\n");
+    o("</ul>\n"
+      "<br clear='all' />\n"
+      "</div>\n");
 }
 void output_footer()
 {
@@ -224,10 +224,10 @@ void output_ticket_table_header_no_link(List* element_types)
         h(et->name);
         o("\t\t</th>\n");
     }
-    o("\t\t<th>投稿日時</th>\n");
-    o("\t\t<th>最終更新日時</th>\n");
-    o("\t\t<th>放置日数</th>\n");
-    o("\t</tr>\n");
+    o("\t\t<th>投稿日時</th>\n"
+      "\t\t<th>最終更新日時</th>\n"
+      "\t\t<th>放置日数</th>\n"
+      "\t</tr>\n");
 }
 void output_ticket_table_header(List* element_types)
 {
@@ -261,8 +261,8 @@ void output_ticket_table_body(SearchResult* result, List* element_types)
         List* elements_a;
         list_alloc(elements_a, Element);
         elements_a = db_get_last_elements_4_list(message->id, elements_a);
-        o("\t<tr>\n");
-        o("\t\t<td class=\"field%d-\"><a href=\"%s/ticket/%s\">%s</a></td>\n", 
+        o("\t<tr>\n"
+          "\t\t<td class=\"field%d-\"><a href=\"%s/ticket/%s\">%s</a></td>\n", 
                 ELEM_ID_ID, 
                 cgiScriptName, 
                 get_element_value_by_id(elements_a, ELEM_ID_ID), 
@@ -347,18 +347,17 @@ void list_action()
     list_free(states_a);
     o("\t\t<li>\n");
     o("\t\t\t<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
-    o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" />\n");
-    o("\t\t\t\t<input type=\"submit\" class=\"button\" value=\"ID指定で表示\" />\n");
-    o("\t\t\t</form>\n");
-    o("\t\t</li>\n");
-    o("\t</ul>\n");
-    o("</div>\n");
-    o("<br clear=\"all\" />\n");
+    o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" />\n"
+      "\t\t\t\t<input type=\"submit\" class=\"button\" value=\"ID指定で表示\" />\n"
+      "\t\t\t</form>\n"
+      "\t\t</li>\n"
+      "\t</ul>\n"
+      "</div>\n"
+      "<br clear=\"all\" />\n");
     fflush(cgiOut);
-    o("<div id=\"ticket_list\">\n");
-
-    o("<h3>状態別チケット一覧</h3>\n");
-    o("<div class=\"description\">未クローズの状態毎にチケットを表示しています。\n");
+    o("<div id=\"ticket_list\">\n"
+      "<h3>状態別チケット一覧</h3>\n"
+      "<div class=\"description\">未クローズの状態毎にチケットを表示しています。\n");
     list_alloc(states_a, State);
     states_a = db_get_states_has_not_close(states_a);
     foreach (it, states_a) {
@@ -369,8 +368,8 @@ void list_action()
         h(s->name);
         o("</a>");
     }
-    o("</div>\n");
-    o("<br clear=\"all\" />\n");
+    o("</div>\n"
+      "<br clear=\"all\" />\n");
     foreach (it, states_a) {
         State* s = it->element;
 
@@ -531,16 +530,16 @@ void search_actoin()
     list_free(states_a);
     o("\t\t<li>\n");
     o("\t\t\t<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
-    o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" />\n");
-    o("\t\t\t\t<input type=\"submit\" class=\"button\" value=\"ID指定で表示\" />\n");
-    o("\t\t\t</form>\n");
-    o("\t\t</li>\n");
-    o("\t</ul>\n");
-    o("<br clear=\"all\" />\n");
-    o("</div>\n");
-    o("<div id=\"condition_form\">\n");
-    o("<h3>検索条件</h3>\n");
-    o("<div class=\"description\">検索条件を入力して検索ボタンを押してください。</div>\n");
+    o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" />\n"
+      "\t\t\t\t<input type=\"submit\" class=\"button\" value=\"ID指定で表示\" />\n"
+      "\t\t\t</form>\n"
+      "\t\t</li>\n"
+      "\t</ul>\n"
+      "<br clear=\"all\" />\n"
+      "</div>\n"
+      "<div id=\"condition_form\">\n"
+      "<h3>検索条件</h3>\n"
+      "<div class=\"description\">検索条件を入力して検索ボタンを押してください。</div>\n");
     o("<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
     o(      "<table summary=\"condition table\">\n");
     foreach (it, element_types_a) {
@@ -557,21 +556,21 @@ void search_actoin()
         o("\t</td>\n");
         o("</tr>\n");
     }
-    o("<tr>\n");
-    o("\t<th>キーワード検索</th>\n");
-    o("\t<td>\n"); 
-    o("\t\t<input type=\"text\" name=\"q\" value=\""); v(q); o("\" />\n");
-    o("\t\t<div id=\"description\">履歴も含めて全ての項目から検索を行ないます。</div>\n");
-    o("\t</td>\n");
-    o("</tr>\n");
-    o("</table>\n");
-    o("<input class=\"button\" type=\"submit\" value=\"検索\" />");
-    o("</form>\n");
-    o("</div>\n");
+    o("<tr>\n"
+      "\t<th>キーワード検索</th>\n"
+      "\t<td>\n"
+      "\t\t<input type=\"text\" name=\"q\" value=\""); v(q); o("\" />\n"
+      "\t\t<div id=\"description\">履歴も含めて全ての項目から検索を行ないます。</div>\n"
+      "\t</td>\n"
+      "</tr>\n"
+      "</table>\n"
+      "<input class=\"button\" type=\"submit\" value=\"検索\" />"
+      "</form>\n"
+      "</div>\n");
     fflush(cgiOut);
-    o("<div id=\"ticket_list\">\n");
-    o("<a name=\"result\"></a>\n");
-    o("<h3>検索結果</h3>\n");
+    o("<div id=\"ticket_list\">\n"
+      "<a name=\"result\"></a>\n"
+      "<h3>検索結果</h3>\n");
 
     if (result->messages->size) {
         char query_string_buffer[DEFAULT_LENGTH];
@@ -859,8 +858,8 @@ void output_form_element(List* elements, ElementType* et)
             o("<input type=\"text\" class=\"calendar\" id=\"field%d\" name=\"field%d\" value=\"\n",
                     et->id, et->id);
             v(value);
-            o("\" maxlength=\"10\"/>\n");
-            o("<div class=\"description\">yyyy-mm-dd形式で入力してください。</div>\n");
+            o("\" maxlength=\"10\"/>\n"
+              "<div class=\"description\">yyyy-mm-dd形式で入力してください。</div>\n");
             break;
     }
     switch (et->type) {
@@ -895,9 +894,9 @@ void output_graph_js() {
 void output_field_information_js(List* element_types) {
     Iterator* it;
     o("<script type=\"text/javascript\" src=\"%s/../js/validate.js\"></script>\n", cgiScriptName); 
-    o("<script type=\"text/javascript\">\n"); 
-    o("\t<!--\n");
-    o("\tvar required_field_indexs = [\n");
+    o("<script type=\"text/javascript\">\n"
+      "\t<!--\n"
+      "\tvar required_field_indexs = [\n");
     foreach (it, element_types) {
         ElementType* et = it->element;
         if (et->required) {
@@ -1017,20 +1016,20 @@ void ticket_action()
     o(      "<div id=\"ticket_newest\">\n"
             "<h3>チケット最新情報</h3>\n"
             "<div class=\"description\">チケットの最新情報です。最新チケットのチケット属性の付いている属性と全添付ファイルを表示しています。</div>\n"
-            "<table summary=\"newest table\">\n");
-    o(      "\t<tr>\n");
-    o(      "\t\t<th>ID</th>\n");
-    o(      "\t\t<td>%d</td>\n", iid);
+            "<table summary=\"newest table\">\n"
+            "\t<tr>\n"
+            "\t\t<th>ID</th>\n"
+            "\t\t<td>%d</td>\n", iid);
     o(      "\t</tr>\n");
     foreach (it, element_types_a) {
         ElementType* et = it->element;
         char* value = get_element_value(elements_a, et);
         if (et->ticket_property == 0) continue;
-        o("\t<tr>\n");
-        o("\t\t<th>\n");
+        o("\t<tr>\n"
+          "\t\t<th>\n");
         h(et->name);
-        o("&nbsp;</th>\n");
-        o("\t\t<td>\n");
+        o("&nbsp;</th>\n"
+          "\t\t<td>\n");
         switch (et->id) {
             case ELEM_ID_SENDER:
                 hmail(value);
@@ -1050,12 +1049,12 @@ void ticket_action()
                     hm(value);
                 }
         }
-        o("&nbsp;</td>\n");
-        o("\t</tr>\n");
+        o("&nbsp;</td>\n"
+          "\t</tr>\n");
     }
-    o("\t<tr>\n");
-    o("\t\t<th>全添付ファイル</th>\n");
-    o("\t\t\t<td>\n");
+    o("\t<tr>\n"
+      "\t\t<th>全添付ファイル</th>\n"
+      "\t\t\t<td>\n");
     for (i = 0; message_ids_a[i] != 0; i++) {
         List* attachment_elements_a;
         list_alloc(attachment_elements_a, Element);
@@ -1075,12 +1074,12 @@ void ticket_action()
         }
         list_free(attachment_elements_a);
     }
-    o("\t\t\t</td>\n");
-    o("\t</tr>\n");
-    o(      "</table>\n"
-            "</div>");
-    o(      "<div class=\"infomation\"><a href=\"#reply\">返信する</a></div>\n");
-    o(      "<div id=\"ticket_history\">\n"
+    o("\t\t\t</td>\n"
+      "\t</tr>\n"
+            "</table>\n"
+            "</div>"
+            "<div class=\"infomation\"><a href=\"#reply\">返信する</a></div>\n"
+            "<div id=\"ticket_history\">\n"
             "<h3>チケット履歴</h3>\n"
             "<div class=\"description\">チケットの履歴情報です。</div>\n");
     list_free(elements_a);
@@ -1090,8 +1089,8 @@ void ticket_action()
         list_alloc(elements_a, Element);
         last_elements = elements_a = db_get_elements(message_ids_a[i], elements_a);
 
-        o(      "<table summary=\"reply table\">\n");
-        o(      "\t<tr>\n"
+        o(      "<table summary=\"reply table\">\n"
+                "\t<tr>\n"
                 "\t\t<td colspan=\"2\" class=\"title\">投稿: %d ", i + 1); o("["); h(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE)); o("]</td>\n"
                 "\t</tr>\n");
         foreach (it, element_types_a) {
@@ -1131,10 +1130,10 @@ void ticket_action()
     xfree(message_ids_a);
     o(  "</div>\n");
     /* フォームの表示 */
-    o(      "<a name=\"reply\"></a>\n");
-    o(      "<div id=\"input_form\">\n"
-            "<h3>チケット返信</h3>\n");
-    o(      "<form id=\"reply_form\" name=\"reply_form\" action=\"%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName);
+    o(      "<a name=\"reply\"></a>\n"
+            "<div id=\"input_form\">\n"
+            "<h3>チケット返信</h3>\n"
+            "<form id=\"reply_form\" name=\"reply_form\" action=\"%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName);
     o(      "<input type=\"hidden\" name=\"ticket_id\" value=\"%s\" />\n", ticket_id);
     o(      "<div class=\"description\">返信を行なう場合は、以下のフォームに内容を記入して返信ボタンを押してください。</div>\n"
             "<noscript><div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div></noscript>\n"
@@ -1341,8 +1340,8 @@ file_size_error:
     db_rollback();
     db_finish();
     output_header(project, "エラー", NULL, NAVI_OTHER);
-    o("<h1>エラー発生</h1>\n");
-    o("<div class=\"message\">ファイルサイズが大きすぎます。%dkbより大きいファイルは登録できません。ブラウザの戻るボタンで戻ってください。</div>\n", MAX_FILE_SIZE);
+    o("<h1>エラー発生</h1>\n"
+      "<div class=\"message\">ファイルサイズが大きすぎます。%dkbより大きいファイルは登録できません。ブラウザの戻るボタンで戻ってください。</div>\n", MAX_FILE_SIZE);
     output_footer();
 }
 /**
@@ -1362,9 +1361,9 @@ void top_action()
     states_a = db_get_states(states_a);
     o(      "<div id=\"info\">\n");
     /* 最新情報の表示 */
-    o(      "<div id=\"top_newest\">\n");
-    o(      "<h4>最新情報</h4>\n");
-    o(      "\t<ul>\n");
+    o(      "<div id=\"top_newest\">\n"
+            "<h4>最新情報</h4>\n"
+            "\t<ul>\n");
     list_alloc(tickets_a, Message);
     tickets_a = db_get_newest_information(10, tickets_a);
     if (tickets_a->size) {
@@ -1384,12 +1383,12 @@ void top_action()
         o("<li>最新情報がありません。</li>\n");
     }
     list_free(tickets_a);
-    o(      "\t</ul>\n");
-    o(      "</div>\n");
+    o(      "\t</ul>\n"
+            "</div>\n");
     /* stateの表示 */
-    o(      "<div id=\"top_state_index\">\n");
-    o(      "<h4>状態別件数</h4>\n");
-    o(      "\t<ul>\n");
+    o(      "<div id=\"top_state_index\">\n"
+            "<h4>状態別件数</h4>\n"
+            "\t<ul>\n");
     if (states_a->size) {
         foreach (it, states_a) {
             State* s = it->element;
@@ -1404,24 +1403,24 @@ void top_action()
         o("<li>チケット情報がありません。</li>\n");
     }
     list_free(states_a);
-    o(      "\t</ul>\n");
-    o(      "</div>\n");
+    o(      "\t</ul>\n"
+            "</div>\n");
     /* ID検索フォームの表示 */
-    o(      "<div id=\"top_id_search\">\n");
-    o(      "<h4>ID検索</h4>\n");
-    o(      "\t<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
-    o(      "\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" />\n");
-    o(      "\t\t<input type=\"submit\" class=\"button\" value=\"表示\" />\n");
-    o(      "\t</form>\n");
-    o(      "</div>\n");
-    o(      "</div>\n");
-    o(      "<div id=\"main\">\n");
-    o(      "<h2>");h(project->name);o("&nbsp;</h2>\n");
-    o(      "<div id=\"main_body\">\n");
-    o(      "<div class=\"top_edit\"><a href=\"%s/edit_top\">トップページの編集</a></div>\n", cgiScriptName);
+    o(      "<div id=\"top_id_search\">\n"
+            "<h4>ID検索</h4>\n"
+            "\t<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
+    o(      "\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" />\n"
+            "\t\t<input type=\"submit\" class=\"button\" value=\"表示\" />\n"
+            "\t</form>\n"
+            "</div>\n"
+            "</div>\n"
+            "<div id=\"main\">\n"
+            "<h2>");h(project->name);o("&nbsp;</h2>\n");
+    o(      "<div id=\"main_body\">\n"
+            "<div class=\"top_edit\"><a href=\"%s/edit_top\">トップページの編集</a></div>\n", cgiScriptName);
     wiki_out("top");
-    o(      "</div>\n");
-    o(      "</div>\n");
+    o(      "</div>\n"
+            "</div>\n");
     db_finish();
     output_footer();
 }
@@ -1508,10 +1507,10 @@ void statistics_action()
     project = db_get_project();
     output_header(project, "統計情報", "graph.js", NAVI_STATISTICS);
     output_graph_js();
-    o(      "<h2>");h(project->name);o("</h2>\n");
-    o(      "<div id=\"top\">\n");
-    o(      "<h3>統計情報</h3>\n");
-    o(      "\t<div class=\"description\">統計情報を表示します。</div>\n");
+    o(      "<h2>");h(project->name);o("</h2>\n"
+            "<div id=\"top\">\n"
+            "<h3>統計情報</h3>\n"
+            "\t<div class=\"description\">統計情報を表示します。</div>\n");
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_all(element_types_a);
     foreach (it, element_types_a) {
@@ -1532,10 +1531,10 @@ got_item:
                 all_items_a = db_get_list_item(et->id, all_items_a);
                 o(      "\t<h4 class=\"item\">");
                 h(et->name);
-                o(      "\t</h4>");
-                o("<div class=\"graph\">\n");
-                o("<noscript>JavaScriptでグラフを表示しています。JavaScriptが有効なブラウザで見てください。\n");
-                o(      "\t<ul>\n");
+                o(      "\t</h4>"
+                  "<div class=\"graph\">\n"
+                  "<noscript>JavaScriptでグラフを表示しています。JavaScriptが有効なブラウザで見てください。\n"
+                        "\t<ul>\n");
                 foreach (it_item, all_items_a) {
                     ListItem* item = it_item->element;
                     State* s = get_statictics(item->id, items_a);
@@ -1544,11 +1543,11 @@ got_item:
                     o(      "(%d)", s == NULL ? 0 : s->count);
                     o(      "\t\t</li>\n");
                 }
-                o(      "\t</ul>\n");
-                o(      "</noscript>\n");
-                o(      "\t\t<script type=\"text/javascript\">\n"); 
-                o(      "\t\t<!--\n");
-                o(      "\t\tvar graph_%d = [\n", et->id);
+                o(      "\t</ul>\n"
+                        "</noscript>\n"
+                        "\t\t<script type=\"text/javascript\">\n"
+                        "\t\t<!--\n"
+                        "\t\tvar graph_%d = [\n", et->id);
                 foreach (it_item, items_a) {
                     State* s = it_item->element;
                     int count = s == NULL ? 0 : s->count;
@@ -1556,10 +1555,10 @@ got_item:
                     if (iterator_next(it_item)) o(",");
                     o("\n");
                 }
-                o(      "\t\t];\n");
-                o(      "\t\t// -->\n");
-                o(      "\t\t</script>\n"); 
-                o("<canvas width=\"400\" height=\"300\" id=\"graph_%d\"></canvas>\n", et->id);
+                o(      "\t\t];\n"
+                        "\t\t// -->\n"
+                        "\t\t</script>\n"
+                  "<canvas width=\"400\" height=\"300\" id=\"graph_%d\"></canvas>\n", et->id);
                 o("</div>\n");
                 break;
         }
@@ -1600,19 +1599,19 @@ void edit_top_action()
     o(      "</textarea>\n"
             "<div>&nbsp;</div>\n"
             "<input class=\"button\" type=\"submit\" value=\"更新\" />\n"
-            "</form>");
-    o(      "<div>\n");
-    o(      "<h3>簡易wikiのサポートする文法</h3>\n");
-    o(      "<ul>\n");
-    o(      "<li>行頭に*を記述した行は、大見出しになります。</li>\n");
-    o(      "<li>行頭に**を記述した行は、中見出しになります。</li>\n");
-    o(      "<li>行頭に***を記述した行は、小見出しになります。</li>\n");
-    o(      "<li>行頭に****を記述した行は、極小見出しになります。</li>\n");
-    o(      "<li>行頭に-を記述した行は、箇条書きになります。</li>\n");
-    o(      "<li>行頭に----を記述した行は、区切り線になります。</li>\n");
-    o(      "</ul>\n");
-    o(      "</div>\n");
-    o(      "</div>\n");
+            "</form>"
+            "<div>\n"
+            "<h3>簡易wikiのサポートする文法</h3>\n"
+            "<ul>\n"
+            "<li>行頭に*を記述した行は、大見出しになります。</li>\n"
+           "<li>行頭に**を記述した行は、中見出しになります。</li>\n"
+            "<li>行頭に***を記述した行は、小見出しになります。</li>\n"
+            "<li>行頭に****を記述した行は、極小見出しになります。</li>\n"
+            "<li>行頭に-を記述した行は、箇条書きになります。</li>\n"
+            "<li>行頭に----を記述した行は、区切り線になります。</li>\n"
+            "</ul>\n"
+            "</div>\n"
+            "</div>\n");
     db_finish();
     output_footer();
 }
