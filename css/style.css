@@ -449,3 +449,6 @@ div.graph {
     width: 400px;
     height: 300px;
 }
+div.delete_item {
+    margin: 10px;
+}

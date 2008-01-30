@@ -288,6 +288,7 @@ void items_action()
     project = db_get_project();
     output_header(project, "項目設定", "management.js", NAVI_ITEM);
 
+    o("<div id=\"top\">\n");
     o("<h2>%s 管理ツール</h2>", project->name);
     o("<div id=\"setting_form\">\n");
     o("\t<form id=\"management_form\" action=\"%s/items_submit\" method=\"post\">\n", cgiScriptName);
@@ -310,7 +311,6 @@ void items_action()
         Iterator* it;
         list_alloc(items_a, ListItem);
         items_a = db_get_list_item(et->id, items_a);
-        o("\t\t<hr />\n");
         o("\t\t<a name=\"field%d\"></a>\n", et->id);
         o("\t\t<h4>"); h(et->name); o("</h4>\n");
         o("\t\t<div class=\"item_navigation\"><a href=\"#top\">このページのトップへ</a></div>\n");
@@ -476,14 +476,14 @@ void items_action()
         o("\t\t</table>\n");
         if (et->id > BASIC_ELEMENT_MAX) {
             /* 基本項目は削除できないようにする。 */
-            o("\t\t<div><a href=\"%s/delete_item/%d\">", cgiScriptName, et->id);o("この項目(");h(et->name);o(")の削除</a></div>\n");
+            o("\t\t<div class=\"delete_item\"><a href=\"%s/delete_item/%d\">", cgiScriptName, et->id);o("この項目(");h(et->name);o(")の削除</a></div>\n");
         }
         list_free(items_a);
+        o("\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
     }
     list_free(element_types_a);
-    o("\t\t<hr />\n");
-    o("\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
     o("\t</form>\n");
+    o("</div>\n");
     o("</div>\n");
 
     output_footer();
