@@ -121,19 +121,20 @@ int cgiMain() {
  */
 void menu_action()
 {
-    Project* project;
+    Project* project_a = xalloc(sizeof(Project));
     char message[DEFAULT_LENGTH];
 
     d("admin\n");
     db_init();
-    project = db_get_project();
-    output_header(project, "メニュー", NULL, NAVI_MENU);
+    project_a = db_get_project(project_a);
+    output_header(project_a, "メニュー", NULL, NAVI_MENU);
 
     cgiFormStringNoNewlines("message", message, DEFAULT_LENGTH);
     if (strlen(message) > 0) {
         o("<div class=\"complete_message\">"); h(message); o("&nbsp;</div>\n");
     }
-    o("<h2>%s 管理ツール</h2>", project->name);
+    o("<h2>%s 管理ツール</h2>", project_a->name);
+    xfree(project_a);
     o("<div id=\"admin_menu\">\n");
     o("\t<dl>\n");
     o("\t\t<dt><a href=\"%s/project\">プロジェクト設定</a></dt><dd>プロジェクトの基本的な情報の設定です。</dd>\n", cgiScriptName);
@@ -151,25 +152,26 @@ void menu_action()
  */
 void project_action()
 {
-    Project* project;
+    Project* project_a = xalloc(sizeof(Project));
 
     db_init();
-    project = db_get_project();
-    output_header(project, "プロジェクト設定", "management.js", NAVI_PROJECT);
+    project_a = db_get_project(project_a);
+    output_header(project_a, "プロジェクト設定", "management.js", NAVI_PROJECT);
 
-    o("<h2>%s 管理ツール</h2>", project->name);
+    o("<h2>%s 管理ツール</h2>", project_a->name);
     o("<div id=\"setting_form\">\n");
     o("\t<form id=\"management_form\" action=\"%s/project_submit\" method=\"post\">\n", cgiScriptName);
     o("\t\t<h3>プロジェクト設定</h3>\n");
     o("\t\t<table summary=\"project table\">\n");
     o("\t\t\t<tr>\n");
     o("\t\t\t\t<th>プロジェクト名</th>\n");
-    o("\t\t\t\t<td><input type=\"text\" name=\"project.name\" value=\"");h(project->name);o("\" maxlength=\"1023\" /></td>\n");
+    o("\t\t\t\t<td><input type=\"text\" name=\"project.name\" value=\"");h(project_a->name);o("\" maxlength=\"1023\" /></td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t</table>\n");
     o("\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
     o("\t</form>\n");
     o("</div>\n");
+    xfree(project_a);
     output_footer();
     db_finish();
 }
@@ -178,15 +180,15 @@ void project_action()
  */
 void project_submit_action()
 {
-    Project* project;
+    Project* project_a = xalloc(sizeof(Project));
 
     db_init();
     db_begin();
-    project = db_get_project();
-    cgiFormStringNoNewlines("project.name", project->name, DEFAULT_LENGTH);
-    db_update_project(project);
+    project_a = db_get_project(project_a);
+    cgiFormStringNoNewlines("project.name", project_a->name, DEFAULT_LENGTH);
+    db_update_project(project_a);
+    xfree(project_a);
 
-    project = db_get_project();
     db_commit();
     db_finish();
     redirect("", "更新しました");
@@ -196,13 +198,13 @@ void project_submit_action()
  */
 void env_action()
 {
-    Project* project;
+    Project* project_a = xalloc(sizeof(Project));
 
     db_init();
-    project = db_get_project();
-    output_header(project, "環境設定", "management.js", NAVI_ENV);
+    project_a = db_get_project(project_a);
+    output_header(project_a, "環境設定", "management.js", NAVI_ENV);
 
-    o("<h2>%s 管理ツール</h2>", project->name);
+    o("<h2>%s 管理ツール</h2>", project_a->name);
     o("<div id=\"setting_form\">\n");
     o("\t<form id=\"management_form\" action=\"%s/env_submit\" method=\"post\">\n", cgiScriptName);
     o("\t\t<h3>環境設定</h3>\n");
@@ -210,35 +212,35 @@ void env_action()
     o("\t\t\t<tr>\n");
     o("\t\t\t\t<th>home_url</th>\n");
     o("\t\t\t\t<td>\n");
-    o("\t\t\t\t\t<input type=\"text\" name=\"project.home_url\" value=\"");h(project->home_url);o("\" maxlength=\"1023\" />\n");
+    o("\t\t\t\t\t<input type=\"text\" name=\"project.home_url\" value=\"");h(project_a->home_url);o("\" maxlength=\"1023\" />\n");
     o("\t\t\t\t\t<div class=\"description\">各ページに表示されるナビゲータの、\"ホーム\" アンカーのリンク先を指定します。</div>\n");
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t\t<tr>\n");
     o("\t\t\t\t<th>smtp_server</th>\n");
     o("\t\t\t\t<td>\n");
-    o("\t\t\t\t\t<input type=\"text\" name=\"project.smtp_server\" value=\"");h(project->smtp_server);o("\" maxlength=\"1023\" />\n");
+    o("\t\t\t\t\t<input type=\"text\" name=\"project.smtp_server\" value=\"");h(project_a->smtp_server);o("\" maxlength=\"1023\" />\n");
     o("\t\t\t\t\t<div class=\"description\">メール送信時に使用するSMTPサーバのホスト名です。</div>\n");
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t\t<tr>\n");
     o("\t\t\t\t<th>smtp_port</th>\n");
     o("\t\t\t\t<td>\n");
-    o("\t\t\t\t\t<input type=\"text\" name=\"project.smtp_port\" value=\"%d\" maxlength=\"1023\" />", project->smtp_port);
+    o("\t\t\t\t\t<input type=\"text\" name=\"project.smtp_port\" value=\"%d\" maxlength=\"1023\" />", project_a->smtp_port);
     o("\t\t\t\t\t<div class=\"description\">メール送信時に使用するSMTPサーバのポート番号です。</div>\n");
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t\t<tr>\n");
     o("\t\t\t\t<th>通知先アドレス</th>\n");
     o("\t\t\t\t<td>\n");
-    o("\t\t\t\t\t<input type=\"text\" name=\"project.notify_address\" value=\"");h(project->notify_address);o("\" maxlength=\"1023\" />\n");
+    o("\t\t\t\t\t<input type=\"text\" name=\"project.notify_address\" value=\"");h(project_a->notify_address);o("\" maxlength=\"1023\" />\n");
     o("\t\t\t\t\t<div class=\"description\">投稿があったときに通知を行なうメールアドレスです。メーリングリストなどを指定してください。</div>\n");
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t\t<tr>\n");
     o("\t\t\t\t<th>管理者アドレス</th>\n");
     o("\t\t\t\t<td>\n");
-    o("\t\t\t\t\t<input type=\"text\" name=\"project.admin_address\" value=\"");h(project->admin_address);o("\" maxlength=\"1023\" />\n");
+    o("\t\t\t\t\t<input type=\"text\" name=\"project.admin_address\" value=\"");h(project_a->admin_address);o("\" maxlength=\"1023\" />\n");
     o("\t\t\t\t\t<div class=\"description\">メール通知のfromに指定されるメールアドレスです。</div>\n");
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
@@ -247,6 +249,7 @@ void env_action()
     o("\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
     o("\t</form>\n");
     o("</div>\n");
+    xfree(project_a);
     output_footer();
     db_finish();
 }
@@ -255,22 +258,22 @@ void env_action()
  */
 void env_submit_action()
 {
-    Project* project;
+    Project* project_a = xalloc(sizeof(Project));
     char smtp_port[DEFAULT_LENGTH];
 
     db_init();
     db_begin();
-    project = db_get_project();
-    cgiFormStringNoNewlines("project.home_url", project->home_url, DEFAULT_LENGTH);
-    cgiFormStringNoNewlines("project.smtp_server", project->smtp_server, DEFAULT_LENGTH);
+    project_a = db_get_project(project_a);
+    cgiFormStringNoNewlines("project.home_url", project_a->home_url, DEFAULT_LENGTH);
+    cgiFormStringNoNewlines("project.smtp_server", project_a->smtp_server, DEFAULT_LENGTH);
     cgiFormStringNoNewlines("project.smtp_port", smtp_port, DEFAULT_LENGTH);
-    project->smtp_port = atoi(smtp_port);
-    cgiFormStringNoNewlines("project.notify_address", project->notify_address, DEFAULT_LENGTH);
-    cgiFormStringNoNewlines("project.admin_address", project->admin_address, DEFAULT_LENGTH);
+    project_a->smtp_port = atoi(smtp_port);
+    cgiFormStringNoNewlines("project.notify_address", project_a->notify_address, DEFAULT_LENGTH);
+    cgiFormStringNoNewlines("project.admin_address", project_a->admin_address, DEFAULT_LENGTH);
 
-    db_update_project(project);
+    db_update_project(project_a);
 
-    project = db_get_project();
+    xfree(project_a);
     db_commit();
     db_finish();
     redirect("", "更新しました");
@@ -280,16 +283,17 @@ void env_submit_action()
  */
 void items_action()
 {
-    Project* project;
+    Project* project_a = xalloc(sizeof(Project));
     List* element_types_a;
     Iterator* it;
 
     db_init();
-    project = db_get_project();
-    output_header(project, "項目設定", "management.js", NAVI_ITEM);
+    project_a = db_get_project(project_a);
+    output_header(project_a, "項目設定", "management.js", NAVI_ITEM);
+    xfree(project_a);
 
     o("<div id=\"top\">\n");
-    o("<h2>%s 管理ツール</h2>", project->name);
+    o("<h2>%s 管理ツール</h2>", project_a->name);
     o("<div id=\"setting_form\">\n");
     o("\t<form id=\"management_form\" action=\"%s/items_submit\" method=\"post\">\n", cgiScriptName);
     o("\t\t<h3>項目設定</h3>\n");
@@ -494,11 +498,8 @@ void items_action()
  */
 void items_submit_action()
 {
-    Project* project;
-
     db_init();
     db_begin();
-    project = db_get_project();
     update_elements();
     db_commit();
     db_finish();
@@ -618,14 +619,15 @@ void update_elements()
 }
 void new_item_action()
 {
-    Project* project;
+    Project* project_a = xalloc(sizeof(Project));
     int i;
 
     db_init();
-    project = db_get_project();
-    output_header(project, "新規項目登録", "new_item.js", NAVI_OTHER);
+    project_a = db_get_project(project_a);
+    output_header(project_a, "新規項目登録", "new_item.js", NAVI_OTHER);
 
-    o("<h2>%s 管理ツール</h2>", project->name);
+    o("<h2>%s 管理ツール</h2>", project_a->name);
+    xfree(project_a);
     o(      "<div id=\"new_item\">\n"
             "<h3>項目の追加</h3>\n"
             "<div class=\"description\">チケットに新しい項目を追加します。追加する項目についての情報を入力し、追加ボタンを押してください。</div>\n"
@@ -758,13 +760,11 @@ void new_item_action()
 void new_item_submit_action()
 {
     ElementType* et_a = xalloc(sizeof(ElementType));
-    Project* project;
     char value[DEFAULT_LENGTH];
     int i, e_type_id;
 
     db_init();
     db_begin();
-    project = db_get_project();
 
     cgiFormStringNoNewlines("field.name", et_a->name, DEFAULT_LENGTH);
 
@@ -818,7 +818,7 @@ void delete_item_action()
     char path_info[DEFAULT_LENGTH];
     char* e_type_id;
     int iid;
-    Project* project;
+    Project* project_a = xalloc(sizeof(Project));
     ElementType* et_a = xalloc(sizeof(ElementType));
 
     strcpy(path_info, cgiPathInfo);
@@ -826,11 +826,12 @@ void delete_item_action()
     if (e_type_id) e_type_id++;
     iid = atoi(e_type_id);
     db_init();
-    project = db_get_project();
-    output_header(project, "項目削除", "delete_item.js", NAVI_OTHER);
+    project_a = db_get_project(project_a);
+    output_header(project_a, "項目削除", "delete_item.js", NAVI_OTHER);
 
     et_a = db_get_element_type(iid, et_a);
-    o("<h2>%s 管理ツール</h2>", project->name);
+    o("<h2>%s 管理ツール</h2>", project_a->name);
+    xfree(project_a);
     o(      "<div id=\"delete_item/%d\">\n", iid);
     o(      "<h3>項目(");h(et_a->name);o(")の削除</h3>\n"
             "<form id=\"delete_item_form\" action=\"%s/delete_item_submit/%d\" method=\"post\">\n"
@@ -865,10 +866,11 @@ void delete_item_submit_action()
 }
 void style_action()
 {
-    Project* project;
+    Project* project_a = xalloc(sizeof(Project));
     db_init();
-    project = db_get_project();
-    output_header(project, "スタイル設定", "style.js", NAVI_STYLE);
+    project_a = db_get_project(project_a);
+    output_header(project_a, "スタイル設定", "style.js", NAVI_STYLE);
+    xfree(project_a);
     o(      "<h2>スタイル編集</h2>\n"
             "<div id=\"top\">\n"
             "<h3>スタイルシートの編集</h3>\n"
@@ -927,14 +929,15 @@ void style_submit_action()
 }
 void admin_help_action()
 {
-    Project* project;
+    Project* project_a = xalloc(sizeof(Project));
     db_init();
-    project = db_get_project();
-    output_header(project, "ヘルプ", NULL, NAVI_ADMIN_HELP);
-    o(      "<h2>");h(project->name);o("</h2>\n"
+    project_a = db_get_project(project_a);
+    output_header(project_a, "ヘルプ", NULL, NAVI_ADMIN_HELP);
+    o(      "<h2>");h(project_a->name);o("</h2>\n"
             "<div id=\"top\">\n");
     wiki_out("adminhelp");
     o(      "</div>\n");
+    xfree(project_a);
     db_finish();
     output_footer();
 }

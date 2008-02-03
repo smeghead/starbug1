@@ -383,7 +383,7 @@ int set_conditions(sqlite3_stmt* stmt, List* conditions, char* q)
     }
     return n;
 }
-SearchResult* db_get_tickets_by_status(char* status, List* messages)
+SearchResult* db_get_tickets_by_status(char* status, List* messages, SearchResult* result)
 {
     int r, n, hit_count = 0;
     char buffer[VALUE_LENGTH];
@@ -391,7 +391,6 @@ SearchResult* db_get_tickets_by_status(char* status, List* messages)
     List* conditions;
     Condition* cond_status;
     sqlite3_stmt *stmt = NULL;
-    SearchResult* result = xalloc(sizeof(SearchResult));
 
     list_alloc(conditions, Condition);
     cond_status = list_new_element(conditions);
@@ -425,13 +424,12 @@ SearchResult* db_get_tickets_by_status(char* status, List* messages)
     return result;
 ERROR_LABEL
 }
-SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, int page, List* messages)
+SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, int page, List* messages, SearchResult* result)
 {
     int r, n;
     char buffer[VALUE_LENGTH];
     char* sql = get_search_sql_string(conditions, sorts, q, buffer);
     sqlite3_stmt *stmt = NULL;
-    SearchResult* result = xalloc(sizeof(SearchResult));
     result->messages = messages;
 
     strcat(sql, " limit ? offset ? ");
@@ -474,13 +472,12 @@ SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, int
     return result;
 ERROR_LABEL
 }
-SearchResult* db_search_tickets_4_report(List* conditions, char* q, Condition* sorts, List* messages)
+SearchResult* db_search_tickets_4_report(List* conditions, char* q, Condition* sorts, List* messages, SearchResult* result)
 {
     int r, n;
     char buffer[VALUE_LENGTH];
     char* sql = get_search_sql_string(conditions, sorts, q, buffer);
     sqlite3_stmt *stmt = NULL;
-    SearchResult* result = xalloc(sizeof(SearchResult));
     result->messages = messages;
 
     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
@@ -702,7 +699,7 @@ List* db_get_elements(int message_id, List* elements)
 
 ERROR_LABEL
 }
-int* db_get_message_ids(int ticket_id)
+int* db_get_message_ids_a(int ticket_id)
 {
     int* message_ids = NULL;
     int r, i = 0;
@@ -737,9 +734,8 @@ int* db_get_message_ids(int ticket_id)
 ERROR_LABEL
 }
 
-Project* db_get_project()
+Project* db_get_project(Project* project)
 {
-    Project* project = NULL;
     int r;
     const char *sql;
     sqlite3_stmt *stmt = NULL;
@@ -749,7 +745,6 @@ Project* db_get_project()
     sqlite3_reset(stmt);
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
-        project = xalloc(sizeof(Project));
         strcpy(project->name, sqlite3_column_text(stmt, 0));
         strcpy(project->home_url, sqlite3_column_text(stmt, 1));
         strcpy(project->smtp_server, sqlite3_column_text(stmt, 2));
@@ -1022,9 +1017,8 @@ List* db_get_statictics(List* states, int element_type_id)
 
 ERROR_LABEL
 }
-ElementFile* db_get_element_file(int id)
+ElementFile* db_get_element_file(int id, ElementFile* file)
 {
-    ElementFile* file;
     int r;
     const char *sql;
     sqlite3_stmt *stmt = NULL;
@@ -1036,12 +1030,10 @@ ElementFile* db_get_element_file(int id)
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, id);
 
-    file = NULL;
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         int len;
         char* p_src;
         char* p_dist;
-        file = xalloc(sizeof(ElementFile));
         file->id = sqlite3_column_int(stmt, 0);
         file->element_type_id = sqlite3_column_int(stmt, 1);
         strcpy(file->name, sqlite3_column_text(stmt, 2));
