@@ -1,6 +1,8 @@
 2008-02-03  smeghead <smeghead@users.sourceforge.jp>
 
     * xfreeのし忘れを修正した。
+    * レポートのcsvダウンロード時に、"が含まれると、&quot;に変換される問題を修
+    正した。
 
 2008-01-31  smeghead <smeghead@users.sourceforge.jp>
 

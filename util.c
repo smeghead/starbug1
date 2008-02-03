@@ -350,6 +350,19 @@ void free_element_list(List* elements)
     }
     list_free(elements);
 }
+static cgiFormResultType csv_escape(char *data, int len)
+{
+    while (len--) {
+        if (*data == '"') {
+            TRYPUTC('"');
+            TRYPUTC('"');
+        } else {
+            TRYPUTC(*data);
+        }
+        data++;
+    }
+    return cgiFormSuccess;
+}
 void csv_field(char* src)
 {
     iconv_t ic;
@@ -363,7 +376,7 @@ void csv_field(char* src)
     ic = iconv_open("CP932", "UTF-8");
     ret_len = iconv(ic, &src, &src_size, &dest, &dest_size);
     o("\"");
-    if (ret_len >= 0) v(dest_buf);
+    if (ret_len >= 0) csv_escape(dest_buf, strlen(dest_buf));
     o("\"");
     iconv_close(ic);
 }
@@ -393,9 +406,7 @@ void css_field(char* str)
     }
         
     memset(dest, 0, DEFAULT_LENGTH);
-    d("src:%s\n", src);
     base64_encode(src, dest);
-    d("base64:%s\n", dest);
     cgiCssClassName(dest, strlen(dest));
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab: */
