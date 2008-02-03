@@ -101,7 +101,7 @@ void output_header(Project* project, char* title, char* script_name, int navi)
     o(      "</head>\n"
             "<body>\n"
             "<a name=\"top\"></a>\n"
-            "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://sourceforge.jp/projects/starbug1/\"><img src=\"%s/../img/title.jpg\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName);
+            "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/../img/title.jpg\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName);
     o("<div>\n"
       "<ul id='menu'>\n");
     o("<li><a href='%s' title=\"ホームへ移動します\">ホーム</a></li>\n", project->home_url);
