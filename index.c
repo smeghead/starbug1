@@ -8,7 +8,7 @@
 #include "list.h"
 #include "util.h"
 #include "wiki.h"
-#include "mail.h"
+#include "hook.h"
 
 /* prototype declares */
 void register_actions();
@@ -1206,9 +1206,10 @@ void register_submit_action()
     Message* ticket_a;
     char ticket_id[DEFAULT_LENGTH];
     int mode = get_mode();
-    int mail_result;
+/*     int mail_result; */
     char** multi;
     char save2cookie[2];
+    char* complete_message_a = NULL;
 
     d("start\n");
     cgiFormStringNoNewlines("save2cookie", save2cookie, 2);
@@ -1227,6 +1228,7 @@ void register_submit_action()
     list_alloc(elements_a, Element);
     if (mode == MODE_REGISTER || mode == MODE_REPLY) {
         char* value_a = xalloc(sizeof(char) * VALUE_LENGTH); /* 1M */
+        HOOK* hook;
         /* register, reply */
         foreach (it, element_types_a) {
             ElementType* et = it->element;
@@ -1323,23 +1325,33 @@ void register_submit_action()
         ticket_a->elements = elements_a;
         db_begin();
         ticket_a->id = db_register_ticket(ticket_a);
-        /* mail */
-        mail_result = mail_send(project_a, ticket_a, elements_a, element_types_a);
+        db_commit();
+        /* hook */
+        hook = init_hook(HOOK_MODE_REGISTERED);
+        hook = exec_hook(hook, project_a, ticket_a, elements_a, element_types_a);
+        complete_message_a = xalloc(sizeof(char) * ((hook->message == NULL ? 0 : strlen(hook->message)) + 32));
+        if (mode == MODE_REGISTER)
+            strcpy(complete_message_a, "登録しました。");
+        else if (mode == MODE_REPLY)
+            strcpy(complete_message_a, "返信しました。");
+        if (hook->message) {
+            strcat(complete_message_a, hook->message);
+        }
+        clean_hook(hook);
         xfree(project_a);
         list_free(element_types_a);
         free_element_list(elements_a);
         xfree(ticket_a);
-        if (mail_result != 0 && mail_result != MAIL_GAVE_UP) {
-            die("mail send error.");
-        }
         db_commit();
     }
+    d("db_finish begin\n");
     db_finish();
+    d("db_finish end\n");
 
-    if (mode == MODE_REGISTER)
-        redirect("/list", "登録しました。");
-    else if (mode == MODE_REPLY)
-        redirect("/list", "返信しました。");
+    d("redirect begin\n");
+    redirect("/list", complete_message_a);
+    d("redirect end\n");
+    if (complete_message_a) xfree(complete_message_a);
     return;
 
 file_size_error:

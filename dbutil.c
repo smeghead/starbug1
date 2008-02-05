@@ -24,27 +24,29 @@ int exec_and_wait_4_done(sqlite3_stmt* stmt)
 
 static int fexist(const char *filename)
 {
-  FILE *fp;
-  if ((fp = fopen(filename, "r")) == NULL) return 0;
-  fclose(fp); return 1;
+    FILE *fp;
+    if ((fp = fopen(filename, "r")) == NULL) return 0;
+    fclose(fp); return 1;
 }
 
 void db_init()
 {
-  int exists_db_file = (fexist(db_name) == 1);
+    int exists_db_file = (fexist(db_name) == 1);
 
-  mkdir("db", 0755);
-  if (SQLITE_OK != sqlite3_open(db_name, &db)) {
-    die("sqlite3 init error.");
-  }
+    mkdir("db", 0755);
+    if (SQLITE_OK != sqlite3_open(db_name, &db)) {
+        die("sqlite3 init error.");
+    }
 
-  if (!exists_db_file)
-    create_tables();
+    if (!exists_db_file)
+        create_tables();
 }
 
 void db_finish()
 {
-  sqlite3_close(db);
+    int ret;
+    ret = sqlite3_close(db);
+    d("done %d\n", ret);
 }
 
 void db_begin()
@@ -65,15 +67,11 @@ void create_tables()
     exec_query(
             "create table project( "
             " name text, "
-            " home_url text, "
-            " smtp_server text, "
-            " smtp_port integer, "
-            " notify_address text, "
-            " admin_address text "
+            " home_url text "
             ");", COLUMN_TYPE_END);
     exec_query(
-            "insert into project(name, home_url, smtp_server, smtp_port, notify_address, admin_address)"
-            "values ('BTS', 'http://example.com/', 'localhost', 25, '', '');", COLUMN_TYPE_END);
+            "insert into project(name, home_url)"
+            "values ('BTS', 'http://example.com/');", COLUMN_TYPE_END);
     exec_query(
             "create table element_type("
             " id integer not null primary key, "

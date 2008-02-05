@@ -1,3 +1,8 @@
+2008-02-06  smeghead <smeghead@users.sourceforge.jp>
+
+    * メール送信機能をhook機能の一部にする修正を行なっている。mail機能呼び出し
+    をhook機能呼び出しに変更した。実際にコマンド呼び出しとperlスクリプトは未実装。
+
 2008-02-03  smeghead <smeghead@users.sourceforge.jp>
 
     * xfreeのし忘れを修正した。

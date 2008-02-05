@@ -14,10 +14,6 @@
 typedef struct _project {
   char name[DEFAULT_LENGTH];
   char home_url[DEFAULT_LENGTH];
-  char smtp_server[DEFAULT_LENGTH];
-  int smtp_port;
-  char notify_address[DEFAULT_LENGTH];
-  char admin_address[DEFAULT_LENGTH];
 } Project;
 
 

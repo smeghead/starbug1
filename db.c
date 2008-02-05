@@ -740,17 +740,13 @@ Project* db_get_project(Project* project)
     const char *sql;
     sqlite3_stmt *stmt = NULL;
 
-    sql = "select name, home_url, smtp_server, smtp_port, notify_address, admin_address from project";
+    sql = "select name, home_url from project";
     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         strcpy(project->name, sqlite3_column_text(stmt, 0));
         strcpy(project->home_url, sqlite3_column_text(stmt, 1));
-        strcpy(project->smtp_server, sqlite3_column_text(stmt, 2));
-        project->smtp_port = sqlite3_column_int(stmt, 3);
-        strcpy(project->notify_address, sqlite3_column_text(stmt, 4));
-        strcpy(project->admin_address, sqlite3_column_text(stmt, 5));
         break;
     }
 
@@ -763,14 +759,9 @@ void db_update_project(Project* project)
 {
     if (exec_query(
             "update project set "
-            "name = ?, home_url = ?, "
-            "smtp_server = ?, smtp_port = ?, notify_address = ?, admin_address = ?",
+            "name = ?, home_url = ?, ",
             COLUMN_TYPE_TEXT, project->name,
             COLUMN_TYPE_TEXT, project->home_url,
-            COLUMN_TYPE_TEXT, project->smtp_server,
-            COLUMN_TYPE_INT, project->smtp_port,
-            COLUMN_TYPE_TEXT, project->notify_address,
-            COLUMN_TYPE_TEXT, project->admin_address,
             COLUMN_TYPE_END) != 1)
         die("no project to update? or too many?");
 }

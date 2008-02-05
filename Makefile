@@ -17,12 +17,12 @@ admin.o: admin.c data.h db.h dbutil.h util.h
 data.o: data.c data.h util.h dbutil.h
 db.o: db.c data.h util.h dbutil.h
 dbutil.o: dbutil.c util.h data.h dbutil.h
-index.o: index.c data.h db.h dbutil.h util.h wiki.h mail.h
-mail.o: mail.c data.h util.h dbutil.h mail.h
+index.o: index.c data.h db.h dbutil.h util.h wiki.h hook.h
+hook.o: hook.c data.h util.h dbutil.h hook.h
 util.o: util.c util.h data.h dbutil.h
 wiki.o: wiki.c wiki.h util.h data.h dbutil.h
 
-index.cgi: list.o data.o dbutil.o db.o mail.o util.o wiki.o index.o
+index.cgi: list.o data.o dbutil.o db.o hook.o util.o wiki.o index.o
 	$(CC) -o $@ $^ $(LFLAGS)
 	strip $@
 

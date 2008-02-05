@@ -216,34 +216,6 @@ void env_action()
     o("\t\t\t\t\t<div class=\"description\">各ページに表示されるナビゲータの、\"ホーム\" アンカーのリンク先を指定します。</div>\n");
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
-    o("\t\t\t<tr>\n");
-    o("\t\t\t\t<th>smtp_server</th>\n");
-    o("\t\t\t\t<td>\n");
-    o("\t\t\t\t\t<input type=\"text\" name=\"project.smtp_server\" value=\"");h(project_a->smtp_server);o("\" maxlength=\"1023\" />\n");
-    o("\t\t\t\t\t<div class=\"description\">メール送信時に使用するSMTPサーバのホスト名です。</div>\n");
-    o("\t\t\t\t</td>\n");
-    o("\t\t\t</tr>\n");
-    o("\t\t\t<tr>\n");
-    o("\t\t\t\t<th>smtp_port</th>\n");
-    o("\t\t\t\t<td>\n");
-    o("\t\t\t\t\t<input type=\"text\" name=\"project.smtp_port\" value=\"%d\" maxlength=\"1023\" />", project_a->smtp_port);
-    o("\t\t\t\t\t<div class=\"description\">メール送信時に使用するSMTPサーバのポート番号です。</div>\n");
-    o("\t\t\t\t</td>\n");
-    o("\t\t\t</tr>\n");
-    o("\t\t\t<tr>\n");
-    o("\t\t\t\t<th>通知先アドレス</th>\n");
-    o("\t\t\t\t<td>\n");
-    o("\t\t\t\t\t<input type=\"text\" name=\"project.notify_address\" value=\"");h(project_a->notify_address);o("\" maxlength=\"1023\" />\n");
-    o("\t\t\t\t\t<div class=\"description\">投稿があったときに通知を行なうメールアドレスです。メーリングリストなどを指定してください。</div>\n");
-    o("\t\t\t\t</td>\n");
-    o("\t\t\t</tr>\n");
-    o("\t\t\t<tr>\n");
-    o("\t\t\t\t<th>管理者アドレス</th>\n");
-    o("\t\t\t\t<td>\n");
-    o("\t\t\t\t\t<input type=\"text\" name=\"project.admin_address\" value=\"");h(project_a->admin_address);o("\" maxlength=\"1023\" />\n");
-    o("\t\t\t\t\t<div class=\"description\">メール通知のfromに指定されるメールアドレスです。</div>\n");
-    o("\t\t\t\t</td>\n");
-    o("\t\t\t</tr>\n");
     o("\t\t</table>\n");
     o("\t\t<div class=\"description\">サーバ名、通知先アドレス、管理者アドレスが入力されていない場合、メール通知機能は機能しません。</div>\n");
     o("\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
@@ -259,17 +231,11 @@ void env_action()
 void env_submit_action()
 {
     Project* project_a = xalloc(sizeof(Project));
-    char smtp_port[DEFAULT_LENGTH];
 
     db_init();
     db_begin();
     project_a = db_get_project(project_a);
     cgiFormStringNoNewlines("project.home_url", project_a->home_url, DEFAULT_LENGTH);
-    cgiFormStringNoNewlines("project.smtp_server", project_a->smtp_server, DEFAULT_LENGTH);
-    cgiFormStringNoNewlines("project.smtp_port", smtp_port, DEFAULT_LENGTH);
-    project_a->smtp_port = atoi(smtp_port);
-    cgiFormStringNoNewlines("project.notify_address", project_a->notify_address, DEFAULT_LENGTH);
-    cgiFormStringNoNewlines("project.admin_address", project_a->admin_address, DEFAULT_LENGTH);
 
     db_update_project(project_a);
 
