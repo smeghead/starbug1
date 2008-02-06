@@ -322,7 +322,7 @@ void list_action()
     output_header(project_a, "状態別チケット一覧", NULL, NAVI_LIST);
     cgiFormStringNoNewlines("message", message, DEFAULT_LENGTH);
     if (strlen(message) > 0) {
-        o("<div class=\"complete_message\">"); h(message); o("&nbsp;</div>\n");
+        o("<div class=\"complete_message\">"); o(message); o("&nbsp;</div>\n");
     }
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_4_list(element_types_a);
@@ -1202,6 +1202,7 @@ void register_submit_action()
     Project* project_a = xalloc(sizeof(Project));
     List* element_types_a;
     Iterator* it;
+    Iterator* it_hook;
     List* elements_a = NULL;
     Message* ticket_a;
     char ticket_id[DEFAULT_LENGTH];
@@ -1329,28 +1330,26 @@ void register_submit_action()
         /* hook */
         hook = init_hook(HOOK_MODE_REGISTERED);
         hook = exec_hook(hook, project_a, ticket_a, elements_a, element_types_a);
-        complete_message_a = xalloc(sizeof(char) * ((hook->message == NULL ? 0 : strlen(hook->message)) + 32));
+        complete_message_a = xalloc(sizeof(char) * (get_hook_message_size(hook) + 32));
         if (mode == MODE_REGISTER)
             strcpy(complete_message_a, "登録しました。");
         else if (mode == MODE_REPLY)
             strcpy(complete_message_a, "返信しました。");
-        if (hook->message) {
-            strcat(complete_message_a, hook->message);
+        foreach (it_hook, hook->results) {
+            HOOK_RESULT* result = it_hook->element;
+            d("hook_message: %s\n", result->message);
+            strcat(complete_message_a, result->message);
         }
         clean_hook(hook);
         xfree(project_a);
         list_free(element_types_a);
         free_element_list(elements_a);
         xfree(ticket_a);
-        db_commit();
+/*         db_commit(); */
     }
-    d("db_finish begin\n");
     db_finish();
-    d("db_finish end\n");
 
-    d("redirect begin\n");
     redirect("/list", complete_message_a);
-    d("redirect end\n");
     if (complete_message_a) xfree(complete_message_a);
     return;
 

@@ -325,7 +325,7 @@ div.complete_message {
     margin: 15px 3px 15px 3px;
     padding: 5px 5px 5px 20px;
     background-color: #DDFFDD;
-    width: 350px;
+    width: 80%;
     -moz-border-radius: 8px;
 }
 div.item_navigation {
