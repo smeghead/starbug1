@@ -1,3 +1,8 @@
+2008-02-09  smeghead <smeghead@users.sourceforge.jp>
+
+    * 簡易wikiの最終行に改行が無い場合に、最終行が表示されなかった問題を修正し
+    た。
+
 2008-02-06  smeghead <smeghead@users.sourceforge.jp>
 
     * メール送信機能をhook機能の一部にする修正を行なっている。mail機能呼び出し

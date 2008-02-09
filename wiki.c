@@ -97,14 +97,13 @@ void wiki_out(char* page_name)
     Wiki* wiki_a = xalloc(sizeof(Wiki));
     char line[MAX_WIDTH];
     char* c;
-    int last;
     char* p;
 
     wiki_a = db_get_newest_wiki(page_name, wiki_a);
     p = wiki_a->content;
     buf_clear();
-    while ((c = strchr(p, '\n')) != NULL && ((last = strlen(p)) != 0)) {
-        if (c) {
+    while ((strlen(p) != 0)) {
+        if ((c = strchr(p, '\n')) != NULL) {
             int len = c - p;
             strncpy(line, p, len);
             line[len] = '\0';
