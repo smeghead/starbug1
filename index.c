@@ -322,7 +322,7 @@ void list_action()
     output_header(project_a, "状態別チケット一覧", NULL, NAVI_LIST);
     cgiFormStringNoNewlines("message", message, DEFAULT_LENGTH);
     if (strlen(message) > 0) {
-        o("<div class=\"complete_message\">"); o(message); o("&nbsp;</div>\n");
+        o("<div class=\"complete_message\">"); o(message); o("</div>\n");
     }
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_4_list(element_types_a);
@@ -1345,7 +1345,6 @@ void register_submit_action()
         list_free(element_types_a);
         free_element_list(elements_a);
         xfree(ticket_a);
-/*         db_commit(); */
     }
     db_finish();
 

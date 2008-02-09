@@ -44,7 +44,7 @@ static char* create_json(char* content, Project* project, Message* message, List
     Iterator* it;
     sprintf(content, 
             "{project:{name: \"%s\"},"
-            "ticket:{id: %d, url: \"%s%s/ticket/%d\",fields:[",
+            "ticket:{id: %d, url: \"http://%s%s/ticket/%d\",fields:[",
             project->name, message->id, cgiServerName, cgiScriptName, message->id);
     foreach (it, element_types) {
         ElementType* et = it->element;
