@@ -486,6 +486,7 @@ void search_actoin()
     char q[DEFAULT_LENGTH];
     char p[DEFAULT_LENGTH];
     List* messages_a;
+    int col_index;
 
     cgiFormStringNoNewlines("id", id, DEFAULT_LENGTH);
     if (strlen(id) > 0) {
@@ -544,6 +545,7 @@ void search_actoin()
       "<div class=\"description\">検索条件を入力して検索ボタンを押してください。</div>\n");
     o("<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
     o(      "<table summary=\"condition table\">\n");
+    col_index = 1;
     foreach (it, element_types_a) {
         ElementType* et = it->element;
         char name[DEFAULT_LENGTH];
@@ -551,17 +553,20 @@ void search_actoin()
         sprintf(name, "field%d", et->id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
 
-        o("<tr>\n");
+        if (col_index == 1)
+            o("<tr>\n");
         o("\t<th>"); h(et->name); o("</th>\n");
         o("\t<td>\n"); 
         output_form_element_4_condition(et);
         o("\t</td>\n");
-        o("</tr>\n");
+        if (col_index == 3)
+            o("</tr>\n");
+        col_index = col_index++ == 3 ? 1 : col_index;
     }
     o("<tr>\n"
       "\t<th>キーワード検索</th>\n"
-      "\t<td>\n"
-      "\t\t<input type=\"text\" name=\"q\" value=\""); v(q); o("\" />\n"
+      "\t<td colspan=\"5\">\n"
+      "\t\t<input type=\"text\" class=\"conditionelement\" name=\"q\" value=\""); v(q); o("\" />\n"
       "\t\t<div id=\"description\">履歴も含めて全ての項目から検索を行ないます。</div>\n"
       "\t</td>\n"
       "</tr>\n"
@@ -701,7 +706,7 @@ void output_form_element_4_condition(ElementType* et)
         case ELEM_TYPE_TEXT:
         case ELEM_TYPE_TEXTAREA:
         case ELEM_TYPE_CHECKBOX:
-            o("<input type=\"text\" class=\"element\" id=\"field");
+            o("<input type=\"text\" class=\"conditionelement\" id=\"field");
             h(id);
             o("\" name=\"field");
             h(id);

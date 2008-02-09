@@ -4,6 +4,7 @@
     た。
     * hook機能でメール送信を行なう場合のスクリプトサンプルを作成した。
     * cssの間違いを修正した。tableタグの指定
+    * チケット検索の検索条件の表示方法を変更した。
 
 2008-02-06  smeghead <smeghead@users.sourceforge.jp>
 
