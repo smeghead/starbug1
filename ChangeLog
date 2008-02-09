@@ -3,6 +3,7 @@
     * 簡易wikiの最終行に改行が無い場合に、最終行が表示されなかった問題を修正し
     た。
     * hook機能でメール送信を行なう場合のスクリプトサンプルを作成した。
+    * cssの間違いを修正した。tableタグの指定
 
 2008-02-06  smeghead <smeghead@users.sourceforge.jp>
 
