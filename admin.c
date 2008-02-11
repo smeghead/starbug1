@@ -256,10 +256,10 @@ void items_action()
     db_init();
     project_a = db_get_project(project_a);
     output_header(project_a, "項目設定", "management.js", NAVI_ITEM);
-    xfree(project_a);
 
     o("<div id=\"top\">\n");
     o("<h2>%s 管理ツール</h2>", project_a->name);
+    xfree(project_a);
     o("<div id=\"setting_form\">\n");
     o("\t<form id=\"management_form\" action=\"%s/items_submit\" method=\"post\">\n", cgiScriptName);
     o("\t\t<h3>項目設定</h3>\n");
@@ -836,9 +836,9 @@ void style_action()
     db_init();
     project_a = db_get_project(project_a);
     output_header(project_a, "スタイル設定", "style.js", NAVI_STYLE);
+    o(      "<h2>%s 管理ツール</h2>", project_a->name);
     xfree(project_a);
-    o(      "<h2>スタイル編集</h2>\n"
-            "<div id=\"top\">\n"
+    o(      "<div id=\"top\">\n"
             "<h3>スタイルシートの編集</h3>\n"
             "<div id=\"description\">スタイルシートの編集を行ない、更新ボタンを押してください。</div>\n"
             "<form id=\"edit_css_form\" action=\"%s/style_submit\" method=\"post\">\n", cgiScriptName);
