@@ -1,5 +1,9 @@
 2008-02-11  smeghead <smeghead@users.sourceforge.jp>
 
+    * 0.1.3-beta リリース
+
+2008-02-11  smeghead <smeghead@users.sourceforge.jp>
+
     * チケット検索で投稿日時、最終更新日時で検索できるようにした。
     * プロジェクト更新時のSQL文が間違っていたためエラーが発生していたのを修正。
 
@@ -79,6 +83,7 @@
     # echo "create table wiki(id integer not null primary key, name text, content text, registerdate text);" | sqlite3 starbug1.db
     # echo "insert into wiki(id, name, content, registerdate) values (NULL, 'top', 'top content', current_timestamp);" | sqlite3 starbug1.db
     # echo "insert into wiki(id, name, content, registerdate) values (NULL, 'help', 'help content', current_timestamp);" | sqlite3 starbug1.db
+    # echo "insert into wiki(id, name, content, registerdate) values (NULL, 'adminhelp', 'adminhelp content', current_timestamp);" | sqlite3 starbug1.db
 
 2008-01-24  smeghead <smeghead@users.sourceforge.jp>
 

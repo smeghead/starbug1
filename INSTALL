@@ -1,148 +1,139 @@
 インストール方法
 
-Starbug1は、sqlite3、cgicを使用しています。
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 
+Starbug1は、sqlite3、cgic、iconvを使用しています。コンパイルするためには、
+sqlite3、cgicが必要です。(FreeBSDでコンパイルするには、それらに加えてlibiconvが
+必要になります。)
 
 sqlite3のインストール
 
 OSに、sqlite3がインストールされている場合(libsqlite3.so, sqlite3.hが存在する場
 合)は、sqlite3のインストールは不要です。
 
- ・ http://www.sqlite.org/ から、 sqlite-3.5.4.tar.gz をダウンロードする。
-   
-    $ wget http://www.sqlite.org/sqlite-3.5.4.tar.gz
-    
- ・ 適当な場所に展開し、コンパイル、インストールする。
-   
-    $ tar zxf sqlite-3.5.4.tar.gz
-    $ mkdir bld
-    $ cd bld
-    $ ../sqlite-3-5-4/configure --disable-tcl
-    $ make
-    $ su
-    # make install
-    
+http://www.sqlite.org/ から、 sqlite-3.5.4.tar.gz をダウンロードする。
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 
+$ wget http://www.sqlite.org/sqlite-3.5.4.tar.gz
+
+適当な場所に展開し、コンパイル、インストールする。
+
+$ tar zxf sqlite-3.5.4.tar.gz
+$ mkdir bld
+$ cd bld
+$ ../sqlite-3-5-4/configure --disable-tcl
+$ make
+$ su
+# make install
 
 cgicのインストール
 
 OSに、cgicl205以上がインストールされている場合は、cgicのインストールは不要です
 。
 
- ・ http://www.boutell.com/cgic/ から cgic205.tar.gz をダウンロードする。
-   
-    $ wget http://www.boutell.com/cgic/cgic205.tar.gz
-    
- ・ 適当な場所に展開し、コンパイル、インストールする。
-   
-    $ tar zxf cgic205.tar.gz
-    $ cd cgic205
-    $ make
-    $ su
-    # make install
-    
+http://www.boutell.com/cgic/ から cgic205.tar.gz をダウンロードする。
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 
+$ wget http://www.boutell.com/cgic/cgic205.tar.gz
+
+適当な場所に展開し、コンパイル、インストールする。
+
+$ tar zxf cgic205.tar.gz
+$ cd cgic205
+$ make
+$ su
+# make install
 
 Starbug1のインストール
 
- ・ ソースを取得する。
-     □ Downloadから最新ソースを取得する。https://sourceforge.jp/projects/
-        starbug1/
-     □ 上から取得できない場合や、リポジトリにアクセスしたい場合は、、cvsリポジ
-        トリからソースを取得する。
-       
-        $ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/starbug1 login
-        Password:  (そのままEnterキーを押してください)
-        $ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/starbug1 checkout starbug1
-        
+ソースを取得する。
 
- ・ コンパイル
-   
-    $ tar zxf starbug-x.x.x.tar.gz
-    $ cd starbug1
-    $ gmake
-    $ gmake webapp
-    
+ ・ Downloadから最新ソースを取得する。https://sourceforge.jp/projects/starbug1/
+ ・ 上から取得できない場合や、リポジトリにアクセスしたい場合は、、cvsリポジトリ
+    からソースを取得する。
+
+$ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/starbug1 login
+Password:  (そのままEnterキーを押してください)
+$ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/starbug1 checkout starbug1
+
+コンパイル
+
+$ tar zxf starbug-x.x.x.tar.gz
+$ cd starbug1
+$ gmake
+$ gmake webapp
 
 dist/starbug1 ディレクトリに、webアプリ一式が生成されます。
 
 Starbug1の配置
 
- ・ Webサーバ(動作確認しているのはapache)のDocumentRoot配下に dist/starbug1 デ
-    ィレクトリを配置します。
-   
-    $ su
-    # cp -r dist/starbug1 /home/httpd/html
-    
- ・ dist/starbug1 配下をcgi実行ユーザの権限に変更します。
-   
-    # cd /home/httpd/html
-    # chown -R apache:apache starbug1
-    
- ・ .htaccessを適切に編集します。
-   
-    $ cat .htaccess
-    # エラーページの指定
-    ErrorDocument 500 /starbug1/error.html
-    # CGIの実行許可
-    Options +ExecCGI
-    
-    # 一般ユーザの認証についての設定
-    <Files index.cgi>
-        AuthName      "authentication for guest user."
-        AuthType      Basic
-        AuthUserFile  /etc/starbug1/.guest-passwd
-        Require       valid-user
-    </Files>
-    
-    # 管理ユーザの認証についての設定
-    <Files admin.cgi>
-        AuthName      "authentication for administrator user."
-        AuthType      Basic
-        AuthUserFile  /etc/starbug1/.admin-passwd
-        Require       valid-user
-    </Files>
-    
+Webサーバ(動作確認しているのはapache)のDocumentRoot配下に dist/starbug1 ディレ
+クトリを配置します。
 
-各設定を適切に行なってください。
+$ su
+# cp -r dist/starbug1 /home/httpd/html
 
- ・ 
-     □ エラーページの指定
-         ☆ URLを適切に指定してください。アプリのフォルダ名(starbug1)を変更した
-            場合は、エラーページの指定のURLを変更してください。
-     □ CGIの実行許可
-         ☆ 不要であれば、コメントアウトしてください。
-     □ Basic認証
-         ☆ Basic認証を使用する場合、htpasswdなどでパスワードファイルへのユーザ
-            の登録を行なってください。
-         ☆ 一般ユーザと管理ユーザの設定を別々に行なう場合は、両方を正しく設定
-            してください。不要であればコメントアウトしてください。
-         ☆ httpd.confを編集できる場合は、同等の設定を、httpd.confで行なう方が
-            望ましいです。
+? 以前のバージョンのStarbug1からアップデートする場合には、以前のディレクトリを
+バックアップした後、上のコマンドで上書きしてください。その後で、(バックアップ
+先)/css/user.css を、(インストールディレクトリ)/css/user.cssに上書きしてくださ
+い。
 
- ・ http://(server_name)/starbug1/ にアクセスします。
+dist/starbug1 配下をcgi実行ユーザの権限に変更します。
+
+# cd /home/httpd/html
+# chown -R apache:apache starbug1
+
+.htaccessを適切に編集します。(apache用設定)
+
+dot.htaccessを.htaccessにファイル名変更して、各設定を適切に行なってください。
+
+$ mv dot.htaccess .htaccess
+$ cat .htaccess
+# エラーページの指定
+ErrorDocument 500 /starbug1/error.html
+# CGIの実行許可
+Options +ExecCGI
+
+# 一般ユーザの認証についての設定
+<Files index.cgi>
+AuthName      "authentication for guest user."
+AuthType      Basic
+AuthUserFile  /etc/starbug1/.guest-passwd
+Require       valid-user
+</Files>
+
+# 管理ユーザの認証についての設定
+<Files admin.cgi>
+AuthName      "authentication for administrator user."
+AuthType      Basic
+AuthUserFile  /etc/starbug1/.admin-passwd
+Require       valid-user
+</Files>
+
+エラーページの指定
+    URLを適切に指定してください。アプリのフォルダ名(starbug1)を変更した場合は、
+    エラーページの指定のURLを変更してください。
+CGIの実行許可
+    不要であれば、コメントアウトしてください。
+Basic認証
+    Basic認証を使用する場合、htpasswdなどでパスワードファイルへのユーザの登録を
+    行なってください。一般ユーザと管理ユーザの設定を別々に行なう場合は、両方を
+    正しく設定してください。不要であればコメントアウトしてください。 httpd.conf
+    を編集できる場合は、同等の設定を、httpd.confで行なう方が望ましいです。
+
+http://(server_name)/starbug1/ にアクセスします。
 
 トップ画面が表示されれば、インストール成功です。
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 
-
 うまく動かない場合
 
- ・ インストール完了したが、ブラウザで http://(server_name)/starbug1/ にアクセ
-    スするとエラーが発生し、Webサーバのエラーログに、「Premature end of script
-    headers: index.cgi」のようなメッセージが出力される。
-     □ CGIを実行する権限があるか確認してください。以下のような簡単なperlのcgi
-        スクリプトをstarbug1ディレクトリに配置し実行権限を付加して動作するかど
-        うか確認しすることで、CGI自体が有効になっているかどうかを確認できます。
-       
-        #!/usr/bin/perl
-        print "Content-Type: text/plain;\n\nhello.";
-        
-     □ Webサーバプロセスユーザが、starbug1ディレクトリに書き込み権限があるか確
-        認してください。データベースファイルを格納するために、Webサーバプロセス
-        ユーザがstarbug1ディレクトリに書き込み可能となっている必要があります。
+インストール完了したが、ブラウザで http://(server_name)/starbug1/ にアクセスす
+るとエラーが発生し、Webサーバのエラーログに、「Premature end of script headers:
+index.cgi」のようなメッセージが出力される。
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 
+CGIを実行する権限があるか確認してください。以下のような簡単なperlのcgiスクリプ
+トをstarbug1ディレクトリに配置し実行権限を付加して動作するかどうか確認しするこ
+とで、CGI自体が有効になっているかどうかを確認できます。
+
+#!/usr/bin/perl
+print "Content-Type: text/plain;\n\nhello.";
+
+Webサーバプロセスユーザが、starbug1ディレクトリに書き込み権限があるか確認してく
+ださい。データベースファイルを格納するために、Webサーバプロセスユーザがstarbug1
+ディレクトリに書き込み可能となっている必要があります。
