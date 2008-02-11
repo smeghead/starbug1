@@ -175,7 +175,7 @@ table.list_item th.delete {
 }
 .list_item input.checkbox {
 }
-input[type=text].conditionelement {
+input.conditionelement {
     width: 200px;
 }
 #info,

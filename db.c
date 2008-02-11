@@ -302,6 +302,7 @@ char* get_search_sql_string(List* conditions, Condition* sort, char* q, char* sq
         foreach (it, conditions) {
             Condition* cond = it->element;
             char val[DEFAULT_LENGTH];
+            if (cond->element_type_id < 0) continue;
             if (i++) strcat(sql_string, " and ");
             switch (cond->condition_type) {
                 case CONDITION_TYPE_DATE_FROM:
@@ -314,6 +315,30 @@ char* get_search_sql_string(List* conditions, Condition* sort, char* q, char* sq
                     sprintf(val, " (%sm.field%d like '%%' || ? || '%%') ", 
                             cond->element_type_id == ELEM_ID_SENDER ? "org_" : "", /* 投稿者は初回投稿者が検索対象になる。 */
                             cond->element_type_id);
+                    break;
+            }
+            strcat(sql_string, val);
+        }
+        foreach (it, conditions) {
+            Condition* cond = it->element;
+            char name[DEFAULT_LENGTH];
+            char val[DEFAULT_LENGTH];
+            if (cond->element_type_id > 0) continue;
+            if (i++) strcat(sql_string, " and ");
+            switch (cond->element_type_id) {
+                case ELEM_ID_REGISTERDATE:
+                    sprintf(name, "org_m.registerdate");
+                    break;
+                case ELEM_ID_LASTREGISTERDATE:
+                    sprintf(name, "m.registerdate");
+                    break;
+            }
+            switch (cond->condition_type) {
+                case CONDITION_TYPE_DATE_FROM:
+                    sprintf(val, " (%s >= ?) ", name);
+                    break;
+                case CONDITION_TYPE_DATE_TO:
+                    sprintf(val, " (%s <= ?) ", name);
                     break;
             }
             strcat(sql_string, val);

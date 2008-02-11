@@ -427,12 +427,14 @@ Condition* create_sort_condition(Condition* sort)
 }
 List* create_conditions(List* conditions, List* element_types)
 {
+    char name[DEFAULT_LENGTH];
+    char value[DEFAULT_LENGTH];
     Iterator* it;
+    Condition* c;
     foreach (it, element_types) {
         ElementType* et = it->element;
         char name[DEFAULT_LENGTH];
         char value[DEFAULT_LENGTH];
-        Condition* c;
 
         switch (et->type) {
             case ELEM_TYPE_DATE:
@@ -468,6 +470,44 @@ List* create_conditions(List* conditions, List* element_types)
                 list_add(conditions, c);
         }
     }
+    /* 登録日時 */
+    sprintf(name, "registerdate.from");
+    cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+    if (strlen(value)) {
+        c = list_new_element(conditions);
+        c->element_type_id = ELEM_ID_REGISTERDATE;
+        c->condition_type = CONDITION_TYPE_DATE_FROM;
+        strcpy(c->value, value);
+        list_add(conditions, c);
+    }
+    sprintf(name, "registerdate.to");
+    cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+    if (strlen(value)) {
+        c = list_new_element(conditions);
+        c->element_type_id = ELEM_ID_REGISTERDATE;
+        c->condition_type = CONDITION_TYPE_DATE_TO;
+        strcpy(c->value, value);
+        list_add(conditions, c);
+    }
+    /* 更新日時 */
+    sprintf(name, "lastregisterdate.from");
+    cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+    if (strlen(value)) {
+        c = list_new_element(conditions);
+        c->element_type_id = ELEM_ID_LASTREGISTERDATE;
+        c->condition_type = CONDITION_TYPE_DATE_FROM;
+        strcpy(c->value, value);
+        list_add(conditions, c);
+    }
+    sprintf(name, "lastregisterdate.to");
+    cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+    if (strlen(value)) {
+        c = list_new_element(conditions);
+        c->element_type_id = ELEM_ID_LASTREGISTERDATE;
+        c->condition_type = CONDITION_TYPE_DATE_TO;
+        strcpy(c->value, value);
+        list_add(conditions, c);
+    }
     return conditions;
 }
 /**
@@ -485,6 +525,10 @@ void search_actoin()
     char id[DEFAULT_LENGTH];
     char q[DEFAULT_LENGTH];
     char p[DEFAULT_LENGTH];
+    char registerdate_from[DEFAULT_LENGTH];
+    char registerdate_to[DEFAULT_LENGTH];
+    char updatedate_from[DEFAULT_LENGTH];
+    char updatedate_to[DEFAULT_LENGTH];
     List* messages_a;
     int col_index;
 
@@ -559,15 +603,33 @@ void search_actoin()
         o("\t<td>\n"); 
         output_form_element_4_condition(et);
         o("\t</td>\n");
-        if (col_index == 3)
+        if (col_index == 3 || !iterator_next(it))
             o("</tr>\n");
         col_index = col_index++ == 3 ? 1 : col_index;
     }
+    cgiFormStringNoNewlines("registerdate.from", registerdate_from, DEFAULT_LENGTH);
+    cgiFormStringNoNewlines("registerdate.to", registerdate_to, DEFAULT_LENGTH);
+    cgiFormStringNoNewlines("lastregisterdate.from", updatedate_from, DEFAULT_LENGTH);
+    cgiFormStringNoNewlines("lastregisterdate.to", updatedate_to, DEFAULT_LENGTH);
     o("<tr>\n"
       "\t<th>キーワード検索</th>\n"
-      "\t<td colspan=\"5\">\n"
+      "\t<td>\n"
       "\t\t<input type=\"text\" class=\"conditionelement\" name=\"q\" value=\""); v(q); o("\" />\n"
-      "\t\t<div id=\"description\">履歴も含めて全ての項目から検索を行ないます。</div>\n"
+      "\t\t<div class=\"description\">履歴も含めて全ての項目から検索を行ないます。</div>\n"
+      "\t</td>\n"
+      "\t<th>投稿日時</th>\n"
+      "\t<td>\n"
+      "\t\t<input type=\"text\" class=\"calendar\" name=\"registerdate.from\" value=\""); v(registerdate_from); o("\" />\n"
+      "〜\n"
+      "\t\t<input type=\"text\" class=\"calendar\" name=\"registerdate.to\" value=\""); v(registerdate_to); o("\" />\n"
+      "\t\t<div class=\"description\">yyyy-mm-dd形式で入力してください。</div>\n"
+      "\t</td>\n"
+      "\t<th>更新日時</th>\n"
+      "\t<td>\n"
+      "\t\t<input type=\"text\" class=\"calendar\" name=\"lastregisterdate.from\" value=\""); v(updatedate_from); o("\" />\n"
+      "〜\n"
+      "\t\t<input type=\"text\" class=\"calendar\" name=\"lastregisterdate.to\" value=\""); v(updatedate_to); o("\" />\n"
+      "\t\t<div class=\"description\">yyyy-mm-dd形式で入力してください。</div>\n"
       "\t</td>\n"
       "</tr>\n"
       "</table>\n"

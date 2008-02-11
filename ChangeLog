@@ -1,3 +1,7 @@
+2008-02-11  smeghead <smeghead@users.sourceforge.jp>
+
+    * チケット検索で投稿日時、最終更新日時で検索できるようにした。
+
 2008-02-09  smeghead <smeghead@users.sourceforge.jp>
 
     * 簡易wikiの最終行に改行が無い場合に、最終行が表示されなかった問題を修正し
