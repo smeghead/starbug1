@@ -784,7 +784,7 @@ void db_update_project(Project* project)
 {
     if (exec_query(
             "update project set "
-            "name = ?, home_url = ?, ",
+            "name = ?, home_url = ? ",
             COLUMN_TYPE_TEXT, project->name,
             COLUMN_TYPE_TEXT, project->home_url,
             COLUMN_TYPE_END) != 1)
