@@ -217,7 +217,6 @@ void env_action()
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t</table>\n");
-    o("\t\t<div class=\"description\">サーバ名、通知先アドレス、管理者アドレスが入力されていない場合、メール通知機能は機能しません。</div>\n");
     o("\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
     o("\t</form>\n");
     o("</div>\n");

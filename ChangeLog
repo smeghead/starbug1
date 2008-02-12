@@ -1,3 +1,7 @@
+2008-02-12  smeghead <smeghead@users.sourceforge.jp>
+
+    * 管理ツールの環境設定でメールに関する注意書きが残っていたのを削除した 。
+
 2008-02-11  smeghead <smeghead@users.sourceforge.jp>
 
     * 0.1.3-beta リリース
