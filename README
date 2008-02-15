@@ -8,5 +8,17 @@ ITS(イシュートラッキングシステム)としても使用できます。
 Starbug1
 http://starbug1.sourceforge.jp/
 
+
+謝辞
+ Starbug1は、以下のソフトウェア(ライブラリ)を使用させて頂いております。
+ ありがとうございます。
+
+  - SQLite3 データベース
+   http://www.sqlite.org/
+  - cgic CGIライブラリ
+   http://www.boutell.com/cgic/
+  - html5jp(JavaScriptライブラリ) グラフ描画ライブラリ
+   http://www.html5.jp/
+
 --
 smeghead smeghead@users.sourceforge.jp
