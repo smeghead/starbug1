@@ -230,7 +230,6 @@ char* get_filename_without_path(char* path)
     while ((c = strstr(p, "/")) != NULL) {
         p = ++c;
     }
-    d("%s\n", p);
     return p;
 }
 char* get_upload_filename(int element_id, char* buf)

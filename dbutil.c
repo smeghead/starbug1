@@ -46,7 +46,6 @@ void db_finish()
 {
     int ret;
     ret = sqlite3_close(db);
-    d("done %d\n", ret);
 }
 
 void db_begin()
@@ -431,11 +430,9 @@ int exec_query_scalar_int(const char* sql, ...)
     for(i = 0; (type = va_arg(ap, int)) != COLUMN_TYPE_END; i++){
         if (type == COLUMN_TYPE_INT) {
             int value = va_arg(ap, int);
-            d("type: %d = %d\n", type, value);
             sqlite3_bind_int(stmt, i + 1, value);
         } else if (type == COLUMN_TYPE_TEXT) {
             char* value = va_arg(ap, char*);
-            d("type(text): %d = %s\n", type, value);
             if (value == NULL) goto error;
             sqlite3_bind_text(stmt, i + 1, value, strlen(value), NULL);
         }

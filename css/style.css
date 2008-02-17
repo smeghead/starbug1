@@ -455,3 +455,6 @@ div.graph {
 div.delete_item {
     margin: 10px;
 }
+img.attachment_image {
+    width: 200px;
+}

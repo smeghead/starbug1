@@ -1,3 +1,8 @@
+2008-02-17  smeghead <smeghead@users.sourceforge.jp>
+
+    * 添付ファイルが画像だった場合にインライン表示するようにした。
+    * 不要なログ出力を削除した。
+
 2008-02-15  smeghead <smeghead@users.sourceforge.jp>
 
     * READMEに謝辞を追加した。

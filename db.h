@@ -31,6 +31,7 @@ List* db_get_statictics_multi(List*, int);
 List* db_get_statictics(List*, int);
 ElementFile* db_get_element_file(int, ElementFile*);
 List* db_get_newest_information(int, List*);
+char* db_get_element_file_mime_type(int, int, char*);
 int db_get_element_file_id(int, int);
 void db_register_wiki(Wiki*);
 Wiki* db_get_newest_wiki(char*, Wiki*);

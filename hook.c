@@ -52,9 +52,7 @@ static char* create_json(char* content, Project* project, Message* message, List
         char name[DEFAULT_LENGTH];
         char value[DEFAULT_LENGTH];
         escape_quot(name, et->name);
-        d("name: %s\n", name);
         escape_quot(value, get_element_value(elements, et));
-        d("value: %s\n", value);
         sprintf(field, "{name:\"%s\", value:\"%s\"}", name, value);
         strcat(content, field);
         if (iterator_next(it)) strcat(content, ",");

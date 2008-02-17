@@ -667,17 +667,13 @@ void output_ticket_information_4_csv_report_header(List* element_types)
 {
     Iterator* it;
 
-    d("zz\n");
     csv_field("ID"); 
-    d("zz11\n");
     o(",");
-    d("zz\n");
     foreach (it, element_types) {
         ElementType* et = it->element;
         if (!et->ticket_property) continue;
         csv_field(et->name); o(",");
     }
-    d("zz\n");
     csv_field("投稿日時"); o(",");
     csv_field("最終更新日時"); o(",");
     csv_field("放置日数"); o("\r\n");
@@ -1110,7 +1106,6 @@ void ticket_action()
                 if (et->type == ELEM_TYPE_UPLOADFILE) {
                     if (strlen(value)) {
                         char* id_str = get_element_value_by_id(elements_a, ELEM_ID_ID);
-                        d("id_str: %s\n", id_str);
                         o("<a href=\"%s/download/%d/", 
                                 cgiScriptName, 
                                 db_get_element_file_id(atoi(id_str), et->id)); 
@@ -1185,10 +1180,18 @@ void ticket_action()
                 default:
                     if (et->type == ELEM_TYPE_UPLOADFILE) {
                         if (strlen(value)) {
-                            o("<a href=\"%s/download/%d/", 
-                                    cgiScriptName, 
-                                    db_get_element_file_id(message_ids_a[i], et->id)); 
+                            char buf[DEFAULT_LENGTH];
+                            char* mime_type;
+                            int file_id = db_get_element_file_id(message_ids_a[i], et->id);
+                            o("<a href=\"%s/download/%d/", cgiScriptName, file_id); 
                             u(value); o("\" target=\"_blank\">");h(value); o("</a>\n");
+                            mime_type = db_get_element_file_mime_type(message_ids_a[i], et->id, buf);
+                            if (strstr(mime_type, "image") != NULL) {
+                                o("<div>\n");
+                                o("<img class=\"attachment_image\" src=\"%s/download/%d\" alt=\"attachment file\" />\n",
+                                        cgiScriptName, file_id);
+                                o("</div>\n");
+                            }
                         }
                     } else {
                         hm(value);

@@ -124,7 +124,6 @@ void menu_action()
     Project* project_a = xalloc(sizeof(Project));
     char message[DEFAULT_LENGTH];
 
-    d("admin\n");
     db_init();
     project_a = db_get_project(project_a);
     output_header(project_a, "メニュー", NULL, NAVI_MENU);

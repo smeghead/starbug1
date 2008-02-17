@@ -1108,6 +1108,29 @@ int db_get_element_file_id(int message_id, int element_type_id)
             COLUMN_TYPE_INT, element_type_id,
             COLUMN_TYPE_END);
 }
+char* db_get_element_file_mime_type(int message_id, int element_type_id, char* buf)
+{
+    int r;
+    const char *sql;
+    sqlite3_stmt *stmt = NULL;
+
+    sql = "select mime_type from element_file as ef "
+            "where ef.message_id = ? and ef.element_type_id = ?";
+    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    sqlite3_reset(stmt);
+    sqlite3_bind_int(stmt, 1, message_id);
+    sqlite3_bind_int(stmt, 2, element_type_id);
+
+    while (SQLITE_ROW == (r = sqlite3_step(stmt))){
+        strcpy(buf, sqlite3_column_text(stmt, 0));
+        break;
+    }
+
+    sqlite3_finalize(stmt);
+
+    return buf;
+ERROR_LABEL
+}
 void db_register_wiki(Wiki* wiki)
 {
     char registerdate[20];
