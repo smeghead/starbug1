@@ -1,0 +1,2 @@
+#!/bin/sh
+cat pickup_template.sql | sqlite3 `dirname $0`/../db/starbug1.db
