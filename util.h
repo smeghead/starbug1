@@ -27,6 +27,7 @@ char* get_upload_content_type(int, char*);
 ElementFile* get_upload_content(int);
 unsigned long url_encode(unsigned char*, unsigned char*, unsigned long);
 void redirect(char*, char*);
+void redirect_with_hook_messages(char*, char*, List*);
 void free_element_list(List*);
 void* xalloc(size_t);
 void xfree(void*);

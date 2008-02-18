@@ -90,8 +90,8 @@ void output_header(Project* project, char* title, char* script_name, int navi)
             "<head>\n"
             "\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n"
             "\t<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\" />\n"
-            "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />\n"
-            "\t<title>%s - %s</title>\n", project->name, title);
+            "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />\n");
+    o(        "\t<title>"); h(project->name); o(" - %s</title>\n", title);
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName);
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/user.css\" />\n", cgiScriptName);
     if (script_name) {
@@ -314,16 +314,29 @@ void list_action()
     Project* project_a = xalloc(sizeof(Project));
     List* states_a;
     Iterator* it;
-    char message[DEFAULT_LENGTH];
     List* messages_a;
+    char** multi;
 
     db_init();
     project_a = db_get_project(project_a);
     output_header(project_a, "状態別チケット一覧", NULL, NAVI_LIST);
-    cgiFormStringNoNewlines("message", message, DEFAULT_LENGTH);
-    if (strlen(message) > 0) {
-        o("<div class=\"complete_message\">"); o(message); o("</div>\n");
+    /* メッセージの取得 */
+    if ((cgiFormStringMultiple("message", &multi)) != cgiFormNotFound) {
+        int i = 0;
+        o("<div class=\"complete_message\">");
+        while (multi[i]) {
+            if (strstr(multi[i], "[ERROR]") != NULL) {
+                o("<div class=\"error\">");
+            } else {
+                o("<div>");
+            }
+            h(multi[i]);
+            o("</div>");
+            i++;
+        }
+        o("</div>\n");
     }
+    cgiStringArrayFree(multi);
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_4_list(element_types_a);
     o("<h2>"); h(project_a->name); o(" - 状態別チケット一覧</h2>\n");
@@ -389,7 +402,7 @@ void list_action()
                     cgiScriptName,
                     ELEM_ID_STATUS);
             u(s->name);
-            o("\">状態が%sである全てのチケットを表示する</a></div>\n", s->name);
+            o("\">状態が"); h(s->name); o("である全てのチケットを表示する</a></div>\n");
         }
         output_ticket_table_status_index(result_a, element_types_a);
         if (result_a->hit_count == LIST_COUNT_PER_LIST_PAGE) {
@@ -397,7 +410,7 @@ void list_action()
                     cgiScriptName,
                     ELEM_ID_STATUS);
             u(s->name);
-            o("\">状態が%sである全てのチケットを表示する</a></div>\n", s->name);
+            o("\">状態が"); h(s->name); o("である全てのチケットを表示する</a></div>\n");
         }
         list_free(result_a->messages);
         xfree(result_a);
@@ -1272,17 +1285,15 @@ void register_submit_action()
     Project* project_a = xalloc(sizeof(Project));
     List* element_types_a;
     Iterator* it;
-    Iterator* it_hook;
     List* elements_a = NULL;
     Message* ticket_a;
     char ticket_id[DEFAULT_LENGTH];
     int mode = get_mode();
-/*     int mail_result; */
     char** multi;
     char save2cookie[2];
-    char* complete_message_a = NULL;
+    char* complete_message = NULL;
+    HOOK* hook = NULL;
 
-    d("start\n");
     cgiFormStringNoNewlines("save2cookie", save2cookie, 2);
     if (mode == MODE_INVALID)
         die("reqired invalid mode.");
@@ -1299,7 +1310,6 @@ void register_submit_action()
     list_alloc(elements_a, Element);
     if (mode == MODE_REGISTER || mode == MODE_REPLY) {
         char* value_a = xalloc(sizeof(char) * VALUE_LENGTH); /* 1M */
-        HOOK* hook;
         /* register, reply */
         foreach (it, element_types_a) {
             ElementType* et = it->element;
@@ -1400,17 +1410,10 @@ void register_submit_action()
         /* hook */
         hook = init_hook(HOOK_MODE_REGISTERED);
         hook = exec_hook(hook, project_a, ticket_a, elements_a, element_types_a);
-        complete_message_a = xalloc(sizeof(char) * (get_hook_message_size(hook) + 32));
         if (mode == MODE_REGISTER)
-            strcpy(complete_message_a, "登録しました。");
+            complete_message = "登録しました。";
         else if (mode == MODE_REPLY)
-            strcpy(complete_message_a, "返信しました。");
-        foreach (it_hook, hook->results) {
-            HOOK_RESULT* result = it_hook->element;
-            d("hook_message: %s\n", result->message);
-            strcat(complete_message_a, result->message);
-        }
-        clean_hook(hook);
+            complete_message = "返信しました。";
         xfree(project_a);
         list_free(element_types_a);
         free_element_list(elements_a);
@@ -1418,8 +1421,8 @@ void register_submit_action()
     }
     db_finish();
 
-    redirect("/list", complete_message_a);
-    if (complete_message_a) xfree(complete_message_a);
+    redirect_with_hook_messages("/list", complete_message, hook->results);
+    if (hook) clean_hook(hook);
     return;
 
 file_size_error:
@@ -1641,7 +1644,7 @@ got_item:
                 foreach (it_item, items_a) {
                     State* s = it_item->element;
                     int count = s == NULL ? 0 : s->count;
-                    o("\t\t[\"%s\t(%d)\", %d]", s->name, count, count);
+                    o("\t\t[\""); h(s->name); o("\t(%d)\", %d]", count, count);
                     if (iterator_next(it_item)) o(",");
                     o("\n");
                 }

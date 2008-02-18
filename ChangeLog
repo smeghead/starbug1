@@ -1,3 +1,8 @@
+2008-02-18  smeghead <smeghead@users.sourceforge.jp>
+
+    * 投稿完了メッセージ部分のXSS対策を行なった。
+    * 状態名などのXSS対策を行なった。
+
 2008-02-17  smeghead <smeghead@users.sourceforge.jp>
 
     * 添付ファイルが画像だった場合にインライン表示するようにした。

@@ -89,9 +89,9 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
             put_env("STARBUG1_CONTENT", content_a);
             ret = system(hook_command);
             if (ret == 0) {
-                sprintf(result->message, "<div>hook処理(%s)を実行しました。</div>", hook_command);
+                sprintf(result->message, "hook処理(%s)を実行しました。", hook_command);
             } else {
-                sprintf(result->message, "<div class=\"error\">hook処理(%s)でエラーが発生しました。(return code: %d)</div>", hook_command, ret);
+                sprintf(result->message, "[ERROR] hook処理(%s)でエラーが発生しました。(return code: %d)", hook_command, ret);
             }
             list_add(hook->results, result);
         }

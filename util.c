@@ -5,6 +5,7 @@
 #include <cgic.h>
 #include <iconv.h>
 #include "util.h"
+#include "hook.h"
 
 unsigned long url_encode(unsigned char*, unsigned char*, unsigned long);
 static action* get_actions();
@@ -335,6 +336,40 @@ void redirect(char* path, char* message)
         url_encode(param, parambuf, DEFAULT_LENGTH);
         strcat(uri, "?message=");
         strcat(uri, parambuf);
+    }
+    sprintf(redirecturi, "%s%s", cgiScriptName, uri);
+    o("Status: 302 Temporary Redirection\r\n");
+    cgiHeaderLocation(redirecturi);
+}
+void redirect_with_hook_messages(char* path, char* message, List* results)
+{
+    char redirecturi[DEFAULT_LENGTH];
+    char uri[DEFAULT_LENGTH];
+    char param[DEFAULT_LENGTH];
+    char parambuf[DEFAULT_LENGTH];
+    Iterator* it;
+
+    strcpy(uri, path);
+    if (message) {
+        strcpy(param, message);
+        url_encode(param, parambuf, DEFAULT_LENGTH);
+        strcat(uri, "?message=");
+        strcat(uri, parambuf);
+    }
+    if (results) {
+        int i = 0;
+        foreach (it, results) {
+            HOOK_RESULT* result = it->element;
+            strcpy(param, result->message);
+            url_encode(param, parambuf, DEFAULT_LENGTH);
+            if (!message && i == 0)
+                strcat(uri, "?");
+            else
+                strcat(uri, "&");
+            strcat(uri, "message=");
+            strcat(uri, parambuf);
+            i++;
+        }
     }
     sprintf(redirecturi, "%s%s", cgiScriptName, uri);
     o("Status: 302 Temporary Redirection\r\n");

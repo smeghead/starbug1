@@ -487,8 +487,6 @@ void update_elements()
 
         et_a = db_get_element_type(atoi(id), et_a);
 
-        d("while id: %s\n", id);
-        d("while\n");
         sprintf(name, "field%s.name", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
         strcpy(et_a->name, value);
@@ -523,9 +521,7 @@ void update_elements()
 
         sprintf(name, "field%s.auto_add_item", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-        d("auto_add_item: %s\n", value);
         et_a->auto_add_item = atoi(value);
-        d("auto_add_item: %d\n", et_a->auto_add_item);
 
         db_update_element_type(et_a);
 
