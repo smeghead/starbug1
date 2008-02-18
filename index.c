@@ -1181,6 +1181,9 @@ void ticket_action()
             /* チケット属性で、直前の値と同じ項目は表示しない。 */
             if (et->ticket_property == 1 && strcmp(value, last_value) == 0)
                 continue;
+            /* チケット属性でなくて、空白の項目は表示しない。 */
+            if (et->ticket_property == 0 && strlen(value) == 0)
+                continue;
             o(      "\t<tr>\n"
                     "\t\t<th>");
             h(et->name);
