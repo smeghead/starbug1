@@ -217,16 +217,16 @@ void output_ticket_table_header_no_link(List* element_types)
     Iterator* it;
 
     o(      "\t<tr>\n");
-    o(      "\t\t<th>ID</th>\n");
+    o(      "\t\t<th class=\"id\">ID</th>\n");
     foreach (it, element_types) {
         ElementType* et = it->element;
-        o("\t\t<th>\n");
+        o("\t\t<th class=\"field%d\">\n", et->id);
         h(et->name);
         o("\t\t</th>\n");
     }
-    o("\t\t<th>投稿日時</th>\n"
-      "\t\t<th>最終更新日時</th>\n"
-      "\t\t<th>放置日数</th>\n"
+    o("\t\t<th class=\"registerdate\">投稿日時</th>\n"
+      "\t\t<th class=\"lastregisterdate\">最終更新日時</th>\n"
+      "\t\t<th class=\"leftdate\">放置日数</th>\n"
       "\t</tr>\n");
 }
 void output_ticket_table_header(List* element_types)
@@ -237,18 +237,18 @@ void output_ticket_table_header(List* element_types)
     char* query_string = format_query_string_without_sort_and_page(query_string_buffer);
 
     o(      "\t<tr>\n");
-    o(      "\t\t<th><a href=\"%s/search?%ssort=-1&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">ID</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    o(      "\t\t<th class=\"id\"><a href=\"%s/search?%ssort=-1&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">ID</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
     foreach (it, element_types) {
         ElementType* et = it->element;
-        o("\t\t<th>\n");
+        o("\t\t<th class=\"\">\n");
         o("\t\t\t<a href=\"%s/search?%ssort=%d&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">", cgiScriptName, reverse ? "" : "r", et->id, query_string);
         h(et->name);
         o("</a>\n");
         o("\t\t</th>\n");
     }
-    o("\t\t<th><a href=\"%s/search?%ssort=-2&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">投稿日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
-    o("\t\t<th><a href=\"%s/search?%ssort=-3&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">最終更新日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
-    o("\t\t<th><a href=\"%s/search?%ssort=-3&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">放置日数</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    o("\t\t<th class=\"registerdate\"><a href=\"%s/search?%ssort=-2&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">投稿日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    o("\t\t<th class=\"lastregisterdate\"><a href=\"%s/search?%ssort=-3&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">最終更新日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    o("\t\t<th class=\"leftdate\"><a href=\"%s/search?%ssort=-3&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">放置日数</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
     o("\t</tr>\n");
 }
 void output_ticket_table_body(SearchResult* result, List* element_types)

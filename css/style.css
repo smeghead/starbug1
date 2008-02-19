@@ -43,6 +43,22 @@ div#ticket_list h4.status  {
     border-width: 0px 0px 2px 0px;
     font-weight: bold;
 }
+/* チケット一覧 ID */
+div#ticket_list table th.id {
+    width: 30px;
+}
+/* チケット一覧 件名 */
+div#ticket_list table th.field1 {
+    width: 20%;
+}
+/* |+チケット一覧 投稿者+| */
+/* div#ticket_list table th.field2 { */
+/*     width: 80px; */
+/* } */
+/* チケット一覧 状態 */
+/* div#ticket_list table th.field3 { */
+/*     width: 45px; */
+/* } */
 h5 {
     font-weight: bold;
     margin: 0px 0px 3px 5px;

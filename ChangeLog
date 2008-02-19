@@ -1,3 +1,8 @@
+2008-02-19  smeghead <smeghead@users.sourceforge.jp>
+
+    * チケット一覧で各項目の幅を指定できるように、trタグにクラス指定をするよう
+    に修正した。
+
 2008-02-18  smeghead <smeghead@users.sourceforge.jp>
 
     * 投稿完了メッセージ部分のXSS対策を行なった。
