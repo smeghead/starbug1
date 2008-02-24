@@ -49,7 +49,7 @@ div#ticket_list table th.id {
 }
 /* チケット一覧 件名 */
 div#ticket_list table th.field1 {
-    width: 20%;
+    width: 30%;
 }
 /* |+チケット一覧 投稿者+| */
 /* div#ticket_list table th.field2 { */
