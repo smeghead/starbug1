@@ -1,4 +1,4 @@
-VERSION = 0.1.3-beta
+VERSION = 0.1.4-beta
 CC = gcc
 CFLAGS= -I/usr/local/include -I. -DVERSION=\"${VERSION}\" -O3 -Wall
 LFLAGS = -L/usr/local/lib -lsqlite3 -lcgic

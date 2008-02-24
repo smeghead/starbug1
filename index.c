@@ -242,7 +242,7 @@ void output_ticket_table_header(List* element_types)
     o(      "\t\t<th class=\"id\"><a href=\"%s/search?%ssort=-1&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">ID</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
     foreach (it, element_types) {
         ElementType* et = it->element;
-        o("\t\t<th class=\"\">\n");
+        o("\t\t<th class=\"field%d\">\n", et->id);
         o("\t\t\t<a href=\"%s/search?%ssort=%d&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">", cgiScriptName, reverse ? "" : "r", et->id, query_string);
         h(et->name);
         o("</a>\n");

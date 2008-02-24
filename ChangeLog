@@ -1,5 +1,9 @@
 2008-02-24  smeghead <smeghead@users.sourceforge.jp>
 
+    * 0.1.4-beta リリース
+
+2008-02-24  smeghead <smeghead@users.sourceforge.jp>
+
     * チケットの項目の内容のサイズが、1024以上ある場合にエラーになるのを再現す
     るテストを追加した。
     * wiki記法で出力する際に、末尾の改行を出力していないため、pre記法が正しく
