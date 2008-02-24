@@ -48,13 +48,20 @@ static char* create_json(char* content, Project* project, Message* message, List
             project->name, message->id, cgiServerName, cgiScriptName, message->id);
     foreach (it, element_types) {
         ElementType* et = it->element;
-        char field[DEFAULT_LENGTH];
+        char field[DEFAULT_LENGTH * 2];
         char name[DEFAULT_LENGTH];
-        char value[DEFAULT_LENGTH];
+        char* value_p;
+        char* value_a;
+        char* value_quoted_a;
         escape_quot(name, et->name);
-        escape_quot(value, get_element_value(elements, et));
-        //TODO valueが長い場合は、fieldに収まるように、valueの後ろを切り捨てる。
-        sprintf(field, "{name:\"%s\", value:\"%s\"}", name, value);
+        value_p = get_element_value(elements, et);
+        value_a = xalloc(sizeof(char) * DEFAULT_LENGTH + 10);
+        value_quoted_a = xalloc(sizeof(char) * DEFAULT_LENGTH * 2); /* quoteするとサイズが増えるので、余分にバッファを用意する。 */
+        strncpy(value_a, value_p, DEFAULT_LENGTH);
+        escape_quot(value_quoted_a, value_a);
+        xfree(value_a);
+        sprintf(field, "{name:\"%s\", value:\"%s\"}", name, value_quoted_a);
+        xfree(value_quoted_a);
         strcat(content, field);
         if (iterator_next(it)) strcat(content, ",");
     }
