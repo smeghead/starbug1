@@ -61,6 +61,7 @@ void buf_flush()
         if (buf_type == TYPE_LI)
             printf("<li>");
         h(text[i]);
+        o("\n");
         if (buf_type == TYPE_LI)
             printf("</li>");
     }
@@ -80,6 +81,7 @@ void buf_flush()
 void buf_out(char* str)
 {
     h(str);
+    o("\n");
 }
 void element_out_without_content(char* tag_name)
 {
