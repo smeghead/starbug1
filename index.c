@@ -147,6 +147,8 @@ void output_navigater(SearchResult* result, char* query_string)
     if (result->page > 0)
         o("<a href=\"%s/search?p=%d&amp;%s\">&lt;&lt;</a>\n", cgiScriptName, result->page - 1, query_string);
     for (i = 0; i * LIST_COUNT_PER_SEARCH_PAGE < result->hit_count; i++) {
+        if (i < result->page - 5 || i > result->page + 5)
+            continue;
         if (i == result->page)
             o("%d\n", i + 1);
         else
@@ -1707,6 +1709,7 @@ void edit_top_action()
             "<li>行頭に****を記述した行は、極小見出しになります。</li>\n"
             "<li>行頭に-を記述した行は、箇条書きになります。</li>\n"
             "<li>行頭に----を記述した行は、区切り線になります。</li>\n"
+            "<li>行頭が空白スペースから始まる行は、整形済みブロックになります。</li>\n"
             "</ul>\n"
             "</div>\n"
             "</div>\n");
