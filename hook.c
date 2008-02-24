@@ -53,6 +53,7 @@ static char* create_json(char* content, Project* project, Message* message, List
         char value[DEFAULT_LENGTH];
         escape_quot(name, et->name);
         escape_quot(value, get_element_value(elements, et));
+        //TODO valueが長い場合は、fieldに収まるように、valueの後ろを切り捨てる。
         sprintf(field, "{name:\"%s\", value:\"%s\"}", name, value);
         strcat(content, field);
         if (iterator_next(it)) strcat(content, ",");

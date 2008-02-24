@@ -1,3 +1,8 @@
+2008-02-24  smeghead <smeghead@users.sourceforge.jp>
+
+    * チケットの項目の内容のサイズが、1024以上ある場合にエラーになるのを再現す
+    るテストを追加した。
+
 2008-02-19  smeghead <smeghead@users.sourceforge.jp>
 
     * チケット一覧で各項目の幅を指定できるように、trタグにクラス指定をするよう
