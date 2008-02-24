@@ -1,5 +1,10 @@
 2008-02-24  smeghead <smeghead@users.sourceforge.jp>
 
+    * チケット項目(複数行テキスト)の値にpre記法を追加した。
+    '>|\n' で始まり、'|<'で終わる領域をpreタグで出力するようにした。
+
+2008-02-24  smeghead <smeghead@users.sourceforge.jp>
+
     * 0.1.4-beta リリース
 
 2008-02-24  smeghead <smeghead@users.sourceforge.jp>

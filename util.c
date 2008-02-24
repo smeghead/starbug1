@@ -88,10 +88,37 @@ void exec_action()
             return cgiFormIO; \
         } \
     } 
+/*
+ * 複数行テキストの領域では、pre記法をサポートする。
+ */
 static cgiFormResultType cgiHtmlEscapeDataMultiLine(char *data, int len)
 {
     while (len--) {
-        if (*data == '<') {
+        d("data: %c %c %x len(%d)\n", *data, *(data + 1), *(data + 2), len);
+        if (len > 2 && *data == '>' &&
+                *(data + 1) == '|' &&
+                (*(data + 2) == '\r' || *(data + 2) == '\n')) {
+            /* pre記法 */
+            TRYPUTC('<');
+            TRYPUTC('p');
+            TRYPUTC('r');
+            TRYPUTC('e');
+            TRYPUTC('>');
+            data += 2;
+            len -= 2;
+        } else if (len > 0 && *data == '|' &&
+                *(data + 1) == '<' &&
+                (*(data + 2) == '\r' || *(data + 2) == '\n' || len == 1)) {
+            /* pre記法 */
+            TRYPUTC('<');
+            TRYPUTC('/');
+            TRYPUTC('p');
+            TRYPUTC('r');
+            TRYPUTC('e');
+            TRYPUTC('>');
+            data += (len == 1) ? 1 : 2; /* |< で終わっている場合(改行が無い場合) は、1を足す。改行が付いている場合は、2を足す。*/
+            len -= (len == 1) ? 1 : 2;
+        } else if (*data == '<') {
             TRYPUTC('&');
             TRYPUTC('l');
             TRYPUTC('t');
