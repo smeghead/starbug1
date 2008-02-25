@@ -93,6 +93,7 @@ void exec_action()
  */
 static cgiFormResultType cgiHtmlEscapeDataMultiLine(char *data, int len)
 {
+    int printing_pre = 0;
     while (len--) {
         d("data: %c %c %x len(%d)\n", *data, *(data + 1), *(data + 2), len);
         if (len > 2 && *data == '>' &&
@@ -106,6 +107,7 @@ static cgiFormResultType cgiHtmlEscapeDataMultiLine(char *data, int len)
             TRYPUTC('>');
             data += 2;
             len -= 2;
+            printing_pre = 1;
         } else if (len > 0 && *data == '|' &&
                 *(data + 1) == '<' &&
                 (*(data + 2) == '\r' || *(data + 2) == '\n' || len == 1)) {
@@ -118,6 +120,7 @@ static cgiFormResultType cgiHtmlEscapeDataMultiLine(char *data, int len)
             TRYPUTC('>');
             data += (len == 1) ? 1 : 2; /* |< で終わっている場合(改行が無い場合) は、1を足す。改行が付いている場合は、2を足す。*/
             len -= (len == 1) ? 1 : 2;
+            printing_pre = 0;
         } else if (*data == '<') {
             TRYPUTC('&');
             TRYPUTC('l');
@@ -134,7 +137,7 @@ static cgiFormResultType cgiHtmlEscapeDataMultiLine(char *data, int len)
             TRYPUTC('g');
             TRYPUTC('t');
             TRYPUTC(';');
-        } else if (*data == '\n') {
+        } else if (printing_pre == 0 && *data == '\n') {
             TRYPUTC('<');
             TRYPUTC('b');
             TRYPUTC('r');

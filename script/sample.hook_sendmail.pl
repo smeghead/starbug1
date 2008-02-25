@@ -59,6 +59,7 @@ sub create_content {
     foreach my $f (@$fields) {
         my $name = $f->{name};
         my $value = $f->{value};
+        $value =~ s/([^\r])\n/$1\r\n/g;
         $fields_data .= " $name: $value\n";
     }
     return <<EOD;

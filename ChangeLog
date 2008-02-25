@@ -1,3 +1,9 @@
+2008-02-25  smeghead <smeghead@users.sourceforge.jp>
+
+    * hook機能のメール送信サンプルスクリプトで、メール本文の項目の内容に改行が
+    出力されないのを修正した。
+    * pre記法の出力中には、改行をbrタグに変換しないように修正した。
+
 2008-02-24  smeghead <smeghead@users.sourceforge.jp>
 
     * チケット項目(複数行テキスト)の値にpre記法を追加した。
