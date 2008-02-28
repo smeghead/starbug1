@@ -1173,13 +1173,20 @@ void ticket_action()
 
         o(      "<table summary=\"reply table\">\n"
                 "\t<tr>\n"
-                "\t\t<td colspan=\"2\" class=\"title\">投稿: %d ", i + 1); o("["); h(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE)); o("]</td>\n"
+                "\t\t<td colspan=\"2\" class=\"title\">%d: ", i + 1);
+        h(get_element_value_by_id(elements_a, ELEM_ID_SENDER));
+        o("&nbsp;<span class=\"date\">("); h(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE)); o(")</span>&nbsp;");
+        o(      "</td>\n"
                 "\t</tr>\n");
         foreach (it, element_types_a) {
             ElementType* et = it->element;
             char* value = get_element_value(elements_a, et);
             char* last_value = get_element_value(previous, et);
 
+            /* 
+             * 投稿者は表示しない。 */
+            if (et->id == ELEM_ID_SENDER)
+                continue;
             /* チケット属性で、直前の値と同じ項目は表示しない。 */
             if (et->ticket_property == 1 && strcmp(value, last_value) == 0)
                 continue;

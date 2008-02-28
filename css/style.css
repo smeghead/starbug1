@@ -139,15 +139,17 @@ input:focus.button {
     width: 95%;
 }
 #ticket_history td.title {
-/*     background-image: url("img/h3.png"); */
-    font-weight: bold;
     color: #00108C;
     font-size: 110%;
-    text-align: center;
     font-weight: bold;
     background:#EEE;
     border-bottom:1px solid gray;
     white-space: nowrap;
+}
+#ticket_history td.title span.date {
+    margin-left: 8px;
+    color: black;
+    font-weight: normal;
 }
 #ticket_history th {
     white-space: nowrap;
