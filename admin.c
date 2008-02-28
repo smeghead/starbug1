@@ -111,6 +111,9 @@ void output_footer()
             "</div>\n"
             "</body>\n</html>\n", VERSION);
 }
+void output_field_information_js() {
+    o("<script type=\"text/javascript\" src=\"%s/../js/validate.js\"></script>\n", cgiScriptName); 
+}
 int cgiMain() {
     register_actions();
     exec_action();
@@ -255,24 +258,25 @@ void items_action()
     project_a = db_get_project(project_a);
     output_header(project_a, "項目設定", "management.js", NAVI_ITEM);
 
-    o("<div id=\"top\">\n");
-    o("<h2>%s 管理ツール</h2>", project_a->name);
+    o("<div id=\"top\">\n"
+      "<h2>%s 管理ツール</h2>", project_a->name);
     xfree(project_a);
-    o("<div id=\"setting_form\">\n");
-    o("\t<form id=\"management_form\" action=\"%s/items_submit\" method=\"post\">\n", cgiScriptName);
-    o("\t\t<h3>項目設定</h3>\n");
-    o("\t\t<div class=\"description\">チケットID、投稿日時は編集できません。件名、投稿者、状態は、基本属性のため編集に制限があります。(削除不可、チケット属性、返信専用属性変更不可)</div>\n");
-    o("\t\t<div><a href=\"%s/new_item\">新規項目の追加</a></div>\n", cgiScriptName);
+    o("<div id=\"setting_form\">\n"
+      "\t<form id=\"management_form\" action=\"%s/items_submit\" method=\"post\">\n", cgiScriptName);
+    o("\t\t<h3>項目設定</h3>\n"
+      "\t\t<div class=\"description\">チケットID、投稿日時は編集できません。件名、投稿者、状態は、基本属性のため編集に制限があります。(削除不可、チケット属性、返信専用属性変更不可)</div>\n"
+      "\t\t<div><a href=\"%s/new_item\">新規項目の追加</a></div>\n", cgiScriptName);
 
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_all(element_types_a);
+    output_field_information_js();
     o("\t\t<ul id=\"field_list\">\n");
     foreach (it, element_types_a) {
         ElementType* et = it->element;
         o("\t\t<li><a href=\"#field%d\">", et->id); h(et->name); o("</a></li>\n");
     }
-    o("\t\t</ul>\n");
-    o("\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
+    o("\t\t</ul>\n"
+      "\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
     foreach (it, element_types_a) {
         ElementType* et = it->element;
         List* items_a;
@@ -280,64 +284,64 @@ void items_action()
         list_alloc(items_a, ListItem);
         items_a = db_get_list_item(et->id, items_a);
         o("\t\t<a name=\"field%d\"></a>\n", et->id);
-        o("\t\t<h4>"); h(et->name); o("</h4>\n");
-        o("\t\t<div class=\"item_navigation\"><a href=\"#top\">このページのトップへ</a></div>\n");
+        o("\t\t<h4>"); h(et->name); o("&nbsp;<a href=\"#top\">↑</a></h4>\n");
         o("\t\t<input type=\"hidden\" name=\"field_ids\" value=\"%d\" />\n", et->id);
-        o("\t\t<table class=\"item_table\" summary=\"item table\">\n");
-        o("\t\t\t<tr>\n");
-        o("\t\t\t\t<th>項目名</th>\n");
-        o("\t\t\t\t<td>\n");
-        o("\t\t\t\t\t<input type=\"text\" name=\"field%d.name\" ", et->id);
-        o(                  "value=\"");h(et->name);o("\" />\n");
-        o("\t\t\t\t\t<div class=\"description\">項目名です。</div>\n");
-        o("\t\t\t\t</td>\n");
-        o("\t\t\t</tr>\n");
-        o("\t\t\t<tr>\n");
-        o("\t\t\t\t<th>項目の説明文</th>\n");
-        o("\t\t\t\t<td>\n");
-        o("\t\t\t\t\t<input type=\"text\" name=\"field%d.description\" ", et->id);
-        o(                  "value=\"");h(et->description);o("\" />\n");
-        o("\t\t\t\t\t<div class=\"description\">項目の説明文です。投稿時に表示されます。</div>\n");
-        o("\t\t\t\t</td>\n");
-        o("\t\t\t</tr>\n");
-        o("\t\t\t<tr>\n");
-        o("\t\t\t\t<th>必須項目</th>\n");
-        o("\t\t\t\t<td>\n");
+        o("\t\t<table class=\"item_table\" summary=\"item table\">\n"
+          "\t\t\t<tr>\n"
+          "\t\t\t\t<th class=\"required\">項目名<span class=\"required\">※</span></th>\n"
+          "\t\t\t\t<td>\n"
+          "\t\t\t\t\t<input class=\"required\" id=\"field%d.name\" type=\"text\" name=\"field%d.name\" ", et->id, et->id);
+        o(                  "value=\"");h(et->name);o("\" />\n"
+          "\t\t\t\t\t<div class=\"description\">項目名です。</div>\n"
+          "\t\t\t\t\t<div id=\"field%d.name.required\" class=\"error\"></div>\n", et->id);
+        o("\t\t\t\t</td>\n"
+          "\t\t\t</tr>\n"
+          "\t\t\t<tr>\n"
+          "\t\t\t\t<th>項目の説明文</th>\n"
+          "\t\t\t\t<td>\n"
+          "\t\t\t\t\t<input type=\"text\" name=\"field%d.description\" ", et->id);
+        o(                  "value=\"");h(et->description);o("\" />\n"
+          "\t\t\t\t\t<div class=\"description\">項目の説明文です。投稿時に表示されます。</div>\n"
+          "\t\t\t\t</td>\n"
+          "\t\t\t</tr>\n"
+          "\t\t\t<tr>\n"
+          "\t\t\t\t<th>必須項目</th>\n"
+          "\t\t\t\t<td>\n");
         o("\t\t\t\t\t<input id=\"field%d.required\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.required\" ", et->id, et->id);
         o(                  "value=\"1\" %s />\n", et->required == 1 ? "checked=\"checked\"" : "");
         o("\t\t\t\t\t<label for=\"field%d.required\">必須項目とする。</label>\n", et->id);
-        o("\t\t\t\t\t<div class=\"description\">入力しないと投稿できない属性とするかどうかです。ただし、チェックはJavaScriptで行なうのみです。</div>\n");
-        o("\t\t\t\t</td>\n");
-        o("\t\t\t</tr>\n");
-        o("\t\t\t<tr>\n");
-        o("\t\t\t\t<th>チケット属性</th>\n");
-        o("\t\t\t\t<td>\n");
-        o("\t\t\t\t\t<input id=\"field%d.ticket_property\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.ticket_property\" ", et->id, et->id);
+        o("\t\t\t\t\t<div class=\"description\">入力しないと投稿できない属性とするかどうかです。ただし、チェックはJavaScriptで行なうのみです。</div>\n"
+          "\t\t\t\t</td>\n"
+          "\t\t\t</tr>\n"
+          "\t\t\t<tr>\n"
+          "\t\t\t\t<th>チケット属性</th>\n"
+          "\t\t\t\t<td>\n"
+          "\t\t\t\t\t<input id=\"field%d.ticket_property\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.ticket_property\" ", et->id, et->id);
         o(                  "value=\"1\" %s %s />\n", et->ticket_property == 1 ? "checked=\"checked\"" : "", et->id <= BASIC_ELEMENT_MAX ? "disabled=\"disabled\"" : "");
         o("\t\t\t\t\t<label for=\"field%d.ticket_property\">チケット属性とする。</label>\n", et->id);
-        o("\t\t\t\t\t<div class=\"description\">\n");
-        o("\t\t\t\t\t\t返信の属性としてではなくチケット自体の属性として定義するかどうかです。\n");
-        o("\t\t\t\t\t\t返信時にチケット属性を指定した項目を書き換えた場合、書き換えた内容がチケット最新情報に表示されるようになります。\n");
-        o("\t\t\t\t\t\tチケット属性を指定していない項目は、チケット最新情報に表示されません。チケット属性を指定していない項目はチケット履歴から参照することになります。\n");
-        o("\t\t\t\t\t</div>\n");
-        o("\t\t\t\t</td>\n");
-        o("\t\t\t</tr>\n");
-        o("\t\t\t<tr>\n");
-        o("\t\t\t\t<th>返信専用属性</th>\n");
-        o("\t\t\t\t<td>\n");
-        o("\t\t\t\t\t<input id=\"field%d.reply_property\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.reply_property\" ", et->id, et->id);
+        o("\t\t\t\t\t<div class=\"description\">\n"
+          "\t\t\t\t\t\t返信の属性としてではなくチケット自体の属性として定義するかどうかです。\n"
+          "\t\t\t\t\t\t返信時にチケット属性を指定した項目を書き換えた場合、書き換えた内容がチケット最新情報に表示されるようになります。\n"
+          "\t\t\t\t\t\tチケット属性を指定していない項目は、チケット最新情報に表示されません。チケット属性を指定していない項目はチケット履歴から参照することになります。\n"
+          "\t\t\t\t\t</div>\n"
+          "\t\t\t\t</td>\n"
+          "\t\t\t</tr>\n"
+          "\t\t\t<tr>\n"
+          "\t\t\t\t<th>返信専用属性</th>\n"
+          "\t\t\t\t<td>\n"
+          "\t\t\t\t\t<input id=\"field%d.reply_property\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.reply_property\" ", et->id, et->id);
         o(                  "value=\"1\" %s %s />\n", et->reply_property == 1 ? "checked=\"checked\"" : "", et->id <= BASIC_ELEMENT_MAX ? "disabled=\"disabled\"" : "");
         o("\t\t\t\t\t<label for=\"field%d.reply_property\">返信専用属性とする。</label>\n", et->id);
-        o("\t\t\t\t\t<div class=\"description\">\n");
-        o("\t\t\t\t\t\t新規の登録時には、入力項目としないかどうかです。チェックした場合、新規の登録時には、入力項目になりません。\n");
-        o("\t\t\t\t\t\t返信の時のみ入力できる項目となります。チケットの対応時期などの返信する人でなければわからない項目は、返信専用属性とすることで、新規登録時の不要な入力の手間を減らすことができます。\n");
-        o("\t\t\t\t\t</div>\n");
-        o("\t\t\t\t</td>\n");
-        o("\t\t\t</tr>\n");
-        o("\t\t\t<tr>\n");
-        o("\t\t\t\t<th>項目種別</th>\n");
-        o("\t\t\t\t<td>\n");
-        o("\t\t\t\t\t<input type=\"hidden\" name=\"field%d.element_type_id\" value=\"%d\" />\n", et->id, et->type);
+        o("\t\t\t\t\t<div class=\"description\">\n"
+          "\t\t\t\t\t\t新規の登録時には、入力項目としないかどうかです。チェックした場合、新規の登録時には、入力項目になりません。\n"
+          "\t\t\t\t\t\t返信の時のみ入力できる項目となります。チケットの対応時期などの返信する人でなければわからない項目は、返信専用属性とすることで、新規登録時の不要な入力の手間を減らすことができます。\n"
+          "\t\t\t\t\t</div>\n"
+          "\t\t\t\t</td>\n"
+          "\t\t\t</tr>\n"
+          "\t\t\t<tr>\n"
+          "\t\t\t\t<th>項目種別</th>\n"
+          "\t\t\t\t<td>\n"
+          "\t\t\t\t\t<input type=\"hidden\" name=\"field%d.element_type_id\" value=\"%d\" />\n", et->id, et->type);
         switch (et->type) {
             case ELEM_TYPE_TEXT:
                 o("1行テキスト(input[type=text])");
@@ -366,82 +370,82 @@ void items_action()
         switch (et->type) {
             case ELEM_TYPE_LIST_SINGLE:
             case ELEM_TYPE_LIST_MULTI:
-                o("\t\t\t<tr>\n");
-                o("\t\t\t\t<th>選択要素</th>\n");
-                o("\t\t\t\t<td>\n");
-                o("\t\t\t\t\t<table class=\"list_item\">\n");
-                o("\t\t\t\t\t\t<tr>\n");
-                o("\t\t\t\t\t\t\t<th>選択肢名</th>\n");
-                o("\t\t\t\t\t\t\t<th class=\"close\">クローズを意味する</th>\n");
-                o("\t\t\t\t\t\t\t<th>並び順</th>\n");
-                o("\t\t\t\t\t\t\t<th class=\"delete\">削除</th>\n");
-                o("\t\t\t\t\t\t</tr>\n");
+                o("\t\t\t<tr>\n"
+                  "\t\t\t\t<th>選択要素</th>\n"
+                  "\t\t\t\t<td>\n"
+                  "\t\t\t\t\t<table class=\"list_item\">\n"
+                  "\t\t\t\t\t\t<tr>\n"
+                  "\t\t\t\t\t\t\t<th>選択肢名</th>\n"
+                  "\t\t\t\t\t\t\t<th class=\"close\">クローズを意味する</th>\n"
+                  "\t\t\t\t\t\t\t<th>並び順</th>\n"
+                  "\t\t\t\t\t\t\t<th class=\"delete\">削除</th>\n"
+                  "\t\t\t\t\t\t</tr>\n");
                 foreach (it, items_a) {
                     ListItem* item = it->element;
-                    o("\t\t\t\t\t\t<tr>\n");
-                    o("\t\t\t\t\t\t\t<td>\n");
-                    o("\t\t\t\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field%d.list_item%d.name\" ", et->id, item->id);
-                    o(                       "value=\"");h(item->name);o("\" />\n");
-                    o("\t\t\t\t\t\t\t</td>\n");
-                    o("\t\t\t\t\t\t\t<td>\n");
-                    o("\t\t\t\t\t\t\t\t<input class=\"checkbox\" type=\"checkbox\" name=\"field%d.list_item%d.close\" value=\"1\" %s />\n", et->id, item->id, (item->close == 1) ? "checked=\"checked\"" : "");
-                    o("\t\t\t\t\t\t\t</td>\n");
-                    o("\t\t\t\t\t\t\t<td>\n");
-                    o("\t\t\t\t\t\t\t\t<input class=\"number\" type=\"text\" name=\"field%d.list_item%d.sort\" value=\"%d\" />\n", et->id, item->id, item->sort);
-                    o("\t\t\t\t\t\t\t</td>\n");
-                    o("\t\t\t\t\t\t\t<td>\n");
-                    o("\t\t\t\t\t\t\t\t<input class=\"checkbox\" type=\"checkbox\" name=\"field%d.list_item%d.delete\" value=\"1\" />\n", et->id, item->id);
-                    o("\t\t\t\t\t\t\t</td>\n");
-                    o("\t\t\t\t\t\t</tr>\n");
+                    o("\t\t\t\t\t\t<tr>\n"
+                      "\t\t\t\t\t\t\t<td>\n"
+                      "\t\t\t\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field%d.list_item%d.name\" ", et->id, item->id);
+                    o(                       "value=\"");h(item->name);o("\" />\n"
+                      "\t\t\t\t\t\t\t</td>\n"
+                      "\t\t\t\t\t\t\t<td>\n"
+                      "\t\t\t\t\t\t\t\t<input class=\"checkbox\" type=\"checkbox\" name=\"field%d.list_item%d.close\" value=\"1\" %s />\n", et->id, item->id, (item->close == 1) ? "checked=\"checked\"" : "");
+                    o("\t\t\t\t\t\t\t</td>\n"
+                      "\t\t\t\t\t\t\t<td>\n"
+                      "\t\t\t\t\t\t\t\t<input class=\"number\" type=\"text\" name=\"field%d.list_item%d.sort\" value=\"%d\" />\n", et->id, item->id, item->sort);
+                    o("\t\t\t\t\t\t\t</td>\n"
+                      "\t\t\t\t\t\t\t<td>\n"
+                      "\t\t\t\t\t\t\t\t<input class=\"checkbox\" type=\"checkbox\" name=\"field%d.list_item%d.delete\" value=\"1\" />\n", et->id, item->id);
+                    o("\t\t\t\t\t\t\t</td>\n"
+                      "\t\t\t\t\t\t</tr>\n");
                 }
-                o("\t\t\t\t\t\t<tr>\n");
-                o("\t\t\t\t\t\t\t<td>\n");
-                o("\t\t\t\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field%d.list_item_new.name\" value=\"\" />\n", et->id);
-                o("\t\t\t\t\t\t\t</td>\n");
-                o("\t\t\t\t\t\t\t<td>\n");
-                o("\t\t\t\t\t\t\t\t<input class=\"checkbox\" type=\"checkbox\" name=\"field%d.list_item_new.close\" value=\"\" />\n", et->id);
-                o("\t\t\t\t\t\t\t</td>\n");
-                o("\t\t\t\t\t\t\t<td>\n");
-                o("\t\t\t\t\t\t\t\t<input class=\"number\" type=\"text\" name=\"field%d.list_item_new.sort\" value=\"\" />\n", et->id);
-                o("\t\t\t\t\t\t\t</td>\n");
-                o("\t\t\t\t\t\t\t<td>\n");
-                o("\t\t\t\t\t\t\t\t&nbsp;\n");
-                o("\t\t\t\t\t\t\t</td>\n");
-                o("\t\t\t\t\t\t</tr>\n");
-                o("\t\t\t\t\t</table>\n");
-                o("\t\t\t\t\t<div class=\"description\">項目種別が選択式の場合の選択肢です。</div>\n");
-                o("\t\t\t\t\t<input id=\"field%d.auto_add_item\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.auto_add_item\" ", et->id, et->id);
+                o("\t\t\t\t\t\t<tr>\n"
+                  "\t\t\t\t\t\t\t<td>\n"
+                  "\t\t\t\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field%d.list_item_new.name\" value=\"\" />\n", et->id);
+                o("\t\t\t\t\t\t\t</td>\n"
+                  "\t\t\t\t\t\t\t<td>\n"
+                  "\t\t\t\t\t\t\t\t<input class=\"checkbox\" type=\"checkbox\" name=\"field%d.list_item_new.close\" value=\"\" />\n", et->id);
+                o("\t\t\t\t\t\t\t</td>\n"
+                  "\t\t\t\t\t\t\t<td>\n"
+                  "\t\t\t\t\t\t\t\t<input class=\"number\" type=\"text\" name=\"field%d.list_item_new.sort\" value=\"\" />\n", et->id);
+                o("\t\t\t\t\t\t\t</td>\n"
+                  "\t\t\t\t\t\t\t<td>\n"
+                  "\t\t\t\t\t\t\t\t&nbsp;\n"
+                  "\t\t\t\t\t\t\t</td>\n"
+                  "\t\t\t\t\t\t</tr>\n"
+                  "\t\t\t\t\t</table>\n"
+                  "\t\t\t\t\t<div class=\"description\">項目種別が選択式の場合の選択肢です。</div>\n"
+                  "\t\t\t\t\t<input id=\"field%d.auto_add_item\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.auto_add_item\" ", et->id, et->id);
                 o(                  "value=\"1\" %s />\n", et->auto_add_item == 1 ? "checked=\"checked\"" : "");
                 o("\t\t\t\t\t<label for=\"field%d.auto_add_item\">投稿時に、新規項目を指定可能とする。</label>\n", et->id);
-                o("\t\t\t\t\t<div class=\"description\">投稿時にテキストボックスを表示し、テキストボックスに入力された場合は、その項目を選択肢に追加する機能を付加するかどうかです。</div>\n");
-                o("\t\t\t\t</td>\n");
-                o("\t\t\t</tr>\n");
+                o("\t\t\t\t\t<div class=\"description\">投稿時にテキストボックスを表示し、テキストボックスに入力された場合は、その項目を選択肢に追加する機能を付加するかどうかです。</div>\n"
+                  "\t\t\t\t</td>\n"
+                  "\t\t\t</tr>\n");
                 break;
         }
-        o("\t\t\t<tr>\n");
-        o("\t\t\t\t<th>デフォルト値</th>\n");
-        o("\t\t\t\t<td>\n");
-        o("\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field%d.default_value\" value=\"%s\" maxlength=\"1000\" />\n", et->id, et->default_value);
-        o("\t\t\t\t\t<div class=\"description\">投稿画面、返信画面での項目の初期値です。</div>\n");
-        o("\t\t\t\t</td>\n");
-        o("\t\t\t</tr>\n");
-        o("\t\t\t<tr>\n");
-        o("\t\t\t\t<th>チケット一覧表示</th>\n");
-        o("\t\t\t\t<td>\n");
-        o("\t\t\t\t\t<input id=\"field%d.display_in_list\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.display_in_list\" ", et->id, et->id);
+        o("\t\t\t<tr>\n"
+          "\t\t\t\t<th>デフォルト値</th>\n"
+          "\t\t\t\t<td>\n"
+          "\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field%d.default_value\" value=\"%s\" maxlength=\"1000\" />\n", et->id, et->default_value);
+        o("\t\t\t\t\t<div class=\"description\">投稿画面、返信画面での項目の初期値です。</div>\n"
+          "\t\t\t\t</td>\n"
+          "\t\t\t</tr>\n"
+          "\t\t\t<tr>\n"
+          "\t\t\t\t<th>チケット一覧表示</th>\n"
+          "\t\t\t\t<td>\n"
+          "\t\t\t\t\t<input id=\"field%d.display_in_list\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.display_in_list\" ", et->id, et->id);
         o(                  "value=\"1\" %s />\n", et->display_in_list == 1 ? "checked=\"checked\"" : "");
         o("\t\t\t\t\t<label for=\"field%d.display_in_list\">項目をチケット一覧に表示する。</label>\n", et->id);
-        o("\t\t\t\t\t<div class=\"description\">項目をチケット一覧で表示するかどうかです。</div>\n");
-        o("\t\t\t\t</td>\n");
-        o("\t\t\t</tr>\n");
-        o("\t\t\t<tr>\n");
-        o("\t\t\t\t<th>並び順</th>\n");
-        o("\t\t\t\t<td>\n");
-        o("\t\t\t\t\t<input class=\"number\" type=\"text\" name=\"field%d.sort\" value=\"%d\" maxlength=\"5\" />\n", et->id, et->sort);
-        o("\t\t\t\t\t<div class=\"description\">チケット一覧、投稿画面、返信画面での項目の並び順です。</div>\n");
-        o("\t\t\t\t</td>\n");
-        o("\t\t\t</tr>\n");
-        o("\t\t</table>\n");
+        o("\t\t\t\t\t<div class=\"description\">項目をチケット一覧で表示するかどうかです。</div>\n"
+          "\t\t\t\t</td>\n"
+          "\t\t\t</tr>\n"
+          "\t\t\t<tr>\n"
+          "\t\t\t\t<th>並び順</th>\n"
+          "\t\t\t\t<td>\n"
+          "\t\t\t\t\t<input class=\"number\" type=\"text\" name=\"field%d.sort\" value=\"%d\" maxlength=\"5\" />\n", et->id, et->sort);
+        o("\t\t\t\t\t<div class=\"description\">チケット一覧、投稿画面、返信画面での項目の並び順です。</div>\n"
+          "\t\t\t\t</td>\n"
+          "\t\t\t</tr>\n"
+          "\t\t</table>\n");
         if (et->id > BASIC_ELEMENT_MAX) {
             /* 基本項目は削除できないようにする。 */
             o("\t\t<div class=\"delete_item\"><a href=\"%s/delete_item/%d\">", cgiScriptName, et->id);o("この項目(");h(et->name);o(")の削除</a></div>\n");
@@ -450,9 +454,9 @@ void items_action()
         o("\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
     }
     list_free(element_types_a);
-    o("\t</form>\n");
-    o("</div>\n");
-    o("</div>\n");
+    o("\t</form>\n"
+      "</div>\n"
+      "</div>\n");
 
     output_footer();
     db_finish();
@@ -594,10 +598,11 @@ void new_item_action()
             "<form id=\"new_item_form\" action=\"%s/new_item_submit\" method=\"post\">\n"
             "<table class=\"item_table\" summary=\"new item table\">\n", cgiScriptName);
     o("\t\t\t<tr>\n");
-    o("\t\t\t\t<th>項目名</th>\n");
+    o("\t\t\t\t<th class=\"required\">項目名<span class=\"required\">※</span></th>\n");
     o("\t\t\t\t<td>\n");
-    o("\t\t\t\t\t<input type=\"text\" name=\"field.name\" value=\"\" />\n");
+    o("\t\t\t\t\t<input id=\"field.name\" type=\"text\" name=\"field.name\" value=\"\" />\n");
     o("\t\t\t\t\t<div class=\"description\">項目名です。</div>\n");
+    o("\t\t\t\t\t<div id=\"field.name.required\" class=\"error\"></div>\n");
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t\t<tr>\n");

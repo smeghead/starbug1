@@ -1,3 +1,8 @@
+2008-02-28  smeghead <smeghead@users.sourceforge.jp>
+
+    * 管理ツールの項目設定の項目の追加時に、項目名が空のままで登録できていたバ
+    グを修正した。
+
 2008-02-25  smeghead <smeghead@users.sourceforge.jp>
 
     * hook機能のメール送信サンプルスクリプトで、メール本文の項目の内容に改行が

@@ -1301,7 +1301,7 @@ void register_submit_action()
 
     cgiFormStringNoNewlines("save2cookie", save2cookie, 2);
     if (mode == MODE_INVALID)
-        die("reqired invalid mode.");
+        die("requested invalid mode.");
     ticket_a = xalloc(sizeof(Message));
     db_init();
     project_a = db_get_project(project_a);
