@@ -34,6 +34,7 @@ h3 {
     border-width: 0px 0px 1px 15px;
     background-image: url("../img/h3.png");
 }
+div#input_form h4,
 div#top h4,
 div#ticket_list h4.status  {
     padding: 0px 2px 0px 10px;
@@ -157,6 +158,9 @@ input:focus.button {
 }
 #ticket_history td {
     vertical-align: top;
+}
+#input_form table {
+    width: 75%;
 }
 #input_form th {
     vertical-align: top;

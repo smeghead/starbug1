@@ -883,7 +883,7 @@ void output_form_element(List* elements, ElementType* et)
             v(et->name);
             o("\" %s />",
                     (strlen(value) || strcmp(value, "0") == 0) ? "checked=\"checked\"" : "");
-            o("<label for=\"field%d\">", et->id); h(et->name); o("</lable>\n");
+            o("<label for=\"field%d\">", et->id); h(et->name); o("</label>\n");
             break;
         case ELEM_TYPE_LIST_SINGLE:
             o("<select id=\"field%d\" name=\"field%d\">\n",
@@ -948,7 +948,7 @@ void output_form_element(List* elements, ElementType* et)
         case ELEM_TYPE_LIST_MULTI:
             if (et->auto_add_item) {
                 /* 新規項目を設定可能である場合、テキストボックスを表示する。 */
-                o("<input type=\"text\" class=\"element_new_item\" id=\"field%d\" name=\"field%d.new_item\" />\n",
+                o("<input type=\"text\" class=\"element_new_item\" id=\"field%d.new_item\" name=\"field%d.new_item\" />\n",
                     et->id, et->id);
                 o("選択肢を追加する場合はテキストボックスに入力してください。\n");
             }
@@ -1236,10 +1236,12 @@ void ticket_action()
             "<form id=\"reply_form\" name=\"reply_form\" action=\"%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName);
     o(      "<input type=\"hidden\" name=\"ticket_id\" value=\"%s\" />\n", ticket_id);
     o(      "<div class=\"description\">返信を行なう場合は、以下のフォームに内容を記入して返信ボタンを押してください。</div>\n"
-            "<noscript><div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div></noscript>\n"
+            "<noscript><div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div></noscript>\n");
+    o(      "<h4>チケット情報の更新</h4>\n"
             "<table summary=\"input table\">\n");
     foreach (it, element_types_a) {
         ElementType* et = it->element;
+        if (et->ticket_property == 0) continue;
         o("\t<tr>\n");
         o("\t\t<th %s>", et->required ? "class=\"required\"" : "");
         if (et->ticket_property)
@@ -1267,8 +1269,41 @@ void ticket_action()
         o("\t</td>\n");
         o("\t</tr>\n");
     }
-    o(      "</table>\n"
-            "<input class=\"button\" type=\"submit\" name=\"reply\" value=\"返信\" />&nbsp;&nbsp;&nbsp;\n"
+    o(      "</table>\n");
+    o(      "<h4>返信情報の登録</h4>\n"
+            "<table summary=\"input table\">\n");
+    foreach (it, element_types_a) {
+        ElementType* et = it->element;
+        if (et->ticket_property == 1) continue;
+        o("\t<tr>\n");
+        o("\t\t<th %s>", et->required ? "class=\"required\"" : "");
+        if (et->ticket_property)
+            o("&nbsp;<span class=\"ticket_property\" title=\"チケット属性\">");
+        h(et->name);
+        if (et->required)
+            o("<span class=\"required\">※</span>");
+        if (et->ticket_property)
+            o("</span>");
+        o("</th>\n\t\t<td>");
+        if (et->required)
+            o("\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
+        if (et->type == ELEM_TYPE_DATE)
+            o("\t\t<div id=\"field%d.datefield\" class=\"error\"></div>\n", et->id);
+        if (last_elements != NULL) {
+            if (et->ticket_property)
+                output_form_element(last_elements, et);
+            else
+                output_form_element(NULL, et);
+/*                 last_elements = last_elements->next; */
+        } else {
+            output_form_element(NULL, et);
+        }
+        o("\t\t<div class=\"description\">");h(et->description);o("&nbsp;</div>\n");
+        o("\t</td>\n");
+        o("\t</tr>\n");
+    }
+    o(      "</table>\n");
+    o(      "<input class=\"button\" type=\"submit\" name=\"reply\" value=\"返信\" />&nbsp;&nbsp;&nbsp;\n"
             "<input id=\"save2cookie\" type=\"checkbox\" name=\"save2cookie\" class=\"checkbox\" value=\"1\" %s />\n"
             "<label for=\"save2cookie\">投稿者を保存する。(cookie使用)</label>\n"
             "</form>\n"
