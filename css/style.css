@@ -354,6 +354,9 @@ div.item_navigation {
     font-size: 80%;
     text-align: right;
 }
+#ticket_list th {
+    white-space: nowrap;
+}
 #ticket_list th a {
     font-weight: bold;
     text-decoration: none;

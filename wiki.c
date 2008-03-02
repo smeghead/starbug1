@@ -94,12 +94,17 @@ void element_out(char* tag_name, char* content)
     buf_out(content);
     printf("</%s>\n", tag_name);
 }
+enum LINE_MODE {
+    LINE_MODE_NORMAL,
+    LINE_MODE_PRE
+};
 void wiki_out(char* page_name)
 {
     Wiki* wiki_a = xalloc(sizeof(Wiki));
     char line[MAX_WIDTH];
     char* c;
     char* p;
+    int mode = LINE_MODE_NORMAL;
 
     wiki_a = db_get_newest_wiki(page_name, wiki_a);
     p = wiki_a->content;
@@ -114,7 +119,18 @@ void wiki_out(char* page_name)
             strcpy(line, p);
             p += strlen(p);
         }
-        if (strncmp(line, "****", strlen("****")) == 0) {
+        if (mode == LINE_MODE_PRE && strncmp(line, "|<", strlen("|<")) != 0) {
+            /* LINE_MODE_PRE中は、成形済ブロック */
+            buf_add(TYPE_PRE, line);
+        } else if (mode == LINE_MODE_NORMAL && strncmp(line, ">|", strlen(">|")) == 0) {
+            /* 成形済ブロック終了 */
+            buf_flush();
+            mode = LINE_MODE_PRE;
+        } else if (mode == LINE_MODE_PRE && strncmp(line, "|<", strlen("|<")) == 0) {
+            /* 成形済ブロック開始 */
+            buf_flush();
+            mode = LINE_MODE_NORMAL;
+        } else if (strncmp(line, "****", strlen("****")) == 0) {
             buf_flush();
             element_out("h6", line + strlen("****"));
         } else if (strncmp(line, "***", strlen("***")) == 0) {
@@ -131,8 +147,8 @@ void wiki_out(char* page_name)
             element_out_without_content("hr");
         } else if (strncmp(line, "-", strlen("-")) == 0) {
             buf_add(TYPE_LI, line + strlen("-"));
-        } else if (strncmp(line, " ", strlen(" ")) == 0) {
-            buf_add(TYPE_PRE, line);
+/*         } else if (strncmp(line, " ", strlen(" ")) == 0) { */
+/*             buf_add(TYPE_PRE, line); */
         } else if (strncmp(line, "\n", strlen("\n")) == 0) {
             buf_flush();
         } else {
