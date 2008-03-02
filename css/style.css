@@ -44,6 +44,15 @@ div#ticket_list h4.status  {
     border-width: 0px 0px 2px 0px;
     font-weight: bold;
 }
+div#ticket_history h4 {
+    width: 98%;
+    padding: 0px 2px 0px 10px;
+    margin: 8px 0px 3px 3px;
+    border-color: #00108C;
+    border-style: solid;
+    border-width: 0px 0px 1px 0px;
+    font-weight: normal;
+}
 /* チケット一覧 ID */
 div#ticket_list table th.id {
     width: 30px;
@@ -143,7 +152,7 @@ input:focus.button {
     color: #00108C;
     font-size: 110%;
     font-weight: bold;
-    background:#EEE;
+    background-color: #d9d9d9;
     border-bottom:1px solid gray;
     white-space: nowrap;
 }

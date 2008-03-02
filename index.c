@@ -1170,14 +1170,11 @@ void ticket_action()
         List* previous = last_elements;
         list_alloc(elements_a, Element);
         last_elements = elements_a = db_get_elements(message_ids_a[i], elements_a);
-
-        o(      "<table summary=\"reply table\">\n"
-                "\t<tr>\n"
-                "\t\t<td colspan=\"2\" class=\"title\">%d: ", i + 1);
+        o(      "\t\t<h4 class=\"title\">%d: ", i + 1);
         h(get_element_value_by_id(elements_a, ELEM_ID_SENDER));
         o("&nbsp;<span class=\"date\">("); h(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE)); o(")</span>&nbsp;");
-        o(      "</td>\n"
-                "\t</tr>\n");
+        o(      "\t</h4>\n");
+        o(      "<table summary=\"reply table\">\n");
         foreach (it, element_types_a) {
             ElementType* et = it->element;
             char* value = get_element_value(elements_a, et);
