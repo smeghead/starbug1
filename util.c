@@ -88,15 +88,42 @@ void exec_action()
             return cgiFormIO; \
         } \
     } 
+int get_ticket_syntax_len(char* data, size_t len)
+{
+    int ticket_syntax_len = 0;
+    if (len == 0) return ticket_syntax_len; /* 最後の文字だった */
+    data += 1; /* 1文字進める。 */
+    while (len--) {
+        d("%c\n", *data);
+        if (*data < '0' || *data > '9') 
+            break; /* 数字でない場合は、breakする。 */
+        data++;
+        ticket_syntax_len++;
+    }
+    return ticket_syntax_len;
+}
 /*
  * 複数行テキストの領域では、pre記法をサポートする。
+ * チケットリンクをサポートする。
  */
 static cgiFormResultType cgiHtmlEscapeDataMultiLine(char *data, int len)
 {
     int printing_pre = 0;
     while (len--) {
-        d("data: %c %c %x len(%d)\n", *data, *(data + 1), *(data + 2), len);
-        if (len > 2 && *data == '>' &&
+        if (*data == '#') {
+            int ticket_syntax_len;
+            ticket_syntax_len = get_ticket_syntax_len(data, len);
+            if (ticket_syntax_len == 0) {
+                TRYPUTC(*data);
+            } else {
+                char ticket_id[DEFAULT_LENGTH];
+                strncpy(ticket_id, ++data, ticket_syntax_len);
+                ticket_id[ticket_syntax_len] = '\0';
+                o("<a href=\"%s/ticket/%s\">#%s</a>", cgiScriptName, ticket_id, ticket_id);
+                data += ticket_syntax_len - 1;
+                len -= ticket_syntax_len;
+            }
+        } else if (len > 2 && *data == '>' &&
                 *(data + 1) == '|' &&
                 (*(data + 2) == '\r' || *(data + 2) == '\n')) {
             /* pre記法 */
