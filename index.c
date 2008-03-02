@@ -1092,7 +1092,7 @@ void ticket_action()
     message_ids_a = db_get_message_ids_a(iid);
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_all(element_types_a);
-    o("<h2 id=\"subject\">"); h(project_a->name); o(" - ID:%5d ", iid);
+    o("<h2 id=\"subject\">"); h(project_a->name); o(" - #%d ", iid);
     xfree(project_a);
     h(get_element_value_by_id(elements_a, ELEM_ID_TITLE));
     o(" &nbsp;</h2>\n");
