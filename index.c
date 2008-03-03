@@ -264,7 +264,7 @@ void output_ticket_table_body(SearchResult* result, List* element_types)
         list_alloc(elements_a, Element);
         elements_a = db_get_last_elements_4_list(message->id, elements_a);
         o("\t<tr>\n"
-          "\t\t<td class=\"field%d-\"><a href=\"%s/ticket/%s\">%s</a></td>\n", 
+          "\t\t<td class=\"id field%d-\"><a href=\"%s/ticket/%s\">%s</a></td>\n", 
                 ELEM_ID_ID, 
                 cgiScriptName, 
                 get_element_value_by_id(elements_a, ELEM_ID_ID), 
@@ -272,7 +272,7 @@ void output_ticket_table_body(SearchResult* result, List* element_types)
         foreach (it, element_types) {
             ElementType* et = it->element;
             char* val = get_element_value_by_id(elements_a, et->id);
-            o("\t\t<td class=\"field%d-", et->id); 
+            o("\t\t<td class=\"field%d field%d-", et->id, et->id); 
             if (et->type == ELEM_TYPE_LIST_SINGLE)
                 css_field(val);
             o("\">");
@@ -286,9 +286,9 @@ void output_ticket_table_body(SearchResult* result, List* element_types)
                 o("</a>");
             o("&nbsp;</td>\n");
         }
-        o("\t\t<td>"); h(get_element_value_by_id(elements_a, ELEM_ID_REGISTERDATE)); o("&nbsp;</td>\n");
-        o("\t\t<td>"); h(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE)); o("&nbsp;</td>\n");
-        o("\t\t<td>"); h(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE_PASSED)); o("&nbsp;</td>\n");
+        o("\t\t<td class=\"registerdate\">"); h(get_element_value_by_id(elements_a, ELEM_ID_REGISTERDATE)); o("&nbsp;</td>\n");
+        o("\t\t<td class=\"lastregisterdate\">"); h(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE)); o("&nbsp;</td>\n");
+        o("\t\t<td class=\"passed\">"); h(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE_PASSED)); o("&nbsp;</td>\n");
         o("\t</tr>\n");
     }
 }

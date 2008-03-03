@@ -1,3 +1,9 @@
+2008-03-03  smeghead <smeghead@users.sourceforge.jp>
+
+    * チケット一覧の日時の秒の表示をしないようにした。 
+    * チケット一覧のIDと放置日数のCSSを変更。IDは中央寄せ、放置日数は右寄せで
+    表示するようにした。
+
 2008-03-02  smeghead <smeghead@users.sourceforge.jp>
 
     * トップページの編集においての成形済ブロック(PRE)の記法を、チケットの複数
