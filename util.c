@@ -502,4 +502,4 @@ void css_field(char* str)
     base64_encode(src, dist);
     cgiCssClassName(dist, strlen(dist));
 }
-/* vim: set ts=4 sw=4 sts=4 expandtab: */
+/* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

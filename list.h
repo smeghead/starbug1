@@ -30,4 +30,4 @@ void list_add(List*, void*);
 void list_free(List*);
 
 #endif
-/* vim: set ts=4 sw=4 sts=4 expandtab: */
+/* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

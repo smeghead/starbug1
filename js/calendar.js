@@ -164,4 +164,4 @@ Event.observe(window, "load", function() {
         }
     );
 });
-//  vim: set ts=4 sw=4 sts=4 expandtab:
+//  vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8:

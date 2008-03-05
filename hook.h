@@ -25,4 +25,4 @@ void clean_hook(HOOK*);
 size_t get_hook_message_size(HOOK*);
 
 #endif
-/* vim: set ts=4 sw=4 sts=4 expandtab: */
+/* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

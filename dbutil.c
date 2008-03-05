@@ -452,4 +452,4 @@ int exec_query_scalar_int(const char* sql, ...)
 
 ERROR_LABEL
 }
-/* vim: set ts=4 sw=4 sts=4 expandtab: */
+/* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

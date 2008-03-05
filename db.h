@@ -36,4 +36,4 @@ int db_get_element_file_id(int, int);
 void db_register_wiki(Wiki*);
 Wiki* db_get_newest_wiki(char*, Wiki*);
 #endif
-/* vim: set ts=4 sw=4 sts=4 expandtab: */
+/* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

@@ -1175,4 +1175,4 @@ Wiki* db_get_newest_wiki(char* page_name, Wiki* wiki)
 
 ERROR_LABEL
 }
-/* vim: set ts=4 sw=4 sts=4 expandtab: */
+/* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

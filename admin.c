@@ -906,4 +906,4 @@ void admin_help_action()
     db_finish();
     output_footer();
 }
-/* vim: set ts=4 sw=4 sts=4 expandtab: */
+/* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

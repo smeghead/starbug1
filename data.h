@@ -117,4 +117,4 @@ char* get_element_value(List*, ElementType*);
 
 
 #endif
-/* vim: set ts=4 sw=4 sts=4 expandtab: */
+/* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

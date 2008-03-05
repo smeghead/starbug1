@@ -177,4 +177,4 @@ void wiki_save(char* page_name, char* content)
     xfree(wiki_a->content);
     xfree(wiki_a);
 }
-/* vim: set ts=4 sw=4 sts=4 expandtab: */
+/* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

@@ -26,4 +26,4 @@ char* get_element_value_by_id(List* elements, int type)
     }
     return "";
 }
-/* vim: set ts=4 sw=4 sts=4 expandtab: */
+/* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
