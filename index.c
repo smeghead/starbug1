@@ -750,7 +750,7 @@ void report_csv_download_action()
     states_a = db_get_states(states_a);
 
     o("Content-Disposition: attachment; filename=\"report.csv\"\r\n");
-    cgiHeaderContentType("text/plain; charset=Windows-31J;");
+    cgiHeaderContentType("text/x-csv; charset=Windows-31J;");
 
     csv_field(project_a->name); o("\r\n");
     xfree(project_a);
