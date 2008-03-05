@@ -1267,7 +1267,7 @@ void ticket_action()
         o("\t</tr>\n");
     }
     o(      "</table>\n");
-    o(      "<h4>返信情報の登録</h4>\n"
+    o(      "<h4>返信情報の追加</h4>\n"
             "<table summary=\"input table\">\n");
     foreach (it, element_types_a) {
         ElementType* et = it->element;

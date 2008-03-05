@@ -1,3 +1,8 @@
+2008-03-05  smeghead <smeghead@users.sourceforge.jp>
+
+    * チケット検索での検索結果CSVダウンロードで内容が長い場合にエラーになる問
+    題を修正した。
+
 2008-03-03  smeghead <smeghead@users.sourceforge.jp>
 
     * チケット一覧の日時の秒の表示をしないようにした。 

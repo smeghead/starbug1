@@ -344,21 +344,21 @@ ElementFile* get_upload_content(int element_id)
 
 static unsigned char *base64 = (unsigned char *)"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-static void enclode_char(unsigned long bb, int srclen, unsigned char *dest, int j)
+static void enclode_char(unsigned long bb, int srclen, unsigned char *dist, int j)
 {
     int x, i, base;
 
     for (i = srclen; i < 2; i++) 
         bb <<= 8;
     for (base = 18, x = 0; x < srclen + 2; x++, base -= 6) {
-        dest[j++] = base64[(unsigned long)((bb>>base) & 0x3F)];
+        dist[j++] = base64[(unsigned long)((bb>>base) & 0x3F)];
     }
     for (i = x; i < 4; i++) {
-        dest[j++] = (unsigned char)'=';
+        dist[j++] = (unsigned char)'=';
     }
 }
 
-void base64_encode(const unsigned char *src, unsigned char *dest)
+void base64_encode(const unsigned char *src, unsigned char *dist)
 {
     unsigned char *p = (char *)src;
     unsigned long bb = (unsigned long)0;
@@ -369,7 +369,7 @@ void base64_encode(const unsigned char *src, unsigned char *dest)
         bb |= (unsigned long)*p;
 
         if (i == 2) {
-            enclode_char(bb, i, dest, j);
+            enclode_char(bb, i, dist, j);
             j = j + 4;
             i = 0;
             bb = 0;
@@ -378,7 +378,7 @@ void base64_encode(const unsigned char *src, unsigned char *dest)
         }
         p++;
     }
-    if (i) enclode_char(bb, i - 1, dest, j);
+    if (i) enclode_char(bb, i - 1, dist, j);
 }
 void redirect(char* path, char* message)
 {
@@ -457,19 +457,21 @@ static cgiFormResultType csv_escape(char *data, int len)
 void csv_field(char* src)
 {
     iconv_t ic;
-    char dest_buf[DEFAULT_LENGTH];
-    size_t src_size, dest_size, ret_len;
-    char* dest = dest_buf;
+    size_t src_size, dist_size, ret_len;
+    char* dist_a;
+    char* dist_p;
 
     src_size = strlen(src) + 1;
-    dest_size = src_size;  /* UTF-8からCP932なので、長さが短かくなることはない。そのためdest_sizeにも同じ長さを指定する。*/
+    dist_size = src_size;  /* UTF-8からCP932なので、長さが短かくなることはない。そのためdist_sizeにも同じ長さを指定する。*/
+    dist_p = dist_a = xalloc(sizeof(char) * dist_size);
     /* 文字コード変換処理 *          */
     ic = iconv_open("CP932", "UTF-8");
-    ret_len = iconv(ic, &src, &src_size, &dest, &dest_size);
+    ret_len = iconv(ic, &src, &src_size, &dist_p, &dist_size);
     o("\"");
-    if (ret_len >= 0) csv_escape(dest_buf, strlen(dest_buf));
+    if (ret_len >= 0) csv_escape(dist_a, strlen(dist_a));
     o("\"");
     iconv_close(ic);
+    xfree(dist_a);
 }
 static cgiFormResultType cgiCssClassName(char *data, int len)
 {
@@ -487,7 +489,7 @@ static cgiFormResultType cgiCssClassName(char *data, int len)
 void css_field(char* str)
 {
     char src[DEFAULT_LENGTH];
-    char dest[DEFAULT_LENGTH];
+    char dist[DEFAULT_LENGTH];
     char* p = src;
 
     strcpy(src, str);
@@ -496,8 +498,8 @@ void css_field(char* str)
         p = '\0';
     }
         
-    memset(dest, 0, DEFAULT_LENGTH);
-    base64_encode(src, dest);
-    cgiCssClassName(dest, strlen(dest));
+    memset(dist, 0, DEFAULT_LENGTH);
+    base64_encode(src, dist);
+    cgiCssClassName(dist, strlen(dist));
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab: */

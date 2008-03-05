@@ -53,27 +53,27 @@ div#ticket_history h4 {
     border-width: 0px 0px 2px 0px;
     font-weight: bold;
 }
-/* ¥Á¥±¥Ã¥È°ìÍ÷ ID */
+/* ãƒã‚±ãƒƒãƒˆä¸€è¦§ ID */
 div#ticket_list table th.id {
     width: 30px;
 }
-/* ¥Á¥±¥Ã¥È°ìÍ÷ ·ïÌ¾ */
+/* ãƒã‚±ãƒƒãƒˆä¸€è¦§ ä»¶å */
 div#ticket_list table th.field1 {
     width: 30%;
 }
-/* |+¥Á¥±¥Ã¥È°ìÍ÷ Åê¹Æ¼Ô+| */
+/* |+ãƒã‚±ãƒƒãƒˆä¸€è¦§ æŠ•ç¨¿è€…+| */
 /* div#ticket_list table th.field2 { */
 /*     width: 80px; */
 /* } */
-/* ¥Á¥±¥Ã¥È°ìÍ÷ ¾õÂÖ */
+/* ãƒã‚±ãƒƒãƒˆä¸€è¦§ çŠ¶æ…‹ */
 /* div#ticket_list table th.field3 { */
 /*     width: 45px; */
 /* } */
-/* ¥Á¥±¥Ã¥È°ìÍ÷ ID */
+/* ãƒã‚±ãƒƒãƒˆä¸€è¦§ ID */
 div#ticket_list table td.id {
     text-align: center;
 }
-/* ÊüÃÖÆü¿ô */
+/* æ”¾ç½®æ—¥æ•° */
 div#ticket_list table td.passed {
     text-align: right;
 }
