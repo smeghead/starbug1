@@ -10,6 +10,23 @@
 #include "wiki.h"
 #include "hook.h"
 
+typedef enum _NAVI {
+    NAVI_OTHER,
+    NAVI_TOP,
+    NAVI_LIST,
+    NAVI_REGISTER,
+    NAVI_SEARCH,
+    NAVI_RSS,
+    NAVI_HELP,
+    NAVI_STATISTICS,
+    NAVI_MANAGEMENT
+} NaviType;
+typedef enum _MODE {
+    MODE_INVALID,
+    MODE_REGISTER,
+    MODE_REPLY
+} ModeType;
+
 /* prototype declares */
 void register_actions();
 void list_action();
@@ -25,23 +42,17 @@ void download_action();
 void report_csv_download_action();
 void rss_action();
 void top_action();
-void output_header(Project*, char*, char*, int);
+void output_header(Project*, char*, char*, NaviType);
 void output_footer();
 int cgiMain();
 void output_form_element(List*, ElementType*);
 void output_form_element_4_condition(ElementType*);
-int get_mode();
+ModeType get_mode();
 static int contains(char* const, const char*);
 void output_calendar_js();
 
 #define COOKIE_SENDER "starbug1_sender"
-enum MODE {
-    MODE_INVALID,
-    MODE_REGISTER,
-    MODE_REPLY
-};
-
-int get_mode()
+ModeType get_mode()
 {
     char mode[MODE_LENGTH];
     cgiFormStringNoNewlines("register", mode, MODE_LENGTH);
@@ -68,18 +79,7 @@ void register_actions()
     register_action_actions("top", top_action);
 }
 
-enum NAVI {
-    NAVI_OTHER,
-    NAVI_TOP,
-    NAVI_LIST,
-    NAVI_REGISTER,
-    NAVI_SEARCH,
-    NAVI_RSS,
-    NAVI_HELP,
-    NAVI_STATISTICS,
-    NAVI_MANAGEMENT
-};
-void output_header(Project* project, char* title, char* script_name, int navi)
+void output_header(Project* project, char* title, char* script_name, NaviType navi)
 {
     o("Pragma: no-cache\r\n");
     o("Cache-Control: no-cache\t\n");
@@ -1146,12 +1146,12 @@ void ticket_action()
             if (et->type == ELEM_TYPE_UPLOADFILE) {
                 char* attachment_file_name = get_element_value(attachment_elements_a, et);
                 if (strlen(attachment_file_name) == 0) continue;
-                o("\t\t<div>\n");
+                o("\t\t<span>\n");
                 o("<a href=\"%s/download/%d/", 
                         cgiScriptName, 
                         db_get_element_file_id(message_ids_a[i], et->id)); 
                 u(attachment_file_name); o("\" target=\"_blank\">");h(attachment_file_name); o("</a>\n");
-                o("\t\t&nbsp;</div>\n");
+                o("\t\t&nbsp;</span>\n");
             }
         }
         list_free(attachment_elements_a);
@@ -1235,6 +1235,7 @@ void ticket_action()
     o(      "<div class=\"description\">返信を行なう場合は、以下のフォームに内容を記入して返信ボタンを押してください。</div>\n"
             "<noscript><div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div></noscript>\n");
     o(      "<h4>チケット情報の更新</h4>\n"
+            "<div class=\"description\">チケット情報(チケットの状態など)を更新する必要がある場合は、以下の情報を変更してください。</div>\n"
             "<table summary=\"input table\">\n");
     foreach (it, element_types_a) {
         ElementType* et = it->element;
@@ -1268,6 +1269,7 @@ void ticket_action()
     }
     o(      "</table>\n");
     o(      "<h4>返信情報の追加</h4>\n"
+            "<div class=\"description\">返信情報を記入してください。</div>\n"
             "<table summary=\"input table\">\n");
     foreach (it, element_types_a) {
         ElementType* et = it->element;
@@ -1332,7 +1334,7 @@ void register_submit_action()
     List* elements_a = NULL;
     Message* ticket_a;
     char ticket_id[DEFAULT_LENGTH];
-    int mode = get_mode();
+    ModeType mode = get_mode();
     char** multi;
     char save2cookie[2];
     char* complete_message = NULL;

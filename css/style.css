@@ -497,6 +497,9 @@ div.graph {
 div.delete_item {
     margin: 10px;
 }
+div.description {
+    margin-left: 10px;
+}
 img.attachment_image {
     width: 200px;
 }

@@ -81,6 +81,7 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
     }
     content_a = (char*)xalloc(sizeof(char) * VALUE_LENGTH);
     content_a = create_json(content_a, project, message, elements, element_types);
+    d("json: %s\n", content_a);
     for (dp = readdir(dir); dp != NULL; dp = readdir(dir)) {
         char hook_command[DEFAULT_LENGTH];
         char filename[DEFAULT_LENGTH];

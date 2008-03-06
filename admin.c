@@ -11,6 +11,16 @@
 
 #define ADD_ITEM_COUNT 5
 
+typedef enum _NAVI {
+    NAVI_OTHER,
+    NAVI_MENU,
+    NAVI_PROJECT,
+    NAVI_ENV,
+    NAVI_ITEM,
+    NAVI_STYLE,
+    NAVI_ADMIN_HELP
+} NaviType;
+
 /* prototype declares */
 void register_actions();
 void menu_action();
@@ -28,7 +38,7 @@ void new_item_submit_action();
 void delete_item_action();
 void delete_item_submit_action();
 void admin_help_action();
-void output_header(Project*, char*, char*, int);
+void output_header(Project*, char*, char*, NaviType);
 void output_footer();
 int cgiMain();
 void update_elements();
@@ -52,16 +62,7 @@ void register_actions()
     register_action_actions("top", menu_action);
 }
 
-enum NAVI {
-    NAVI_OTHER,
-    NAVI_MENU,
-    NAVI_PROJECT,
-    NAVI_ENV,
-    NAVI_ITEM,
-    NAVI_STYLE,
-    NAVI_ADMIN_HELP
-};
-void output_header(Project* project, char* title, char* script_name, int navi)
+void output_header(Project* project, char* title, char* script_name, NaviType navi)
 {
     cgiHeaderContentType("text/html; charset=utf-8;");
     /* Top of the page */
