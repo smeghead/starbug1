@@ -446,6 +446,7 @@ table.item_table th {
     position:absolute;
     margin: 0px;
     padding: 0px;
+    width: 200px;
 }
 #calendar table {
     border-collapse: collapse;

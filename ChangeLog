@@ -1,3 +1,9 @@
+2008-03-06  smeghead <smeghead@users.sourceforge.jp>
+
+    * 日付項目の入力支援のJavaScriptカレンダーのwidthを200pxに指定するようにし
+    た。
+
+
 2008-03-05  smeghead <smeghead@users.sourceforge.jp>
 
     * チケット検索での検索結果CSVダウンロードで内容が長い場合にエラーになる問
