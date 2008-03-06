@@ -1,5 +1,9 @@
 2008-03-06  smeghead <smeghead@users.sourceforge.jp>
 
+    * 0.1.5-beta リリース
+
+2008-03-06  smeghead <smeghead@users.sourceforge.jp>
+
     * 日付項目の入力支援のJavaScriptカレンダーのwidthを200pxに指定するようにし
     た。
 
