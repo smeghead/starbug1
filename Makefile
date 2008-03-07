@@ -13,6 +13,7 @@ endif
 default: index.cgi admin.cgi
 
 list.o: list.c list.h
+simple_string.o: simple_string.c simple_string.h
 admin.o: admin.c data.h db.h dbutil.h util.h
 data.o: data.c data.h util.h dbutil.h
 db.o: db.c data.h util.h dbutil.h
@@ -22,11 +23,11 @@ hook.o: hook.c data.h util.h dbutil.h hook.h
 util.o: util.c util.h data.h dbutil.h
 wiki.o: wiki.c wiki.h util.h data.h dbutil.h
 
-index.cgi: list.o data.o dbutil.o db.o hook.o util.o wiki.o index.o
+index.cgi: list.o simple_string.o data.o dbutil.o db.o hook.o util.o wiki.o index.o
 	$(CC) -o $@ $^ $(LFLAGS)
 	strip $@
 
-admin.cgi: list.o data.o dbutil.o db.o util.o css.o wiki.o admin.o
+admin.cgi: list.o simple_string.o data.o dbutil.o db.o util.o css.o wiki.o admin.o
 	$(CC) -o $@ $^ $(LFLAGS)
 	strip $@
 
