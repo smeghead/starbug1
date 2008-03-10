@@ -3,7 +3,7 @@
 
 #include <string.h>
 
-#define STRING_DEFAULT_SIZE 10
+#define STRING_DEFAULT_SIZE 512
 
 typedef struct _String {
     char* raw_chars;
@@ -12,7 +12,7 @@ typedef struct _String {
 } String;
 
 String* string_new(size_t);
-void string_add(String*, char*);
+void string_append(String*, char*);
 char* string_rawstr(String*);
 void string_free(String*);
 

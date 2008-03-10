@@ -24,12 +24,12 @@ String* string_new(size_t buf_size)
     strcpy(str->raw_chars, "");
     return str;
 }
-void string_add(String* str, char* addstr)
+void string_append(String* str, char* append_str)
 {
-    size_t len = strlen(addstr);
-    printf("%s (size: %d) STRING_DEFAULT_SIZE:%d\n", str->raw_chars, str->buf_size, STRING_DEFAULT_SIZE);
-    if (str->current_size + len > str->buf_size) {
-        int new_size = str->buf_size + STRING_DEFAULT_SIZE;
+    size_t len = strlen(append_str);
+/*     printf("%s (size: %d) STRING_DEFAULT_SIZE:%d\n", str->raw_chars, str->buf_size, STRING_DEFAULT_SIZE); */
+    if (str->current_size + len - 1 > str->buf_size) {
+        int new_size = str->buf_size + STRING_DEFAULT_SIZE * (len / STRING_DEFAULT_SIZE + 1);
         str->raw_chars = realloc(str->raw_chars, new_size);
         if (!str->raw_chars) {
             fprintf(stderr, "memory error.");
@@ -37,7 +37,7 @@ void string_add(String* str, char* addstr)
         }
         str->buf_size = new_size;
     }
-    strcat(str->raw_chars, addstr);
+    strcat(str->raw_chars, append_str);
     str->current_size += len;
 }
 char* string_rawstr(String* str)
