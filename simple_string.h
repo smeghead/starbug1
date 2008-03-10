@@ -1,12 +1,11 @@
-#ifndef STRING_H
-#define STRING_H
+#ifndef SIMPLE_STRING_H
+#define SIMPLE_STRING_H
 
 #include <string.h>
 
-#define STRING_DEFAULT_SIZE 512
-
 typedef struct _String {
     char* raw_chars;
+    size_t pool_size;
     size_t buf_size;
     size_t current_size;
 } String;

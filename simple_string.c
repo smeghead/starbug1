@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "simple_string.h"
 
+#define STRING_DEFAULT_SIZE 10
+
 static void* xalloc(size_t size)
 {
     void* p = calloc(1, size);
@@ -16,20 +18,24 @@ static void xfree(void* p)
     free(p);
 }
 
-String* string_new(size_t buf_size)
+String* string_new(size_t pool_size)
 {
     String* str = xalloc(sizeof(String));
-    str->buf_size = buf_size;
-    str->raw_chars = xalloc(sizeof(char) * buf_size);
+    if (pool_size == 0) {
+        str->pool_size = STRING_DEFAULT_SIZE;
+    } else {
+        str->pool_size = pool_size;
+    }
+    str->buf_size = str->pool_size;
+    str->raw_chars = xalloc(sizeof(char) * str->pool_size);
     strcpy(str->raw_chars, "");
     return str;
 }
-void string_append(String* str, char* append_str)
+void string_append(String* str, char* addstr)
 {
-    size_t len = strlen(append_str);
-/*     printf("%s (size: %d) STRING_DEFAULT_SIZE:%d\n", str->raw_chars, str->buf_size, STRING_DEFAULT_SIZE); */
+    size_t len = strlen(addstr);
     if (str->current_size + len - 1 > str->buf_size) {
-        int new_size = str->buf_size + STRING_DEFAULT_SIZE * (len / STRING_DEFAULT_SIZE + 1);
+        int new_size = str->buf_size + str->pool_size * (len / str->pool_size + 1);
         str->raw_chars = realloc(str->raw_chars, new_size);
         if (!str->raw_chars) {
             fprintf(stderr, "memory error.");
@@ -37,8 +43,9 @@ void string_append(String* str, char* append_str)
         }
         str->buf_size = new_size;
     }
-    strcat(str->raw_chars, append_str);
+    strcat(str->raw_chars, addstr);
     str->current_size += len;
+    printf("%s (size: %d)\n", str->raw_chars, str->buf_size);
 }
 char* string_rawstr(String* str)
 {
