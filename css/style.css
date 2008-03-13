@@ -101,12 +101,12 @@ table {
 table tr th{
     padding:3px;
     background:#EEE;
-    border-bottom:1px solid gray;
+/*     border-bottom:1px solid gray; */
 }
 
 table tr td {
     padding:3px;
-    border-bottom:1px dashed gray;
+/*     border-bottom:1px dashed gray; */
 }
 input, textarea {
     width: 400px;
@@ -123,10 +123,10 @@ input.number {
 }
 input.button {
     width: 100px;
-    background-color: #ddd;
-    border: 1px solid #bbb;
-    border-right-color: #333;
-    border-bottom-color: #333;
+/*     background-color: #ddd; */
+/*     border: 1px solid #bbb; */
+/*     border-right-color: #333; */
+/*     border-bottom-color: #333; */
 }
 input:hover.button {
     cursor: pointer;
@@ -135,6 +135,7 @@ input:hover.button {
 
 input:focus.button {
     border-color: #000;
+    background-color: #ccc;
 }
 #mainmenu {
     width:100%;
@@ -184,7 +185,7 @@ input:focus.button {
     width: 150px;
 }
 #input_form textarea {
-    height: 100px;
+    height: 200px;
 }
 div {
 }
