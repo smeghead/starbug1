@@ -308,7 +308,7 @@ input.conditionelement {
 #ticket_newest td {
 }
 th.required {
-    border-left-color: #DE1439;
+    border-left-color: #DE1439 !important;
     border-left-width: 3px;
 }
 span.required {

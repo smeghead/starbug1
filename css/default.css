@@ -327,9 +327,9 @@ table {
     margin: 0 20px 0.5em 20px;
     border-collapse: collapse;
     border-spacing: 1px;
-    border-width: 1px;
-    border-style: solid;
-    border-color: #777;
+/*     border-width: 1px; */
+/*     border-style: solid; */
+/*     border-color: #777; */
 /*     background-color: #fff; */
 }
 
