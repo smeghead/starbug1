@@ -362,7 +362,7 @@ void list_action()
     list_free(states_a);
     o("\t\t<li>\n");
     o("\t\t\t<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
-    o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" />\n"
+    o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" maxlength=\"1000\" />\n"
       "\t\t\t\t<input type=\"submit\" class=\"button\" value=\"ID指定で表示\" />\n"
       "\t\t\t</form>\n"
       "\t\t</li>\n"
@@ -592,7 +592,7 @@ void search_actoin()
     list_free(states_a);
     o("\t\t<li>\n");
     o("\t\t\t<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
-    o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" />\n"
+    o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" maxlength=\"1000\" />\n"
       "\t\t\t\t<input type=\"submit\" class=\"button\" value=\"ID指定で表示\" />\n"
       "\t\t\t</form>\n"
       "\t\t</li>\n"
@@ -629,21 +629,21 @@ void search_actoin()
     o("<tr>\n"
       "\t<th>キーワード検索</th>\n"
       "\t<td>\n"
-      "\t\t<input type=\"text\" class=\"conditionelement\" name=\"q\" value=\""); v(q); o("\" />\n"
+      "\t\t<input type=\"text\" class=\"conditionelement\" name=\"q\" value=\""); v(q); o("\" maxlength=\"1000\" />\n"
       "\t\t<div class=\"description\">履歴も含めて全ての項目から検索を行ないます。</div>\n"
       "\t</td>\n"
       "\t<th>投稿日時</th>\n"
       "\t<td>\n"
-      "\t\t<input type=\"text\" class=\"calendar\" name=\"registerdate.from\" value=\""); v(registerdate_from); o("\" />\n"
+      "\t\t<input type=\"text\" class=\"calendar\" name=\"registerdate.from\" value=\""); v(registerdate_from); o("\" maxlength=\"20\" />\n"
       "〜\n"
-      "\t\t<input type=\"text\" class=\"calendar\" name=\"registerdate.to\" value=\""); v(registerdate_to); o("\" />\n"
+      "\t\t<input type=\"text\" class=\"calendar\" name=\"registerdate.to\" value=\""); v(registerdate_to); o("\" maxlength=\"20\" />\n"
       "\t\t<div class=\"description\">yyyy-mm-dd形式で入力してください。</div>\n"
       "\t</td>\n"
       "\t<th>更新日時</th>\n"
       "\t<td>\n"
-      "\t\t<input type=\"text\" class=\"calendar\" name=\"lastregisterdate.from\" value=\""); v(updatedate_from); o("\" />\n"
+      "\t\t<input type=\"text\" class=\"calendar\" name=\"lastregisterdate.from\" value=\""); v(updatedate_from); o("\" maxlength=\"20\" />\n"
       "〜\n"
-      "\t\t<input type=\"text\" class=\"calendar\" name=\"lastregisterdate.to\" value=\""); v(updatedate_to); o("\" />\n"
+      "\t\t<input type=\"text\" class=\"calendar\" name=\"lastregisterdate.to\" value=\""); v(updatedate_to); o("\" maxlength=\"20\" />\n"
       "\t\t<div class=\"description\">yyyy-mm-dd形式で入力してください。</div>\n"
       "\t</td>\n"
       "</tr>\n"
@@ -869,7 +869,7 @@ void output_form_element(List* elements, ElementType* et)
             o("<input type=\"text\" class=\"element\" id=\"field%d\" name=\"field%d\" value=\"",
                     et->id, et->id);
             v(value);
-            o("\" />\n");
+            o("\" maxlength=\"1000\" />\n");
             break;
         case ELEM_TYPE_TEXTAREA:
             o("<textarea id=\"field%d\" name=\"field%d\" rows=\"3\" cols=\"10\">",
@@ -948,7 +948,7 @@ void output_form_element(List* elements, ElementType* et)
         case ELEM_TYPE_LIST_MULTI:
             if (et->auto_add_item) {
                 /* 新規項目を設定可能である場合、テキストボックスを表示する。 */
-                o("<input type=\"text\" class=\"element_new_item\" id=\"field%d.new_item\" name=\"field%d.new_item\" />\n",
+                o("<input type=\"text\" class=\"element_new_item\" id=\"field%d.new_item\" name=\"field%d.new_item\" maxlength=\"1000\" />\n",
                     et->id, et->id);
                 o("選択肢を追加する場合はテキストボックスに入力してください。\n");
             }
@@ -1545,7 +1545,7 @@ void top_action()
     o(      "<div id=\"top_id_search\">\n"
             "<h4>ID検索</h4>\n"
             "\t<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
-    o(      "\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" />\n"
+    o(      "\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" maxlength=\"1000\" />\n"
             "\t\t<input type=\"submit\" class=\"button\" value=\"表示\" />\n"
             "\t</form>\n"
             "</div>\n"

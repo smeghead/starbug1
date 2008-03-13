@@ -168,7 +168,7 @@ void project_action()
     o("\t\t<table summary=\"project table\">\n");
     o("\t\t\t<tr>\n");
     o("\t\t\t\t<th>プロジェクト名</th>\n");
-    o("\t\t\t\t<td><input type=\"text\" name=\"project.name\" value=\"");h(project_a->name);o("\" maxlength=\"1023\" /></td>\n");
+    o("\t\t\t\t<td><input type=\"text\" name=\"project.name\" value=\"");h(project_a->name);o("\" maxlength=\"1000\" /></td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t</table>\n");
     o("\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
@@ -215,7 +215,7 @@ void env_action()
     o("\t\t\t<tr>\n");
     o("\t\t\t\t<th>home_url</th>\n");
     o("\t\t\t\t<td>\n");
-    o("\t\t\t\t\t<input type=\"text\" name=\"project.home_url\" value=\"");h(project_a->home_url);o("\" maxlength=\"1023\" />\n");
+    o("\t\t\t\t\t<input type=\"text\" name=\"project.home_url\" value=\"");h(project_a->home_url);o("\" maxlength=\"1000\" />\n");
     o("\t\t\t\t\t<div class=\"description\">各ページに表示されるナビゲータの、\"ホーム\" アンカーのリンク先を指定します。</div>\n");
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
@@ -292,7 +292,7 @@ void items_action()
           "\t\t\t\t<th class=\"required\">項目名<span class=\"required\">※</span></th>\n"
           "\t\t\t\t<td>\n"
           "\t\t\t\t\t<input class=\"required\" id=\"field%d.name\" type=\"text\" name=\"field%d.name\" ", et->id, et->id);
-        o(                  "value=\"");h(et->name);o("\" />\n"
+        o(                  "value=\"");h(et->name);o("\" maxlength=\"1000\" />\n"
           "\t\t\t\t\t<div class=\"description\">項目名です。</div>\n"
           "\t\t\t\t\t<div id=\"field%d.name.required\" class=\"error\"></div>\n", et->id);
         o("\t\t\t\t</td>\n"
@@ -301,7 +301,7 @@ void items_action()
           "\t\t\t\t<th>項目の説明文</th>\n"
           "\t\t\t\t<td>\n"
           "\t\t\t\t\t<input type=\"text\" name=\"field%d.description\" ", et->id);
-        o(                  "value=\"");h(et->description);o("\" />\n"
+        o(                  "value=\"");h(et->description);o("\" maxlength=\"1000\" />\n"
           "\t\t\t\t\t<div class=\"description\">項目の説明文です。投稿時に表示されます。</div>\n"
           "\t\t\t\t</td>\n"
           "\t\t\t</tr>\n"
@@ -386,13 +386,13 @@ void items_action()
                     o("\t\t\t\t\t\t<tr>\n"
                       "\t\t\t\t\t\t\t<td>\n"
                       "\t\t\t\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field%d.list_item%d.name\" ", et->id, item->id);
-                    o(                       "value=\"");h(item->name);o("\" />\n"
+                    o(                       "value=\"");h(item->name);o("\" maxlength=\"1000\" />\n"
                       "\t\t\t\t\t\t\t</td>\n"
                       "\t\t\t\t\t\t\t<td>\n"
                       "\t\t\t\t\t\t\t\t<input class=\"checkbox\" type=\"checkbox\" name=\"field%d.list_item%d.close\" value=\"1\" %s />\n", et->id, item->id, (item->close == 1) ? "checked=\"checked\"" : "");
                     o("\t\t\t\t\t\t\t</td>\n"
                       "\t\t\t\t\t\t\t<td>\n"
-                      "\t\t\t\t\t\t\t\t<input class=\"number\" type=\"text\" name=\"field%d.list_item%d.sort\" value=\"%d\" />\n", et->id, item->id, item->sort);
+                      "\t\t\t\t\t\t\t\t<input class=\"number\" type=\"text\" name=\"field%d.list_item%d.sort\" value=\"%d\" maxlength=\"1000\" />\n", et->id, item->id, item->sort);
                     o("\t\t\t\t\t\t\t</td>\n"
                       "\t\t\t\t\t\t\t<td>\n"
                       "\t\t\t\t\t\t\t\t<input class=\"checkbox\" type=\"checkbox\" name=\"field%d.list_item%d.delete\" value=\"1\" />\n", et->id, item->id);
@@ -401,7 +401,7 @@ void items_action()
                 }
                 o("\t\t\t\t\t\t<tr>\n"
                   "\t\t\t\t\t\t\t<td>\n"
-                  "\t\t\t\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field%d.list_item_new.name\" value=\"\" />\n", et->id);
+                  "\t\t\t\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field%d.list_item_new.name\" value=\"\" maxlength=\"1000\" />\n", et->id);
                 o("\t\t\t\t\t\t\t</td>\n"
                   "\t\t\t\t\t\t\t<td>\n"
                   "\t\t\t\t\t\t\t\t<input class=\"checkbox\" type=\"checkbox\" name=\"field%d.list_item_new.close\" value=\"\" />\n", et->id);
@@ -434,7 +434,7 @@ void items_action()
           "\t\t\t\t<th>チケット一覧表示</th>\n"
           "\t\t\t\t<td>\n"
           "\t\t\t\t\t<input id=\"field%d.display_in_list\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.display_in_list\" ", et->id, et->id);
-        o(                  "value=\"1\" %s />\n", et->display_in_list == 1 ? "checked=\"checked\"" : "");
+        o(                  "value=\"1\" %s maxlength=\"1000\" />\n", et->display_in_list == 1 ? "checked=\"checked\"" : "");
         o("\t\t\t\t\t<label for=\"field%d.display_in_list\">項目をチケット一覧に表示する。</label>\n", et->id);
         o("\t\t\t\t\t<div class=\"description\">項目をチケット一覧で表示するかどうかです。</div>\n"
           "\t\t\t\t</td>\n"
@@ -601,7 +601,7 @@ void new_item_action()
     o("\t\t\t<tr>\n");
     o("\t\t\t\t<th class=\"required\">項目名<span class=\"required\">※</span></th>\n");
     o("\t\t\t\t<td>\n");
-    o("\t\t\t\t\t<input id=\"field.name\" type=\"text\" name=\"field.name\" value=\"\" />\n");
+    o("\t\t\t\t\t<input id=\"field.name\" type=\"text\" name=\"field.name\" value=\"\" maxlength=\"1000\" />\n");
     o("\t\t\t\t\t<div class=\"description\">項目名です。</div>\n");
     o("\t\t\t\t\t<div id=\"field.name.required\" class=\"error\"></div>\n");
     o("\t\t\t\t</td>\n");
@@ -609,7 +609,7 @@ void new_item_action()
     o("\t\t\t<tr>\n");
     o("\t\t\t\t<th>項目の説明文</th>\n");
     o("\t\t\t\t<td>\n");
-    o("\t\t\t\t\t<input type=\"text\" name=\"field.description\" value=\"\" />\n");
+    o("\t\t\t\t\t<input type=\"text\" name=\"field.description\" value=\"\" maxlength=\"1000\" />\n");
     o("\t\t\t\t\t<div class=\"description\">項目の説明文です。投稿時に表示されます。</div>\n");
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
@@ -683,13 +683,13 @@ void new_item_action()
             for (i = 0; i < ADD_ITEM_COUNT; i++) {
                 o("\t\t\t\t\t\t<tr>\n");
                 o("\t\t\t\t\t\t\t<td>\n");
-                o("\t\t\t\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field.list_item_new%d.name\" value=\"\" />\n", i);
+                o("\t\t\t\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field.list_item_new%d.name\" value=\"\" maxlength=\"1000\" />\n", i);
                 o("\t\t\t\t\t\t\t</td>\n");
                 o("\t\t\t\t\t\t\t<td>\n");
                 o("\t\t\t\t\t\t\t\t<input class=\"checkbox\" type=\"checkbox\" name=\"field.list_item_new%d.close\" value=\"\" />\n", i);
                 o("\t\t\t\t\t\t\t</td>\n");
                 o("\t\t\t\t\t\t\t<td>\n");
-                o("\t\t\t\t\t\t\t\t<input class=\"number\" type=\"text\" name=\"field.list_item_new%d.sort\" value=\"\" />\n", i);
+                o("\t\t\t\t\t\t\t\t<input class=\"number\" type=\"text\" name=\"field.list_item_new%d.sort\" value=\"\" maxlength=\"5\" />\n", i);
                 o("\t\t\t\t\t\t\t</td>\n");
                 o("\t\t\t\t\t\t</tr>\n");
             }
