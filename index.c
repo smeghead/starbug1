@@ -618,6 +618,14 @@ void search_actoin()
         o("\t<td>\n"); 
         output_form_element_4_condition(et);
         o("\t</td>\n");
+        if (!iterator_next(it)) {
+            /* 空いたセルの調整 */
+            int i = col_index;
+            for (; i < 3; i++) {
+                o("\t<td>&nbsp;</td>\n");
+                o("\t<td>&nbsp;</td>\n");
+            }
+        }
         if (col_index == 3 || !iterator_next(it))
             o("</tr>\n");
         col_index = col_index++ == 3 ? 1 : col_index;

@@ -493,7 +493,7 @@ table.item_table th {
     cursor: pointer;
 }
 div.graph {
-    width: 400px;
+    width: 100%;
     height: 300px;
 }
 div.delete_item {

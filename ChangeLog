@@ -1,6 +1,7 @@
 2008-03-13  smeghead <smeghead@users.sourceforge.jp>
 
     * 入力フィールドにmaxlengthの指定を追加した。
+    * デザインをシンプルに変更した。
 
 2008-03-07  smeghead <smeghead@users.sourceforge.jp>
 
