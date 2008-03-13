@@ -5,13 +5,14 @@
 
 typedef struct _String {
     char* raw_chars;
-    size_t pool_size;
+    size_t block_size;
     size_t buf_size;
     size_t current_size;
 } String;
 
 String* string_new(size_t);
 void string_append(String*, char*);
+size_t string_len(String*);
 char* string_rawstr(String*);
 void string_free(String*);
 

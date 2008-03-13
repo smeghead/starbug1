@@ -8,6 +8,7 @@
 #include "db.h"
 #include "util.h"
 #include "dbutil.h"
+#include "simple_string.h"
 
 
 extern const char* db_name;
@@ -282,11 +283,11 @@ void create_columns_like_exp(List* element_types, char* table_name, char* buf)
         strcat(buf, column_name);
     }
 }
-char* get_search_sql_string(List* conditions, Condition* sort, char* q, char* sql_string)
+String* get_search_sql_string(List* conditions, Condition* sort, char* q, String* sql_string)
 {
     int i = 0;
     Iterator* it;
-    strcpy(sql_string,
+    string_append(sql_string,
             "select "
             " t.id "
             "from ticket as t "
@@ -294,16 +295,16 @@ char* get_search_sql_string(List* conditions, Condition* sort, char* q, char* sq
             "inner join message as org_m on org_m.id = t.original_message_id ");
 
     if (strlen(q))
-        strcat(sql_string, "inner join message as m_all on m_all.ticket_id = t.id ");
+        string_append(sql_string, "inner join message as m_all on m_all.ticket_id = t.id ");
 
     if (conditions->size || strlen(q))
-        strcat(sql_string, "where ");
+        string_append(sql_string, "where ");
     if (conditions->size) {
         foreach (it, conditions) {
             Condition* cond = it->element;
             char val[DEFAULT_LENGTH];
             if (cond->element_type_id < 0) continue;
-            if (i++) strcat(sql_string, " and ");
+            if (i++) string_append(sql_string, " and ");
             switch (cond->condition_type) {
                 case CONDITION_TYPE_DATE_FROM:
                     sprintf(val, " (length(m.field%d) > 0 and m.field%d >= ?) ", cond->element_type_id, cond->element_type_id);
@@ -317,14 +318,14 @@ char* get_search_sql_string(List* conditions, Condition* sort, char* q, char* sq
                             cond->element_type_id);
                     break;
             }
-            strcat(sql_string, val);
+            string_append(sql_string, val);
         }
         foreach (it, conditions) {
             Condition* cond = it->element;
             char name[DEFAULT_LENGTH];
             char val[DEFAULT_LENGTH];
             if (cond->element_type_id > 0) continue;
-            if (i++) strcat(sql_string, " and ");
+            if (i++) string_append(sql_string, " and ");
             switch (cond->element_type_id) {
                 case ELEM_ID_REGISTERDATE:
                     sprintf(name, "org_m.registerdate");
@@ -341,7 +342,7 @@ char* get_search_sql_string(List* conditions, Condition* sort, char* q, char* sq
                     sprintf(val, " (%s <= ?) ", name);
                     break;
             }
-            strcat(sql_string, val);
+            string_append(sql_string, val);
         }
     }
     if (strlen(q)) {
@@ -351,15 +352,15 @@ char* get_search_sql_string(List* conditions, Condition* sort, char* q, char* sq
         element_types_a = db_get_element_types_all(element_types_a);
         create_columns_like_exp(element_types_a, "m_all", columns);
         if (conditions->size)
-            strcat(sql_string, " and ");
-        strcat(sql_string, "(");
-        strcat(sql_string, columns);
-        strcat(sql_string, ")");
+            string_append(sql_string, " and ");
+        string_append(sql_string, "(");
+        string_append(sql_string, columns);
+        string_append(sql_string, ")");
         list_free(element_types_a);
     }
 
-    strcat(sql_string, " group by t.id ");
-    strcat(sql_string, " order by ");
+    string_append(sql_string, " group by t.id ");
+    string_append(sql_string, " order by ");
     if (sort != NULL && sort->element_type_id != 0) {
         char column[DEFAULT_LENGTH];
         char sort_type[DEFAULT_LENGTH];
@@ -381,11 +382,11 @@ char* get_search_sql_string(List* conditions, Condition* sort, char* q, char* sq
                 sprintf(column, "m.field%d %s, ", sort->element_type_id, sort_type);
                 break;
         }
-        strcat(sql_string, column);
+        string_append(sql_string, column);
     }
-    strcat(sql_string, "t.registerdate desc, t.id desc ");
+    string_append(sql_string, "t.registerdate desc, t.id desc ");
 
-    d("sql: %s\n", sql_string);
+    d("sql: %s\n", string_rawstr(sql_string));
     return sql_string;
 }
 int set_conditions(sqlite3_stmt* stmt, List* conditions, char* q)
@@ -411,8 +412,7 @@ int set_conditions(sqlite3_stmt* stmt, List* conditions, char* q)
 SearchResult* db_get_tickets_by_status(char* status, List* messages, SearchResult* result)
 {
     int r, n, hit_count = 0;
-    char buffer[VALUE_LENGTH];
-    char* sql;
+    String* sql_a = string_new(0);
     List* conditions;
     Condition* cond_status;
     sqlite3_stmt *stmt = NULL;
@@ -422,12 +422,12 @@ SearchResult* db_get_tickets_by_status(char* status, List* messages, SearchResul
     cond_status->element_type_id = ELEM_ID_STATUS;
     strcpy(cond_status->value, status);
     list_add(conditions, cond_status);
-    sql = get_search_sql_string(conditions, NULL, "", buffer);
-    strcat(sql, " limit ? ");
-    d("sql: %s\n", sql);
+    sql_a = get_search_sql_string(conditions, NULL, "", sql_a);
+    string_append(sql_a, " limit ? ");
+    d("sql_a: %s\n", string_rawstr(sql_a));
     result->messages = messages;
 
-    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db, string_rawstr(sql_a), string_len(sql_a), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     n = set_conditions(stmt, conditions, "");
     sqlite3_bind_int(stmt, n++, LIST_COUNT_PER_LIST_PAGE);
@@ -443,6 +443,7 @@ SearchResult* db_get_tickets_by_status(char* status, List* messages, SearchResul
         goto error;
 
     sqlite3_finalize(stmt);
+    string_free(sql_a);
 
     list_free(conditions);
     result->hit_count = hit_count;
@@ -452,13 +453,13 @@ ERROR_LABEL
 SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, int page, List* messages, SearchResult* result)
 {
     int r, n;
-    char buffer[VALUE_LENGTH];
-    char* sql = get_search_sql_string(conditions, sorts, q, buffer);
+    String* sql_a = string_new(0);
     sqlite3_stmt *stmt = NULL;
     result->messages = messages;
+    sql_a = get_search_sql_string(conditions, sorts, q, sql_a);
 
-    strcat(sql, " limit ? offset ? ");
-    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    string_append(sql_a, " limit ? offset ? ");
+    if (sqlite3_prepare(db, string_rawstr(sql_a), string_len(sql_a), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     n = set_conditions(stmt, conditions, q);
     sqlite3_bind_int(stmt, n++, LIST_COUNT_PER_SEARCH_PAGE);
@@ -473,15 +474,14 @@ SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, int
     if (SQLITE_DONE != r)
         goto error;
 
+    string_free(sql_a);
     /* hit件数を取得する。 */
     {
-        char buf[DEFAULT_LENGTH];
-        char* s;
-        strcpy(sql, "select count(*) from (");
-        s = get_search_sql_string(conditions, sorts, q, buf);
-        strcat(sql, s);
-        strcat(sql, ")");
-        if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+        String* s = string_new(0);
+        string_append(s, "select count(*) from (");
+        s = get_search_sql_string(conditions, sorts, q, s);
+        string_append(s, ")");
+        if (sqlite3_prepare(db, string_rawstr(s), string_len(s), &stmt, NULL) == SQLITE_ERROR) goto error;
         sqlite3_reset(stmt);
         n = set_conditions(stmt, conditions, q);
         while (SQLITE_ROW == (r = sqlite3_step(stmt))){
@@ -500,12 +500,12 @@ ERROR_LABEL
 SearchResult* db_search_tickets_4_report(List* conditions, char* q, Condition* sorts, List* messages, SearchResult* result)
 {
     int r, n;
-    char buffer[VALUE_LENGTH];
-    char* sql = get_search_sql_string(conditions, sorts, q, buffer);
+    String* sql_a = string_new(0);
     sqlite3_stmt *stmt = NULL;
     result->messages = messages;
+    sql_a = get_search_sql_string(conditions, sorts, q, sql_a);
 
-    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db, string_rawstr(sql_a), string_len(sql_a), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     n = set_conditions(stmt, conditions, q);
 
@@ -520,6 +520,7 @@ SearchResult* db_search_tickets_4_report(List* conditions, char* q, Condition* s
         goto error;
 
     sqlite3_finalize(stmt);
+    string_free(sql_a);
 
     return result;
 ERROR_LABEL

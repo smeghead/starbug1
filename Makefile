@@ -1,6 +1,6 @@
 VERSION = 0.1.5-beta
 CC = gcc
-CFLAGS= -I/usr/local/include -I. -DVERSION=\"${VERSION}\" -O3 -Wall
+CFLAGS= -I/usr/local/include -I. -DVERSION=\"${VERSION}\" -O3 -Wall #-D_FORTIFY_SOURCE=2
 LFLAGS = -L/usr/local/lib -lsqlite3 -lcgic
 OS = ${shell uname}
 ifeq ($(OS), FreeBSD)
