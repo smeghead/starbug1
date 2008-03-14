@@ -20,7 +20,8 @@ Object.extend(Starbug1Calendar.Util, {
         return '<table>' +
             '<tr class="title">' +
                 '<th id="pre">《</th>' +
-                '<th class="title" colspan="5">' + date.getFullYear() + '年' + (date.getMonth() + 1) + '月</th>' +
+                '<th class="title" colspan="4">' + date.getFullYear() + '年' + (date.getMonth() + 1) + '月</th>' +
+                '<th id="close">×</th>' +
                 '<th id="next">》</th>' +
             '</td></tr>' +
             '<tr>' + this.DAY_OF_WEEK.inject(
@@ -38,9 +39,8 @@ Object.extend(Starbug1Calendar.Util, {
         var firstDate = Starbug1Calendar.Util.getFirstDate(date);
         var nextFirstDate = new Date(date.getFullYear(), date.getMonth() + 1, 1);
         var currentDate = Starbug1Calendar.Util.getAddedDate(firstDate, firstDate.getDay() * -1);
-        var endDate = Starbug1Calendar.Util.getAddedDate(nextFirstDate, 4 - firstDate.getDay());
         var buf = "";
-        while (currentDate < endDate) {
+        while (1) {
             var dayOfWeek = currentDate.getDay();
             if (dayOfWeek == 0) buf += '<tr>';
             var className = 'day_' + dayOfWeek;
@@ -52,6 +52,8 @@ Object.extend(Starbug1Calendar.Util, {
             buf += '<td class="' + className + '">' + currentDate.getDate() + '</td>';
             if (dayOfWeek == 6) buf += '</tr>';
             currentDate = Starbug1Calendar.Util.getAddedDate(currentDate, 1);
+            if (dayOfWeek == 6 && currentDate > nextFirstDate)
+                break;
         }
         return buf;
     },
@@ -132,6 +134,9 @@ Object.extend(Starbug1Calendar.Calendar.prototype, {
         );
         Event.observe('next', 'mouseover', Starbug1Calendar.Util.mouseover);
         Event.observe('next', 'mouseout', Starbug1Calendar.Util.mouseout);
+        Event.observe('close', 'mouseover', Starbug1Calendar.Util.mouseover);
+        Event.observe('close', 'mouseout', Starbug1Calendar.Util.mouseout);
+        Event.observe('close', 'click', _this.hide.bindAsEventListener(_this));
         Element.show(this.calendar);
     },
     hide: function() {

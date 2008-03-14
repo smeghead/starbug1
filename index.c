@@ -823,6 +823,7 @@ void output_form_element_4_condition(ElementType* et)
         case ELEM_TYPE_DATE:
             sprintf(name, "field%d_from", et->id);
             cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+            o("<span>\n");
             o("<input type=\"text\" class=\"calendar\" id=\"field");
             h(id);
             o("\" name=\"field");
@@ -830,9 +831,11 @@ void output_form_element_4_condition(ElementType* et)
             o("_from\" value=\"");
             v(value);
             o("\" maxlength=\"10\" />\n");
+            o("</span>\n");
             o("〜\n");
             sprintf(name, "field%d_to", et->id);
             cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+            o("<span>\n");
             o("<input type=\"text\" class=\"calendar\" id=\"field");
             h(id);
             o("\" name=\"field");
@@ -840,6 +843,7 @@ void output_form_element_4_condition(ElementType* et)
             o("_to\" value=\"");
             v(value);
             o("\" maxlength=\"10\" />\n");
+            o("</span>\n");
             break;
     }
 }
@@ -944,10 +948,12 @@ void output_form_element(List* elements, ElementType* et)
             o("<div class=\"description\">ファイルサイズは、%dKb以下になるようにしてください。</div>\n", MAX_FILE_SIZE);
             break;
         case ELEM_TYPE_DATE:
+            o("<span>\n");
             o("<input type=\"text\" class=\"calendar\" id=\"field%d\" name=\"field%d\" value=\"\n",
                     et->id, et->id);
             v(value);
             o("\" maxlength=\"10\"/>\n"
+              "</span>\n"
               "<div class=\"description\">yyyy-mm-dd形式で入力してください。</div>\n");
             break;
     }
