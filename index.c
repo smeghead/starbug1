@@ -106,7 +106,7 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
       "<ul id='menu'>\n");
     o("<li><a href='%s' title=\"ホームへ移動します\">ホーム</a></li>\n", project->home_url);
     o("<li><a %s href='%s' title=\"トップページへ移動します\">トップ</a></li>\n", navi == NAVI_TOP ? "class=\"current\"" : "", cgiScriptName);
-    o("<li><a %s href='%s/list' title=\"状態別のチケット一覧を参照します\">状態別チケット</a></li>\n", navi == NAVI_LIST ? "class=\"current\"" : "", cgiScriptName);
+    o("<li><a %s href='%s/list' title=\"状態別のチケット一覧を参照します\">状態別チケット一覧</a></li>\n", navi == NAVI_LIST ? "class=\"current\"" : "", cgiScriptName);
     o("<li><a %s href='%s/register' title=\"新規にチケットを登録します\">チケット登録</a></li>\n", navi == NAVI_REGISTER ? "class=\"current\"" : "", cgiScriptName);
     o("<li><a %s href='%s/search' title=\"チケットを検索します\">チケット検索</a></li>\n", navi == NAVI_SEARCH ? "class=\"current\"" : "", cgiScriptName);
     o("<li><a %s href='%s/statistics' title=\"統計情報を表示します\">統計情報</a></li>\n", navi == NAVI_STATISTICS ? "class=\"current\"" : "", cgiScriptName);
