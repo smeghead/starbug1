@@ -303,9 +303,10 @@ input.conditionelement {
 #ticket_newest th {
     white-space: nowrap;
     width: 150px;
-    background-color: #d9d9d9;
+    background-color: #F0DB8C;
 }
 #ticket_newest td {
+    background-color: #ffffe0;
 }
 th.required {
     border-left-color: #DE1439 !important;
