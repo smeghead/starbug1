@@ -87,10 +87,6 @@ Object.extend(Starbug1Calendar.Calendar.prototype, {
         if (isNaN(this.date)) this.date = new Date();
         this.calendar.id = 'calendar';
         this.calendar.innerHTML = Starbug1Calendar.Util.createCalendar(this.date);
-        //Point
-        var offsets = Position.positionedOffset(this.target);
-        this.calendar.style.left = offsets[0];
-        this.calendar.style.top = offsets[1] + Element.getHeight(this.target);
         //Event
         var _this = this;
         var selector = new Selector('td');
@@ -114,6 +110,10 @@ Object.extend(Starbug1Calendar.Calendar.prototype, {
             }
         );
         this.target.parentNode.appendChild(this.calendar);
+        //Point
+        var offsets = Position.positionedOffset(this.target);
+        this.calendar.style.left = offsets[0];
+        this.calendar.style.top = offsets[1] + Element.getHeight(this.target);
         Event.observe('pre', 'click', 
             function() {
                 var firstDate = Starbug1Calendar.Util.getFirstDate(_this.date);
