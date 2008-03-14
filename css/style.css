@@ -197,6 +197,11 @@ div {
     margin: 10px;
     width: 95%;
 }
+#input_form table th,
+#setting_form table th,
+#condition_form table th {
+    background-color: #f0f8ff;
+}
 table.list_item, table.list_item td, table.list_item th {
   margin: 0px;
   border: none;
