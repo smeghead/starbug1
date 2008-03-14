@@ -1,3 +1,8 @@
+2008-03-14  smeghead <smeghead@users.sourceforge.jp>
+
+    * 入力フォームの下に、複数行テキスト項目での、他チケットリンクとpre記法に
+    ついての説明を追加した。
+
 2008-03-13  smeghead <smeghead@users.sourceforge.jp>
 
     * 入力フィールドにmaxlengthの指定を追加した。

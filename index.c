@@ -1059,6 +1059,12 @@ void register_action()
             "<label for=\"save2cookie\">投稿者を保存する。(cookie使用)</label>\n"
             "</form>\n"
             "</div>\n", strlen(sender) ? "checked" : "");
+    o(      "<div class=\"description\">\n"
+            "\t<ul>\n"
+            "\t\t<li>複数行テキスト項目の内容では、#1 のように書くと、ID が 1 のチケット詳細ページへのリンクとなります。</li>\n"
+            "\t\t<li>複数行テキスト項目の内容では、行頭が >| から始まる行から、行頭が |< から始まる行までは、整形済みブロックになります。</li>\n"
+            "\t</ul>\n"
+            "</div>\n");
     db_finish();
     output_footer();
 }
@@ -1315,6 +1321,12 @@ void ticket_action()
             "<label for=\"save2cookie\">投稿者を保存する。(cookie使用)</label>\n"
             "</form>\n"
             "</div>\n", strlen(sender) ? "checked" : "");
+    o(      "<div class=\"description\">\n"
+            "\t<ul>\n"
+            "\t\t<li>複数行テキスト項目の内容では、#1 のように書くと、ID が 1 のチケット詳細ページへのリンクとなります。</li>\n"
+            "\t\t<li>複数行テキスト項目の内容では、行頭が >| から始まる行から、行頭が |< から始まる行までは、整形済みブロックになります。</li>\n"
+            "\t</ul>\n"
+            "</div>\n");
     output_field_information_js(element_types_a);
     db_finish();
     output_footer();
