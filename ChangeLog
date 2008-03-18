@@ -1,3 +1,8 @@
+2008-03-18  smeghead <smeghead@users.sourceforge.jp>
+
+    * strcatを使用している部分を、simple_stringを使用するように修正した。
+    * stackに1Mのバッファを取っている部分を、ヒープに確保するように変更した。
+
 2008-03-14  smeghead <smeghead@users.sourceforge.jp>
 
     * 入力フォームの下に、複数行テキスト項目での、他チケットリンクとpre記法に

@@ -18,7 +18,7 @@ admin.o: admin.c data.h db.h dbutil.h util.h
 data.o: data.c data.h util.h dbutil.h
 db.o: db.c data.h util.h dbutil.h
 dbutil.o: dbutil.c util.h data.h dbutil.h
-index.o: index.c data.h db.h dbutil.h util.h wiki.h hook.h
+index.o: index.c simple_string.h data.h db.h dbutil.h util.h wiki.h hook.h
 hook.o: hook.c data.h util.h dbutil.h hook.h
 util.o: util.c util.h data.h dbutil.h
 wiki.o: wiki.c wiki.h util.h data.h dbutil.h

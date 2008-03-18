@@ -9,6 +9,7 @@
 #include "util.h"
 #include "wiki.h"
 #include "hook.h"
+#include "simple_string.h"
 
 typedef enum _NAVI {
     NAVI_OTHER,
@@ -158,13 +159,12 @@ void output_navigater(SearchResult* result, char* query_string)
         o("<a href=\"%s/search?p=%d&amp;%s\">&gt;&gt;</a>\n", cgiScriptName, result->page + 1, query_string);
     o("</div>\n");
 }
-char* format_query_string_without_page(char* buffer)
+String* format_query_string_without_page(String* buffer)
 {
     char **array, **arrayStep;
     if (cgiFormEntries(&array) != cgiFormSuccess) {
-        return "";
+        return buffer;
     }
-    strcpy(buffer, "");
     arrayStep = array;
     while (*arrayStep) {
         if (strcmp(*arrayStep, "p") != 0) {
@@ -174,10 +174,10 @@ char* format_query_string_without_page(char* buffer)
             strcpy(name, *arrayStep);
             cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
             url_encode(value, encodedvalue, DEFAULT_LENGTH);
-            strcat(buffer, name);
-            strcat(buffer, "=");
-            strcat(buffer, encodedvalue);
-            strcat(buffer, "&amp;");
+            string_append(buffer, name);
+            string_append(buffer, "=");
+            string_append(buffer, encodedvalue);
+            string_append(buffer, "&amp;");
         }
         arrayStep++;
     }
@@ -185,13 +185,12 @@ char* format_query_string_without_page(char* buffer)
 
     return buffer;
 }
-char* format_query_string_without_sort_and_page(char* buffer)
+String* format_query_string_without_sort_and_page(String* buffer)
 {
     char **array, **arrayStep;
     if (cgiFormEntries(&array) != cgiFormSuccess) {
-        return "";
+        return buffer;
     }
-    strcpy(buffer, "");
     arrayStep = array;
     while (*arrayStep) {
         if (strcmp(*arrayStep, "rsort") != 0 &&
@@ -203,10 +202,10 @@ char* format_query_string_without_sort_and_page(char* buffer)
             strcpy(name, *arrayStep);
             cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
             url_encode(value, encodedvalue, DEFAULT_LENGTH);
-            strcat(buffer, name);
-            strcat(buffer, "=");
-            strcat(buffer, encodedvalue);
-            strcat(buffer, "&amp;");
+            string_append(buffer, name);
+            string_append(buffer, "=");
+            string_append(buffer, encodedvalue);
+            string_append(buffer, "&amp;");
         }
         arrayStep++;
     }
@@ -235,23 +234,24 @@ void output_ticket_table_header(List* element_types)
 {
     Iterator* it;
     char* reverse = strstr(cgiQueryString, "rsort=");
-    char query_string_buffer[DEFAULT_LENGTH];
-    char* query_string = format_query_string_without_sort_and_page(query_string_buffer);
+    String* query_string_a = string_new(0);
+    query_string_a = format_query_string_without_sort_and_page(query_string_a);
 
     o(      "\t<tr>\n");
-    o(      "\t\t<th class=\"id\"><a href=\"%s/search?%ssort=-1&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">ID</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    o(      "\t\t<th class=\"id\"><a href=\"%s/search?%ssort=-1&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">ID</a></th>\n", cgiScriptName, reverse ? "" : "r", string_rawstr(query_string_a));
     foreach (it, element_types) {
         ElementType* et = it->element;
         o("\t\t<th class=\"field%d\">\n", et->id);
-        o("\t\t\t<a href=\"%s/search?%ssort=%d&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">", cgiScriptName, reverse ? "" : "r", et->id, query_string);
+        o("\t\t\t<a href=\"%s/search?%ssort=%d&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">", cgiScriptName, reverse ? "" : "r", et->id, string_rawstr(query_string_a));
         h(et->name);
         o("</a>\n");
         o("\t\t</th>\n");
     }
-    o("\t\t<th class=\"registerdate\"><a href=\"%s/search?%ssort=-2&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">投稿日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
-    o("\t\t<th class=\"lastregisterdate\"><a href=\"%s/search?%ssort=-3&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">最終更新日時</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
-    o("\t\t<th class=\"leftdate\"><a href=\"%s/search?%ssort=-3&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">放置日数</a></th>\n", cgiScriptName, reverse ? "" : "r", query_string);
+    o("\t\t<th class=\"registerdate\"><a href=\"%s/search?%ssort=-2&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">投稿日時</a></th>\n", cgiScriptName, reverse ? "" : "r", string_rawstr(query_string_a));
+    o("\t\t<th class=\"lastregisterdate\"><a href=\"%s/search?%ssort=-3&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">最終更新日時</a></th>\n", cgiScriptName, reverse ? "" : "r", string_rawstr(query_string_a));
+    o("\t\t<th class=\"leftdate\"><a href=\"%s/search?%ssort=-3&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">放置日数</a></th>\n", cgiScriptName, reverse ? "" : "r", string_rawstr(query_string_a));
     o("\t</tr>\n");
+    string_free(query_string_a);
 }
 void output_ticket_table_body(SearchResult* result, List* element_types)
 {
@@ -673,19 +673,19 @@ void search_actoin()
       "<h3>検索結果</h3>\n");
 
     if (result_a->messages->size) {
-        char query_string_buffer[DEFAULT_LENGTH];
-        char* query_string;
+        String* query_string_a = string_new(0);
 
-        query_string = format_query_string_without_page(query_string_buffer);
+        query_string_a = format_query_string_without_page(query_string_a);
         o(      "<div class=\"infomation\">");
         o(      "%d件ヒットしました。\n", result_a->hit_count);
         o(      "<a href=\"%s/report_csv_download?%s\" target=\"_blank\">検索結果をCSVでダウンロードする。</a>\n",
                 cgiScriptName,
-                query_string);
+                string_rawstr(query_string_a));
         o(      "</div>\n");
-        output_navigater(result_a, query_string);
+        output_navigater(result_a, string_rawstr(query_string_a));
         output_ticket_table(result_a, element_types_a);
-        output_navigater(result_a, query_string);
+        output_navigater(result_a, string_rawstr(query_string_a));
+        string_free(query_string_a);
     }
     o("</div>\n");
     output_footer();
@@ -1283,7 +1283,6 @@ void ticket_action()
                 output_form_element(last_elements, et);
             else
                 output_form_element(NULL, et);
-/*                 last_elements = last_elements->next; */
         } else {
             output_form_element(NULL, et);
         }
@@ -1317,7 +1316,6 @@ void ticket_action()
                 output_form_element(last_elements, et);
             else
                 output_form_element(NULL, et);
-/*                 last_elements = last_elements->next; */
         } else {
             output_form_element(NULL, et);
         }
@@ -1806,12 +1804,13 @@ void edit_top_action()
 }
 void edit_top_submit_action()
 {
-    char value[VALUE_LENGTH];
+    char* value_a = xalloc(sizeof(char) * VALUE_LENGTH);
 
-    cgiFormString("edit_top", value, VALUE_LENGTH);
+    cgiFormString("edit_top", value_a, VALUE_LENGTH);
     db_init();
-    wiki_save("top", value);
+    wiki_save("top", value_a);
     db_finish();
+    xfree(value_a);
 
     redirect("", NULL);
 }
