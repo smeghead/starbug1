@@ -2,5 +2,5 @@
 TEMPLATE_DIR=template
 rm -rf $TEMPLATE_DIR
 mkdir -p $TEMPLATE_DIR/{css,db}
-cat pickup_template.sql | sqlite3 `dirname $0`/../db/starbug1.db > $TEMPLATE_DIR/db/starbug1.db
+cat pickup_template.sql | sqlite3 `dirname $0`/../db/starbug1.db | sqlite3 $TEMPLATE_DIR/db/starbug1.db
 cp `dirname $0`/../css/user.css $TEMPLATE_DIR/css/
