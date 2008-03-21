@@ -869,15 +869,11 @@ void output_form_element(List* elements, ElementType* et)
         value = get_element_value(elements, et);
     } else {
         if (et->id == ELEM_ID_SENDER) {
-            char* user_name = getenv("REMOTE_USER");
             char sender[DEFAULT_LENGTH];
             cgiCookieString(COOKIE_SENDER, sender, DEFAULT_LENGTH);
             if (strlen(sender))
                 /* 投稿者のフィールドは、cookieから値が取得できれば、その値を表示する。 */
                 value = sender;
-            else if (user_name)
-                /* 投稿者のフィールドは、basic認証が行なわれていればそのユーザ名を表示する。 */
-                value = user_name;
             else 
                 value = et->default_value;
         } else {
