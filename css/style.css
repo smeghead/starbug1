@@ -202,6 +202,9 @@ div {
 #condition_form table th {
     background-color: #f0f8ff;
 }
+#input_form table div.description {
+    margin-left: 0px;
+}
 table.list_item, table.list_item td, table.list_item th {
   margin: 0px;
   border: none;
@@ -221,7 +224,7 @@ table.list_item th.delete {
 .list_item input.checkbox {
 }
 input.conditionelement {
-    width: 200px;
+    width: 150px;
 }
 #info,
 #top_state_index,
