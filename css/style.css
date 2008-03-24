@@ -22,6 +22,7 @@ h2 {
     margin: 3px 3px 3px 3px;
     padding: 5px 3px 3px 30px;
     background-image: url("../img/h2.png");
+    background-repeat: repeat-x;
 }
 h3 {
     font-size: 120%;

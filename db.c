@@ -23,9 +23,9 @@ static List* db_get_element_types(int all, List* elements)
     sqlite3_stmt *stmt = NULL;
 
     if (all) {
-        sql = "select id, type, ticket_property, reply_property, required, name, description, display_in_list, sort, default_value, auto_add_item from element_type order by sort";
+        sql = "select id, type, ticket_property, reply_property, required, name, description, display_in_list, sort, default_value, auto_add_item from element_type where deleted = 0 order by sort";
     } else {
-        sql = "select id, type, ticket_property, reply_property, required, name, description, display_in_list, sort, default_value, auto_add_item from element_type where display_in_list = 1 order by sort";
+        sql = "select id, type, ticket_property, reply_property, required, name, description, display_in_list, sort, default_value, auto_add_item from element_type where deleted = 0 and display_in_list = 1 order by sort";
     }
     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
@@ -76,6 +76,7 @@ ElementType* db_get_element_type(int id, ElementType* e)
     sql = "select id, type, ticket_property, reply_property, required, name, description, auto_add_item, default_value, display_in_list, sort "
         "from element_type "
         "where id = ? "
+        " and deleted = 0 "
         "order by sort";
     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
@@ -895,7 +896,7 @@ int db_register_element_type(ElementType* et)
 void db_delete_element_type(int id)
 {
     exec_query(
-            "delete from element_type where id = ?",
+            "update element_type set deleted = 1 where id = ?",
             COLUMN_TYPE_INT, id,
             COLUMN_TYPE_END);
 }

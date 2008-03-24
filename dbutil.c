@@ -83,7 +83,8 @@ void create_tables()
             " default_value text, "
             " auto_add_item integer not null default 0, "
             " display_in_list integer not null default 0, "
-            " sort integer "
+            " sort integer, "
+            " deleted integer not null default 0 "
             ");", COLUMN_TYPE_END);
     exec_query(
             "create index index_element_type_0 on element_type (id, type, display_in_list, sort)", COLUMN_TYPE_END);
