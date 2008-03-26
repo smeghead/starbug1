@@ -15,6 +15,7 @@ void string_append(String*, char*);
 size_t string_len(String*);
 char* string_rawstr(String*);
 void string_free(String*);
+void string_replace(String*, char, char*);
 
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

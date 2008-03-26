@@ -7,6 +7,7 @@
 #include "data.h"
 #include "util.h"
 #include "hook.h"
+#include "simple_string.h"
 
 static void put_env(char* name, char* value)
 {
@@ -24,54 +25,54 @@ HOOK* init_hook(HOOK_MODE mode)
     hook->results = results;
     return hook;
 }
-static void escape_quot(char* dist, char* src)
+static void escape_quot(String* dist)
 {
-    char* d = dist;
-    char* p = src;
-    while (*p) {
-        if (*p == '"') {
-            *d = '\\';
-            d++;
-        }
-        *d = *p;
-        d++;
-        p++;
-    }
-    *d = '\0';
+    string_replace(dist, '"', "\"\"");
+    string_replace(dist, '\\', "\\\\");
+    string_replace(dist, '\n', "\\n");
 }
-static char* create_json(char* content, Project* project, Message* message, List* elements, List* element_types)
+static String* create_json(String* content, Project* project, Message* message, List* elements, List* element_types)
 {
     Iterator* it;
-    sprintf(content, 
-            "{project:{name: \"%s\"},"
-            "ticket:{id: %d, url: \"http://%s%s/ticket/%d\",fields:[",
-            project->name, message->id, cgiServerName, cgiScriptName, message->id);
+    char buf[DEFAULT_LENGTH];
+    string_append(content, "{project:{name: \"");
+    string_append(content, project->name);
+    string_append(content, "\"}, ticket:{id: ");
+    sprintf(buf, "%d", message->id);
+    string_append(content, buf);
+    string_append(content, ", url: \"http://");
+    string_append(content, cgiServerName);
+    string_append(content, cgiScriptName);
+    string_append(content, "/ticket/");
+    string_append(content, buf);
+    string_append(content, "\",fields:[");
     foreach (it, element_types) {
         ElementType* et = it->element;
-        char field[DEFAULT_LENGTH * 2];
-        char name[DEFAULT_LENGTH];
-        char* value_p;
-        char* value_a;
-        char* value_quoted_a;
-        escape_quot(name, et->name);
-        value_p = get_element_value(elements, et);
-        value_a = xalloc(sizeof(char) * DEFAULT_LENGTH + 10);
-        value_quoted_a = xalloc(sizeof(char) * DEFAULT_LENGTH * 2); /* quoteするとサイズが増えるので、余分にバッファを用意する。 */
-        strncpy(value_a, value_p, DEFAULT_LENGTH);
-        escape_quot(value_quoted_a, value_a);
-        xfree(value_a);
-        sprintf(field, "{name:\"%s\", value:\"%s\"}", name, value_quoted_a);
-        xfree(value_quoted_a);
-        strcat(content, field);
-        if (iterator_next(it)) strcat(content, ",");
+        String* field_a = string_new(0);
+        String* name_a = string_new(0);
+        String* value_a = string_new(0);
+        string_append(name_a, et->name);
+        escape_quot(name_a);
+        string_append(value_a, get_element_value(elements, et));
+        escape_quot(value_a);
+        string_append(field_a, "{name:\"");
+        string_append(field_a, string_rawstr(name_a));
+        string_append(field_a, "\", value:\"");
+        string_append(field_a, string_rawstr(value_a));
+        string_append(field_a, "\"}");
+        string_free(name_a);
+        string_free(value_a);
+        string_append(content, string_rawstr(field_a));
+        string_free(field_a);
+        if (iterator_next(it)) string_append(content, ",");
     }
-    strcat(content, "]}}");
+    string_append(content, "]}}");
     return content;
 }
 HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, List* element_types)
 {
     char hook_dir[DEFAULT_LENGTH] = "script";
-    char* content_a;
+    String* content_a = string_new(0);
     DIR* dir;
     struct dirent *dp;
     struct stat fi;
@@ -79,9 +80,8 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
     if ((dir=opendir(hook_dir)) == NULL) {
         return hook;
     }
-    content_a = (char*)xalloc(sizeof(char) * VALUE_LENGTH);
     content_a = create_json(content_a, project, message, elements, element_types);
-    d("json: %s\n", content_a);
+    d("json: %s\n", string_rawstr(content_a));
     for (dp = readdir(dir); dp != NULL; dp = readdir(dir)) {
         char hook_command[DEFAULT_LENGTH];
         char filename[DEFAULT_LENGTH];
@@ -95,7 +95,7 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
             HOOK_RESULT* result;
             result = list_new_element(hook->results);
             strcpy(result->command, hook_command);
-            put_env("STARBUG1_CONTENT", content_a);
+            put_env("STARBUG1_CONTENT", string_rawstr(content_a));
             ret = system(hook_command);
             if (ret == 0) {
                 sprintf(result->message, "hook処理(%s)を実行しました。", hook_command);
@@ -105,7 +105,7 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
             list_add(hook->results, result);
         }
     }
-    xfree(content_a);
+    string_free(content_a);
     return hook;
 }
 size_t get_hook_message_size(HOOK* hook)

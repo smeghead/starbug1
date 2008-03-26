@@ -62,4 +62,26 @@ size_t string_len(String* str)
 {
     return str->current_size;
 }
+void string_replace(String* str, char target_char, char* newchars)
+{
+    String* new_string_a = string_new(str->block_size);
+    char* src = str->raw_chars;
+    while (*src) {
+        if (*src == target_char) {
+            string_append(new_string_a, newchars);
+        } else {
+            char dist[2];
+            sprintf(dist, "%c", *src);
+            string_append(new_string_a, dist);
+        }
+        src++;
+    }
+    xfree(str->raw_chars);
+    str->raw_chars = new_string_a->raw_chars;
+    str->block_size = new_string_a->block_size;
+    str->buf_size = new_string_a->buf_size;
+    str->current_size = new_string_a->current_size;
+    xfree(new_string_a);
+}
+
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
