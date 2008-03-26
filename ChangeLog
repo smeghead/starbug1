@@ -1,5 +1,9 @@
 2008-03-26  smeghead <smeghead@users.sourceforge.jp>
 
+    * 0.2.1-beta リリース
+
+2008-03-26  smeghead <smeghead@users.sourceforge.jp>
+
     * hook機能へjsonを送るときに改行コードを\nに変換するようにした。
 
 2008-03-24  smeghead <smeghead@users.sourceforge.jp>
