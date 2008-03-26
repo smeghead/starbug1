@@ -1,5 +1,10 @@
 2008-03-26  smeghead <smeghead@users.sourceforge.jp>
 
+    * 複数行入力エリア(<textarea>)の値の出力に、値用のエスケープ処理を行なって
+    いたのを、HTML用のエスケープ処理に変更した。
+
+2008-03-26  smeghead <smeghead@users.sourceforge.jp>
+
     * 0.2.1-beta リリース
 
 2008-03-26  smeghead <smeghead@users.sourceforge.jp>

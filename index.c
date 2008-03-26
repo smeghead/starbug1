@@ -890,7 +890,7 @@ void output_form_element(List* elements, ElementType* et)
         case ELEM_TYPE_TEXTAREA:
             o("<textarea id=\"field%d\" name=\"field%d\" rows=\"3\" cols=\"10\">",
                     et->id, et->id);
-            v(value);
+            h(value);
             o("</textarea>\n");
             break;
         case ELEM_TYPE_CHECKBOX:
