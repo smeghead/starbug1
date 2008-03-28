@@ -120,14 +120,14 @@ void wiki_out(char* page_name)
             p += strlen(p);
         }
         if (mode == LINE_MODE_PRE && strncmp(line, "|<", strlen("|<")) != 0) {
-            /* LINE_MODE_PRE√Ê§œ°¢¿Æ∑¡∫—•÷•Ì•√•Ø */
+            /* LINE_MODE_PRE‰∏≠„ÅØ„ÄÅÊàêÂΩ¢Ê∏à„Éñ„É≠„ÉÉ„ÇØ */
             buf_add(TYPE_PRE, line);
         } else if (mode == LINE_MODE_NORMAL && strncmp(line, ">|", strlen(">|")) == 0) {
-            /* ¿Æ∑¡∫—•÷•Ì•√•ØΩ™Œª */
+            /* ÊàêÂΩ¢Ê∏à„Éñ„É≠„ÉÉ„ÇØÁµÇ‰∫Ü */
             buf_flush();
             mode = LINE_MODE_PRE;
         } else if (mode == LINE_MODE_PRE && strncmp(line, "|<", strlen("|<")) == 0) {
-            /* ¿Æ∑¡∫—•÷•Ì•√•Ø≥´ªœ */
+            /* ÊàêÂΩ¢Ê∏à„Éñ„É≠„ÉÉ„ÇØÈñãÂßã */
             buf_flush();
             mode = LINE_MODE_NORMAL;
         } else if (strncmp(line, "****", strlen("****")) == 0) {

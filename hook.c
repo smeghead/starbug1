@@ -27,7 +27,7 @@ HOOK* init_hook(HOOK_MODE mode)
 }
 static void escape_quot(String* dist)
 {
-    string_replace(dist, '"', "\"\"");
+    string_replace(dist, '"', "\\\"");
     string_replace(dist, '\\', "\\\\");
     string_replace(dist, '\n', "\\n");
 }

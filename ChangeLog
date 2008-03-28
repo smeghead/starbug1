@@ -1,3 +1,8 @@
+2008-03-28  smeghead <smeghead@users.sourceforge.jp>
+
+    * hook機能で外部プログラムに渡すjsonのエスケープ方法が間違っていたのを修正
+    した。" を "" にエスケープしてたのを、 \" に変更した。
+
 2008-03-26  smeghead <smeghead@users.sourceforge.jp>
 
     * 複数行入力エリア(<textarea>)の値の出力に、値用のエスケープ処理を行なって
