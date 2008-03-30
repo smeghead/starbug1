@@ -1,4 +1,8 @@
-2008-03-28  smeghead <smeghead@users.sourceforge.jp>
+2008-03-30  smeghead <smeghead@users.sourceforge.jp>
+
+    * 0.2.2-beta リリース
+
+2008-02-28  smeghead <smeghead@users.sourceforge.jp>
 
     * hook機能で外部プログラムに渡すjsonのエスケープ方法が間違っていたのを修正
     した。" を "" にエスケープしてたのを、 \" に変更した。
