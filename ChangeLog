@@ -1,5 +1,9 @@
 2008-03-30  smeghead <smeghead@users.sourceforge.jp>
 
+    * string_appendf(フォーマット指定文字列追加関数)を追加した。
+
+2008-03-30  smeghead <smeghead@users.sourceforge.jp>
+
     * 0.2.2-beta リリース
 
 2008-02-28  smeghead <smeghead@users.sourceforge.jp>

@@ -354,9 +354,8 @@ String* get_search_sql_string(List* conditions, Condition* sort, char* q, String
         create_columns_like_exp(element_types_a, "m_all", columns);
         if (conditions->size)
             string_append(sql_string, " and ");
-        string_append(sql_string, "(");
-        string_append(sql_string, columns);
-        string_append(sql_string, ")");
+        string_append(sql_string, "(%s)",
+                columns);
         list_free(element_types_a);
     }
 

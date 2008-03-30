@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "data.h"
 #include "simple_string.h"
 
 #define STRING_DEFAULT_SIZE 1024
@@ -83,5 +84,46 @@ void string_replace(String* str, char target_char, char* newchars)
     str->current_size = new_string_a->current_size;
     xfree(new_string_a);
 }
+void string_appendf(String* str, char* fmt, ...)
+{
+    va_list ap;
+    int i;
+    char cs[DEFAULT_LENGTH];
+    char* s;
+    char c;
+    char char_prefix = '\0';
 
+    va_start(ap, fmt);
+    while (*fmt) {
+        if (char_prefix == '%') {
+            switch (*fmt) {
+                case 's':              /* string */
+                    s = va_arg(ap, char *);
+                    string_append(str, s);
+                    break;
+                case 'd':              /* int */
+                    i = va_arg(ap, int);
+                    sprintf(cs, "%d", i);
+                    string_append(str, cs);
+                    break;
+                case 'c':              /* char */
+                    c = (char) va_arg(ap, int);
+                    sprintf(cs, "%c", c);
+                    string_append(str, cs);
+                    break;
+                default:
+                    sprintf(cs, "%c", char_prefix);
+                    string_append(str, cs);
+                    sprintf(cs, "%c", *fmt);
+                    string_append(str, cs);
+                    break;
+            }
+        } else if (*fmt != '%') {
+            sprintf(cs, "%c", *fmt);
+            string_append(str, cs);
+        }
+        char_prefix = *fmt++;
+    }
+    va_end(ap);
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

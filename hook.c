@@ -34,18 +34,12 @@ static void escape_quot(String* dist)
 static String* create_json(String* content, Project* project, Message* message, List* elements, List* element_types)
 {
     Iterator* it;
-    char buf[DEFAULT_LENGTH];
-    string_append(content, "{project:{name: \"");
-    string_append(content, project->name);
-    string_append(content, "\"}, ticket:{id: ");
-    sprintf(buf, "%d", message->id);
-    string_append(content, buf);
-    string_append(content, ", url: \"http://");
-    string_append(content, cgiServerName);
-    string_append(content, cgiScriptName);
-    string_append(content, "/ticket/");
-    string_append(content, buf);
-    string_append(content, "\",fields:[");
+    string_appendf(content, "{project:{name: \"%s\"}, ticket:{id: %d, url: \"http://%s%s/ticket/%d\",fields:[",
+            project->name,
+            message->id,
+            cgiServerName,
+            cgiScriptName,
+            message->id);
     foreach (it, element_types) {
         ElementType* et = it->element;
         String* field_a = string_new(0);
@@ -55,11 +49,9 @@ static String* create_json(String* content, Project* project, Message* message, 
         escape_quot(name_a);
         string_append(value_a, get_element_value(elements, et));
         escape_quot(value_a);
-        string_append(field_a, "{name:\"");
-        string_append(field_a, string_rawstr(name_a));
-        string_append(field_a, "\", value:\"");
-        string_append(field_a, string_rawstr(value_a));
-        string_append(field_a, "\"}");
+        string_appendf(field_a, "{name:\"%s\", value:\"%s\"}",
+                string_rawstr(name_a),
+                string_rawstr(value_a));
         string_free(name_a);
         string_free(value_a);
         string_append(content, string_rawstr(field_a));

@@ -391,7 +391,7 @@ int exec_query(const char* sql, ...)
     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
 
-    va_start(ap,sql);
+    va_start(ap, sql);
     for(i = 0; (type = va_arg(ap, int)) != COLUMN_TYPE_END; i++){
         if (type == COLUMN_TYPE_INT) {
             int value = va_arg(ap, int);
