@@ -1,3 +1,8 @@
+2008-03-31  smeghead <smeghead@users.sourceforge.jp>
+
+    * hook機能で外部プログラムに渡すjsonのエスケープ方法が間違っていたのを修正
+    した。" より、先に、\をエスケープする必要があったため。
+
 2008-03-30  smeghead <smeghead@users.sourceforge.jp>
 
     * string_appendf(フォーマット指定文字列追加関数)を追加した。

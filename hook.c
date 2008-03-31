@@ -27,8 +27,8 @@ HOOK* init_hook(HOOK_MODE mode)
 }
 static void escape_quot(String* dist)
 {
-    string_replace(dist, '"', "\\\"");
     string_replace(dist, '\\', "\\\\");
+    string_replace(dist, '"', "\\\"");
     string_replace(dist, '\n', "\\n");
 }
 static String* create_json(String* content, Project* project, Message* message, List* elements, List* element_types)

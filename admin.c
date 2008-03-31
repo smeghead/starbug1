@@ -141,7 +141,7 @@ void menu_action()
     o("<div id=\"admin_menu\">\n");
     o("\t<dl>\n");
     o("\t\t<dt><a href=\"%s/project\">プロジェクト設定</a></dt><dd>プロジェクトの基本的な情報の設定です。</dd>\n", cgiScriptName);
-    o("\t\t<dt><a href=\"%s/env\">環境設定</a></dt><dd>URLやメール関連の設定です。</dd>\n", cgiScriptName);
+    o("\t\t<dt><a href=\"%s/env\">環境設定</a></dt><dd>URLの設定です。</dd>\n", cgiScriptName);
     o("\t\t<dt><a href=\"%s/items\">項目設定</a></dt><dd>チケットの項目についての設定です。</dd>\n", cgiScriptName);
     o("\t\t<dt><a href=\"%s/style\">スタイル設定</a></dt><dd>スタイルシートの設定です。</dd>\n", cgiScriptName);
     o("\t</dl>\n");
