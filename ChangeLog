@@ -1,6 +1,11 @@
 2008-04-03  smeghead <smeghead@users.sourceforge.jp>
 
+    * 0.2.3-beta リリース
+
+2008-04-03  smeghead <smeghead@users.sourceforge.jp>
+
     * cygwinでコンパイルできるように、Makefileを修正。cygwinでの動作は未確認。
+    * テストを修正した。SeleniumIDEで「速く」で実行できるようにした。
 
 2008-03-31  smeghead <smeghead@users.sourceforge.jp>
 
