@@ -6,6 +6,9 @@ OS = ${shell uname}
 ifneq ($(OS), Linux)
 	LFLAGS += -liconv
 endif
+ifeq ($(OS), CYGWIN_NT-5.1)
+	LFLAGS += -static
+endif
 
 default: index.cgi admin.cgi
 
