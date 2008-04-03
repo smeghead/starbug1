@@ -1,3 +1,7 @@
+2008-04-03  smeghead <smeghead@users.sourceforge.jp>
+
+    * cygwinでコンパイルできるように、Makefileを修正。cygwinでの動作は未確認。
+
 2008-03-31  smeghead <smeghead@users.sourceforge.jp>
 
     * hook機能で外部プログラムに渡すjsonのエスケープ方法が間違っていたのを修正

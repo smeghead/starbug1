@@ -3,12 +3,9 @@ CC = gcc
 CFLAGS= -I/usr/local/include -I. -DVERSION=\"${VERSION}\" -O3 -Wall
 LFLAGS = -L/usr/local/lib -lsqlite3 -lcgic
 OS = ${shell uname}
-ifeq ($(OS), FreeBSD)
+ifneq ($(OS), Linux)
 	LFLAGS += -liconv
 endif
-
-
-
 
 default: index.cgi admin.cgi
 
