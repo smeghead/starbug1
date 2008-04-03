@@ -1,7 +1,7 @@
 VERSION = 0.2.2-beta
 CC = gcc
-CFLAGS= -I/usr/local/include -I. -DVERSION=\"${VERSION}\" -O3 -Wall
-LFLAGS = -L/usr/local/lib -lsqlite3 -lcgic
+CFLAGS = -I/usr/include -I/usr/local/include -I. -DVERSION=\"${VERSION}\" -O3 -Wall
+LFLAGS = -L/usr/lib -L/usr/local/lib -lsqlite3 -lcgic
 OS = ${shell uname}
 ifneq ($(OS), Linux)
 	LFLAGS += -liconv
@@ -31,7 +31,7 @@ admin.cgi: list.o simple_string.o data.o dbutil.o db.o util.o css.o wiki.o admin
 	$(CC) -o $@ $^ $(LFLAGS)
 	strip $@
 
-.PHONY: clean webapp dist displayinstalldoc
+.PHONY: clean webapp dist cvsreleasetag displayinstalldoc
 clean:
 	rm -f *.o index.cgi admin.cgi
 	rm -rf ./dist
