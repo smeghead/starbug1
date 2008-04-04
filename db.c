@@ -271,23 +271,53 @@ int db_register_ticket(Message* ticket)
 ERROR_LABEL
 }
 
-void create_columns_like_exp(List* element_types, char* table_name, char* buf)
+static String* create_columns_like_exp(List* element_types, char* table_name, List* keywords, String* buf)
 {
+    Iterator* it_keyword;
     Iterator* it;
-    strcpy(buf, "");
-    foreach (it, element_types) {
-        char column_name[DEFAULT_LENGTH];
-        ElementType* et = it->element;
-        if (strlen(buf))
-            strcat(buf, "or ");
-        sprintf(column_name, "%s.field%d like '%%' || ? || '%%' ", table_name, et->id);
-        strcat(buf, column_name);
+    foreach (it_keyword, keywords) {
+        foreach (it, element_types) {
+            char column_name[DEFAULT_LENGTH];
+            ElementType* et = it->element;
+            if (string_len(buf))
+                string_append(buf, "or ");
+            sprintf(column_name, "%s.field%d like '%%' || ? || '%%' ", table_name, et->id);
+            string_append(buf, column_name);
+        }
     }
+    return buf;
 }
-String* get_search_sql_string(List* conditions, Condition* sort, char* q, String* sql_string)
+static List* parse_keywords(List* keywords, char* query)
+{
+    char* hit;
+    char* p = query;
+    if (strlen(p) == 0) {
+        return keywords;
+    }
+    while (1) {
+        hit = strchr(p, ' ');
+        if (hit == NULL) {
+            char* word = xalloc(sizeof(char) * strlen(p) + 1);
+            strcpy(word, p);
+            if (strlen(word))
+                list_add(keywords, word);
+            break;
+        } else {
+            int len = hit - p + 1;
+            char* word = xalloc(len);
+            strncpy(word, p, len - 1);
+            p = hit + 1;
+            if (strlen(word))
+                list_add(keywords, word);
+        }
+    }
+    return keywords;
+}
+static String* get_search_sql_string(List* conditions, Condition* sort, List* keywords, String* sql_string)
 {
     int i = 0;
     Iterator* it;
+
     string_append(sql_string,
             "select "
             " t.id "
@@ -295,10 +325,11 @@ String* get_search_sql_string(List* conditions, Condition* sort, char* q, String
             "inner join message as m on m.id = t.last_message_id "
             "inner join message as org_m on org_m.id = t.original_message_id ");
 
-    if (strlen(q))
+    
+    if (keywords->size > 0)
         string_append(sql_string, "inner join message as m_all on m_all.ticket_id = t.id ");
 
-    if (conditions->size || strlen(q))
+    if (conditions->size || keywords->size > 0)
         string_append(sql_string, "where ");
     if (conditions->size) {
         foreach (it, conditions) {
@@ -346,16 +377,16 @@ String* get_search_sql_string(List* conditions, Condition* sort, char* q, String
             string_append(sql_string, val);
         }
     }
-    if (strlen(q)) {
-        char columns[DEFAULT_LENGTH];
+    if (keywords->size > 0) {
+        String* columns_a = string_new(0);
         List* element_types_a;
         list_alloc(element_types_a, ElementType);
         element_types_a = db_get_element_types_all(element_types_a);
-        create_columns_like_exp(element_types_a, "m_all", columns);
+        columns_a = create_columns_like_exp(element_types_a, "m_all", keywords, columns_a);
         if (conditions->size)
             string_append(sql_string, " and ");
-        string_appendf(sql_string, "(%s)",
-                columns);
+        string_appendf(sql_string, "(%s)", string_rawstr(columns_a));
+        string_free(columns_a);
         list_free(element_types_a);
     }
 
@@ -389,7 +420,7 @@ String* get_search_sql_string(List* conditions, Condition* sort, char* q, String
     d("sql: %s\n", string_rawstr(sql_string));
     return sql_string;
 }
-int set_conditions(sqlite3_stmt* stmt, List* conditions, char* q)
+int set_conditions(sqlite3_stmt* stmt, List* conditions, List* keywords)
 {
     int n = 1;
     Iterator* it;
@@ -397,13 +428,17 @@ int set_conditions(sqlite3_stmt* stmt, List* conditions, char* q)
         Condition* cond = it->element;
         sqlite3_bind_text(stmt, n++, cond->value, strlen(cond->value), NULL);
     }
-    if (strlen(q)) {
+    if (keywords->size > 0) {
         List* element_types_a;
+        Iterator* it_keyword;
         Iterator* it;
         list_alloc(element_types_a, ElementType);
         element_types_a= db_get_element_types_all(element_types_a);
-        foreach (it, element_types_a) {
-            sqlite3_bind_text(stmt, n++, q, strlen(q), NULL);
+        foreach (it_keyword, keywords) {
+            char* word = it_keyword->element;
+            foreach (it, element_types_a) {
+                sqlite3_bind_text(stmt, n++, word, strlen(word), NULL);
+            }
         }
         list_free(element_types_a);
     }
@@ -416,20 +451,22 @@ SearchResult* db_get_tickets_by_status(char* status, List* messages, SearchResul
     List* conditions;
     Condition* cond_status;
     sqlite3_stmt *stmt = NULL;
+    List* keywords_a;
 
+    list_alloc(keywords_a, char);
     list_alloc(conditions, Condition);
     cond_status = list_new_element(conditions);
     cond_status->element_type_id = ELEM_ID_STATUS;
     strcpy(cond_status->value, status);
     list_add(conditions, cond_status);
-    sql_a = get_search_sql_string(conditions, NULL, "", sql_a);
+    sql_a = get_search_sql_string(conditions, NULL, keywords_a, sql_a);
     string_append(sql_a, " limit ? ");
     d("sql_a: %s\n", string_rawstr(sql_a));
     result->messages = messages;
 
     if (sqlite3_prepare(db, string_rawstr(sql_a), string_len(sql_a), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
-    n = set_conditions(stmt, conditions, "");
+    n = set_conditions(stmt, conditions, keywords_a);
     sqlite3_bind_int(stmt, n++, LIST_COUNT_PER_LIST_PAGE);
 
     /* hitした分のticket_idを取得する。 */
@@ -444,6 +481,7 @@ SearchResult* db_get_tickets_by_status(char* status, List* messages, SearchResul
 
     sqlite3_finalize(stmt);
     string_free(sql_a);
+    list_free(keywords_a);
 
     list_free(conditions);
     result->hit_count = hit_count;
@@ -455,13 +493,17 @@ SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, int
     int r, n;
     String* sql_a = string_new(0);
     sqlite3_stmt *stmt = NULL;
+    List* keywords_a;
+
+    list_alloc(keywords_a, char);
+    keywords_a = parse_keywords(keywords_a, q);
     result->messages = messages;
-    sql_a = get_search_sql_string(conditions, sorts, q, sql_a);
+    sql_a = get_search_sql_string(conditions, sorts, keywords_a, sql_a);
 
     string_append(sql_a, " limit ? offset ? ");
     if (sqlite3_prepare(db, string_rawstr(sql_a), string_len(sql_a), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
-    n = set_conditions(stmt, conditions, q);
+    n = set_conditions(stmt, conditions, keywords_a);
     sqlite3_bind_int(stmt, n++, LIST_COUNT_PER_SEARCH_PAGE);
     sqlite3_bind_int(stmt, n++, page * LIST_COUNT_PER_SEARCH_PAGE);
 
@@ -479,11 +521,11 @@ SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, int
     {
         String* s = string_new(0);
         string_append(s, "select count(*) from (");
-        s = get_search_sql_string(conditions, sorts, q, s);
+        s = get_search_sql_string(conditions, sorts, keywords_a, s);
         string_append(s, ")");
         if (sqlite3_prepare(db, string_rawstr(s), string_len(s), &stmt, NULL) == SQLITE_ERROR) goto error;
         sqlite3_reset(stmt);
-        n = set_conditions(stmt, conditions, q);
+        n = set_conditions(stmt, conditions, keywords_a);
         while (SQLITE_ROW == (r = sqlite3_step(stmt))){
             result->hit_count = sqlite3_column_int(stmt, 0);
         }
@@ -492,6 +534,7 @@ SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, int
     }
 
     sqlite3_finalize(stmt);
+    list_free(keywords_a);
 
     result->page = page;
     return result;
@@ -502,12 +545,16 @@ SearchResult* db_search_tickets_4_report(List* conditions, char* q, Condition* s
     int r, n;
     String* sql_a = string_new(0);
     sqlite3_stmt *stmt = NULL;
+    List* keywords_a;
+
+    list_alloc(keywords_a, char);
+    keywords_a = parse_keywords(keywords_a, q);
     result->messages = messages;
-    sql_a = get_search_sql_string(conditions, sorts, q, sql_a);
+    sql_a = get_search_sql_string(conditions, sorts, keywords_a, sql_a);
 
     if (sqlite3_prepare(db, string_rawstr(sql_a), string_len(sql_a), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
-    n = set_conditions(stmt, conditions, q);
+    n = set_conditions(stmt, conditions, keywords_a);
 
     /* ticket_idを取得する。 */
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
@@ -521,6 +568,7 @@ SearchResult* db_search_tickets_4_report(List* conditions, char* q, Condition* s
 
     sqlite3_finalize(stmt);
     string_free(sql_a);
+    list_free(keywords_a);
 
     return result;
 ERROR_LABEL

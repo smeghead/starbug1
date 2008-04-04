@@ -1,3 +1,8 @@
+2008-04-04  smeghead <smeghead@users.sourceforge.jp>
+
+    * キーワード検索で、複数語を条件にして検索できるようにした。半角スペースで
+    区切って複数の単語を指定して検索する。
+
 2008-04-03  smeghead <smeghead@users.sourceforge.jp>
 
     * 0.2.3-beta リリース
