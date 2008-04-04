@@ -131,7 +131,6 @@ input.button {
 }
 input:hover.button {
     cursor: pointer;
-    border-color: #666;
 }
 
 input:focus.button {
