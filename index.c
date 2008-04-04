@@ -604,32 +604,6 @@ void search_actoin()
       "<div class=\"description\">検索条件を入力して検索ボタンを押してください。</div>\n");
     o("<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
     o(      "<table summary=\"condition table\">\n");
-    col_index = 1;
-    foreach (it, element_types_a) {
-        ElementType* et = it->element;
-        char name[DEFAULT_LENGTH];
-        char value[DEFAULT_LENGTH];
-        sprintf(name, "field%d", et->id);
-        cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-
-        if (col_index == 1)
-            o("<tr>\n");
-        o("\t<th>"); h(et->name); o("</th>\n");
-        o("\t<td>\n"); 
-        output_form_element_4_condition(et);
-        o("\t</td>\n");
-        if (!iterator_next(it)) {
-            /* 空いたセルの調整 */
-            int i = col_index;
-            for (; i < 3; i++) {
-                o("\t<th>&nbsp;</th>\n");
-                o("\t<td>&nbsp;</td>\n");
-            }
-        }
-        if (col_index == 3 || !iterator_next(it))
-            o("</tr>\n");
-        col_index = col_index++ == 3 ? 1 : col_index;
-    }
     cgiFormStringNoNewlines("registerdate.from", registerdate_from, DEFAULT_LENGTH);
     cgiFormStringNoNewlines("registerdate.to", registerdate_to, DEFAULT_LENGTH);
     cgiFormStringNoNewlines("lastregisterdate.from", updatedate_from, DEFAULT_LENGTH);
@@ -662,8 +636,34 @@ void search_actoin()
       "\t\t</span>\n"
       "\t\t<div class=\"description\">yyyy-mm-dd形式で入力してください。</div>\n"
       "\t</td>\n"
-      "</tr>\n"
-      "</table>\n"
+      "</tr>\n");
+    col_index = 1;
+    foreach (it, element_types_a) {
+        ElementType* et = it->element;
+        char name[DEFAULT_LENGTH];
+        char value[DEFAULT_LENGTH];
+        sprintf(name, "field%d", et->id);
+        cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+
+        if (col_index == 1)
+            o("<tr>\n");
+        o("\t<th>"); h(et->name); o("</th>\n");
+        o("\t<td>\n"); 
+        output_form_element_4_condition(et);
+        o("\t</td>\n");
+        if (!iterator_next(it)) {
+            /* 空いたセルの調整 */
+            int i = col_index;
+            for (; i < 3; i++) {
+                o("\t<th>&nbsp;</th>\n");
+                o("\t<td>&nbsp;</td>\n");
+            }
+        }
+        if (col_index == 3 || !iterator_next(it))
+            o("</tr>\n");
+        col_index = col_index++ == 3 ? 1 : col_index;
+    }
+    o("</table>\n"
       "<input class=\"button\" type=\"submit\" value=\"検索\" />"
       "</form>\n"
       "</div>\n");

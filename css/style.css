@@ -203,6 +203,7 @@ div {
 #condition_form table th {
     background-color: #f0f8ff;
 }
+#condition_form table div.description, 
 #setting_form table div.description, 
 #input_form table div.description {
     margin-left: 0px;
