@@ -82,6 +82,9 @@ void register_actions()
 
 void output_header(Project* project, char* title, char* script_name, NaviType navi)
 {
+
+    String* base_url_a = string_new(0);
+    base_url_a = get_base_url(base_url_a);
     o("Pragma: no-cache\r\n");
     o("Cache-Control: no-cache\t\n");
     cgiHeaderContentType("text/html; charset=utf-8;");
@@ -99,6 +102,8 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/prototype.js\"></script>\n", cgiScriptName);
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/%s\"></script>\n", cgiScriptName, script_name);
     }
+    o(      "\t<link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS\" href=\"%s/rss\">\n", string_rawstr(base_url_a));
+    string_free(base_url_a);
     o(      "</head>\n"
             "<body>\n"
             "<a name=\"top\"></a>\n"

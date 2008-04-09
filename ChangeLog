@@ -1,3 +1,8 @@
+2008-04-09  smeghead <smeghead@users.sourceforge.jp>
+
+    * RSS用のlinkタグを追加した。
+    * httpsの場合の対応、サーバのポート番号がデフォルト以外の場合の対応をした。
+
 2008-04-04  smeghead <smeghead@users.sourceforge.jp>
 
     * キーワード検索で、複数語を条件にして検索できるようにした。半角スペースで

@@ -4,6 +4,7 @@
 #include "list.h"
 #include "data.h"
 #include "dbutil.h"
+#include "simple_string.h"
 
 #define o(...) fprintf(cgiOut, __VA_ARGS__)
 #define d(...) {FILE *fp = fopen("debug.log", "a");fprintf(fp, __VA_ARGS__);fclose(fp);}
@@ -33,6 +34,7 @@ void* xalloc(size_t);
 void xfree(void*);
 void csv_field(char*);
 void css_field(char*);
+String* get_base_url(String*);
 
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

@@ -34,12 +34,14 @@ static void escape_quot(String* dist)
 static String* create_json(String* content, Project* project, Message* message, List* elements, List* element_types)
 {
     Iterator* it;
-    string_appendf(content, "{project:{name: \"%s\"}, ticket:{id: %d, url: \"http://%s%s/ticket/%d\",fields:[",
+    String* base_url_a = string_new(0);
+    base_url_a = get_base_url(base_url_a);
+    string_appendf(content, "{project:{name: \"%s\"}, ticket:{id: %d, url: \"%s/ticket/%d\",fields:[",
             project->name,
             message->id,
-            cgiServerName,
-            cgiScriptName,
+            string_rawstr(base_url_a),
             message->id);
+    string_free(base_url_a);
     foreach (it, element_types) {
         ElementType* et = it->element;
         String* field_a = string_new(0);

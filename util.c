@@ -502,4 +502,17 @@ void css_field(char* str)
     base64_encode(src, dist);
     cgiCssClassName(dist, strlen(dist));
 }
+String* get_base_url(String* buf)
+{
+    int is_ssl = strcmp(cgiServerProtocol, "HTTPS") == 0 ? 1 : 0;
+    int is_default_port_no = 
+        (is_ssl && strcmp(cgiServerPort, "443") == 0) || (is_ssl == 0 && strcmp(cgiServerPort, "80") == 0);
+    string_appendf(buf, "http%s://%s%s%s%s",
+            is_ssl ? "s" : "",
+            is_default_port_no ? "" : ":",
+            is_default_port_no ? "" : cgiServerPort,
+            cgiServerName,
+            cgiScriptName);
+    return buf;
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
