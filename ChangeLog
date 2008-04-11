@@ -1,6 +1,8 @@
 2008-04-11  smeghead <smeghead@users.sourceforge.jp>
 
     * 出力されるHTMLを多少整形した。
+    * チケット登録と統計情報のページにも、状態検索リンクとID指定フォームを追加
+    した。
 
 2008-04-09  smeghead <smeghead@users.sourceforge.jp>
 

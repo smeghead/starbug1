@@ -1009,6 +1009,7 @@ void output_field_information_js(List* element_types) {
 void register_action()
 {
     Project* project_a = xalloc(sizeof(Project));
+    List* states_a;
     char sender[DEFAULT_LENGTH];
     cgiCookieString(COOKIE_SENDER, sender, DEFAULT_LENGTH);
 
@@ -1016,8 +1017,12 @@ void register_action()
     project_a = db_get_project(project_a);
     output_header(project_a, "チケット登録", "register.js", NAVI_REGISTER);
     output_calendar_js();
-    o(      "<h2>"); h(project_a->name);o(" - チケット登録</h2>\n"
-            "<div id=\"input_form\">\n"
+    o(      "<h2>"); h(project_a->name);o(" - チケット登録</h2>\n");
+    list_alloc(states_a, State);
+    states_a = db_get_states(states_a);
+    output_states(states_a);
+    list_free(states_a);
+    o(      "<div id=\"input_form\">\n"
             "<h3>チケット登録</h3>\n"
             "<div class=\"description\">新規チケットを登録する場合は、以下のフォームを記入し登録ボタンを押してください。</div>\n"
             "<noscript><div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div></noscript>\n");
@@ -1653,13 +1658,18 @@ void statistics_action()
     Project* project_a = xalloc(sizeof(Project));
     List* element_types_a;
     Iterator* it;
+    List* states_a;
 
     db_init();
     project_a = db_get_project(project_a);
     output_header(project_a, "統計情報", "graph.js", NAVI_STATISTICS);
     output_graph_js();
-    o(      "<h2>");h(project_a->name);o("</h2>\n"
-            "<div id=\"top\">\n"
+    o(      "<h2>");h(project_a->name);o("</h2>\n");
+    list_alloc(states_a, State);
+    states_a = db_get_states(states_a);
+    output_states(states_a);
+    list_free(states_a);
+    o(      "<div id=\"top\">\n"
             "<h3>統計情報</h3>\n"
             "\t<div class=\"description\">統計情報を表示します。</div>\n");
     xfree(project_a);
