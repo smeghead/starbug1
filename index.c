@@ -110,15 +110,15 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/../img/title.jpg\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName);
     o("<div>\n"
       "<ul id='menu'>\n");
-    o("<li><a href='%s' title=\"ホームへ移動します\">ホーム</a></li>\n", project->home_url);
-    o("<li><a %s href='%s' title=\"トップページへ移動します\">トップ</a></li>\n", navi == NAVI_TOP ? "class=\"current\"" : "", cgiScriptName);
-    o("<li><a %s href='%s/list' title=\"状態別のチケット一覧を参照します\">状態別チケット一覧</a></li>\n", navi == NAVI_LIST ? "class=\"current\"" : "", cgiScriptName);
-    o("<li><a %s href='%s/register' title=\"新規にチケットを登録します\">チケット登録</a></li>\n", navi == NAVI_REGISTER ? "class=\"current\"" : "", cgiScriptName);
-    o("<li><a %s href='%s/search' title=\"チケットを検索します\">チケット検索</a></li>\n", navi == NAVI_SEARCH ? "class=\"current\"" : "", cgiScriptName);
-    o("<li><a %s href='%s/statistics' title=\"統計情報を表示します\">統計情報</a></li>\n", navi == NAVI_STATISTICS ? "class=\"current\"" : "", cgiScriptName);
-    o("<li><a %s href='%s/rss' title=\"RSS Feed\">RSS Feed</a></li>\n", navi == NAVI_RSS ? "class=\"current\"" : "", cgiScriptName);
-    o("<li><a %s href='%s/help' title=\"ヘルプを参照します\">ヘルプ</a></li>\n", navi == NAVI_HELP ? "class=\"current\"" : "", cgiScriptName);
-    o("<li><a %s href='%s/../admin.cgi' title=\"各種設定を行ないます\">管理ツール</a></li>\n", navi == NAVI_MANAGEMENT ? "class=\"current\"" : "", cgiScriptName);
+    o("\t<li><a href='%s' title=\"ホームへ移動します\">ホーム</a></li>\n", project->home_url);
+    o("\t<li><a %s href='%s' title=\"トップページへ移動します\">トップ</a></li>\n", navi == NAVI_TOP ? "class=\"current\"" : "", cgiScriptName);
+    o("\t<li><a %s href='%s/list' title=\"状態別のチケット一覧を参照します\">状態別チケット一覧</a></li>\n", navi == NAVI_LIST ? "class=\"current\"" : "", cgiScriptName);
+    o("\t<li><a %s href='%s/register' title=\"新規にチケットを登録します\">チケット登録</a></li>\n", navi == NAVI_REGISTER ? "class=\"current\"" : "", cgiScriptName);
+    o("\t<li><a %s href='%s/search' title=\"チケットを検索します\">チケット検索</a></li>\n", navi == NAVI_SEARCH ? "class=\"current\"" : "", cgiScriptName);
+    o("\t<li><a %s href='%s/statistics' title=\"統計情報を表示します\">統計情報</a></li>\n", navi == NAVI_STATISTICS ? "class=\"current\"" : "", cgiScriptName);
+    o("\t<li><a %s href='%s/rss' title=\"RSS Feed\">RSS Feed</a></li>\n", navi == NAVI_RSS ? "class=\"current\"" : "", cgiScriptName);
+    o("\t<li><a %s href='%s/help' title=\"ヘルプを参照します\">ヘルプ</a></li>\n", navi == NAVI_HELP ? "class=\"current\"" : "", cgiScriptName);
+    o("\t<li><a %s href='%s/../admin.cgi' title=\"各種設定を行ないます\">管理ツール</a></li>\n", navi == NAVI_MANAGEMENT ? "class=\"current\"" : "", cgiScriptName);
     o("</ul>\n"
       "<br clear='all' />\n"
       "</div>\n");
@@ -226,9 +226,9 @@ void output_ticket_table_header_no_link(List* element_types)
     o(      "\t\t<th class=\"id\">ID</th>\n");
     foreach (it, element_types) {
         ElementType* et = it->element;
-        o("\t\t<th class=\"field%d\">\n", et->id);
+        o("\t\t<th class=\"field%d\">", et->id);
         h(et->name);
-        o("\t\t</th>\n");
+        o(    "</th>\n");
     }
     o("\t\t<th class=\"registerdate\">投稿日時</th>\n"
       "\t\t<th class=\"lastregisterdate\">最終更新日時</th>\n"
@@ -311,6 +311,34 @@ void output_ticket_table(SearchResult* result, List* element_types)
     output_ticket_table_body(result, element_types);
     o("</table>\n");
 }
+void output_states(List* states)
+{
+    Iterator* it;
+    /* stateの表示 */
+    o("<div id=\"state_index\">\n");
+    o("\t<ul>\n");
+    foreach (it, states) {
+        State* s = it->element;
+        o("\t\t<li>\n");
+        o("\t\t\t<a href=\"%s/search?field%d=", cgiScriptName, ELEM_ID_STATUS);
+        u(s->name);
+        o("\" title=\"状態を条件にして検索を行ないます。\">");
+        h(s->name);
+        o("</a>");
+        o("(%d)\n", s->count);
+        o("\t\t</li>\n");
+    }
+    o("\t\t<li>\n");
+    o("\t\t\t<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
+    o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" maxlength=\"1000\" />\n"
+      "\t\t\t\t<input type=\"submit\" class=\"button\" value=\"ID指定で表示\" />\n"
+      "\t\t\t</form>\n"
+      "\t\t</li>\n"
+      "\t</ul>\n"
+      "\t<br clear=\"all\" />\n"
+      "</div>\n");
+/*       "<br clear=\"all\" />\n"); */
+}
 /**
  * 一覧を表示するaction。
  */
@@ -350,30 +378,8 @@ void list_action()
     xfree(project_a);
     list_alloc(states_a, State);
     states_a = db_get_states(states_a);
-    /* stateの表示 */
-    o("<div id=\"state_index\">\n");
-    o("\t<ul>\n");
-    foreach (it, states_a) {
-        State* s = it->element;
-        o("\t\t<li>\n");
-        o("\t\t\t<a href=\"%s/search?field%d=", cgiScriptName, ELEM_ID_STATUS);
-        u(s->name);
-        o("\" title=\"状態を条件にして検索を行ないます。\">");
-        h(s->name);
-        o("</a>");
-        o("(%d)", s->count);
-        o("\t\t</li>\n");
-    }
+    output_states(states_a);
     list_free(states_a);
-    o("\t\t<li>\n");
-    o("\t\t\t<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
-    o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" maxlength=\"1000\" />\n"
-      "\t\t\t\t<input type=\"submit\" class=\"button\" value=\"ID指定で表示\" />\n"
-      "\t\t\t</form>\n"
-      "\t\t</li>\n"
-      "\t</ul>\n"
-      "</div>\n"
-      "<br clear=\"all\" />\n");
     fflush(cgiOut);
     o("<div id=\"ticket_list\">\n"
       "<h3>状態別チケット一覧</h3>\n"
@@ -580,31 +586,9 @@ void search_actoin()
     xfree(sort_a);
     list_alloc(states_a, State);
     states_a = db_get_states(states_a);
-    /* stateの表示 */
-    o("<div id=\"state_index\">\n");
-    o("\t<ul>\n");
-    foreach (it, states_a) {
-        State* s = it->element;
-        o("\t\t<li>\n");
-        o("\t\t\t<a href=\"%s/search?field%d=", cgiScriptName, ELEM_ID_STATUS);
-        u(s->name);
-        o("\" title=\"状態を条件にして検索を行ないます。\">");
-        h(s->name);
-        o("</a>");
-        o("(%d)", s->count);
-        o("\t\t</li>\n");
-    }
+    output_states(states_a);
     list_free(states_a);
-    o("\t\t<li>\n");
-    o("\t\t\t<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
-    o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" maxlength=\"1000\" />\n"
-      "\t\t\t\t<input type=\"submit\" class=\"button\" value=\"ID指定で表示\" />\n"
-      "\t\t\t</form>\n"
-      "\t\t</li>\n"
-      "\t</ul>\n"
-      "<br clear=\"all\" />\n"
-      "</div>\n"
-      "<div id=\"condition_form\">\n"
+    o("<div id=\"condition_form\">\n"
       "<h3>検索条件</h3>\n"
       "<div class=\"description\">検索条件を入力して検索ボタンを押してください。</div>\n");
     o("<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);

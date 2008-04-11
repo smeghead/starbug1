@@ -1,3 +1,7 @@
+2008-04-11  smeghead <smeghead@users.sourceforge.jp>
+
+    * 出力されるHTMLを多少整形した。
+
 2008-04-09  smeghead <smeghead@users.sourceforge.jp>
 
     * RSS用のlinkタグを追加した。
