@@ -1,3 +1,8 @@
+2008-04-17  smeghead <smeghead@users.sourceforge.jp>
+
+    * 正しいxhtmlでない部分を修正した。checked を checked="checked" に変更。
+    * チケット登録時に、返信専用属性のチェックを行なってしまう問題を修正した。
+
 2008-04-11  smeghead <smeghead@users.sourceforge.jp>
 
     * 出力されるHTMLを多少整形した。

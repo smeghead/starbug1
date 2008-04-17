@@ -1,11 +1,19 @@
 function register_required_fields(array, ids) {
     $A(ids).each(
-        function(i) {if (i > 0) array.push($('field' + i));}
+        function(i) {
+            var e = $('field' + i);
+            if (e)
+                array.push(e);
+        }
     );
 }
 function register_date_fields(array, ids) {
     $A(ids).each(
-        function(i) {if (i > 0) array.push($('field' + i));}
+        function(i) {
+            var e = $('field' + i);
+            if (e)
+                array.push(e);
+        }
     );
 }
 
