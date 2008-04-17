@@ -16,6 +16,7 @@ typedef enum _NAVI {
     NAVI_TOP,
     NAVI_LIST,
     NAVI_REGISTER,
+    NAVI_REGISTER_AT_ONCE,
     NAVI_SEARCH,
     NAVI_RSS,
     NAVI_HELP,
@@ -32,6 +33,8 @@ typedef enum _MODE {
 void register_actions();
 void list_action();
 void search_actoin();
+void register_at_once_action();
+void register_at_once_confirm_action();
 void register_submit_action();
 void register_action();
 void ticket_action();
@@ -67,6 +70,8 @@ void register_actions()
     register_action_actions("list", list_action);
     register_action_actions("search", search_actoin);
     register_action_actions("register", register_action);
+    register_action_actions("register_at_once", register_at_once_action);
+    register_action_actions("register_at_once_confirm", register_at_once_confirm_action);
     register_action_actions("register_submit", register_submit_action);
     register_action_actions("ticket", ticket_action);
     register_action_actions("statistics", statistics_action);
@@ -116,6 +121,7 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
     o("\t<li><a %s href='%s/register' title=\"新規にチケットを登録します\">チケット登録</a></li>\n", navi == NAVI_REGISTER ? "class=\"current\"" : "", cgiScriptName);
     o("\t<li><a %s href='%s/search' title=\"チケットを検索します\">チケット検索</a></li>\n", navi == NAVI_SEARCH ? "class=\"current\"" : "", cgiScriptName);
     o("\t<li><a %s href='%s/statistics' title=\"統計情報を表示します\">統計情報</a></li>\n", navi == NAVI_STATISTICS ? "class=\"current\"" : "", cgiScriptName);
+    o("\t<li><a %s href='%s/register_at_once' title=\"複数新規にチケットを登録します\">チケット一括登録</a></li>\n", navi == NAVI_REGISTER_AT_ONCE ? "class=\"current\"" : "", cgiScriptName);
     o("\t<li><a %s href='%s/rss' title=\"RSS Feed\">RSS Feed</a></li>\n", navi == NAVI_RSS ? "class=\"current\"" : "", cgiScriptName);
     o("\t<li><a %s href='%s/help' title=\"ヘルプを参照します\">ヘルプ</a></li>\n", navi == NAVI_HELP ? "class=\"current\"" : "", cgiScriptName);
     o("\t<li><a %s href='%s/../admin.cgi' title=\"各種設定を行ないます\">管理ツール</a></li>\n", navi == NAVI_MANAGEMENT ? "class=\"current\"" : "", cgiScriptName);
@@ -1497,6 +1503,156 @@ file_size_error:
       "<div class=\"message\">ファイルサイズが大きすぎます。%dkbより大きいファイルは登録できません。ブラウザの戻るボタンで戻ってください。</div>\n", MAX_FILE_SIZE);
     output_footer();
     xfree(project_a);
+}
+/**
+ * 一括登録画面を表示するaction。
+ */
+void register_at_once_action()
+{
+    Project* project_a = xalloc(sizeof(Project));
+    List* states_a;
+    char sender[DEFAULT_LENGTH];
+    cgiCookieString(COOKIE_SENDER, sender, DEFAULT_LENGTH);
+
+    db_init();
+    project_a = db_get_project(project_a);
+    output_header(project_a, "チケット一括登録", "register_at_once.js", NAVI_REGISTER_AT_ONCE);
+    output_calendar_js();
+    o(      "<h2>"); h(project_a->name);o(" - チケット一括登録</h2>\n");
+    list_alloc(states_a, State);
+    states_a = db_get_states(states_a);
+    output_states(states_a);
+    list_free(states_a);
+    o(      "<div id=\"input_form\">\n"
+            "<h3>チケット一括登録</h3>\n"
+            "<div class=\"description\">新規チケットを一括登録する場合は、以下のフォームを記入し登録ボタンを押してください。</div>\n"
+            "<noscript><div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div></noscript>\n");
+    o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/register_at_once_confirm\" method=\"post\">\n", cgiScriptName);
+    o(      "<table summary=\"input infomation\">\n");
+    xfree(project_a);
+    {
+        List* element_types_a;
+        Iterator* it;
+        list_alloc(element_types_a, ElementType);
+        element_types_a = db_get_element_types_all(element_types_a);
+        foreach (it, element_types_a) {
+            ElementType* et = it->element;
+            /* 返信専用属性は表示しない。 */
+            if (et->reply_property == 1) continue;
+            /* 投稿者だけを表示する。 */
+            if (et->id != ELEM_ID_SENDER) continue;
+            o("\t<tr>\n");
+            o("\t\t<th %s>", et->required ? "class=\"required\"" : "");
+            h(et->name);
+            if (et->required) {
+                o("<span class=\"required\">※</span>");
+            }
+            o("</th><td>\n");
+            if (et->required)
+                o("\t\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
+            if (et->type == ELEM_TYPE_DATE)
+                o("\t\t<div id=\"field%d.datefield\" class=\"error\"></div>\n", et->id);
+            output_form_element(NULL, et);
+            o("\t\t\t<div class=\"description\">");h(et->description);o("&nbsp;</div>\n");
+            o("\t\t</td>\n");
+            o("\t</tr>\n");
+        }
+        /* 一括用、CSV形式フィールド */
+        o("\t<tr>\n");
+        o("\t\t<th class=\"required\">CSV");
+        o("<span class=\"required\">※</span>");
+        o("</th><td>\n");
+        o("\t\t\t<div id=\"field.cvsdata.required\" class=\"error\"></div>\n");
+        o("\t\t\t<textarea name=\"csvdata\" id=\"csvdata\" row=\"5\" col=\"5\"></textarea>\n");
+        o("\t\t\t<div class=\"description\">登録したいデータをCSV形式で貼り付けてください。&nbsp;</div>\n");
+        o("\t\t</td>\n");
+        o("\t</tr>\n");
+        o("</table>\n");
+        output_field_information_js(element_types_a);
+        list_free(element_types_a);
+    }
+    o(      "<input class=\"button\" type=\"submit\" name=\"register\" value=\"確認\" />\n"
+            "<input id=\"save2cookie\" type=\"checkbox\" name=\"save2cookie\" class=\"checkbox\" value=\"1\" %s />\n"
+            "<label for=\"save2cookie\">投稿者を保存する。(cookie使用)</label>\n"
+            "</form>\n"
+            "</div>\n", strlen(sender) ? "checked" : "");
+    db_finish();
+    output_footer();
+}
+/**
+ * 一括登録確認画面を表示するaction。
+ */
+void register_at_once_confirm_action()
+{
+    Project* project_a = xalloc(sizeof(Project));
+    List* states_a;
+    char sender[DEFAULT_LENGTH];
+    cgiCookieString(COOKIE_SENDER, sender, DEFAULT_LENGTH);
+
+    db_init();
+    project_a = db_get_project(project_a);
+    output_header(project_a, "チケット一括登録確認", "register_at_once.js", NAVI_REGISTER_AT_ONCE);
+    output_calendar_js();
+    o(      "<h2>"); h(project_a->name);o(" - チケット一括登録確認</h2>\n");
+    list_alloc(states_a, State);
+    states_a = db_get_states(states_a);
+    output_states(states_a);
+    list_free(states_a);
+    o(      "<div id=\"input_form\">\n"
+            "<h3>チケット一括登録確認</h3>\n"
+            "<div class=\"description\">各カラムの項目を選択して、登録ボタンを押してください。</div>\n"
+            "<noscript><div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div></noscript>\n");
+    o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/register_at_once_submit\" method=\"post\">\n", cgiScriptName);
+    o(      "<table summary=\"input infomation\">\n");
+    xfree(project_a);
+    {
+        List* element_types_a;
+        Iterator* it;
+        list_alloc(element_types_a, ElementType);
+        element_types_a = db_get_element_types_all(element_types_a);
+        foreach (it, element_types_a) {
+            ElementType* et = it->element;
+            /* 返信専用属性は表示しない。 */
+            if (et->reply_property == 1) continue;
+            /* 投稿者だけを表示する。 */
+            if (et->id != ELEM_ID_SENDER) continue;
+            o("\t<tr>\n");
+            o("\t\t<th %s>", et->required ? "class=\"required\"" : "");
+            h(et->name);
+            if (et->required) {
+                o("<span class=\"required\">※</span>");
+            }
+            o("</th><td>\n");
+            if (et->required)
+                o("\t\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
+            if (et->type == ELEM_TYPE_DATE)
+                o("\t\t<div id=\"field%d.datefield\" class=\"error\"></div>\n", et->id);
+            output_form_element(NULL, et);
+            o("\t\t\t<div class=\"description\">");h(et->description);o("&nbsp;</div>\n");
+            o("\t\t</td>\n");
+            o("\t</tr>\n");
+        }
+        /* 一括用、CSV形式フィールド */
+        o("\t<tr>\n");
+        o("\t\t<th class=\"required\">CSV");
+        o("<span class=\"required\">※</span>");
+        o("</th><td>\n");
+        o("\t\t\t<div id=\"field.cvsdata.required\" class=\"error\"></div>\n");
+        o("\t\t\t<textarea name=\"csvdata\" id=\"csvdata\" row=\"5\" col=\"5\"></textarea>\n");
+        o("\t\t\t<div class=\"description\">登録したいデータをCSV形式で貼り付けてください。&nbsp;</div>\n");
+        o("\t\t</td>\n");
+        o("\t</tr>\n");
+        o("</table>\n");
+        output_field_information_js(element_types_a);
+        list_free(element_types_a);
+    }
+    o(      "<input class=\"button\" type=\"submit\" name=\"register\" value=\"確認\" />\n"
+            "<input id=\"save2cookie\" type=\"checkbox\" name=\"save2cookie\" class=\"checkbox\" value=\"1\" %s />\n"
+            "<label for=\"save2cookie\">投稿者を保存する。(cookie使用)</label>\n"
+            "</form>\n"
+            "</div>\n", strlen(sender) ? "checked" : "");
+    db_finish();
+    output_footer();
 }
 /**
  * デフォルトのaction。

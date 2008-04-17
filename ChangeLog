@@ -2,6 +2,7 @@
 
     * 正しいxhtmlでない部分を修正した。checked を checked="checked" に変更。
     * チケット登録時に、返信専用属性のチェックを行なってしまう問題を修正した。
+    * チケット一括登録作成中。
 
 2008-04-11  smeghead <smeghead@users.sourceforge.jp>
 
