@@ -9,6 +9,7 @@
 #include "util.h"
 #include "wiki.h"
 #include "hook.h"
+#include "csv.h"
 #include "simple_string.h"
 
 typedef enum _NAVI {
@@ -1531,51 +1532,21 @@ void register_at_once_action()
     o(      "<table summary=\"input infomation\">\n");
     xfree(project_a);
     {
-        List* element_types_a;
-        Iterator* it;
-        list_alloc(element_types_a, ElementType);
-        element_types_a = db_get_element_types_all(element_types_a);
-        foreach (it, element_types_a) {
-            ElementType* et = it->element;
-            /* 返信専用属性は表示しない。 */
-            if (et->reply_property == 1) continue;
-            /* 投稿者だけを表示する。 */
-            if (et->id != ELEM_ID_SENDER) continue;
-            o("\t<tr>\n");
-            o("\t\t<th %s>", et->required ? "class=\"required\"" : "");
-            h(et->name);
-            if (et->required) {
-                o("<span class=\"required\">※</span>");
-            }
-            o("</th><td>\n");
-            if (et->required)
-                o("\t\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
-            if (et->type == ELEM_TYPE_DATE)
-                o("\t\t<div id=\"field%d.datefield\" class=\"error\"></div>\n", et->id);
-            output_form_element(NULL, et);
-            o("\t\t\t<div class=\"description\">");h(et->description);o("&nbsp;</div>\n");
-            o("\t\t</td>\n");
-            o("\t</tr>\n");
-        }
         /* 一括用、CSV形式フィールド */
         o("\t<tr>\n");
         o("\t\t<th class=\"required\">CSV");
         o("<span class=\"required\">※</span>");
         o("</th><td>\n");
-        o("\t\t\t<div id=\"field.cvsdata.required\" class=\"error\"></div>\n");
+        o("\t\t\t<div id=\"field.csvdata.required\" class=\"error\"></div>\n");
         o("\t\t\t<textarea name=\"csvdata\" id=\"csvdata\" row=\"5\" col=\"5\"></textarea>\n");
         o("\t\t\t<div class=\"description\">登録したいデータをCSV形式で貼り付けてください。&nbsp;</div>\n");
         o("\t\t</td>\n");
         o("\t</tr>\n");
         o("</table>\n");
-        output_field_information_js(element_types_a);
-        list_free(element_types_a);
     }
-    o(      "<input class=\"button\" type=\"submit\" name=\"register\" value=\"確認\" />\n"
-            "<input id=\"save2cookie\" type=\"checkbox\" name=\"save2cookie\" class=\"checkbox\" value=\"1\" %s />\n"
-            "<label for=\"save2cookie\">投稿者を保存する。(cookie使用)</label>\n"
+    o(      "<input class=\"button\" type=\"submit\" name=\"register\" value=\"登録\" />\n"
             "</form>\n"
-            "</div>\n", strlen(sender) ? "checked" : "");
+            "</div>\n");
     db_finish();
     output_footer();
 }
@@ -1586,10 +1557,19 @@ void register_at_once_confirm_action()
 {
     Project* project_a = xalloc(sizeof(Project));
     List* states_a;
+    Csv* csv_a;
     char sender[DEFAULT_LENGTH];
+    char* content_a = xalloc(sizeof(char) * VALUE_LENGTH);
     cgiCookieString(COOKIE_SENDER, sender, DEFAULT_LENGTH);
 
     db_init();
+    d("start\n");
+    cgiFormString("csvdata", content_a, VALUE_LENGTH);
+    d("content_a: %s\n", content_a);
+    csv_a = csv_new(content_a);
+
+
+
     project_a = db_get_project(project_a);
     output_header(project_a, "チケット一括登録確認", "register_at_once.js", NAVI_REGISTER_AT_ONCE);
     output_calendar_js();
@@ -1608,6 +1588,7 @@ void register_at_once_confirm_action()
     {
         List* element_types_a;
         Iterator* it;
+        Iterator* it_row;
         list_alloc(element_types_a, ElementType);
         element_types_a = db_get_element_types_all(element_types_a);
         foreach (it, element_types_a) {
@@ -1632,21 +1613,31 @@ void register_at_once_confirm_action()
             o("\t\t</td>\n");
             o("\t</tr>\n");
         }
-        /* 一括用、CSV形式フィールド */
-        o("\t<tr>\n");
-        o("\t\t<th class=\"required\">CSV");
-        o("<span class=\"required\">※</span>");
-        o("</th><td>\n");
-        o("\t\t\t<div id=\"field.cvsdata.required\" class=\"error\"></div>\n");
-        o("\t\t\t<textarea name=\"csvdata\" id=\"csvdata\" row=\"5\" col=\"5\"></textarea>\n");
-        o("\t\t\t<div class=\"description\">登録したいデータをCSV形式で貼り付けてください。&nbsp;</div>\n");
-        o("\t\t</td>\n");
-        o("\t</tr>\n");
+        /* データ */
+        d("csv lines %d\n", csv_a->lines->size);
+        foreach (it_row, csv_a->lines) {
+            List* cols = it_row->element;
+            Iterator* it_cols;
+            d("csv line %d\n", cols->size);
+            o("\t<tr>\n");
+            o("\t\t<th class=\"required\">CSV");
+            o("<span class=\"required\">※</span>");
+            o("</th>\n");
+            foreach (it_cols, cols) {
+                d("csv col\n");
+                o("\t\t<td>\n");
+                o("\t\t\t<div id=\"field.csvdata.required\" class=\"error\"></div>\n");
+                o("\t\t\t<textarea name=\"csvdata\" row=\"5\" col=\"5\"></textarea>\n");
+                o("\t\t\t<div class=\"description\">登録したいデータをCSV形式で貼り付けてください。&nbsp;</div>\n");
+                o("\t\t</td>\n");
+            }
+            o("\t</tr>\n");
+        }
         o("</table>\n");
         output_field_information_js(element_types_a);
         list_free(element_types_a);
     }
-    o(      "<input class=\"button\" type=\"submit\" name=\"register\" value=\"確認\" />\n"
+    o(      "<input class=\"button\" type=\"submit\" name=\"register\" value=\"登録\" />\n"
             "<input id=\"save2cookie\" type=\"checkbox\" name=\"save2cookie\" class=\"checkbox\" value=\"1\" %s />\n"
             "<label for=\"save2cookie\">投稿者を保存する。(cookie使用)</label>\n"
             "</form>\n"

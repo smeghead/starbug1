@@ -22,8 +22,9 @@ index.o: index.c simple_string.h data.h db.h dbutil.h util.h wiki.h hook.h
 hook.o: hook.c data.h util.h dbutil.h hook.h
 util.o: util.c util.h data.h dbutil.h
 wiki.o: wiki.c wiki.h util.h data.h dbutil.h
+csv.o: csv.c csv.h list.h
 
-index.cgi: list.o simple_string.o data.o dbutil.o db.o hook.o util.o wiki.o index.o
+index.cgi: list.o simple_string.o data.o dbutil.o db.o hook.o util.o wiki.o csv.o index.o
 	$(CC) -o $@ $^ $(LFLAGS)
 	strip $@
 
