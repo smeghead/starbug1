@@ -36,6 +36,7 @@ void list_action();
 void search_actoin();
 void register_at_once_action();
 void register_at_once_confirm_action();
+void register_at_once_submit_action();
 void register_submit_action();
 void register_action();
 void ticket_action();
@@ -73,6 +74,7 @@ void register_actions()
     register_action_actions("register", register_action);
     register_action_actions("register_at_once", register_at_once_action);
     register_action_actions("register_at_once_confirm", register_at_once_confirm_action);
+    register_action_actions("register_at_once_submit", register_at_once_submit_action);
     register_action_actions("register_submit", register_submit_action);
     register_action_actions("ticket", ticket_action);
     register_action_actions("statistics", statistics_action);
@@ -1555,6 +1557,8 @@ void register_at_once_action()
  */
 void register_at_once_confirm_action()
 {
+    int i;
+    int row = 0;
     Project* project_a = xalloc(sizeof(Project));
     List* states_a;
     Csv* csv_a;
@@ -1586,6 +1590,7 @@ void register_at_once_confirm_action()
     o(      "<table summary=\"input infomation\">\n");
     xfree(project_a);
     {
+        int row_count = 0, col_count = 0;
         List* element_types_a;
         Iterator* it;
         Iterator* it_row;
@@ -1613,28 +1618,46 @@ void register_at_once_confirm_action()
             o("\t\t</td>\n");
             o("\t</tr>\n");
         }
+        o("</table>\n");
+        o(      "<table id=\"register_at_once_confirm\">\n"
+                "\t<tr>\n");
+        o(  "\t\t<th>&nbsp;</th>\n");
+        for (i = 0; i < csv_a->col_count; i++) {
+            o(  "\t\t<th>\n");
+            o(  "\t\t\t<select name=\"col_field%d\">\n", i);
+            o(  "\t\t\t\t<option value=\"\"></option>\n");
+            foreach (it, element_types_a) {
+                ElementType* et = it->element;
+                if (et->id == ELEM_ID_SENDER) continue;
+                o("\t\t\t\t<option value=\"%d\">\n", et->id);
+                o("\t\t\t\t\t"); h(et->name); o("\n");
+                o("\t\t\t\t</option>\n");
+            }
+            o(  "\t\t\t</select>\n");
+            o(  "\t\t</th>\n");
+        }
+        o(      "\t</tr>\n");
         /* データ */
-        d("csv lines %d\n", csv_a->lines->size);
         foreach (it_row, csv_a->lines) {
             List* cols = it_row->element;
             Iterator* it_cols;
             d("csv line %d\n", cols->size);
             o("\t<tr>\n");
-            o("\t\t<th class=\"required\">CSV");
-            o("<span class=\"required\">※</span>");
+            o("\t\t<th>%d", row++ + 1);
             o("</th>\n");
+            col_count = 0;
             foreach (it_cols, cols) {
+                String* s = it_cols->element;
                 d("csv col\n");
                 o("\t\t<td>\n");
-                o("\t\t\t<div id=\"field.csvdata.required\" class=\"error\"></div>\n");
-                o("\t\t\t<textarea name=\"csvdata\" row=\"5\" col=\"5\"></textarea>\n");
-                o("\t\t\t<div class=\"description\">登録したいデータをCSV形式で貼り付けてください。&nbsp;</div>\n");
+                o("\t\t\t<textarea name=\"csvfield%d.%d\" row=\"5\" col=\"5\">", row_count, col_count); h(string_rawstr(s)); o("</textarea>\n");
                 o("\t\t</td>\n");
+                col_count++;
             }
             o("\t</tr>\n");
+            row_count++;
         }
         o("</table>\n");
-        output_field_information_js(element_types_a);
         list_free(element_types_a);
     }
     o(      "<input class=\"button\" type=\"submit\" name=\"register\" value=\"登録\" />\n"
@@ -1644,6 +1667,86 @@ void register_at_once_confirm_action()
             "</div>\n", strlen(sender) ? "checked" : "");
     db_finish();
     output_footer();
+}
+void register_at_once_submit_action()
+{
+    int row_count = 0, col_count = 0;
+    Iterator* it;
+    char save2cookie[2];
+    char* value_a;
+    char senderfield[DEFAULT_LENGTH];
+    char sender[DEFAULT_LENGTH];
+    List* field_ids_a;
+    int i = 0;
+
+    cgiFormStringNoNewlines("save2cookie", save2cookie, 2);
+    sprintf(senderfield, "field%d", ELEM_ID_SENDER);
+    cgiFormStringNoNewlines(senderfield, sender, DEFAULT_LENGTH);
+    if (strcmp(save2cookie, "1") == 0) {
+        d("set cookie: %s, %s, %s\n", sender, cgiScriptName, cgiServerName);
+        cgiHeaderCookieSetString(COOKIE_SENDER, sender, 86400 * 30, "/", cgiServerName);
+    } else {
+        cgiHeaderCookieSetString(COOKIE_SENDER, "", 0, "/", cgiServerName);
+    }
+
+    d("1\n");
+    /* 項目一覧を取得する。 */
+    list_alloc(field_ids_a, int);
+    while (1) {
+        char name[DEFAULT_LENGTH];
+        char value[DEFAULT_LENGTH];
+        int* field_id;
+        sprintf(name, "col_field%d", i++);
+        cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+        if (strlen(value) == 0) break;
+        field_id = list_new_element(field_ids_a);
+        *field_id = atoi(value);
+        list_add(field_ids_a, field_id);
+    }
+    d("2\n");
+    db_init();
+    db_begin();
+    while (1) {
+        Message* ticket_a = xalloc(sizeof(Message));
+        List* elements_a = NULL;
+        ticket_a->id = -1;
+        list_alloc(elements_a, Element);
+        value_a = xalloc(sizeof(char) * VALUE_LENGTH); /* 1M */
+        /* register */
+        col_count = 0;
+        foreach (it, field_ids_a) {
+            int* field_id = it->element;
+            Element* e = list_new_element(elements_a);
+            char name[DEFAULT_LENGTH] = "";
+    d("3 field_id: %d\n", *field_id);
+            sprintf(name, "csvfield%d.%d", row_count, col_count++);
+            strcpy(value_a, "");
+            e->element_type_id = *field_id;
+            e->is_file = 0;
+            cgiFormString(name, value_a, VALUE_LENGTH);
+            if (strlen(value_a) == 0) continue; /* 値が無ければelementを追加しない */
+            e->str_val = xalloc(sizeof(char) * strlen(value_a) + 1);
+            strcpy(e->str_val, value_a);
+    d("3 value: %s\n", value_a);
+            list_add(elements_a, e);
+        }
+    d("4\n");
+        if (elements_a->size == 0) break; /* elementが無い状態だったら、登録処理終了。 */
+        xfree(value_a);
+        ticket_a->elements = elements_a;
+        ticket_a->id = db_register_ticket(ticket_a);
+        free_element_list(elements_a);
+        xfree(ticket_a);
+        row_count++;
+    }
+    d("5\n");
+    db_commit();
+    db_finish();
+
+    redirect("/list", "登録しました。");
+    list_free(field_ids_a);
+    return;
+
 }
 /**
  * デフォルトのaction。

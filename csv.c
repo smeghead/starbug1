@@ -21,22 +21,30 @@ Csv* csv_new(char* content)
     mark = p;
     d("csv_new begin\n");
     while (1) {
-        d("csv_new %c %d\n", *p, p - mark);
-        if (*p == '\0' || *p == '\n' || *p == ',') {
+        int data_end = *p == '\0' || *p == '\n' || *p == ',';
+        d("csv_new %d %d\n", *p, p - mark);
+        if (data_end) {
             String* col = string_new(0);
             char buf[p - mark + 1];
             strncpy(buf, mark, p - mark);
             d("col: %s\n", buf);
             string_append(col, buf);
             list_add(cols, col);
-            mark = ++p; /* , の分進める。 */
+            csv->col_count++;
         }
         if (*p == '\n') {
+            d("next line!!!!\n");
             list_add(csv->lines, cols);
+            csv->row_count++;
+            csv->col_count= 0;
             list_alloc(cols, String); /* cols を初期化 */
         } else if (*p == '\0') {
             list_add(csv->lines, cols);
+            csv->row_count++;
             break;
+        }
+        if (data_end) {
+            mark = ++p; /* , の分進める。 */
         }
         p++;
     }

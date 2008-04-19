@@ -516,4 +516,11 @@ div.description {
 img.attachment_image {
     width: 200px;
 }
+#input_form textarea {
+    height: 200px;
+}
+table#register_at_once_confirm tr td textarea {
+    width: 100px;
+    height: 20px;
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
