@@ -9,7 +9,7 @@ ErrorDocument 500 /starbug1/error.html
 # CGIの実行許可
 Options +ExecCGI
 # 初期ページの設定
-#DirectoryIndex index.cgi
+DirectoryIndex index.cgi
 
 # 一般ユーザの認証についての設定 
 #<Files index.cgi>

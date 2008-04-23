@@ -1590,10 +1590,10 @@ void register_at_once_confirm_action()
     o(      "<table summary=\"input infomation\">\n");
     xfree(project_a);
     {
-        int row_count = 0, col_count = 0;
+        int line_count = 0, fields_count = 0;
         List* element_types_a;
         Iterator* it;
-        Iterator* it_row;
+        Iterator* it_line;
         list_alloc(element_types_a, ElementType);
         element_types_a = db_get_element_types_all(element_types_a);
         foreach (it, element_types_a) {
@@ -1622,7 +1622,7 @@ void register_at_once_confirm_action()
         o(      "<table id=\"register_at_once_confirm\">\n"
                 "\t<tr>\n");
         o(  "\t\t<th>&nbsp;</th>\n");
-        for (i = 0; i < csv_a->col_count; i++) {
+        for (i = 0; i < csv_a->field_count; i++) {
             o(  "\t\t<th>\n");
             o(  "\t\t\t<select name=\"col_field%d\">\n", i);
             o(  "\t\t\t\t<option value=\"\"></option>\n");
@@ -1638,24 +1638,24 @@ void register_at_once_confirm_action()
         }
         o(      "\t</tr>\n");
         /* データ */
-        foreach (it_row, csv_a->lines) {
-            List* cols = it_row->element;
-            Iterator* it_cols;
-            d("csv line %d\n", cols->size);
+        foreach (it_line, csv_a->lines) {
+            CsvLine* line = it_line->element;
+            Iterator* it_fields;
+            d("csv field size %d\n", line->fields->size);
             o("\t<tr>\n");
-            o("\t\t<th>%d", row++ + 1);
+            o("\t\t<th>%d", (row++) + 1);
             o("</th>\n");
-            col_count = 0;
-            foreach (it_cols, cols) {
-                String* s = it_cols->element;
-                d("csv col\n");
+            fields_count = 0;
+            foreach (it_fields, line->fields) {
+                CsvField* field = it_fields->element;
+                d("csv col %s\n", string_rawstr(field->data));
                 o("\t\t<td>\n");
-                o("\t\t\t<textarea name=\"csvfield%d.%d\" row=\"5\" col=\"5\">", row_count, col_count); h(string_rawstr(s)); o("</textarea>\n");
+                o("\t\t\t<textarea name=\"csvfield%d.%d\" row=\"5\" col=\"5\">", line_count, fields_count); h(string_rawstr(field->data)); o("</textarea>\n");
                 o("\t\t</td>\n");
-                col_count++;
+                fields_count++;
             }
             o("\t</tr>\n");
-            row_count++;
+            line_count++;
         }
         o("</table>\n");
         list_free(element_types_a);
