@@ -1531,20 +1531,20 @@ void register_at_once_action()
             "<div class=\"description\">新規チケットを一括登録する場合は、以下のフォームを記入し登録ボタンを押してください。</div>\n"
             "<noscript><div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div></noscript>\n");
     o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/register_at_once_confirm\" method=\"post\">\n", cgiScriptName);
-    o(      "<table summary=\"input infomation\">\n");
     xfree(project_a);
     {
         /* 一括用、CSV形式フィールド */
-        o("\t<tr>\n");
-        o("\t\t<th class=\"required\">CSV");
-        o("<span class=\"required\">※</span>");
-        o("</th><td>\n");
-        o("\t\t\t<div id=\"field.csvdata.required\" class=\"error\"></div>\n");
-        o("\t\t\t<textarea name=\"csvdata\" id=\"csvdata\" row=\"5\" col=\"5\"></textarea>\n");
-        o("\t\t\t<div class=\"description\">登録したいデータをCSV形式で貼り付けてください。&nbsp;</div>\n");
-        o("\t\t</td>\n");
-        o("\t</tr>\n");
-        o("</table>\n");
+        o("<table summary=\"input infomation\">\n"
+          "\t<tr>\n"
+          "\t\t<th class=\"required\">CSV"
+          "<span class=\"required\">※</span>"
+          "</th><td>\n"
+          "\t\t\t<div id=\"field.csvdata.required\" class=\"error\"></div>\n"
+          "\t\t\t<textarea name=\"csvdata\" id=\"csvdata\" row=\"5\" col=\"5\" wrap=\"off\"></textarea>\n"
+          "\t\t\t<div class=\"description\">登録したいデータをCSV形式で貼り付けてください。&nbsp;</div>\n"
+          "\t\t</td>\n"
+          "\t</tr>\n"
+          "</table>\n");
     }
     o(      "<input class=\"button\" type=\"submit\" name=\"register\" value=\"登録\" />\n"
             "</form>\n"
@@ -1704,9 +1704,12 @@ void register_at_once_submit_action()
         sprintf(name, "col_field%d", i);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
         d("1 %s %d %s\n", name, i, value);
-        if (strlen(value) == 0) continue;
         field_id = list_new_element(field_ids_a);
-        *field_id = atoi(value);
+        if (strlen(value) != 0) {
+            *field_id = atoi(value);
+        } else {
+            *field_id = -1;
+        }
         list_add(field_ids_a, field_id);
         d("1 add field\n");
     }
@@ -1720,13 +1723,16 @@ void register_at_once_submit_action()
         list_alloc(elements_a, Element);
         value_a = xalloc(sizeof(char) * VALUE_LENGTH); /* 1M */
         /* register */
-        col_count = 0;
+        col_count = -1;
         foreach (it, field_ids_a) {
             int* field_id = it->element;
-            Element* e = list_new_element(elements_a);
+            Element* e;
+            col_count++;
+            if (*field_id == -1) continue;
+            e = list_new_element(elements_a);
             char name[DEFAULT_LENGTH] = "";
     d("3 field_id: %d\n", *field_id);
-            sprintf(name, "csvfield%d.%d", row_count, col_count++);
+            sprintf(name, "csvfield%d.%d", row_count, col_count);
             strcpy(value_a, "");
             e->element_type_id = *field_id;
             e->is_file = 0;

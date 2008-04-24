@@ -523,4 +523,8 @@ table#register_at_once_confirm tr td textarea {
     width: 100px;
     height: 40px;
 }
+textarea#csvdata {
+    width: 95%;
+    height: 300px;
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
