@@ -1619,13 +1619,14 @@ void register_at_once_confirm_action()
             o("\t</tr>\n");
         }
         o("</table>\n");
+        o("<input type=\"hidden\" name=\"fields_count\" value=\"%d\" />\n", csv_a->field_count);
         o(      "<table id=\"register_at_once_confirm\">\n"
                 "\t<tr>\n");
         o(  "\t\t<th>&nbsp;</th>\n");
         for (i = 0; i < csv_a->field_count; i++) {
             o(  "\t\t<th>\n");
             o(  "\t\t\t<select name=\"col_field%d\">\n", i);
-            o(  "\t\t\t\t<option value=\"\"></option>\n");
+            o(  "\t\t\t\t<option value=\"\">無視</option>\n");
             foreach (it, element_types_a) {
                 ElementType* et = it->element;
                 if (et->id == ELEM_ID_SENDER) continue;
@@ -1676,8 +1677,10 @@ void register_at_once_submit_action()
     char* value_a;
     char senderfield[DEFAULT_LENGTH];
     char sender[DEFAULT_LENGTH];
+    char fields_count_str[5];
     List* field_ids_a;
     int i = 0;
+    int fields_count;
 
     cgiFormStringNoNewlines("save2cookie", save2cookie, 2);
     sprintf(senderfield, "field%d", ELEM_ID_SENDER);
@@ -1689,19 +1692,23 @@ void register_at_once_submit_action()
         cgiHeaderCookieSetString(COOKIE_SENDER, "", 0, "/", cgiServerName);
     }
 
-    d("1\n");
+    cgiFormStringNoNewlines("fields_count", fields_count_str, 5);
+    fields_count = atoi(fields_count_str);
+    d("1 fields_count %d\n", fields_count);
     /* 項目一覧を取得する。 */
     list_alloc(field_ids_a, int);
-    while (1) {
+    for (i = 0; i < fields_count; i++) {
         char name[DEFAULT_LENGTH];
         char value[DEFAULT_LENGTH];
         int* field_id;
-        sprintf(name, "col_field%d", i++);
+        sprintf(name, "col_field%d", i);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-        if (strlen(value) == 0) break;
+        d("1 %s %d %s\n", name, i, value);
+        if (strlen(value) == 0) continue;
         field_id = list_new_element(field_ids_a);
         *field_id = atoi(value);
         list_add(field_ids_a, field_id);
+        d("1 add field\n");
     }
     d("2\n");
     db_init();

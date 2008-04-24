@@ -521,6 +521,6 @@ img.attachment_image {
 }
 table#register_at_once_confirm tr td textarea {
     width: 100px;
-    height: 20px;
+    height: 40px;
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

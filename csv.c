@@ -16,10 +16,11 @@ typedef enum _mode {
 } CsvMode;
 Csv* csv_new(char* content)
 {
-    CsvMode mode = CSV_MODE_SEPARATER;
+    CsvMode mode = CSV_MODE_DATA;
     char* p = content;
     char* mark;
     CsvLine* line;
+    int field_count = 0;
     Csv* csv = xalloc(sizeof(Csv));
     /* create first line. */
     list_alloc(csv->lines, CsvLine);
@@ -28,19 +29,21 @@ Csv* csv_new(char* content)
     mark = p;
     d("csv_new begin\n");
     while (1) {
-        int data_end;
-        d("mode: %d\n", mode);
+        int data_end = 0;
+        d("mode: %d c: %c %c\n", mode, *p, *(p + 1));
         if (mode == CSV_MODE_QUOTED_DATA) {
             if (*p == '"' && *(p + 1) == '"') {
+                /* escaped quote */
                 p++;
             } else if (*p == '"') {
+                /* quote mode ends */
                 mode = CSV_MODE_DATA;
             }
-        } else if (*p == '"') {
+        } else if (mode == CSV_MODE_DATA && *p == '"') {
             mode = CSV_MODE_QUOTED_DATA;
         }
         if (mode == CSV_MODE_DATA) {
-            data_end = (mode == CSV_MODE_DATA) && (*p == '\0' || *p == '\n' || *p == ',');
+            data_end = (*p == '\0' || *p == '\n' || *p == ',');
             d("csv_new %d %d\n", *p, p - mark);
             if (data_end) {
                 CsvField* field = list_new_element(line->fields);
@@ -51,23 +54,25 @@ Csv* csv_new(char* content)
                 d("col: %s\n", buf);
                 string_append(field->data, buf);
                 list_add(line->fields, field);
-                csv->field_count++;
+                field_count++;
+                if (csv->field_count < field_count)
+                    csv->field_count = field_count;
             }
-            if (*p == '\n') {
-                d("next line!!!!\n");
-                list_add(csv->lines, line);
-                csv->line_count++;
-                csv->field_count= 0;
-                line = list_new_element(csv->lines);
-                list_alloc(line->fields, CsvField); /* line を初期化 */
-            } else if (*p == '\0') {
-                list_add(csv->lines, line);
-                csv->line_count++;
-                break;
-            }
-            if (data_end) {
-                mark = ++p; /* , の分進める。 */
-            }
+        }
+        if (*p == '\n') {
+            d("next line!!!!\n");
+            list_add(csv->lines, line);
+            csv->line_count++;
+            field_count = 0;
+            line = list_new_element(csv->lines);
+            list_alloc(line->fields, CsvField); /* line を初期化 */
+        } else if (*p == '\0') {
+            list_add(csv->lines, line);
+            csv->line_count++;
+            break;
+        }
+        if (data_end) {
+            mark = p + 1; /* 次のフィールドの開始点をマークする。 */
         }
         p++;
     }
