@@ -1086,6 +1086,7 @@ void register_action()
  */
 void ticket_action()
 {
+    String* title_a = string_new(0);
     char path_info[DEFAULT_LENGTH];
     char* ticket_id;
     List* elements_a = NULL;
@@ -1112,16 +1113,18 @@ void ticket_action()
         redirect("/list", "存在しないIDが指定されました。");
         return;
     }
+    string_appendf(title_a, "#%d %s", iid, get_element_value_by_id(elements_a, ELEM_ID_TITLE));
     project_a = db_get_project(project_a);
-    output_header(project_a, "チケット詳細", "reply.js", NAVI_OTHER);
+    output_header(project_a, string_rawstr(title_a), "reply.js", NAVI_OTHER);
     output_calendar_js();
 
     message_ids_a = db_get_message_ids_a(iid);
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_all(element_types_a);
-    o("<h2 id=\"subject\">"); h(project_a->name); o(" - #%d ", iid);
+    o("<h2 id=\"subject\">"); h(project_a->name); o(" - ");
     xfree(project_a);
-    h(get_element_value_by_id(elements_a, ELEM_ID_TITLE));
+    h(string_rawstr(title_a));
+    string_free(title_a);
     o(" &nbsp;</h2>\n");
     o(      "<div id=\"ticket_newest\">\n"
             "<h3>チケット最新情報</h3>\n"
