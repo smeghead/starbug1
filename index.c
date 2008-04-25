@@ -1071,7 +1071,7 @@ void register_action()
             "<input id=\"save2cookie\" type=\"checkbox\" name=\"save2cookie\" class=\"checkbox\" value=\"1\" %s />\n"
             "<label for=\"save2cookie\">投稿者を保存する。(cookie使用)</label>\n"
             "</form>\n"
-            "</div>\n", strlen(sender) ? "checked" : "");
+            "</div>\n", strlen(sender) ? "checked=\"checked\"" : "");
     o(      "<div class=\"description\">\n"
             "\t<ul>\n"
             "\t\t<li>複数行テキスト項目の内容では、#1 のように書くと、ID が 1 のチケットのチケット詳細ページへのリンクとなります。</li>\n"

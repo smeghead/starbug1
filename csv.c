@@ -14,6 +14,37 @@ typedef enum _mode {
     CSV_MODE_DATA,
     CSV_MODE_QUOTED_DATA
 } CsvMode;
+
+#define is_space(c) (c == ' ' || c == '\t')
+static void decord_csv_field(char* src, char* dist)
+{
+    int quote = 0;
+    char* p = src;
+    char* p_dist = dist;
+    /* 前のスペースを削除する。 */
+    while (*p != '\0') {
+        if (!(strlen(dist) == 0 && is_space(*p))) { /* 最初の空白は追加しない */
+            if (strlen(dist) > 0 || *p != '"') {
+                if (strlen(dist) == 0 || !(*p == '"' && *(p - 1) == '"')) { /* 重なった " は追加しない */ 
+                    *p_dist++ = *p;
+                }
+            } else if (strlen(dist) == 0 && *p == '"') {
+                quote = 1;
+            }
+        }
+        p++;
+    }
+    p_dist--;
+    /* 後のスペースを削除する。 */
+    while (is_space(*p_dist)) {
+        *p_dist-- = '\0';
+    }
+    /* quoteモードで最後が " なら削除 */
+    d("qote %d\n", quote);
+    if (quote && *p_dist == '"') {
+        *p_dist = '\0';
+    }
+}
 Csv* csv_new(char* content)
 {
     CsvMode mode = CSV_MODE_DATA;
@@ -47,12 +78,15 @@ Csv* csv_new(char* content)
             d("csv_new %d %d\n", *p, p - mark);
             if (data_end) {
                 CsvField* field = list_new_element(line->fields);
-                field->data = string_new(0);
                 char buf[p - mark + 1];
-                memset(buf, '\0', sizeof(buf));
+                char buf_decorded[p - mark + 1];
+                memset(buf, '\0', p - mark + 1);
+                memset(buf_decorded, '\0', p - mark + 1);
+                field->data = string_new(0);
                 strncpy(buf, mark, p - mark);
+                decord_csv_field(buf, buf_decorded);
                 d("col: %s\n", buf);
-                string_append(field->data, buf);
+                string_append(field->data, buf_decorded);
                 list_add(line->fields, field);
                 field_count++;
                 if (csv->field_count < field_count)

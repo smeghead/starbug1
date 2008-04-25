@@ -1,6 +1,7 @@
 2008-04-25  smeghead <smeghead@users.sourceforge.jp>
 
     * チケット詳細ページのHTMLタイトルを、「#id 件名」に変更した。
+    * チケット一括登録作成中。csvフィールドのデコード処理を追加。
 
 2008-04-24  smeghead <smeghead@users.sourceforge.jp>
 
