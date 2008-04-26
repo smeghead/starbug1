@@ -1,3 +1,11 @@
+2008-04-26  smeghead <smeghead@users.sourceforge.jp>
+
+    * CSVのfreeを実装。
+    * チケット一括登録作成中。説明文を追加。
+    * testを追加した。
+    * ヘルプを追加した。
+    * リリース準備
+
 2008-04-25  smeghead <smeghead@users.sourceforge.jp>
 
     * チケット詳細ページのHTMLタイトルを、「#id 件名」に変更した。

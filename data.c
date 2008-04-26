@@ -26,4 +26,9 @@ char* get_element_value_by_id(List* elements, int type)
     }
     return "";
 }
+void set_element_value(Element* e, char* val)
+{
+    e->str_val = xalloc(sizeof(char) * strlen(val) + 1);
+    strcpy(e->str_val, val);
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

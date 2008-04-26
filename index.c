@@ -1402,39 +1402,33 @@ void register_submit_action()
                 case ELEM_TYPE_TEXT:
                 case ELEM_TYPE_DATE:
                     cgiFormStringNoNewlines(name, value_a, VALUE_LENGTH);
-                    e->str_val = xalloc(sizeof(char) * strlen(value_a) + 1);
-                    strcpy(e->str_val, value_a);
+                    set_element_value(e, value_a);
                     break;
                 case ELEM_TYPE_TEXTAREA:
                     cgiFormString(name, value_a, VALUE_LENGTH);
-                    e->str_val = xalloc(sizeof(char) * strlen(value_a) + 1);
-                    strcpy(e->str_val, value_a);
+                    set_element_value(e, value_a);
                     break;
                 case ELEM_TYPE_CHECKBOX:
                     cgiFormString(name, value_a, VALUE_LENGTH);
-                    e->str_val = xalloc(sizeof(char) * strlen(value_a) + 1);
-                    strcpy(e->str_val, value_a);
+                    set_element_value(e, value_a);
                     break;
                 case ELEM_TYPE_LIST_SINGLE:
                     /* 新規選択肢 */
                     cgiFormString(name_new_item, value_a, VALUE_LENGTH);
                     if (strlen(value_a)) {
-                        e->str_val = xalloc(sizeof(char) * strlen(value_a) + 1);
-                        strcpy(e->str_val, value_a);
+                        set_element_value(e, value_a);
                         /* 新しく選択肢を追加 */
                         register_list_item(et->id, value_a);
                     } else {
                         cgiFormString(name, value_a, VALUE_LENGTH);
-                        e->str_val = xalloc(sizeof(char) * strlen(value_a) + 1);
-                        strcpy(e->str_val, value_a);
+                        set_element_value(e, value_a);
                     }
                     break;
                 case ELEM_TYPE_LIST_MULTI:
                     /* 新規選択肢 */
                     cgiFormString(name_new_item, value_a, VALUE_LENGTH);
                     if (strlen(value_a)) {
-                        e->str_val = xalloc(sizeof(char) * strlen(value_a) + 1);
-                        strcpy(e->str_val, value_a);
+                        set_element_value(e, value_a);
                         /* 新しく選択肢を追加 */
                         register_list_item(et->id, value_a);
                     }
@@ -1452,8 +1446,7 @@ void register_submit_action()
                             i++;
                         }
                     }
-                    e->str_val = xalloc(sizeof(char) * strlen(value_a) + 1);
-                    strcpy(e->str_val, value_a);
+                    set_element_value(e, value_a);
                     cgiStringArrayFree(multi);
                     break;
                 case ELEM_TYPE_UPLOADFILE:
@@ -1531,7 +1524,14 @@ void register_at_once_action()
     list_free(states_a);
     o(      "<div id=\"input_form\">\n"
             "<h3>チケット一括登録</h3>\n"
-            "<div class=\"description\">新規チケットを一括登録する場合は、以下のフォームを記入し登録ボタンを押してください。</div>\n"
+            "<div class=\"description\">\n"
+            "新規チケットを一括登録する場合は、以下のフォームを記入し登録ボタンを押してください。登録の手順は下のとおりです。\n"
+            "\t<ul>\n"
+            "\t\t<li>チケット一括登録ページ(このページ)で、CSVを登録して、解析ボタンを押す。</li>\n"
+            "\t\t<li>チケット一括登録確認ページで、各フィールドに対応する項目を選択し、登録ボタンを押す。</li>\n"
+            "\t\t<li>登録完了。</li>\n"
+            "\t</ul>\n"
+            "</div>\n"
             "<noscript><div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div></noscript>\n");
     o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/register_at_once_confirm\" method=\"post\">\n", cgiScriptName);
     xfree(project_a);
@@ -1542,14 +1542,14 @@ void register_at_once_action()
           "\t\t<th class=\"required\">CSV"
           "<span class=\"required\">※</span>"
           "</th><td>\n"
-          "\t\t\t<div id=\"field.csvdata.required\" class=\"error\"></div>\n"
+          "\t\t\t<div id=\"csvdata.required\" class=\"error\"></div>\n"
           "\t\t\t<textarea name=\"csvdata\" id=\"csvdata\" row=\"5\" col=\"5\" wrap=\"off\"></textarea>\n"
-          "\t\t\t<div class=\"description\">登録したいデータをCSV形式で貼り付けてください。&nbsp;</div>\n"
+          "\t\t\t<div class=\"description\">登録したいデータをCSV形式で貼り付けてください。次の画面で取り込むフィールドを設定可能です。&nbsp;</div>\n"
           "\t\t</td>\n"
           "\t</tr>\n"
           "</table>\n");
     }
-    o(      "<input class=\"button\" type=\"submit\" name=\"register\" value=\"登録\" />\n"
+    o(      "<input class=\"button\" type=\"submit\" name=\"register\" value=\"解析\" />\n"
             "</form>\n"
             "</div>\n");
     db_finish();
@@ -1670,6 +1670,7 @@ void register_at_once_confirm_action()
             "</form>\n"
             "</div>\n", strlen(sender) ? "checked" : "");
     db_finish();
+    csv_free(csv_a);
     output_footer();
 }
 void register_at_once_submit_action()
@@ -1677,13 +1678,13 @@ void register_at_once_submit_action()
     int row_count = 0, col_count = 0;
     Iterator* it;
     char save2cookie[2];
-    char* value_a;
     char senderfield[DEFAULT_LENGTH];
     char sender[DEFAULT_LENGTH];
     char fields_count_str[5];
     List* field_ids_a;
     int i = 0;
     int fields_count;
+    int registered_tickets_count = 0;
 
     cgiFormStringNoNewlines("save2cookie", save2cookie, 2);
     sprintf(senderfield, "field%d", ELEM_ID_SENDER);
@@ -1697,7 +1698,6 @@ void register_at_once_submit_action()
 
     cgiFormStringNoNewlines("fields_count", fields_count_str, 5);
     fields_count = atoi(fields_count_str);
-    d("1 fields_count %d\n", fields_count);
     /* 項目一覧を取得する。 */
     list_alloc(field_ids_a, int);
     for (i = 0; i < fields_count; i++) {
@@ -1706,7 +1706,6 @@ void register_at_once_submit_action()
         int* field_id;
         sprintf(name, "col_field%d", i);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-        d("1 %s %d %s\n", name, i, value);
         field_id = list_new_element(field_ids_a);
         if (strlen(value) != 0) {
             *field_id = atoi(value);
@@ -1714,9 +1713,7 @@ void register_at_once_submit_action()
             *field_id = -1;
         }
         list_add(field_ids_a, field_id);
-        d("1 add field\n");
     }
-    d("2\n");
     db_init();
     db_begin();
     while (1) {
@@ -1724,42 +1721,64 @@ void register_at_once_submit_action()
         List* elements_a = NULL;
         ticket_a->id = -1;
         list_alloc(elements_a, Element);
-        value_a = xalloc(sizeof(char) * VALUE_LENGTH); /* 1M */
         /* register */
         col_count = -1;
         foreach (it, field_ids_a) {
             int* field_id = it->element;
+            char* value_a;
             Element* e;
+            value_a = xalloc(sizeof(char) * VALUE_LENGTH); /* 1M */
             col_count++;
-            if (*field_id == -1) continue;
+            if (*field_id == -1) {
+                xfree(value_a);
+                continue;
+            }
             e = list_new_element(elements_a);
             char name[DEFAULT_LENGTH] = "";
-    d("3 field_id: %d\n", *field_id);
             sprintf(name, "csvfield%d.%d", row_count, col_count);
             strcpy(value_a, "");
             e->element_type_id = *field_id;
             e->is_file = 0;
             cgiFormString(name, value_a, VALUE_LENGTH);
-            if (strlen(value_a) == 0) continue; /* 値が無ければelementを追加しない */
-            e->str_val = xalloc(sizeof(char) * strlen(value_a) + 1);
-            strcpy(e->str_val, value_a);
-    d("3 value: %s\n", value_a);
+            if (strlen(value_a) == 0) {
+                /* 値が無ければelementを追加しない */
+                xfree(value_a);
+                continue;
+            }
+            set_element_value(e, value_a);
             list_add(elements_a, e);
+            if (elements_a->size == 1) {
+                /* 1回だけ投稿者を追加する。 */
+                Element* sender_element = list_new_element(elements_a);
+                sender_element->element_type_id = ELEM_ID_SENDER;
+                set_element_value(sender_element, sender);
+                list_add(elements_a, sender_element);
+            }
+            xfree(value_a);
         }
-    d("4\n");
-        if (elements_a->size == 0) break; /* elementが無い状態だったら、登録処理終了。 */
-        xfree(value_a);
+        if (elements_a->size == 0) {
+            /* elementが無い状態だったら、登録処理終了。 */
+            free_element_list(elements_a);
+            xfree(ticket_a);
+            break;
+        }
         ticket_a->elements = elements_a;
         ticket_a->id = db_register_ticket(ticket_a);
+        registered_tickets_count++;
         free_element_list(elements_a);
         xfree(ticket_a);
         row_count++;
     }
-    d("5\n");
     db_commit();
     db_finish();
 
-    redirect("/list", "登録しました。");
+    if (registered_tickets_count) {
+        char message[DEFAULT_LENGTH];
+        sprintf(message, "%d件登録しました。", registered_tickets_count);
+        redirect("/list", message);
+    } else {
+        redirect("/list", "登録されたチケットはありませんでした。戻るボタンで戻って確認してください。");
+    }
     list_free(field_ids_a);
     return;
 

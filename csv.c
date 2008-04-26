@@ -24,12 +24,12 @@ static void decord_csv_field(char* src, char* dist)
     /* 前のスペースを削除する。 */
     while (*p != '\0') {
         if (!(strlen(dist) == 0 && is_space(*p))) { /* 最初の空白は追加しない */
-            if (strlen(dist) > 0 || *p != '"') {
+            if (strlen(dist) > 0 || *p != '"') { /* 最初の" は追加しない。 */
                 if (strlen(dist) == 0 || !(*p == '"' && *(p - 1) == '"')) { /* 重なった " は追加しない */ 
                     *p_dist++ = *p;
                 }
             } else if (strlen(dist) == 0 && *p == '"') {
-                quote = 1;
+                quote = 1; /* " モード */
             }
         }
         p++;
@@ -115,6 +115,17 @@ Csv* csv_new(char* content)
 }
 void csv_free(Csv* csv)
 {
+    Iterator* it;
+    foreach (it, csv->lines) {
+        CsvLine* line = it->element;
+        Iterator* it_field;
+        foreach (it_field, line->fields) {
+            CsvField* field = it_field->element;
+            string_free(field->data);
+        }
+        xfree(line);
+    }
+    xfree(csv);
 }
 
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
