@@ -24,7 +24,7 @@ function initPage(e) {
                     Event.stop(e);
                 return dedide;
             } catch(ex) {
-                alert('エラーが発生しました。');
+                alert('エラーが発生しました。' + ex);
                 Event.stop(e);
             }
         }

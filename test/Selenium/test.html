@@ -1055,7 +1055,7 @@
 </tr>
 <tr>
 	<td>waitForPageToLoad</td>
-	<td>1000</td>
+	<td>2000</td>
 	<td></td>
 </tr>
 <tr>
@@ -1546,7 +1546,7 @@
 <tr>
 	<td>type</td>
 	<td>q</td>
-	<td>が 後 </td>
+	<td>が 後</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -1561,7 +1561,7 @@
 <tr>
 	<td>type</td>
 	<td>q</td>
-	<td>が 後&nbsp;&nbsp;&nbsp;</td>
+	<td>が 後</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -1576,7 +1576,7 @@
 <tr>
 	<td>type</td>
 	<td>q</td>
-	<td>&nbsp;&nbsp;が 後&nbsp;&nbsp;&nbsp;</td>
+	<td>が 後</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -1589,61 +1589,80 @@
 	<td>Copyright smeghead 2007</td>
 </tr>
 <tr>
-  <td>clickAndWait</td>
-  <td>link=チケット一括登録</td>
-  <td></td>
+	<td>clickAndWait</td>
+	<td>link=チケット一括登録</td>
+	<td></td>
 </tr>
 <tr>
-  <td>type</td>
-  <td>csvdata</td>
-  <td>2029,"基本設計",2008-06-12,08/06/26,10,0,"","","test1",<br />2099,"詳細設計",2008-06-26,08/07/02,4,0,"","","test2",</td>
+	<td>type</td>
+	<td>csvdata</td>
+	<td>2029,"基本設計",2008-06-12,08/06/26,10,0,"","","test1",<br />2099,"詳細設計",2008-06-26,08/07/02,4,0,"","","test2",</td>
 </tr>
 <tr>
-  <td>clickAndWait</td>
-  <td>register</td>
-  <td></td>
+	<td>click</td>
+	<td>register</td>
+	<td></td>
 </tr>
 <tr>
-  <td>assertTextPresent</td>
-  <td></td>
-  <td>Copyright smeghead 2007</td>
+	<td>assertConfirmation</td>
+	<td>解析します。よろしいですか？</td>
+	<td></td>
 </tr>
 <tr>
-  <td>select</td>
-  <td>col_field1</td>
-  <td>label=件名</td>
+	<td>waitForPageToLoad</td>
+	<td>2000</td>
+	<td></td>
 </tr>
 <tr>
-  <td>select</td>
-  <td>col_field2</td>
-  <td>label=期限</td>
+	<td>assertTextPresent</td>
+	<td></td>
+	<td>Copyright smeghead 2007</td>
 </tr>
 <tr>
-  <td>select</td>
-  <td>col_field8</td>
-  <td>label=詳細</td>
+	<td>select</td>
+	<td>col_field1</td>
+	<td>label=件名</td>
 </tr>
 <tr>
-  <td>select</td>
-  <td>col_field4</td>
-  <td>label=再現手順</td>
+	<td>select</td>
+	<td>col_field2</td>
+	<td>label=期限</td>
 </tr>
 <tr>
-  <td>type</td>
-  <td>field2</td>
-  <td>test0</td>
+	<td>select</td>
+	<td>col_field8</td>
+	<td>label=詳細</td>
 </tr>
 <tr>
-  <td>clickAndWait</td>
-  <td>register</td>
-  <td></td>
+	<td>select</td>
+	<td>col_field4</td>
+	<td>label=再現手順</td>
 </tr>
 <tr>
-  <td>assertTextPresent</td>
-  <td></td>
-  <td>Copyright smeghead 2007</td>
+	<td>type</td>
+	<td>field2</td>
+	<td>test0</td>
 </tr>
-
+<tr>
+	<td>click</td>
+	<td>register</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>登録します。よろしいですか？</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForPageToLoad</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td></td>
+	<td>Copyright smeghead 2007</td>
+</tr>
 
 </tbody></table>
 </body>

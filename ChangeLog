@@ -1,7 +1,12 @@
 2008-04-26  smeghead <smeghead@users.sourceforge.jp>
 
+    * 0.3.1-beta リリース
+
+2008-04-26  smeghead <smeghead@users.sourceforge.jp>
+
     * CSVのfreeを実装。
     * チケット一括登録作成中。説明文を追加。
+    * チケット一括登録作成中。入力チェックjavascriptを追加。
     * testを追加した。
     * ヘルプを追加した。
     * リリース準備

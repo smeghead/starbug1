@@ -1578,7 +1578,7 @@ void register_at_once_confirm_action()
 
 
     project_a = db_get_project(project_a);
-    output_header(project_a, "チケット一括登録確認", "register_at_once.js", NAVI_REGISTER_AT_ONCE);
+    output_header(project_a, "チケット一括登録確認", "register_at_once_submit.js", NAVI_REGISTER_AT_ONCE);
     output_calendar_js();
     o(      "<h2>"); h(project_a->name);o(" - チケット一括登録確認</h2>\n");
     list_alloc(states_a, State);
@@ -1587,13 +1587,13 @@ void register_at_once_confirm_action()
     list_free(states_a);
     o(      "<div id=\"input_form\">\n"
             "<h3>チケット一括登録確認</h3>\n"
-            "<div class=\"description\">各カラムの項目を選択して、登録ボタンを押してください。</div>\n"
+            "<div class=\"description\">各桁の登録対象コンボボックスの選択値を、その桁のデータの登録対象となる項目を選択して、登録ボタンを押してください。</div>\n"
             "<noscript><div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div></noscript>\n");
     o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/register_at_once_submit\" method=\"post\">\n", cgiScriptName);
     o(      "<table summary=\"input infomation\">\n");
     xfree(project_a);
     {
-        int line_count = 0, fields_count = 0;
+        int line_count = 0;
         List* element_types_a;
         Iterator* it;
         Iterator* it_line;
@@ -1614,8 +1614,6 @@ void register_at_once_confirm_action()
             o("</th><td>\n");
             if (et->required)
                 o("\t\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
-            if (et->type == ELEM_TYPE_DATE)
-                o("\t\t<div id=\"field%d.datefield\" class=\"error\"></div>\n", et->id);
             output_form_element(NULL, et);
             o("\t\t\t<div class=\"description\">");h(et->description);o("&nbsp;</div>\n");
             o("\t\t</td>\n");
@@ -1625,7 +1623,7 @@ void register_at_once_confirm_action()
         o("<input type=\"hidden\" name=\"fields_count\" value=\"%d\" />\n", csv_a->field_count);
         o(      "<table id=\"register_at_once_confirm\">\n"
                 "\t<tr>\n");
-        o(  "\t\t<th>&nbsp;</th>\n");
+        o(  "\t\t<th>登録<br />対象</th>\n");
         for (i = 0; i < csv_a->field_count; i++) {
             o(  "\t\t<th>\n");
             o(  "\t\t\t<select name=\"col_field%d\">\n", i);
@@ -1645,11 +1643,11 @@ void register_at_once_confirm_action()
         foreach (it_line, csv_a->lines) {
             CsvLine* line = it_line->element;
             Iterator* it_fields;
+            int fields_count = 0, i;
             d("csv field size %d\n", line->fields->size);
             o("\t<tr>\n");
             o("\t\t<th>%d", (row++) + 1);
             o("</th>\n");
-            fields_count = 0;
             foreach (it_fields, line->fields) {
                 CsvField* field = it_fields->element;
                 d("csv col %s\n", string_rawstr(field->data));
@@ -1657,6 +1655,9 @@ void register_at_once_confirm_action()
                 o("\t\t\t<textarea name=\"csvfield%d.%d\" row=\"5\" col=\"5\">", line_count, fields_count); h(string_rawstr(field->data)); o("</textarea>\n");
                 o("\t\t</td>\n");
                 fields_count++;
+            }
+            for (i = csv_a->field_count; i > fields_count; i--) {
+                o("\t\t<td>&nbsp;</td>\n");
             }
             o("\t</tr>\n");
             line_count++;
@@ -1667,8 +1668,14 @@ void register_at_once_confirm_action()
     o(      "<input class=\"button\" type=\"submit\" name=\"register\" value=\"登録\" />\n"
             "<input id=\"save2cookie\" type=\"checkbox\" name=\"save2cookie\" class=\"checkbox\" value=\"1\" %s />\n"
             "<label for=\"save2cookie\">投稿者を保存する。(cookie使用)</label>\n"
-            "</form>\n"
-            "</div>\n", strlen(sender) ? "checked" : "");
+            "</form>\n", strlen(sender) ? "checked=\"checked\"" : "");
+    o(      "<div class=\"description\">\n"
+            "\t<ul>\n"
+            "\t\t<li>登録対象コンボボックスの選択値を、「無視」のまま登録すると、登録対象から省かれます。</li>\n"
+            "\t\t<li>登録する各値は、入力チェックが行なわれませんので、登録前に確認してください。</li>\n"
+            "\t</ul>\n"
+            "</div>\n");
+    o(      "</div>\n");
     db_finish();
     csv_free(csv_a);
     output_footer();

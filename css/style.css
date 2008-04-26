@@ -527,4 +527,9 @@ textarea#csvdata {
     width: 95%;
     height: 300px;
 }
+table#register_at_once_confirm {
+}
+table#register_at_once_confirm th {
+    white-space: nowrap;
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
