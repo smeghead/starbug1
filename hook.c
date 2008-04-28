@@ -75,7 +75,6 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
         return hook;
     }
     content_a = create_json(content_a, project, message, elements, element_types);
-    d("json: %s\n", string_rawstr(content_a));
     for (dp = readdir(dir); dp != NULL; dp = readdir(dir)) {
         char hook_command[DEFAULT_LENGTH];
         char filename[DEFAULT_LENGTH];

@@ -17,13 +17,14 @@ void* xalloc(size_t size)
     void* p;
     p = calloc(1, size);
     if (!p) {
-        d("memory error!!");
         die("memory error.");
     }
+/*     d("xalloc: %p\n", p); */
     return p;
 }
 void xfree(void* p)
 {
+/*     d("xfree: %p\n", p); */
     free(p);
 }
 static action* get_actions()
@@ -44,6 +45,16 @@ void register_action_actions(char* action_name, void func(void))
     a->action_name = action_name;
     a->action_func = func;
     a->next = NULL;
+}
+void free_action_actions()
+{
+    action* a = actions->next;
+    while (a) {
+        action* old = a;
+        a = a->next;
+        xfree(old);
+    }
+    xfree(actions);
 }
 
 void exec_action()
@@ -94,7 +105,6 @@ int get_ticket_syntax_len(char* data, size_t len)
     if (len == 0) return ticket_syntax_len; /* 最後の文字だった */
     data += 1; /* 1文字進める。 */
     while (len--) {
-        d("%c\n", *data);
         if (*data < '0' || *data > '9') 
             break; /* 数字でない場合は、breakする。 */
         data++;
@@ -230,50 +240,50 @@ void u(char* str)
 }
 unsigned long url_encode(unsigned char* csource, unsigned char* cbuffer, unsigned long lbuffersize)
 {
-    unsigned long   llength;                                        /* csource のサイズを格納 */
-    unsigned long   lcount = 0;                                     /* csource の読み込み位置カウンタ */
-    unsigned char   cbyte;                                          /* 抜き出された 1 バイト分のデータを格納 */
-    unsigned char   ctemp[4];                                       /* 変換結果(1 文字分)一時格納バッファ */
-    unsigned long   lresultcount = 0;                               /* cbuffer の書き込み位置カウンタ */
+    unsigned long llength;
+    unsigned long lcount = 0;
+    unsigned char cbyte;
+    unsigned char ctemp[4];
+    unsigned long lresultcount = 0;
 
-    llength = (unsigned long)strlen(csource);                       /* csource の文字サイズを得る */
-    if(!llength) { return lresultcount; }                           /* csource が 0 文字の場合、関数を抜ける */
-    if(lbuffersize < (llength * 3 + 1)) { return lresultcount; }    /* バッファサイズが足りない場合、関数を抜ける */
+    llength = (unsigned long)strlen(csource);
+    if(!llength) { return lresultcount; }
+    if(lbuffersize < (llength * 3 + 1)) { return lresultcount; }
 
     while(1) {
-        cbyte = *(csource + lcount);                                /* 1 バイトを抜き出す */
+        cbyte = *(csource + lcount);
         if( ((cbyte >= 0x81) && (cbyte <= 0x9F)) ||
-                ((cbyte >= 0xE0) && (cbyte <= 0xEF)) ) {                /* Shift-JIS 2 バイト文字だった場合 */
+                ((cbyte >= 0xE0) && (cbyte <= 0xEF)) ) {            /* Shift-JIS 2 バイト文字だった場合 */
             sprintf(ctemp, "%%%02X", cbyte);                        /* URL エンコード(上位バイト) */
-            strncpy(cbuffer + lresultcount, ctemp, 4);              /* cbuffer にコピー */
-            lcount++;                                               /* 読み込みカウンタをインクリメント */
-            lresultcount += 3;                                      /* 書き込みカウンタを 3 増やす */
+            strncpy(cbuffer + lresultcount, ctemp, 4);
+            lcount++;
+            lresultcount += 3;
             if(lcount == llength) { break; }                        /* 文字列の終端に達した場合、ループを抜ける */
             sprintf(ctemp, "%%%02X", *(csource + lcount));          /* URL エンコード(下位バイト) */
-            strncpy(cbuffer + lresultcount, ctemp, 4);              /* cbuffer にコピー */
-            lcount++;                                               /* 読み込みカウンタをインクリメント */
-            lresultcount += 3;                                      /* 書き込みカウンタを 3 増やす */
+            strncpy(cbuffer + lresultcount, ctemp, 4);
+            lcount++;
+            lresultcount += 3;
         } else if(cbyte == 0x20) {                                  /* 1 バイト半角スペース(" ")だった場合 */
-            strncpy(cbuffer + lresultcount, "+", 2);                /* "+" を cbuffer にコピー */
-            lcount++;                                               /* 読み込みカウンタをインクリメント */
-            lresultcount++;                                         /* 書き込みカウンタをインクリメント */
+            strncpy(cbuffer + lresultcount, "+", 2);
+            lcount++;
+            lresultcount++;
         } else if( ((cbyte >= 0x40) && (cbyte <= 0x5A)) ||          /* @A-Z */
-                ((cbyte >= 0x61) && (cbyte <= 0x7A)) ||          /* a-z */
-                ((cbyte >= 0x30) && (cbyte <= 0x39)) ||          /* 0-9 */
-                (cbyte == 0x2A) ||                               /* "*" */
-                (cbyte == 0x2D) ||                               /* "-" */
-                (cbyte == 0x2E) ||                               /* "." */
-                (cbyte == 0x5F) ) {                              /* "_" */ /* 無変換文字だった場合 */
-            strncpy(cbuffer + lresultcount, csource + lcount, 2);   /* そのまま cbuffer にコピー */
-            lcount++;                                               /* 読み込みカウンタをインクリメント */
-            lresultcount++;                                         /* 書き込みカウンタをインクリメント */
+                ((cbyte >= 0x61) && (cbyte <= 0x7A)) ||             /* a-z */
+                ((cbyte >= 0x30) && (cbyte <= 0x39)) ||             /* 0-9 */
+                (cbyte == 0x2A) ||                                  /* "*" */
+                (cbyte == 0x2D) ||                                  /* "-" */
+                (cbyte == 0x2E) ||                                  /* "." */
+                (cbyte == 0x5F) ) {                                 /* "_" */ /* 無変換文字だった場合 */
+            strncpy(cbuffer + lresultcount, csource + lcount, 2);
+            lcount++;
+            lresultcount++;
         } else {                                                    /* その他の文字の場合 */
             sprintf(ctemp, "%%%02X", cbyte);                        /* URL エンコード */
-            strncpy(cbuffer + lresultcount, ctemp, 4);              /* cbuffer にコピー */
-            lcount++;                                               /* 読み込みカウンタをインクリメント */
-            lresultcount += 3;                                      /* 書き込みカウンタを 3 増やす */
+            strncpy(cbuffer + lresultcount, ctemp, 4);
+            lcount++;
+            lresultcount += 3;
         }
-        if(lcount == llength) { break; }                            /* 文字列の終端に達した場合、ループを抜ける */
+        if(lcount == llength) { break; }
     }
     return lresultcount;                                            /* cbuffer に書き込んだ文字列のサイズを返す */
 }

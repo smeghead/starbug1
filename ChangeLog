@@ -1,3 +1,7 @@
+2008-04-28  smeghead <smeghead@users.sourceforge.jp>
+
+    * free忘れの部分を修正した。list_freeなど。
+
 2008-04-26  smeghead <smeghead@users.sourceforge.jp>
 
     * 0.3.1-beta リリース

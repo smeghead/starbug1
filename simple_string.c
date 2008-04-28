@@ -1,27 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "data.h"
+#include "util.h"
 #include "simple_string.h"
 
 #define STRING_DEFAULT_SIZE 1024
 
-static void* xalloc(size_t size)
-{
-    void* p = calloc(1, size);
-    if (!p) {
-        fprintf(stderr, "memory error.");
-        exit(-1);
-    }
-    return p;
-}
-static void xfree(void* p)
-{
-    free(p);
-}
-
 String* string_new(size_t block_size)
 {
-    String* str = xalloc(sizeof(String));
+    String* str;
+    d("string size: %d\n", sizeof(String));
+    str = xalloc(sizeof(String));
     if (block_size == 0) {
         str->block_size = STRING_DEFAULT_SIZE;
     } else {

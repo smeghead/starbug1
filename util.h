@@ -18,6 +18,7 @@ typedef struct _action {
     struct _action* next;
 } action;
 void register_action_actions(char*, void func(void));
+void free_action_actions();
 void exec_action();
 void hm(char*);
 void hmail(char*);

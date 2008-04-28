@@ -47,4 +47,5 @@ void list_free(List* list)
         it = it->next;
         xfree(old_it);
     }
+    xfree(list);
 }

@@ -40,7 +40,6 @@ static void decord_csv_field(char* src, char* dist)
         *p_dist-- = '\0';
     }
     /* quoteモードで最後が " なら削除 */
-    d("qote %d\n", quote);
     if (quote && *p_dist == '"') {
         *p_dist = '\0';
     }
@@ -58,10 +57,8 @@ Csv* csv_new(char* content)
     line = list_new_element(csv->lines);
     list_alloc(line->fields, CsvField);
     mark = p;
-    d("csv_new begin\n");
     while (1) {
         int data_end = 0;
-        d("mode: %d c: %c %c\n", mode, *p, *(p + 1));
         if (mode == CSV_MODE_QUOTED_DATA) {
             if (*p == '"' && *(p + 1) == '"') {
                 /* escaped quote */
@@ -75,7 +72,6 @@ Csv* csv_new(char* content)
         }
         if (mode == CSV_MODE_DATA) {
             data_end = (*p == '\0' || *p == '\n' || *p == ',');
-            d("csv_new %d %d\n", *p, p - mark);
             if (data_end) {
                 CsvField* field = list_new_element(line->fields);
                 char buf[p - mark + 1];
@@ -85,7 +81,6 @@ Csv* csv_new(char* content)
                 field->data = string_new(0);
                 strncpy(buf, mark, p - mark);
                 decord_csv_field(buf, buf_decorded);
-                d("col: %s\n", buf);
                 string_append(field->data, buf_decorded);
                 list_add(line->fields, field);
                 field_count++;
@@ -94,7 +89,6 @@ Csv* csv_new(char* content)
             }
         }
         if (*p == '\n') {
-            d("next line!!!!\n");
             list_add(csv->lines, line);
             csv->line_count++;
             field_count = 0;
@@ -110,7 +104,6 @@ Csv* csv_new(char* content)
         }
         p++;
     }
-    d("csv_new end\n");
     return csv;
 }
 void csv_free(Csv* csv)

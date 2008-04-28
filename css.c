@@ -23,7 +23,7 @@ void css_save(char* filename, char* content)
 {
     FILE* out;
 
-    /* TODO ¥í¥Ã¥¯½èÍı */
+    /* TODO ãƒ­ãƒƒã‚¯å‡¦ç† */
     if ((out  = fopen(filename, "w")) == NULL)
         die("file open error.");
     fputs(content, out);

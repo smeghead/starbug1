@@ -98,9 +98,19 @@ enum LINE_MODE {
     LINE_MODE_NORMAL,
     LINE_MODE_PRE
 };
+Wiki* wiki_new()
+{
+    d("wiki size: %d\n", sizeof(Wiki));
+    return xalloc(sizeof(Wiki));
+}
+void wiki_free(Wiki* wiki)
+{
+    xfree(wiki->content);
+    xfree(wiki);
+}
 void wiki_out(char* page_name)
 {
-    Wiki* wiki_a = xalloc(sizeof(Wiki));
+    Wiki* wiki_a = wiki_new();
     char line[MAX_WIDTH];
     char* c;
     char* p;
@@ -156,25 +166,22 @@ void wiki_out(char* page_name)
         }
     }
     buf_flush();
-    xfree(wiki_a->content);
-    xfree(wiki_a);
+    wiki_free(wiki_a);
 }
 void wiki_content_out(char* page_name)
 {
-    Wiki* wiki_a = xalloc(sizeof(Wiki));
+    Wiki* wiki_a = wiki_new();
     wiki_a = db_get_newest_wiki(page_name, wiki_a);
     h(wiki_a->content);
-    xfree(wiki_a->content);
-    xfree(wiki_a);
+    wiki_free(wiki_a);
 }
 void wiki_save(char* page_name, char* content)
 {
-    Wiki* wiki_a = xalloc(sizeof(Wiki));
+    Wiki* wiki_a = wiki_new();
     wiki_a->content = xalloc(sizeof(char) * strlen(content) + 1);
     strcpy(wiki_a->name, page_name);
     strcpy(wiki_a->content, content);
     db_register_wiki(wiki_a);
-    xfree(wiki_a->content);
-    xfree(wiki_a);
+    wiki_free(wiki_a);
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

@@ -152,6 +152,7 @@ void output_footer()
 int cgiMain() {
     register_actions();
     exec_action();
+    free_action_actions();
     return 0;
 }
 void output_navigater(SearchResult* result, char* query_string)
@@ -304,6 +305,7 @@ void output_ticket_table_body(SearchResult* result, List* element_types)
         o("\t\t<td class=\"lastregisterdate\">"); h(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE)); o("&nbsp;</td>\n");
         o("\t\t<td class=\"passed\">"); h(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE_PASSED)); o("&nbsp;</td>\n");
         o("\t</tr>\n");
+        free_element_list(elements_a);
     }
 }
 void output_ticket_table_status_index(SearchResult* result, List* element_types)
@@ -729,6 +731,7 @@ void output_ticket_information_4_csv_report(SearchResult* result, List* element_
         csv_field(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE)); o(",");
         csv_field(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE_PASSED));
         o("\r\n");
+        free_element_list(elements_a);
     }
 }
 /**
@@ -1194,7 +1197,7 @@ void ticket_action()
             "<div id=\"ticket_history\">\n"
             "<h3>チケット履歴</h3>\n"
             "<div class=\"description\">チケットの履歴情報です。</div>\n");
-    list_free(elements_a);
+    free_element_list(elements_a);
     /* 履歴の表示 */
     for (i = 0; message_ids_a[i] != 0; i++) {
         List* previous = last_elements;
@@ -1252,6 +1255,7 @@ void ticket_action()
             o(      "&nbsp;</td>\n"
                     "\t</tr>\n");
         }
+        free_element_list(elements_a);
         o("</table>\n");
     }
     xfree(message_ids_a);
@@ -1485,10 +1489,10 @@ void register_submit_action()
             complete_message = "返信しました。";
         xfree(project_a);
         list_free(element_types_a);
-        free_element_list(elements_a);
         xfree(ticket_a);
     }
     db_finish();
+    free_element_list(elements_a);
 
     redirect_with_hook_messages("/list", complete_message, hook->results);
     if (hook) clean_hook(hook);
@@ -1570,12 +1574,8 @@ void register_at_once_confirm_action()
     cgiCookieString(COOKIE_SENDER, sender, DEFAULT_LENGTH);
 
     db_init();
-    d("start\n");
     cgiFormString("csvdata", content_a, VALUE_LENGTH);
-    d("content_a: %s\n", content_a);
     csv_a = csv_new(content_a);
-
-
 
     project_a = db_get_project(project_a);
     output_header(project_a, "チケット一括登録確認", "register_at_once_submit.js", NAVI_REGISTER_AT_ONCE);
@@ -1644,13 +1644,11 @@ void register_at_once_confirm_action()
             CsvLine* line = it_line->element;
             Iterator* it_fields;
             int fields_count = 0, i;
-            d("csv field size %d\n", line->fields->size);
             o("\t<tr>\n");
             o("\t\t<th>%d", (row++) + 1);
             o("</th>\n");
             foreach (it_fields, line->fields) {
                 CsvField* field = it_fields->element;
-                d("csv col %s\n", string_rawstr(field->data));
                 o("\t\t<td>\n");
                 o("\t\t\t<textarea name=\"csvfield%d.%d\" row=\"5\" col=\"5\">", line_count, fields_count); h(string_rawstr(field->data)); o("</textarea>\n");
                 o("\t\t</td>\n");

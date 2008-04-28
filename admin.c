@@ -118,6 +118,7 @@ void output_field_information_js() {
 int cgiMain() {
     register_actions();
     exec_action();
+    free_action_actions();
     return 0;
 }
 /**
@@ -136,7 +137,7 @@ void menu_action()
     if (strlen(message) > 0) {
         o("<div class=\"complete_message\">"); h(message); o("&nbsp;</div>\n");
     }
-    o("<h2>%s 管理ツール</h2>", project_a->name);
+    o("<h2>"); h(project_a->name); o(" 管理ツール</h2>");
     xfree(project_a);
     o("<div id=\"admin_menu\">\n");
     o("\t<dl>\n");
