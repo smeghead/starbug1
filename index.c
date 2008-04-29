@@ -1246,7 +1246,8 @@ void ticket_action()
             o(      "&nbsp;</td>\n"
                     "\t</tr>\n");
         }
-        free_element_list(elements_a);
+        if (message_ids_a[i + 1] != 0) /* 最後の要素は、last_elementsとして返信フォーム表示後に、freeするのでここではfreeしない。 */
+            free_element_list(elements_a);
         o("</table>\n");
     }
     xfree(message_ids_a);
@@ -1275,16 +1276,13 @@ void ticket_action()
             o("\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
         if (et->type == ELEM_TYPE_DATE)
             o("\t\t<div id=\"field%d.datefield\" class=\"error\"></div>\n", et->id);
-        if (last_elements != NULL) {
-            output_form_element(last_elements, et);
-        } else {
-            output_form_element(NULL, et);
-        }
+        output_form_element(last_elements, et);
         o("\t\t<div class=\"description\">");h(et->description);o("&nbsp;</div>\n");
         o("\t</td>\n");
         o("\t</tr>\n");
     }
     o(      "</table>\n");
+    free_element_list(last_elements);
     o(      "<h4>返信情報の追加</h4>\n"
             "<div class=\"description\">返信情報を記入してください。</div>\n"
             "<table summary=\"input table\">\n");
