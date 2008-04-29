@@ -1,3 +1,8 @@
+2008-04-29  smeghead <smeghead@users.sourceforge.jp>
+
+    * 文字列用char配列バッファの長さを適切な長さに変更。数値文字列用、日付用など。
+    * フォーム部品に適切なmaxlengthを指定した。
+
 2008-04-28  smeghead <smeghead@users.sourceforge.jp>
 
     * free忘れの部分を修正した。list_freeなど。

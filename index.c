@@ -341,8 +341,8 @@ void output_states(List* states)
     }
     o("\t\t<li>\n");
     o("\t\t\t<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
-    o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" maxlength=\"1000\" />\n"
-      "\t\t\t\t<input type=\"submit\" class=\"button\" value=\"ID指定で表示\" />\n"
+    o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" maxlength=\"%d\" />\n", NUM_LENGTH - 1);
+    o("\t\t\t\t<input type=\"submit\" class=\"button\" value=\"ID指定で表示\" />\n"
       "\t\t\t</form>\n"
       "\t\t</li>\n"
       "\t</ul>\n"
@@ -357,7 +357,7 @@ void list_action()
 {
     List* element_types_a;
     List* conditions_a = NULL;
-    Project* project_a = xalloc(sizeof(Project));
+    Project* project_a = project_new();
     List* states_a;
     Iterator* it;
     List* messages_a;
@@ -386,7 +386,7 @@ void list_action()
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_4_list(element_types_a);
     o("<h2>"); h(project_a->name); o(" - 状態別チケット一覧</h2>\n");
-    xfree(project_a);
+    project_free(project_a);
     list_alloc(states_a, State);
     states_a = db_get_states(states_a);
     output_states(states_a);
@@ -409,7 +409,7 @@ void list_action()
       "<br clear=\"all\" />\n");
     foreach (it, states_a) {
         State* s = it->element;
-        SearchResult* result_a = xalloc(sizeof(SearchResult));
+        SearchResult* result_a = search_result_new();
 
         /* 検索 */
         list_alloc(conditions_a, Condition);
@@ -436,8 +436,7 @@ void list_action()
             u(s->name);
             o("\">状態が"); h(s->name); o("である全てのチケットを表示する</a></div>\n");
         }
-        list_free(result_a->messages);
-        xfree(result_a);
+        search_result_free(result_a);
         o("</div>\n");
         fflush(cgiOut);
     }
@@ -480,9 +479,7 @@ List* create_conditions(List* conditions, List* element_types)
                 cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                 if (strlen(value) > 0) {
                     c = list_new_element(conditions);
-                    c->element_type_id = et->id;
-                    c->condition_type = CONDITION_TYPE_DATE_FROM;
-                    strcpy(c->value, value);
+                    set_condition_values(c, et->id, CONDITION_TYPE_DATE_FROM, value);
                     list_add(conditions, c);
                 }
                 /* 日付 to */
@@ -490,9 +487,7 @@ List* create_conditions(List* conditions, List* element_types)
                 cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                 if (strlen(value) > 0) {
                     c = list_new_element(conditions);
-                    c->element_type_id = et->id;
-                    c->condition_type = CONDITION_TYPE_DATE_TO;
-                    strcpy(c->value, value);
+                    set_condition_values(c, et->id, CONDITION_TYPE_DATE_TO, value);
                     list_add(conditions, c);
                 }
                 break;
@@ -501,9 +496,7 @@ List* create_conditions(List* conditions, List* element_types)
                 cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                 if (strlen(value) == 0) continue;
                 c = list_new_element(conditions);
-                c->element_type_id = et->id;
-                c->condition_type = CONDITION_TYPE_NORMAL;
-                strcpy(c->value, value);
+                set_condition_values(c, et->id, CONDITION_TYPE_NORMAL, value);
                 list_add(conditions, c);
         }
     }
@@ -512,18 +505,14 @@ List* create_conditions(List* conditions, List* element_types)
     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
     if (strlen(value)) {
         c = list_new_element(conditions);
-        c->element_type_id = ELEM_ID_REGISTERDATE;
-        c->condition_type = CONDITION_TYPE_DATE_FROM;
-        strcpy(c->value, value);
+        set_condition_values(c, ELEM_ID_REGISTERDATE, CONDITION_TYPE_DATE_FROM, value);
         list_add(conditions, c);
     }
     sprintf(name, "registerdate.to");
     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
     if (strlen(value)) {
         c = list_new_element(conditions);
-        c->element_type_id = ELEM_ID_REGISTERDATE;
-        c->condition_type = CONDITION_TYPE_DATE_TO;
-        strcpy(c->value, value);
+        set_condition_values(c, ELEM_ID_REGISTERDATE, CONDITION_TYPE_DATE_TO, value);
         list_add(conditions, c);
     }
     /* 更新日時 */
@@ -531,18 +520,14 @@ List* create_conditions(List* conditions, List* element_types)
     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
     if (strlen(value)) {
         c = list_new_element(conditions);
-        c->element_type_id = ELEM_ID_LASTREGISTERDATE;
-        c->condition_type = CONDITION_TYPE_DATE_FROM;
-        strcpy(c->value, value);
+        set_condition_values(c, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_FROM, value);
         list_add(conditions, c);
     }
     sprintf(name, "lastregisterdate.to");
     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
     if (strlen(value)) {
         c = list_new_element(conditions);
-        c->element_type_id = ELEM_ID_LASTREGISTERDATE;
-        c->condition_type = CONDITION_TYPE_DATE_TO;
-        strcpy(c->value, value);
+        set_condition_values(c, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_TO, value);
         list_add(conditions, c);
     }
     return conditions;
@@ -552,24 +537,24 @@ List* create_conditions(List* conditions, List* element_types)
  */
 void search_actoin()
 {
-    SearchResult* result_a = xalloc(sizeof(SearchResult));
+    SearchResult* result_a = search_result_new();
     List* element_types_a;
     List* conditions_a = NULL;
     Condition* sort_a = NULL;
-    Project* project_a = xalloc(sizeof(Project));
+    Project* project_a = project_new();
     List* states_a;
     Iterator* it;
-    char id[DEFAULT_LENGTH];
+    char id[NUM_LENGTH];
     char q[DEFAULT_LENGTH];
-    char p[DEFAULT_LENGTH];
-    char registerdate_from[DEFAULT_LENGTH];
-    char registerdate_to[DEFAULT_LENGTH];
-    char updatedate_from[DEFAULT_LENGTH];
-    char updatedate_to[DEFAULT_LENGTH];
+    char p[NUM_LENGTH];
+    char registerdate_from[DATE_LENGTH];
+    char registerdate_to[DATE_LENGTH];
+    char updatedate_from[DATE_LENGTH];
+    char updatedate_to[DATE_LENGTH];
     List* messages_a;
     int col_index;
 
-    cgiFormStringNoNewlines("id", id, DEFAULT_LENGTH);
+    cgiFormStringNoNewlines("id", id, NUM_LENGTH);
     if (strlen(id) > 0) {
         char uri[DEFAULT_LENGTH];
         sprintf(uri, "/ticket/%s", id);
@@ -583,14 +568,14 @@ void search_actoin()
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_4_list(element_types_a);
     o("<h2>"); h(project_a->name); o(" - チケット検索</h2>\n");
-    xfree(project_a);
+    project_free(project_a);
     /* 検索 */
     list_alloc(conditions_a, Condition);
     conditions_a = create_conditions(conditions_a, element_types_a);
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
     sort_a = xalloc(sizeof(Condition));
     sort_a = create_sort_condition(sort_a);
-    cgiFormStringNoNewlines("p", p, DEFAULT_LENGTH);
+    cgiFormStringNoNewlines("p", p, NUM_LENGTH);
     list_alloc(messages_a, Message);
     result_a = db_search_tickets(conditions_a, q, sort_a, atoi(p), messages_a, result_a);
     xfree(conditions_a);
@@ -604,36 +589,36 @@ void search_actoin()
       "<div class=\"description\">検索条件を入力して検索ボタンを押してください。</div>\n");
     o("<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
     o(      "<table summary=\"condition table\">\n");
-    cgiFormStringNoNewlines("registerdate.from", registerdate_from, DEFAULT_LENGTH);
-    cgiFormStringNoNewlines("registerdate.to", registerdate_to, DEFAULT_LENGTH);
-    cgiFormStringNoNewlines("lastregisterdate.from", updatedate_from, DEFAULT_LENGTH);
-    cgiFormStringNoNewlines("lastregisterdate.to", updatedate_to, DEFAULT_LENGTH);
+    cgiFormStringNoNewlines("registerdate.from", registerdate_from, DATE_LENGTH);
+    cgiFormStringNoNewlines("registerdate.to", registerdate_to, DATE_LENGTH);
+    cgiFormStringNoNewlines("lastregisterdate.from", updatedate_from, DATE_LENGTH);
+    cgiFormStringNoNewlines("lastregisterdate.to", updatedate_to, DATE_LENGTH);
     o("<tr>\n"
       "\t<th>キーワード検索</th>\n"
       "\t<td>\n"
-      "\t\t<input type=\"text\" class=\"conditionelement\" name=\"q\" value=\""); v(q); o("\" maxlength=\"1000\" />\n"
-      "\t\t<div class=\"description\">履歴も含めて全ての項目から検索を行ないます。</div>\n"
+      "\t\t<input type=\"text\" class=\"conditionelement\" name=\"q\" value=\""); v(q); o("\" maxlength=\"%d\" />\n", DEFAULT_LENGTH - 1);
+    o("\t\t<div class=\"description\">履歴も含めて全ての項目から検索を行ないます。</div>\n"
       "\t</td>\n"
       "\t<th>投稿日時</th>\n"
       "\t<td>\n"
       "\t\t<span>\n"
-      "\t\t<input type=\"text\" class=\"calendar\" name=\"registerdate.from\" value=\""); v(registerdate_from); o("\" maxlength=\"20\" />\n"
-      "\t\t</span>\n"
+      "\t\t<input type=\"text\" class=\"calendar\" name=\"registerdate.from\" value=\""); v(registerdate_from); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
+    o("\t\t</span>\n"
       "〜\n"
       "\t\t<span>\n"
-      "\t\t<input type=\"text\" class=\"calendar\" name=\"registerdate.to\" value=\""); v(registerdate_to); o("\" maxlength=\"20\" />\n"
-      "\t\t</span>\n"
+      "\t\t<input type=\"text\" class=\"calendar\" name=\"registerdate.to\" value=\""); v(registerdate_to); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
+    o("\t\t</span>\n"
       "\t\t<div class=\"description\">yyyy-mm-dd形式で入力してください。</div>\n"
       "\t</td>\n"
       "\t<th>更新日時</th>\n"
       "\t<td>\n"
       "\t\t<span>\n"
-      "\t\t<input type=\"text\" class=\"calendar\" name=\"lastregisterdate.from\" value=\""); v(updatedate_from); o("\" maxlength=\"20\" />\n"
-      "\t\t</span>\n"
+      "\t\t<input type=\"text\" class=\"calendar\" name=\"lastregisterdate.from\" value=\""); v(updatedate_from); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
+    o("\t\t</span>\n"
       "〜\n"
       "\t\t<span>\n"
-      "\t\t<input type=\"text\" class=\"calendar\" name=\"lastregisterdate.to\" value=\""); v(updatedate_to); o("\" maxlength=\"20\" />\n"
-      "\t\t</span>\n"
+      "\t\t<input type=\"text\" class=\"calendar\" name=\"lastregisterdate.to\" value=\""); v(updatedate_to); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
+    o("\t\t</span>\n"
       "\t\t<div class=\"description\">yyyy-mm-dd形式で入力してください。</div>\n"
       "\t</td>\n"
       "</tr>\n");
@@ -690,9 +675,8 @@ void search_actoin()
     o("</div>\n");
     output_footer();
     db_finish();
-    list_free(result_a->messages);
     list_free(element_types_a);
-    xfree(result_a);
+    search_result_free(result_a);
 }
 void output_ticket_information_4_csv_report_header(List* element_types)
 {
@@ -717,7 +701,7 @@ void output_ticket_information_4_csv_report(SearchResult* result, List* element_
     foreach (it_msg, result->messages) {
         Message* message = it_msg->element;
         List* elements_a;
-        char id_str[DEFAULT_LENGTH];
+        char id_str[NUM_LENGTH];
         sprintf(id_str, "%d", message->id);
         list_alloc(elements_a, Element);
         elements_a = db_get_last_elements(message->id, elements_a);
@@ -739,11 +723,11 @@ void output_ticket_information_4_csv_report(SearchResult* result, List* element_
  */
 void report_csv_download_action()
 {
-    SearchResult* result_a = xalloc(sizeof(SearchResult));
+    SearchResult* result_a = search_result_new();
     List* element_types_a;
     List* conditions_a = NULL;
     Condition* sort_a = NULL;
-    Project* project_a = xalloc(sizeof(Project));
+    Project* project_a = project_new();
     List* states_a;
     char q[DEFAULT_LENGTH];
     List* messages_a;
@@ -770,20 +754,19 @@ void report_csv_download_action()
     cgiHeaderContentType("text/x-csv; charset=Windows-31J;");
 
     csv_field(project_a->name); o("\r\n");
-    xfree(project_a);
+    project_free(project_a);
     output_ticket_information_4_csv_report_header(element_types_a);
     output_ticket_information_4_csv_report(result_a, element_types_a);
     db_finish();
-    list_free(result_a->messages);
     list_free(element_types_a);
-    xfree(result_a);
+    search_result_free(result_a);
 }
 /**
  * form要素を表示する。
  */
 void output_form_element_4_condition(ElementType* et)
 {
-    char id[DEFAULT_LENGTH];
+    char id[NUM_LENGTH];
     List* items_a;
     Iterator* it;
     char name[DEFAULT_LENGTH];
@@ -802,7 +785,7 @@ void output_form_element_4_condition(ElementType* et)
             h(id);
             o("\" value=\"");
             v(value);
-            o("\" />\n");
+            o("\" maxlength=\"%d\"/>\n", DEFAULT_LENGTH - 1);
             break;
         case ELEM_TYPE_LIST_SINGLE:
         case ELEM_TYPE_LIST_MULTI:
@@ -839,7 +822,7 @@ void output_form_element_4_condition(ElementType* et)
             h(id);
             o("_from\" value=\"");
             v(value);
-            o("\" maxlength=\"10\" />\n");
+            o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
             o("</span>\n");
             o("〜\n");
             sprintf(name, "field%d_to", et->id);
@@ -851,7 +834,7 @@ void output_form_element_4_condition(ElementType* et)
             h(id);
             o("_to\" value=\"");
             v(value);
-            o("\" maxlength=\"10\" />\n");
+            o("\" maxlength=\"%d\" />\n", DATE_LENGTH -1);
             o("</span>\n");
             break;
     }
@@ -864,7 +847,6 @@ void output_form_element(List* elements, ElementType* et)
     char* value = "";
     List* items_a;
     Iterator* it;
-    int list_count = 0;
 
     if (elements != NULL) {
         value = get_element_value(elements, et);
@@ -886,7 +868,7 @@ void output_form_element(List* elements, ElementType* et)
             o("<input type=\"text\" class=\"element\" id=\"field%d\" name=\"field%d\" value=\"",
                     et->id, et->id);
             v(value);
-            o("\" maxlength=\"1000\" />\n");
+            o("\" maxlength=\"%d\" />\n", DEFAULT_LENGTH - 1);
             break;
         case ELEM_TYPE_TEXTAREA:
             o("<textarea id=\"field%d\" name=\"field%d\" rows=\"3\" cols=\"10\">",
@@ -926,9 +908,7 @@ void output_form_element(List* elements, ElementType* et)
         case ELEM_TYPE_LIST_MULTI:
             list_alloc(items_a, ListItem);
             items_a = db_get_list_item(et->id, items_a);
-            /* リストの要素数をカウントする */
-            foreach (it, items_a) list_count++;
-            o("<select size=\"%d\" id=\"field%d", list_count + 1, et->id);
+            o("<select size=\"%d\" id=\"field%d", items_a->size + 1, et->id);
             o("\" name=\"field%d\" multiple=\"multiple\">\n", et->id);
 
             o("<option value=\"\">&nbsp;</option>\n");
@@ -957,9 +937,9 @@ void output_form_element(List* elements, ElementType* et)
             o("<input type=\"text\" class=\"calendar\" id=\"field%d\" name=\"field%d\" value=\"\n",
                     et->id, et->id);
             v(value);
-            o("\" maxlength=\"10\"/>\n"
+            o("\" maxlength=\"%d\"/>\n"
               "</span>\n"
-              "<div class=\"description\">yyyy-mm-dd形式で入力してください。</div>\n");
+              "<div class=\"description\">yyyy-mm-dd形式で入力してください。</div>\n", DATE_LENGTH - 1);
             break;
     }
     switch (et->type) {
@@ -967,8 +947,8 @@ void output_form_element(List* elements, ElementType* et)
         case ELEM_TYPE_LIST_MULTI:
             if (et->auto_add_item) {
                 /* 新規項目を設定可能である場合、テキストボックスを表示する。 */
-                o("<input type=\"text\" class=\"element_new_item\" id=\"field%d.new_item\" name=\"field%d.new_item\" maxlength=\"1000\" />\n",
-                    et->id, et->id);
+                o("<input type=\"text\" class=\"element_new_item\" id=\"field%d.new_item\" name=\"field%d.new_item\" maxlength=\"%d\" />\n",
+                    et->id, et->id, DEFAULT_LENGTH -1 );
                 o("選択肢を追加する場合はテキストボックスに入力してください。\n");
             }
             break;
@@ -1020,7 +1000,7 @@ void output_field_information_js(List* element_types) {
  */
 void register_action()
 {
-    Project* project_a = xalloc(sizeof(Project));
+    Project* project_a = project_new();
     List* states_a;
     char sender[DEFAULT_LENGTH];
     cgiCookieString(COOKIE_SENDER, sender, DEFAULT_LENGTH);
@@ -1040,7 +1020,7 @@ void register_action()
             "<noscript><div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div></noscript>\n");
     o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName);
     o(      "<table summary=\"input infomation\">\n");
-    xfree(project_a);
+    project_free(project_a);
     {
         List* element_types_a;
         Iterator* it;
@@ -1048,10 +1028,21 @@ void register_action()
         element_types_a = db_get_element_types_all(element_types_a);
         foreach (it, element_types_a) {
             ElementType* et = it->element;
+            char class_name[20] = "";
             /* 返信専用属性は表示しない。 */
             if (et->reply_property == 1) continue;
             o("\t<tr>\n");
-            o("\t\t<th %s>", et->required ? "class=\"required\"" : "");
+            if (et->required)
+                strcat(class_name, "required");
+            if (et->ticket_property)
+                strcat(class_name, " ticket_property");
+            if (class_name) {
+                char class_attr[40];
+                sprintf(class_attr, "class=\"%s\"", class_name);
+                o("\t\t<th %s>", class_attr);
+            } else {
+                o("\t\t<th>");
+            }
             h(et->name);
             if (et->required) {
                 o("<span class=\"required\">※</span>");
@@ -1097,7 +1088,7 @@ void ticket_action()
     List* element_types_a;
     Iterator* it;
     int iid, *message_ids_a, i;
-    Project* project_a = xalloc(sizeof(Project));
+    Project* project_a = project_new();
     char sender[DEFAULT_LENGTH];
     cgiCookieString(COOKIE_SENDER, sender, DEFAULT_LENGTH);
 
@@ -1125,7 +1116,7 @@ void ticket_action()
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_all(element_types_a);
     o("<h2 id=\"subject\">"); h(project_a->name); o(" - ");
-    xfree(project_a);
+    project_free(project_a);
     h(string_rawstr(title_a));
     string_free(title_a);
     o(" &nbsp;</h2>\n");
@@ -1275,7 +1266,7 @@ void ticket_action()
         ElementType* et = it->element;
         if (et->ticket_property == 0) continue;
         o("\t<tr>\n");
-        o("\t\t<th %s>", et->required ? "class=\"required\"" : "");
+        o("\t\t<th %s>", et->required ? "class=\"required ticket_property\"" : "class=\"ticket_property\"");
         h(et->name);
         if (et->required)
             o("<span class=\"required\">※</span>");
@@ -1285,10 +1276,7 @@ void ticket_action()
         if (et->type == ELEM_TYPE_DATE)
             o("\t\t<div id=\"field%d.datefield\" class=\"error\"></div>\n", et->id);
         if (last_elements != NULL) {
-            if (et->ticket_property)
-                output_form_element(last_elements, et);
-            else
-                output_form_element(NULL, et);
+            output_form_element(last_elements, et);
         } else {
             output_form_element(NULL, et);
         }
@@ -1305,26 +1293,15 @@ void ticket_action()
         if (et->ticket_property == 1) continue;
         o("\t<tr>\n");
         o("\t\t<th %s>", et->required ? "class=\"required\"" : "");
-        if (et->ticket_property)
-            o("&nbsp;<span class=\"ticket_property\" title=\"チケット属性\">");
         h(et->name);
         if (et->required)
             o("<span class=\"required\">※</span>");
-        if (et->ticket_property)
-            o("</span>");
         o("</th>\n\t\t<td>");
         if (et->required)
             o("\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
         if (et->type == ELEM_TYPE_DATE)
             o("\t\t<div id=\"field%d.datefield\" class=\"error\"></div>\n", et->id);
-        if (last_elements != NULL) {
-            if (et->ticket_property)
-                output_form_element(last_elements, et);
-            else
-                output_form_element(NULL, et);
-        } else {
-            output_form_element(NULL, et);
-        }
+        output_form_element(NULL, et);
         o("\t\t<div class=\"description\">");h(et->description);o("&nbsp;</div>\n");
         o("\t</td>\n");
         o("\t</tr>\n");
@@ -1362,12 +1339,12 @@ void register_list_item(int id, char* name)
  */
 void register_submit_action()
 {
-    Project* project_a = xalloc(sizeof(Project));
+    Project* project_a = project_new();
     List* element_types_a;
     Iterator* it;
     List* elements_a = NULL;
     Message* ticket_a;
-    char ticket_id[DEFAULT_LENGTH];
+    char ticket_id[NUM_LENGTH];
     ModeType mode = get_mode();
     char** multi;
     char save2cookie[2];
@@ -1382,7 +1359,7 @@ void register_submit_action()
     project_a = db_get_project(project_a);
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_all(element_types_a);
-    cgiFormStringNoNewlines("ticket_id", ticket_id, DEFAULT_LENGTH);
+    cgiFormStringNoNewlines("ticket_id", ticket_id, NUM_LENGTH);
     if (mode == MODE_REGISTER)
         ticket_a->id = -1;
     else
@@ -1487,7 +1464,7 @@ void register_submit_action()
             complete_message = "登録しました。";
         else if (mode == MODE_REPLY)
             complete_message = "返信しました。";
-        xfree(project_a);
+        project_free(project_a);
         list_free(element_types_a);
         xfree(ticket_a);
     }
@@ -1505,14 +1482,14 @@ file_size_error:
     o("<h1>エラー発生</h1>\n"
       "<div class=\"message\">ファイルサイズが大きすぎます。%dkbより大きいファイルは登録できません。ブラウザの戻るボタンで戻ってください。</div>\n", MAX_FILE_SIZE);
     output_footer();
-    xfree(project_a);
+    project_free(project_a);
 }
 /**
  * 一括登録画面を表示するaction。
  */
 void register_at_once_action()
 {
-    Project* project_a = xalloc(sizeof(Project));
+    Project* project_a = project_new();
     List* states_a;
     char sender[DEFAULT_LENGTH];
     cgiCookieString(COOKIE_SENDER, sender, DEFAULT_LENGTH);
@@ -1538,7 +1515,7 @@ void register_at_once_action()
             "</div>\n"
             "<noscript><div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div></noscript>\n");
     o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/register_at_once_confirm\" method=\"post\">\n", cgiScriptName);
-    xfree(project_a);
+    project_free(project_a);
     {
         /* 一括用、CSV形式フィールド */
         o("<table summary=\"input infomation\">\n"
@@ -1566,7 +1543,7 @@ void register_at_once_confirm_action()
 {
     int i;
     int row = 0;
-    Project* project_a = xalloc(sizeof(Project));
+    Project* project_a = project_new();
     List* states_a;
     Csv* csv_a;
     char sender[DEFAULT_LENGTH];
@@ -1591,7 +1568,7 @@ void register_at_once_confirm_action()
             "<noscript><div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div></noscript>\n");
     o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/register_at_once_submit\" method=\"post\">\n", cgiScriptName);
     o(      "<table summary=\"input infomation\">\n");
-    xfree(project_a);
+    project_free(project_a);
     {
         int line_count = 0;
         List* element_types_a;
@@ -1793,7 +1770,7 @@ void register_at_once_submit_action()
  */
 void top_action()
 {
-    Project* project_a = xalloc(sizeof(Project));
+    Project* project_a = project_new();
     List* tickets_a;
     List* states_a;
     Iterator* it;
@@ -1853,14 +1830,14 @@ void top_action()
     o(      "<div id=\"top_id_search\">\n"
             "<h4>ID検索</h4>\n"
             "\t<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
-    o(      "\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" maxlength=\"1000\" />\n"
-            "\t\t<input type=\"submit\" class=\"button\" value=\"表示\" />\n"
+    o(      "\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" maxlength=\"%d\" />\n", DEFAULT_LENGTH - 1);
+    o(      "\t\t<input type=\"submit\" class=\"button\" value=\"表示\" />\n"
             "\t</form>\n"
             "</div>\n"
             "</div>\n"
             "<div id=\"main\">\n"
             "<h2>");h(project_a->name);o("&nbsp;</h2>\n");
-    xfree(project_a);
+    project_free(project_a);
     o(      "<div id=\"main_body\">\n"
             "<div class=\"top_edit\"><a href=\"%s/edit_top\">トップページの編集</a></div>\n", cgiScriptName);
     wiki_out("top");
@@ -1874,7 +1851,7 @@ void rss_action()
 {
     List* tickets_a;
     Iterator* it;
-    Project* project_a = xalloc(sizeof(Project));
+    Project* project_a = project_new();
 
     db_init();
     project_a = db_get_project(project_a);
@@ -1928,7 +1905,7 @@ void rss_action()
                     "\t</item>\n");
         }
     }
-    xfree(project_a);
+    project_free(project_a);
     list_free(tickets_a);
     o(      "</rdf:RDF>\n");
     db_finish();
@@ -1945,7 +1922,7 @@ State* get_statictics(int element_type_id, List* states)
 }
 void statistics_action()
 {
-    Project* project_a = xalloc(sizeof(Project));
+    Project* project_a = project_new();
     List* element_types_a;
     Iterator* it;
     List* states_a;
@@ -1962,7 +1939,7 @@ void statistics_action()
     o(      "<div id=\"top\">\n"
             "<h3>統計情報</h3>\n"
             "\t<div class=\"description\">統計情報を表示します。</div>\n");
-    xfree(project_a);
+    project_free(project_a);
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_all(element_types_a);
     foreach (it, element_types_a) {
@@ -2024,7 +2001,7 @@ got_item:
 }
 void help_action()
 {
-    Project* project_a = xalloc(sizeof(Project));
+    Project* project_a = project_new();
     db_init();
     project_a = db_get_project(project_a);
     output_header(project_a, "ヘルプ", NULL, NAVI_HELP);
@@ -2032,17 +2009,17 @@ void help_action()
             "<div id=\"top\">\n");
     wiki_out("help");
     o(      "</div>\n");
-    xfree(project_a);
+    project_free(project_a);
     db_finish();
     output_footer();
 }
 void edit_top_action()
 {
-    Project* project_a = xalloc(sizeof(Project));
+    Project* project_a = project_new();
     db_init();
     project_a = db_get_project(project_a);
     output_header(project_a, "トップページの編集", "edit_top.js", NAVI_OTHER);
-    xfree(project_a);
+    project_free(project_a);
     o(      "<h2>トップページの編集</h2>\n"
             "<div id=\"top\">\n"
             "<h3>トップページの編集</h3>\n"

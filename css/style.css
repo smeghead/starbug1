@@ -8,6 +8,22 @@
 /* end of initialize rule */
 /* ---------------------- */
 
+a:link {
+    color: #0051E9;
+}
+
+a:visited {
+    color: #005585;
+}
+
+a:hover {
+    color: #80af00;
+}
+select:focus,
+input:focus,
+textarea:focus {
+    background-color: #ffffe0;
+}
 h1 {
     margin: 0px 0px 0px 0px;
     padding: 0px 0px 0px 0px;
@@ -124,18 +140,14 @@ input.number {
 }
 input.button {
     width: 100px;
-/*     background-color: #ddd; */
-/*     border: 1px solid #bbb; */
-/*     border-right-color: #333; */
-/*     border-bottom-color: #333; */
 }
 input:hover.button {
     cursor: pointer;
 }
 
 input:focus.button {
-    border-color: #000;
-    background-color: #ccc;
+    border-color: #000000;
+    background-color: #cccccc;
 }
 #mainmenu {
     width:100%;
@@ -162,12 +174,12 @@ input:focus.button {
     font-size: 110%;
     font-weight: bold;
     background-color: #d9d9d9;
-    border-bottom:1px solid gray;
+    border-bottom:1px solid #808080;
     white-space: nowrap;
 }
 #ticket_history td.title span.date {
     margin-left: 8px;
-    color: black;
+    color: #000000;
     font-weight: normal;
 }
 #ticket_history th {
@@ -201,6 +213,9 @@ div {
 #setting_form table th,
 #condition_form table th {
     background-color: #f0f8ff;
+}
+#input_form table th.ticket_property {
+    background-color: #FAFAE8;
 }
 #condition_form table div.description, 
 #setting_form table div.description, 
@@ -255,7 +270,7 @@ input.conditionelement {
 #top_state_index h4,
 #top_id_search h4 {
     background-color: #ff5500;
-    color: white;
+    color: #ffffff;
     margin: 0px;
     padding: 0px;
     text-align: center;
@@ -323,10 +338,10 @@ th.required {
     border-left-width: 3px;
 }
 span.required {
-    color: red;
+    color: #ff0000;
 }
 .error {
-    color: red;
+    color: #ff0000;
     font-weight: bold;
 }
 #state_index {
@@ -438,7 +453,7 @@ table.item_table th {
 }
 #menu a {
     background: #eee bottom right no-repeat;
-    color: black;
+    color: #000000;
     display: block;
     float: left;
     margin: 0;
@@ -447,11 +462,11 @@ table.item_table th {
 }
 #menu a.current {
     background: #666 bottom center no-repeat;
-    color: #fff;
+    color: #ffffff;
 }
 #menu a:hover {
     background: #999 bottom center no-repeat;
-    color: #fff;
+    color: #ffffff;
     padding-bottom: 0px;    
 }
 #calendar {
@@ -477,10 +492,10 @@ table.item_table th {
     background-color: #F7F3F7;
 }
 #calendar table tr td.out {
-    color: gray;
+    color: #808080;
 }
 #calendar tr.title th {
-    color: white;
+    color: #ffffff;
     background-color: #0838A5;
 }
 #calendar tr th {
@@ -491,10 +506,10 @@ table.item_table th {
     width: auto;
 }
 #calendar .day_0 {
-    color: red;
+    color: #ff0000;
 }
 #calendar .day_6 {
-    color: blue;
+    color: #0000ff;
 }
 #calendar .selected {
     background-color: #FFDEAE;

@@ -7,6 +7,8 @@
 #define VALUE_LENGTH 1048575
 #define MODE_LENGTH 10
 #define DEFAULT_LENGTH 1024
+#define NUM_LENGTH 20
+#define DATE_LENGTH 20
 #define MAX_FILE_SIZE 512
 #define LIST_COUNT_PER_LIST_PAGE 15
 #define LIST_COUNT_PER_SEARCH_PAGE 30
@@ -15,7 +17,8 @@ typedef struct _project {
   char name[DEFAULT_LENGTH];
   char home_url[DEFAULT_LENGTH];
 } Project;
-
+Project* project_new();
+void project_free(Project*);
 
 typedef struct _element {
   int element_type_id;
@@ -91,12 +94,15 @@ enum CONDITION_TYPE {
     CONDITION_TYPE_DATE_FROM,
     CONDITION_TYPE_DATE_TO
 };
+void set_condition_values(Condition*, int, int, char*);
 
 typedef struct _search_result {
   int hit_count;
   int page;
   List* messages;
 } SearchResult;
+SearchResult* search_result_new();
+void search_result_free(SearchResult*);
 
 typedef struct _state {
   int id;
