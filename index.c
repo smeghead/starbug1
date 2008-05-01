@@ -54,7 +54,6 @@ int cgiMain();
 void output_form_element(List*, ElementType*);
 void output_form_element_4_condition(ElementType*);
 ModeType get_mode();
-static int contains(char* const, const char*);
 void output_calendar_js();
 
 #define COOKIE_SENDER "starbug1_sender"
@@ -573,13 +572,13 @@ void search_actoin()
     list_alloc(conditions_a, Condition);
     conditions_a = create_conditions(conditions_a, element_types_a);
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
-    sort_a = xalloc(sizeof(Condition));
+    sort_a = condition_new();
     sort_a = create_sort_condition(sort_a);
     cgiFormStringNoNewlines("p", p, NUM_LENGTH);
     list_alloc(messages_a, Message);
     result_a = db_search_tickets(conditions_a, q, sort_a, atoi(p), messages_a, result_a);
-    xfree(conditions_a);
-    xfree(sort_a);
+    list_free(conditions_a);
+    condition_free(sort_a);
     list_alloc(states_a, State);
     states_a = db_get_states(states_a);
     output_states(states_a);
@@ -741,12 +740,12 @@ void report_csv_download_action()
     list_alloc(conditions_a, Condition);
     conditions_a = create_conditions(conditions_a, element_types_a);
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
-    sort_a = xalloc(sizeof(Condition));
+    sort_a = condition_new();
     create_sort_condition(sort_a);
     list_alloc(messages_a, Message);
     result_a = db_search_tickets_4_report(conditions_a, q, sort_a, messages_a, result_a);
     xfree(conditions_a);
-    xfree(sort_a);
+    condition_free(sort_a);
     list_alloc(states_a, State);
     states_a = db_get_states(states_a);
 
@@ -953,16 +952,6 @@ void output_form_element(List* elements, ElementType* et)
             }
             break;
     }
-}
-static int contains(char* const value, const char* name)
-{
-    char* p = value;
-    do {
-        if (*p == '\t') p++;
-        if (strncmp(p, name, strlen(name)) == 0)
-            return 1;
-    } while ((p = strstr(p, "\t")) != NULL);
-    return 0;
 }
 void output_calendar_js() {
     o("<script type=\"text/javascript\" src=\"%s/../js/calendar.js\"></script>\n", cgiScriptName); 
@@ -1323,13 +1312,13 @@ void ticket_action()
 }
 void register_list_item(int id, char* name)
 {
-    ListItem* item_a = xalloc(sizeof(ListItem));
+    ListItem* item_a = list_item_new();
     item_a->element_type_id = id;
     strcpy(item_a->name, name);
     item_a->close = 0;
     item_a->sort = 0;
     db_register_list_item(item_a);
-    xfree(item_a);
+    list_item_free(item_a);
 }
 /**
  * 登録するaction。
@@ -1352,7 +1341,7 @@ void register_submit_action()
     cgiFormStringNoNewlines("save2cookie", save2cookie, 2);
     if (mode == MODE_INVALID)
         die("requested invalid mode.");
-    ticket_a = xalloc(sizeof(Message));
+    ticket_a = message_new();
     db_init();
     project_a = db_get_project(project_a);
     list_alloc(element_types_a, ElementType);
@@ -1464,7 +1453,7 @@ void register_submit_action()
             complete_message = "返信しました。";
         project_free(project_a);
         list_free(element_types_a);
-        xfree(ticket_a);
+        message_free(ticket_a);
     }
     db_finish();
     free_element_list(elements_a);
@@ -1665,6 +1654,8 @@ void register_at_once_submit_action()
     int i = 0;
     int fields_count;
     int registered_tickets_count = 0;
+    List* element_types_a; 
+    Iterator* it_et;
 
     cgiFormStringNoNewlines("save2cookie", save2cookie, 2);
     sprintf(senderfield, "field%d", ELEM_ID_SENDER);
@@ -1697,7 +1688,7 @@ void register_at_once_submit_action()
     db_init();
     db_begin();
     while (1) {
-        Message* ticket_a = xalloc(sizeof(Message));
+        Message* ticket_a = message_new();
         List* elements_a = NULL;
         ticket_a->id = -1;
         list_alloc(elements_a, Element);
@@ -1739,14 +1730,37 @@ void register_at_once_submit_action()
         if (elements_a->size == 0) {
             /* elementが無い状態だったら、登録処理終了。 */
             free_element_list(elements_a);
-            xfree(ticket_a);
+            message_free(ticket_a);
             break;
         }
+        /* 指定されていない項目は、デフォルト値を登録する。 */
+        list_alloc(element_types_a, ElementType);
+        element_types_a = db_get_element_types_all(element_types_a);
+        foreach (it_et, element_types_a) {
+            ElementType* et = it_et->element;
+            Element* element = NULL;
+            if (strlen(et->default_value) == 0)
+                continue;
+            foreach (it, elements_a) {
+                Element* e = it->element;
+                if (et->id == e->element_type_id) {
+                    element = e;
+                    break;
+                }
+            }
+            if (element == NULL) {
+                Element* e_added = list_new_element(elements_a);
+                e_added->element_type_id = et->id;
+                set_element_value(e_added, et->default_value);
+                list_add(elements_a, e_added);
+            }
+        }
+        list_free(element_types_a);
         ticket_a->elements = elements_a;
         ticket_a->id = db_register_ticket(ticket_a);
         registered_tickets_count++;
         free_element_list(elements_a);
-        xfree(ticket_a);
+        message_free(ticket_a);
         row_count++;
     }
     db_commit();
@@ -2076,7 +2090,7 @@ void edit_top_submit_action()
 }
 void download_action()
 {
-    ElementFile* file_a = xalloc(sizeof(ElementFile));
+    ElementFile* file_a = element_file_new();
     char path_info[DEFAULT_LENGTH];
     char* element_id_str;
     int element_file_id;
@@ -2102,8 +2116,7 @@ void download_action()
         p++;
     }
     db_finish();
-    xfree(file_a->blob);
-    xfree(file_a);
+    element_file_free(file_a);
     return;
 
 error:

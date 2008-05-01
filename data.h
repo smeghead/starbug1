@@ -31,6 +31,8 @@ typedef struct _message {
   int id;
   List* elements;
 } Message;
+Message* message_new();
+void message_free(Message*);
 
 typedef struct _list_item {
   int id;
@@ -39,6 +41,8 @@ typedef struct _list_item {
   int close;
   int sort;
 } ListItem;
+ListItem* list_item_new();
+void list_item_free(ListItem*);
 
 typedef struct _element_type {
   int id;
@@ -62,6 +66,8 @@ typedef struct _element_file {
     char mime_type[DEFAULT_LENGTH];
     char* blob;
 } ElementFile;
+ElementFile* element_file_new();
+void element_file_free(ElementFile*);
 
 enum ELEM_TYPE {
   ELEM_TYPE_TEXT,
@@ -94,6 +100,8 @@ enum CONDITION_TYPE {
     CONDITION_TYPE_DATE_FROM,
     CONDITION_TYPE_DATE_TO
 };
+Condition* condition_new();
+void condition_free(Condition*);
 void set_condition_values(Condition*, int, int, char*);
 
 typedef struct _search_result {

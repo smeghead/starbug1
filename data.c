@@ -55,4 +55,38 @@ void search_result_free(SearchResult* sr)
         xfree(sr->messages);
     xfree(sr);
 }
+ListItem* list_item_new()
+{
+    return xalloc(sizeof(ListItem));
+}
+void list_item_free(ListItem* li)
+{
+    xfree(li);
+}
+ElementFile* element_file_new()
+{
+    return xalloc(sizeof(ElementFile));
+}
+void element_file_free(ElementFile* ef)
+{
+    if (ef->blob)
+        xfree(ef->blob);
+    xfree(ef);
+}
+Message* message_new()
+{
+    return xalloc(sizeof(Message));
+}
+void message_free(Message* m)
+{
+    xfree(m);
+}
+Condition* condition_new()
+{
+    return xalloc(sizeof(Condition));
+}
+void condition_free(Condition* c)
+{
+    xfree(c);
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

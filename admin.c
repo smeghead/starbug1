@@ -126,7 +126,7 @@ int cgiMain() {
  */
 void menu_action()
 {
-    Project* project_a = xalloc(sizeof(Project));
+    Project* project_a = project_new();
     char message[DEFAULT_LENGTH];
 
     db_init();
@@ -138,7 +138,7 @@ void menu_action()
         o("<div class=\"complete_message\">"); h(message); o("&nbsp;</div>\n");
     }
     o("<h2>"); h(project_a->name); o(" 管理ツール</h2>");
-    xfree(project_a);
+    project_free(project_a);
     o("<div id=\"admin_menu\">\n");
     o("\t<dl>\n");
     o("\t\t<dt><a href=\"%s/project\">プロジェクト設定</a></dt><dd>プロジェクトの基本的な情報の設定です。</dd>\n", cgiScriptName);
@@ -156,7 +156,7 @@ void menu_action()
  */
 void project_action()
 {
-    Project* project_a = xalloc(sizeof(Project));
+    Project* project_a = project_new();
 
     db_init();
     project_a = db_get_project(project_a);
@@ -175,7 +175,7 @@ void project_action()
     o("\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
     o("\t</form>\n");
     o("</div>\n");
-    xfree(project_a);
+    project_free(project_a);
     output_footer();
     db_finish();
 }
@@ -184,14 +184,14 @@ void project_action()
  */
 void project_submit_action()
 {
-    Project* project_a = xalloc(sizeof(Project));
+    Project* project_a = project_new();
 
     db_init();
     db_begin();
     project_a = db_get_project(project_a);
     cgiFormStringNoNewlines("project.name", project_a->name, DEFAULT_LENGTH);
     db_update_project(project_a);
-    xfree(project_a);
+    project_free(project_a);
 
     db_commit();
     db_finish();
@@ -202,7 +202,7 @@ void project_submit_action()
  */
 void env_action()
 {
-    Project* project_a = xalloc(sizeof(Project));
+    Project* project_a = project_new();
 
     db_init();
     project_a = db_get_project(project_a);
@@ -217,14 +217,14 @@ void env_action()
     o("\t\t\t\t<th>home_url</th>\n");
     o("\t\t\t\t<td>\n");
     o("\t\t\t\t\t<input type=\"text\" name=\"project.home_url\" value=\"");h(project_a->home_url);o("\" maxlength=\"1000\" />\n");
-    o("\t\t\t\t\t<div class=\"description\">各ページに表示されるナビゲータの、\"ホーム\" アンカーのリンク先を指定します。</div>\n");
+    o("\t\t\t\t\t<div class=\"description\">各ページに表示されるナビゲーションメニューの、\"ホーム\" アンカーのリンク先を指定します。</div>\n");
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t</table>\n");
     o("\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
     o("\t</form>\n");
     o("</div>\n");
-    xfree(project_a);
+    project_free(project_a);
     output_footer();
     db_finish();
 }
@@ -233,7 +233,7 @@ void env_action()
  */
 void env_submit_action()
 {
-    Project* project_a = xalloc(sizeof(Project));
+    Project* project_a = project_new();
 
     db_init();
     db_begin();
@@ -242,7 +242,7 @@ void env_submit_action()
 
     db_update_project(project_a);
 
-    xfree(project_a);
+    project_free(project_a);
     db_commit();
     db_finish();
     redirect("", "更新しました");
@@ -252,7 +252,7 @@ void env_submit_action()
  */
 void items_action()
 {
-    Project* project_a = xalloc(sizeof(Project));
+    Project* project_a = project_new();
     List* element_types_a;
     Iterator* it;
 
@@ -262,7 +262,7 @@ void items_action()
 
     o("<div id=\"top\">\n"
       "<h2>%s 管理ツール</h2>", project_a->name);
-    xfree(project_a);
+    project_free(project_a);
     o("<div id=\"setting_form\">\n"
       "\t<form id=\"management_form\" action=\"%s/items_submit\" method=\"post\">\n", cgiScriptName);
     o("\t\t<h3>項目設定</h3>\n"
@@ -585,7 +585,7 @@ void update_elements()
 }
 void new_item_action()
 {
-    Project* project_a = xalloc(sizeof(Project));
+    Project* project_a = project_new();
     int i;
 
     db_init();
@@ -593,7 +593,7 @@ void new_item_action()
     output_header(project_a, "新規項目登録", "new_item.js", NAVI_OTHER);
 
     o("<h2>%s 管理ツール</h2>", project_a->name);
-    xfree(project_a);
+    project_free(project_a);
     o(      "<div id=\"new_item\">\n"
             "<h3>項目の追加</h3>\n"
             "<div class=\"description\">チケットに新しい項目を追加します。追加する項目についての情報を入力し、追加ボタンを押してください。</div>\n"
@@ -785,7 +785,7 @@ void delete_item_action()
     char path_info[DEFAULT_LENGTH];
     char* e_type_id;
     int iid;
-    Project* project_a = xalloc(sizeof(Project));
+    Project* project_a = project_new();
     ElementType* et_a = xalloc(sizeof(ElementType));
 
     strcpy(path_info, cgiPathInfo);
@@ -798,7 +798,7 @@ void delete_item_action()
 
     et_a = db_get_element_type(iid, et_a);
     o("<h2>%s 管理ツール</h2>", project_a->name);
-    xfree(project_a);
+    project_free(project_a);
     o(      "<div id=\"delete_item/%d\">\n", iid);
     o(      "<h3>項目(");h(et_a->name);o(")の削除</h3>\n"
             "<form id=\"delete_item_form\" action=\"%s/delete_item_submit/%d\" method=\"post\">\n"
@@ -833,12 +833,12 @@ void delete_item_submit_action()
 }
 void style_action()
 {
-    Project* project_a = xalloc(sizeof(Project));
+    Project* project_a = project_new();
     db_init();
     project_a = db_get_project(project_a);
     output_header(project_a, "スタイル設定", "style.js", NAVI_STYLE);
     o(      "<h2>%s 管理ツール</h2>", project_a->name);
-    xfree(project_a);
+    project_free(project_a);
     o(      "<div id=\"top\">\n"
             "<h3>スタイルシートの編集</h3>\n"
             "<div id=\"description\">スタイルシートの編集を行ない、更新ボタンを押してください。</div>\n"
@@ -896,7 +896,7 @@ void style_submit_action()
 }
 void admin_help_action()
 {
-    Project* project_a = xalloc(sizeof(Project));
+    Project* project_a = project_new();
     db_init();
     project_a = db_get_project(project_a);
     output_header(project_a, "ヘルプ", NULL, NAVI_ADMIN_HELP);
@@ -904,7 +904,7 @@ void admin_help_action()
             "<div id=\"top\">\n");
     wiki_out("adminhelp");
     o(      "</div>\n");
-    xfree(project_a);
+    project_free(project_a);
     db_finish();
     output_footer();
 }

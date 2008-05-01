@@ -525,4 +525,14 @@ String* get_base_url(String* buf)
             cgiScriptName);
     return buf;
 }
+int contains(char* const value, const char* name)
+{
+    char* p = value;
+    do {
+        if (*p == '\t') p++;
+        if (strncmp(p, name, strlen(name)) == 0)
+            return 1;
+    } while ((p = strstr(p, "\t")) != NULL);
+    return 0;
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
