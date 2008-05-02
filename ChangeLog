@@ -1,3 +1,7 @@
+2008-05-02  smeghead <smeghead@users.sourceforge.jp>
+
+    * 多くの関数の引数にconstを付けた。
+
 2008-05-01  smeghead <smeghead@users.sourceforge.jp>
 
     * チケット一括登録時に、入力されていない項目でデフォルト値がある場合はデ

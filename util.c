@@ -300,14 +300,14 @@ char* get_filename_without_path(char* path)
     }
     return p;
 }
-char* get_upload_filename(int element_id, char* buf)
+char* get_upload_filename(const int element_id, char* buf)
 {
     char name[DEFAULT_LENGTH];
     sprintf(name, "field%d", element_id);
     cgiFormFileName(name, buf, DEFAULT_LENGTH);
     return buf;
 }
-int get_upload_size(int element_id)
+int get_upload_size(const int element_id)
 {
     char name[DEFAULT_LENGTH];
     int size;
@@ -315,14 +315,14 @@ int get_upload_size(int element_id)
     cgiFormFileSize(name, &size);
     return size;
 }
-char* get_upload_content_type(int element_id, char* buf)
+char* get_upload_content_type(const int element_id, char* buf)
 {
     char name[DEFAULT_LENGTH];
     sprintf(name, "field%d", element_id);
     cgiFormFileContentType(name, buf, DEFAULT_LENGTH);
     return buf;
 }
-ElementFile* get_upload_content(int element_id)
+ElementFile* get_upload_content(const int element_id)
 {
     int got = 0;
     char* buffer_org;
@@ -390,7 +390,7 @@ void base64_encode(const unsigned char *src, unsigned char *dist)
     }
     if (i) enclode_char(bb, i - 1, dist, j);
 }
-void redirect(char* path, char* message)
+void redirect(const char* path, const char* message)
 {
     char redirecturi[DEFAULT_LENGTH];
     char uri[DEFAULT_LENGTH];
@@ -408,7 +408,7 @@ void redirect(char* path, char* message)
     o("Status: 302 Temporary Redirection\r\n");
     cgiHeaderLocation(redirecturi);
 }
-void redirect_with_hook_messages(char* path, char* message, List* results)
+void redirect_with_hook_messages(const char* path, const char* message, List* results)
 {
     char redirecturi[DEFAULT_LENGTH];
     char uri[DEFAULT_LENGTH];

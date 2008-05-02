@@ -48,7 +48,7 @@ void download_action();
 void report_csv_download_action();
 void rss_action();
 void top_action();
-void output_header(Project*, char*, char*, NaviType);
+void output_header(Project*, char*, char*, const NaviType);
 void output_footer();
 int cgiMain();
 void output_form_element(List*, ElementType*);
@@ -87,7 +87,7 @@ void register_actions()
     register_action_actions("top", top_action);
 }
 
-void output_header(Project* project, char* title, char* script_name, NaviType navi)
+void output_header(Project* project, char* title, char* script_name, const NaviType navi)
 {
 
     String* base_url_a = string_new(0);

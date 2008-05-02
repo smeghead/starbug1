@@ -106,7 +106,7 @@ ElementType* db_get_element_type(int id, ElementType* e)
 ERROR_LABEL
 }
 
-List* db_get_list_item(int element_type, List* items)
+List* db_get_list_item(const int element_type, List* items)
 {
     int r;
     const char *sql = "select id, name, close, sort from list_item where element_type_id = ? order by sort";
@@ -444,7 +444,7 @@ int set_conditions(sqlite3_stmt* stmt, List* conditions, List* keywords)
     }
     return n;
 }
-SearchResult* db_get_tickets_by_status(char* status, List* messages, SearchResult* result)
+SearchResult* db_get_tickets_by_status(const char* status, List* messages, SearchResult* result)
 {
     int r, n, hit_count = 0;
     String* sql_a = string_new(0);
@@ -488,7 +488,7 @@ SearchResult* db_get_tickets_by_status(char* status, List* messages, SearchResul
     return result;
 ERROR_LABEL
 }
-SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, int page, List* messages, SearchResult* result)
+SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, const int page, List* messages, SearchResult* result)
 {
     int r, n;
     String* sql_a = string_new(0);
@@ -590,7 +590,7 @@ static void set_str_val(Element* e, const unsigned char* str_val)
         strcpy(e->str_val, str_val);
     }
 }
-List* db_get_last_elements_4_list(int ticket_id, List* elements)
+List* db_get_last_elements_4_list(const int ticket_id, List* elements)
 {
     char sql[DEFAULT_LENGTH] = "";
     char sql_suf[DEFAULT_LENGTH] = "";
@@ -662,7 +662,7 @@ List* db_get_last_elements_4_list(int ticket_id, List* elements)
     return elements;
 ERROR_LABEL
 }
-List* db_get_last_elements(int ticket_id, List* elements)
+List* db_get_last_elements(const int ticket_id, List* elements)
 {
     char sql[DEFAULT_LENGTH];
     sqlite3_stmt *stmt = NULL;
@@ -773,7 +773,7 @@ List* db_get_elements(int message_id, List* elements)
 
 ERROR_LABEL
 }
-int* db_get_message_ids_a(int ticket_id)
+int* db_get_message_ids_a(const int ticket_id)
 {
     int* message_ids = NULL;
     int r, i = 0;
@@ -893,7 +893,7 @@ void db_update_list_item(ListItem* item)
             COLUMN_TYPE_END) != 1)
         die("no list_item to update?");
 }
-void db_delete_list_item(int id)
+void db_delete_list_item(const int id)
 {
     exec_query(
             "delete from list_item "
@@ -940,7 +940,7 @@ int db_register_element_type(ElementType* et)
     exec_query(sql, COLUMN_TYPE_END);
     return element_type_id;
 }
-void db_delete_element_type(int id)
+void db_delete_element_type(const int id)
 {
     exec_query(
             "update element_type set deleted = 1 where id = ?",
@@ -1014,7 +1014,7 @@ List* db_get_states(List* states)
 
 ERROR_LABEL
 }
-List* db_get_statictics_multi(List* states, int element_type_id)
+List* db_get_statictics_multi(List* states, const int element_type_id)
 {
     int r;
     char sql[DEFAULT_LENGTH];
@@ -1048,7 +1048,7 @@ List* db_get_statictics_multi(List* states, int element_type_id)
 
 ERROR_LABEL
 }
-List* db_get_statictics(List* states, int element_type_id)
+List* db_get_statictics(List* states, const int element_type_id)
 {
     int r;
     char sql[DEFAULT_LENGTH];
@@ -1120,7 +1120,7 @@ ElementFile* db_get_element_file(int id, ElementFile* file)
     return file;
 ERROR_LABEL
 }
-List* db_get_newest_information(int limit, List* messages)
+List* db_get_newest_information(const int limit, List* messages)
 {
     int r;
     char sql[DEFAULT_LENGTH];
@@ -1157,7 +1157,7 @@ int db_get_element_file_id(int message_id, int element_type_id)
             COLUMN_TYPE_INT, element_type_id,
             COLUMN_TYPE_END);
 }
-char* db_get_element_file_mime_type(int message_id, int element_type_id, char* buf)
+char* db_get_element_file_mime_type(const int message_id, const int element_type_id, char* buf)
 {
     int r;
     const char *sql;

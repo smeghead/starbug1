@@ -15,7 +15,7 @@ char* get_element_value(List* elements, ElementType* et)
     }
     return "";
 }
-char* get_element_value_by_id(List* elements, int type)
+char* get_element_value_by_id(List* elements, const int type)
 {
     Iterator* it;
     if (elements == NULL) return "";
@@ -26,7 +26,7 @@ char* get_element_value_by_id(List* elements, int type)
     }
     return "";
 }
-void set_element_value(Element* e, char* val)
+void set_element_value(Element* e, const char* val)
 {
     e->str_val = xalloc(sizeof(char) * strlen(val) + 1);
     strcpy(e->str_val, val);
