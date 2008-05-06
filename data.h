@@ -24,7 +24,6 @@ typedef struct _element {
   int element_type_id;
   char* str_val;
   int is_file;
-  struct _element* next;
 } Element;
 
 typedef struct _message {
@@ -128,6 +127,7 @@ char* get_element_value_by_id(List*, const int);
 char* get_element_value(List*, ElementType*);
 // int get_element_lid_by_id(List*, int);
 void set_element_value(Element*, const char*);
+void free_element_list(List*);
 
 
 

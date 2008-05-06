@@ -550,7 +550,6 @@ void search_actoin()
     char registerdate_to[DATE_LENGTH];
     char updatedate_from[DATE_LENGTH];
     char updatedate_to[DATE_LENGTH];
-    List* messages_a;
     int col_index;
 
     cgiFormStringNoNewlines("id", id, NUM_LENGTH);
@@ -575,8 +574,7 @@ void search_actoin()
     sort_a = condition_new();
     sort_a = create_sort_condition(sort_a);
     cgiFormStringNoNewlines("p", p, NUM_LENGTH);
-    list_alloc(messages_a, Message);
-    result_a = db_search_tickets(conditions_a, q, sort_a, atoi(p), messages_a, result_a);
+    result_a = db_search_tickets(conditions_a, q, sort_a, atoi(p), result_a);
     list_free(conditions_a);
     condition_free(sort_a);
     list_alloc(states_a, State);
@@ -1167,7 +1165,7 @@ void ticket_action()
                 o("\t\t&nbsp;</span>\n");
             }
         }
-        list_free(attachment_elements_a);
+        free_element_list(attachment_elements_a);
     }
     o("\t\t\t</td>\n"
       "\t</tr>\n"

@@ -11,6 +11,7 @@ unsigned long url_encode(unsigned char*, unsigned char*, unsigned long);
 static action* get_actions();
 
 action* actions = NULL;
+int alloc_count = 0;
 
 void* xalloc(size_t size)
 {
@@ -19,12 +20,14 @@ void* xalloc(size_t size)
     if (!p) {
         die("memory error.");
     }
+    alloc_count++;
 /*     d("xalloc: %p\n", p); */
     return p;
 }
 void xfree(void* p)
 {
 /*     d("xfree: %p\n", p); */
+    alloc_count--;
     free(p);
 }
 static action* get_actions()
@@ -55,6 +58,7 @@ void free_action_actions()
         xfree(old);
     }
     xfree(actions);
+    d("alloc_count: %d\n", alloc_count);
 }
 
 void exec_action()
@@ -441,15 +445,6 @@ void redirect_with_hook_messages(const char* path, const char* message, List* re
     sprintf(redirecturi, "%s%s", cgiScriptName, uri);
     o("Status: 302 Temporary Redirection\r\n");
     cgiHeaderLocation(redirecturi);
-}
-void free_element_list(List* elements)
-{
-    Iterator* it;
-    foreach (it, elements) {
-        Element* e = it->element;
-        xfree(e->str_val);
-    }
-    list_free(elements);
 }
 static cgiFormResultType csv_escape(char *data, int len)
 {

@@ -30,7 +30,6 @@ ElementFile* get_upload_content(const int);
 unsigned long url_encode(unsigned char*, unsigned char*, unsigned long);
 void redirect(const char*, const char*);
 void redirect_with_hook_messages(const char*, const char*, List*);
-void free_element_list(List*);
 void* xalloc(size_t);
 void xfree(void*);
 void csv_field(char*);

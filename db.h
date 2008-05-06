@@ -10,7 +10,7 @@ ElementType* db_get_element_type(int, ElementType*);
 List* db_get_list_item(const int, List*);
 int db_register_ticket(Message*);
 void db_delete_ticket(Message*);
-SearchResult* db_search_tickets(List*, char*, Condition*, const int, List* messages, SearchResult*);
+SearchResult* db_search_tickets(List*, char*, Condition*, const int, SearchResult*);
 SearchResult* db_search_tickets_4_report(List*, char*, Condition*, List*, SearchResult*);
 SearchResult* db_get_tickets_by_status(const char*, List*, SearchResult*);
 List* db_get_elements(const int, List*);

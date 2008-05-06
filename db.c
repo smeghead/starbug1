@@ -16,7 +16,7 @@ extern sqlite3 *db;
 
 void create_columns_exp(List*, char*, char*);
 
-static List* db_get_element_types(int all, List* elements)
+static List* db_get_element_types(int all, List* element_types)
 {
     int r;
     const char *sql;
@@ -32,30 +32,30 @@ static List* db_get_element_types(int all, List* elements)
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         unsigned const char* value;
-        ElementType* e = list_new_element(elements);
+        ElementType* et = list_new_element(element_types);
 
-        e->id = sqlite3_column_int(stmt, 0);
-        e->type = sqlite3_column_int(stmt, 1);
-        e->ticket_property = sqlite3_column_int(stmt, 2);
-        e->reply_property = sqlite3_column_int(stmt, 3);
-        e->required = sqlite3_column_int(stmt, 4);
-        strcpy(e->name, sqlite3_column_text(stmt, 5));
-        strcpy(e->description, sqlite3_column_text(stmt, 6));
-        e->display_in_list = sqlite3_column_int(stmt, 7);
-        e->sort = sqlite3_column_int(stmt, 8);
+        et->id = sqlite3_column_int(stmt, 0);
+        et->type = sqlite3_column_int(stmt, 1);
+        et->ticket_property = sqlite3_column_int(stmt, 2);
+        et->reply_property = sqlite3_column_int(stmt, 3);
+        et->required = sqlite3_column_int(stmt, 4);
+        strcpy(et->name, sqlite3_column_text(stmt, 5));
+        strcpy(et->description, sqlite3_column_text(stmt, 6));
+        et->display_in_list = sqlite3_column_int(stmt, 7);
+        et->sort = sqlite3_column_int(stmt, 8);
         value = sqlite3_column_text(stmt, 9);
         if (value != NULL) {
-            strcpy(e->default_value, value);
+            strcpy(et->default_value, value);
         }
-        e->auto_add_item = sqlite3_column_int(stmt, 10);
-        list_add(elements, e);
+        et->auto_add_item = sqlite3_column_int(stmt, 10);
+        list_add(element_types, et);
     }
     if (SQLITE_DONE != r)
         goto error;
 
     sqlite3_finalize(stmt);
 
-    return elements;
+    return element_types;
 
 ERROR_LABEL
 }
@@ -433,7 +433,7 @@ int set_conditions(sqlite3_stmt* stmt, List* conditions, List* keywords)
         Iterator* it_keyword;
         Iterator* it;
         list_alloc(element_types_a, ElementType);
-        element_types_a= db_get_element_types_all(element_types_a);
+        element_types_a = db_get_element_types_all(element_types_a);
         foreach (it_keyword, keywords) {
             char* word = it_keyword->element;
             foreach (it, element_types_a) {
@@ -488,16 +488,18 @@ SearchResult* db_get_tickets_by_status(const char* status, List* messages, Searc
     return result;
 ERROR_LABEL
 }
-SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, const int page, List* messages, SearchResult* result)
+SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, const int page, SearchResult* result)
 {
     int r, n;
     String* sql_a = string_new(0);
     sqlite3_stmt *stmt = NULL;
     List* keywords_a;
+    List* messages_a;
 
+    list_alloc(messages_a, Message);
     list_alloc(keywords_a, char);
     keywords_a = parse_keywords(keywords_a, q);
-    result->messages = messages;
+    result->messages = messages_a;
     sql_a = get_search_sql_string(conditions, sorts, keywords_a, sql_a);
 
     string_append(sql_a, " limit ? offset ? ");
@@ -529,6 +531,7 @@ SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, con
         while (SQLITE_ROW == (r = sqlite3_step(stmt))){
             result->hit_count = sqlite3_column_int(stmt, 0);
         }
+        string_free(s);
         if (SQLITE_DONE != r)
             goto error;
     }

@@ -51,8 +51,13 @@ SearchResult* search_result_new()
 }
 void search_result_free(SearchResult* sr)
 {
-    if (sr->messages)
-        xfree(sr->messages);
+    if (sr->messages) {
+        Iterator* it;
+        foreach (it, sr->messages) {
+            Message* m = it->element;
+            message_free(m);
+        }
+    }
     xfree(sr);
 }
 ListItem* list_item_new()
@@ -79,6 +84,8 @@ Message* message_new()
 }
 void message_free(Message* m)
 {
+    if (m->elements)
+        free_element_list(m->elements);
     xfree(m);
 }
 Condition* condition_new()
@@ -88,5 +95,14 @@ Condition* condition_new()
 void condition_free(Condition* c)
 {
     xfree(c);
+}
+void free_element_list(List* elements)
+{
+    Iterator* it;
+    foreach (it, elements) {
+        Element* e = it->element;
+        xfree(e->str_val);
+    }
+    list_free(elements);
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

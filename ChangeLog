@@ -1,3 +1,7 @@
+2008-05-06  smeghead <smeghead@users.sourceforge.jp>
+
+    * freeし忘れている部分を修正した。
+
 2008-05-02  smeghead <smeghead@users.sourceforge.jp>
 
     * 多くの関数の引数にconstを付けた。

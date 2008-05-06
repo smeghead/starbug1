@@ -875,6 +875,7 @@ void style_action()
                     o(" background-color: lightyellow !important;\n");
                     o("}\n");
                 }
+                list_free(items_a);
             }
         }
         list_free(element_types_a);
