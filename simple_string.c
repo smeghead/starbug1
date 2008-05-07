@@ -26,10 +26,8 @@ void string_append(String* str, char* addstr)
     size_t len = strlen(addstr);
     int size_needed = str->current_size + len + 1;
     if (size_needed > str->buf_size) {
-        char* old = str->raw_chars;
         int new_size = str->block_size * (size_needed / str->block_size + 1);
         str->raw_chars = realloc(str->raw_chars, sizeof(char) * new_size);
-        xfree(old);
         if (!str->raw_chars) {
             fprintf(stderr, "memory error.");
             exit(-1);
@@ -89,7 +87,7 @@ void string_appendf(String* str, char* fmt, ...)
         if (char_prefix == '%') {
             switch (*fmt) {
                 case 's':              /* string */
-                    s = va_arg(ap, char *);
+                    s = va_arg(ap, char*);
                     string_append(str, s);
                     break;
                 case 'd':              /* int */
