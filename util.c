@@ -21,12 +21,12 @@ void* xalloc(size_t size)
         die("memory error.");
     }
     alloc_count++;
-/*     d("xalloc: %p\n", p); */
+    d("xalloc: %p\n", p);
     return p;
 }
 void xfree(void* p)
 {
-/*     d("xfree: %p\n", p); */
+    d("xfree: %p\n", p);
     alloc_count--;
     free(p);
 }

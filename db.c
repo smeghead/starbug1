@@ -509,19 +509,23 @@ SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, con
     sqlite3_bind_int(stmt, n++, LIST_COUNT_PER_SEARCH_PAGE);
     sqlite3_bind_int(stmt, n++, page * LIST_COUNT_PER_SEARCH_PAGE);
 
+    d("1\n");
     /* 1ページ分のticket_idを取得する。 */
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         Message* message = list_new_element(result->messages);
         message->id = sqlite3_column_int(stmt, 0);
         list_add(result->messages, message);
+    d("2 %p\n", message);
     }
     if (SQLITE_DONE != r)
         goto error;
 
+    d("3\n");
     string_free(sql_a);
     /* hit件数を取得する。 */
     {
         String* s = string_new(0);
+    d("4\n");
         string_append(s, "select count(*) from (");
         s = get_search_sql_string(conditions, sorts, keywords_a, s);
         string_append(s, ")");

@@ -122,6 +122,8 @@ typedef struct _wiki {
   char name[DEFAULT_LENGTH];
   char* content;
 } Wiki;
+Wiki* wiki_new();
+void wiki_free(Wiki*);
 
 char* get_element_value_by_id(List*, const int);
 char* get_element_value(List*, ElementType*);

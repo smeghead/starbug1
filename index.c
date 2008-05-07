@@ -1233,8 +1233,8 @@ void ticket_action()
             o(      "&nbsp;</td>\n"
                     "\t</tr>\n");
         }
-        if (message_ids_a[i + 1] != 0) /* 最後の要素は、last_elementsとして返信フォーム表示後に、freeするのでここではfreeしない。 */
-            free_element_list(elements_a);
+        if (previous)   /* 不要になった1つ前の要素をfreeする。最後の要素は、last_elementsとして返信フォーム表示後に、freeする */
+            free_element_list(previous);
         o("</table>\n");
     }
     xfree(message_ids_a);
@@ -1350,7 +1350,8 @@ void register_submit_action()
     else
         ticket_a->id = atoi(ticket_id);
     list_alloc(elements_a, Element);
-    if (mode == MODE_REGISTER || mode == MODE_REPLY) {
+    ticket_a->elements = elements_a;
+    {
         char* value_a = xalloc(sizeof(char) * VALUE_LENGTH); /* 1M */
         /* register, reply */
         foreach (it, element_types_a) {
@@ -1438,7 +1439,6 @@ void register_submit_action()
             list_add(elements_a, e);
         }
         xfree(value_a);
-        ticket_a->elements = elements_a;
         db_begin();
         ticket_a->id = db_register_ticket(ticket_a);
         db_commit();
@@ -1451,10 +1451,9 @@ void register_submit_action()
             complete_message = "返信しました。";
         project_free(project_a);
         list_free(element_types_a);
-        message_free(ticket_a);
     }
     db_finish();
-    free_element_list(elements_a);
+    message_free(ticket_a);
 
     redirect_with_hook_messages("/list", complete_message, hook->results);
     if (hook) clean_hook(hook);

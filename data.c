@@ -55,8 +55,10 @@ void search_result_free(SearchResult* sr)
         Iterator* it;
         foreach (it, sr->messages) {
             Message* m = it->element;
-            message_free(m);
+            if (m->elements)
+                free_element_list(m->elements); /* リストの要素は、list_freeで開放するので、リスト要素だけ開放する。 */
         }
+        list_free(sr->messages);
     }
     xfree(sr);
 }
@@ -101,8 +103,20 @@ void free_element_list(List* elements)
     Iterator* it;
     foreach (it, elements) {
         Element* e = it->element;
-        xfree(e->str_val);
+/*         d("str_val:%s\n", e->str_val); */
+        if (e->str_val)
+            xfree(e->str_val);
     }
     list_free(elements);
+}
+Wiki* wiki_new()
+{
+    d("wiki size: %d\n", sizeof(Wiki));
+    return xalloc(sizeof(Wiki));
+}
+void wiki_free(Wiki* wiki)
+{
+    xfree(wiki->content);
+    xfree(wiki);
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

@@ -1,3 +1,9 @@
+2008-05-07  smeghead <smeghead@users.sourceforge.jp>
+
+    * チケット詳細ページの履歴表示部分でのfreeタイミングによるバグの修正。
+      (0.3.1-betaリリース以降に発生したバグ)
+    * freeし忘れている部分を修正した。
+
 2008-05-06  smeghead <smeghead@users.sourceforge.jp>
 
     * freeし忘れている部分を修正した。

@@ -98,16 +98,6 @@ enum LINE_MODE {
     LINE_MODE_NORMAL,
     LINE_MODE_PRE
 };
-Wiki* wiki_new()
-{
-    d("wiki size: %d\n", sizeof(Wiki));
-    return xalloc(sizeof(Wiki));
-}
-void wiki_free(Wiki* wiki)
-{
-    xfree(wiki->content);
-    xfree(wiki);
-}
 void wiki_out(char* page_name)
 {
     Wiki* wiki_a = wiki_new();
