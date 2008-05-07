@@ -416,6 +416,11 @@ div.item_navigation {
     background-color: #E9FEEE;
     border-bottom: solid #004000 1px;
 }
+#ticket_list td.registerdate,
+#ticket_list td.lastregisterdate {
+/*     white-space: nowrap; */
+}
+
 div.navigater {
     font-weight: bold;
     padding: 5px 50px 5px 50px;

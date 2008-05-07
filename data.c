@@ -111,7 +111,7 @@ void free_element_list(List* elements)
 }
 Wiki* wiki_new()
 {
-    d("wiki size: %d\n", sizeof(Wiki));
+/*     d("wiki size: %d\n", sizeof(Wiki)); */
     return xalloc(sizeof(Wiki));
 }
 void wiki_free(Wiki* wiki)
