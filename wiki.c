@@ -94,17 +94,17 @@ void element_out(char* tag_name, char* content)
     buf_out(content);
     printf("</%s>\n", tag_name);
 }
-enum LINE_MODE {
+typedef enum LINE_MODE {
     LINE_MODE_NORMAL,
     LINE_MODE_PRE
-};
+} LineMode;
 void wiki_out(char* page_name)
 {
     Wiki* wiki_a = wiki_new();
     char line[MAX_WIDTH];
     char* c;
     char* p;
-    int mode = LINE_MODE_NORMAL;
+    LineMode mode = LINE_MODE_NORMAL;
 
     wiki_a = db_get_newest_wiki(page_name, wiki_a);
     p = wiki_a->content;

@@ -31,7 +31,7 @@ static int fexist(const char *filename)
 
 void db_init()
 {
-    int exists_db_file = (fexist(db_name) == 1);
+    bool exists_db_file = (fexist(db_name) == 1);
 
     mkdir("db", 0755);
     if (SQLITE_OK != sqlite3_open(db_name, &db)) {
@@ -436,7 +436,7 @@ int exec_query_scalar_int(const char* sql, ...)
     sqlite3_reset(stmt);
 
     va_start(ap,sql);
-    for(i = 0; (type = va_arg(ap, int)) != COLUMN_TYPE_END; i++){
+    for (i = 0; (type = va_arg(ap, int)) != COLUMN_TYPE_END; i++) {
         if (type == COLUMN_TYPE_INT) {
             int value = va_arg(ap, int);
             sqlite3_bind_int(stmt, i + 1, value);

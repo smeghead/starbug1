@@ -18,7 +18,7 @@ typedef enum _mode {
 #define is_space(c) (c == ' ' || c == '\t')
 static void decord_csv_field(char* src, char* dist)
 {
-    int quote = 0;
+    bool quote = false;
     char* p = src;
     char* p_dist = dist;
     /* 前のスペースを削除する。 */
@@ -29,7 +29,7 @@ static void decord_csv_field(char* src, char* dist)
                     *p_dist++ = *p;
                 }
             } else if (strlen(dist) == 0 && *p == '"') {
-                quote = 1; /* " モード */
+                quote = true; /* " モード */
             }
         }
         p++;
@@ -58,7 +58,7 @@ Csv* csv_new(char* content)
     list_alloc(line->fields, CsvField);
     mark = p;
     while (1) {
-        int data_end = 0;
+        bool data_end = false;
         if (mode == CSV_MODE_QUOTED_DATA) {
             if (*p == '"' && *(p + 1) == '"') {
                 /* escaped quote */

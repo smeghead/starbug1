@@ -35,7 +35,7 @@ void xfree(void*);
 void csv_field(char*);
 void css_field(char*);
 String* get_base_url(String*);
-int contains(char* const, const char*);
+bool contains(char* const, const char*);
 
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

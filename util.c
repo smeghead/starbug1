@@ -122,7 +122,7 @@ int get_ticket_syntax_len(char* data, size_t len)
  */
 static cgiFormResultType cgiHtmlEscapeDataMultiLine(char *data, int len)
 {
-    int printing_pre = 0;
+    bool printing_pre = false;
     while (len--) {
         if (*data == '#') {
             int ticket_syntax_len;
@@ -148,7 +148,7 @@ static cgiFormResultType cgiHtmlEscapeDataMultiLine(char *data, int len)
             TRYPUTC('>');
             data += 2;
             len -= 2;
-            printing_pre = 1;
+            printing_pre = true;
         } else if (len > 0 && *data == '|' &&
                 *(data + 1) == '<' &&
                 (*(data + 2) == '\r' || *(data + 2) == '\n' || len == 1)) {
@@ -161,7 +161,7 @@ static cgiFormResultType cgiHtmlEscapeDataMultiLine(char *data, int len)
             TRYPUTC('>');
             data += (len == 1) ? 1 : 2; /* |< で終わっている場合(改行が無い場合) は、1を足す。改行が付いている場合は、2を足す。*/
             len -= (len == 1) ? 1 : 2;
-            printing_pre = 0;
+            printing_pre = false;
         } else if (*data == '<') {
             TRYPUTC('&');
             TRYPUTC('l');
@@ -178,7 +178,7 @@ static cgiFormResultType cgiHtmlEscapeDataMultiLine(char *data, int len)
             TRYPUTC('g');
             TRYPUTC('t');
             TRYPUTC(';');
-        } else if (printing_pre == 0 && *data == '\n') {
+        } else if (printing_pre == false && *data == '\n') {
             TRYPUTC('<');
             TRYPUTC('b');
             TRYPUTC('r');
@@ -328,7 +328,7 @@ char* get_upload_content_type(const int element_id, char* buf)
 }
 ElementFile* get_upload_content(const int element_id)
 {
-    int got = 0;
+    int got_count = 0;
     char* buffer_org;
     char* buffer;
     char b[DEFAULT_LENGTH];
@@ -342,10 +342,10 @@ ElementFile* get_upload_content(const int element_id)
         die("Could not open the file.");
     }
 
-    while (cgiFormFileRead(file, b, sizeof(b), &got) == cgiFormSuccess) {
+    while (cgiFormFileRead(file, b, sizeof(b), &got_count) == cgiFormSuccess) {
         char* p = b;
         int i;
-        for (i = 0; i < got; i++) {
+        for (i = 0; i < got_count; i++) {
             *buffer = *p;
             buffer++;
             p++;
@@ -520,14 +520,14 @@ String* get_base_url(String* buf)
             cgiScriptName);
     return buf;
 }
-int contains(char* const value, const char* name)
+bool contains(char* const value, const char* name)
 {
     char* p = value;
     do {
         if (*p == '\t') p++;
         if (strncmp(p, name, strlen(name)) == 0)
-            return 1;
+            return true;
     } while ((p = strstr(p, "\t")) != NULL);
-    return 0;
+    return false;
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

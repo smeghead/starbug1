@@ -167,7 +167,8 @@ int db_register_ticket(Message* ticket)
     List* elements;
     Iterator* it;
     char sql[DEFAULT_LENGTH];
-    int i, closed = 0;
+    int i;
+    bool closed = false;
     sqlite3_stmt *stmt = NULL;
     int message_id;
     int register_mode = ticket->id == -1;
@@ -193,7 +194,7 @@ int db_register_ticket(Message* ticket)
                 COLUMN_TYPE_TEXT, e->str_val,
                 COLUMN_TYPE_END);
         if (c != INVALID_INT && c != 0) {
-            closed = 1;
+            closed = true;
             break;
         }
     }
