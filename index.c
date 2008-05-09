@@ -321,7 +321,7 @@ void output_ticket_table(SearchResult* result, List* element_types)
     output_ticket_table_body(result, element_types);
     o("</table>\n");
 }
-void output_states(List* states)
+void output_states(List* states, bool with_new_ticket_link)
 {
     Iterator* it;
     /* stateの表示 */
@@ -343,8 +343,13 @@ void output_states(List* states)
     o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" maxlength=\"%d\" />\n", NUM_LENGTH - 1);
     o("\t\t\t\t<input type=\"submit\" class=\"button\" value=\"ID指定で表示\" />\n"
       "\t\t\t</form>\n"
-      "\t\t</li>\n"
-      "\t</ul>\n"
+      "\t\t</li>\n");
+    if (with_new_ticket_link) {
+        o("\t\t<li>\n"
+          "\t\t\t<a id=\"new_ticket_link\" href=\"%s/register\">新しいチケットを登録する</a>\n", cgiScriptName);
+        o("\t\t</li>\n");
+    }
+    o("\t</ul>\n"
       "\t<br clear=\"all\" />\n"
       "</div>\n");
 /*       "<br clear=\"all\" />\n"); */
@@ -388,7 +393,7 @@ void list_action()
     project_free(project_a);
     list_alloc(states_a, State);
     states_a = db_get_states(states_a);
-    output_states(states_a);
+    output_states(states_a, true);
     list_free(states_a);
     fflush(cgiOut);
     o("<div id=\"ticket_list\">\n"
@@ -579,7 +584,7 @@ void search_actoin()
     condition_free(sort_a);
     list_alloc(states_a, State);
     states_a = db_get_states(states_a);
-    output_states(states_a);
+    output_states(states_a, true);
     list_free(states_a);
     o("<div id=\"condition_form\">\n"
       "<h3>検索条件</h3>\n"
@@ -999,7 +1004,7 @@ void register_action()
     o(      "<h2>"); h(project_a->name);o(" - チケット登録</h2>\n");
     list_alloc(states_a, State);
     states_a = db_get_states(states_a);
-    output_states(states_a);
+    output_states(states_a, false);
     list_free(states_a);
     o(      "<div id=\"input_form\">\n"
             "<h3>チケット登録</h3>\n"
@@ -1482,7 +1487,7 @@ void register_at_once_action()
     o(      "<h2>"); h(project_a->name);o(" - チケット一括登録</h2>\n");
     list_alloc(states_a, State);
     states_a = db_get_states(states_a);
-    output_states(states_a);
+    output_states(states_a, true);
     list_free(states_a);
     o(      "<div id=\"input_form\">\n"
             "<h3>チケット一括登録</h3>\n"
@@ -1542,7 +1547,7 @@ void register_at_once_confirm_action()
     o(      "<h2>"); h(project_a->name);o(" - チケット一括登録確認</h2>\n");
     list_alloc(states_a, State);
     states_a = db_get_states(states_a);
-    output_states(states_a);
+    output_states(states_a, true);
     list_free(states_a);
     o(      "<div id=\"input_form\">\n"
             "<h3>チケット一括登録確認</h3>\n"
@@ -1783,6 +1788,9 @@ void top_action()
     list_alloc(states_a, State);
     states_a = db_get_states(states_a);
     o(      "<div id=\"info\">\n");
+    o(      "<div id=\"top_new_ticket_link\">\n"
+            "<h4><a href=\"%s/register\">新しいチケットを登録する</a></h4>\n"
+            "</div>\n", cgiScriptName);
     /* 最新情報の表示 */
     o(      "<div id=\"top_newest\">\n"
             "<h4>最新情報</h4>\n"
@@ -1936,7 +1944,7 @@ void statistics_action()
     o(      "<h2>");h(project_a->name);o("</h2>\n");
     list_alloc(states_a, State);
     states_a = db_get_states(states_a);
-    output_states(states_a);
+    output_states(states_a, true);
     list_free(states_a);
     o(      "<div id=\"top\">\n"
             "<h3>統計情報</h3>\n"

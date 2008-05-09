@@ -260,8 +260,8 @@ void items_action()
     project_a = db_get_project(project_a);
     output_header(project_a, "項目設定", "management.js", NAVI_ITEM);
 
-    o("<div id=\"top\">\n"
-      "<h2>%s 管理ツール</h2>", project_a->name);
+    o("<h2>%s 管理ツール</h2>", project_a->name);
+    o("<div id=\"top\">\n");
     project_free(project_a);
     o("<div id=\"setting_form\">\n"
       "\t<form id=\"management_form\" action=\"%s/items_submit\" method=\"post\">\n", cgiScriptName);

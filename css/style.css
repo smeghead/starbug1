@@ -244,6 +244,7 @@ input.conditionelement {
     width: 150px;
 }
 #info,
+#top_new_ticket_link,
 #top_state_index,
 #top_newest,
 #top_id_search,
@@ -259,6 +260,7 @@ input.conditionelement {
     width: 20%;
     float: right;
 }
+#top_new_ticket_link,
 #top_newest,
 #top_state_index,
 #top_id_search {
@@ -266,6 +268,7 @@ input.conditionelement {
     padding: 0px;
     border: #ff5500 solid 1px;
 }
+#top_new_ticket_link h4,
 #top_newest h4,
 #top_state_index h4,
 #top_id_search h4 {
@@ -276,6 +279,7 @@ input.conditionelement {
     text-align: center;
     font-weight: bold;
 }
+#top_new_ticket_link li,
 #top_newest li,
 #top_state_index li {
     margin: 5px;
@@ -284,9 +288,14 @@ input.conditionelement {
 #top_id_search form {
     margin: 8px;
 }
+#top_new_ticket_link li,
 #top_state_index li,
 #top_newest li {
     list-style-image: url("../img/li.gif");
+}
+#top_new_ticket_link h4 a {
+    color: #ffffff;
+    font-weight: bold;
 }
 #main {
     width: 75%;
@@ -551,5 +560,13 @@ table#register_at_once_confirm {
 }
 table#register_at_once_confirm th {
     white-space: nowrap;
+}
+a#new_ticket_link {
+    font-size: 100%;
+    color: #EF5110;
+    font-weight: bold;
+}
+a#new_ticket_link:hover {
+    background-color: #EFEFEF;
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

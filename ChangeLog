@@ -1,6 +1,7 @@
 2008-05-09  smeghead <smeghead@users.sourceforge.jp>
 
     * freeし忘れている部分を修正した。hook処理の部分とチケット一括登録の部分。
+    * 新しいチケットを登録するリンクを新しく追加した。
 
 2008-05-07  smeghead <smeghead@users.sourceforge.jp>
 
