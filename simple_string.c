@@ -9,7 +9,7 @@
 String* string_new(size_t block_size)
 {
     String* str;
-    d("string size: %d\n", sizeof(String));
+/*     d("string size: %d\n", sizeof(String)); */
     str = xalloc(sizeof(String));
     if (block_size == 0) {
         str->block_size = STRING_DEFAULT_SIZE;

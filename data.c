@@ -82,7 +82,9 @@ void element_file_free(ElementFile* ef)
 }
 Message* message_new()
 {
-    return xalloc(sizeof(Message));
+    Message* message = xalloc(sizeof(Message));
+    list_alloc(message->elements, Element);
+    return message;
 }
 void message_free(Message* m)
 {

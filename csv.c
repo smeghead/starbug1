@@ -116,8 +116,9 @@ void csv_free(Csv* csv)
             CsvField* field = it_field->element;
             string_free(field->data);
         }
-        xfree(line);
+        list_free(line->fields);
     }
+    list_free(csv->lines);
     xfree(csv);
 }
 

@@ -1327,7 +1327,6 @@ void register_submit_action()
     Project* project_a = project_new();
     List* element_types_a;
     Iterator* it;
-    List* elements_a = NULL;
     Message* ticket_a;
     char ticket_id[NUM_LENGTH];
     ModeType mode = get_mode();
@@ -1349,14 +1348,12 @@ void register_submit_action()
         ticket_a->id = -1;
     else
         ticket_a->id = atoi(ticket_id);
-    list_alloc(elements_a, Element);
-    ticket_a->elements = elements_a;
     {
         char* value_a = xalloc(sizeof(char) * VALUE_LENGTH); /* 1M */
         /* register, reply */
         foreach (it, element_types_a) {
             ElementType* et = it->element;
-            Element* e = list_new_element(elements_a);
+            Element* e = list_new_element(ticket_a->elements);
             char name_new_item[DEFAULT_LENGTH] = "";
             char name[DEFAULT_LENGTH] = "";
             sprintf(name_new_item, "field%d.new_item", et->id);
@@ -1436,7 +1433,7 @@ void register_submit_action()
                     cgiHeaderCookieSetString(COOKIE_SENDER, "", 0, "/", cgiServerName);
                 }
             }
-            list_add(elements_a, e);
+            list_add(ticket_a->elements, e);
         }
         xfree(value_a);
         db_begin();
@@ -1444,7 +1441,7 @@ void register_submit_action()
         db_commit();
         /* hook */
         hook = init_hook(HOOK_MODE_REGISTERED);
-        hook = exec_hook(hook, project_a, ticket_a, elements_a, element_types_a);
+        hook = exec_hook(hook, project_a, ticket_a, ticket_a->elements, element_types_a);
         if (mode == MODE_REGISTER)
             complete_message = "登録しました。";
         else if (mode == MODE_REPLY)
@@ -1537,6 +1534,7 @@ void register_at_once_confirm_action()
     db_init();
     cgiFormString("csvdata", content_a, VALUE_LENGTH);
     csv_a = csv_new(content_a);
+    xfree(content_a);
 
     project_a = db_get_project(project_a);
     output_header(project_a, "チケット一括登録確認", "register_at_once_submit.js", NAVI_REGISTER_AT_ONCE);
@@ -1686,9 +1684,7 @@ void register_at_once_submit_action()
     db_begin();
     while (1) {
         Message* ticket_a = message_new();
-        List* elements_a = NULL;
         ticket_a->id = -1;
-        list_alloc(elements_a, Element);
         /* register */
         col_count = -1;
         foreach (it, field_ids_a) {
@@ -1701,7 +1697,7 @@ void register_at_once_submit_action()
                 xfree(value_a);
                 continue;
             }
-            e = list_new_element(elements_a);
+            e = list_new_element(ticket_a->elements);
             char name[DEFAULT_LENGTH] = "";
             sprintf(name, "csvfield%d.%d", row_count, col_count);
             strcpy(value_a, "");
@@ -1714,19 +1710,18 @@ void register_at_once_submit_action()
                 continue;
             }
             set_element_value(e, value_a);
-            list_add(elements_a, e);
-            if (elements_a->size == 1) {
+            list_add(ticket_a->elements, e);
+            if (ticket_a->elements->size == 1) {
                 /* 1回だけ投稿者を追加する。 */
-                Element* sender_element = list_new_element(elements_a);
+                Element* sender_element = list_new_element(ticket_a->elements);
                 sender_element->element_type_id = ELEM_ID_SENDER;
                 set_element_value(sender_element, sender);
-                list_add(elements_a, sender_element);
+                list_add(ticket_a->elements, sender_element);
             }
             xfree(value_a);
         }
-        if (elements_a->size == 0) {
+        if (ticket_a->elements->size == 0) {
             /* elementが無い状態だったら、登録処理終了。 */
-            free_element_list(elements_a);
             message_free(ticket_a);
             break;
         }
@@ -1738,7 +1733,7 @@ void register_at_once_submit_action()
             Element* element = NULL;
             if (strlen(et->default_value) == 0)
                 continue;
-            foreach (it, elements_a) {
+            foreach (it, ticket_a->elements) {
                 Element* e = it->element;
                 if (et->id == e->element_type_id) {
                     element = e;
@@ -1746,17 +1741,15 @@ void register_at_once_submit_action()
                 }
             }
             if (element == NULL) {
-                Element* e_added = list_new_element(elements_a);
+                Element* e_added = list_new_element(ticket_a->elements);
                 e_added->element_type_id = et->id;
                 set_element_value(e_added, et->default_value);
-                list_add(elements_a, e_added);
+                list_add(ticket_a->elements, e_added);
             }
         }
         list_free(element_types_a);
-        ticket_a->elements = elements_a;
         ticket_a->id = db_register_ticket(ticket_a);
         registered_tickets_count++;
-        free_element_list(elements_a);
         message_free(ticket_a);
         row_count++;
     }

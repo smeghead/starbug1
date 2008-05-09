@@ -9,11 +9,12 @@
 #include "hook.h"
 #include "simple_string.h"
 
-static void put_env(char* name, char* value)
+static char* put_env_a(char* name, char* value)
 {
     char* val = (char*)xalloc(sizeof(char) * VALUE_LENGTH);
     sprintf(val, "%s=%s", name, value);
     putenv(val);
+    return val;
 }
 
 HOOK* init_hook(HOOK_MODE mode)
@@ -71,7 +72,7 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
     struct dirent *dp;
     struct stat fi;
 
-    if ((dir=opendir(hook_dir)) == NULL) {
+    if ((dir = opendir(hook_dir)) == NULL) {
         return hook;
     }
     content_a = create_json(content_a, project, message, elements, element_types);
@@ -85,11 +86,13 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
                 (fi.st_mode & S_IXUSR) &&                  //所有者が実行可能で
                 (strstr(filename, "hook_") == filename)) { // ファイル名がhook_から始まる。
             int ret;
+            char* val_a;
             HOOK_RESULT* result;
             result = list_new_element(hook->results);
             strcpy(result->command, hook_command);
-            put_env("STARBUG1_CONTENT", string_rawstr(content_a));
+            val_a = put_env_a("STARBUG1_CONTENT", string_rawstr(content_a));
             ret = system(hook_command);
+            xfree(val_a);
             if (ret == 0) {
                 sprintf(result->message, "hook処理(%s)を実行しました。", hook_command);
             } else {
