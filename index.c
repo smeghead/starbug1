@@ -555,6 +555,7 @@ void search_actoin()
     char registerdate_to[DATE_LENGTH];
     char updatedate_from[DATE_LENGTH];
     char updatedate_to[DATE_LENGTH];
+    char save_condition2cookie[NUM_LENGTH];
     int col_index;
 
     cgiFormStringNoNewlines("id", id, NUM_LENGTH);
@@ -564,6 +565,7 @@ void search_actoin()
         redirect(uri, NULL);
     }
     
+    cgiFormStringNoNewlines("save_condition2cookie", save_condition2cookie, NUM_LENGTH);
     db_init();
     project_a = db_get_project(project_a);
     output_header(project_a, "チケット検索", "calendar.js", NAVI_SEARCH);
@@ -652,7 +654,10 @@ void search_actoin()
     }
     o("</table>\n"
       "<input class=\"button\" type=\"submit\" value=\"検索\" />"
-      "</form>\n"
+      "<input id=\"save_condition2cookie\" type=\"checkbox\" name=\"save_condition2cookie\" class=\"checkbox\" value=\"1\" %s />\n"
+      "<label for=\"save_condition2cookie\">検索条件を保存する。(cookie使用)</label>\n"
+      "</div>\n", strcmp(save_condition2cookie, "1") == 0 ? "checked=\"checked\"" : "");
+    o("</form>\n"
       "</div>\n");
     fflush(cgiOut);
     o("<div id=\"ticket_list\">\n"
@@ -2092,8 +2097,6 @@ void download_action()
     char path_info[DEFAULT_LENGTH];
     char* element_id_str;
     int element_file_id;
-    int i;
-    char* p;
 
     strcpy(path_info, cgiPathInfo);
     element_id_str = strchr(path_info + 1, '/');
@@ -2108,11 +2111,7 @@ void download_action()
     o("Content-Disposition: attachment;\r\n");
     o("\r\n");
 
-    p = file_a->blob;
-    for (i = 0; i < file_a->size; i++) {
-        fputc(*p, cgiOut);
-        p++;
-    }
+    fwrite(file_a->blob, sizeof(char), file_a->size, cgiOut);
     db_finish();
     element_file_free(file_a);
     return;
