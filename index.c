@@ -1793,9 +1793,6 @@ void top_action()
     list_alloc(states_a, State);
     states_a = db_get_states(states_a);
     o(      "<div id=\"info\">\n");
-    o(      "<div id=\"top_new_ticket_link\">\n"
-            "<h4><a href=\"%s/register\">新しいチケットを登録する</a></h4>\n"
-            "</div>\n", cgiScriptName);
     /* 最新情報の表示 */
     o(      "<div id=\"top_newest\">\n"
             "<h4>最新情報</h4>\n"
@@ -1854,7 +1851,10 @@ void top_action()
             "<h2>");h(project_a->name);o("&nbsp;</h2>\n");
     project_free(project_a);
     o(      "<div id=\"main_body\">\n"
-            "<div class=\"top_edit\"><a href=\"%s/edit_top\">トップページの編集</a></div>\n", cgiScriptName);
+            "<div class=\"top_edit\">\n"
+            "<a id=\"new_ticket_link\" href=\"%s/register\">新しいチケットを登録する</a>&nbsp;\n", cgiScriptName);
+    o(      "<a href=\"%s/edit_top\">トップページの編集</a>\n", cgiScriptName);
+    o(      "</div>\n");
     wiki_out("top");
     o(      "</div>\n"
             "</div>\n");
