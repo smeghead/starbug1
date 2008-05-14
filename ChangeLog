@@ -1,3 +1,7 @@
+2008-05-14  smeghead <smeghead@users.sourceforge.jp>
+
+    * action構造体の型を他と合わせて大文字から始まるActionに変更した。
+
 2008-05-12  smeghead <smeghead@users.sourceforge.jp>
 
     * download時の書き込みをfwrite関数で行なうように修正した。

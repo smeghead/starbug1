@@ -263,8 +263,7 @@ int db_register_ticket(Message* ticket)
                     COLUMN_TYPE_BLOB, content_a,
                     COLUMN_TYPE_END) == 0)
                 die("insert failed.");
-            xfree(content_a->blob);
-            xfree(content_a);
+            element_file_free(content_a);
         }
     }
     return ticket->id;

@@ -16,7 +16,7 @@ typedef struct _action {
     char* action_name;
     void (*action_func)(void);
     struct _action* next;
-} action;
+} Action;
 void register_action_actions(char*, void func(void));
 void free_action_actions();
 void exec_action();

@@ -8,9 +8,9 @@
 #include "hook.h"
 
 unsigned long url_encode(unsigned char*, unsigned char*, unsigned long);
-static action* get_actions();
+static Action* get_actions();
 
-action* actions = NULL;
+Action* actions = NULL;
 int alloc_count = 0;
 
 void* xalloc(size_t size)
@@ -30,20 +30,20 @@ void xfree(void* p)
     alloc_count--;
     free(p);
 }
-static action* get_actions()
+static Action* get_actions()
 {
     return actions;
 }
 void register_action_actions(char* action_name, void func(void))
 {
-    action* a;
+    Action* a;
     if (actions == NULL) {
-        actions = xalloc(sizeof(action));
+        actions = xalloc(sizeof(Action));
         actions->action_name = "__HEAD__";
         actions->next = NULL;
     }
     for (a = actions; a->next != NULL; a = a->next);
-    a->next = xalloc(sizeof(action));
+    a->next = xalloc(sizeof(Action));
     a = a->next;
     a->action_name = action_name;
     a->action_func = func;
@@ -51,9 +51,9 @@ void register_action_actions(char* action_name, void func(void))
 }
 void free_action_actions()
 {
-    action* a = actions->next;
+    Action* a = actions->next;
     while (a) {
-        action* old = a;
+        Action* old = a;
         a = a->next;
         xfree(old);
     }
@@ -66,7 +66,7 @@ void exec_action()
     char* index;
     char* path_info = cgiPathInfo;
     char action_name[1024];
-    action* a;
+    Action* a;
     if (strlen(path_info) > 1) {
         strncpy(action_name, path_info + 1, 1024);
     } else {
@@ -85,7 +85,7 @@ void exec_action()
         }
     }
     if (strlen(action_name) != 0) {
-        /* 知らないactionが指定されたら、リダイレクトする。  */
+        /* 知らないActionが指定されたら、リダイレクトする。  */
         redirect("", NULL);
     } else {
         /* path_infoが空なら、top_actionを呼び出す。 */
@@ -334,7 +334,7 @@ ElementFile* get_upload_content(const int element_id)
     char b[DEFAULT_LENGTH];
     char name[DEFAULT_LENGTH];
     cgiFilePtr file;
-    ElementFile* content = xalloc(sizeof(ElementFile));
+    ElementFile* content = element_file_new();
     content->size = get_upload_size(element_id);
     buffer = buffer_org = xalloc(sizeof(char) * content->size);
     sprintf(name, "field%d", element_id);
