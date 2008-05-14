@@ -52,11 +52,14 @@ void output_header(Project*, char*, char*, const NaviType);
 void output_footer();
 int cgiMain();
 void output_form_element(List*, ElementType*);
-void output_form_element_4_condition(ElementType*);
+void output_form_element_4_condition(ElementType*, List* conditions);
 ModeType get_mode();
 void output_calendar_js();
 
 #define COOKIE_SENDER "starbug1_sender"
+#define COOKIE_SAVE_CONDITION "starbug1_save_condition"
+#define COOKIE_CONDITION "starbug1_field%d"
+#define COOKIE_CONDITION_KEYWORD "starbug1_keyword"
 ModeType get_mode()
 {
     char mode[MODE_LENGTH];
@@ -536,6 +539,31 @@ List* create_conditions(List* conditions, List* element_types)
     }
     return conditions;
 }
+static void save_condition2cookie(List* conditions, char* q, bool save)
+{
+    Iterator* it;
+    d("save_condition2cookie\n");
+    foreach (it, conditions) {
+        Condition* c = it->element;
+        char cookie_key[DEFAULT_LENGTH];
+    d("%d %s\n", save, c->value);
+        sprintf(cookie_key, COOKIE_CONDITION, c->element_type_id);
+        if (save) {
+            d("set cookie: %d, %s, %s, %s\n", c->element_type_id, c->value, cgiScriptName, cgiServerName);
+            cgiHeaderCookieSetString(cookie_key, c->value, 86400 * 30, "/", cgiServerName);
+        } else {
+            cgiHeaderCookieSetString(cookie_key, "", 0, "/", cgiServerName);
+        }
+    }
+    if (save) {
+        d("set cookie: keyword, %s, %s, %s\n", q, cgiScriptName, cgiServerName);
+        cgiHeaderCookieSetString(COOKIE_CONDITION_KEYWORD, q, 86400 * 30, "/", cgiServerName);
+        cgiHeaderCookieSetString(COOKIE_SAVE_CONDITION, "1", 86400 * 30, "/", cgiServerName);
+    } else {
+        cgiHeaderCookieSetString(COOKIE_CONDITION_KEYWORD, "", 0, "/", cgiServerName);
+        cgiHeaderCookieSetString(COOKIE_SAVE_CONDITION, "", 0, "/", cgiServerName);
+    }
+}
 /**
  * 検索画面を表示するaction。
  */
@@ -555,7 +583,7 @@ void search_actoin()
     char registerdate_to[DATE_LENGTH];
     char updatedate_from[DATE_LENGTH];
     char updatedate_to[DATE_LENGTH];
-    char save_condition2cookie[NUM_LENGTH];
+    char save_condition[NUM_LENGTH];
     int col_index;
 
     cgiFormStringNoNewlines("id", id, NUM_LENGTH);
@@ -565,15 +593,9 @@ void search_actoin()
         redirect(uri, NULL);
     }
     
-    cgiFormStringNoNewlines("save_condition2cookie", save_condition2cookie, NUM_LENGTH);
     db_init();
-    project_a = db_get_project(project_a);
-    output_header(project_a, "チケット検索", "calendar.js", NAVI_SEARCH);
-    output_calendar_js();
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_4_list(element_types_a);
-    o("<h2>"); h(project_a->name); o(" - チケット検索</h2>\n");
-    project_free(project_a);
     /* 検索 */
     list_alloc(conditions_a, Condition);
     conditions_a = create_conditions(conditions_a, element_types_a);
@@ -582,7 +604,18 @@ void search_actoin()
     sort_a = create_sort_condition(sort_a);
     cgiFormStringNoNewlines("p", p, NUM_LENGTH);
     result_a = db_search_tickets(conditions_a, q, sort_a, atoi(p), result_a);
-    list_free(conditions_a);
+    /* 検索条件のcookie保存 */
+    cgiFormStringNoNewlines("save_condition", save_condition, NUM_LENGTH);
+    if (conditions_a->size > 0 || strlen(q) > 0) {
+        bool save = (strcmp(save_condition, "1") == 0) ? true : false;
+        /* 検索条件を保存のチェックボックスがチェックされている場合は、保存。それ意外はクリアする。 */
+        save_condition2cookie(conditions_a, q, save);
+    }
+    project_a = db_get_project(project_a);
+    output_header(project_a, "チケット検索", "calendar.js", NAVI_SEARCH);
+    output_calendar_js();
+    o("<h2>"); h(project_a->name); o(" - チケット検索</h2>\n");
+    project_free(project_a);
     condition_free(sort_a);
     list_alloc(states_a, State);
     states_a = db_get_states(states_a);
@@ -638,7 +671,7 @@ void search_actoin()
             o("<tr>\n");
         o("\t<th>"); h(et->name); o("</th>\n");
         o("\t<td>\n"); 
-        output_form_element_4_condition(et);
+        output_form_element_4_condition(et, conditions_a);
         o("\t</td>\n");
         if (!iterator_next(it)) {
             /* 空いたセルの調整 */
@@ -652,11 +685,12 @@ void search_actoin()
             o("</tr>\n");
         col_index = col_index++ == 3 ? 1 : col_index;
     }
+    list_free(conditions_a);
     o("</table>\n"
       "<input class=\"button\" type=\"submit\" value=\"検索\" />"
-      "<input id=\"save_condition2cookie\" type=\"checkbox\" name=\"save_condition2cookie\" class=\"checkbox\" value=\"1\" %s />\n"
-      "<label for=\"save_condition2cookie\">検索条件を保存する。(cookie使用)</label>\n"
-      "</div>\n", strcmp(save_condition2cookie, "1") == 0 ? "checked=\"checked\"" : "");
+      "<input id=\"save_condition\" type=\"checkbox\" name=\"save_condition\" class=\"checkbox\" value=\"1\" %s />\n"
+      "<label for=\"save_condition\">検索条件を保存する。(cookie使用)</label>\n"
+      "</div>\n", strcmp(save_condition, "1") == 0 ? "checked=\"checked\"" : "");
     o("</form>\n"
       "</div>\n");
     fflush(cgiOut);
@@ -771,7 +805,7 @@ void report_csv_download_action()
 /**
  * form要素を表示する。
  */
-void output_form_element_4_condition(ElementType* et)
+void output_form_element_4_condition(ElementType* et, List* conditions)
 {
     char id[NUM_LENGTH];
     List* items_a;
@@ -780,6 +814,14 @@ void output_form_element_4_condition(ElementType* et)
     char value[DEFAULT_LENGTH];
     sprintf(name, "field%d", et->id);
     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+    if (strlen(value) == 0) {
+        /* 条件が存在しない場合、cookieから復元する。 */
+        foreach (it, conditions) {
+            Condition* c = it->element;
+            if (c->element_type_id != et->id) continue;
+            strcpy(value, c->value);
+        }
+    }
 
     sprintf(id, "%d", et->id);
     switch (et->type) {
@@ -1318,7 +1360,7 @@ void ticket_action()
     output_footer();
     list_free(element_types_a);
 }
-void register_list_item(int id, char* name)
+static void register_list_item(int id, char* name)
 {
     ListItem* item_a = list_item_new();
     item_a->element_type_id = id;
