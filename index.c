@@ -58,7 +58,7 @@ void output_calendar_js();
 
 #define COOKIE_SENDER "starbug1_sender"
 #define COOKIE_SAVE_CONDITION "starbug1_save_condition"
-#define COOKIE_CONDITION "starbug1_field%d"
+#define COOKIE_CONDITION_FORMAT "starbug1_field%d"
 #define COOKIE_CONDITION_KEYWORD "starbug1_keyword"
 ModeType get_mode()
 {
@@ -478,6 +478,8 @@ List* create_conditions(List* conditions, List* element_types)
         ElementType* et = it->element;
         char name[DEFAULT_LENGTH];
         char value[DEFAULT_LENGTH];
+        char cookie_name[DEFAULT_LENGTH];
+        char cookie_value[DEFAULT_LENGTH];
 
         switch (et->type) {
             case ELEM_TYPE_DATE:
@@ -501,7 +503,14 @@ List* create_conditions(List* conditions, List* element_types)
             default:
                 sprintf(name, "field%d", et->id);
                 cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-                if (strlen(value) == 0) continue;
+                sprintf(cookie_name, COOKIE_CONDITION_FORMAT, et->id);
+                cgiCookieString(cookie_name, cookie_value, DEFAULT_LENGTH);
+                if (strlen(value) == 0 && strlen(cookie_value)== 0) {
+                    continue;
+                } else if (strlen(cookie_value)) {
+                    /* cookieに保存された検索条件があれば、設定する。 */
+                    strcpy(value, cookie_value);
+                }
                 c = list_new_element(conditions);
                 set_condition_values(c, et->id, CONDITION_TYPE_NORMAL, value);
                 list_add(conditions, c);
@@ -547,7 +556,7 @@ static void save_condition2cookie(List* conditions, char* q, bool save)
         Condition* c = it->element;
         char cookie_key[DEFAULT_LENGTH];
     d("%d %s\n", save, c->value);
-        sprintf(cookie_key, COOKIE_CONDITION, c->element_type_id);
+        sprintf(cookie_key, COOKIE_CONDITION_FORMAT, c->element_type_id);
         if (save) {
             d("set cookie: %d, %s, %s, %s\n", c->element_type_id, c->value, cgiScriptName, cgiServerName);
             cgiHeaderCookieSetString(cookie_key, c->value, 86400 * 30, "/", cgiServerName);
@@ -584,7 +593,10 @@ void search_actoin()
     char updatedate_from[DATE_LENGTH];
     char updatedate_to[DATE_LENGTH];
     char save_condition[NUM_LENGTH];
+    char cookie_save_condition[NUM_LENGTH];
     int col_index;
+    bool condition_will_save;
+    char search_button[DEFAULT_LENGTH];
 
     cgiFormStringNoNewlines("id", id, NUM_LENGTH);
     if (strlen(id) > 0) {
@@ -593,6 +605,13 @@ void search_actoin()
         redirect(uri, NULL);
     }
     
+    /* 検索条件のcookie保存 */
+    cgiFormStringNoNewlines("search_button", search_button, DEFAULT_LENGTH);
+    cgiFormStringNoNewlines("save_condition", save_condition, NUM_LENGTH);
+    cgiCookieString(COOKIE_SAVE_CONDITION, cookie_save_condition, NUM_LENGTH);
+    condition_will_save = (strcmp(save_condition, "1") == 0 ||
+            (strlen(search_button) == 0 && strcmp(cookie_save_condition, "1") == 0))
+        ? true : false;
     db_init();
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_4_list(element_types_a);
@@ -600,17 +619,16 @@ void search_actoin()
     list_alloc(conditions_a, Condition);
     conditions_a = create_conditions(conditions_a, element_types_a);
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
+    if (strlen(q) == 0 && condition_will_save) {
+        /* 検索条件を保存する状況で、queryStringが指定されていなかったら、cookieから復元する。 */
+        cgiCookieString(COOKIE_CONDITION_KEYWORD, q, DEFAULT_LENGTH);
+    }
     sort_a = condition_new();
     sort_a = create_sort_condition(sort_a);
     cgiFormStringNoNewlines("p", p, NUM_LENGTH);
     result_a = db_search_tickets(conditions_a, q, sort_a, atoi(p), result_a);
-    /* 検索条件のcookie保存 */
-    cgiFormStringNoNewlines("save_condition", save_condition, NUM_LENGTH);
-    if (conditions_a->size > 0 || strlen(q) > 0) {
-        bool save = (strcmp(save_condition, "1") == 0) ? true : false;
-        /* 検索条件を保存のチェックボックスがチェックされている場合は、保存。それ意外はクリアする。 */
-        save_condition2cookie(conditions_a, q, save);
-    }
+    /* 検索条件を保存のチェックボックスがチェックされている場合は、保存。それ意外はクリアする。 */
+    save_condition2cookie(conditions_a, q, condition_will_save);
     project_a = db_get_project(project_a);
     output_header(project_a, "チケット検索", "calendar.js", NAVI_SEARCH);
     output_calendar_js();
@@ -687,10 +705,10 @@ void search_actoin()
     }
     list_free(conditions_a);
     o("</table>\n"
-      "<input class=\"button\" type=\"submit\" value=\"検索\" />"
+      "<input name=\"search_button\" class=\"button\" type=\"submit\" value=\"検索\" />"
       "<input id=\"save_condition\" type=\"checkbox\" name=\"save_condition\" class=\"checkbox\" value=\"1\" %s />\n"
       "<label for=\"save_condition\">検索条件を保存する。(cookie使用)</label>\n"
-      "</div>\n", strcmp(save_condition, "1") == 0 ? "checked=\"checked\"" : "");
+      "</div>\n", condition_will_save ? "checked=\"checked\"" : "");
     o("</form>\n"
       "</div>\n");
     fflush(cgiOut);
