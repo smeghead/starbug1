@@ -658,7 +658,7 @@ void search_actoin()
     list_alloc(conditions_a, Condition);
     conditions_a = create_conditions(conditions_a, element_types_a, condition_restore);
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
-    if (strlen(q) == 0 && condition_will_save) {
+    if (strlen(q) == 0 && condition_restore) {
         /* 検索条件を保存する状況で、queryStringが指定されていなかったら、cookieから復元する。 */
         cgiCookieString(COOKIE_CONDITION_KEYWORD, q, DEFAULT_LENGTH);
     }

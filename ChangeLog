@@ -1,5 +1,9 @@
 2008-05-17  smeghead <smeghead@users.sourceforge.jp>
 
+    * 検索条件の保存。キーワード検索の検索条件を保存する条件が間違ってる問題を修正した。
+
+2008-05-17  smeghead <smeghead@users.sourceforge.jp>
+
     * 0.3.2-beta リリース
 
 2008-05-17  smeghead <smeghead@users.sourceforge.jp>
