@@ -530,4 +530,13 @@ bool contains(char* const value, const char* name)
     } while ((p = strstr(p, "\t")) != NULL);
     return false;
 }
+void set_cookie(char* key, char* value)
+{
+    cgiHeaderCookieSetString(key, value, 86400 * 30, "/", cgiServerName);
+}
+void clear_cookie(char* key)
+{
+    cgiHeaderCookieSetString(key, "", 0, "/", cgiServerName);
+}
+
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

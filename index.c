@@ -468,46 +468,50 @@ Condition* create_sort_condition(Condition* sort)
     }
     return sort;
 }
-List* create_conditions(List* conditions, List* element_types)
+List* create_conditions(List* conditions, List* element_types, bool condition_restore)
 {
     char name[DEFAULT_LENGTH];
     char value[DEFAULT_LENGTH];
+    char cookie_name[DEFAULT_LENGTH];
+    char cookie_value[DEFAULT_LENGTH];
     Iterator* it;
     Condition* c;
     foreach (it, element_types) {
         ElementType* et = it->element;
-        char name[DEFAULT_LENGTH];
-        char value[DEFAULT_LENGTH];
-        char cookie_name[DEFAULT_LENGTH];
-        char cookie_value[DEFAULT_LENGTH];
 
         switch (et->type) {
             case ELEM_TYPE_DATE:
                 /* 日付 from */
                 sprintf(name, "field%d_from", et->id);
                 cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-                if (strlen(value) > 0) {
-                    c = list_new_element(conditions);
-                    set_condition_values(c, et->id, CONDITION_TYPE_DATE_FROM, value);
-                    list_add(conditions, c);
+                sprintf(cookie_name, COOKIE_CONDITION_FORMAT ".from", et->id);
+                cgiCookieString(cookie_name, cookie_value, DEFAULT_LENGTH);
+                if (condition_restore && strlen(cookie_value)) {
+                    /* cookieに保存された検索条件があれば、設定する。 */
+                    strcpy(value, cookie_value);
                 }
+                c = list_new_element(conditions);
+                set_condition_values(c, et->id, CONDITION_TYPE_DATE_FROM, value);
+                list_add(conditions, c);
                 /* 日付 to */
                 sprintf(name, "field%d_to", et->id);
                 cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-                if (strlen(value) > 0) {
-                    c = list_new_element(conditions);
-                    set_condition_values(c, et->id, CONDITION_TYPE_DATE_TO, value);
-                    list_add(conditions, c);
+                sprintf(cookie_name, COOKIE_CONDITION_FORMAT ".to", et->id);
+                cgiCookieString(cookie_name, cookie_value, DEFAULT_LENGTH);
+                if (condition_restore && strlen(cookie_value)) {
+                    /* cookieに保存された検索条件があれば、設定する。 */
+                    strcpy(value, cookie_value);
                 }
+                c = list_new_element(conditions);
+                set_condition_values(c, et->id, CONDITION_TYPE_DATE_TO, value);
+                list_add(conditions, c);
                 break;
             default:
                 sprintf(name, "field%d", et->id);
                 cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                 sprintf(cookie_name, COOKIE_CONDITION_FORMAT, et->id);
                 cgiCookieString(cookie_name, cookie_value, DEFAULT_LENGTH);
-                if (strlen(value) == 0 && strlen(cookie_value)== 0) {
-                    continue;
-                } else if (strlen(cookie_value)) {
+                if (condition_restore && strlen(cookie_value)) {
                     /* cookieに保存された検索条件があれば、設定する。 */
                     strcpy(value, cookie_value);
                 }
@@ -519,33 +523,45 @@ List* create_conditions(List* conditions, List* element_types)
     /* 登録日時 */
     sprintf(name, "registerdate.from");
     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-    if (strlen(value)) {
-        c = list_new_element(conditions);
-        set_condition_values(c, ELEM_ID_REGISTERDATE, CONDITION_TYPE_DATE_FROM, value);
-        list_add(conditions, c);
+    sprintf(cookie_name, COOKIE_CONDITION_FORMAT ".from", ELEM_ID_REGISTERDATE);
+    cgiCookieString(cookie_name, cookie_value, DEFAULT_LENGTH);
+    if (condition_restore && strlen(value) == 0) {
+        strcpy(value, cookie_value);
     }
+    c = list_new_element(conditions);
+    set_condition_values(c, ELEM_ID_REGISTERDATE, CONDITION_TYPE_DATE_FROM, value);
+    list_add(conditions, c);
     sprintf(name, "registerdate.to");
     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-    if (strlen(value)) {
-        c = list_new_element(conditions);
-        set_condition_values(c, ELEM_ID_REGISTERDATE, CONDITION_TYPE_DATE_TO, value);
-        list_add(conditions, c);
+    sprintf(cookie_name, COOKIE_CONDITION_FORMAT ".to", ELEM_ID_REGISTERDATE);
+    cgiCookieString(cookie_name, cookie_value, DEFAULT_LENGTH);
+    if (condition_restore && strlen(value) == 0) {
+        strcpy(value, cookie_value);
     }
+    c = list_new_element(conditions);
+    set_condition_values(c, ELEM_ID_REGISTERDATE, CONDITION_TYPE_DATE_TO, value);
+    list_add(conditions, c);
     /* 更新日時 */
     sprintf(name, "lastregisterdate.from");
     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-    if (strlen(value)) {
-        c = list_new_element(conditions);
-        set_condition_values(c, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_FROM, value);
-        list_add(conditions, c);
+    sprintf(cookie_name, COOKIE_CONDITION_FORMAT ".from", ELEM_ID_LASTREGISTERDATE);
+    cgiCookieString(cookie_name, cookie_value, DEFAULT_LENGTH);
+    if (condition_restore && strlen(value) == 0) {
+        strcpy(value, cookie_value);
     }
+    c = list_new_element(conditions);
+    set_condition_values(c, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_FROM, value);
+    list_add(conditions, c);
     sprintf(name, "lastregisterdate.to");
     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-    if (strlen(value)) {
-        c = list_new_element(conditions);
-        set_condition_values(c, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_TO, value);
-        list_add(conditions, c);
+    sprintf(cookie_name, COOKIE_CONDITION_FORMAT ".to", ELEM_ID_LASTREGISTERDATE);
+    cgiCookieString(cookie_name, cookie_value, DEFAULT_LENGTH);
+    if (condition_restore && strlen(value) == 0) {
+        strcpy(value, cookie_value);
     }
+    c = list_new_element(conditions);
+    set_condition_values(c, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_TO, value);
+    list_add(conditions, c);
     return conditions;
 }
 static void save_condition2cookie(List* conditions, char* q, bool save)
@@ -555,22 +571,48 @@ static void save_condition2cookie(List* conditions, char* q, bool save)
     foreach (it, conditions) {
         Condition* c = it->element;
         char cookie_key[DEFAULT_LENGTH];
-    d("%d %s\n", save, c->value);
-        sprintf(cookie_key, COOKIE_CONDITION_FORMAT, c->element_type_id);
-        if (save) {
-            d("set cookie: %d, %s, %s, %s\n", c->element_type_id, c->value, cgiScriptName, cgiServerName);
-            cgiHeaderCookieSetString(cookie_key, c->value, 86400 * 30, "/", cgiServerName);
+        if (c->element_type_id > 0) {
+            switch (c->condition_type) {
+                case CONDITION_TYPE_DATE_TO:
+                case CONDITION_TYPE_DATE_FROM:
+                    sprintf(cookie_key, COOKIE_CONDITION_FORMAT ".%s",
+                            c->element_type_id,
+                            c->condition_type == CONDITION_TYPE_DATE_FROM ? "from" : "to");
+                    break;
+                default:
+                    sprintf(cookie_key, COOKIE_CONDITION_FORMAT, c->element_type_id);
+            }
         } else {
-            cgiHeaderCookieSetString(cookie_key, "", 0, "/", cgiServerName);
+            switch (c->element_type_id) {
+                case ELEM_ID_REGISTERDATE:
+                    sprintf(cookie_key, COOKIE_CONDITION_FORMAT ".%s",
+                            ELEM_ID_REGISTERDATE,
+                            c->condition_type == CONDITION_TYPE_DATE_FROM ? "from" : "to");
+                    break;
+                case ELEM_ID_LASTREGISTERDATE:
+                    sprintf(cookie_key, COOKIE_CONDITION_FORMAT ".%s",
+                            ELEM_ID_LASTREGISTERDATE,
+                            c->condition_type == CONDITION_TYPE_DATE_FROM ? "from" : "to");
+                    break;
+                default:
+                    die("It will never reach!");
+            }
+        }
+    d("save cookie...%d %s %s\n", save, cookie_key, c->value);
+        if (save) {
+            d("set cookie: %d, %s\n", c->element_type_id, c->value);
+            set_cookie(cookie_key, c->value);
+        } else {
+            clear_cookie(cookie_key);
         }
     }
     if (save) {
-        d("set cookie: keyword, %s, %s, %s\n", q, cgiScriptName, cgiServerName);
-        cgiHeaderCookieSetString(COOKIE_CONDITION_KEYWORD, q, 86400 * 30, "/", cgiServerName);
-        cgiHeaderCookieSetString(COOKIE_SAVE_CONDITION, "1", 86400 * 30, "/", cgiServerName);
+        d("set cookie: keyword, %s\n", q);
+        set_cookie(COOKIE_CONDITION_KEYWORD, q);
+        set_cookie(COOKIE_SAVE_CONDITION, "1");
     } else {
-        cgiHeaderCookieSetString(COOKIE_CONDITION_KEYWORD, "", 0, "/", cgiServerName);
-        cgiHeaderCookieSetString(COOKIE_SAVE_CONDITION, "", 0, "/", cgiServerName);
+        clear_cookie(COOKIE_CONDITION_KEYWORD);
+        clear_cookie(COOKIE_SAVE_CONDITION);
     }
 }
 /**
@@ -588,14 +630,10 @@ void search_actoin()
     char id[NUM_LENGTH];
     char q[DEFAULT_LENGTH];
     char p[NUM_LENGTH];
-    char registerdate_from[DATE_LENGTH];
-    char registerdate_to[DATE_LENGTH];
-    char updatedate_from[DATE_LENGTH];
-    char updatedate_to[DATE_LENGTH];
     char save_condition[NUM_LENGTH];
     char cookie_save_condition[NUM_LENGTH];
     int col_index;
-    bool condition_will_save;
+    bool condition_will_save, condition_restore;
     char search_button[DEFAULT_LENGTH];
 
     cgiFormStringNoNewlines("id", id, NUM_LENGTH);
@@ -612,12 +650,13 @@ void search_actoin()
     condition_will_save = (strcmp(save_condition, "1") == 0 ||
             (strlen(search_button) == 0 && strcmp(cookie_save_condition, "1") == 0))
         ? true : false;
+    condition_restore = (strlen(search_button) == 0) ? true : false;
     db_init();
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_4_list(element_types_a);
     /* 検索 */
     list_alloc(conditions_a, Condition);
-    conditions_a = create_conditions(conditions_a, element_types_a);
+    conditions_a = create_conditions(conditions_a, element_types_a, condition_restore);
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
     if (strlen(q) == 0 && condition_will_save) {
         /* 検索条件を保存する状況で、queryStringが指定されていなかったら、cookieから復元する。 */
@@ -644,10 +683,6 @@ void search_actoin()
       "<div class=\"description\">検索条件を入力して検索ボタンを押してください。</div>\n");
     o("<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
     o(      "<table summary=\"condition table\">\n");
-    cgiFormStringNoNewlines("registerdate.from", registerdate_from, DATE_LENGTH);
-    cgiFormStringNoNewlines("registerdate.to", registerdate_to, DATE_LENGTH);
-    cgiFormStringNoNewlines("lastregisterdate.from", updatedate_from, DATE_LENGTH);
-    cgiFormStringNoNewlines("lastregisterdate.to", updatedate_to, DATE_LENGTH);
     o("<tr>\n"
       "\t<th>キーワード検索</th>\n"
       "\t<td>\n"
@@ -657,22 +692,22 @@ void search_actoin()
       "\t<th>投稿日時</th>\n"
       "\t<td>\n"
       "\t\t<span>\n"
-      "\t\t<input type=\"text\" class=\"calendar\" name=\"registerdate.from\" value=\""); v(registerdate_from); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
+      "\t\t<input type=\"text\" class=\"calendar\" name=\"registerdate.from\" value=\""); v(get_condition_value(conditions_a, ELEM_ID_REGISTERDATE, CONDITION_TYPE_DATE_FROM)); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
     o("\t\t</span>\n"
       "〜\n"
       "\t\t<span>\n"
-      "\t\t<input type=\"text\" class=\"calendar\" name=\"registerdate.to\" value=\""); v(registerdate_to); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
+      "\t\t<input type=\"text\" class=\"calendar\" name=\"registerdate.to\" value=\""); v(get_condition_value(conditions_a, ELEM_ID_REGISTERDATE, CONDITION_TYPE_DATE_TO)); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
     o("\t\t</span>\n"
       "\t\t<div class=\"description\">yyyy-mm-dd形式で入力してください。</div>\n"
       "\t</td>\n"
       "\t<th>更新日時</th>\n"
       "\t<td>\n"
       "\t\t<span>\n"
-      "\t\t<input type=\"text\" class=\"calendar\" name=\"lastregisterdate.from\" value=\""); v(updatedate_from); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
+      "\t\t<input type=\"text\" class=\"calendar\" name=\"lastregisterdate.from\" value=\""); v(get_condition_value(conditions_a, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_FROM)); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
     o("\t\t</span>\n"
       "〜\n"
       "\t\t<span>\n"
-      "\t\t<input type=\"text\" class=\"calendar\" name=\"lastregisterdate.to\" value=\""); v(updatedate_to); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
+      "\t\t<input type=\"text\" class=\"calendar\" name=\"lastregisterdate.to\" value=\""); v(get_condition_value(conditions_a, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_TO)); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
     o("\t\t</span>\n"
       "\t\t<div class=\"description\">yyyy-mm-dd形式で入力してください。</div>\n"
       "\t</td>\n"
@@ -718,10 +753,18 @@ void search_actoin()
 
     if (result_a->messages->size) {
         String* query_string_a = string_new(0);
+        Iterator* it;
 
         query_string_a = format_query_string_without_page(query_string_a);
         o(      "<div class=\"infomation\">");
         o(      "%d件ヒットしました。\n", result_a->hit_count);
+        o(      "[&nbsp;");
+        foreach (it, result_a->states) {
+            State* s = it->element;
+            h(s->name);
+            o("(%d)&nbsp;", s->count);
+        }
+        o(      "]&nbsp;");
         o(      "<a href=\"%s/report_csv_download?%s\" target=\"_blank\">検索結果をCSVでダウンロードする。</a>\n",
                 cgiScriptName,
                 string_rawstr(query_string_a));
@@ -798,7 +841,7 @@ void report_csv_download_action()
     element_types_a = db_get_element_types_all(element_types_a);
     /* 検索 */
     list_alloc(conditions_a, Condition);
-    conditions_a = create_conditions(conditions_a, element_types_a);
+    conditions_a = create_conditions(conditions_a, element_types_a, false);
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
     sort_a = condition_new();
     create_sort_condition(sort_a);
@@ -880,27 +923,23 @@ void output_form_element_4_condition(ElementType* et, List* conditions)
             list_free(items_a);
             break;
         case ELEM_TYPE_DATE:
-            sprintf(name, "field%d_from", et->id);
-            cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
             o("<span>\n");
             o("<input type=\"text\" class=\"calendar\" id=\"field");
             h(id);
             o("\" name=\"field");
             h(id);
             o("_from\" value=\"");
-            v(value);
+            v(get_condition_value(conditions, et->id, CONDITION_TYPE_DATE_FROM));
             o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
             o("</span>\n");
             o("〜\n");
-            sprintf(name, "field%d_to", et->id);
-            cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
             o("<span>\n");
             o("<input type=\"text\" class=\"calendar\" id=\"field");
             h(id);
             o("\" name=\"field");
             h(id);
             o("_to\" value=\"");
-            v(value);
+            v(get_condition_value(conditions, et->id, CONDITION_TYPE_DATE_TO));
             o("\" maxlength=\"%d\" />\n", DATE_LENGTH -1);
             o("</span>\n");
             break;
@@ -1319,7 +1358,7 @@ void ticket_action()
             "<noscript><div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div></noscript>\n");
     o(      "<h4>チケット情報の更新</h4>\n"
             "<div class=\"description\">チケット情報(チケットの状態など)を更新する必要がある場合は、以下の情報を変更してください。</div>\n"
-            "<table summary=\"input table\">\n");
+            "<table class=\"reply_table\" summary=\"input table\">\n");
     foreach (it, element_types_a) {
         ElementType* et = it->element;
         if (et->ticket_property == 0) continue;
@@ -1498,9 +1537,9 @@ void register_submit_action()
             if (e->element_type_id == ELEM_ID_SENDER) {
                 if (strcmp(save2cookie, "1") == 0) {
                     d("set cookie: %s, %s, %s\n", e->str_val, cgiScriptName, cgiServerName);
-                    cgiHeaderCookieSetString(COOKIE_SENDER, e->str_val, 86400 * 30, "/", cgiServerName);
+                    set_cookie(COOKIE_SENDER, e->str_val);
                 } else {
-                    cgiHeaderCookieSetString(COOKIE_SENDER, "", 0, "/", cgiServerName);
+                    clear_cookie(COOKIE_SENDER);
                 }
             }
             list_add(ticket_a->elements, e);
@@ -1727,9 +1766,9 @@ void register_at_once_submit_action()
     cgiFormStringNoNewlines(senderfield, sender, DEFAULT_LENGTH);
     if (strcmp(save2cookie, "1") == 0) {
         d("set cookie: %s, %s, %s\n", sender, cgiScriptName, cgiServerName);
-        cgiHeaderCookieSetString(COOKIE_SENDER, sender, 86400 * 30, "/", cgiServerName);
+        set_cookie(COOKIE_SENDER, sender);
     } else {
-        cgiHeaderCookieSetString(COOKIE_SENDER, "", 0, "/", cgiServerName);
+        clear_cookie(COOKIE_SENDER);
     }
 
     cgiFormStringNoNewlines("fields_count", fields_count_str, 5);

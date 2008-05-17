@@ -1,3 +1,10 @@
+2008-05-17  smeghead <smeghead@users.sourceforge.jp>
+
+    * 検索結果でhit件数を表示している部分に、チケットの状態別の内訳を表示するようにした。
+    * 検索条件の保存処理の完成。
+    * リリースの準備。
+    * testの更新。
+
 2008-05-15  smeghead <smeghead@users.sourceforge.jp>
 
     * 検索条件の保存処理の作成中。cookieの読取。単一の条件の項目とキーワードに対応。

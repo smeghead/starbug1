@@ -214,7 +214,7 @@ div {
 #condition_form table th {
     background-color: #f0f8ff;
 }
-#input_form table th.ticket_property {
+#input_form table.reply_table th.ticket_property {
     background-color: #FAFAE8;
 }
 #condition_form table div.description, 

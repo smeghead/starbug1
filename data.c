@@ -37,6 +37,28 @@ void set_condition_values(Condition* c, int element_type_id, int condition_type,
     c->condition_type = condition_type;
     strcpy(c->value, value);
 }
+char* get_condition_value(List* conditions, int element_type_id, int condition_type)
+{
+    Iterator* it;
+    foreach (it, conditions) {
+        Condition* c = it->element;
+        if (c->element_type_id == element_type_id && c->condition_type == condition_type) {
+            return c->value;
+        }
+    }
+    return "";
+}
+int valid_condition_size(List* conditions)
+{
+    int size = 0;
+    Iterator* it;
+    foreach (it, conditions) {
+        Condition* c = it->element;
+        if (strlen(c->value))
+            size++;
+    }
+    return size;
+}
 Project* project_new()
 {
     return xalloc(sizeof(Project));
@@ -47,7 +69,10 @@ void project_free(Project* p)
 }
 SearchResult* search_result_new()
 {
-    return xalloc(sizeof(SearchResult));
+    SearchResult* result =  xalloc(sizeof(SearchResult));
+    list_alloc(result->messages, Message);
+    list_alloc(result->states, State);
+    return result;
 }
 void search_result_free(SearchResult* sr)
 {
@@ -56,9 +81,12 @@ void search_result_free(SearchResult* sr)
         foreach (it, sr->messages) {
             Message* m = it->element;
             if (m->elements)
-                free_element_list(m->elements); /* リストの要素は、list_freeで開放するので、リスト要素だけ開放する。 */
+                free_element_list(m->elements); /* リスト自体は、list_freeで開放するので、リスト要素だけ開放する。 */
         }
         list_free(sr->messages);
+    }
+    if (sr->states) {
+        list_free(sr->states);
     }
     xfree(sr);
 }

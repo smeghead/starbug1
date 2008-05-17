@@ -107,20 +107,23 @@ enum CONDITION_TYPE {
 Condition* condition_new();
 void condition_free(Condition*);
 void set_condition_values(Condition*, int, int, char*);
-
-typedef struct _search_result {
-  int hit_count;
-  int page;
-  List* messages;
-} SearchResult;
-SearchResult* search_result_new();
-void search_result_free(SearchResult*);
+char* get_condition_value(List*, int, int);
+int valid_condition_size(List*);
 
 typedef struct _state {
   int id;
   char name[DEFAULT_LENGTH];
   int count;
 } State;
+
+typedef struct _search_result {
+  int hit_count;
+  int page;
+  List* messages;
+  List* states;
+} SearchResult;
+SearchResult* search_result_new();
+void search_result_free(SearchResult*);
 
 typedef struct _wiki {
   int id;

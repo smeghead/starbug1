@@ -318,24 +318,25 @@ static String* get_search_sql_string(List* conditions, Condition* sort, List* ke
     int i = 0;
     Iterator* it;
 
-    string_append(sql_string,
+    string_appendf(sql_string,
             "select "
-            " t.id "
+            " t.id as id, m.field%d as status "
             "from ticket as t "
             "inner join message as m on m.id = t.last_message_id "
-            "inner join message as org_m on org_m.id = t.original_message_id ");
+            "inner join message as org_m on org_m.id = t.original_message_id ", ELEM_ID_STATUS);
 
     
     if (keywords->size > 0)
         string_append(sql_string, "inner join message as m_all on m_all.ticket_id = t.id ");
 
-    if (conditions->size || keywords->size > 0)
+    if (valid_condition_size(conditions) || keywords->size > 0)
         string_append(sql_string, "where ");
-    if (conditions->size) {
+    if (valid_condition_size(conditions)) {
         foreach (it, conditions) {
             Condition* cond = it->element;
             char val[DEFAULT_LENGTH];
             if (cond->element_type_id < 0) continue;
+            if (strlen(cond->value) == 0) continue;
             if (i++) string_append(sql_string, " and ");
             switch (cond->condition_type) {
                 case CONDITION_TYPE_DATE_FROM:
@@ -357,6 +358,7 @@ static String* get_search_sql_string(List* conditions, Condition* sort, List* ke
             char name[DEFAULT_LENGTH];
             char val[DEFAULT_LENGTH];
             if (cond->element_type_id > 0) continue;
+            if (strlen(cond->value) == 0) continue;
             if (i++) string_append(sql_string, " and ");
             switch (cond->element_type_id) {
                 case ELEM_ID_REGISTERDATE:
@@ -383,7 +385,7 @@ static String* get_search_sql_string(List* conditions, Condition* sort, List* ke
         list_alloc(element_types_a, ElementType);
         element_types_a = db_get_element_types_all(element_types_a);
         columns_a = create_columns_like_exp(element_types_a, "m_all", keywords, columns_a);
-        if (conditions->size)
+        if (valid_condition_size(conditions))
             string_append(sql_string, " and ");
         string_appendf(sql_string, "(%s)", string_rawstr(columns_a));
         string_free(columns_a);
@@ -426,6 +428,7 @@ int set_conditions(sqlite3_stmt* stmt, List* conditions, List* keywords)
     Iterator* it;
     foreach (it, conditions) {
         Condition* cond = it->element;
+        if (strlen(cond->value) == 0) continue;
         sqlite3_bind_text(stmt, n++, cond->value, strlen(cond->value), NULL);
     }
     if (keywords->size > 0) {
@@ -494,12 +497,9 @@ SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, con
     String* sql_a = string_new(0);
     sqlite3_stmt *stmt = NULL;
     List* keywords_a;
-    List* messages_a;
 
-    list_alloc(messages_a, Message);
     list_alloc(keywords_a, char);
     keywords_a = parse_keywords(keywords_a, q);
-    result->messages = messages_a;
     sql_a = get_search_sql_string(conditions, sorts, keywords_a, sql_a);
 
     string_append(sql_a, " limit ? offset ? ");
@@ -522,14 +522,17 @@ SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, con
     /* hit件数を取得する。 */
     {
         String* s = string_new(0);
-        string_append(s, "select count(*) from (");
+        string_append(s, "select count(res.id), res.status from (");
         s = get_search_sql_string(conditions, sorts, keywords_a, s);
-        string_append(s, ")");
+        string_append(s, ") as res left join element_type as et on et.id = res.status group by status");
         if (sqlite3_prepare(db, string_rawstr(s), string_len(s), &stmt, NULL) == SQLITE_ERROR) goto error;
         sqlite3_reset(stmt);
         n = set_conditions(stmt, conditions, keywords_a);
         while (SQLITE_ROW == (r = sqlite3_step(stmt))){
-            result->hit_count = sqlite3_column_int(stmt, 0);
+            State* s = list_new_element(result->states);
+            result->hit_count += s->count = sqlite3_column_int(stmt, 0);
+            strcpy(s->name, sqlite3_column_text(stmt, 1));
+            list_add(result->states, s);
         }
         string_free(s);
         if (SQLITE_DONE != r)

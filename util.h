@@ -36,6 +36,8 @@ void csv_field(char*);
 void css_field(char*);
 String* get_base_url(String*);
 bool contains(char* const, const char*);
+void set_cookie(char*, char*);
+void clear_cookie(char*);
 
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
