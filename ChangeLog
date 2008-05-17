@@ -1,5 +1,9 @@
 2008-05-17  smeghead <smeghead@users.sourceforge.jp>
 
+    * 0.3.2-beta リリース
+
+2008-05-17  smeghead <smeghead@users.sourceforge.jp>
+
     * 検索結果でhit件数を表示している部分に、チケットの状態別の内訳を表示するようにした。
     * 検索条件の保存処理の完成。
     * リリースの準備。
