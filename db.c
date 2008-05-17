@@ -320,7 +320,7 @@ static String* get_search_sql_string(List* conditions, Condition* sort, List* ke
 
     string_appendf(sql_string,
             "select "
-            " t.id as id, m.field%d as status "
+            " t.id as id, m.field%d as state "
             "from ticket as t "
             "inner join message as m on m.id = t.last_message_id "
             "inner join message as org_m on org_m.id = t.original_message_id ", ELEM_ID_STATUS);
@@ -522,9 +522,13 @@ SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, con
     /* hit件数を取得する。 */
     {
         String* s = string_new(0);
-        string_append(s, "select count(res.id), res.status from (");
+        string_append(s, "select count(res.id), res.state from (");
         s = get_search_sql_string(conditions, sorts, keywords_a, s);
-        string_append(s, ") as res left join element_type as et on et.id = res.status group by status");
+        string_appendf(s,
+                ") as res "
+                "inner join list_item as l on l.element_type_id = %d and l.name = res.state "
+                "group by res.state "
+                "order by l.sort", ELEM_ID_STATUS);
         if (sqlite3_prepare(db, string_rawstr(s), string_len(s), &stmt, NULL) == SQLITE_ERROR) goto error;
         sqlite3_reset(stmt);
         n = set_conditions(stmt, conditions, keywords_a);
