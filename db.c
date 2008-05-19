@@ -336,7 +336,7 @@ static String* get_search_sql_string(List* conditions, Condition* sort, List* ke
             Condition* cond = it->element;
             char val[DEFAULT_LENGTH];
             if (cond->element_type_id < 0) continue;
-            if (strlen(cond->value) == 0) continue;
+            if (!valid_condition(cond)) continue;
             if (i++) string_append(sql_string, " and ");
             switch (cond->condition_type) {
                 case CONDITION_TYPE_DATE_FROM:
@@ -428,8 +428,10 @@ int set_conditions(sqlite3_stmt* stmt, List* conditions, List* keywords)
     Iterator* it;
     foreach (it, conditions) {
         Condition* cond = it->element;
-        if (strlen(cond->value) == 0) continue;
-        sqlite3_bind_text(stmt, n++, cond->value, strlen(cond->value), NULL);
+        char* v;
+        if (!valid_condition(cond)) continue;
+        v = get_condition_valid_value(cond);
+        sqlite3_bind_text(stmt, n++, v, strlen(v), NULL);
     }
     if (keywords->size > 0) {
         List* element_types_a;

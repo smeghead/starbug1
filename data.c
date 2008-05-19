@@ -31,11 +31,12 @@ void set_element_value(Element* e, const char* val)
     e->str_val = xalloc(sizeof(char) * strlen(val) + 1);
     strcpy(e->str_val, val);
 }
-void set_condition_values(Condition* c, int element_type_id, int condition_type, char* value)
+void set_condition_values(Condition* c, int element_type_id, int condition_type, char* value, char* cookie_value)
 {
     c->element_type_id = element_type_id;
     c->condition_type = condition_type;
     strcpy(c->value, value);
+    strcpy(c->cookie_value, cookie_value);
 }
 char* get_condition_value(List* conditions, int element_type_id, int condition_type)
 {
@@ -43,7 +44,7 @@ char* get_condition_value(List* conditions, int element_type_id, int condition_t
     foreach (it, conditions) {
         Condition* c = it->element;
         if (c->element_type_id == element_type_id && c->condition_type == condition_type) {
-            return c->value;
+            return get_condition_valid_value(c);
         }
     }
     return "";
@@ -54,10 +55,18 @@ int valid_condition_size(List* conditions)
     Iterator* it;
     foreach (it, conditions) {
         Condition* c = it->element;
-        if (strlen(c->value))
+        if (valid_condition(c))
             size++;
     }
     return size;
+}
+bool valid_condition(Condition* c)
+{
+    return (strlen(c->value) || strlen(c->cookie_value)) ? true : false;
+}
+char* get_condition_valid_value(Condition* c)
+{
+    return strlen(c->value) ? c->value : c->cookie_value;
 }
 Project* project_new()
 {

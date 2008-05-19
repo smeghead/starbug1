@@ -468,7 +468,7 @@ Condition* create_sort_condition(Condition* sort)
     }
     return sort;
 }
-List* create_conditions(List* conditions, List* element_types, bool condition_restore)
+List* create_conditions(List* conditions, List* element_types)
 {
     char name[DEFAULT_LENGTH];
     char value[DEFAULT_LENGTH];
@@ -486,24 +486,16 @@ List* create_conditions(List* conditions, List* element_types, bool condition_re
                 cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                 sprintf(cookie_name, COOKIE_CONDITION_FORMAT ".from", et->id);
                 cgiCookieString(cookie_name, cookie_value, DEFAULT_LENGTH);
-                if (condition_restore && strlen(cookie_value)) {
-                    /* cookieに保存された検索条件があれば、設定する。 */
-                    strcpy(value, cookie_value);
-                }
                 c = list_new_element(conditions);
-                set_condition_values(c, et->id, CONDITION_TYPE_DATE_FROM, value);
+                set_condition_values(c, et->id, CONDITION_TYPE_DATE_FROM, value, cookie_value);
                 list_add(conditions, c);
                 /* 日付 to */
                 sprintf(name, "field%d_to", et->id);
                 cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                 sprintf(cookie_name, COOKIE_CONDITION_FORMAT ".to", et->id);
                 cgiCookieString(cookie_name, cookie_value, DEFAULT_LENGTH);
-                if (condition_restore && strlen(cookie_value)) {
-                    /* cookieに保存された検索条件があれば、設定する。 */
-                    strcpy(value, cookie_value);
-                }
                 c = list_new_element(conditions);
-                set_condition_values(c, et->id, CONDITION_TYPE_DATE_TO, value);
+                set_condition_values(c, et->id, CONDITION_TYPE_DATE_TO, value, cookie_value);
                 list_add(conditions, c);
                 break;
             default:
@@ -511,12 +503,8 @@ List* create_conditions(List* conditions, List* element_types, bool condition_re
                 cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                 sprintf(cookie_name, COOKIE_CONDITION_FORMAT, et->id);
                 cgiCookieString(cookie_name, cookie_value, DEFAULT_LENGTH);
-                if (condition_restore && strlen(cookie_value)) {
-                    /* cookieに保存された検索条件があれば、設定する。 */
-                    strcpy(value, cookie_value);
-                }
                 c = list_new_element(conditions);
-                set_condition_values(c, et->id, CONDITION_TYPE_NORMAL, value);
+                set_condition_values(c, et->id, CONDITION_TYPE_NORMAL, value, cookie_value);
                 list_add(conditions, c);
         }
     }
@@ -525,42 +513,30 @@ List* create_conditions(List* conditions, List* element_types, bool condition_re
     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
     sprintf(cookie_name, COOKIE_CONDITION_FORMAT ".from", ELEM_ID_REGISTERDATE);
     cgiCookieString(cookie_name, cookie_value, DEFAULT_LENGTH);
-    if (condition_restore && strlen(value) == 0) {
-        strcpy(value, cookie_value);
-    }
     c = list_new_element(conditions);
-    set_condition_values(c, ELEM_ID_REGISTERDATE, CONDITION_TYPE_DATE_FROM, value);
+    set_condition_values(c, ELEM_ID_REGISTERDATE, CONDITION_TYPE_DATE_FROM, value, cookie_value);
     list_add(conditions, c);
     sprintf(name, "registerdate.to");
     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
     sprintf(cookie_name, COOKIE_CONDITION_FORMAT ".to", ELEM_ID_REGISTERDATE);
     cgiCookieString(cookie_name, cookie_value, DEFAULT_LENGTH);
-    if (condition_restore && strlen(value) == 0) {
-        strcpy(value, cookie_value);
-    }
     c = list_new_element(conditions);
-    set_condition_values(c, ELEM_ID_REGISTERDATE, CONDITION_TYPE_DATE_TO, value);
+    set_condition_values(c, ELEM_ID_REGISTERDATE, CONDITION_TYPE_DATE_TO, value, cookie_value);
     list_add(conditions, c);
     /* 更新日時 */
     sprintf(name, "lastregisterdate.from");
     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
     sprintf(cookie_name, COOKIE_CONDITION_FORMAT ".from", ELEM_ID_LASTREGISTERDATE);
     cgiCookieString(cookie_name, cookie_value, DEFAULT_LENGTH);
-    if (condition_restore && strlen(value) == 0) {
-        strcpy(value, cookie_value);
-    }
     c = list_new_element(conditions);
-    set_condition_values(c, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_FROM, value);
+    set_condition_values(c, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_FROM, value, cookie_value);
     list_add(conditions, c);
     sprintf(name, "lastregisterdate.to");
     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
     sprintf(cookie_name, COOKIE_CONDITION_FORMAT ".to", ELEM_ID_LASTREGISTERDATE);
     cgiCookieString(cookie_name, cookie_value, DEFAULT_LENGTH);
-    if (condition_restore && strlen(value) == 0) {
-        strcpy(value, cookie_value);
-    }
     c = list_new_element(conditions);
-    set_condition_values(c, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_TO, value);
+    set_condition_values(c, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_TO, value, cookie_value);
     list_add(conditions, c);
     return conditions;
 }
@@ -656,7 +632,7 @@ void search_actoin()
     element_types_a = db_get_element_types_4_list(element_types_a);
     /* 検索 */
     list_alloc(conditions_a, Condition);
-    conditions_a = create_conditions(conditions_a, element_types_a, condition_restore);
+    conditions_a = create_conditions(conditions_a, element_types_a);
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
     if (strlen(q) == 0 && condition_restore) {
         /* 検索条件を保存する状況で、queryStringが指定されていなかったら、cookieから復元する。 */
@@ -841,7 +817,7 @@ void report_csv_download_action()
     element_types_a = db_get_element_types_all(element_types_a);
     /* 検索 */
     list_alloc(conditions_a, Condition);
-    conditions_a = create_conditions(conditions_a, element_types_a, false);
+    conditions_a = create_conditions(conditions_a, element_types_a);
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
     sort_a = condition_new();
     create_sort_condition(sort_a);

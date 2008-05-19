@@ -98,6 +98,7 @@ typedef struct _condition {
   int element_type_id;
   int condition_type;
   char value[DEFAULT_LENGTH];
+  char cookie_value[DEFAULT_LENGTH];
 } Condition;
 enum CONDITION_TYPE {
     CONDITION_TYPE_NORMAL,
@@ -106,9 +107,11 @@ enum CONDITION_TYPE {
 };
 Condition* condition_new();
 void condition_free(Condition*);
-void set_condition_values(Condition*, int, int, char*);
+void set_condition_values(Condition*, int, int, char*, char*);
 char* get_condition_value(List*, int, int);
 int valid_condition_size(List*);
+bool valid_condition(Condition*);
+char* get_condition_valid_value(Condition*);
 
 typedef struct _state {
   int id;
