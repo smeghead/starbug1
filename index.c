@@ -367,7 +367,6 @@ void list_action()
     Project* project_a = project_new();
     List* states_a;
     Iterator* it;
-    List* messages_a;
     char** multi;
 
     db_init();
@@ -420,8 +419,7 @@ void list_action()
 
         /* 検索 */
         list_alloc(conditions_a, Condition);
-        list_alloc(messages_a, Message);
-        result_a = db_get_tickets_by_status(s->name, messages_a, result_a);
+        result_a = db_get_tickets_by_status(s->name, result_a);
         list_free(conditions_a);
 
         o("<a name=\""); h(s->name); o("\"></a>\n");
@@ -485,7 +483,7 @@ List* create_conditions(List* conditions, List* element_types)
                 sprintf(name, "field%d_from", et->id);
                 cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                 sprintf(cookie_name, COOKIE_CONDITION_FORMAT ".from", et->id);
-                cgiCookieString(cookie_name, cookie_value, DEFAULT_LENGTH);
+                get_cookie_string(cookie_name, cookie_value);
                 c = list_new_element(conditions);
                 set_condition_values(c, et->id, CONDITION_TYPE_DATE_FROM, value, cookie_value);
                 list_add(conditions, c);
@@ -493,7 +491,7 @@ List* create_conditions(List* conditions, List* element_types)
                 sprintf(name, "field%d_to", et->id);
                 cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                 sprintf(cookie_name, COOKIE_CONDITION_FORMAT ".to", et->id);
-                cgiCookieString(cookie_name, cookie_value, DEFAULT_LENGTH);
+                get_cookie_string(cookie_name, cookie_value);
                 c = list_new_element(conditions);
                 set_condition_values(c, et->id, CONDITION_TYPE_DATE_TO, value, cookie_value);
                 list_add(conditions, c);
@@ -502,7 +500,7 @@ List* create_conditions(List* conditions, List* element_types)
                 sprintf(name, "field%d", et->id);
                 cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                 sprintf(cookie_name, COOKIE_CONDITION_FORMAT, et->id);
-                cgiCookieString(cookie_name, cookie_value, DEFAULT_LENGTH);
+                get_cookie_string(cookie_name, cookie_value);
                 c = list_new_element(conditions);
                 set_condition_values(c, et->id, CONDITION_TYPE_NORMAL, value, cookie_value);
                 list_add(conditions, c);
@@ -512,14 +510,14 @@ List* create_conditions(List* conditions, List* element_types)
     sprintf(name, "registerdate.from");
     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
     sprintf(cookie_name, COOKIE_CONDITION_FORMAT ".from", ELEM_ID_REGISTERDATE);
-    cgiCookieString(cookie_name, cookie_value, DEFAULT_LENGTH);
+    get_cookie_string(cookie_name, cookie_value);
     c = list_new_element(conditions);
     set_condition_values(c, ELEM_ID_REGISTERDATE, CONDITION_TYPE_DATE_FROM, value, cookie_value);
     list_add(conditions, c);
     sprintf(name, "registerdate.to");
     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
     sprintf(cookie_name, COOKIE_CONDITION_FORMAT ".to", ELEM_ID_REGISTERDATE);
-    cgiCookieString(cookie_name, cookie_value, DEFAULT_LENGTH);
+    get_cookie_string(cookie_name, cookie_value);
     c = list_new_element(conditions);
     set_condition_values(c, ELEM_ID_REGISTERDATE, CONDITION_TYPE_DATE_TO, value, cookie_value);
     list_add(conditions, c);
@@ -527,14 +525,14 @@ List* create_conditions(List* conditions, List* element_types)
     sprintf(name, "lastregisterdate.from");
     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
     sprintf(cookie_name, COOKIE_CONDITION_FORMAT ".from", ELEM_ID_LASTREGISTERDATE);
-    cgiCookieString(cookie_name, cookie_value, DEFAULT_LENGTH);
+    get_cookie_string(cookie_name, cookie_value);
     c = list_new_element(conditions);
     set_condition_values(c, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_FROM, value, cookie_value);
     list_add(conditions, c);
     sprintf(name, "lastregisterdate.to");
     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
     sprintf(cookie_name, COOKIE_CONDITION_FORMAT ".to", ELEM_ID_LASTREGISTERDATE);
-    cgiCookieString(cookie_name, cookie_value, DEFAULT_LENGTH);
+    get_cookie_string(cookie_name, cookie_value);
     c = list_new_element(conditions);
     set_condition_values(c, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_TO, value, cookie_value);
     list_add(conditions, c);
@@ -543,7 +541,6 @@ List* create_conditions(List* conditions, List* element_types)
 static void save_condition2cookie(List* conditions, char* q, bool save)
 {
     Iterator* it;
-    d("save_condition2cookie\n");
     foreach (it, conditions) {
         Condition* c = it->element;
         char cookie_key[DEFAULT_LENGTH];
@@ -574,10 +571,9 @@ static void save_condition2cookie(List* conditions, char* q, bool save)
                     die("It will never reach!");
             }
         }
-    d("save cookie...%d %s %s\n", save, cookie_key, c->value);
         if (save) {
-            d("set cookie: %d, %s\n", c->element_type_id, c->value);
-            set_cookie(cookie_key, c->value);
+            d("set cookie: %d, %s\n", c->element_type_id, get_condition_valid_value(c));
+            set_cookie(cookie_key, get_condition_valid_value(c));
         } else {
             clear_cookie(cookie_key);
         }
@@ -586,6 +582,7 @@ static void save_condition2cookie(List* conditions, char* q, bool save)
         d("set cookie: keyword, %s\n", q);
         set_cookie(COOKIE_CONDITION_KEYWORD, q);
         set_cookie(COOKIE_SAVE_CONDITION, "1");
+        d("set cookie: keywordend , %s\n", q);
     } else {
         clear_cookie(COOKIE_CONDITION_KEYWORD);
         clear_cookie(COOKIE_SAVE_CONDITION);
@@ -607,7 +604,7 @@ void search_actoin()
     char q[DEFAULT_LENGTH];
     char p[NUM_LENGTH];
     char save_condition[NUM_LENGTH];
-    char cookie_save_condition[NUM_LENGTH];
+    char cookie_save_condition[DEFAULT_LENGTH];
     int col_index;
     bool condition_will_save, condition_restore;
     char search_button[DEFAULT_LENGTH];
@@ -622,7 +619,7 @@ void search_actoin()
     /* 検索条件のcookie保存 */
     cgiFormStringNoNewlines("search_button", search_button, DEFAULT_LENGTH);
     cgiFormStringNoNewlines("save_condition", save_condition, NUM_LENGTH);
-    cgiCookieString(COOKIE_SAVE_CONDITION, cookie_save_condition, NUM_LENGTH);
+    get_cookie_string(COOKIE_SAVE_CONDITION, cookie_save_condition);
     condition_will_save = (strcmp(save_condition, "1") == 0 ||
             (strlen(search_button) == 0 && strcmp(cookie_save_condition, "1") == 0))
         ? true : false;
@@ -636,7 +633,7 @@ void search_actoin()
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
     if (strlen(q) == 0 && condition_restore) {
         /* 検索条件を保存する状況で、queryStringが指定されていなかったら、cookieから復元する。 */
-        cgiCookieString(COOKIE_CONDITION_KEYWORD, q, DEFAULT_LENGTH);
+        get_cookie_string(COOKIE_CONDITION_KEYWORD, q);
     }
     sort_a = condition_new();
     sort_a = create_sort_condition(sort_a);
@@ -808,7 +805,6 @@ void report_csv_download_action()
     Project* project_a = project_new();
     List* states_a;
     char q[DEFAULT_LENGTH];
-    List* messages_a;
 
     db_init();
     project_a = db_get_project(project_a);
@@ -821,8 +817,7 @@ void report_csv_download_action()
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
     sort_a = condition_new();
     create_sort_condition(sort_a);
-    list_alloc(messages_a, Message);
-    result_a = db_search_tickets_4_report(conditions_a, q, sort_a, messages_a, result_a);
+    result_a = db_search_tickets_4_report(conditions_a, q, sort_a, result_a);
     xfree(conditions_a);
     condition_free(sort_a);
     list_alloc(states_a, State);
@@ -856,7 +851,7 @@ void output_form_element_4_condition(ElementType* et, List* conditions)
         foreach (it, conditions) {
             Condition* c = it->element;
             if (c->element_type_id != et->id) continue;
-            strcpy(value, c->value);
+            strcpy(value, get_condition_valid_value(c));
         }
     }
 
@@ -935,7 +930,7 @@ void output_form_element(List* elements, ElementType* et)
     } else {
         if (et->id == ELEM_ID_SENDER) {
             char sender[DEFAULT_LENGTH];
-            cgiCookieString(COOKIE_SENDER, sender, DEFAULT_LENGTH);
+            get_cookie_string(COOKIE_SENDER, sender);
             if (strlen(sender))
                 /* 投稿者のフィールドは、cookieから値が取得できれば、その値を表示する。 */
                 value = sender;
@@ -1075,7 +1070,7 @@ void register_action()
     Project* project_a = project_new();
     List* states_a;
     char sender[DEFAULT_LENGTH];
-    cgiCookieString(COOKIE_SENDER, sender, DEFAULT_LENGTH);
+    get_cookie_string(COOKIE_SENDER, sender);
 
     db_init();
     project_a = db_get_project(project_a);
@@ -1162,7 +1157,7 @@ void ticket_action()
     int iid, *message_ids_a, i;
     Project* project_a = project_new();
     char sender[DEFAULT_LENGTH];
-    cgiCookieString(COOKIE_SENDER, sender, DEFAULT_LENGTH);
+    get_cookie_string(COOKIE_SENDER, sender);
 
     strcpy(path_info, cgiPathInfo);
     ticket_id = strchr(path_info + 1, '/');
@@ -1558,7 +1553,7 @@ void register_at_once_action()
     Project* project_a = project_new();
     List* states_a;
     char sender[DEFAULT_LENGTH];
-    cgiCookieString(COOKIE_SENDER, sender, DEFAULT_LENGTH);
+    get_cookie_string(COOKIE_SENDER, sender);
 
     db_init();
     project_a = db_get_project(project_a);
@@ -1614,7 +1609,7 @@ void register_at_once_confirm_action()
     Csv* csv_a;
     char sender[DEFAULT_LENGTH];
     char* content_a = xalloc(sizeof(char) * VALUE_LENGTH);
-    cgiCookieString(COOKIE_SENDER, sender, DEFAULT_LENGTH);
+    get_cookie_string(COOKIE_SENDER, sender);
 
     db_init();
     cgiFormString("csvdata", content_a, VALUE_LENGTH);

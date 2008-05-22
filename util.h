@@ -38,6 +38,8 @@ String* get_base_url(String*);
 bool contains(char* const, const char*);
 void set_cookie(char*, char*);
 void clear_cookie(char*);
+void get_cookie_string(char*, char*);
+int base64_decode(const unsigned char*, unsigned char*);
 
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

@@ -532,11 +532,98 @@ bool contains(char* const value, const char* name)
 }
 void set_cookie(char* key, char* value)
 {
-    cgiHeaderCookieSetString(key, value, 86400 * 30, "/", cgiServerName);
+    char value_base64[DEFAULT_LENGTH];
+    memset(value_base64, 0, DEFAULT_LENGTH);
+    base64_encode(value, value_base64);
+    cgiHeaderCookieSetString(key, value_base64, 86400 * 30, cgiScriptName, cgiServerName);
 }
 void clear_cookie(char* key)
 {
-    cgiHeaderCookieSetString(key, "", 0, "/", cgiServerName);
+    cgiHeaderCookieSetString(key, "", 0, cgiScriptName, cgiServerName);
+}
+void get_cookie_string(char* key, char* buf)
+{
+    char value[DEFAULT_LENGTH];
+    char value_base64[DEFAULT_LENGTH];
+    cgiCookieString(key, value, DEFAULT_LENGTH);
+    memset(value_base64, 0, DEFAULT_LENGTH);
+    base64_decode(value, value_base64);
+    strcpy(buf, value_base64);
+}
+typedef union {
+    unsigned int    data;
+    unsigned char   xyz[4];
+} Union_data_t;
+
+static long codetovalue(unsigned char c)
+{
+    if( (c >= (unsigned char)'A') && (c <= (unsigned char)'Z') ) {
+        return (long)(c - (unsigned char)'A');
+    }
+    else if( (c >= (unsigned char)'a') && (c <= (unsigned char)'z') ) {
+        return ((long)(c - (unsigned char)'a') +26);
+    }
+    else if( (c >= (unsigned char)'0') && (c <= (unsigned char)'9') ) {
+        return ((long)(c - (unsigned char)'0') +52);
+    }
+    else if( (unsigned char)'+' == c ) {
+        return (long)62;
+    }
+    else if( (unsigned char)'/' == c ) {
+        return (long)63;
+    }
+    else if( (unsigned char)'=' == c ) {
+        return (long)0;
+    }
+    else {
+        return -1;
+    }
 }
 
+static int decode_str(int enc_ptr, const unsigned char *src, unsigned char *dest)
+{
+    int i, j;
+    unsigned long base64 = 0;
+    unsigned char x;
+    Union_data_t bb;
+
+    for (i = enc_ptr; i < enc_ptr + 4; i++) {
+        if (src[i] == '\0') return -1; /* '\0'が出現したら終了。 */
+        x = codetovalue(src[i]);
+        base64 |= x;
+        if ((i - enc_ptr) != 3) base64 <<= 6;
+    }
+    base64 <<= 8;
+    bb.data = base64;
+
+    for(j = 0, i = 3; i >= 1; i--) {
+        dest[j++] = bb.xyz[i];
+    }
+    return 0;
+}
+
+int base64_decode(const unsigned char *src, unsigned char *dest)
+{
+    int i = 0;
+    int srclen;
+    char tmp[4];
+
+    /* NULL pointer */
+    if (src == NULL) return -1;
+
+    srclen = strlen(src);
+
+    if (!srclen % 4) return -2;
+
+    while(srclen) {
+        memset(tmp, 0, sizeof(tmp));
+        if (decode_str(i, src, tmp) != 0)
+            return -1; /* 失敗した場合は、終了 */
+        strcat(dest, tmp);
+        i += 4;
+        srclen -= 4;
+    }
+
+    return 0;
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

@@ -1,3 +1,9 @@
+2008-05-22  smeghead <smeghead@users.sourceforge.jp>
+
+    * cookie保存時のPathを / から、script_nameのパスを指定するように修正した。
+    * cookie保存時は、base64でエンコードしてから保存し、取得時は、base64デコードするようにした。
+    * リリースの準備。
+
 2008-05-19  smeghead <smeghead@users.sourceforge.jp>
 
     * 検索条件を保存している状態でページ上部の状態別のリンクをクリックした時に

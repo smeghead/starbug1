@@ -449,7 +449,7 @@ int set_conditions(sqlite3_stmt* stmt, List* conditions, List* keywords)
     }
     return n;
 }
-SearchResult* db_get_tickets_by_status(const char* status, List* messages, SearchResult* result)
+SearchResult* db_get_tickets_by_status(const char* status, SearchResult* result)
 {
     int r, n, hit_count = 0;
     String* sql_a = string_new(0);
@@ -467,7 +467,6 @@ SearchResult* db_get_tickets_by_status(const char* status, List* messages, Searc
     sql_a = get_search_sql_string(conditions, NULL, keywords_a, sql_a);
     string_append(sql_a, " limit ? ");
     d("sql_a: %s\n", string_rawstr(sql_a));
-    result->messages = messages;
 
     if (sqlite3_prepare(db, string_rawstr(sql_a), string_len(sql_a), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
@@ -552,7 +551,7 @@ SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, con
     return result;
 ERROR_LABEL
 }
-SearchResult* db_search_tickets_4_report(List* conditions, char* q, Condition* sorts, List* messages, SearchResult* result)
+SearchResult* db_search_tickets_4_report(List* conditions, char* q, Condition* sorts, SearchResult* result)
 {
     int r, n;
     String* sql_a = string_new(0);
@@ -561,7 +560,6 @@ SearchResult* db_search_tickets_4_report(List* conditions, char* q, Condition* s
 
     list_alloc(keywords_a, char);
     keywords_a = parse_keywords(keywords_a, q);
-    result->messages = messages;
     sql_a = get_search_sql_string(conditions, sorts, keywords_a, sql_a);
 
     if (sqlite3_prepare(db, string_rawstr(sql_a), string_len(sql_a), &stmt, NULL) == SQLITE_ERROR) goto error;
