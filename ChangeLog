@@ -1,5 +1,9 @@
 2008-05-22  smeghead <smeghead@users.sourceforge.jp>
 
+    * 0.3.3-beta リリース
+
+2008-05-22  smeghead <smeghead@users.sourceforge.jp>
+
     * cookie保存時のPathを / から、script_nameのパスを指定するように修正した。
     * cookie保存時は、base64でエンコードしてから保存し、取得時は、base64デコードするようにした。
     * リリースの準備。
