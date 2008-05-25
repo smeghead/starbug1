@@ -803,7 +803,6 @@ void report_csv_download_action()
     List* conditions_a = NULL;
     Condition* sort_a = NULL;
     Project* project_a = project_new();
-    List* states_a;
     char q[DEFAULT_LENGTH];
 
     db_init();
@@ -818,10 +817,8 @@ void report_csv_download_action()
     sort_a = condition_new();
     create_sort_condition(sort_a);
     result_a = db_search_tickets_4_report(conditions_a, q, sort_a, result_a);
-    xfree(conditions_a);
+    list_free(conditions_a);
     condition_free(sort_a);
-    list_alloc(states_a, State);
-    states_a = db_get_states(states_a);
 
     o("Content-Disposition: attachment; filename=\"report.csv\"\r\n");
     cgiHeaderContentType("text/x-csv; charset=Windows-31J;");
@@ -1567,10 +1564,10 @@ void register_at_once_action()
     o(      "<div id=\"input_form\">\n"
             "<h3>チケット一括登録</h3>\n"
             "<div class=\"description\">\n"
-            "新規チケットを一括登録する場合は、以下のフォームを記入し登録ボタンを押してください。登録の手順は下のとおりです。\n"
+            "新規チケットを一括登録する場合は、以下のフォームにチケット情報をCSV形式で記入し解析ボタンを押してください。登録の手順の詳細は以下のとおりです。\n"
             "\t<ul>\n"
-            "\t\t<li>チケット一括登録ページ(このページ)で、CSVを登録して、解析ボタンを押す。</li>\n"
-            "\t\t<li>チケット一括登録確認ページで、各フィールドに対応する項目を選択し、登録ボタンを押す。</li>\n"
+            "\t\t<li>チケット一括登録ページ(このページ)で、登録したい複数のチケットの情報をCSV形式で貼り付けて、解析ボタンを押す。</li>\n"
+            "\t\t<li>チケット一括登録確認ページで、解析結果が表示されるので、各フィールドに対応する項目を選択し、登録ボタンを押す。</li>\n"
             "\t\t<li>登録完了。</li>\n"
             "\t</ul>\n"
             "</div>\n"
@@ -1787,6 +1784,7 @@ void register_at_once_submit_action()
             if (strlen(value_a) == 0) {
                 /* 値が無ければelementを追加しない */
                 xfree(value_a);
+                xfree(e);
                 continue;
             }
             set_element_value(e, value_a);
