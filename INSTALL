@@ -1,27 +1,38 @@
 インストール方法
 
-Starbug1は、sqlite3、cgic、iconvを使用しています。コンパイルするためには、
+ ・ SQLite3のインストール
+ ・ cgicのインストール
+ ・ Starbug1のコンパイル
+ ・ Starbug1の配置
+ ・ hook機能について
+ ・ バックアップの方法
+ ・ 設定情報をエクスポートする機能について
+ ・ うまく動かない場合
+
+Starbug1は、SQLite3、cgic、iconvを使用しています。コンパイルするためには、
 sqlite3、cgicが必要です。(FreeBSDでコンパイルするには、それらに加えてlibiconvが
 必要になります。)
 
-sqlite3のインストール
+SQLite3のインストール
 
-OSに、sqlite3がインストールされている場合(libsqlite3.so, sqlite3.hが存在する場
-合)は、sqlite3のインストールは不要です。
+OSに、SQLite3がインストールされている場合(libsqlite3.so, sqlite3.hが存在する場
+合)は、SQLite3のインストールは不要です。
 
 http://www.sqlite.org/ から、 sqlite-3.5.4.tar.gz をダウンロードする。
 
-$ wget http://www.sqlite.org/sqlite-3.5.4.tar.gz
+      $ wget http://www.sqlite.org/sqlite-3.5.4.tar.gz
+
 
 適当な場所に展開し、コンパイル、インストールする。
 
-$ tar zxf sqlite-3.5.4.tar.gz
-$ mkdir bld
-$ cd bld
-$ ../sqlite-3-5-4/configure --disable-tcl
-$ make
-$ su
-# make install
+      $ tar zxf sqlite-3.5.4.tar.gz
+      $ mkdir bld
+      $ cd bld
+      $ ../sqlite-3-5-4/configure --disable-tcl
+      $ make
+      $ su
+      # make install
+
 
 cgicのインストール
 
@@ -30,17 +41,19 @@ OSに、cgicl205以上がインストールされている場合は、cgicのインストールは不要です
 
 http://www.boutell.com/cgic/ から cgic205.tar.gz をダウンロードする。
 
-$ wget http://www.boutell.com/cgic/cgic205.tar.gz
+      $ wget http://www.boutell.com/cgic/cgic205.tar.gz
+
 
 適当な場所に展開し、コンパイル、インストールする。
 
-$ tar zxf cgic205.tar.gz
-$ cd cgic205
-$ make
-$ su
-# make install
+      $ tar zxf cgic205.tar.gz
+      $ cd cgic205
+      $ make
+      $ su
+      # make install
 
-Starbug1のインストール
+
+Starbug1のコンパイル
 
 ソースを取得する。
 
@@ -48,16 +61,18 @@ Starbug1のインストール
  ・ 上から取得できない場合や、リポジトリにアクセスしたい場合は、、cvsリポジトリ
     からソースを取得する。
 
-$ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/starbug1 login
-Password:  (そのままEnterキーを押してください)
-$ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/starbug1 checkout starbug1
+      $ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/starbug1 login
+      Password:  (そのままEnterキーを押してください)
+      $ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/starbug1 checkout starbug1
+
 
 コンパイル
 
-$ tar zxf starbug-x.x.x.tar.gz
-$ cd starbug1
-$ gmake
-$ gmake webapp
+      $ tar zxf starbug-x.x.x.tar.gz
+      $ cd starbug1
+      $ gmake
+      $ gmake webapp
+
 
 dist/starbug1 ディレクトリに、webアプリ一式が生成されます。
 
@@ -66,8 +81,9 @@ Starbug1の配置
 Webサーバ(動作確認しているのはapache)のDocumentRoot配下に dist/starbug1 ディレ
 クトリを配置します。
 
-$ su
-# cp -r dist/starbug1 /home/httpd/html
+      $ su
+      # cp -r dist/starbug1 /home/httpd/html
+
 
 ? 以前のバージョンのStarbug1からアップデートする場合には、以前のディレクトリを
 バックアップした後、上のコマンドで上書きしてください。その後で、(バックアップ
@@ -76,43 +92,47 @@ $ su
 
 dist/starbug1 配下をcgi実行ユーザの権限に変更します。
 
-# cd /home/httpd/html
-# chown -R apache:apache starbug1
+      # cd /home/httpd/html
+      # chown -R apache:apache starbug1
+
 
 .htaccessを適切に編集します。(apache用設定)
 
 dot.htaccessを.htaccessにファイル名変更して、各設定を適切に行なってください。
 
-$ mv dot.htaccess .htaccess
-$ cat .htaccess
-# エラーページの指定
-ErrorDocument 500 /starbug1/error.html
-# CGIの実行許可
-Options +ExecCGI
-# 初期ページの設定
-DirectoryIndex index.cgi
+      $ mv dot.htaccess .htaccess
+      $ cat .htaccess
+      # エラーページの指定
+      ErrorDocument 500 /starbug1/error.html
+      # CGIの実行許可
+      Options +ExecCGI
+      # 初期ページの設定
+      DirectoryIndex index.cgi
 
 
-# 一般ユーザの認証についての設定
-<Files index.cgi>
-AuthName      "authentication for guest user."
-AuthType      Basic
-AuthUserFile  /etc/starbug1/.guest-passwd
-Require       valid-user
-</Files>
+      # 一般ユーザの認証についての設定
+      <Files index.cgi>
+          AuthName      "authentication for guest user."
+          AuthType      Basic
+          AuthUserFile  /etc/starbug1/.guest-passwd
+          Require       valid-user
+      </Files>
 
-# 管理ユーザの認証についての設定
-<Files admin.cgi>
-AuthName      "authentication for administrator user."
-AuthType      Basic
-AuthUserFile  /etc/starbug1/.admin-passwd
-Require       valid-user
-</Files>
+      # 管理ユーザの認証についての設定
+      <Files admin.cgi>
+          AuthName      "authentication for administrator user."
+          AuthType      Basic
+          AuthUserFile  /etc/starbug1/.admin-passwd
+          Require       valid-user
+      </Files>
+
 
 エラーページの指定
     URLを適切に指定してください。アプリのフォルダ名(starbug1)を変更した場合は、
     エラーページの指定のURLを変更してください。
 CGIの実行許可
+    不要であれば、コメントアウトしてください。
+デフォルトページ(welcomeページ)
     不要であれば、コメントアウトしてください。
 Basic認証
     Basic認証を使用する場合、htpasswdなどでパスワードファイルへのユーザの登録を
@@ -169,23 +189,24 @@ hook機能に登録された外部スクリプトでエラーが発生した場合は、「登録が完了しまし
 し、見易いように整形してあります。) 各言語のjsonとオブジェクトの変換ライブラリ
 で変換すれば、簡単に投稿内容を取得できます。
 
-{
-  project: { name: "テストサンプル プロジェクト"},
-  ticket: {
-    id: 2,
-    url: "http://popnuts.ddo.jp/starbug1/index.cgi/ticket/2",
-    fields: [
-      { name: "件名",     value: "誰でも投稿できるようになっていた件について" },
-      { name: "投稿者",   value: "smeghead" },
-      { name: "状態",     value: "受付済" },
-      { name: "カテゴリ", value: "画面 " },
-      { name: "優先度",   value: "高" },
-      { name: "詳細",     value: "テスト詳細2" },
-      { name: "再現手順", value: "テスト再現手順2" },
-      { name: "コメント", value: "" }
-    ]
-  }
-}
+      {
+        project: { name: "テストサンプル プロジェクト"},
+        ticket: {
+          id: 2,
+          url: "http://popnuts.ddo.jp/starbug1/index.cgi/ticket/2",
+          fields: [
+            { name: "件名",     value: "誰でも投稿できるようになっていた件について" },
+            { name: "投稿者",   value: "smeghead" },
+            { name: "状態",     value: "受付済" },
+            { name: "カテゴリ", value: "画面 " },
+            { name: "優先度",   value: "高" },
+            { name: "詳細",     value: "テスト詳細2" },
+            { name: "再現手順", value: "テスト再現手順2" },
+            { name: "コメント", value: "" }
+          ]
+        }
+      }
+
 
 添付のメール送信スクリプトの設定方法
 
@@ -194,29 +215,46 @@ Starbug1に添付されているメール送信スクリプトの設定方法を説明します。 ${Starbug1
 在します。以下のコマンドで、メール送信スクリプトをhook_で始まるファイル名に変更
 します。
 
-# cd ${Starbug1のインストールディレクトリ}/script
-# mv sample.hook_sendmail.pl hook_sendmail.pl
+      # cd ${Starbug1のインストールディレクトリ}/script
+      # mv sample.hook_sendmail.pl hook_sendmail.pl
+
 
 スクリプトの一行目を、perlのpathに変更します。
 
-#!/usr/local/bin/perl
+      #!/usr/local/bin/perl
+
 
 メール送信のための情報を設定します。$options というhashに対して設定を行ないます
 。赤文字の部分がカスタマイズ部分です。
 
-my $options = {
-  #使用するSMTPホスト名
-  smtp_host => 'localhost',
-  #使用するSMTPポート番号
-  smtp_port => 25,
-  #送信するメールのFROMを指定してください。
-  from => 'project-admin@example.com',
-  #メールの送信先を指定してください。通知したいメーリングリストのアドレスなど。
-  to => 'project-ml@example.com'
-};
+      my $options = {
+        #使用するSMTPホスト名
+        smtp_host => 'localhost',
+        #使用するSMTPポート番号
+        smtp_port => 25,
+        #送信するメールのFROMを指定してください。
+        from => 'project-admin@example.com',
+        #メールの送信先を指定してください。通知したいメーリングリストのアドレスなど。
+        to => 'project-ml@example.com'
+      };
+
 
 以上の設定を行なった後、チケットの登録・返信を行なって、動作確認を行なってくだ
 さい。
+
+バックアップの方法
+
+Starbug1で定期的にバックアップを行ないたい場合は、${インストールディレクトリ}/
+db/starbug1.db をバックアップしてください。 starbug1.dbは、ただのSQLite3のデー
+タベースファイルです。
+
+例えばcronに登録する場合は以下のようにcrontab -e で設定すれば、バックアップでき
+ます。
+
+      # /var/www/html/starbug1 にインストールされたStarbug1のデータベースを、
+      # gzipで圧縮して /var/backup 以下に保存する場合です。
+      0 1 * * * gzip -c /var/www/html/starbug1/db/starbug1.db > /var/backup/starbug1.db_$(date +%Y%m%d).gz
+
 
 設定情報をエクスポートする機能について
 
@@ -231,9 +269,10 @@ my $options = {
 
 既に存在するプロジェクトの動作環境のサーバ上でコマンドを実行します。
 
-# cd /somewhere/to/old/project
-# cd script
-# ./pickup_template
+      # cd /somewhere/to/old/project
+      # cd script
+      # ./pickup_template
+
 
 実行後、template ディレクトリが作成され、内部にテンプレートが作成されます。
 
@@ -245,7 +284,8 @@ my $options = {
 新しいプロジェクトをインストールします。正常にインストールが完了した状態で、保
 存してあったtemplateディレクトリを上書きします。
 
-# cp -r /somewhere/to/old/project/template/* /somewhere/to/new/project/
+      # cp -r /somewhere/to/old/project/template/* /somewhere/to/new/project/
+
 
 以上で、新しいプロジェクトに古いプロジェクトの設定情報が反映されます。新しいプ
 ロジェクトと古いプロジェクトのバージョンが違う場合は、正常に反映されない又は正
@@ -261,9 +301,11 @@ CGIを実行する権限があるか確認してください。以下のような簡単なperlのcgiスクリプ
 トをstarbug1ディレクトリに配置し実行権限を付加して動作するかどうか確認すること
 で、CGI自体が有効になっているかどうかを確認できます。
 
-#!/usr/bin/perl
-print "Content-Type: text/plain;\n\nhello.";
+      #!/usr/bin/perl
+      print "Content-Type: text/plain;\n\nhello.";
+
 
 Webサーバプロセスユーザが、starbug1ディレクトリに書き込み権限があるか確認してく
 ださい。データベースファイルを格納するために、Webサーバプロセスユーザが
 starbug1ディレクトリに書き込み可能となっている必要があります。
+
