@@ -145,10 +145,6 @@ input:hover.button {
     cursor: pointer;
 }
 
-input:focus.button {
-    border-color: #000000;
-    background-color: #cccccc;
-}
 #mainmenu {
     width:100%;
     margin:0px 0px 0px 0px;

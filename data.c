@@ -31,12 +31,13 @@ void set_element_value(Element* e, const char* val)
     e->str_val = xalloc(sizeof(char) * strlen(val) + 1);
     strcpy(e->str_val, val);
 }
-void set_condition_values(Condition* c, int element_type_id, int condition_type, char* value, char* cookie_value)
+void set_condition_values(Condition* c, int element_type_id, int condition_type, char* value, char* cookie_value, bool cookie_restore)
 {
     c->element_type_id = element_type_id;
     c->condition_type = condition_type;
     strcpy(c->value, value);
-    strcpy(c->cookie_value, cookie_value);
+    if (cookie_restore)
+        strcpy(c->cookie_value, cookie_value);
 }
 char* get_condition_value(List* conditions, int element_type_id, int condition_type)
 {

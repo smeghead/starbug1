@@ -107,7 +107,7 @@ enum CONDITION_TYPE {
 };
 Condition* condition_new();
 void condition_free(Condition*);
-void set_condition_values(Condition*, int, int, char*, char*);
+void set_condition_values(Condition*, int, int, char*, char*, bool);
 char* get_condition_value(List*, int, int);
 int valid_condition_size(List*);
 bool valid_condition(Condition*);

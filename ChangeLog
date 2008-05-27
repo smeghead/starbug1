@@ -1,3 +1,8 @@
+2008-05-27  smeghead <smeghead@users.sourceforge.jp>
+
+    * カーソルを載せたときのボタンのスタイル指定を削除した。
+    * チケット検索でクッキーの値を復元する条件を修正した。
+
 2008-05-25  smeghead <smeghead@users.sourceforge.jp>
 
     * csvダウンロード時のfree忘れに対応した。
