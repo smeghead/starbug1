@@ -70,7 +70,7 @@ void create_tables()
             ");", COLUMN_TYPE_END);
     exec_query(
             "insert into project(name, home_url)"
-            "values ('BTS', 'http://example.com/');", COLUMN_TYPE_END);
+            "values ('BTS', '');", COLUMN_TYPE_END);
     exec_query(
             "create table element_type("
             " id integer not null primary key, "
