@@ -250,6 +250,15 @@ void create_tables()
 
             "**ページのスタイルを自由に設定したい\n"
             "管理ツールのスタイル設定から、スタイルシートをカスタマイズすることが可能です。カスタマイズするためには、CSSの知識が必要です。\n"
+
+            "**データのバックアップをしたい\n"
+            "バックアップの方法については、以下のサイトのインストールのページを見てください。\n"
+            "-http://starbug1.sourceforge.jp/\n"
+
+            "**設定情報をエクスポートしたい\n"
+            "Starbug1を複数立ち上げる際などに、1から設定しなくて済むように、運用中のStarbug1から設定情報をエクスポートすることができます。設定情報のエクスポートの方法については、以下のサイトのインストールのページを見てください。\n"
+            "-http://starbug1.sourceforge.jp/\n"
+
             "', current_timestamp);", COLUMN_TYPE_END);
     exec_query(
             "insert into wiki(id, name, content, registerdate) values (NULL, 'adminhelp', '"
