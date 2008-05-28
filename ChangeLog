@@ -1,3 +1,9 @@
+2008-05-28  smeghead <smeghead@users.sourceforge.jp>
+
+    * 管理ツールのバックアップのリンクを削除した。
+    * ヘルプページに逆引きヘルプの項目を追加した。
+    * 管理ツールの項目設定の説明文を修正した。
+
 2008-05-27  smeghead <smeghead@users.sourceforge.jp>
 
     * カーソルを載せたときのボタンのスタイル指定を削除した。

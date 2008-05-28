@@ -28,6 +28,7 @@ DirectoryIndex index.cgi
 #</Files>
 
 # 隠すファイルやディレクトリ
-<FilesMatch "(^\.|.*\.log|^script$)">
+<FilesMatch "(^\.|.*\.log|^script$|^db$)">
     deny from all
 </FilesMatch>
+# vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8:

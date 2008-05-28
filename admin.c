@@ -89,7 +89,6 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
     o(      "\t\t<li><a %s href=\"%s/env\">環境設定</a></li>\n", navi == NAVI_ENV ? "class=\"current\"" : "", cgiScriptName);
     o(      "\t\t<li><a %s href=\"%s/items\">項目設定</a></li>\n", navi == NAVI_ITEM ? "class=\"current\"" : "", cgiScriptName);
     o(      "\t\t<li><a %s href=\"%s/style\">スタイル設定</a></li>\n", navi == NAVI_STYLE ? "class=\"current\"" : "", cgiScriptName);
-    o(      "\t<li><a href=\"%s/../db/starbug1.db\">バックアップ</a></li>\n", cgiScriptName);
     o(      "\t\t<li><a %s href=\"%s/admin_help\">ヘルプ</a></li>\n", navi == NAVI_ADMIN_HELP ? "class=\"current\"" : "", cgiScriptName);
     o(      "\t<li><a href=\"%s/../index.cgi\">", cgiScriptName);h(project->name); o("トップへ</a></li>\n");
     o(      "</ul>\n"
@@ -139,6 +138,8 @@ void menu_action()
     }
     o("<h2>"); h(project_a->name); o(" 管理ツール</h2>");
     project_free(project_a);
+    o("<div id=\"main_body\">\n");
+    o("<h3>管理ツールメニュー</h3>\n");
     o("<div id=\"admin_menu\">\n");
     o("\t<dl>\n");
     o("\t\t<dt><a href=\"%s/project\">プロジェクト設定</a></dt><dd>プロジェクトの基本的な情報の設定です。</dd>\n", cgiScriptName);
@@ -146,6 +147,14 @@ void menu_action()
     o("\t\t<dt><a href=\"%s/items\">項目設定</a></dt><dd>チケットの項目についての設定です。</dd>\n", cgiScriptName);
     o("\t\t<dt><a href=\"%s/style\">スタイル設定</a></dt><dd>スタイルシートの設定です。</dd>\n", cgiScriptName);
     o("\t</dl>\n");
+    o("</div>\n");
+    o("<h3>メール送信機能について</h3>\n");
+    o("<div class=\"description\">\n");
+    o("\t投稿時、返信時のメール送信は、hook機能により実現可能です。hook機能はサーバ上での設定が必要になります。hook機能の設定方法については、以下のサイトのインストールのページを見てください。\n");
+    o("\t<ul>\n"
+      "\t\t<li><a href=\"http://starbug1.sourceforge.jp/\">http://starbug1.sourceforge.jp/</a></li>\n"
+      "\t</ul>\n");
+    o("</div>\n");
     o("</div>\n");
 
     output_footer();
@@ -266,7 +275,7 @@ void items_action()
     o("<div id=\"setting_form\">\n"
       "\t<form id=\"management_form\" action=\"%s/items_submit\" method=\"post\">\n", cgiScriptName);
     o("\t\t<h3>項目設定</h3>\n"
-      "\t\t<div class=\"description\">チケットID、投稿日時は編集できません。件名、投稿者、状態は、基本属性のため編集に制限があります。(削除不可、チケット属性、返信専用属性変更不可)</div>\n"
+      "\t\t<div class=\"description\">チケットID、投稿日時は編集できません。件名、投稿者、状態は、基本属性のため編集できる内容に制限があります。(削除不可、チケット属性、返信専用属性変更不可)</div>\n"
       "\t\t<div><a href=\"%s/new_item\">新規項目の追加</a></div>\n", cgiScriptName);
 
     list_alloc(element_types_a, ElementType);
