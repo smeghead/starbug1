@@ -112,7 +112,7 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/prototype.js\"></script>\n", cgiScriptName);
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/%s\"></script>\n", cgiScriptName, script_name);
     }
-    o(      "\t<link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS\" href=\"%s/rss\">\n", string_rawstr(base_url_a));
+    o(      "\t<link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS\" href=\"%s/rss\" />\n", string_rawstr(base_url_a));
     string_free(base_url_a);
     o(      "</head>\n"
             "<body>\n"
@@ -343,7 +343,7 @@ void output_states(List* states, bool with_new_ticket_link)
     }
     o("\t\t<li>\n");
     o("\t\t\t<form action=\"%s/search\" method=\"get\">\n", cgiScriptName);
-    o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" maxlength=\"%d\" />\n", NUM_LENGTH - 1);
+    o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" maxlength=\"%d\" value=\"\" />\n", NUM_LENGTH - 1);
     o("\t\t\t\t<input type=\"submit\" class=\"button\" value=\"ID指定で表示\" />\n"
       "\t\t\t</form>\n"
       "\t\t</li>\n");
@@ -716,8 +716,8 @@ void search_actoin()
     o("</table>\n"
       "<input name=\"search_button\" class=\"button\" type=\"submit\" value=\"検索\" />"
       "<input id=\"save_condition\" type=\"checkbox\" name=\"save_condition\" class=\"checkbox\" value=\"1\" %s />\n"
-      "<label for=\"save_condition\">検索条件を保存する。(cookie使用)</label>\n"
-      "</div>\n", condition_will_save ? "checked=\"checked\"" : "");
+      "<label for=\"save_condition\">検索条件を保存する。(cookie使用)</label>\n",
+      condition_will_save ? "checked=\"checked\"" : "");
     o("</form>\n"
       "</div>\n");
     fflush(cgiOut);
@@ -864,7 +864,7 @@ void output_form_element_4_condition(ElementType* et, List* conditions)
             h(id);
             o("\" value=\"");
             v(value);
-            o("\" maxlength=\"%d\"/>\n", DEFAULT_LENGTH - 1);
+            o("\" maxlength=\"%d\" />\n", DEFAULT_LENGTH - 1);
             break;
         case ELEM_TYPE_LIST_SINGLE:
         case ELEM_TYPE_LIST_MULTI:
@@ -1134,7 +1134,7 @@ void register_action()
     o(      "<div class=\"description\">\n"
             "\t<ul>\n"
             "\t\t<li>複数行テキスト項目の内容では、#1 のように書くと、ID が 1 のチケットのチケット詳細ページへのリンクとなります。</li>\n"
-            "\t\t<li>複数行テキスト項目の内容では、行頭が >| から始まる行から、行頭が |< から始まる行までは、整形済みブロックになります。</li>\n"
+            "\t\t<li>複数行テキスト項目の内容では、行頭が &gt;| から始まる行から、行頭が |&lt; から始まる行までは、整形済みブロックになります。</li>\n"
             "\t</ul>\n"
             "</div>\n");
     db_finish();
@@ -1378,7 +1378,7 @@ void ticket_action()
     o(      "<div class=\"description\">\n"
             "\t<ul>\n"
             "\t\t<li>複数行テキスト項目の内容では、#1 のように書くと、ID が 1 のチケットのチケット詳細ページへのリンクとなります。</li>\n"
-            "\t\t<li>複数行テキスト項目の内容では、行頭が >| から始まる行から、行頭が |< から始まる行までは、整形済みブロックになります。</li>\n"
+            "\t\t<li>複数行テキスト項目の内容では、行頭が &gt;| から始まる行から、行頭が |&lt; から始まる行までは、整形済みブロックになります。</li>\n"
             "\t</ul>\n"
             "</div>\n");
     output_field_information_js(element_types_a);
@@ -1583,7 +1583,7 @@ void register_at_once_action()
           "<span class=\"required\">※</span>"
           "</th><td>\n"
           "\t\t\t<div id=\"csvdata.required\" class=\"error\"></div>\n"
-          "\t\t\t<textarea name=\"csvdata\" id=\"csvdata\" row=\"5\" col=\"5\" wrap=\"off\"></textarea>\n"
+          "\t\t\t<textarea name=\"csvdata\" id=\"csvdata\" rows=\"5\" cols=\"5\"></textarea>\n"
           "\t\t\t<div class=\"description\">登録したいデータをCSV形式で貼り付けてください。次の画面で取り込むフィールドを設定可能です。&nbsp;</div>\n"
           "\t\t</td>\n"
           "\t</tr>\n"
