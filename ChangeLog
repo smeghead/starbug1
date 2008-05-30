@@ -1,6 +1,7 @@
 2008-05-29  smeghead <smeghead@users.sourceforge.jp>
 
     * XHTMLのエラーを修正した。
+    * XHTMLのValidアイコンを消した。canvasを使っているためvalidではなくなっていたため。
 
 2008-05-28  smeghead <smeghead@users.sourceforge.jp>
 

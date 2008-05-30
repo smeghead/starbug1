@@ -100,12 +100,13 @@ void output_footer()
     o(      "<div id=\"footer\">\n"
             "<hr />\n"
             "<div align=\"right\">\n"
-            "<p>\n"
-            "\t<a href=\"http://validator.w3.org/check?uri=referer\">\n"
-            "\t\t<img src=\"http://www.w3.org/Icons/valid-xhtml10\" alt=\"Valid XHTML 1.0 Transitional\" height=\"31\" width=\"88\" />\n"
-            "\t</a>\n"
-            "</p>\n"
+/*             "<p>\n" */
+/*             "\t<a href=\"http://validator.w3.org/check?uri=referer\">\n" */
+/*             "\t\t<img src=\"http://www.w3.org/Icons/valid-xhtml10\" alt=\"Valid XHTML 1.0 Transitional\" height=\"31\" width=\"88\" />\n" */
+/*             "\t</a>\n" */
+/*             "</p>\n" */
             "<div><address>Powered by cgic.</address></div>\n"
+            "<div><address>Powered by SQLite3.</address></div>\n"
             "<div><address>Starbug1 version: %s. Copyright smeghead 2007 - 2008.</address></div>\n"
             "</div>\n"
             "</div>\n"

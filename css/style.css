@@ -299,6 +299,10 @@ input.conditionelement {
 #footer {
     clear : both;
 }
+#footer div address {
+    margin:0px;
+    padding:0px;
+}
 #info ul,
 #info li {
     margin:0px 0px 0px 0px;
