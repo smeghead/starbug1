@@ -140,17 +140,16 @@ void output_footer()
     o(      "<div id=\"footer\">\n"
             "<hr />\n"
             "<div align=\"right\">\n"
-/*             "<p>\n" */
-/*             "\t<a href=\"http://validator.w3.org/check?uri=referer\">\n" */
-/*             "\t\t<img src=\"http://www.w3.org/Icons/valid-xhtml10\" alt=\"Valid XHTML 1.0 Transitional\" height=\"31\" width=\"88\" />\n" */
-/*             "\t</a>\n" */
-/*             "</p>\n" */
-            "<div><address>Powered by cgic.</address></div>\n"
-            "<div><address>Powered by SQLite3.</address></div>\n"
+            "<p>\n"
+            "\t<a href=\"http://validator.w3.org/check?uri=referer\">\n"
+            "\t\t<img src=\"%s/../img/valid-xhtml10.gif\" alt=\"Valid XHTML 1.0 Transitional\" height=\"31\" width=\"88\" />\n"
+            "\t</a>\n"
+            "</p>\n"
+            "<div><address>Powered by cgic &amp; SQLite3.</address></div>\n"
             "<div><address>Starbug1 version: %s. Copyright smeghead 2007 - 2008.</address></div>\n"
             "</div>\n"
             "</div>\n"
-            "</body>\n</html>\n", VERSION);
+            "</body>\n</html>\n", cgiScriptName, VERSION);
 }
 int cgiMain() {
     register_actions();
@@ -2070,9 +2069,9 @@ got_item:
                     o("\n");
                 }
                 o(      "\t\t];\n"
+                        "\t\tdocument.write('<canvas width=\"400\" height=\"300\" id=\"graph_%d\"></canvas>');\n"
                         "\t\t// -->\n"
-                        "\t\t</script>\n"
-                  "<canvas width=\"400\" height=\"300\" id=\"graph_%d\"></canvas>\n", et->id);
+                        "\t\t</script>\n", et->id);
                 o("</div>\n");
                 break;
         }

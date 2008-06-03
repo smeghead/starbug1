@@ -1,3 +1,8 @@
+2008-06-03  smeghead <smeghead@users.sourceforge.jp>
+
+    * XHTML Validのアイコンを再度追加した。存在しないcanvasタグは、JavaScript
+      で出力するように修正した。
+
 2008-05-30  smeghead <smeghead@users.sourceforge.jp>
 
     * 1.0.1 リリース
