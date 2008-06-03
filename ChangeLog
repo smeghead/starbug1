@@ -2,6 +2,7 @@
 
     * XHTML Validのアイコンを再度追加した。存在しないcanvasタグは、JavaScript
       で出力するように修正した。
+    * ヘルプの追加。項目のカスタマイズと添付資料の項目の追加の記述を追加した。
 
 2008-05-30  smeghead <smeghead@users.sourceforge.jp>
 
