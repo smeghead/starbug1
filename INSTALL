@@ -58,15 +58,10 @@ Starbug1のコンパイル
 ソースを取得する。
 
  ・ Downloadから最新ソースを取得する。https://sourceforge.jp/projects/starbug1/
- ・ 上から取得できない場合や、リポジトリにアクセスしたい場合は、、cvsリポジトリ
-    からソースを取得する。
-
-      $ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/starbug1 login
-      Password:  (そのままEnterキーを押してください)
-      $ cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/starbug1 checkout starbug1
-
 
 コンパイル
+
+取得したソースを展開しコンパイルします。
 
       $ tar zxf starbug-x.x.x.tar.gz
       $ cd starbug1
@@ -90,7 +85,7 @@ Webサーバ(動作確認しているのはapache)のDocumentRoot配下に dist/starbug1 ディレ
 先)/css/user.css を、(インストールディレクトリ)/css/user.cssに上書きしてくださ
 い。
 
-dist/starbug1 配下をcgi実行ユーザの権限に変更します。
+(インストールディレクトリ)/starbug1 配下をcgi実行ユーザの権限に変更します。
 
       # cd /home/httpd/html
       # chown -R apache:apache starbug1
@@ -309,3 +304,6 @@ Webサーバプロセスユーザが、starbug1ディレクトリに書き込み権限があるか確認してく
 ださい。データベースファイルを格納するために、Webサーバプロセスユーザが
 starbug1ディレクトリに書き込み可能となっている必要があります。
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                                                                               
+                                                Copyright smeghead 2007 - 2008.

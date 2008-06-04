@@ -1,3 +1,7 @@
+2008-06-04  smeghead <smeghead@users.sourceforge.jp>
+
+    * INSTALLから、CVSから取得する場合の説明を削除した。
+
 2008-06-03  smeghead <smeghead@users.sourceforge.jp>
 
     * XHTML Validのアイコンを再度追加した。存在しないcanvasタグは、JavaScript
