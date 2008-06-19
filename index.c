@@ -1398,7 +1398,7 @@ static void register_list_item(int id, char* name)
 }
 /**
  * 登録するaction。
- * 登録モード、編集モード、削除モードがある。
+ * 登録モード、編集モードがある。
  */
 void register_submit_action()
 {
@@ -1473,6 +1473,7 @@ void register_submit_action()
                         set_element_value(e, value_a);
                         /* 新しく選択肢を追加 */
                         register_list_item(et->id, value_a);
+                        strcat(value_a, "\t");
                     }
                     if ((cgiFormStringMultiple(name, &multi)) != cgiFormNotFound) {
                         int i = 0;
