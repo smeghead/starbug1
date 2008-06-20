@@ -26,7 +26,6 @@ function check_input_value(fields) {
                 ? value.empty()
                 : (value.any(function(x){return x.empty();}) && new_item && $F(new_item).empty());
                 if (f.id == 'field4')
-                alert(value.any(function(x){return x.empty();}));
             var message = $(f.id + '.required');
             if (empty) {
                 message.innerHTML = "必須項目です。入力してください。";
