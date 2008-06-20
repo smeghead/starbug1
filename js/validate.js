@@ -20,7 +20,13 @@ function register_date_fields(array, ids) {
 function check_input_value(fields) {
     var ret = $A(fields).findAll(
         function(f) {
-            var empty = $F(f).empty();
+            var value = $F(f);
+            var new_item = $(f.id + '.new_item');
+            var empty = (value.constructor != Array)
+                ? value.empty()
+                : (value.any(function(x){return x.empty();}) && new_item && $F(new_item).empty());
+                if (f.id == 'field4')
+                alert(value.any(function(x){return x.empty();}));
             var message = $(f.id + '.required');
             if (empty) {
                 message.innerHTML = "必須項目です。入力してください。";
