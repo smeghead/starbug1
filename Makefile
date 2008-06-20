@@ -10,7 +10,7 @@ ifeq ($(OS), CYGWIN_NT-5.1)
 	LFLAGS += -static
 endif
 
-default: index.cgi post.cgi admin.cgi
+default: index.cgi admin.cgi
 
 list.o: list.c list.h
 simple_string.o: simple_string.c simple_string.h
