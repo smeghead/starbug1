@@ -1470,7 +1470,6 @@ void register_submit_action()
                     /* 新規選択肢 */
                     cgiFormString(name_new_item, value_a, VALUE_LENGTH);
                     if (strlen(value_a)) {
-                        set_element_value(e, value_a);
                         /* 新しく選択肢を追加 */
                         register_list_item(et->id, value_a);
                         strcat(value_a, "\t");
