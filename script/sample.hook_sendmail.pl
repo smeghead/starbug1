@@ -60,7 +60,7 @@ sub create_content {
         my $name = $f->{name};
         my $value = $f->{value};
         $value =~ s/([^\r])\n/$1\r\n/g;
-        $fields_data .= " $name: $value\n";
+        $fields_data .= "■$name\n$value\n---------------------------------------------\n";
     }
     return <<EOD;
 チケットが更新されました。
