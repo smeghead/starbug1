@@ -1,3 +1,8 @@
+2008-06-25  smeghead <smeghead@users.sourceforge.jp>
+
+    * スタイルシートの調整をした。トップページのinfoを少し大きい文字に変更した。
+    * スタイルシートの調整をした。pre記法のfont指定に、ＭＳゴシックを追加した。
+
 2008-06-24  smeghead <smeghead@users.sourceforge.jp>
 
     * サンプルのメール送信用hookスクリプトで、メール本文の内容を見易い形式に変更した。
