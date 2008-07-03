@@ -435,8 +435,12 @@ void items_action()
         }
         o("\t\t\t<tr>\n"
           "\t\t\t\t<th>デフォルト値</th>\n"
-          "\t\t\t\t<td>\n"
-          "\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field%d.default_value\" value=\"%s\" maxlength=\"1000\" />\n", et->id, et->default_value);
+          "\t\t\t\t<td>\n");
+        if (et->type == ELEM_TYPE_TEXTAREA) {
+            o("\t\t\t\t\t<textarea name=\"field%d.default_value\" rows=\"2\" cols=\"10\" maxlength=\"1000\" >", et->id);h(et->default_value);o("</textarea>\n");
+        } else {
+            o("\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field%d.default_value\" value=\"%s\" maxlength=\"1000\" />\n", et->id, et->default_value);
+        }
         o("\t\t\t\t\t<div class=\"description\">投稿画面、返信画面での項目の初期値です。</div>\n"
           "\t\t\t\t</td>\n"
           "\t\t\t</tr>\n"
@@ -531,7 +535,7 @@ void update_elements()
         et_a->sort = atoi(value);
 
         sprintf(name, "field%s.default_value", id);
-        cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+        cgiFormString(name, value, DEFAULT_LENGTH);
         strcpy(et_a->default_value, value);
 
         sprintf(name, "field%s.auto_add_item", id);

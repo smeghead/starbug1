@@ -355,7 +355,7 @@ void output_states(List* states, bool with_new_ticket_link)
     o("\t</ul>\n"
       "\t<br clear=\"all\" />\n"
       "</div>\n");
-/*       "<br clear=\"all\" />\n"); */
+/*     o("<br class=\"clear\" clear=\"all\" />\n"); */
 }
 /**
  * 一覧を表示するaction。

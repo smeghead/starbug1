@@ -143,6 +143,10 @@ input.button {
 input:hover.button {
     cursor: pointer;
 }
+br.clear {
+    height: 1px;
+    background-color: red;
+}
 
 #mainmenu {
     width:100%;
@@ -439,6 +443,9 @@ table.item_table {
 }
 table.item_table th {
     width: 120px;
+}
+table.item_table textarea {
+    height: 40px;
 }
 .element_new_item {
     width: 80px;

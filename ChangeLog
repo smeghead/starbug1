@@ -1,3 +1,7 @@
+2008-07-03  smeghead <smeghead@users.sourceforge.jp>
+
+    * 複数行テキストの項目のデフォルト値を、複数行で指定できるようにした。
+
 2008-06-25  smeghead <smeghead@users.sourceforge.jp>
 
     * スタイルシートの調整をした。トップページのinfoを少し大きい文字に変更した。
