@@ -1,5 +1,6 @@
 #ifndef DATA_H
 #define DATA_H
+/* 使用するデータ型を定義する */
 
 #include <stdio.h>
 #include "list.h"

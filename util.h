@@ -7,7 +7,22 @@
 #include "simple_string.h"
 
 #define o(...) fprintf(cgiOut, __VA_ARGS__)
-#define d(...) {FILE *fp = fopen("debug.log", "a");fprintf(fp, __VA_ARGS__);fclose(fp);}
+#ifdef DEBUG
+#define d(...) {\
+    char time[20];\
+    FILE *fp = fopen("debug.log", "a");\
+    set_date_string(time);\
+    fprintf(fp, "[%s] ", time);\
+    fprintf(fp, __VA_ARGS__);\
+    fclose(fp);\
+}
+#else
+#define d(...) {\
+    FILE *fp = fopen("debug.log", "a");\
+    fprintf(fp, __VA_ARGS__);\
+    fclose(fp);\
+}
+#endif
 #define die(msg)    {d("ERROR: %s(%d) %s %s\n", __FILE__, __LINE__, __FUNCTION__, msg); exit(1);}
 #define h(str)      cgiHtmlEscape(str == NULL ? "" : str)
 #define v(str)      cgiValueEscape(str == NULL ? "" : str)
@@ -40,6 +55,7 @@ void set_cookie(char*, char*);
 void clear_cookie(char*);
 void get_cookie_string(char*, char*);
 int base64_decode(const unsigned char*, unsigned char*);
+void set_date_string(char*);
 
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

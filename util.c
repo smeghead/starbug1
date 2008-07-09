@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
+#include <sys/time.h>
 #include <cgic.h>
 #include <iconv.h>
 #include "util.h"
@@ -625,5 +627,16 @@ int base64_decode(const unsigned char *src, unsigned char *dest)
     }
 
     return 0;
+}
+void set_date_string(char* buf)
+{
+    struct timeval tv;
+    struct tm *tp;
+
+    gettimeofday(&tv, NULL);
+    tp = localtime(&tv.tv_sec);
+    sprintf(buf, "%04d-%02d-%02d %02d:%02d:%02d",
+            tp->tm_year + 1900, tp->tm_mon + 1, tp->tm_mday,
+            tp->tm_hour, tp->tm_min, tp->tm_sec);
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

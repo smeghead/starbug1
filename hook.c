@@ -9,12 +9,10 @@
 #include "hook.h"
 #include "simple_string.h"
 
-static char* put_env_a(char* name, char* value)
+static void put_env_a(char* name, char* value, char* buf)
 {
-    char* val = (char*)xalloc(sizeof(char) * VALUE_LENGTH);
-    sprintf(val, "%s=%s", name, value);
-    putenv(val);
-    return val;
+    sprintf(buf, "%s=%s", name, value);
+    putenv(buf);
 }
 
 HOOK* init_hook(HOOK_MODE mode)
@@ -90,7 +88,8 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
             HOOK_RESULT* result;
             result = list_new_element(hook->results);
             strcpy(result->command, hook_command);
-            val_a = put_env_a("STARBUG1_CONTENT", string_rawstr(content_a));
+            val_a = xalloc(sizeof(char) * string_len(content_a) + strlen("STARBUG1_CONTENT=") + 1);
+            put_env_a("STARBUG1_CONTENT", string_rawstr(content_a), val_a);
             ret = system(hook_command);
             xfree(val_a);
             if (ret == 0) {

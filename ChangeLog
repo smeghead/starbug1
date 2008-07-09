@@ -1,3 +1,17 @@
+2008-07-09  smeghead <smeghead@users.sourceforge.jp>
+
+    * 1.0.3 リリース
+
+2008-07-09  smeghead <smeghead@users.sourceforge.jp>
+
+    * DEBUGが定義されている場合、debug.logの出力に時間を出力するように修正した。
+    * hook機能に渡すjsonの領域を必要な分だけallocするように修正した。
+
+2008-07-08  smeghead <smeghead@users.sourceforge.jp>
+
+    * filesizeエラーが発生したときエラー処理でrollbackしていたが、beginする前
+      だったために予期せぬエラーが発生していたのを修正した。
+
 2008-07-03  smeghead <smeghead@users.sourceforge.jp>
 
     * 複数行テキストの項目のデフォルト値を、複数行で指定できるようにした。

@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
-#include <sys/time.h>
 #include <sqlite3.h>
 #include "data.h"
 #include "db.h"
@@ -134,17 +132,6 @@ List* db_get_list_item(const int element_type, List* items)
 ERROR_LABEL
 }
 
-void set_date_string(char* buf)
-{
-    struct timeval tv;
-    struct tm *tp;
-
-    gettimeofday(&tv, NULL);
-    tp = localtime(&tv.tv_sec);
-    sprintf(buf, "%04d-%02d-%02d %02d:%02d:%02d",
-            tp->tm_year + 1900, tp->tm_mon + 1, tp->tm_mday,
-            tp->tm_hour, tp->tm_min, tp->tm_sec);
-}
 void create_message_insert_sql(List* elements, char* buf)
 {
     Iterator* it;

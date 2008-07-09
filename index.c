@@ -1492,7 +1492,7 @@ void register_submit_action()
                     cgiStringArrayFree(multi);
                     break;
                 case ELEM_TYPE_UPLOADFILE:
-                    if (get_upload_size(et->id) > MAX_FILE_SIZE * 1024) {
+                    if (get_upload_size(et->id) > (MAX_FILE_SIZE * 1024)) {
                         goto file_size_error;
                     }
                     cgiFormFileName(name, value_a, VALUE_LENGTH);
@@ -1516,26 +1516,33 @@ void register_submit_action()
         xfree(value_a);
         db_begin();
         ticket_a->id = db_register_ticket(ticket_a);
+        d("commit\n");
         db_commit();
+        d("commited\n");
         /* hook */
         hook = init_hook(HOOK_MODE_REGISTERED);
+        d("init_hook\n");
         hook = exec_hook(hook, project_a, ticket_a, ticket_a->elements, element_types_a);
+        d("exec_hook\n");
         if (mode == MODE_REGISTER)
             complete_message = "登録しました。";
         else if (mode == MODE_REPLY)
             complete_message = "返信しました。";
+        d("finish\n");
         project_free(project_a);
         list_free(element_types_a);
     }
+        d("finish\n");
     db_finish();
+        d("finished\n");
     message_free(ticket_a);
 
     redirect_with_hook_messages("/list", complete_message, hook->results);
     if (hook) clean_hook(hook);
+        d("end\n");
     return;
 
 file_size_error:
-    db_rollback();
     db_finish();
     output_header(project_a, "エラー", NULL, NAVI_OTHER);
     o("<h1>エラー発生</h1>\n"
