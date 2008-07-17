@@ -7,6 +7,8 @@
     * 複数選択可能リスト」を設定した場合、統計情報が正しく表示されない問題を修
       正した。複数選択可能リストの統計を取得するSQLに問題があった。
       http://sourceforge.jp/tracker/index.php?func=detail&aid=13055&group_id=3135&atid=11637
+    * apache用.htaccessのアクセス禁止の設定を、ブラックリスト式からホワイトリ
+      スト式に変更した。
 
 2008-07-09  smeghead <smeghead@users.sourceforge.jp>
 

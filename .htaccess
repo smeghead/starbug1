@@ -26,9 +26,12 @@ DirectoryIndex index.cgi
 #    AuthUserFile  /etc/starbug1/.admin-passwd
 #    Require       valid-user
 #</Files>
-
 # 隠すファイルやディレクトリ
-<FilesMatch "(^\.|.*\.log|^script$|^db$)">
+<FilesMatch ".*">
     deny from all
+</FilesMatch>
+# 見せるファイル
+<FilesMatch "(^$|\.cgi|\.jpg|\.png|\.gif|\.css|\.js)">
+    allow from all
 </FilesMatch>
 # vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8:
