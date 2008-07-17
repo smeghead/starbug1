@@ -1,3 +1,8 @@
+2008-07-17  smeghead <smeghead@users.sourceforge.jp>
+
+    * 複数選択可能リスト」を設定した場合、統計情報が正しく表示されない問題を修
+      正した。複数選択可能リストの統計を取得するSQLに問題があった。
+
 2008-07-09  smeghead <smeghead@users.sourceforge.jp>
 
     * 1.0.3 リリース

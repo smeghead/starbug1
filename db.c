@@ -1024,8 +1024,8 @@ List* db_get_statictics_multi(List* states, const int element_type_id)
             " on m.id = t.last_message_id "
             "inner join list_item as l "
             " on l.element_type_id = %d and m.m.field%d like '%%' || l.name || '\t%%' "
-            "group by m.field%d "
-            "order by l.sort ", element_type_id, element_type_id, element_type_id);
+            "group by l.id "
+            "order by l.sort ", element_type_id, element_type_id);
     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
 
