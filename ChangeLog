@@ -9,6 +9,7 @@
       http://sourceforge.jp/tracker/index.php?func=detail&aid=13055&group_id=3135&atid=11637
     * apache用.htaccessのアクセス禁止の設定を、ブラックリスト式からホワイトリ
       スト式に変更した。
+    * .htaccessの修正に合わせてINSTALLを修正した。
 
 2008-07-09  smeghead <smeghead@users.sourceforge.jp>
 
