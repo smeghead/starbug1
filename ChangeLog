@@ -1,3 +1,7 @@
+2008-09-07  smeghead <smeghead@users.sourceforge.jp>
+
+    * top_imageの返却に有効期限を追加した。キャッシュしてもらうため。
+
 2008-09-07  smeghead  <smeghead@debian>
 
 	* cgiの拡張子を動的に取得してリンクのファイル名を決定するように修正。Windows対応。

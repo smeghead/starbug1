@@ -180,7 +180,7 @@ void project_action()
     o("\t\t\t\t<td><input type=\"text\" name=\"project.name\" value=\"");h(project_a->name);o("\" maxlength=\"1000\" /></td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t\t<tr>\n");
-    o("\t\t\t\t<th>画像</th>\n");
+    o("\t\t\t\t<th>画像(ページの一番上に表示される画像です)</th>\n");
     o("\t\t\t\t<td><input type=\"file\" name=\"project.file\" /></td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t</table>\n");

@@ -56,6 +56,7 @@ void clear_cookie(char*);
 void get_cookie_string(char*, char*);
 int base64_decode(const unsigned char*, unsigned char*);
 void set_date_string(char*);
+void set_rfc_date_string(char*, int);
 char* get_ext(char*);
 
 #endif

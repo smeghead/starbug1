@@ -639,6 +639,16 @@ void set_date_string(char* buf)
             tp->tm_year + 1900, tp->tm_mon + 1, tp->tm_mday,
             tp->tm_hour, tp->tm_min, tp->tm_sec);
 }
+void set_rfc_date_string(char* buf, int days)
+{
+    time_t timer;
+    struct tm *tp;
+
+    time(&timer);
+    tp = localtime(&timer);
+/*     tp = localtime(&timer + 60 * 24 * days); */
+    sprintf(buf, "%s", asctime(tp));
+}
 /*
  * 引数の文字列から拡張子部分のポインタを返す。
  */
