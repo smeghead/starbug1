@@ -1,5 +1,14 @@
 2008-09-07  smeghead <smeghead@users.sourceforge.jp>
 
+    * 1.1.2 リリース
+    
+2008-09-07  smeghead <smeghead@users.sourceforge.jp>
+
+    * トップ画像のキャッシュ指定が正しくなかったために、トップ画像が表示されない問題を修正。
+      Expiresではなく、Cache-Control: max-arg で指定するように修正した。
+
+2008-09-07  smeghead <smeghead@users.sourceforge.jp>
+
     * 1.1.1 リリース
 
 2008-09-07  smeghead <smeghead@users.sourceforge.jp>

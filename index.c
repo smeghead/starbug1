@@ -2203,7 +2203,6 @@ void setting_file_action()
     SettingFile* file_a = setting_file_new();
     char path_info[DEFAULT_LENGTH];
     char* name;
-    char expires[DEFAULT_LENGTH];
 
     strcpy(path_info, cgiPathInfo);
     name = strchr(path_info + 1, '/');
@@ -2214,8 +2213,7 @@ void setting_file_action()
     if (!file_a) goto error;
     o("Content-Type: %s\r\n", file_a->mime_type);
     o("Content-Length: %d\r\n", file_a->size);
-    set_rfc_date_string(expires, 1);
-    o("Expires: %s\r\n", expires);
+    o("Cache-Control: max-age=%d\r\n", 60 * 24 * 1);
     o("\r\n");
 
     fwrite(file_a->content, sizeof(char), file_a->size, cgiOut);
