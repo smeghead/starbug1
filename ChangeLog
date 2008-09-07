@@ -1,9 +1,14 @@
 2008-09-07  smeghead <smeghead@users.sourceforge.jp>
 
+    * 1.1.1 リリース
+
+2008-09-07  smeghead <smeghead@users.sourceforge.jp>
+
     * top_imageの返却に有効期限を追加した。キャッシュしてもらうため。
 
 2008-09-07  smeghead  <smeghead@debian>
 
+	* .htaccessの問題のため、internal server errorの場合に、error.htmlが表示できなかったのを修正。
 	* cgiの拡張子を動的に取得してリンクのファイル名を決定するように修正。Windows対応。
     * プロジェクトの設定内容を格納するテーブルをprojectからsetting(新規テーブル)に変更。projectテーブルは廃止。
     * user.cssをsetting_file(新規テーブル)に格納するように修正。
