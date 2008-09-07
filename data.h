@@ -32,6 +32,16 @@ typedef struct _element {
   int is_file;
 } Element;
 
+typedef struct _setting_file {
+    char name[DEFAULT_LENGTH];
+    char file_name[DEFAULT_LENGTH];
+    int size;
+    char mime_type[DEFAULT_LENGTH];
+    char* content;
+} SettingFile;
+SettingFile* setting_file_new();
+void setting_file_free(SettingFile*);
+
 typedef struct _message {
   int id;
   List* elements;
@@ -69,7 +79,7 @@ typedef struct _element_file {
     char name[DEFAULT_LENGTH];
     int size;
     char mime_type[DEFAULT_LENGTH];
-    char* blob;
+    char* content;
 } ElementFile;
 ElementFile* element_file_new();
 void element_file_free(ElementFile*);

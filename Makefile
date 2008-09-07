@@ -1,4 +1,4 @@
-VERSION = 1.0.4
+VERSION = 1.1.1
 CC = gcc
 CFLAGS = -I/usr/include -I/usr/local/include -I. -DVERSION=\"${VERSION}\" -O3 -Wall
 LFLAGS = -L/usr/lib -L/usr/local/lib -lsqlite3 -lcgic
@@ -28,7 +28,7 @@ index.cgi: list.o simple_string.o data.o dbutil.o db.o hook.o util.o wiki.o csv.
 	$(CC) -o $@ $^ $(LFLAGS)
 	strip $@
 
-admin.cgi: list.o simple_string.o data.o dbutil.o db.o util.o css.o wiki.o admin.o
+admin.cgi: list.o simple_string.o data.o dbutil.o db.o util.o wiki.o admin.o
 	$(CC) -o $@ $^ $(LFLAGS)
 	strip $@
 

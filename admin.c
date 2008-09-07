@@ -6,7 +6,6 @@
 #include "db.h"
 #include "dbutil.h"
 #include "util.h"
-#include "css.h"
 #include "wiki.h"
 
 #define ADD_ITEM_COUNT 5
@@ -74,7 +73,7 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
             "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />"
             "\t<title>%s 管理ツール - %s</title>\n", project->name, title);
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName);
-    o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/user.css\" />\n", cgiScriptName);
+    o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/setting_file/user.css\" />\n", cgiScriptName);
     if (script_name) {
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/prototype.js\"></script>\n", cgiScriptName);
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/%s\"></script>\n", cgiScriptName, script_name);
@@ -82,15 +81,15 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
     o(      "</head>\n"
             "<body>\n"
             "<a name=\"top\"></a>\n"
-            "<h1 id=\"toptitle\" title=\"管理ツール\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/../img/title.jpg\" alt=\"Starbug1\" /></a></h1>\n"
-            "<ul id=\"menu\">\n", cgiScriptName);
+            "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/../index.%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n"
+            "<ul id=\"menu\">\n", cgiScriptName, get_ext(cgiScriptName));
     o(      "\t<li><a %s href=\"%s\">管理ツールメニュー</a></li>\n", navi == NAVI_MENU ? "class=\"current\"" : "", cgiScriptName);
     o(      "\t\t<li><a %s href=\"%s/project\">プロジェクトの設定</a></li>\n", navi == NAVI_PROJECT ? "class=\"current\"" : "", cgiScriptName);
     o(      "\t\t<li><a %s href=\"%s/env\">環境設定</a></li>\n", navi == NAVI_ENV ? "class=\"current\"" : "", cgiScriptName);
     o(      "\t\t<li><a %s href=\"%s/items\">項目設定</a></li>\n", navi == NAVI_ITEM ? "class=\"current\"" : "", cgiScriptName);
     o(      "\t\t<li><a %s href=\"%s/style\">スタイル設定</a></li>\n", navi == NAVI_STYLE ? "class=\"current\"" : "", cgiScriptName);
     o(      "\t\t<li><a %s href=\"%s/admin_help\">ヘルプ</a></li>\n", navi == NAVI_ADMIN_HELP ? "class=\"current\"" : "", cgiScriptName);
-    o(      "\t<li><a href=\"%s/../index.cgi\">", cgiScriptName);h(project->name); o("トップへ</a></li>\n");
+    o(      "\t<li><a href=\"%s/../index.%s\">", cgiScriptName, get_ext(cgiScriptName));h(project->name); o("トップへ</a></li>\n");
     o(      "</ul>\n"
             "<br clear=\"all\" />\n");
 }
@@ -173,12 +172,16 @@ void project_action()
 
     o("<h2>%s 管理ツール</h2>", project_a->name);
     o("<div id=\"setting_form\">\n");
-    o("\t<form id=\"management_form\" action=\"%s/project_submit\" method=\"post\">\n", cgiScriptName);
+    o("\t<form id=\"management_form\" action=\"%s/project_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName);
     o("\t\t<h3>プロジェクト設定</h3>\n");
     o("\t\t<table summary=\"project table\">\n");
     o("\t\t\t<tr>\n");
     o("\t\t\t\t<th>プロジェクト名</th>\n");
     o("\t\t\t\t<td><input type=\"text\" name=\"project.name\" value=\"");h(project_a->name);o("\" maxlength=\"1000\" /></td>\n");
+    o("\t\t\t</tr>\n");
+    o("\t\t\t<tr>\n");
+    o("\t\t\t\t<th>画像</th>\n");
+    o("\t\t\t\t<td><input type=\"file\" name=\"project.file\" /></td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t</table>\n");
     o("\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
@@ -188,12 +191,39 @@ void project_action()
     output_footer();
     db_finish();
 }
+void fill_upload_content_setting_file(SettingFile* sf)
+{
+    int got_count = 0;
+    char* buffer;
+    char b[DEFAULT_LENGTH];
+    cgiFilePtr file;
+    strcpy(sf->name, "top_image");
+    cgiFormFileSize("project.file", &sf->size);
+    cgiFormFileName("project.file", sf->file_name, DEFAULT_LENGTH);
+    cgiFormFileContentType("project.file", sf->mime_type, DEFAULT_LENGTH);
+    buffer = sf->content = xalloc(sizeof(char) * sf->size);
+    if (cgiFormFileOpen("project.file", &file) != cgiFormSuccess) {
+        die("Could not open the file.");
+    }
+
+    while (cgiFormFileRead(file, b, sizeof(b), &got_count) == cgiFormSuccess) {
+        char* p = b;
+        int i;
+        for (i = 0; i < got_count; i++) {
+            *buffer = *p;
+            buffer++;
+            p++;
+        }
+    }
+    cgiFormFileClose(file);
+}
 /**
  * プロジェクト設定を更新するaction。
  */
 void project_submit_action()
 {
     Project* project_a = project_new();
+    SettingFile* sf_a = setting_file_new();
 
     db_init();
     db_begin();
@@ -202,6 +232,15 @@ void project_submit_action()
     db_update_project(project_a);
     project_free(project_a);
 
+    /* 画像の更新 */
+    cgiFormFileSize("project.file", &(sf_a->size));
+    d("image size %d.\n", sf_a->size);
+    if (sf_a->size > 0) {
+        d("try to save top image.\n");
+        fill_upload_content_setting_file(sf_a);
+        db_update_top_image(sf_a);
+    }
+    setting_file_free(sf_a);
     db_commit();
     db_finish();
     redirect("", "更新しました");
@@ -857,7 +896,13 @@ void style_action()
             "<div id=\"description\">スタイルシートの編集を行ない、更新ボタンを押してください。</div>\n"
             "<form id=\"edit_css_form\" action=\"%s/style_submit\" method=\"post\">\n", cgiScriptName);
     o(      "<textarea name=\"edit_css\" id=\"edit_top\" rows=\"3\" cols=\"10\">");
-    css_content_out("css/user.css");
+    {
+        /* user.css の出力 */
+        SettingFile* file_a = setting_file_new();
+        file_a = db_get_setting_file("user.cs", file_a);
+        fwrite(file_a->content, sizeof(char), file_a->size, cgiOut);
+        setting_file_free(file_a);
+    }
     o(      "</textarea>\n"
             "<div>&nbsp;</div>\n"
             "<input class=\"button\" type=\"submit\" value=\"更新\" />\n"
@@ -900,13 +945,20 @@ void style_action()
 }
 void style_submit_action()
 {
-    char* value_a = xalloc(sizeof(char) * VALUE_LENGTH);
+    SettingFile* sf_a = setting_file_new();
+    strcpy(sf_a->name, "user.css");
+    strcpy(sf_a->file_name, "");
+    sf_a->content = xalloc(sizeof(char) * VALUE_LENGTH);
 
-    cgiFormString("edit_css", value_a, VALUE_LENGTH);
-    css_save("css/user.css", value_a);
+    cgiFormString("edit_css", sf_a->content, VALUE_LENGTH);
+    sf_a->size = strlen(sf_a->content);
+    strcpy(sf_a->mime_type, "text/css");
+    db_init();
+    db_setting_file_save(sf_a);
+    db_finish();
 
     redirect("", "更新しました。");
-    xfree(value_a);
+    setting_file_free(sf_a);
 }
 void admin_help_action()
 {

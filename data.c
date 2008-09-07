@@ -108,14 +108,26 @@ void list_item_free(ListItem* li)
 {
     xfree(li);
 }
+
+SettingFile* setting_file_new()
+{
+    return xalloc(sizeof(SettingFile));
+}
+void setting_file_free(SettingFile* file)
+{
+    if (file->content)
+        xfree(file->content);
+    xfree(file);
+}
+
 ElementFile* element_file_new()
 {
     return xalloc(sizeof(ElementFile));
 }
 void element_file_free(ElementFile* ef)
 {
-    if (ef->blob)
-        xfree(ef->blob);
+    if (ef->content)
+        xfree(ef->content);
     xfree(ef);
 }
 Message* message_new()

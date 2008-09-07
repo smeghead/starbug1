@@ -35,5 +35,8 @@ char* db_get_element_file_mime_type(const int, const int, char*);
 int db_get_element_file_id(const int, const int);
 void db_register_wiki(Wiki*);
 Wiki* db_get_newest_wiki(char*, Wiki*);
+void db_setting_file_save(SettingFile*);
+SettingFile* db_get_setting_file(char*, SettingFile*);
+void db_update_top_image(SettingFile*);
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

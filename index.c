@@ -48,6 +48,7 @@ void download_action();
 void report_csv_download_action();
 void rss_action();
 void top_action();
+void setting_file_action();
 void output_header(Project*, char*, char*, const NaviType);
 void output_footer();
 int cgiMain();
@@ -88,6 +89,7 @@ void register_actions()
     register_action_actions("rss", rss_action);
     register_action_actions("report_csv_download", report_csv_download_action);
     register_action_actions("top", top_action);
+    register_action_actions("setting_file", setting_file_action);
 }
 
 void output_header(Project* project, char* title, char* script_name, const NaviType navi)
@@ -107,7 +109,7 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
             "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />\n");
     o(        "\t<title>"); h(project->name); o(" - %s</title>\n", title);
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName);
-    o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/user.css\" />\n", cgiScriptName);
+    o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/setting_file/user.css\" />\n", cgiScriptName);
     if (script_name) {
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/prototype.js\"></script>\n", cgiScriptName);
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/%s\"></script>\n", cgiScriptName, script_name);
@@ -117,7 +119,7 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
     o(      "</head>\n"
             "<body>\n"
             "<a name=\"top\"></a>\n"
-            "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/../img/title.jpg\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName);
+            "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName);
     o("<div>\n"
       "<ul id='menu'>\n");
     o("\t<li><a href='%s' title=\"ホームへ移動します\">ホーム</a></li>\n", project->home_url);
@@ -129,7 +131,7 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
     o("\t<li><a %s href='%s/register_at_once' title=\"複数新規にチケットを登録します\">チケット一括登録</a></li>\n", navi == NAVI_REGISTER_AT_ONCE ? "class=\"current\"" : "", cgiScriptName);
     o("\t<li><a %s href='%s/rss' title=\"RSS Feed\">RSS Feed</a></li>\n", navi == NAVI_RSS ? "class=\"current\"" : "", cgiScriptName);
     o("\t<li><a %s href='%s/help' title=\"ヘルプを参照します\">ヘルプ</a></li>\n", navi == NAVI_HELP ? "class=\"current\"" : "", cgiScriptName);
-    o("\t<li><a %s href='%s/../admin.cgi' title=\"各種設定を行ないます\">管理ツール</a></li>\n", navi == NAVI_MANAGEMENT ? "class=\"current\"" : "", cgiScriptName);
+    o("\t<li><a %s href='%s/../admin.%s' title=\"各種設定を行ないます\">管理ツール</a></li>\n", navi == NAVI_MANAGEMENT ? "class=\"current\"" : "", cgiScriptName, get_ext(cgiScriptName));
     o("</ul>\n"
       "<br clear='all' />\n"
       "</div>\n");
@@ -190,7 +192,7 @@ String* format_query_string_without_page(String* buffer)
             char encodedvalue[DEFAULT_LENGTH] = "";
             strcpy(name, *arrayStep);
             cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-            url_encode(value, encodedvalue, DEFAULT_LENGTH);
+            url_encode((unsigned char*)value, (unsigned char*)encodedvalue, DEFAULT_LENGTH);
             string_append(buffer, name);
             string_append(buffer, "=");
             string_append(buffer, encodedvalue);
@@ -218,7 +220,7 @@ String* format_query_string_without_sort_and_page(String* buffer)
             char encodedvalue[DEFAULT_LENGTH] = "";
             strcpy(name, *arrayStep);
             cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-            url_encode(value, encodedvalue, DEFAULT_LENGTH);
+            url_encode((unsigned char*)value, (unsigned char*)encodedvalue, DEFAULT_LENGTH);
             string_append(buffer, name);
             string_append(buffer, "=");
             string_append(buffer, encodedvalue);
@@ -2187,9 +2189,36 @@ void download_action()
     o("Content-Disposition: attachment;\r\n");
     o("\r\n");
 
-    fwrite(file_a->blob, sizeof(char), file_a->size, cgiOut);
+    fwrite(file_a->content, sizeof(char), file_a->size, cgiOut);
     db_finish();
     element_file_free(file_a);
+    return;
+
+error:
+    cgiHeaderContentType("text/plain; charset=utf-8;");
+    o("error: ファイルがありません。");
+}
+void setting_file_action()
+{
+    SettingFile* file_a = setting_file_new();
+    char path_info[DEFAULT_LENGTH];
+    char* name;
+
+    strcpy(path_info, cgiPathInfo);
+    name = strchr(path_info + 1, '/');
+    if (name) name++;
+
+    db_init();
+    file_a = db_get_setting_file(name, file_a);
+    if (!file_a) goto error;
+    o("Content-Type: %s\r\n", file_a->mime_type);
+    o("Content-Length: %d\r\n", file_a->size);
+    /* TODO キャッシュを効かせる */
+    o("\r\n");
+
+    fwrite(file_a->content, sizeof(char), file_a->size, cgiOut);
+    db_finish();
+    setting_file_free(file_a);
     return;
 
 error:

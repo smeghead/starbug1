@@ -241,7 +241,7 @@ void hmail(char *s)
 void u(char* str)
 {
     char buf[DEFAULT_LENGTH];
-    url_encode(str, buf, DEFAULT_LENGTH);
+    url_encode((unsigned char*)str, (unsigned char*)buf, DEFAULT_LENGTH);
     fprintf(cgiOut, "%s", buf);
 }
 unsigned long url_encode(unsigned char* csource, unsigned char* cbuffer, unsigned long lbuffersize)
@@ -252,7 +252,7 @@ unsigned long url_encode(unsigned char* csource, unsigned char* cbuffer, unsigne
     unsigned char ctemp[4];
     unsigned long lresultcount = 0;
 
-    llength = (unsigned long)strlen(csource);
+    llength = (unsigned long)strlen((char*)csource);
     if(!llength) { return lresultcount; }
     if(lbuffersize < (llength * 3 + 1)) { return lresultcount; }
 
@@ -260,17 +260,17 @@ unsigned long url_encode(unsigned char* csource, unsigned char* cbuffer, unsigne
         cbyte = *(csource + lcount);
         if( ((cbyte >= 0x81) && (cbyte <= 0x9F)) ||
                 ((cbyte >= 0xE0) && (cbyte <= 0xEF)) ) {            /* Shift-JIS 2 バイト文字だった場合 */
-            sprintf(ctemp, "%%%02X", cbyte);                        /* URL エンコード(上位バイト) */
-            strncpy(cbuffer + lresultcount, ctemp, 4);
+            sprintf((char*)ctemp, "%%%02X", cbyte);                        /* URL エンコード(上位バイト) */
+            strncpy((char*)(cbuffer + lresultcount), (char*)ctemp, 4);
             lcount++;
             lresultcount += 3;
             if(lcount == llength) { break; }                        /* 文字列の終端に達した場合、ループを抜ける */
-            sprintf(ctemp, "%%%02X", *(csource + lcount));          /* URL エンコード(下位バイト) */
-            strncpy(cbuffer + lresultcount, ctemp, 4);
+            sprintf((char*)ctemp, "%%%02X", *(csource + lcount));          /* URL エンコード(下位バイト) */
+            strncpy((char*)cbuffer + lresultcount, (char*)ctemp, 4);
             lcount++;
             lresultcount += 3;
         } else if(cbyte == 0x20) {                                  /* 1 バイト半角スペース(" ")だった場合 */
-            strncpy(cbuffer + lresultcount, "+", 2);
+            strncpy((char*)cbuffer + lresultcount, "+", 2);
             lcount++;
             lresultcount++;
         } else if( ((cbyte >= 0x40) && (cbyte <= 0x5A)) ||          /* @A-Z */
@@ -280,12 +280,12 @@ unsigned long url_encode(unsigned char* csource, unsigned char* cbuffer, unsigne
                 (cbyte == 0x2D) ||                                  /* "-" */
                 (cbyte == 0x2E) ||                                  /* "." */
                 (cbyte == 0x5F) ) {                                 /* "_" */ /* 無変換文字だった場合 */
-            strncpy(cbuffer + lresultcount, csource + lcount, 2);
+            strncpy((char*)cbuffer + lresultcount, (char*)csource + lcount, 2);
             lcount++;
             lresultcount++;
         } else {                                                    /* その他の文字の場合 */
-            sprintf(ctemp, "%%%02X", cbyte);                        /* URL エンコード */
-            strncpy(cbuffer + lresultcount, ctemp, 4);
+            sprintf((char*)ctemp, "%%%02X", cbyte);                        /* URL エンコード */
+            strncpy((char*)cbuffer + lresultcount, (char*)ctemp, 4);
             lcount++;
             lresultcount += 3;
         }
@@ -353,7 +353,7 @@ ElementFile* get_upload_content(const int element_id)
             p++;
         }
     }
-    content->blob = buffer_org;
+    content->content = buffer_org;
     cgiFormFileClose(file);
     return content;
 }
@@ -376,7 +376,7 @@ static void enclode_char(unsigned long bb, int srclen, unsigned char *dist, int 
 
 void base64_encode(const unsigned char *src, unsigned char *dist)
 {
-    unsigned char *p = (char *)src;
+    unsigned char *p = (unsigned char*)src;
     unsigned long bb = (unsigned long)0;
     int i = 0, j = 0;
 
@@ -406,7 +406,7 @@ void redirect(const char* path, const char* message)
     strcpy(uri, path);
     if (message) {
         strcpy(param, message);
-        url_encode(param, parambuf, DEFAULT_LENGTH);
+        url_encode((unsigned char*)param, (unsigned char*)parambuf, DEFAULT_LENGTH);
         strcat(uri, "?message=");
         strcat(uri, parambuf);
     }
@@ -425,7 +425,7 @@ void redirect_with_hook_messages(const char* path, const char* message, List* re
     strcpy(uri, path);
     if (message) {
         strcpy(param, message);
-        url_encode(param, parambuf, DEFAULT_LENGTH);
+        url_encode((unsigned char*)param, (unsigned char*)parambuf, DEFAULT_LENGTH);
         strcat(uri, "?message=");
         strcat(uri, parambuf);
     }
@@ -434,7 +434,7 @@ void redirect_with_hook_messages(const char* path, const char* message, List* re
         foreach (it, results) {
             HOOK_RESULT* result = it->element;
             strcpy(param, result->message);
-            url_encode(param, parambuf, DEFAULT_LENGTH);
+            url_encode((unsigned char*)param, (unsigned char*)parambuf, DEFAULT_LENGTH);
             if (!message && i == 0)
                 strcat(uri, "?");
             else
@@ -506,7 +506,7 @@ void css_field(char* str)
     }
         
     memset(dist, 0, DEFAULT_LENGTH);
-    base64_encode(src, dist);
+    base64_encode((unsigned char*)src, (unsigned char*)dist);
     cgiCssClassName(dist, strlen(dist));
 }
 String* get_base_url(String* buf)
@@ -536,7 +536,7 @@ void set_cookie(char* key, char* value)
 {
     char value_base64[DEFAULT_LENGTH];
     memset(value_base64, 0, DEFAULT_LENGTH);
-    base64_encode(value, value_base64);
+    base64_encode((unsigned char*)value, (unsigned char*)value_base64);
     cgiHeaderCookieSetString(key, value_base64, 86400 * 30, cgiScriptName, cgiServerName);
 }
 void clear_cookie(char* key)
@@ -549,7 +549,7 @@ void get_cookie_string(char* key, char* buf)
     char value_base64[DEFAULT_LENGTH];
     cgiCookieString(key, value, DEFAULT_LENGTH);
     memset(value_base64, 0, DEFAULT_LENGTH);
-    base64_decode(value, value_base64);
+    base64_decode((unsigned char*)value, (unsigned char*)value_base64);
     strcpy(buf, value_base64);
 }
 typedef union {
@@ -613,15 +613,15 @@ int base64_decode(const unsigned char *src, unsigned char *dest)
     /* NULL pointer */
     if (src == NULL) return -1;
 
-    srclen = strlen(src);
+    srclen = strlen((char*)src);
 
     if (!srclen % 4) return -2;
 
     while(srclen) {
         memset(tmp, 0, sizeof(tmp));
-        if (decode_str(i, src, tmp) != 0)
+        if (decode_str(i, src, (unsigned char*)tmp) != 0)
             return -1; /* 失敗した場合は、終了 */
-        strcat(dest, tmp);
+        strcat((char*)dest, tmp);
         i += 4;
         srclen -= 4;
     }
@@ -638,5 +638,23 @@ void set_date_string(char* buf)
     sprintf(buf, "%04d-%02d-%02d %02d:%02d:%02d",
             tp->tm_year + 1900, tp->tm_mon + 1, tp->tm_mday,
             tp->tm_hour, tp->tm_min, tp->tm_sec);
+}
+/*
+ * 引数の文字列から拡張子部分のポインタを返す。
+ */
+char* get_ext(char* path)
+{
+    char* p = path;
+    /* 後ろから探して.があったら、そこの文字配列のポインタを返却する。 */
+    for (p += strlen(path); p > path; p--) {
+        switch (*p) {
+            case '.':
+                return (char*)p + 1;
+            case '\\':
+            case '/':
+                return "";
+        }
+    }
+    return "";
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

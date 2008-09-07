@@ -37,13 +37,13 @@ static List* db_get_element_types(int all, List* element_types)
         et->ticket_property = sqlite3_column_int(stmt, 2);
         et->reply_property = sqlite3_column_int(stmt, 3);
         et->required = sqlite3_column_int(stmt, 4);
-        strcpy(et->name, sqlite3_column_text(stmt, 5));
-        strcpy(et->description, sqlite3_column_text(stmt, 6));
+        strcpy(et->name, (char*)sqlite3_column_text(stmt, 5));
+        strcpy(et->description, (char*)sqlite3_column_text(stmt, 6));
         et->display_in_list = sqlite3_column_int(stmt, 7);
         et->sort = sqlite3_column_int(stmt, 8);
         value = sqlite3_column_text(stmt, 9);
         if (value != NULL) {
-            strcpy(et->default_value, value);
+            strcpy(et->default_value, (char*)value);
         }
         et->auto_add_item = sqlite3_column_int(stmt, 10);
         list_add(element_types, et);
@@ -87,12 +87,12 @@ ElementType* db_get_element_type(int id, ElementType* e)
         e->ticket_property = sqlite3_column_int(stmt, 2);
         e->reply_property = sqlite3_column_int(stmt, 3);
         e->required = sqlite3_column_int(stmt, 4);
-        strcpy(e->name, sqlite3_column_text(stmt, 5));
-        strcpy(e->description, sqlite3_column_text(stmt, 6));
+        strcpy(e->name, (char*)sqlite3_column_text(stmt, 5));
+        strcpy(e->description, (char*)sqlite3_column_text(stmt, 6));
         e->auto_add_item = sqlite3_column_int(stmt, 7);
         value = sqlite3_column_text(stmt, 8);
         if (value != NULL)
-            strcpy(e->default_value, value);
+            strcpy(e->default_value, (char*)value);
         e->display_in_list = sqlite3_column_int(stmt, 9);
         e->sort = sqlite3_column_int(stmt, 10);
         break;
@@ -117,7 +117,7 @@ List* db_get_list_item(const int element_type, List* items)
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         ListItem* item = list_new_element(items);
         item->id = sqlite3_column_int(stmt, 0);
-        strcpy(item->name, sqlite3_column_text(stmt, 1));
+        strcpy(item->name, (char*)sqlite3_column_text(stmt, 1));
         item->close = sqlite3_column_int(stmt, 2);
         item->sort = sqlite3_column_int(stmt, 3);
         list_add(items, item);
@@ -247,7 +247,7 @@ int db_register_ticket(Message* ticket)
                     COLUMN_TYPE_TEXT, fname,
                     COLUMN_TYPE_INT, size,
                     COLUMN_TYPE_TEXT, mime_type,
-                    COLUMN_TYPE_BLOB, content_a,
+                    COLUMN_TYPE_BLOB_ELEMENT_FILE, content_a,
                     COLUMN_TYPE_END) == 0)
                 die("insert failed.");
             element_file_free(content_a);
@@ -523,7 +523,7 @@ SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, con
         while (SQLITE_ROW == (r = sqlite3_step(stmt))){
             State* s = list_new_element(result->states);
             result->hit_count += s->count = sqlite3_column_int(stmt, 0);
-            strcpy(s->name, sqlite3_column_text(stmt, 1));
+            strcpy(s->name, (char*)sqlite3_column_text(stmt, 1));
             list_add(result->states, s);
         }
         string_free(s);
@@ -583,8 +583,8 @@ void create_columns_exp(List* element_types, char* table_name, char* buf)
 static void set_str_val(Element* e, const unsigned char* str_val)
 {
     if (str_val != NULL) {
-        e->str_val = xalloc(sizeof(char) * strlen(str_val) + 1);
-        strcpy(e->str_val, str_val);
+        e->str_val = xalloc(sizeof(char) * strlen((char*)str_val) + 1);
+        strcpy(e->str_val, (char*)str_val);
     }
 }
 List* db_get_last_elements_4_list(const int ticket_id, List* elements)
@@ -811,14 +811,16 @@ Project* db_get_project(Project* project)
     const char *sql;
     sqlite3_stmt *stmt = NULL;
 
-    sql = "select name, home_url from project";
+    sql = "select name, value from setting";
     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
-        strcpy(project->name, sqlite3_column_text(stmt, 0));
-        strcpy(project->home_url, sqlite3_column_text(stmt, 1));
-        break;
+        char* name = (char*)sqlite3_column_text(stmt, 0);
+        if (strcmp(name, "project_name") == 0)
+            strcpy(project->name, (char*)sqlite3_column_text(stmt, 1));
+        else if (strcmp(name, "home_url") == 0)
+            strcpy(project->home_url, (char*)sqlite3_column_text(stmt, 1));
     }
 
     sqlite3_finalize(stmt);
@@ -829,12 +831,19 @@ ERROR_LABEL
 void db_update_project(Project* project)
 {
     if (exec_query(
-            "update project set "
-            "name = ?, home_url = ? ",
+            "update setting set "
+            "value = ? "
+            "where name = 'project_name'",
             COLUMN_TYPE_TEXT, project->name,
+            COLUMN_TYPE_END) != 1)
+        die("no seting to update? or too many?");
+    if (exec_query(
+            "update setting set "
+            "value = ? "
+            "where name = 'home_url'",
             COLUMN_TYPE_TEXT, project->home_url,
             COLUMN_TYPE_END) != 1)
-        die("no project to update? or too many?");
+        die("no seting to update? or too many?");
 }
 void db_update_element_type(ElementType* et)
 {
@@ -965,7 +974,7 @@ List* db_get_states_has_not_close(List* states)
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         State* s = list_new_element(states);
-        strcpy(s->name, sqlite3_column_text(stmt, 0));
+        strcpy(s->name, (char*)sqlite3_column_text(stmt, 0));
         s->count = sqlite3_column_int(stmt, 1);
         list_add(states, s);
     }
@@ -998,7 +1007,7 @@ List* db_get_states(List* states)
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         State* s = list_new_element(states);
-        strcpy(s->name, sqlite3_column_text(stmt, 0));
+        strcpy(s->name, (char*)sqlite3_column_text(stmt, 0));
         s->count = sqlite3_column_int(stmt, 1);
         list_add(states, s);
     }
@@ -1032,7 +1041,7 @@ List* db_get_statictics_multi(List* states, const int element_type_id)
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         State* s = list_new_element(states);
         s->id = sqlite3_column_int(stmt, 0);
-        strcpy(s->name, sqlite3_column_text(stmt, 1));
+        strcpy(s->name, (char*)sqlite3_column_text(stmt, 1));
         s->count = sqlite3_column_int(stmt, 2);
         list_add(states, s);
     }
@@ -1066,7 +1075,7 @@ List* db_get_statictics(List* states, const int element_type_id)
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         State* s = list_new_element(states);
         s->id = sqlite3_column_int(stmt, 0);
-        strcpy(s->name, sqlite3_column_text(stmt, 1));
+        strcpy(s->name, (char*)sqlite3_column_text(stmt, 1));
         s->count = sqlite3_column_int(stmt, 2);
         list_add(states, s);
     }
@@ -1098,11 +1107,11 @@ ElementFile* db_get_element_file(int id, ElementFile* file)
         char* p_dist;
         file->id = sqlite3_column_int(stmt, 0);
         file->element_type_id = sqlite3_column_int(stmt, 1);
-        strcpy(file->name, sqlite3_column_text(stmt, 2));
+        strcpy(file->name, (char*)sqlite3_column_text(stmt, 2));
         file->size = sqlite3_column_int(stmt, 3);
-        strcpy(file->mime_type, sqlite3_column_text(stmt, 4));
+        strcpy(file->mime_type, (char*)sqlite3_column_text(stmt, 4));
         len = sqlite3_column_bytes(stmt, 5);
-        p_dist = file->blob = xalloc(sizeof(char) * len);
+        p_dist = file->content = xalloc(sizeof(char) * len);
         p_src = (char*)sqlite3_column_blob(stmt, 5);
         while (len--) {
             *p_dist = *p_src;
@@ -1168,7 +1177,7 @@ char* db_get_element_file_mime_type(const int message_id, const int element_type
     sqlite3_bind_int(stmt, 2, element_type_id);
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
-        strcpy(buf, sqlite3_column_text(stmt, 0));
+        strcpy(buf, (char*)sqlite3_column_text(stmt, 0));
         break;
     }
 
@@ -1209,10 +1218,10 @@ Wiki* db_get_newest_wiki(char* page_name, Wiki* wiki)
     while (SQLITE_ROW == (r = sqlite3_step(stmt))) {
         const unsigned char* value;
         wiki->id = sqlite3_column_int(stmt, 0);
-        strcpy(wiki->name, sqlite3_column_text(stmt, 1));
+        strcpy(wiki->name, (char*)sqlite3_column_text(stmt, 1));
         value = sqlite3_column_text(stmt, 2);
-        wiki->content = xalloc(sizeof(char) * strlen(value) + 1);
-        strcpy(wiki->content, value);
+        wiki->content = xalloc(sizeof(char) * strlen((char*)value) + 1);
+        strcpy(wiki->content, (char*)value);
         break;
     }
 
@@ -1220,5 +1229,75 @@ Wiki* db_get_newest_wiki(char* page_name, Wiki* wiki)
     return wiki;
 
 ERROR_LABEL
+}
+void db_setting_file_save(SettingFile* sf)
+{
+    if (exec_query("update setting_file "
+            "set "
+            " file_name = ?, "
+            " size = ?, "
+            " mime_type = ?, "
+            " content = ? "
+            "where name = ?",
+            COLUMN_TYPE_TEXT, sf->file_name,
+            COLUMN_TYPE_INT, sf->size,
+            COLUMN_TYPE_TEXT, sf->mime_type,
+            COLUMN_TYPE_TEXT, sf->content,
+            COLUMN_TYPE_TEXT, sf->name,
+            COLUMN_TYPE_END) != 1)
+        die("failed to update setting file.");
+}
+SettingFile* db_get_setting_file(char* name, SettingFile* file)
+{
+    int r;
+    const char *sql;
+    sqlite3_stmt *stmt = NULL;
+
+    sql = "select file_name, size, mime_type, content "
+        "from setting_file "
+        "where name = ? ";
+    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    sqlite3_reset(stmt);
+    sqlite3_bind_text(stmt, 1, name, strlen(name), NULL);
+
+    while (SQLITE_ROW == (r = sqlite3_step(stmt))){
+        int len;
+        char* p_src;
+        char* p_dist;
+        strcpy(file->name, (char*)sqlite3_column_text(stmt, 0));
+        file->size = sqlite3_column_int(stmt, 1);
+        strcpy(file->mime_type, (char*)sqlite3_column_text(stmt, 2));
+        len = sqlite3_column_bytes(stmt, 3);
+        p_dist = file->content = xalloc(sizeof(char) * len);
+        p_src = (char*)sqlite3_column_blob(stmt, 3);
+        while (len--) {
+            *p_dist = *p_src;
+            p_dist++;
+            p_src++;
+        }
+        break;
+    }
+
+    sqlite3_finalize(stmt);
+
+    return file;
+ERROR_LABEL
+}
+void db_update_top_image(SettingFile* sf)
+{
+    if (exec_query(
+                "update setting_file "
+                "set "
+                " file_name = ?, "
+                " size = ?, "
+                " mime_type = ?, "
+                " content = ? "
+                "where name = 'top_image'",
+                COLUMN_TYPE_TEXT, sf->file_name,
+                COLUMN_TYPE_INT, sf->size,
+                COLUMN_TYPE_TEXT, sf->mime_type,
+                COLUMN_TYPE_BLOB_SETTING_FILE, sf,
+                COLUMN_TYPE_END) != 1)
+        die("update failed.");
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

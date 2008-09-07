@@ -56,6 +56,7 @@ void clear_cookie(char*);
 void get_cookie_string(char*, char*);
 int base64_decode(const unsigned char*, unsigned char*);
 void set_date_string(char*);
+char* get_ext(char*);
 
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
