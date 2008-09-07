@@ -5,6 +5,41 @@
     * user.cssをsetting_file(新規テーブル)に格納するように修正。
     * トップ画像をseting_fileに格納するように修正。
 
+    以前のバージョンからの移行手順
+    (1) 以前のStarbug1のディレクトリをバックアップする。
+      任意のディレクトリにコピーしておいてください。
+
+    (2) 通常のインストール手順によりインストールする。
+
+    (3) データベースの存在するディレクトリに移動する。
+    # cd <Starbug1のディレクトリ>/db
+
+    (4) 以前のStarbug1のデータベースをコピーする。
+    # cp <以前のStarbug1のバックアップ先>/db/starbug1.db <Starbug1のディレクトリ>/db/
+
+    (5) projectテーブルに格納されていた、以前の設定をsettingテーブル(新規)に移行する。
+    # cat | sqlite3 starbug1.db
+    create table setting(name text primary key, value text);
+    insert into setting(name, value) select 'project_name', name from project;
+    insert into setting(name, value) select 'home_url', home_url from project;
+    create table setting_file(name text primary key, file_name text, size
+    integer, mime_type text, content blob);
+    insert into setting_file(name, content) values ('user.css', '');
+    insert into setting_file(name, content) values ('top_image', '');
+    <CTRL-D>
+    ※ cat | sqlite3 starbug1.db のコマンドを打ってから、下に続くSQL文を貼り付
+       けてください。最後に、<CTRL-D>を入力してください。
+
+    (6) ブラウザで Starbug1 の管理ツールを開く。
+      (例) http://example.com/starbug1/admin.cgi
+
+    (7) バックアップしたユーザ定義のcssを移行する。
+      <以前のStarbug1のバックアップ先>/css/user.css の内容を管理ツールの
+      スタイル設定のテキストエリアに貼り付けて更新ボタンをクリックする。
+
+    (8) 管理ツールのプロジェクト設定から、画像をアップロードする。
+      常に画面上部に表示されている画像です。
+
 2008-07-17  smeghead <smeghead@users.sourceforge.jp>
 
     * 1.0.4 リリース
