@@ -1267,17 +1267,11 @@ SettingFile* db_get_setting_file(char* name, SettingFile* file)
         char* p_src;
         char* p_dist;
         strcpy(file->name, (char*)sqlite3_column_text(stmt, 0));
-    d("pass2.1\n");
         file->size = sqlite3_column_int(stmt, 1);
-    d("pass2.2\n");
         strcpy(file->mime_type, (char*)sqlite3_column_text(stmt, 2));
-    d("pass2.3\n");
         len = sqlite3_column_bytes(stmt, 3);
-    d("pass2.4\n");
         p_dist = file->content = xalloc(sizeof(char) * len);
-    d("pass2.5\n");
         p_src = (char*)sqlite3_column_blob(stmt, 3);
-    d("pass2.6\n");
         while (len--) {
             *p_dist = *p_src;
             p_dist++;

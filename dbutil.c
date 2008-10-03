@@ -83,8 +83,8 @@ void create_tables()
             " content blob "
             ");", COLUMN_TYPE_END);
     exec_query(
-            "insert into setting_file(name, content)"
-            "values ('user.css', '"
+            "insert into setting_file(name, file_name, size, mime_type, content)"
+            "values ('user.css', 'user.css', 1382, 'text/css', '"
             "@charset \"utf-8\";\n"
             "/* ================================ */\n"
             "/*  チケット一覧の状態の背景色設定  */\n"

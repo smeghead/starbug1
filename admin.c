@@ -899,7 +899,7 @@ void style_action()
     {
         /* user.css の出力 */
         SettingFile* file_a = setting_file_new();
-        file_a = db_get_setting_file("user.cs", file_a);
+        file_a = db_get_setting_file("user.css", file_a);
         fwrite(file_a->content, sizeof(char), file_a->size, cgiOut);
         setting_file_free(file_a);
     }
