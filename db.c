@@ -1256,12 +1256,10 @@ SettingFile* db_get_setting_file(char* name, SettingFile* file)
     sql = "select file_name, size, mime_type, content "
         "from setting_file "
         "where name = ? ";
-    d("pass1\n");
     if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_text(stmt, 1, name, strlen(name), NULL);
 
-    d("pass2\n");
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         int len;
         char* p_src;
@@ -1279,7 +1277,6 @@ SettingFile* db_get_setting_file(char* name, SettingFile* file)
         }
         break;
     }
-    d("pass3\n");
 
     sqlite3_finalize(stmt);
 
