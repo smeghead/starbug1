@@ -1,6 +1,7 @@
 2008-10-04  smeghead <smeghead@users.sourceforge.jp>
 
     * 管理ツールのスタイル設定で、正しく値を取得できていないために、スタイル設定が上書きされてしまう問題を修正。
+    * h4のスタイルシート設定を追加。トップページの編集部分のスタイル調整のため。
 
 2008-09-07  smeghead <smeghead@users.sourceforge.jp>
 
