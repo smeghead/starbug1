@@ -1,4 +1,4 @@
-VERSION = 1.1.2
+VERSION = 1.1.3
 CC = gcc
 CFLAGS = -I/usr/include -I/usr/local/include -I. -DVERSION=\"${VERSION}\" -O3 -Wall
 LFLAGS = -L/usr/lib -L/usr/local/lib -lsqlite3 -lcgic
