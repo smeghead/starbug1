@@ -1095,7 +1095,7 @@ void register_action()
         element_types_a = db_get_element_types_all(element_types_a);
         foreach (it, element_types_a) {
             ElementType* et = it->element;
-            char class_name[20] = "";
+            char class_name[32] = "";
             /* 返信専用属性は表示しない。 */
             if (et->reply_property == 1) continue;
             o("\t<tr>\n");
@@ -1103,8 +1103,8 @@ void register_action()
                 strcat(class_name, "required");
             if (et->ticket_property)
                 strcat(class_name, " ticket_property");
-            if (class_name) {
-                char class_attr[40];
+            if (class_name[0] != '\0') {
+                char class_attr[64];
                 sprintf(class_attr, "class=\"%s\"", class_name);
                 o("\t\t<th %s>", class_attr);
             } else {

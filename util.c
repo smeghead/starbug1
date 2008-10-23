@@ -6,6 +6,7 @@
 #include <sys/time.h>
 #include <cgic.h>
 #include <iconv.h>
+#include <errno.h>
 #include "util.h"
 #include "hook.h"
 
@@ -467,6 +468,7 @@ void csv_field(char* src)
     size_t src_size, dist_size, ret_len;
     char* dist_a;
     char* dist_p;
+    bool has_error = false;
 
     src_size = strlen(src) + 1;
     dist_size = src_size;  /* UTF-8からCP932なので、長さが短かくなることはない。そのためdist_sizeにも同じ長さを指定する。*/
@@ -474,8 +476,12 @@ void csv_field(char* src)
     /* 文字コード変換処理 *          */
     ic = iconv_open("CP932", "UTF-8");
     ret_len = iconv(ic, &src, &src_size, &dist_p, &dist_size);
+    if (ret_len == (size_t)-1) {
+        d("iconv failed: %s", strerror(errno));
+        has_error = true;
+    }
     o("\"");
-    if (ret_len >= 0) csv_escape(dist_a, strlen(dist_a));
+    if (!has_error) csv_escape(dist_a, strlen(dist_a));
     o("\"");
     iconv_close(ic);
     xfree(dist_a);

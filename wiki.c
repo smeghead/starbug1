@@ -9,7 +9,7 @@
 #define MAX_WIDTH 1000
 
 void buf_clear();
-void buf_add(int, char*);
+void buf_add(unsigned int, char*);
 void buf_flush();
 void text_out(char*);
 void element_out_without_content(char*);
@@ -28,7 +28,7 @@ void buf_clear() {
         strcpy(text[i], "");
     }
 }
-void buf_add(int type, char* str)
+void buf_add(unsigned int type, char* str)
 {
     int i;
     if (buf_type != type)
