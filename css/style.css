@@ -50,7 +50,7 @@ h3 {
     border-style: solid;
     border-width: 0px 0px 2px 15px;
 }
-h4 {
+div#main_body h4 {
     font-weight: bold;
     font-size: 95%;
     margin: 2px 10px;
