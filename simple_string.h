@@ -1,6 +1,8 @@
 #ifndef SIMPLE_STRING_H
 #define SIMPLE_STRING_H
-
+/*
+ * 単純な文字列操作クラス
+ */
 #include <string.h>
 #include <stdarg.h>
 

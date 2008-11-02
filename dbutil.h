@@ -1,5 +1,8 @@
 #ifndef DBUTIL_H
 #define DBUTIL_H
+/*
+ * データベースアクセスユーティリティ
+ */
 #include <stdio.h>
 #include <sqlite3.h>
 #include <stdarg.h>

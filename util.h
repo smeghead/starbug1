@@ -23,7 +23,11 @@
     fclose(fp);\
 }
 #endif
-#define die(msg)    {d("ERROR: %s(%d) %s %s\n", __FILE__, __LINE__, __FUNCTION__, msg); exit(1);}
+#define die(msg)    { \
+    d("ERROR: %s(%d) %s %s\n", __FILE__, __LINE__, __FUNCTION__, msg);\
+    print_error_page(__FILE__, __LINE__, __FUNCTION__, msg);\
+    exit(1);\
+}
 #define h(str)      cgiHtmlEscape(str == NULL ? "" : str)
 #define v(str)      cgiValueEscape(str == NULL ? "" : str)
 void u(char*);
@@ -32,6 +36,7 @@ typedef struct _action {
     void (*action_func)(void);
     struct _action* next;
 } Action;
+void print_error_page(char*, int, char*, char*);
 void register_action_actions(char*, void func(void));
 void free_action_actions();
 void exec_action();

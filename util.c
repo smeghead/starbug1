@@ -64,6 +64,37 @@ void free_action_actions()
     d("alloc_count: %d\n", alloc_count);
 }
 
+/* 復帰できないエラーが発生した場合にエラーページを表示する。 */
+void print_error_page(char* file_name, int line_number, char* function_name, char* message)
+{
+    d("ERROR: %s(%d): %s %s\n",
+            file_name,
+            line_number,
+            function_name,
+            message);
+    o("Status: 500 Starbug1 Internal Error.\r\n");
+    o("Content-Type: text/html\r\n\r\n");
+    o(  "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
+        "<html xml:lang=\"ja\" lang=\"ja\" xmlns=\"http://www.w3.org/1999/xhtml\">"
+        "<head>"
+            "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />"
+        "</head>"
+        "<body>"
+            "<h2>ERROR oops!</h2>"
+            "エラーが発生しましたm(_ _)m"
+            "<h3>detail information</h3>");
+    o(      "<p>[%s(%d):%s] %s</p>",
+                file_name,
+                line_number,
+                function_name,
+                message);
+    o(      "<hr />"
+            "<div align=\"right\">"
+            "<address>Copyright smeghead 2007 - 2008.</address>"
+            "</div>"
+        "</body>"
+        "</html>");
+}
 void exec_action()
 {
     char* index;

@@ -1,3 +1,9 @@
+2008-11-03  smeghead <smeghead@users.sourceforge.jp>
+
+    * エラーが発生してdie関数を呼び出した時、ブラウザにもエラーの内容を表示するようにした。
+      セキュリティの問題よりも、Starbug1の問題を解決できた方がいいので、ファイ
+      ル名、行数、エラーメッセージも表示するようにした。
+
 2008-10-26  smeghead <smeghead@users.sourceforge.jp>
 
     * リリース準備
