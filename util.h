@@ -76,5 +76,6 @@ char* get_ext(char*);
 
 extern char g_project_name[DEFAULT_LENGTH];
 extern char g_action_name[DEFAULT_LENGTH];
+extern char g_path_info[DEFAULT_LENGTH];
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

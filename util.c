@@ -14,6 +14,8 @@
 char g_project_name[DEFAULT_LENGTH] = "";
 /* アクション名 */
 char g_action_name[DEFAULT_LENGTH] = "";
+/* PATH_INFO */
+char g_path_info[DEFAULT_LENGTH] = "";
 
 unsigned long url_encode(unsigned char*, unsigned char*, unsigned long);
 static Action* get_actions();
@@ -110,20 +112,23 @@ ActionType analysis_action()
     char admin_cgi_file_name[DEFAULT_LENGTH] = "";
     ActionType ret = ACTION_TYPE_NONE;
 
-    memset(g_project_name, 0, 1024);
-    memset(g_action_name, 0, 1024);
+    memset(g_project_name, 0, DEFAULT_LENGTH);
+    memset(g_action_name, 0, DEFAULT_LENGTH);
+    memset(g_path_info, 0, DEFAULT_LENGTH);
     d("path_info: %s\n", path_info);
     if (strlen(path_info) > 1) {
-        strncpy(g_project_name, path_info + 1, 1024);
+        strncpy(g_project_name, path_info + 1, DEFAULT_LENGTH);
     } else {
         strcpy(g_project_name, "");
         strcpy(g_action_name, "");
     }
     if ((index = strchr(g_project_name, '/'))) {
         *index = '\0';
-        strncpy(g_action_name, index + 1, 1024 - (strlen(g_project_name) + 1));
+        strncpy(g_action_name, index + 1, DEFAULT_LENGTH - (strlen(g_project_name) + 1));
         if ((index = strchr(g_action_name, '/'))) {
             *index = '\0';
+            /* 残りをpath_infoとする */
+            strcpy(g_path_info, index + 1);
         }
     }
     d("g_project_name: %s g_action_name: %s\n", g_project_name, g_action_name);
@@ -481,7 +486,7 @@ void redirect(const char* path, const char* message)
         strcat(uri, "?message=");
         strcat(uri, parambuf);
     }
-    sprintf(redirecturi, "%s%s", cgiScriptName, uri);
+    sprintf(redirecturi, "%s/%s%s", cgiScriptName, g_project_name, uri);
     o("Status: 302 Temporary Redirection\r\n");
     cgiHeaderLocation(redirecturi);
 }
