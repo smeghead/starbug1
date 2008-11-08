@@ -6,6 +6,7 @@
 #include "dbutil.h"
 #include "simple_string.h"
 
+#define REG_ACTION(action) register_action_actions(#action, action ## _action)
 #define o(...) fprintf(cgiOut, __VA_ARGS__)
 #ifdef DEBUG
 #define d(...) {\
@@ -31,6 +32,15 @@
 #define h(str)      cgiHtmlEscape(str == NULL ? "" : str)
 #define v(str)      cgiValueEscape(str == NULL ? "" : str)
 void u(char*);
+
+typedef enum {
+    ACTION_TYPE_NONE,
+    ACTION_TYPE_INDEX_TOP,
+    ACTION_TYPE_INDEX,
+    ACTION_TYPE_ADMIN_TOP,
+    ACTION_TYPE_ADMIN
+} ActionType;
+
 typedef struct _action {
     char* action_name;
     void (*action_func)(void);
@@ -39,6 +49,7 @@ typedef struct _action {
 void print_error_page(char*, int, char*, char*);
 void register_action_actions(char*, void func(void));
 void free_action_actions();
+ActionType analysis_action();
 void exec_action();
 void hm(char*);
 void hmail(char*);
@@ -63,5 +74,7 @@ int base64_decode(const unsigned char*, unsigned char*);
 void set_date_string(char*);
 char* get_ext(char*);
 
+extern char g_project_name[DEFAULT_LENGTH];
+extern char g_action_name[DEFAULT_LENGTH];
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

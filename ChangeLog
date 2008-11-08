@@ -1,3 +1,8 @@
+2008-11-09  smeghead <smeghead@users.sourceforge.jp>
+
+    * 複数プロジェクト対応の開始。
+    * ファイルの分割。プロジェクト毎のアクション処理とトップのアクション処理を別のファイルに記述するようにする。
+
 2008-11-03  smeghead <smeghead@users.sourceforge.jp>
 
     * エラーが発生してdie関数を呼び出した時、ブラウザにもエラーの内容を表示するようにした。

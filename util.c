@@ -10,6 +10,11 @@
 #include "util.h"
 #include "hook.h"
 
+/* プロジェクト名 */
+char g_project_name[DEFAULT_LENGTH] = "";
+/* アクション名 */
+char g_action_name[DEFAULT_LENGTH] = "";
+
 unsigned long url_encode(unsigned char*, unsigned char*, unsigned long);
 static Action* get_actions();
 
@@ -95,21 +100,55 @@ void print_error_page(char* file_name, int line_number, char* function_name, cha
         "</body>"
         "</html>");
 }
-void exec_action()
+
+ActionType analysis_action()
 {
     char* index;
+    char* script_name = cgiScriptName;
     char* path_info = cgiPathInfo;
-    char action_name[1024];
-    Action* a;
-    if (strlen(path_info) > 1) {
-        strncpy(action_name, path_info + 1, 1024);
-    } else {
-        strcpy(action_name, "");
-    }
-    if ((index = strchr(action_name, '/'))) {
-        *index = '\0';
-    }
+    char index_cgi_file_name[DEFAULT_LENGTH] = "";
+    char admin_cgi_file_name[DEFAULT_LENGTH] = "";
+    ActionType ret = ACTION_TYPE_NONE;
 
+    memset(g_project_name, 0, 1024);
+    memset(g_action_name, 0, 1024);
+    d("path_info: %s\n", path_info);
+    if (strlen(path_info) > 1) {
+        strncpy(g_project_name, path_info + 1, 1024);
+    } else {
+        strcpy(g_project_name, "");
+        strcpy(g_action_name, "");
+    }
+    if ((index = strchr(g_project_name, '/'))) {
+        *index = '\0';
+        strncpy(g_action_name, index + 1, 1024 - (strlen(g_project_name) + 1));
+        if ((index = strchr(g_action_name, '/'))) {
+            *index = '\0';
+        }
+    }
+    d("g_project_name: %s g_action_name: %s\n", g_project_name, g_action_name);
+    sprintf(index_cgi_file_name, "index.%s", get_ext(cgiScriptName));
+    sprintf(admin_cgi_file_name, "admin.%s", get_ext(cgiScriptName));
+    if (strstr(script_name, index_cgi_file_name)) {
+        if (strcmp(g_project_name, "top")) {
+            ret = ACTION_TYPE_INDEX_TOP;
+        } else {
+            ret = ACTION_TYPE_INDEX;
+        }
+    } else if (strstr(script_name, admin_cgi_file_name)) {
+        if (strcmp(g_project_name, "top")) {
+            ret = ACTION_TYPE_ADMIN_TOP;
+        } else {
+            ret = ACTION_TYPE_ADMIN;
+        }
+    }
+    return ret;
+}
+void exec_action()
+{
+    Action* a;
+    char action_name[DEFAULT_LENGTH];
+    strcpy(action_name, g_action_name);
     for (a = get_actions(); a != NULL; a = a->next) {
         if (!strcmp(action_name, a->action_name)) {
             d("exec_action start: %s\n", a->action_name);
