@@ -167,7 +167,7 @@ void exec_action()
     } else {
         /* path_infoが空なら、top_actionを呼び出す。 */
         for (a = get_actions(); a != NULL; a = a->next) {
-            if (!strcmp("top", a->action_name)) {
+            if (!strcmp("top", a->action_name) || !strcmp("top_top", a->action_name)) {
                 d("=exec_action default_action start: %s\n", a->action_name);
                 a->action_func();
                 d("=exec_action default_action end  : %s\n", a->action_name);

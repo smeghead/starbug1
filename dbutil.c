@@ -109,7 +109,7 @@ void create_top_tables(Database* db)
             db,
             "insert into wiki(id, name, content, registerdate) values (NULL, 'top', '"
             "*編集可能領域\n"
-            "自由に編集できます。右側の「トップページの編集」のリンクから編集してください。色々な用途に使用してください。\n"
+            "自由に編集できます。上の「編集」のリンクから編集してください。色々な用途に使用してください。\n"
             "-お知らせ\n"
             "-Starbug1の使い方についての注意事項など\n"
             "', current_timestamp);", COLUMN_TYPE_END);

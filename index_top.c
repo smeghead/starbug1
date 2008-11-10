@@ -13,13 +13,17 @@
 #include "simple_string.h"
 
 void top_top_action();
+void top_edit_top_action();
+void top_edit_top_submit_action();
 
 /* prototype declares */
 int index_top_main();
 
 void top_register_actions()
 {
-    register_action_actions("top", top_top_action);
+    REG_ACTION(top_top);
+    REG_ACTION(top_edit_top);
+    REG_ACTION(top_edit_top_submit);
 }
 
 void top_output_header(char* title)
@@ -78,6 +82,7 @@ void top_top_action()
     List* project_infos;
     Iterator* it;
 
+    d("path\n");
     list_alloc(project_infos, ProjectInfo);
     d("top_top_action\n");
 
@@ -105,147 +110,72 @@ void top_top_action()
     o(      "</div>\n");
     top_output_footer();
     db_finish(db_a);
-/*     Project* project_a = project_new(); */
-/*     List* tickets_a; */
-/*     List* states_a; */
-/*     Iterator* it; */
-
-/*     db_init(); */
-/*     project_a = db_get_project(project_a); */
-/*     output_header(project_a, "トップページ", NULL, NAVI_TOP); */
-/*     list_alloc(states_a, State); */
-/*     states_a = db_get_states(states_a); */
-/*     o(      "<div id=\"info\">\n"); */
-/*     |+最新情報の表示+| */
-/*     o(      "<div id=\"top_newest\">\n" */
-/*             "<h4>最新情報</h4>\n" */
-/*             "\t<ul>\n"); */
-/*     list_alloc(tickets_a, Message); */
-/*     tickets_a = db_get_newest_information(10, tickets_a); */
-/*     if (tickets_a->size) { */
-/*         foreach (it, tickets_a) { */
-/*             Message* ticket = it->element; */
-/*             List* elements_a; */
-/*             list_alloc(elements_a, Element); */
-/*             elements_a = db_get_last_elements_4_list(ticket->id, elements_a); */
-/*             o("\t\t<li>\n"); */
-/*             o("\t\t\t<a href=\"%s/ticket/%d", cgiScriptName, ticket->id); o("\">"); */
-/*             h(get_element_value_by_id(elements_a, ELEM_ID_TITLE)); */
-/*             o(      "</a>\n"); */
-/*             o("\t\t</li>\n"); */
-/*             free_element_list(elements_a); */
-/*         } */
-/*     } else { */
-/*         o("<li>最新情報がありません。</li>\n"); */
-/*     } */
-/*     list_free(tickets_a); */
-/*     o(      "\t</ul>\n" */
-/*             "</div>\n"); */
-/*     |+stateの表示+| */
-/*     o(      "<div id=\"top_state_index\">\n" */
-/*             "<h4>状態別件数</h4>\n" */
-/*             "\t<ul>\n"); */
-/*     if (states_a->size) { */
-/*         foreach (it, states_a) { */
-/*             State* s = it->element; */
-/*             o("\t\t<li>\n"); */
-/*             o("\t\t\t<a href=\"%s/search?field%d=", cgiScriptName, ELEM_ID_STATUS); u(s->name); o("\">"); */
-/*             h(s->name); */
-/*             o("\t\t\t</a>\n"); */
-/*             o("(%d)", s->count); */
-/*             o("\t\t</li>\n"); */
-/*         } */
-/*     } else { */
-/*         o("<li>チケット情報がありません。</li>\n"); */
-/*     } */
-/*     list_free(states_a); */
-/*     o(      "\t</ul>\n" */
-/*             "</div>\n"); */
-/*     |+ID検索フォームの表示+| */
-/*     o(      "<div id=\"top_id_search\">\n" */
-/*             "<h4>ID検索</h4>\n" */
-/*             "\t<form action=\"%s/search\" method=\"get\">\n", cgiScriptName); */
-/*     o(      "\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" maxlength=\"%d\" />\n", DEFAULT_LENGTH - 1); */
-/*     o(      "\t\t<input type=\"submit\" class=\"button\" value=\"表示\" />\n" */
-/*             "\t</form>\n" */
-/*             "</div>\n" */
-/*             "</div>\n" */
-/*             "<div id=\"main\">\n" */
-/*             "<h2>");h(project_a->name);o("&nbsp;</h2>\n"); */
-/*     project_free(project_a); */
-/*     o(      "<div id=\"main_body\">\n" */
-/*             "<div class=\"top_edit\">\n" */
-/*             "<a id=\"new_ticket_link\" href=\"%s/register\">新しいチケットを登録する</a>&nbsp;\n", cgiScriptName); */
-/*     o(      "<a href=\"%s/edit_top\">トップページの編集</a>\n", cgiScriptName); */
-/*     o(      "</div>\n"); */
-/*     wiki_out("top"); */
-/*     o(      "</div>\n" */
-/*             "</div>\n"); */
-/*     db_finish(); */
-/*     output_footer(); */
 }
-
 void top_edit_top_action()
 {
-/*     Project* project_a = project_new(); */
-/*     db_init(); */
-/*     project_a = db_get_project(project_a); */
-/*     output_header(project_a, "トップページの編集", "edit_top.js", NAVI_OTHER); */
-/*     project_free(project_a); */
-/*     o(      "<h2>トップページの編集</h2>\n" */
-/*             "<div id=\"top\">\n" */
-/*             "<h3>トップページの編集</h3>\n" */
-/*             "<div id=\"description\">簡易wikiの文法でトップページのコンテンツの編集を行ない、更新ボタンを押してください。</div>\n" */
-/*             "<form id=\"edit_top_form\" action=\"%s/edit_top_submit\" method=\"post\">\n", cgiScriptName); */
-/*     o(      "<textarea name=\"edit_top\" id=\"edit_top\" rows=\"3\" cols=\"10\">"); */
-/*     wiki_content_out("top"); */
-/*     o(      "</textarea>\n" */
-/*             "<div>&nbsp;</div>\n" */
-/*             "<input class=\"button\" type=\"submit\" value=\"更新\" />\n" */
-/*             "</form>" */
-/*             "<div>\n" */
-/*             "<h3>簡易wikiのサポートする文法</h3>\n" */
-/*             "<ul>\n" */
-/*             "<li>行頭に*を記述した行は、大見出しになります。</li>\n" */
-/*             "<li>行頭に**を記述した行は、中見出しになります。</li>\n" */
-/*             "<li>行頭に***を記述した行は、小見出しになります。</li>\n" */
-/*             "<li>行頭に****を記述した行は、極小見出しになります。</li>\n" */
-/*             "<li>行頭に-を記述した行は、箇条書きになります。</li>\n" */
-/*             "<li>行頭に----を記述した行は、区切り線になります。</li>\n" */
-/*             "<li>行頭が >| から始まる行から、行頭が |< から始まる行までは、整形済みブロックになります。</li>\n" */
-/*             "</ul>\n" */
-/*             "<h5>例</h5>\n" */
-/*             "<pre>\n" */
-/*             "*編集可能領域\n" */
-/*             "自由に編集できます。\n" */
-/*             "右側の「トップページの編集」のリンクから編集してください。\n" */
-/*             "色々な用途に使用してください。\n" */
-/*             "-お知らせ\n" */
-/*             "-Starbug1の使い方についての注意事項など\n" */
-/*             "\n" */
-/*             ">|\n" */
-/*             "void displayWidgets (Iterable<Widget> widgets) {\n" */
-/*             "  for (Widget w : widgets) {\n" */
-/*             "    w.display();\n" */
-/*             "  }\n" */
-/*             "}\n" */
-/*             "|<\n" */
-/*             "</pre>\n" */
-/*             "</div>\n" */
-/*             "</div>\n"); */
-/*     db_finish(); */
-/*     output_footer(); */
+    Database* db_a;
+    char buffer[DEFAULT_LENGTH];
+
+    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    top_output_header("トップページの編集");
+    o(      "<h2>トップページの編集</h2>\n"
+            "<div id=\"top\">\n"
+            "<h3>トップページの編集</h3>\n"
+            "<div id=\"description\">簡易wikiの文法でトップページのコンテンツの編集を行ない、更新ボタンを押してください。</div>\n"
+            "<form id=\"edit_top_form\" action=\"%s/%s/top_edit_top_submit\" method=\"post\">\n", cgiScriptName, g_project_name);
+    o(      "<textarea name=\"edit_top\" id=\"edit_top\" rows=\"3\" cols=\"10\">");
+    wiki_content_out(db_a, "top");
+    o(      "</textarea>\n"
+            "<div>&nbsp;</div>\n"
+            "<input class=\"button\" type=\"submit\" value=\"更新\" />\n"
+            "</form>"
+            "<div>\n"
+            "<h3>簡易wikiのサポートする文法</h3>\n"
+            "<ul>\n"
+            "<li>行頭に*を記述した行は、大見出しになります。</li>\n"
+            "<li>行頭に**を記述した行は、中見出しになります。</li>\n"
+            "<li>行頭に***を記述した行は、小見出しになります。</li>\n"
+            "<li>行頭に****を記述した行は、極小見出しになります。</li>\n"
+            "<li>行頭に-を記述した行は、箇条書きになります。</li>\n"
+            "<li>行頭に----を記述した行は、区切り線になります。</li>\n"
+            "<li>行頭が >| から始まる行から、行頭が |< から始まる行までは、整形済みブロックになります。</li>\n"
+            "</ul>\n"
+            "<h5>例</h5>\n"
+            "<pre>\n"
+            "*編集可能領域\n"
+            "自由に編集できます。\n"
+            "右側の「トップページの編集」のリンクから編集してください。\n"
+            "色々な用途に使用してください。\n"
+            "-お知らせ\n"
+            "-Starbug1の使い方についての注意事項など\n"
+            "\n"
+            ">|\n"
+            "void displayWidgets (Iterable<Widget> widgets) {\n"
+            "  for (Widget w : widgets) {\n"
+            "    w.display();\n"
+            "  }\n"
+            "}\n"
+            "|<\n"
+            "</pre>\n"
+            "</div>\n"
+            "</div>\n");
+    db_finish(db_a);
+    top_output_footer();
 }
+
 void top_edit_top_submit_action()
 {
-/*     char* value_a = xalloc(sizeof(char) * VALUE_LENGTH); */
+    Database* db_a;
+    char buffer[DEFAULT_LENGTH];
+    char* value_a = xalloc(sizeof(char) * VALUE_LENGTH);
 
-/*     cgiFormString("edit_top", value_a, VALUE_LENGTH); */
-/*     db_init(); */
-/*     wiki_save("top", value_a); */
-/*     db_finish(); */
-/*     xfree(value_a); */
+    d("pass\n");
+    cgiFormString("edit_top", value_a, VALUE_LENGTH);
+    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    wiki_save(db_a, "top", value_a);
+    db_finish(db_a);
+    xfree(value_a);
 
-/*     redirect("", NULL); */
+    redirect("", NULL);
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
