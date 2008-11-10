@@ -97,6 +97,22 @@ void create_top_tables(Database* db)
             "insert into project_info(id, name, deleted, sort) "
             "values (2, 'bts', 0, 1);", 
             COLUMN_TYPE_END);
+    exec_query(
+            db,
+            "create table wiki( "
+            " id integer not null primary key, "
+            " name text, "
+            " content text, "
+            " registerdate text "
+            ");", COLUMN_TYPE_END);
+    exec_query(
+            db,
+            "insert into wiki(id, name, content, registerdate) values (NULL, 'top', '"
+            "*編集可能領域\n"
+            "自由に編集できます。右側の「トップページの編集」のリンクから編集してください。色々な用途に使用してください。\n"
+            "-お知らせ\n"
+            "-Starbug1の使い方についての注意事項など\n"
+            "', current_timestamp);", COLUMN_TYPE_END);
     db_commit(db);
 }
 void create_project_tables(Database* db)

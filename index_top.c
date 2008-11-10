@@ -37,12 +37,13 @@ void top_output_header(char* title)
             "\t<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\" />\n"
             "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />\n");
     o(        "\t<title>Starbug1 - %s</title>\n", title);
-    o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName);
+/*     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName); */
     string_free(base_url_a);
     o(      "</head>\n"
             "<body>\n"
             "<a name=\"top\"></a>\n"
-            "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/../img/starbug1.jpg\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName);
+            "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\">Starbug1</a> トップページ</h1>\n");
+/*             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/../img/starbug1.jpg\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName); */
 }
 void top_output_footer()
 {
@@ -68,100 +69,6 @@ int index_top_main() {
     return 0;
 }
 /**
- * 一覧を表示するaction。
- */
-/* void list_action() */
-/* { */
-/*     List* element_types_a; */
-/*     List* conditions_a = NULL; */
-/*     Project* project_a = project_new(); */
-/*     List* states_a; */
-/*     Iterator* it; */
-/*     char** multi; */
-
-/*     db_init(); */
-/*     project_a = db_get_project(project_a); */
-/*     output_header(project_a, "状態別チケット一覧", NULL, NAVI_LIST); */
-/*     |+メッセージの取得+| */
-/*     if ((cgiFormStringMultiple("message", &multi)) != cgiFormNotFound) { */
-/*         int i = 0; */
-/*         o("<div class=\"complete_message\">"); */
-/*         while (multi[i]) { */
-/*             if (strstr(multi[i], "[ERROR]") != NULL) { */
-/*                 o("<div class=\"error\">"); */
-/*             } else { */
-/*                 o("<div>"); */
-/*             } */
-/*             h(multi[i]); */
-/*             o("</div>"); */
-/*             i++; */
-/*         } */
-/*         o("</div>\n"); */
-/*     } */
-/*     cgiStringArrayFree(multi); */
-/*     list_alloc(element_types_a, ElementType); */
-/*     element_types_a = db_get_element_types_4_list(element_types_a); */
-/*     o("<h2>"); h(project_a->name); o(" - 状態別チケット一覧</h2>\n"); */
-/*     project_free(project_a); */
-/*     list_alloc(states_a, State); */
-/*     states_a = db_get_states(states_a); */
-/*     output_states(states_a, true); */
-/*     list_free(states_a); */
-/*     fflush(cgiOut); */
-/*     o("<div id=\"ticket_list\">\n" */
-/*       "<h3>状態別チケット一覧</h3>\n" */
-/*       "<div class=\"description\">未クローズの状態毎にチケットを表示しています。\n"); */
-/*     list_alloc(states_a, State); */
-/*     states_a = db_get_states_has_not_close(states_a); */
-/*     foreach (it, states_a) { */
-/*         State* s = it->element; */
-/*         o("\t\t\t<a href=\"#"); */
-/*         h(s->name); */
-/*         o("\" title=\"ページ内へのリンク\">"); */
-/*         h(s->name); */
-/*         o("</a>"); */
-/*     } */
-/*     o("</div>\n" */
-/*       "<br clear=\"all\" />\n"); */
-/*     foreach (it, states_a) { */
-/*         State* s = it->element; */
-/*         SearchResult* result_a = search_result_new(); */
-
-/*         |+検索+| */
-/*         list_alloc(conditions_a, Condition); */
-/*         result_a = db_get_tickets_by_status(s->name, result_a); */
-/*         list_free(conditions_a); */
-
-/*         o("<a name=\""); h(s->name); o("\"></a>\n"); */
-/*         o("<div>\n"); */
-/*         o("<h4 class=\"status\">");h(s->name);o("&nbsp;(%d件)&nbsp;<a href=\"#top\">↑</a></h4>\n", s->count); */
-/*         if (result_a->hit_count == LIST_COUNT_PER_LIST_PAGE) { */
-/*             o("\t\t<div class=\"infomation\">新しい%d件のみを表示しています。<a href=\"%s/search?field%d=",  */
-/*                     result_a->hit_count,  */
-/*                     cgiScriptName, */
-/*                     ELEM_ID_STATUS); */
-/*             u(s->name); */
-/*             o("\">状態が"); h(s->name); o("である全てのチケットを表示する</a></div>\n"); */
-/*         } */
-/*         output_ticket_table_status_index(result_a, element_types_a); */
-/*         if (result_a->hit_count == LIST_COUNT_PER_LIST_PAGE) { */
-/*             o("\t\t<div class=\"infomation\">続きがあります。<a href=\"%s/search?field%d=",  */
-/*                     cgiScriptName, */
-/*                     ELEM_ID_STATUS); */
-/*             u(s->name); */
-/*             o("\">状態が"); h(s->name); o("である全てのチケットを表示する</a></div>\n"); */
-/*         } */
-/*         search_result_free(result_a); */
-/*         o("</div>\n"); */
-/*         fflush(cgiOut); */
-/*     } */
-/*     list_free(states_a); */
-/*     list_free(element_types_a); */
-/*     o("</div>\n"); */
-/*     output_footer(); */
-/*     db_finish(); */
-/* } */
-/**
  * デフォルトのaction。
  */
 void top_top_action()
@@ -177,8 +84,10 @@ void top_top_action()
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_infos = db_top_get_all_project_infos(db_a, project_infos);
     top_output_header("トップページ");
-    o("<h2>全プロジェクトページ</h2>\n");
+    o(      "<div id=\"project_menu\">\n"
+            "\t<a href=\"%s/../admin.%s/%s/\">各プロジェクトの管理</a>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name);
     o(      "<div id=\"project_list\">\n"
+            "\t<h2>プロジェクト一覧</h2>\n"
             "\t<ul>\n");
     foreach (it, project_infos) {
         ProjectInfo* p = it->element;
@@ -189,6 +98,11 @@ void top_top_action()
         o(      "\t\t\t<li><a href=\"%s/%s\">%s</a></li>\n", cgiScriptName, p->name, p->name);
     }
     o(      "\t</ul>\n");
+    o(      "</div>\n");
+    o(      "<div id=\"dashboard\">\n");
+    o(      "<a href=\"%s/%s/top_edit_top\">編集</a>\n", cgiScriptName, g_project_name);
+    wiki_out(db_a, "top");
+    o(      "</div>\n");
     top_output_footer();
     db_finish(db_a);
 /*     Project* project_a = project_new(); */

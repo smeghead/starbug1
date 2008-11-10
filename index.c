@@ -4,7 +4,7 @@
 #include "index_top.h"
 #include "index_project.h"
 
-/*  */
+/* index.cgiのエントリポイントになる関数  */
 int cgiMain() {
     ActionType type = analysis_action();
     int ret = 0;
