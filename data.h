@@ -19,20 +19,27 @@ typedef enum _bool {
     true
 } bool;
 
-typedef struct _project {
+typedef struct {
+    int id;
+    char name[DEFAULT_LENGTH];
+} ProjectInfo;
+ProjectInfo* project_info_new();
+void project_info_free(ProjectInfo*);
+
+typedef struct {
   char name[DEFAULT_LENGTH];
   char home_url[DEFAULT_LENGTH];
 } Project;
 Project* project_new();
 void project_free(Project*);
 
-typedef struct _element {
+typedef struct {
   int element_type_id;
   char* str_val;
   int is_file;
 } Element;
 
-typedef struct _setting_file {
+typedef struct {
     char name[DEFAULT_LENGTH];
     char file_name[DEFAULT_LENGTH];
     int size;
@@ -42,14 +49,14 @@ typedef struct _setting_file {
 SettingFile* setting_file_new();
 void setting_file_free(SettingFile*);
 
-typedef struct _message {
+typedef struct {
   int id;
   List* elements;
 } Message;
 Message* message_new();
 void message_free(Message*);
 
-typedef struct _list_item {
+typedef struct {
   int id;
   int element_type_id;
   char name[256];
@@ -59,7 +66,7 @@ typedef struct _list_item {
 ListItem* list_item_new();
 void list_item_free(ListItem*);
 
-typedef struct _element_type {
+typedef struct {
   int id;
   int type;
   int ticket_property;
@@ -73,7 +80,7 @@ typedef struct _element_type {
   int sort;
 } ElementType;
 
-typedef struct _element_file {
+typedef struct {
     int id;
     int element_type_id;
     char name[DEFAULT_LENGTH];
@@ -105,7 +112,7 @@ enum ELEM_ID {
 };
 #define BASIC_ELEMENT_MAX 3
 
-typedef struct _condition {
+typedef struct {
   int element_type_id;
   int condition_type;
   char value[DEFAULT_LENGTH];
@@ -124,13 +131,13 @@ int valid_condition_size(List*);
 bool valid_condition(Condition*);
 char* get_condition_valid_value(Condition*);
 
-typedef struct _state {
+typedef struct {
   int id;
   char name[DEFAULT_LENGTH];
   int count;
 } State;
 
-typedef struct _search_result {
+typedef struct {
   int hit_count;
   int page;
   List* messages;
@@ -139,7 +146,7 @@ typedef struct _search_result {
 SearchResult* search_result_new();
 void search_result_free(SearchResult*);
 
-typedef struct _wiki {
+typedef struct {
   int id;
   char name[DEFAULT_LENGTH];
   char* content;

@@ -6,21 +6,27 @@
 #include <stdio.h>
 #include <sqlite3.h>
 #include <stdarg.h>
+#include "util.h"
 
-#define ERROR_LABEL error: \
+#define ERROR_LABEL(db) error: \
     d("ERR: %s\n", sqlite3_errmsg(db)); \
     sqlite3_finalize(stmt); \
     sqlite3_close(db); \
     die("failed to dbaccess.");
 
-void db_init();
-void db_finish();
-void db_begin();
-void db_rollback();
-void db_commit();
+typedef struct {
+    char name[DEFAULT_LENGTH];
+    sqlite3* handle;
+} Database;
 
-int exec_query(const char* sql,...);
-int exec_query_scalar_int(const char* sql, ...);
+Database* db_init(char*);
+void db_finish(Database*);
+void db_begin(Database*);
+void db_rollback(Database*);
+void db_commit(Database*);
+
+int exec_query(Database*, const char* sql,...);
+int exec_query_scalar_int(Database*, const char* sql, ...);
 int exec_and_wait_4_done(sqlite3_stmt*);
 
 #define INVALID_INT -99999

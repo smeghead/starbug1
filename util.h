@@ -13,7 +13,7 @@
     char time[20];\
     FILE *fp = fopen("debug.log", "a");\
     set_date_string(time);\
-    fprintf(fp, "[%s] ", time);\
+    fprintf(fp, "[%s] {%s/%s}\t", time, g_project_name, g_action_name);\
     fprintf(fp, __VA_ARGS__);\
     fclose(fp);\
 }
@@ -26,7 +26,7 @@
 #endif
 #define die(msg)    { \
     d("ERROR: %s(%d) %s %s\n", __FILE__, __LINE__, __FUNCTION__, msg);\
-    print_error_page(__FILE__, __LINE__, __FUNCTION__, msg);\
+    print_error_page(__FILE__, __LINE__, msg);\
     exit(1);\
 }
 #define h(str)      cgiHtmlEscape(str == NULL ? "" : str)
@@ -46,7 +46,7 @@ typedef struct _action {
     void (*action_func)(void);
     struct _action* next;
 } Action;
-void print_error_page(char*, int, char*, char*);
+void print_error_page(char*, int, char*);
 void register_action_actions(char*, void func(void));
 void free_action_actions();
 ActionType analysis_action();

@@ -3,7 +3,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include "data.h"
-#include "db.h"
+#include "db_project.h"
+#include "db_top.h"
 #include "dbutil.h"
 #include "list.h"
 #include "util.h"
@@ -52,8 +53,8 @@ void setting_file_action();
 void output_header(Project*, char*, char*, const NaviType);
 void output_footer();
 int public_main();
-void output_form_element(List*, ElementType*);
-void output_form_element_4_condition(ElementType*, List* conditions);
+void output_form_element(Database*, List*, ElementType*);
+void output_form_element_4_condition(Database*, ElementType*, List* conditions);
 ModeType get_mode();
 void output_calendar_js();
 
@@ -271,7 +272,7 @@ void output_ticket_table_header(List* element_types)
     o("\t</tr>\n");
     string_free(query_string_a);
 }
-void output_ticket_table_body(SearchResult* result, List* element_types)
+void output_ticket_table_body(Database* db, SearchResult* result, List* element_types)
 {
     Iterator* it;
     Iterator* it_msg;
@@ -280,7 +281,7 @@ void output_ticket_table_body(SearchResult* result, List* element_types)
         Message* message = it_msg->element;
         List* elements_a;
         list_alloc(elements_a, Element);
-        elements_a = db_get_last_elements_4_list(message->id, elements_a);
+        elements_a = db_get_last_elements_4_list(db, message->id, elements_a);
         o("\t<tr>\n"
           "\t\t<td class=\"id field%d-\"><a href=\"%s/%s/ticket/%s\">%s</a></td>\n", 
                 ELEM_ID_ID, 
@@ -312,18 +313,18 @@ void output_ticket_table_body(SearchResult* result, List* element_types)
         free_element_list(elements_a);
     }
 }
-void output_ticket_table_status_index(SearchResult* result, List* element_types)
+void output_ticket_table_status_index(Database* db, SearchResult* result, List* element_types)
 {
     o("<table summary=\"ticket list\">\n");
     output_ticket_table_header_no_link(element_types);
-    output_ticket_table_body(result, element_types);
+    output_ticket_table_body(db, result, element_types);
     o("</table>\n");
 }
-void output_ticket_table(SearchResult* result, List* element_types)
+void output_ticket_table(Database* db, SearchResult* result, List* element_types)
 {
     o("<table summary=\"ticket list\">\n");
     output_ticket_table_header(element_types);
-    output_ticket_table_body(result, element_types);
+    output_ticket_table_body(db, result, element_types);
     o("</table>\n");
 }
 void output_states(List* states, bool with_new_ticket_link)
@@ -359,6 +360,7 @@ void output_states(List* states, bool with_new_ticket_link)
       "</div>\n");
 /*     o("<br class=\"clear\" clear=\"all\" />\n"); */
 }
+
 /**
  * 一覧を表示するaction。
  */
@@ -370,9 +372,11 @@ void list_action()
     List* states_a;
     Iterator* it;
     char** multi;
+    Database* db_a;
+    char buffer[DEFAULT_LENGTH];
 
-    db_init();
-    project_a = db_get_project(project_a);
+    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    project_a = db_get_project(db_a, project_a);
     output_header(project_a, "状態別チケット一覧", NULL, NAVI_LIST);
     /* メッセージの取得 */
     if ((cgiFormStringMultiple("message", &multi)) != cgiFormNotFound) {
@@ -392,11 +396,11 @@ void list_action()
     }
     cgiStringArrayFree(multi);
     list_alloc(element_types_a, ElementType);
-    element_types_a = db_get_element_types_4_list(element_types_a);
+    element_types_a = db_get_element_types_4_list(db_a, element_types_a);
     o("<h2>"); h(project_a->name); o(" - 状態別チケット一覧</h2>\n");
     project_free(project_a);
     list_alloc(states_a, State);
-    states_a = db_get_states(states_a);
+    states_a = db_get_states(db_a, states_a);
     output_states(states_a, true);
     list_free(states_a);
     fflush(cgiOut);
@@ -404,7 +408,7 @@ void list_action()
       "<h3>状態別チケット一覧</h3>\n"
       "<div class=\"description\">未クローズの状態毎にチケットを表示しています。\n");
     list_alloc(states_a, State);
-    states_a = db_get_states_has_not_close(states_a);
+    states_a = db_get_states_has_not_close(db_a, states_a);
     foreach (it, states_a) {
         State* s = it->element;
         o("\t\t\t<a href=\"#");
@@ -421,7 +425,7 @@ void list_action()
 
         /* 検索 */
         list_alloc(conditions_a, Condition);
-        result_a = db_get_tickets_by_status(s->name, result_a);
+        result_a = db_get_tickets_by_status(db_a, s->name, result_a);
         list_free(conditions_a);
 
         o("<a name=\""); h(s->name); o("\"></a>\n");
@@ -436,7 +440,7 @@ void list_action()
             u(s->name);
             o("\">状態が"); h(s->name); o("である全てのチケットを表示する</a></div>\n");
         }
-        output_ticket_table_status_index(result_a, element_types_a);
+        output_ticket_table_status_index(db_a, result_a, element_types_a);
         if (result_a->hit_count == LIST_COUNT_PER_LIST_PAGE) {
             o("\t\t<div class=\"infomation\">続きがあります。<a href=\"%s/%s/search?field%d=", 
                     cgiScriptName,
@@ -453,7 +457,7 @@ void list_action()
     list_free(element_types_a);
     o("</div>\n");
     output_footer();
-    db_finish();
+    db_finish(db_a);
 }
 Condition* create_sort_condition(Condition* sort)
 {
@@ -612,6 +616,8 @@ void search_action()
     int col_index;
     bool condition_will_save, condition_restore;
     char search_button[DEFAULT_LENGTH];
+    Database* db_a;
+    char buffer[DEFAULT_LENGTH];
 
     cgiFormStringNoNewlines("id", id, NUM_LENGTH);
     if (strlen(id) > 0) {
@@ -629,9 +635,9 @@ void search_action()
         ? true : false;
     condition_restore = (strlen(search_button) == 0 && strcmp(cookie_save_condition, "1") == 0)
         ? true : false;
-    db_init();
+    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     list_alloc(element_types_a, ElementType);
-    element_types_a = db_get_element_types_4_list(element_types_a);
+    element_types_a = db_get_element_types_4_list(db_a, element_types_a);
     /* 検索 */
     list_alloc(conditions_a, Condition);
     conditions_a = create_conditions(conditions_a, element_types_a, condition_restore);
@@ -643,17 +649,17 @@ void search_action()
     sort_a = condition_new();
     sort_a = create_sort_condition(sort_a);
     cgiFormStringNoNewlines("p", p, NUM_LENGTH);
-    result_a = db_search_tickets(conditions_a, q, sort_a, atoi(p), result_a);
+    result_a = db_search_tickets(db_a, conditions_a, q, sort_a, atoi(p), result_a);
     /* 検索条件を保存のチェックボックスがチェックされている場合は、保存。それ意外はクリアする。 */
     save_condition2cookie(conditions_a, q, condition_will_save);
-    project_a = db_get_project(project_a);
+    project_a = db_get_project(db_a, project_a);
     output_header(project_a, "チケット検索", "calendar.js", NAVI_SEARCH);
     output_calendar_js();
     o("<h2>"); h(project_a->name); o(" - チケット検索</h2>\n");
     project_free(project_a);
     condition_free(sort_a);
     list_alloc(states_a, State);
-    states_a = db_get_states(states_a);
+    states_a = db_get_states(db_a, states_a);
     output_states(states_a, true);
     list_free(states_a);
     o("<div id=\"condition_form\">\n"
@@ -702,7 +708,7 @@ void search_action()
             o("<tr>\n");
         o("\t<th>"); h(et->name); o("</th>\n");
         o("\t<td>\n"); 
-        output_form_element_4_condition(et, conditions_a);
+        output_form_element_4_condition(db_a, et, conditions_a);
         o("\t</td>\n");
         if (!iterator_next(it)) {
             /* 空いたセルの調整 */
@@ -749,13 +755,13 @@ void search_action()
                 string_rawstr(query_string_a));
         o(      "</div>\n");
         output_navigater(result_a, string_rawstr(query_string_a));
-        output_ticket_table(result_a, element_types_a);
+        output_ticket_table(db_a, result_a, element_types_a);
         output_navigater(result_a, string_rawstr(query_string_a));
         string_free(query_string_a);
     }
     o("</div>\n");
     output_footer();
-    db_finish();
+    db_finish(db_a);
     list_free(element_types_a);
     search_result_free(result_a);
 }
@@ -774,7 +780,7 @@ void output_ticket_information_4_csv_report_header(List* element_types)
     csv_field("最終更新日時"); o(",");
     csv_field("放置日数"); o("\r\n");
 }
-void output_ticket_information_4_csv_report(SearchResult* result, List* element_types)
+void output_ticket_information_4_csv_report(Database* db, SearchResult* result, List* element_types)
 {
     Iterator* it;
     Iterator* it_msg;
@@ -785,7 +791,7 @@ void output_ticket_information_4_csv_report(SearchResult* result, List* element_
         char id_str[NUM_LENGTH];
         sprintf(id_str, "%d", message->id);
         list_alloc(elements_a, Element);
-        elements_a = db_get_last_elements(message->id, elements_a);
+        elements_a = db_get_last_elements(db, message->id, elements_a);
         csv_field(id_str); o(",");
         foreach (it, element_types) {
             ElementType* et = it->element;
@@ -810,19 +816,21 @@ void report_csv_download_action()
     Condition* sort_a = NULL;
     Project* project_a = project_new();
     char q[DEFAULT_LENGTH];
+    Database* db_a;
+    char buffer[DEFAULT_LENGTH];
 
-    db_init();
-    project_a = db_get_project(project_a);
+    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    project_a = db_get_project(db_a, project_a);
     list_alloc(element_types_a, ElementType);
 
-    element_types_a = db_get_element_types_all(element_types_a);
+    element_types_a = db_get_element_types_all(db_a, element_types_a);
     /* 検索 */
     list_alloc(conditions_a, Condition);
     conditions_a = create_conditions(conditions_a, element_types_a, false);
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
     sort_a = condition_new();
     create_sort_condition(sort_a);
-    result_a = db_search_tickets_4_report(conditions_a, q, sort_a, result_a);
+    result_a = db_search_tickets_4_report(db_a, conditions_a, q, sort_a, result_a);
     list_free(conditions_a);
     condition_free(sort_a);
 
@@ -832,15 +840,15 @@ void report_csv_download_action()
     csv_field(project_a->name); o("\r\n");
     project_free(project_a);
     output_ticket_information_4_csv_report_header(element_types_a);
-    output_ticket_information_4_csv_report(result_a, element_types_a);
-    db_finish();
+    output_ticket_information_4_csv_report(db_a, result_a, element_types_a);
+    db_finish(db_a);
     list_free(element_types_a);
     search_result_free(result_a);
 }
 /**
  * form要素を表示する。
  */
-void output_form_element_4_condition(ElementType* et, List* conditions)
+void output_form_element_4_condition(Database* db, ElementType* et, List* conditions)
 {
     char id[NUM_LENGTH];
     List* items_a;
@@ -879,7 +887,7 @@ void output_form_element_4_condition(ElementType* et, List* conditions)
             h(id);
             o("\">\n");
             list_alloc(items_a, ListItem);
-            items_a = db_get_list_item(et->id, items_a);
+            items_a = db_get_list_item(db, et->id, items_a);
 
             o("<option value=\"\">&nbsp;</option>");
             foreach (it, items_a) {
@@ -922,7 +930,7 @@ void output_form_element_4_condition(ElementType* et, List* conditions)
 /**
  * form要素を表示する。
  */
-void output_form_element(List* elements, ElementType* et)
+void output_form_element(Database* db, List* elements, ElementType* et)
 {
     char* value = "";
     List* items_a;
@@ -969,7 +977,7 @@ void output_form_element(List* elements, ElementType* et)
                     et->id, et->id);
             o("<option value=\"\">&nbsp;</option>\n");
             list_alloc(items_a, ListItem);
-            items_a = db_get_list_item(et->id, items_a);
+            items_a = db_get_list_item(db, et->id, items_a);
             foreach (it, items_a) {
                 ListItem* item = it->element;
                 o("<option value=\"");
@@ -987,7 +995,7 @@ void output_form_element(List* elements, ElementType* et)
             break;
         case ELEM_TYPE_LIST_MULTI:
             list_alloc(items_a, ListItem);
-            items_a = db_get_list_item(et->id, items_a);
+            items_a = db_get_list_item(db, et->id, items_a);
             o("<select size=\"%d\" id=\"field%d", items_a->size + 1, et->id);
             o("\" name=\"field%d\" multiple=\"multiple\">\n", et->id);
 
@@ -1072,16 +1080,18 @@ void register_action()
 {
     Project* project_a = project_new();
     List* states_a;
+    Database* db_a;
+    char buffer[DEFAULT_LENGTH];
     char sender[DEFAULT_LENGTH];
     get_cookie_string(COOKIE_SENDER, sender);
 
-    db_init();
-    project_a = db_get_project(project_a);
+    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    project_a = db_get_project(db_a, project_a);
     output_header(project_a, "チケット登録", "register.js", NAVI_REGISTER);
     output_calendar_js();
     o(      "<h2>"); h(project_a->name);o(" - チケット登録</h2>\n");
     list_alloc(states_a, State);
-    states_a = db_get_states(states_a);
+    states_a = db_get_states(db_a, states_a);
     output_states(states_a, false);
     list_free(states_a);
     o(      "<div id=\"input_form\">\n"
@@ -1095,7 +1105,7 @@ void register_action()
         List* element_types_a;
         Iterator* it;
         list_alloc(element_types_a, ElementType);
-        element_types_a = db_get_element_types_all(element_types_a);
+        element_types_a = db_get_element_types_all(db_a, element_types_a);
         foreach (it, element_types_a) {
             ElementType* et = it->element;
             char class_name[32] = "";
@@ -1122,7 +1132,7 @@ void register_action()
                 o("\t\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
             if (et->type == ELEM_TYPE_DATE)
                 o("\t\t<div id=\"field%d.datefield\" class=\"error\"></div>\n", et->id);
-            output_form_element(NULL, et);
+            output_form_element(db_a, NULL, et);
             o("\t\t\t<div class=\"description\">");h(et->description);o("&nbsp;</div>\n");
             o("\t\t</td>\n");
             o("\t</tr>\n");
@@ -1142,7 +1152,7 @@ void register_action()
             "\t\t<li>複数行テキスト項目の内容では、行頭が &gt;| から始まる行から、行頭が |&lt; から始まる行までは、整形済みブロックになります。</li>\n"
             "\t</ul>\n"
             "</div>\n");
-    db_finish();
+    db_finish(db_a);
     output_footer();
 }
 /**
@@ -1158,7 +1168,9 @@ void ticket_action()
     Iterator* it;
     int iid, *message_ids_a, i;
     Project* project_a = project_new();
+    Database* db_a;
     char sender[DEFAULT_LENGTH];
+    char buffer[DEFAULT_LENGTH];
     get_cookie_string(COOKIE_SENDER, sender);
 
     strcpy(ticket_id, g_path_info);
@@ -1167,21 +1179,21 @@ void ticket_action()
         redirect("/list", "存在しないIDが指定されました。");
             return;
     }
-    db_init();
+    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     list_alloc(elements_a, Element);
-    elements_a = db_get_last_elements(iid, elements_a);
+    elements_a = db_get_last_elements(db_a, iid, elements_a);
     if (elements_a->size == 0) {
         redirect("/list", "存在しないIDが指定されました。");
         return;
     }
     string_appendf(title_a, "#%d %s", iid, get_element_value_by_id(elements_a, ELEM_ID_TITLE));
-    project_a = db_get_project(project_a);
+    project_a = db_get_project(db_a, project_a);
     output_header(project_a, string_rawstr(title_a), "reply.js", NAVI_OTHER);
     output_calendar_js();
 
-    message_ids_a = db_get_message_ids_a(iid);
+    message_ids_a = db_get_message_ids_a(db_a, iid);
     list_alloc(element_types_a, ElementType);
-    element_types_a = db_get_element_types_all(element_types_a);
+    element_types_a = db_get_element_types_all(db_a, element_types_a);
     o("<h2 id=\"subject\">"); h(project_a->name); o(" - ");
     project_free(project_a);
     h(string_rawstr(title_a));
@@ -1215,7 +1227,7 @@ void ticket_action()
                         o("<a href=\"%s/%s/download/%d/", 
                                 cgiScriptName, 
                                 g_project_name,
-                                db_get_element_file_id(atoi(id_str), et->id)); 
+                                db_get_element_file_id(db_a, atoi(id_str), et->id)); 
                         u(value);
                         o("\" target=\"_blank\">");h(value); o("</a>\n");
                     }
@@ -1232,7 +1244,7 @@ void ticket_action()
     for (i = 0; message_ids_a[i] != 0; i++) {
         List* attachment_elements_a;
         list_alloc(attachment_elements_a, Element);
-        attachment_elements_a = db_get_elements(message_ids_a[i], attachment_elements_a);
+        attachment_elements_a = db_get_elements(db_a, message_ids_a[i], attachment_elements_a);
         foreach (it, element_types_a) {
             ElementType* et = it->element;
             if (et->type == ELEM_TYPE_UPLOADFILE) {
@@ -1242,7 +1254,7 @@ void ticket_action()
                 o("<a href=\"%s/%s/download/%d/", 
                         cgiScriptName, 
                         g_project_name,
-                        db_get_element_file_id(message_ids_a[i], et->id)); 
+                        db_get_element_file_id(db_a, message_ids_a[i], et->id)); 
                 u(attachment_file_name); o("\" target=\"_blank\">");h(attachment_file_name); o("</a>\n");
                 o("\t\t&nbsp;</span>\n");
             }
@@ -1262,7 +1274,7 @@ void ticket_action()
     for (i = 0; message_ids_a[i] != 0; i++) {
         List* previous = last_elements;
         list_alloc(elements_a, Element);
-        last_elements = elements_a = db_get_elements(message_ids_a[i], elements_a);
+        last_elements = elements_a = db_get_elements(db_a, message_ids_a[i], elements_a);
         o(      "\t\t<h4 class=\"title\">%d: ", i + 1);
         h(get_element_value_by_id(elements_a, ELEM_ID_SENDER));
         o("&nbsp;<span class=\"date\">("); h(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE)); o(")</span>&nbsp;");
@@ -1297,10 +1309,10 @@ void ticket_action()
                         if (strlen(value)) {
                             char buf[DEFAULT_LENGTH];
                             char* mime_type;
-                            int file_id = db_get_element_file_id(message_ids_a[i], et->id);
+                            int file_id = db_get_element_file_id(db_a, message_ids_a[i], et->id);
                             o("<a href=\"%s/%s/download/%d/", cgiScriptName, g_project_name, file_id); 
                             u(value); o("\" target=\"_blank\">");h(value); o("</a>\n");
-                            mime_type = db_get_element_file_mime_type(message_ids_a[i], et->id, buf);
+                            mime_type = db_get_element_file_mime_type(db_a, message_ids_a[i], et->id, buf);
                             if (strstr(mime_type, "image") != NULL) {
                                 o("<div>\n");
                                 o("<img class=\"attachment_image\" src=\"%s/%s/download/%d\" alt=\"attachment file\" />\n",
@@ -1345,7 +1357,7 @@ void ticket_action()
             o("\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
         if (et->type == ELEM_TYPE_DATE)
             o("\t\t<div id=\"field%d.datefield\" class=\"error\"></div>\n", et->id);
-        output_form_element(last_elements, et);
+        output_form_element(db_a, last_elements, et);
         o("\t\t<div class=\"description\">");h(et->description);o("&nbsp;</div>\n");
         o("\t</td>\n");
         o("\t</tr>\n");
@@ -1368,7 +1380,7 @@ void ticket_action()
             o("\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
         if (et->type == ELEM_TYPE_DATE)
             o("\t\t<div id=\"field%d.datefield\" class=\"error\"></div>\n", et->id);
-        output_form_element(NULL, et);
+        output_form_element(db_a, NULL, et);
         o("\t\t<div class=\"description\">");h(et->description);o("&nbsp;</div>\n");
         o("\t</td>\n");
         o("\t</tr>\n");
@@ -1386,18 +1398,18 @@ void ticket_action()
             "\t</ul>\n"
             "</div>\n");
     output_field_information_js(element_types_a);
-    db_finish();
+    db_finish(db_a);
     output_footer();
     list_free(element_types_a);
 }
-static void register_list_item(int id, char* name)
+static void register_list_item(Database* db, int id, char* name)
 {
     ListItem* item_a = list_item_new();
     item_a->element_type_id = id;
     strcpy(item_a->name, name);
     item_a->close = 0;
     item_a->sort = 0;
-    db_register_list_item(item_a);
+    db_register_list_item(db, item_a);
     list_item_free(item_a);
 }
 /**
@@ -1416,15 +1428,17 @@ void register_submit_action()
     char save2cookie[2];
     char* complete_message = NULL;
     HOOK* hook = NULL;
+    Database* db_a;
+    char buffer[DEFAULT_LENGTH];
 
     cgiFormStringNoNewlines("save2cookie", save2cookie, 2);
     if (mode == MODE_INVALID)
         die("requested invalid mode.");
     ticket_a = message_new();
-    db_init();
-    project_a = db_get_project(project_a);
+    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    project_a = db_get_project(db_a, project_a);
     list_alloc(element_types_a, ElementType);
-    element_types_a = db_get_element_types_all(element_types_a);
+    element_types_a = db_get_element_types_all(db_a, element_types_a);
     cgiFormStringNoNewlines("ticket_id", ticket_id, NUM_LENGTH);
     if (mode == MODE_REGISTER)
         ticket_a->id = -1;
@@ -1464,7 +1478,7 @@ void register_submit_action()
                     if (strlen(value_a)) {
                         set_element_value(e, value_a);
                         /* 新しく選択肢を追加 */
-                        register_list_item(et->id, value_a);
+                        register_list_item(db_a, et->id, value_a);
                     } else {
                         cgiFormString(name, value_a, VALUE_LENGTH);
                         set_element_value(e, value_a);
@@ -1475,7 +1489,7 @@ void register_submit_action()
                     cgiFormString(name_new_item, value_a, VALUE_LENGTH);
                     if (strlen(value_a)) {
                         /* 新しく選択肢を追加 */
-                        register_list_item(et->id, value_a);
+                        register_list_item(db_a, et->id, value_a);
                         strcat(value_a, "\t");
                     }
                     if ((cgiFormStringMultiple(name, &multi)) != cgiFormNotFound) {
@@ -1518,10 +1532,10 @@ void register_submit_action()
             list_add(ticket_a->elements, e);
         }
         xfree(value_a);
-        db_begin();
-        ticket_a->id = db_register_ticket(ticket_a);
+        db_begin(db_a);
+        ticket_a->id = db_register_ticket(db_a, ticket_a);
         d("commit\n");
-        db_commit();
+        db_commit(db_a);
         d("commited\n");
         /* hook */
         hook = init_hook(HOOK_MODE_REGISTERED);
@@ -1537,7 +1551,7 @@ void register_submit_action()
         list_free(element_types_a);
     }
         d("finish\n");
-    db_finish();
+    db_finish(db_a);
         d("finished\n");
     message_free(ticket_a);
 
@@ -1547,7 +1561,7 @@ void register_submit_action()
     return;
 
 file_size_error:
-    db_finish();
+    db_finish(db_a);
     output_header(project_a, "エラー", NULL, NAVI_OTHER);
     o("<h1>エラー発生</h1>\n"
       "<div class=\"message\">ファイルサイズが大きすぎます。%dkbより大きいファイルは登録できません。ブラウザの戻るボタンで戻ってください。</div>\n", MAX_FILE_SIZE);
@@ -1561,16 +1575,18 @@ void register_at_once_action()
 {
     Project* project_a = project_new();
     List* states_a;
+    Database* db_a;
+    char buffer[DEFAULT_LENGTH];
     char sender[DEFAULT_LENGTH];
     get_cookie_string(COOKIE_SENDER, sender);
 
-    db_init();
-    project_a = db_get_project(project_a);
+    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    project_a = db_get_project(db_a, project_a);
     output_header(project_a, "チケット一括登録", "register_at_once.js", NAVI_REGISTER_AT_ONCE);
     output_calendar_js();
     o(      "<h2>"); h(project_a->name);o(" - チケット一括登録</h2>\n");
     list_alloc(states_a, State);
-    states_a = db_get_states(states_a);
+    states_a = db_get_states(db_a, states_a);
     output_states(states_a, true);
     list_free(states_a);
     o(      "<div id=\"input_form\">\n"
@@ -1603,7 +1619,7 @@ void register_at_once_action()
     o(      "<input class=\"button\" type=\"submit\" name=\"register\" value=\"解析\" />\n"
             "</form>\n"
             "</div>\n");
-    db_finish();
+    db_finish(db_a);
     output_footer();
 }
 /**
@@ -1616,21 +1632,23 @@ void register_at_once_confirm_action()
     Project* project_a = project_new();
     List* states_a;
     Csv* csv_a;
+    Database* db_a;
+    char buffer[DEFAULT_LENGTH];
     char sender[DEFAULT_LENGTH];
     char* content_a = xalloc(sizeof(char) * VALUE_LENGTH);
     get_cookie_string(COOKIE_SENDER, sender);
 
-    db_init();
+    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     cgiFormString("csvdata", content_a, VALUE_LENGTH);
     csv_a = csv_new(content_a);
     xfree(content_a);
 
-    project_a = db_get_project(project_a);
+    project_a = db_get_project(db_a, project_a);
     output_header(project_a, "チケット一括登録確認", "register_at_once_submit.js", NAVI_REGISTER_AT_ONCE);
     output_calendar_js();
     o(      "<h2>"); h(project_a->name);o(" - チケット一括登録確認</h2>\n");
     list_alloc(states_a, State);
-    states_a = db_get_states(states_a);
+    states_a = db_get_states(db_a, states_a);
     output_states(states_a, true);
     list_free(states_a);
     o(      "<div id=\"input_form\">\n"
@@ -1646,7 +1664,7 @@ void register_at_once_confirm_action()
         Iterator* it;
         Iterator* it_line;
         list_alloc(element_types_a, ElementType);
-        element_types_a = db_get_element_types_all(element_types_a);
+        element_types_a = db_get_element_types_all(db_a, element_types_a);
         foreach (it, element_types_a) {
             ElementType* et = it->element;
             /* 返信専用属性は表示しない。 */
@@ -1662,7 +1680,7 @@ void register_at_once_confirm_action()
             o("</th><td>\n");
             if (et->required)
                 o("\t\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
-            output_form_element(NULL, et);
+            output_form_element(db_a, NULL, et);
             o("\t\t\t<div class=\"description\">");h(et->description);o("&nbsp;</div>\n");
             o("\t\t</td>\n");
             o("\t</tr>\n");
@@ -1722,7 +1740,7 @@ void register_at_once_confirm_action()
             "\t</ul>\n"
             "</div>\n");
     o(      "</div>\n");
-    db_finish();
+    db_finish(db_a);
     csv_free(csv_a);
     output_footer();
 }
@@ -1740,6 +1758,8 @@ void register_at_once_submit_action()
     int registered_tickets_count = 0;
     List* element_types_a; 
     Iterator* it_et;
+    Database* db_a;
+    char buffer[DEFAULT_LENGTH];
 
     cgiFormStringNoNewlines("save2cookie", save2cookie, 2);
     sprintf(senderfield, "field%d", ELEM_ID_SENDER);
@@ -1769,8 +1789,8 @@ void register_at_once_submit_action()
         }
         list_add(field_ids_a, field_id);
     }
-    db_init();
-    db_begin();
+    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_begin(db_a);
     while (1) {
         Message* ticket_a = message_new();
         ticket_a->id = -1;
@@ -1817,7 +1837,7 @@ void register_at_once_submit_action()
         }
         /* 指定されていない項目は、デフォルト値を登録する。 */
         list_alloc(element_types_a, ElementType);
-        element_types_a = db_get_element_types_all(element_types_a);
+        element_types_a = db_get_element_types_all(db_a, element_types_a);
         foreach (it_et, element_types_a) {
             ElementType* et = it_et->element;
             Element* element = NULL;
@@ -1838,13 +1858,13 @@ void register_at_once_submit_action()
             }
         }
         list_free(element_types_a);
-        ticket_a->id = db_register_ticket(ticket_a);
+        ticket_a->id = db_register_ticket(db_a, ticket_a);
         registered_tickets_count++;
         message_free(ticket_a);
         row_count++;
     }
-    db_commit();
-    db_finish();
+    db_commit(db_a);
+    db_finish(db_a);
 
     if (registered_tickets_count) {
         char message[DEFAULT_LENGTH];
@@ -1866,25 +1886,27 @@ void top_action()
     List* tickets_a;
     List* states_a;
     Iterator* it;
+    Database* db_a;
+    char buffer[DEFAULT_LENGTH];
 
-    db_init();
-    project_a = db_get_project(project_a);
+    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    project_a = db_get_project(db_a, project_a);
     output_header(project_a, "トップページ", NULL, NAVI_TOP);
     list_alloc(states_a, State);
-    states_a = db_get_states(states_a);
+    states_a = db_get_states(db_a, states_a);
     o(      "<div id=\"info\">\n");
     /* 最新情報の表示 */
     o(      "<div id=\"top_newest\">\n"
             "<h4>最新情報</h4>\n"
             "\t<ul>\n");
     list_alloc(tickets_a, Message);
-    tickets_a = db_get_newest_information(10, tickets_a);
+    tickets_a = db_get_newest_information(db_a, 10, tickets_a);
     if (tickets_a->size) {
         foreach (it, tickets_a) {
             Message* ticket = it->element;
             List* elements_a;
             list_alloc(elements_a, Element);
-            elements_a = db_get_last_elements_4_list(ticket->id, elements_a);
+            elements_a = db_get_last_elements_4_list(db_a, ticket->id, elements_a);
             o("\t\t<li>\n");
             o("\t\t\t<a href=\"%s/%s/ticket/%d", cgiScriptName, g_project_name, ticket->id); o("\">");
             h(get_element_value_by_id(elements_a, ELEM_ID_TITLE));
@@ -1935,10 +1957,10 @@ void top_action()
             "<a id=\"new_ticket_link\" href=\"%s/%s/register\">新しいチケットを登録する</a>&nbsp;\n", cgiScriptName, g_project_name);
     o(      "<a href=\"%s/%s/edit_top\">トップページの編集</a>\n", cgiScriptName, g_project_name);
     o(      "</div>\n");
-    wiki_out("top");
+    wiki_out(db_a, "top");
     o(      "</div>\n"
             "</div>\n");
-    db_finish();
+    db_finish(db_a);
     output_footer();
 }
 
@@ -1947,9 +1969,11 @@ void rss_action()
     List* tickets_a;
     Iterator* it;
     Project* project_a = project_new();
+    Database* db_a;
+    char buffer[DEFAULT_LENGTH];
 
-    db_init();
-    project_a = db_get_project(project_a);
+    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    project_a = db_get_project(db_a, project_a);
     cgiHeaderContentType("text/xml; charset=utf-8;");
     o(      "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"
             "<rdf:RDF \n"
@@ -1970,14 +1994,14 @@ void rss_action()
             "\t</channel>\n");
 
     list_alloc(tickets_a, Message);
-    tickets_a = db_get_newest_information(10, tickets_a);
+    tickets_a = db_get_newest_information(db_a, 10, tickets_a);
     if (tickets_a != NULL) {
         foreach (it, tickets_a) {
             Message* ticket = it->element;
             List* elements_a;
             Iterator* it;
             list_alloc(elements_a, Element);
-            elements_a = db_get_last_elements_4_list(ticket->id, elements_a);
+            elements_a = db_get_last_elements_4_list(db_a, ticket->id, elements_a);
             o(      "\t<item rdf:about=\"");h(project_a->home_url);o("%s/%s/ticket/%d\">\n", cgiScriptName, g_project_name, ticket->id);
             o(      "\t\t<title>ID:%5d ", ticket->id);
             h(get_element_value_by_id(elements_a, ELEM_ID_TITLE));
@@ -2003,7 +2027,7 @@ void rss_action()
     project_free(project_a);
     list_free(tickets_a);
     o(      "</rdf:RDF>\n");
-    db_finish();
+    db_finish(db_a);
 }
 State* get_statictics(int element_type_id, List* states)
 {
@@ -2021,14 +2045,16 @@ void statistics_action()
     List* element_types_a;
     Iterator* it;
     List* states_a;
+    Database* db_a;
+    char buffer[DEFAULT_LENGTH];
 
-    db_init();
-    project_a = db_get_project(project_a);
+    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    project_a = db_get_project(db_a, project_a);
     output_header(project_a, "統計情報", "graph.js", NAVI_STATISTICS);
     output_graph_js();
     o(      "<h2>");h(project_a->name);o("</h2>\n");
     list_alloc(states_a, State);
-    states_a = db_get_states(states_a);
+    states_a = db_get_states(db_a, states_a);
     output_states(states_a, true);
     list_free(states_a);
     o(      "<div id=\"top\">\n"
@@ -2036,7 +2062,7 @@ void statistics_action()
             "\t<div class=\"description\">統計情報を表示します。</div>\n");
     project_free(project_a);
     list_alloc(element_types_a, ElementType);
-    element_types_a = db_get_element_types_all(element_types_a);
+    element_types_a = db_get_element_types_all(db_a, element_types_a);
     foreach (it, element_types_a) {
         ElementType* et = it->element;
         List* items_a;
@@ -2047,12 +2073,12 @@ void statistics_action()
         list_alloc(all_items_a, ListItem);
         switch (et->type) {
             case ELEM_TYPE_LIST_SINGLE:
-                items_a = db_get_statictics(items_a, et->id);
+                items_a = db_get_statictics(db_a, items_a, et->id);
                 goto got_item;
             case ELEM_TYPE_LIST_MULTI:
-                items_a = db_get_statictics_multi(items_a, et->id);
+                items_a = db_get_statictics_multi(db_a, items_a, et->id);
 got_item:
-                all_items_a = db_get_list_item(et->id, all_items_a);
+                all_items_a = db_get_list_item(db_a, et->id, all_items_a);
                 o(      "\t<h4 class=\"item\">");
                 h(et->name);
                 o(      "\t</h4>"
@@ -2092,27 +2118,33 @@ got_item:
     list_free(element_types_a);
     o(      "</div>\n");
     output_footer();
-    db_finish();
+    db_finish(db_a);
 }
 void help_action()
 {
     Project* project_a = project_new();
-    db_init();
-    project_a = db_get_project(project_a);
+    Database* db_a;
+    char buffer[DEFAULT_LENGTH];
+
+    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    project_a = db_get_project(db_a, project_a);
     output_header(project_a, "ヘルプ", NULL, NAVI_HELP);
     o(      "<h2>");h(project_a->name);o("</h2>\n"
             "<div id=\"top\">\n");
-    wiki_out("help");
+    wiki_out(db_a, "help");
     o(      "</div>\n");
     project_free(project_a);
-    db_finish();
+    db_finish(db_a);
     output_footer();
 }
 void edit_top_action()
 {
     Project* project_a = project_new();
-    db_init();
-    project_a = db_get_project(project_a);
+    Database* db_a;
+    char buffer[DEFAULT_LENGTH];
+
+    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    project_a = db_get_project(db_a, project_a);
     output_header(project_a, "トップページの編集", "edit_top.js", NAVI_OTHER);
     project_free(project_a);
     o(      "<h2>トップページの編集</h2>\n"
@@ -2121,7 +2153,7 @@ void edit_top_action()
             "<div id=\"description\">簡易wikiの文法でトップページのコンテンツの編集を行ない、更新ボタンを押してください。</div>\n"
             "<form id=\"edit_top_form\" action=\"%s/%s/edit_top_submit\" method=\"post\">\n", cgiScriptName, g_project_name);
     o(      "<textarea name=\"edit_top\" id=\"edit_top\" rows=\"3\" cols=\"10\">");
-    wiki_content_out("top");
+    wiki_content_out(db_a, "top");
     o(      "</textarea>\n"
             "<div>&nbsp;</div>\n"
             "<input class=\"button\" type=\"submit\" value=\"更新\" />\n"
@@ -2156,17 +2188,19 @@ void edit_top_action()
             "</pre>\n"
             "</div>\n"
             "</div>\n");
-    db_finish();
+    db_finish(db_a);
     output_footer();
 }
 void edit_top_submit_action()
 {
     char* value_a = xalloc(sizeof(char) * VALUE_LENGTH);
+    Database* db_a;
+    char buffer[DEFAULT_LENGTH];
 
     cgiFormString("edit_top", value_a, VALUE_LENGTH);
-    db_init();
-    wiki_save("top", value_a);
-    db_finish();
+    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    wiki_save(db_a, "top", value_a);
+    db_finish(db_a);
     xfree(value_a);
 
     redirect("", NULL);
@@ -2176,12 +2210,14 @@ void download_action()
     ElementFile* file_a = element_file_new();
     char element_id_str[DEFAULT_LENGTH];
     int element_file_id;
+    Database* db_a;
+    char buffer[DEFAULT_LENGTH];
 
     strcpy(element_id_str, g_path_info);
     element_file_id = atoi(element_id_str);
 
-    db_init();
-    file_a = db_get_element_file(element_file_id, file_a);
+    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    file_a = db_get_element_file(db_a, element_file_id, file_a);
     if (!file_a) goto error;
     o("Content-Type: %s\r\n", file_a->mime_type);
     o("Content-Length: %d\r\n", file_a->size);
@@ -2189,7 +2225,7 @@ void download_action()
     o("\r\n");
 
     fwrite(file_a->content, sizeof(char), file_a->size, cgiOut);
-    db_finish();
+    db_finish(db_a);
     element_file_free(file_a);
     return;
 
@@ -2201,11 +2237,13 @@ void setting_file_action()
 {
     SettingFile* file_a = setting_file_new();
     char name[DEFAULT_LENGTH];
+    Database* db_a;
+    char buffer[DEFAULT_LENGTH];
 
     strcpy(name, g_path_info);
 
-    db_init();
-    file_a = db_get_setting_file(name, file_a);
+    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    file_a = db_get_setting_file(db_a, name, file_a);
     if (!file_a) goto error;
     o("Content-Type: %s\r\n", file_a->mime_type);
     o("Content-Length: %d\r\n", file_a->size);
@@ -2213,7 +2251,7 @@ void setting_file_action()
     o("\r\n");
 
     fwrite(file_a->content, sizeof(char), file_a->size, cgiOut);
-    db_finish();
+    db_finish(db_a);
     setting_file_free(file_a);
     return;
 

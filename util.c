@@ -20,6 +20,8 @@ char g_path_info[DEFAULT_LENGTH] = "";
 unsigned long url_encode(unsigned char*, unsigned char*, unsigned long);
 static Action* get_actions();
 
+void redirect_raw(const char*);
+
 Action* actions = NULL;
 int alloc_count = 0;
 
@@ -39,6 +41,7 @@ void xfree(void* p)
 /*     d("xfree: %p\n", p); */
     alloc_count--;
     free(p);
+    p = NULL;
 }
 static Action* get_actions()
 {
@@ -72,13 +75,8 @@ void free_action_actions()
 }
 
 /* 復帰できないエラーが発生した場合にエラーページを表示する。 */
-void print_error_page(char* file_name, int line_number, char* function_name, char* message)
+void print_error_page(char* file_name, int line_number, char* message)
 {
-    d("ERROR: %s(%d): %s %s\n",
-            file_name,
-            line_number,
-            function_name,
-            message);
     o("Status: 500 Starbug1 Internal Error.\r\n");
     o("Content-Type: text/html\r\n\r\n");
     o(  "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
@@ -90,10 +88,9 @@ void print_error_page(char* file_name, int line_number, char* function_name, cha
             "<h2>ERROR oops!</h2>"
             "エラーが発生しましたm(_ _)m"
             "<h3>detail information</h3>");
-    o(      "<p>[%s(%d):%s] %s</p>",
+    o(      "<p>[%s(%d)] %s</p>",
                 file_name,
                 line_number,
-                function_name,
                 message);
     o(      "<hr />"
             "<div align=\"right\">"
@@ -115,12 +112,13 @@ ActionType analysis_action()
     memset(g_project_name, 0, DEFAULT_LENGTH);
     memset(g_action_name, 0, DEFAULT_LENGTH);
     memset(g_path_info, 0, DEFAULT_LENGTH);
-    d("path_info: %s\n", path_info);
+    d("************************************\n");
+    d("REQUEST: %s%s\n", script_name, path_info);
     if (strlen(path_info) > 1) {
         strncpy(g_project_name, path_info + 1, DEFAULT_LENGTH);
     } else {
-        strcpy(g_project_name, "");
-        strcpy(g_action_name, "");
+        redirect_raw("top");
+        die("redirect to top.");
     }
     if ((index = strchr(g_project_name, '/'))) {
         *index = '\0';
@@ -131,13 +129,14 @@ ActionType analysis_action()
             strcpy(g_path_info, index + 1);
         }
     }
-    d("g_project_name: %s g_action_name: %s\n", g_project_name, g_action_name);
     sprintf(index_cgi_file_name, "index.%s", get_ext(cgiScriptName));
     sprintf(admin_cgi_file_name, "admin.%s", get_ext(cgiScriptName));
     if (strstr(script_name, index_cgi_file_name)) {
-        if (strcmp(g_project_name, "top")) {
+        if (strcmp(g_project_name, "top") == 0) {
+            d("actiontype top\n");
             ret = ACTION_TYPE_INDEX_TOP;
         } else {
+            d("actiontype project\n");
             ret = ACTION_TYPE_INDEX;
         }
     } else if (strstr(script_name, admin_cgi_file_name)) {
@@ -156,9 +155,9 @@ void exec_action()
     strcpy(action_name, g_action_name);
     for (a = get_actions(); a != NULL; a = a->next) {
         if (!strcmp(action_name, a->action_name)) {
-            d("exec_action start: %s\n", a->action_name);
+            d("=exec_action start: %s\n", a->action_name);
             a->action_func();
-            d("exec_action end  : %s\n", a->action_name);
+            d("=exec_action end  : %s\n", a->action_name);
             return;
         }
     }
@@ -169,7 +168,9 @@ void exec_action()
         /* path_infoが空なら、top_actionを呼び出す。 */
         for (a = get_actions(); a != NULL; a = a->next) {
             if (!strcmp("top", a->action_name)) {
+                d("=exec_action default_action start: %s\n", a->action_name);
                 a->action_func();
+                d("=exec_action default_action end  : %s\n", a->action_name);
                 return;
             }
         }
@@ -472,6 +473,13 @@ void base64_encode(const unsigned char *src, unsigned char *dist)
     }
     if (i) enclode_char(bb, i - 1, dist, j);
 }
+void redirect_raw(const char* path)
+{
+    char redirecturi[DEFAULT_LENGTH];
+    sprintf(redirecturi, "%s/%s", cgiScriptName, path);
+    o("Status: 302 Temporary Redirection\r\n");
+    cgiHeaderLocation(redirecturi);
+}
 void redirect(const char* path, const char* message)
 {
     char redirecturi[DEFAULT_LENGTH];
@@ -520,7 +528,7 @@ void redirect_with_hook_messages(const char* path, const char* message, List* re
             i++;
         }
     }
-    sprintf(redirecturi, "%s%s", cgiScriptName, uri);
+    sprintf(redirecturi, "%s/%s%s", cgiScriptName, g_project_name, uri);
     o("Status: 302 Temporary Redirection\r\n");
     cgiHeaderLocation(redirecturi);
 }

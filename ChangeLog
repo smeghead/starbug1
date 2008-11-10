@@ -6,6 +6,7 @@
      - 旧URL http://www.example.com/starbug1/index.cgi/ticket/10
      - 新URL http://www.example.com/starbug1/index.cgi/project_name/ticket/10
     * 不要なファイルが存在したので削除した。
+    * 複数プロジェクト対応用のデータベース追加
 
 2008-11-03  smeghead <smeghead@users.sourceforge.jp>
 

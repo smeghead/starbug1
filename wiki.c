@@ -4,7 +4,7 @@
 #include <cgic.h>
 #include "wiki.h"
 #include "util.h"
-#include "db.h"
+#include "db_project.h"
 
 #define MAX_WIDTH 1000
 
@@ -98,7 +98,7 @@ typedef enum LINE_MODE {
     LINE_MODE_NORMAL,
     LINE_MODE_PRE
 } LineMode;
-void wiki_out(char* page_name)
+void wiki_out(Database* db, char* page_name)
 {
     Wiki* wiki_a = wiki_new();
     char line[MAX_WIDTH];
@@ -106,7 +106,7 @@ void wiki_out(char* page_name)
     char* p;
     LineMode mode = LINE_MODE_NORMAL;
 
-    wiki_a = db_get_newest_wiki(page_name, wiki_a);
+    wiki_a = db_get_newest_wiki(db, page_name, wiki_a);
     p = wiki_a->content;
     buf_clear();
     while ((strlen(p) != 0)) {
@@ -158,20 +158,20 @@ void wiki_out(char* page_name)
     buf_flush();
     wiki_free(wiki_a);
 }
-void wiki_content_out(char* page_name)
+void wiki_content_out(Database* db, char* page_name)
 {
     Wiki* wiki_a = wiki_new();
-    wiki_a = db_get_newest_wiki(page_name, wiki_a);
+    wiki_a = db_get_newest_wiki(db, page_name, wiki_a);
     h(wiki_a->content);
     wiki_free(wiki_a);
 }
-void wiki_save(char* page_name, char* content)
+void wiki_save(Database* db, char* page_name, char* content)
 {
     Wiki* wiki_a = wiki_new();
     wiki_a->content = xalloc(sizeof(char) * strlen(content) + 1);
     strcpy(wiki_a->name, page_name);
     strcpy(wiki_a->content, content);
-    db_register_wiki(wiki_a);
+    db_register_wiki(db, wiki_a);
     wiki_free(wiki_a);
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

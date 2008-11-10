@@ -1,4 +1,4 @@
-VERSION = 1.1.4
+VERSION = 1.2.1-alpha
 CC = gcc
 CC_VERSION = ${shell gcc --version | grep 'gcc.*[0-9]\.' | sed -e 's/gcc[^0-9]*\([0-9]\).*/\1/g'}
 CFLAGS = -I/usr/include -I/usr/local/include -I. -DVERSION=\"${VERSION}\" -O3 -Wall
@@ -17,27 +17,32 @@ ifeq ($(OS), CYGWIN_NT-5.1)
 	LFLAGS += -static
 endif
 
+#debug
+CFLAGS += -DDEBUG
+
 default: index.cgi admin.cgi
 
-list.o: list.c list.h
-simple_string.o: simple_string.c simple_string.h
-admin.o: admin.c data.h db.h dbutil.h util.h
-data.o: data.c data.h util.h dbutil.h
-db.o: db.c data.h util.h dbutil.h
-dbutil.o: dbutil.c util.h data.h dbutil.h
-index_project.o: index_project.c simple_string.h data.h db.h dbutil.h util.h wiki.h hook.h
-#top.o: top.c simple_string.h data.h db.h dbutil.h util.h wiki.h hook.h
-index.o: index.c simple_string.h data.h db.h dbutil.h util.h wiki.h hook.h
-hook.o: hook.c data.h util.h dbutil.h hook.h
-util.o: util.c util.h data.h dbutil.h
-wiki.o: wiki.c wiki.h util.h data.h dbutil.h
-csv.o: csv.c csv.h list.h
+admin.o: admin.c util.h list.h data.h dbutil.h simple_string.h admin_project.h
+admin_project.o: admin_project.c data.h list.h db_project.h dbutil.h util.h simple_string.h db_top.h wiki.h
+csv.o: csv.c csv.h list.h simple_string.h util.h data.h dbutil.h
+data.o: data.c data.h list.h util.h dbutil.h simple_string.h
+db_project.o: db_project.c data.h list.h db_project.h dbutil.h util.h simple_string.h
+db_top.o: db_top.c data.h list.h db_project.h dbutil.h util.h simple_string.h
+dbutil.o: dbutil.c util.h list.h data.h dbutil.h simple_string.h
+hook.o: hook.c data.h list.h util.h dbutil.h simple_string.h hook.h
+index.o: index.c util.h list.h data.h dbutil.h simple_string.h index_project.h
+index_project.o: index_project.c data.h list.h db_project.h dbutil.h util.h simple_string.h db_top.h wiki.h hook.h csv.h
+index_top.o: index_top.c data.h list.h db_top.h dbutil.h util.h simple_string.h wiki.h hook.h csv.h
+list.o: list.c util.h list.h data.h dbutil.h simple_string.h
+simple_string.o: simple_string.c data.h list.h util.h dbutil.h simple_string.h
+util.o: util.c util.h list.h data.h dbutil.h simple_string.h hook.h
+wiki.o: wiki.c wiki.h dbutil.h util.h list.h data.h simple_string.h db_project.h
 
-index.cgi: list.o simple_string.o data.o dbutil.o db.o hook.o util.o wiki.o csv.o index_project.o index.o
+index.cgi: list.o simple_string.o data.o dbutil.o db_project.o db_top.o hook.o util.o wiki.o csv.o index_project.o index_top.o index.o
 	$(CC) -o $@ $^ $(LFLAGS)
 	strip $@
 
-admin.cgi: list.o simple_string.o data.o dbutil.o db.o util.o wiki.o admin.o
+admin.cgi: list.o simple_string.o data.o dbutil.o db_project.o db_top.o util.o wiki.o admin_project.o admin.o
 	$(CC) -o $@ $^ $(LFLAGS)
 	strip $@
 

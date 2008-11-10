@@ -69,6 +69,14 @@ char* get_condition_valid_value(Condition* c)
 {
     return strlen(c->value) ? c->value : c->cookie_value;
 }
+ProjectInfo* project_info_new()
+{
+    return xalloc(sizeof(ProjectInfo));
+}
+void project_info_free(ProjectInfo* pi)
+{
+    xfree(pi);
+}
 Project* project_new()
 {
     return xalloc(sizeof(Project));

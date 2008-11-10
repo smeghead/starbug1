@@ -1,9 +1,10 @@
 #ifndef WIKI_H
 #define WIKI_H
+#include "dbutil.h"
 
-void wiki_out(char*);
-void wiki_content_out(char*);
-void wiki_save(char*, char*);
+void wiki_out(Database*, char*);
+void wiki_content_out(Database*, char*);
+void wiki_save(Database*, char*, char*);
 
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

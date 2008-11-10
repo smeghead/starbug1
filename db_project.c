@@ -3,18 +3,15 @@
 #include <string.h>
 #include <sqlite3.h>
 #include "data.h"
-#include "db.h"
+#include "db_project.h"
 #include "util.h"
 #include "dbutil.h"
 #include "simple_string.h"
 
 
-extern const char* db_name;
-extern sqlite3 *db;
-
 void create_columns_exp(List*, char*, char*);
 
-static List* db_get_element_types(int all, List* element_types)
+static List* db_get_element_types(Database* db, bool all, List* element_types)
 {
     int r;
     const char *sql;
@@ -25,7 +22,7 @@ static List* db_get_element_types(int all, List* element_types)
     } else {
         sql = "select id, type, ticket_property, reply_property, required, name, description, display_in_list, sort, default_value, auto_add_item from element_type where deleted = 0 and display_in_list = 1 order by sort";
     }
-    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
@@ -55,17 +52,17 @@ static List* db_get_element_types(int all, List* element_types)
 
     return element_types;
 
-ERROR_LABEL
+ERROR_LABEL(db->handle)
 }
-List* db_get_element_types_4_list(List* elements)
+List* db_get_element_types_4_list(Database* db, List* elements)
 {
-    return db_get_element_types(0, elements);
+    return db_get_element_types(db, false, elements);
 }
-List* db_get_element_types_all(List* elements)
+List* db_get_element_types_all(Database* db, List* elements)
 {
-    return db_get_element_types(1, elements);
+    return db_get_element_types(db, true, elements);
 }
-ElementType* db_get_element_type(int id, ElementType* e)
+ElementType* db_get_element_type(Database* db, int id, ElementType* e)
 {
     int r;
     const char *sql;
@@ -76,7 +73,7 @@ ElementType* db_get_element_type(int id, ElementType* e)
         "where id = ? "
         " and deleted = 0 "
         "order by sort";
-    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, id);
 
@@ -101,16 +98,16 @@ ElementType* db_get_element_type(int id, ElementType* e)
     sqlite3_finalize(stmt);
 
     return e;
-ERROR_LABEL
+ERROR_LABEL(db->handle)
 }
 
-List* db_get_list_item(const int element_type, List* items)
+List* db_get_list_item(Database* db, const int element_type, List* items)
 {
     int r;
     const char *sql = "select id, name, close, sort from list_item where element_type_id = ? order by sort";
     sqlite3_stmt *stmt = NULL;
 
-    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, element_type);
 
@@ -129,7 +126,7 @@ List* db_get_list_item(const int element_type, List* items)
 
     return items;
 
-ERROR_LABEL
+ERROR_LABEL(db->handle)
 }
 
 void create_message_insert_sql(List* elements, char* buf)
@@ -148,7 +145,7 @@ void create_message_insert_sql(List* elements, char* buf)
     }
     strcat(buf, ")");
 }
-int db_register_ticket(Message* ticket)
+int db_register_ticket(Database* db, Message* ticket)
 {
     char registerdate[20];
     List* elements;
@@ -164,18 +161,22 @@ int db_register_ticket(Message* ticket)
 
     if (register_mode) {
         /* 新規の場合は、ticketテーブルにレコードを挿入する。 */
-        exec_query("insert into ticket(id, registerdate, closed) "
+        exec_query(
+                db, 
+                "insert into ticket(id, registerdate, closed) "
                 "values (NULL, ?, 0)",
                 COLUMN_TYPE_TEXT, registerdate,
                 COLUMN_TYPE_END);
 
-        ticket->id = sqlite3_last_insert_rowid(db);
+        ticket->id = sqlite3_last_insert_rowid(db->handle);
     }
     /* クローズの状態に変更されたかどうかを判定する。 */
     elements = ticket->elements;
     foreach (it, elements) {
         Element* e = it->element;
-        int c = exec_query_scalar_int("select close from list_item "
+        int c = exec_query_scalar_int(
+                db,
+                "select close from list_item "
                 "where list_item.element_type_id = ? and list_item.name = ?",
                 COLUMN_TYPE_INT, e->element_type_id,
                 COLUMN_TYPE_TEXT, e->str_val,
@@ -186,16 +187,18 @@ int db_register_ticket(Message* ticket)
         }
     }
     /* クローズ状態に変更されていた場合は、closedに1を設定する。 */
-    if (exec_query("update ticket set closed = ? where id = ?",
-            COLUMN_TYPE_INT, closed,
-            COLUMN_TYPE_INT, ticket->id,
-            COLUMN_TYPE_END) != 1)
+    if (exec_query(
+                db,
+                "update ticket set closed = ? where id = ?",
+                COLUMN_TYPE_INT, closed,
+                COLUMN_TYPE_INT, ticket->id,
+                COLUMN_TYPE_END) != 1)
         die("no ticket to update?");
 
     elements = ticket->elements;
     create_message_insert_sql(elements, sql);
 
-    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     i = 1;
     sqlite3_bind_int(stmt, i++, ticket->id);
@@ -205,18 +208,22 @@ int db_register_ticket(Message* ticket)
         sqlite3_bind_text(stmt, i++, e->str_val, strlen(e->str_val), NULL);
     }
     if (exec_and_wait_4_done(stmt) != SQLITE_RETURN_OK) goto error;
-    message_id = sqlite3_last_insert_rowid(db);
+    message_id = sqlite3_last_insert_rowid(db->handle);
     sqlite3_finalize(stmt);
     /* message_id を更新する。 */
     if (register_mode) {
-        exec_query("update ticket set original_message_id = ?, last_message_id = ? "
+        exec_query(
+                db,
+                "update ticket set original_message_id = ?, last_message_id = ? "
                 "where id = ?",
                 COLUMN_TYPE_INT, message_id,
                 COLUMN_TYPE_INT, message_id,
                 COLUMN_TYPE_INT, ticket->id,
                 COLUMN_TYPE_END);
     } else {
-        exec_query("update ticket set last_message_id = ? "
+        exec_query(
+                db,
+                "update ticket set last_message_id = ? "
                 "where id = ?",
                 COLUMN_TYPE_INT, message_id,
                 COLUMN_TYPE_INT, ticket->id,
@@ -239,23 +246,24 @@ int db_register_ticket(Message* ticket)
             ctype = get_upload_content_type(e->element_type_id, mime_type);
             content_a = get_upload_content(e->element_type_id);
             if (exec_query(
+                        db,
                         "insert into element_file("
                         " id, message_id, element_type_id, filename, size, mime_type, content"
                         ") values (NULL, ?, ?, ?, ?, ?, ?) ",
-                    COLUMN_TYPE_INT, message_id,
-                    COLUMN_TYPE_INT, e->element_type_id,
-                    COLUMN_TYPE_TEXT, fname,
-                    COLUMN_TYPE_INT, size,
-                    COLUMN_TYPE_TEXT, mime_type,
-                    COLUMN_TYPE_BLOB_ELEMENT_FILE, content_a,
-                    COLUMN_TYPE_END) == 0)
+                        COLUMN_TYPE_INT, message_id,
+                        COLUMN_TYPE_INT, e->element_type_id,
+                        COLUMN_TYPE_TEXT, fname,
+                        COLUMN_TYPE_INT, size,
+                        COLUMN_TYPE_TEXT, mime_type,
+                        COLUMN_TYPE_BLOB_ELEMENT_FILE, content_a,
+                        COLUMN_TYPE_END) == 0)
                 die("insert failed.");
             element_file_free(content_a);
         }
     }
     return ticket->id;
 
-ERROR_LABEL
+ERROR_LABEL(db->handle)
 }
 
 static String* create_columns_like_exp(List* element_types, char* table_name, List* keywords, String* buf)
@@ -300,7 +308,7 @@ static List* parse_keywords(List* keywords, char* query)
     }
     return keywords;
 }
-static String* get_search_sql_string(List* conditions, Condition* sort, List* keywords, String* sql_string)
+static String* get_search_sql_string(Database* db, List* conditions, Condition* sort, List* keywords, String* sql_string)
 {
     int i = 0;
     Iterator* it;
@@ -370,7 +378,7 @@ static String* get_search_sql_string(List* conditions, Condition* sort, List* ke
         String* columns_a = string_new(0);
         List* element_types_a;
         list_alloc(element_types_a, ElementType);
-        element_types_a = db_get_element_types_all(element_types_a);
+        element_types_a = db_get_element_types_all(db, element_types_a);
         columns_a = create_columns_like_exp(element_types_a, "m_all", keywords, columns_a);
         if (valid_condition_size(conditions))
             string_append(sql_string, " and ");
@@ -409,7 +417,7 @@ static String* get_search_sql_string(List* conditions, Condition* sort, List* ke
     d("sql: %s\n", string_rawstr(sql_string));
     return sql_string;
 }
-int set_conditions(sqlite3_stmt* stmt, List* conditions, List* keywords)
+int set_conditions(Database* db, sqlite3_stmt* stmt, List* conditions, List* keywords)
 {
     int n = 1;
     Iterator* it;
@@ -425,7 +433,7 @@ int set_conditions(sqlite3_stmt* stmt, List* conditions, List* keywords)
         Iterator* it_keyword;
         Iterator* it;
         list_alloc(element_types_a, ElementType);
-        element_types_a = db_get_element_types_all(element_types_a);
+        element_types_a = db_get_element_types_all(db, element_types_a);
         foreach (it_keyword, keywords) {
             char* word = it_keyword->element;
             foreach (it, element_types_a) {
@@ -436,7 +444,7 @@ int set_conditions(sqlite3_stmt* stmt, List* conditions, List* keywords)
     }
     return n;
 }
-SearchResult* db_get_tickets_by_status(const char* status, SearchResult* result)
+SearchResult* db_get_tickets_by_status(Database* db, const char* status, SearchResult* result)
 {
     int r, n, hit_count = 0;
     String* sql_a = string_new(0);
@@ -451,13 +459,13 @@ SearchResult* db_get_tickets_by_status(const char* status, SearchResult* result)
     cond_status->element_type_id = ELEM_ID_STATUS;
     strcpy(cond_status->value, status);
     list_add(conditions, cond_status);
-    sql_a = get_search_sql_string(conditions, NULL, keywords_a, sql_a);
+    sql_a = get_search_sql_string(db, conditions, NULL, keywords_a, sql_a);
     string_append(sql_a, " limit ? ");
     d("sql_a: %s\n", string_rawstr(sql_a));
 
-    if (sqlite3_prepare(db, string_rawstr(sql_a), string_len(sql_a), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db->handle, string_rawstr(sql_a), string_len(sql_a), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
-    n = set_conditions(stmt, conditions, keywords_a);
+    n = set_conditions(db, stmt, conditions, keywords_a);
     sqlite3_bind_int(stmt, n++, LIST_COUNT_PER_LIST_PAGE);
 
     /* hitした分のticket_idを取得する。 */
@@ -477,9 +485,9 @@ SearchResult* db_get_tickets_by_status(const char* status, SearchResult* result)
     list_free(conditions);
     result->hit_count = hit_count;
     return result;
-ERROR_LABEL
+ERROR_LABEL(db->handle)
 }
-SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, const int page, SearchResult* result)
+SearchResult* db_search_tickets(Database* db, List* conditions, char* q, Condition* sorts, const int page, SearchResult* result)
 {
     int r, n;
     String* sql_a = string_new(0);
@@ -488,12 +496,12 @@ SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, con
 
     list_alloc(keywords_a, char);
     keywords_a = parse_keywords(keywords_a, q);
-    sql_a = get_search_sql_string(conditions, sorts, keywords_a, sql_a);
+    sql_a = get_search_sql_string(db, conditions, sorts, keywords_a, sql_a);
 
     string_append(sql_a, " limit ? offset ? ");
-    if (sqlite3_prepare(db, string_rawstr(sql_a), string_len(sql_a), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db->handle, string_rawstr(sql_a), string_len(sql_a), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
-    n = set_conditions(stmt, conditions, keywords_a);
+    n = set_conditions(db, stmt, conditions, keywords_a);
     sqlite3_bind_int(stmt, n++, LIST_COUNT_PER_SEARCH_PAGE);
     sqlite3_bind_int(stmt, n++, page * LIST_COUNT_PER_SEARCH_PAGE);
 
@@ -511,15 +519,15 @@ SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, con
     {
         String* s = string_new(0);
         string_append(s, "select count(res.id), res.state from (");
-        s = get_search_sql_string(conditions, sorts, keywords_a, s);
+        s = get_search_sql_string(db, conditions, sorts, keywords_a, s);
         string_appendf(s,
                 ") as res "
                 "inner join list_item as l on l.element_type_id = %d and l.name = res.state "
                 "group by res.state "
                 "order by l.sort", ELEM_ID_STATUS);
-        if (sqlite3_prepare(db, string_rawstr(s), string_len(s), &stmt, NULL) == SQLITE_ERROR) goto error;
+        if (sqlite3_prepare(db->handle, string_rawstr(s), string_len(s), &stmt, NULL) == SQLITE_ERROR) goto error;
         sqlite3_reset(stmt);
-        n = set_conditions(stmt, conditions, keywords_a);
+        n = set_conditions(db, stmt, conditions, keywords_a);
         while (SQLITE_ROW == (r = sqlite3_step(stmt))){
             State* s = list_new_element(result->states);
             result->hit_count += s->count = sqlite3_column_int(stmt, 0);
@@ -536,9 +544,9 @@ SearchResult* db_search_tickets(List* conditions, char* q, Condition* sorts, con
 
     result->page = page;
     return result;
-ERROR_LABEL
+ERROR_LABEL(db->handle)
 }
-SearchResult* db_search_tickets_4_report(List* conditions, char* q, Condition* sorts, SearchResult* result)
+SearchResult* db_search_tickets_4_report(Database* db, List* conditions, char* q, Condition* sorts, SearchResult* result)
 {
     int r, n;
     String* sql_a = string_new(0);
@@ -547,11 +555,11 @@ SearchResult* db_search_tickets_4_report(List* conditions, char* q, Condition* s
 
     list_alloc(keywords_a, char);
     keywords_a = parse_keywords(keywords_a, q);
-    sql_a = get_search_sql_string(conditions, sorts, keywords_a, sql_a);
+    sql_a = get_search_sql_string(db, conditions, sorts, keywords_a, sql_a);
 
-    if (sqlite3_prepare(db, string_rawstr(sql_a), string_len(sql_a), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db->handle, string_rawstr(sql_a), string_len(sql_a), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
-    n = set_conditions(stmt, conditions, keywords_a);
+    n = set_conditions(db, stmt, conditions, keywords_a);
 
     /* ticket_idを取得する。 */
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
@@ -568,7 +576,7 @@ SearchResult* db_search_tickets_4_report(List* conditions, char* q, Condition* s
     list_free(keywords_a);
 
     return result;
-ERROR_LABEL
+ERROR_LABEL(db->handle)
 }
 void create_columns_exp(List* element_types, char* table_name, char* buf)
 {
@@ -587,7 +595,7 @@ static void set_str_val(Element* e, const unsigned char* str_val)
         strcpy(e->str_val, (char*)str_val);
     }
 }
-List* db_get_last_elements_4_list(const int ticket_id, List* elements)
+List* db_get_last_elements_4_list(Database* db, const int ticket_id, List* elements)
 {
     char sql[DEFAULT_LENGTH] = "";
     char sql_suf[DEFAULT_LENGTH] = "";
@@ -598,7 +606,7 @@ List* db_get_last_elements_4_list(const int ticket_id, List* elements)
     Iterator* it;
 
     list_alloc(element_types_a, ElementType);
-    element_types_a = db_get_element_types_4_list(element_types_a);
+    element_types_a = db_get_element_types_4_list(db, element_types_a);
     create_columns_exp(element_types_a, "last_m", columns);
     sprintf(sql, "select t.id, org_m.field%d ", ELEM_ID_SENDER);
     strcat(sql, columns);
@@ -610,7 +618,7 @@ List* db_get_last_elements_4_list(const int ticket_id, List* elements)
             "inner join message as org_m on org_m.id = t.original_message_id "
             "where t.id = ?");
     strcat(sql, sql_suf);
-    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, ticket_id);
 
@@ -657,9 +665,9 @@ List* db_get_last_elements_4_list(const int ticket_id, List* elements)
     list_free(element_types_a);
 
     return elements;
-ERROR_LABEL
+ERROR_LABEL(db->handle)
 }
-List* db_get_last_elements(const int ticket_id, List* elements)
+List* db_get_last_elements(Database* db, const int ticket_id, List* elements)
 {
     char sql[DEFAULT_LENGTH];
     sqlite3_stmt *stmt = NULL;
@@ -668,7 +676,7 @@ List* db_get_last_elements(const int ticket_id, List* elements)
     char columns[DEFAULT_LENGTH] = "";
 
     list_alloc(element_types_a, ElementType);
-    element_types_a = db_get_element_types_all(element_types_a);
+    element_types_a = db_get_element_types_all(db, element_types_a);
     create_columns_exp(element_types_a, "m", columns);
     strcpy(sql, "select m.id");
     strcat(sql, columns);
@@ -680,7 +688,7 @@ List* db_get_last_elements(const int ticket_id, List* elements)
             "inner join message as last_m on last_m.id = t.last_message_id "
             "inner join message as m on m.id = t.last_message_id "
             "where t.id = ?");
-    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, ticket_id);
 
@@ -722,9 +730,9 @@ List* db_get_last_elements(const int ticket_id, List* elements)
     list_free(element_types_a);
 
     return elements;
-ERROR_LABEL
+ERROR_LABEL(db->handle)
 }
-List* db_get_elements(int message_id, List* elements)
+List* db_get_elements(Database* db, int message_id, List* elements)
 {
     char sql[DEFAULT_LENGTH] = "";
     sqlite3_stmt *stmt = NULL;
@@ -733,7 +741,7 @@ List* db_get_elements(int message_id, List* elements)
     List* element_types_a = NULL;
 
     list_alloc(element_types_a, ElementType);
-    element_types_a = db_get_element_types_all(element_types_a);
+    element_types_a = db_get_element_types_all(db, element_types_a);
     create_columns_exp(element_types_a, "m", columns);
 
     strcpy(sql, "select m.registerdate");
@@ -741,7 +749,7 @@ List* db_get_elements(int message_id, List* elements)
     strcat(sql,
             "from message as m "
             "where m.id = ? ");
-    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, message_id);
 
@@ -768,16 +776,16 @@ List* db_get_elements(int message_id, List* elements)
 
     return elements;
 
-ERROR_LABEL
+ERROR_LABEL(db->handle)
 }
-int* db_get_message_ids_a(const int ticket_id)
+int* db_get_message_ids_a(Database* db, const int ticket_id)
 {
     int* message_ids = NULL;
     int r, i = 0;
     const char *sql = "select count(*) from message as m where m.ticket_id = ?";
     sqlite3_stmt *stmt = NULL;
 
-    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, ticket_id);
 
@@ -788,7 +796,7 @@ int* db_get_message_ids_a(const int ticket_id)
     sqlite3_finalize(stmt);
 
     sql = "select id from message as m where m.ticket_id = ? order by m.registerdate";
-    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, ticket_id);
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
@@ -802,17 +810,17 @@ int* db_get_message_ids_a(const int ticket_id)
 
     return message_ids;
 
-ERROR_LABEL
+ERROR_LABEL(db->handle)
 }
 
-Project* db_get_project(Project* project)
+Project* db_get_project(Database* db, Project* project)
 {
     int r;
     const char *sql;
     sqlite3_stmt *stmt = NULL;
 
     sql = "select name, value from setting";
-    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
@@ -826,11 +834,12 @@ Project* db_get_project(Project* project)
     sqlite3_finalize(stmt);
 
     return project;
-ERROR_LABEL
+ERROR_LABEL(db->handle)
 }
-void db_update_project(Project* project)
+void db_update_project(Database* db, Project* project)
 {
     if (exec_query(
+            db,
             "update setting set "
             "value = ? "
             "where name = 'project_name'",
@@ -838,6 +847,7 @@ void db_update_project(Project* project)
             COLUMN_TYPE_END) != 1)
         die("no seting to update? or too many?");
     if (exec_query(
+            db,
             "update setting set "
             "value = ? "
             "where name = 'home_url'",
@@ -845,7 +855,7 @@ void db_update_project(Project* project)
             COLUMN_TYPE_END) != 1)
         die("no seting to update? or too many?");
 }
-void db_update_element_type(ElementType* et)
+void db_update_element_type(Database* db, ElementType* et)
 {
     /* 基本項目の場合、ticket_propertyとreply_propertyは編集させない。 */
     switch (et->id) {
@@ -863,6 +873,7 @@ void db_update_element_type(ElementType* et)
             break;
     }
     if (exec_query(
+            db,
             "update element_type set "
             " ticket_property = ?,"
             " reply_property = ?,"
@@ -887,9 +898,10 @@ void db_update_element_type(ElementType* et)
             COLUMN_TYPE_END) != 1)
         die("no element_type to update?");
 }
-void db_update_list_item(ListItem* item)
+void db_update_list_item(Database* db, ListItem* item)
 {
     if (exec_query(
+            db,
             "update list_item set "
             "name = ?, close = ?, sort = ? where id = ?",
             COLUMN_TYPE_TEXT, item->name,
@@ -899,17 +911,19 @@ void db_update_list_item(ListItem* item)
             COLUMN_TYPE_END) != 1)
         die("no list_item to update?");
 }
-void db_delete_list_item(const int id)
+void db_delete_list_item(Database* db, const int id)
 {
     exec_query(
+            db,
             "delete from list_item "
             "where id = ?",
             COLUMN_TYPE_INT, id,
             COLUMN_TYPE_END);
 }
-void db_register_list_item(ListItem* item)
+void db_register_list_item(Database* db, ListItem* item)
 {
     exec_query(
+            db,
             "insert into list_item (id, element_type_id, name, close, sort)"
             "values (NULL, ?, ?, ?, ?)",
             COLUMN_TYPE_INT, item->element_type_id,
@@ -918,12 +932,13 @@ void db_register_list_item(ListItem* item)
             COLUMN_TYPE_INT, item->sort,
             COLUMN_TYPE_END);
 }
-int db_register_element_type(ElementType* et)
+int db_register_element_type(Database* db, ElementType* et)
 {
     char field_name[DEFAULT_LENGTH];
     char sql[DEFAULT_LENGTH];
     int element_type_id;
     exec_query(
+            db,
             "insert into element_type (id, type, ticket_property, reply_property, required, name, description, auto_add_item, display_in_list, sort)"
             "values (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             COLUMN_TYPE_INT, et->type,
@@ -938,22 +953,23 @@ int db_register_element_type(ElementType* et)
             COLUMN_TYPE_END);
 
     /* columnの追加 */
-    element_type_id = sqlite3_last_insert_rowid(db);
+    element_type_id = sqlite3_last_insert_rowid(db->handle);
     sprintf(field_name, "field%d", element_type_id);
     strcpy(sql, "alter table message add column ");
     strcat(sql, field_name);
     strcat(sql, " text not null default '' ");
-    exec_query(sql, COLUMN_TYPE_END);
+    exec_query(db, sql, COLUMN_TYPE_END);
     return element_type_id;
 }
-void db_delete_element_type(const int id)
+void db_delete_element_type(Database* db, const int id)
 {
     exec_query(
+            db,
             "update element_type set deleted = 1 where id = ?",
             COLUMN_TYPE_INT, id,
             COLUMN_TYPE_END);
 }
-List* db_get_states_has_not_close(List* states)
+List* db_get_states_has_not_close(Database* db, List* states)
 {
     int r;
     char sql[DEFAULT_LENGTH];
@@ -969,7 +985,7 @@ List* db_get_states_has_not_close(List* states)
             "where l.close = 0 "
             "group by m.field%d "
             "order by l.sort ", ELEM_ID_STATUS, ELEM_ID_STATUS, ELEM_ID_STATUS);
-    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
@@ -985,9 +1001,9 @@ List* db_get_states_has_not_close(List* states)
 
     return states;
 
-ERROR_LABEL
+ERROR_LABEL(db->handle)
 }
-List* db_get_states(List* states)
+List* db_get_states(Database* db, List* states)
 {
     int r;
     char sql[DEFAULT_LENGTH];
@@ -1002,7 +1018,7 @@ List* db_get_states(List* states)
             " on l.element_type_id = %d and l.name = m.m.field%d "
             "group by m.field%d "
             "order by l.sort ", ELEM_ID_STATUS, ELEM_ID_STATUS, ELEM_ID_STATUS, ELEM_ID_STATUS);
-    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
@@ -1018,9 +1034,9 @@ List* db_get_states(List* states)
 
     return states;
 
-ERROR_LABEL
+ERROR_LABEL(db->handle)
 }
-List* db_get_statictics_multi(List* states, const int element_type_id)
+List* db_get_statictics_multi(Database* db, List* states, const int element_type_id)
 {
     int r;
     char sql[DEFAULT_LENGTH];
@@ -1035,7 +1051,7 @@ List* db_get_statictics_multi(List* states, const int element_type_id)
             " on l.element_type_id = %d and m.m.field%d like '%%' || l.name || '\t%%' "
             "group by l.id "
             "order by l.sort ", element_type_id, element_type_id);
-    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
@@ -1052,9 +1068,9 @@ List* db_get_statictics_multi(List* states, const int element_type_id)
 
     return states;
 
-ERROR_LABEL
+ERROR_LABEL(db->handle)
 }
-List* db_get_statictics(List* states, const int element_type_id)
+List* db_get_statictics(Database* db, List* states, const int element_type_id)
 {
     int r;
     char sql[DEFAULT_LENGTH];
@@ -1069,7 +1085,7 @@ List* db_get_statictics(List* states, const int element_type_id)
             " on l.element_type_id = %d and l.name = m.m.field%d "
             "group by m.field%d "
             "order by l.sort ", element_type_id, element_type_id, element_type_id);
-    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
@@ -1086,9 +1102,9 @@ List* db_get_statictics(List* states, const int element_type_id)
 
     return states;
 
-ERROR_LABEL
+ERROR_LABEL(db->handle)
 }
-ElementFile* db_get_element_file(int id, ElementFile* file)
+ElementFile* db_get_element_file(Database* db, int id, ElementFile* file)
 {
     int r;
     const char *sql;
@@ -1097,7 +1113,7 @@ ElementFile* db_get_element_file(int id, ElementFile* file)
     sql = "select id, element_type_id, filename, size, mime_type, content "
         "from element_file "
         "where id = ? ";
-    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, id);
 
@@ -1124,9 +1140,9 @@ ElementFile* db_get_element_file(int id, ElementFile* file)
     sqlite3_finalize(stmt);
 
     return file;
-ERROR_LABEL
+ERROR_LABEL(db->handle)
 }
-List* db_get_newest_information(const int limit, List* messages)
+List* db_get_newest_information(Database* db, const int limit, List* messages)
 {
     int r;
     char sql[DEFAULT_LENGTH];
@@ -1139,7 +1155,7 @@ List* db_get_newest_information(const int limit, List* messages)
             "order by m.registerdate desc "
             "limit %d ", limit);
 
-    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
@@ -1153,17 +1169,19 @@ List* db_get_newest_information(const int limit, List* messages)
     sqlite3_finalize(stmt);
     return messages;
 
-ERROR_LABEL
+ERROR_LABEL(db->handle)
 }
-int db_get_element_file_id(int message_id, int element_type_id)
+int db_get_element_file_id(Database* db, int message_id, int element_type_id)
 {
-    return exec_query_scalar_int("select id from element_file as ef "
+    return exec_query_scalar_int(
+            db,
+            "select id from element_file as ef "
             "where ef.message_id = ? and ef.element_type_id = ?",
             COLUMN_TYPE_INT, message_id,
             COLUMN_TYPE_INT, element_type_id,
             COLUMN_TYPE_END);
 }
-char* db_get_element_file_mime_type(const int message_id, const int element_type_id, char* buf)
+char* db_get_element_file_mime_type(Database* db, const int message_id, const int element_type_id, char* buf)
 {
     int r;
     const char *sql;
@@ -1171,7 +1189,7 @@ char* db_get_element_file_mime_type(const int message_id, const int element_type
 
     sql = "select mime_type from element_file as ef "
             "where ef.message_id = ? and ef.element_type_id = ?";
-    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_int(stmt, 1, message_id);
     sqlite3_bind_int(stmt, 2, element_type_id);
@@ -1184,13 +1202,14 @@ char* db_get_element_file_mime_type(const int message_id, const int element_type
     sqlite3_finalize(stmt);
 
     return buf;
-ERROR_LABEL
+ERROR_LABEL(db->handle)
 }
-void db_register_wiki(Wiki* wiki)
+void db_register_wiki(Database* db, Wiki* wiki)
 {
     char registerdate[20];
     set_date_string(registerdate);
     exec_query(
+            db,
             "insert into wiki (id, name, content, registerdate)"
             "values (NULL, ?, ?, ?)",
             COLUMN_TYPE_TEXT, wiki->name,
@@ -1198,7 +1217,7 @@ void db_register_wiki(Wiki* wiki)
             COLUMN_TYPE_TEXT, registerdate,
             COLUMN_TYPE_END);
 }
-Wiki* db_get_newest_wiki(char* page_name, Wiki* wiki)
+Wiki* db_get_newest_wiki(Database* db, char* page_name, Wiki* wiki)
 {
     int r;
     char sql[DEFAULT_LENGTH];
@@ -1211,7 +1230,7 @@ Wiki* db_get_newest_wiki(char* page_name, Wiki* wiki)
             "order by w.registerdate desc "
             "limit 1 ");
 
-    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_text(stmt, 1, page_name, strlen(page_name), NULL);
 
@@ -1228,26 +1247,28 @@ Wiki* db_get_newest_wiki(char* page_name, Wiki* wiki)
     sqlite3_finalize(stmt);
     return wiki;
 
-ERROR_LABEL
+ERROR_LABEL(db->handle)
 }
-void db_setting_file_save(SettingFile* sf)
+void db_setting_file_save(Database* db, SettingFile* sf)
 {
-    if (exec_query("update setting_file "
-            "set "
-            " file_name = ?, "
-            " size = ?, "
-            " mime_type = ?, "
-            " content = ? "
-            "where name = ?",
-            COLUMN_TYPE_TEXT, sf->file_name,
-            COLUMN_TYPE_INT, sf->size,
-            COLUMN_TYPE_TEXT, sf->mime_type,
-            COLUMN_TYPE_TEXT, sf->content,
-            COLUMN_TYPE_TEXT, sf->name,
-            COLUMN_TYPE_END) != 1)
+    if (exec_query(
+                db,
+                "update setting_file "
+                "set "
+                " file_name = ?, "
+                " size = ?, "
+                " mime_type = ?, "
+                " content = ? "
+                "where name = ?",
+                COLUMN_TYPE_TEXT, sf->file_name,
+                COLUMN_TYPE_INT, sf->size,
+                COLUMN_TYPE_TEXT, sf->mime_type,
+                COLUMN_TYPE_TEXT, sf->content,
+                COLUMN_TYPE_TEXT, sf->name,
+                COLUMN_TYPE_END) != 1)
         die("failed to update setting file.");
 }
-SettingFile* db_get_setting_file(char* name, SettingFile* file)
+SettingFile* db_get_setting_file(Database* db, char* name, SettingFile* file)
 {
     int r;
     const char *sql;
@@ -1256,7 +1277,7 @@ SettingFile* db_get_setting_file(char* name, SettingFile* file)
     sql = "select file_name, size, mime_type, content "
         "from setting_file "
         "where name = ? ";
-    if (sqlite3_prepare(db, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_text(stmt, 1, name, strlen(name), NULL);
 
@@ -1264,9 +1285,11 @@ SettingFile* db_get_setting_file(char* name, SettingFile* file)
         int len;
         char* p_src;
         char* p_dist;
-        strcpy(file->name, (char*)sqlite3_column_text(stmt, 0));
+        if (sqlite3_column_text(stmt, 0)) 
+            strcpy(file->name, (char*)sqlite3_column_text(stmt, 0));
         file->size = sqlite3_column_int(stmt, 1);
-        strcpy(file->mime_type, (char*)sqlite3_column_text(stmt, 2));
+        if (sqlite3_column_text(stmt, 2)) 
+            strcpy(file->mime_type, (char*)sqlite3_column_text(stmt, 2));
         len = sqlite3_column_bytes(stmt, 3);
         p_dist = file->content = xalloc(sizeof(char) * len);
         p_src = (char*)sqlite3_column_blob(stmt, 3);
@@ -1281,11 +1304,12 @@ SettingFile* db_get_setting_file(char* name, SettingFile* file)
     sqlite3_finalize(stmt);
 
     return file;
-ERROR_LABEL
+ERROR_LABEL(db->handle)
 }
-void db_update_top_image(SettingFile* sf)
+void db_update_top_image(Database* db, SettingFile* sf)
 {
     if (exec_query(
+                db,
                 "update setting_file "
                 "set "
                 " file_name = ?, "
