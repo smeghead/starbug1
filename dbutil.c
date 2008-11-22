@@ -16,7 +16,8 @@ int exec_and_wait_4_done(sqlite3_stmt* stmt)
 
     while (SQLITE_DONE != (ret = sqlite3_step(stmt))) {
         if (loop++ > 100000) {
-            d("sql update error. database may be locked.\n");
+            d("last status: %d\n", ret);
+            d("sql update error. database may be locked or bug?.\n");
             return SQLITE_RETURN_ERROR;
         }
     }
@@ -35,7 +36,6 @@ Database* db_init(char* db_name)
     bool exists_db_file = (fexist(db_name) == 1);
     Database* db;
 
-    d("exists_db_file: %d\n", exists_db_file);
     db = xalloc(sizeof(Database));
     strcpy(db->name, db_name);
     mkdir("db", 0755);
@@ -633,9 +633,11 @@ int exec_query(Database* db, const char* sql, ...)
         d("parameter %d\n", i);
         if (type == COLUMN_TYPE_INT) {
             int value = va_arg(ap, int);
+            d("int %d\n", value);
             sqlite3_bind_int(stmt, i + 1, value);
         } else if (type == COLUMN_TYPE_TEXT) {
             char* value = va_arg(ap, char*);
+            d("char* %s\n", value);
             if (value == NULL) goto error;
             sqlite3_bind_text(stmt, i + 1, value, strlen(value), NULL);
         } else if (type == COLUMN_TYPE_BLOB_ELEMENT_FILE) {

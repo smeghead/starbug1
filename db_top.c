@@ -60,24 +60,26 @@ ProjectInfo* db_top_get_project_info(Database* db, ProjectInfo* project_info, ch
 
 ERROR_LABEL(db->handle)
 }
-void db_top_update_project_info(List* project_infos)
+void db_top_update_project_infos(Database* db, List* project_infos)
 {
     Iterator* it;
-    sqlite3_stmt *stmt = NULL;
-
 
     foreach (it, project_infos) {
         ProjectInfo* pi = it->element;
-        if (pi->id) {
-        } else {
-            /* 新規の場合は、ticketテーブルにレコードを挿入する。 */
-/*             exec_query("insert into ticket(id, registerdate, closed) " */
-/*                     "values (NULL, ?, 0)", */
-/*                     COLUMN_TYPE_TEXT, registerdate, */
-/*                     COLUMN_TYPE_END); */
-        }
+        exec_query(db, "update project_info set name = ?, sort = ? where id = ?",
+                COLUMN_TYPE_TEXT, pi->name,
+                COLUMN_TYPE_INT, pi->sort,
+                COLUMN_TYPE_INT, pi->id,
+                COLUMN_TYPE_END);
     }
-    sqlite3_finalize(stmt);
+    return;
+}
+void db_top_register_project_info(Database* db, ProjectInfo* project_info)
+{
+    exec_query(db, "insert into project_info(id, name, sort) values (NULL, ?, ?)",
+            COLUMN_TYPE_TEXT, project_info->name,
+            COLUMN_TYPE_INT, project_info->sort,
+            COLUMN_TYPE_END);
     return;
 }
 char* db_top_get_project_db_name(char* project_name, char* buffer)

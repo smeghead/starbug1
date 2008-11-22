@@ -82,6 +82,7 @@ void top_top_action()
     char buffer[DEFAULT_LENGTH];
     List* project_infos_a;
     Iterator* it;
+    char** multi;
 
     list_alloc(project_infos_a, ProjectInfo);
 
@@ -90,9 +91,26 @@ void top_top_action()
     top_output_header("全体の管理");
     o(      "<div id=\"project_menu\">\n"
             "\t<a href=\"%s/../index.%s/%s/\">全体のトップページへ</a>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name);
+    /* メッセージの取得 */
+    if ((cgiFormStringMultiple("message", &multi)) != cgiFormNotFound) {
+        int i = 0;
+        o("<div class=\"complete_message\">");
+        while (multi[i]) {
+            if (strstr(multi[i], "[ERROR]") != NULL) {
+                o("<div class=\"error\">");
+            } else {
+                o("<div>");
+            }
+            h(multi[i]);
+            o("</div>");
+            i++;
+        }
+        o("</div>\n");
+    }
+    cgiStringArrayFree(multi);
     o(      "<div id=\"project_list\">\n"
             "\t<h2>プロジェクト一覧</h2>\n");
-    o(      "\t<form action=\"%s/top_update_project_submit\" method=\"post\">\n", cgiScriptName);
+    o(      "\t<form action=\"%s/top/top_update_project_submit\" method=\"post\">\n", cgiScriptName);
     o(      "\t\t<table>\n"
             "\t\t\t<tr>\n"
             "\t\t\t\t<th>プロジェクト名</th>\n"
@@ -128,7 +146,7 @@ void top_top_action()
     o(      "</div>\n");
     o(      "<div id=\"project_list\">\n"
             "\t<h2>プロジェクトの追加</h2>\n");
-    o(      "\t<form action=\"%s/top_add_project_submit\" method=\"post\">\n", cgiScriptName);
+    o(      "\t<form action=\"%s/top/top_add_project_submit\" method=\"post\">\n", cgiScriptName);
     o(      "\t\t<table>\n"
             "\t\t\t<tr>\n"
             "\t\t\t\t<th>プロジェクトID</th>\n"
@@ -155,24 +173,57 @@ void top_update_project_submit_action()
 
     cgiFormString("edit_top", value_a, VALUE_LENGTH);
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
-    wiki_save(db_a, "top", value_a);
+    {
+        List* project_infos_a;
+        Iterator* it;
+        list_alloc(project_infos_a, ProjectInfo);
+
+        project_infos_a = db_top_get_all_project_infos(db_a, project_infos_a);
+        foreach (it, project_infos_a) {
+            ProjectInfo* p = it->element;
+            char name[DEFAULT_LENGTH];
+            char sort[DEFAULT_LENGTH];
+            char param_name[DEFAULT_LENGTH];
+            if (p->id == 1) continue; /* topは更新対象外 */ 
+
+            sprintf(param_name, "project_%d.name", p->id);
+            cgiFormString(param_name, name, DEFAULT_LENGTH);
+            strcpy(p->name, name);
+            sprintf(param_name, "project_%d.sort", p->id);
+            cgiFormString(param_name, sort, DEFAULT_LENGTH);
+            p->sort = atoi(sort);
+        }
+        db_top_update_project_infos(db_a, project_infos_a);
+        list_free(project_infos_a);
+    }
     db_finish(db_a);
     xfree(value_a);
 
-    redirect("", NULL);
+    redirect("", "更新しました。");
 }
 void top_add_project_submit_action()
 {
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
-    char* value_a = xalloc(sizeof(char) * VALUE_LENGTH);
 
-    cgiFormString("edit_top", value_a, VALUE_LENGTH);
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
-    wiki_save(db_a, "top", value_a);
-    db_finish(db_a);
-    xfree(value_a);
+    {
+        char name[DEFAULT_LENGTH];
+        char sort[DEFAULT_LENGTH];
+        char param_name[DEFAULT_LENGTH];
+        ProjectInfo* project_info = project_info_new();
 
-    redirect("", NULL);
+        d("db->name: %s\n", db_a->name);
+        cgiFormString("project_new.name", name, DEFAULT_LENGTH);
+        strcpy(project_info->name, name);
+        cgiFormString("project_new.sort", sort, DEFAULT_LENGTH);
+        project_info->sort = atoi(sort);
+        /* エラーになるけど原因がわからない。 */
+        db_top_register_project_info(db_a, project_info);
+        project_info_free(project_info);
+    }
+    db_finish(db_a);
+
+    redirect("", "追加しました。");
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

@@ -6,8 +6,8 @@
 #include "dbutil.h"
 
 List* db_top_get_all_project_infos(Database*, List*);
-int db_top_register_project_info(Database*, ProjectInfo*);
-void db_top_update_project_info(Database*, ProjectInfo*);
+void db_top_register_project_info(Database*, ProjectInfo*);
+void db_top_update_project_infos(Database*, List*);
 void db_top_delete_project_info(Database*, ProjectInfo*);
 char* db_top_get_project_db_name(char*, char*);
 #endif
