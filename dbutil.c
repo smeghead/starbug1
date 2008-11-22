@@ -82,7 +82,7 @@ void create_top_tables(Database* db)
     exec_query(
             db,
             "create table project_info ( "
-            " id text not null primary key, "
+            " id integer not null primary key, "
             " name text, "
             " deleted integer default 0, "
             " sort integer "

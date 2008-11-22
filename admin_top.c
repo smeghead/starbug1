@@ -116,8 +116,7 @@ void top_top_action()
             "\t\t\t\t<th>プロジェクト名</th>\n"
             "\t\t\t\t<th>プロジェクトID</th>\n"
             "\t\t\t\t<th>並び順</th>\n"
-            "\t\t\t</tr>\n"
-            "\t\t\t<tr>\n");
+            "\t\t\t</tr>\n");
     foreach (it, project_infos_a) {
         ProjectInfo* p = it->element;
         Database* db_project_a;
@@ -131,11 +130,13 @@ void top_top_action()
         sprintf(db_name, "db/%d.db", p->id);
         db_project_a = db_init(db_name);
         project_a = db_get_project(db_project_a, project_a);
+        o(      "\t\t\t<tr>\n");
         o(      "\t\t\t\t<td>%s</td>\n", project_a->name);
         project_free(project_a);
         db_finish(db_project_a);
         o(      "\t\t\t\t<td><input type=\"text\" name=\"project_%d.name\" value=\"%s\" /></td>\n", p->id, p->name);
         o(      "\t\t\t\t<td><input type=\"text\" name=\"project_%d.sort\" value=\"%d\" /></td>\n", p->id, p->sort);
+        o(      "\t\t\t</tr>\n");
     }
     list_free(project_infos_a);
     o(      "\t\t\t</tr>\n");
@@ -210,7 +211,6 @@ void top_add_project_submit_action()
     {
         char name[DEFAULT_LENGTH];
         char sort[DEFAULT_LENGTH];
-        char param_name[DEFAULT_LENGTH];
         ProjectInfo* project_info = project_info_new();
 
         d("db->name: %s\n", db_a->name);
@@ -218,7 +218,6 @@ void top_add_project_submit_action()
         strcpy(project_info->name, name);
         cgiFormString("project_new.sort", sort, DEFAULT_LENGTH);
         project_info->sort = atoi(sort);
-        /* エラーになるけど原因がわからない。 */
         db_top_register_project_info(db_a, project_info);
         project_info_free(project_info);
     }
