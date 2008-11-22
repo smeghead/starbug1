@@ -22,6 +22,7 @@ typedef enum _bool {
 typedef struct {
     int id;
     char name[DEFAULT_LENGTH];
+    int sort;
 } ProjectInfo;
 ProjectInfo* project_info_new();
 void project_info_free(ProjectInfo*);

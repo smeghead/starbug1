@@ -140,9 +140,12 @@ ActionType analysis_action()
             ret = ACTION_TYPE_INDEX;
         }
     } else if (strstr(script_name, admin_cgi_file_name)) {
-        if (strcmp(g_project_name, "top")) {
+        d("g_project_name: %s\n", g_project_name);
+        if (strcmp(g_project_name, "top") == 0) {
+            d("actiontype admin top\n");
             ret = ACTION_TYPE_ADMIN_TOP;
         } else {
+            d("actiontype admin project\n");
             ret = ACTION_TYPE_ADMIN;
         }
     }

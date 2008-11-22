@@ -18,7 +18,7 @@ List* db_top_get_all_project_infos(Database* db, List* project_infos)
     const char *sql;
     sqlite3_stmt *stmt = NULL;
 
-    sql = "select id, name from project_info where deleted = 0 order by sort";
+    sql = "select id, name, sort from project_info where deleted = 0 order by sort";
     if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
 
@@ -27,6 +27,7 @@ List* db_top_get_all_project_infos(Database* db, List* project_infos)
 
         project_info->id = sqlite3_column_int(stmt, 0);
         strncpy(project_info->name, (char*)sqlite3_column_text(stmt, 1), DEFAULT_LENGTH - 1);
+        project_info->sort = sqlite3_column_int(stmt, 2);
         list_add(project_infos, project_info);
     }
     if (SQLITE_DONE != r)
@@ -82,14 +83,15 @@ void db_top_update_project_info(List* project_infos)
 char* db_top_get_project_db_name(char* project_name, char* buffer)
 {
     Database* top_db_a = db_init("db/1.db");
-    ProjectInfo* project_info = project_info_new();
+    ProjectInfo* project_info_a = project_info_new();
 
     d("project_name: %s\n", project_name);
-    project_info = db_top_get_project_info(top_db_a, project_info, project_name);
-    if (!project_info->id) {
+    project_info_a = db_top_get_project_info(top_db_a, project_info_a, project_name);
+    if (!project_info_a->id) {
         die("ERROR: no such project found.");
     }
-    sprintf(buffer, "db/%d.db", project_info->id);
+    sprintf(buffer, "db/%d.db", project_info_a->id);
+    project_info_free(project_info_a);
     db_finish(top_db_a);
     return buffer;
 }

@@ -14,8 +14,8 @@
 #include "simple_string.h"
 
 void top_top_action();
-void top_edit_top_action();
-void top_edit_top_submit_action();
+void top_update_project_submit_action();
+void top_add_project_submit_action();
 
 /* prototype declares */
 int index_top_main();
@@ -23,8 +23,8 @@ int index_top_main();
 void top_register_actions()
 {
     REG_ACTION(top_top);
-    REG_ACTION(top_edit_top);
-    REG_ACTION(top_edit_top_submit);
+    REG_ACTION(top_update_project_submit);
+    REG_ACTION(top_add_project_submit);
 }
 
 void top_output_header(char* title)
@@ -67,7 +67,7 @@ void top_output_footer()
             "</div>\n"
             "</body>\n</html>\n", cgiScriptName, VERSION);
 }
-int index_top_main() {
+int admin_top_main() {
     top_register_actions();
     exec_action();
     free_action_actions();
@@ -87,12 +87,19 @@ void top_top_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_infos_a = db_top_get_all_project_infos(db_a, project_infos_a);
-    top_output_header("トップページ");
+    top_output_header("全体の管理");
     o(      "<div id=\"project_menu\">\n"
-            "\t<a href=\"%s/../admin.%s/%s/\">全体の管理</a>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name);
+            "\t<a href=\"%s/../index.%s/%s/\">全体のトップページへ</a>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name);
     o(      "<div id=\"project_list\">\n"
-            "\t<h2>プロジェクト一覧</h2>\n"
-            "\t<ul>\n");
+            "\t<h2>プロジェクト一覧</h2>\n");
+    o(      "\t<form action=\"%s/top_update_project_submit\" method=\"post\">\n", cgiScriptName);
+    o(      "\t\t<table>\n"
+            "\t\t\t<tr>\n"
+            "\t\t\t\t<th>プロジェクト名</th>\n"
+            "\t\t\t\t<th>プロジェクトID</th>\n"
+            "\t\t\t\t<th>並び順</th>\n"
+            "\t\t\t</tr>\n"
+            "\t\t\t<tr>\n");
     foreach (it, project_infos_a) {
         ProjectInfo* p = it->element;
         Database* db_project_a;
@@ -106,73 +113,55 @@ void top_top_action()
         sprintf(db_name, "db/%d.db", p->id);
         db_project_a = db_init(db_name);
         project_a = db_get_project(db_project_a, project_a);
-        o(      "\t\t\t<li><a href=\"%s/%s\">%s</a></li>\n", cgiScriptName, p->name, project_a->name);
+        o(      "\t\t\t\t<td>%s</td>\n", project_a->name);
         project_free(project_a);
         db_finish(db_project_a);
+        o(      "\t\t\t\t<td><input type=\"text\" name=\"project_%d.name\" value=\"%s\" /></td>\n", p->id, p->name);
+        o(      "\t\t\t\t<td><input type=\"text\" name=\"project_%d.sort\" value=\"%d\" /></td>\n", p->id, p->sort);
     }
     list_free(project_infos_a);
-    o(      "\t</ul>\n");
+    o(      "\t\t\t</tr>\n");
+    o(      "\t\t</table>\n");
+    o(      "\t\t<p>既存のプロジェクトIDを変更すると、プロジェクトのURLが変わってしまうので注意してください。</p>\n");
+    o(      "\t\t<input type=\"submit\" value=\"更新\" />\n");
+    o(      "\t</form>\n");
     o(      "</div>\n");
-    o(      "<div id=\"dashboard\">\n");
-    o(      "<a href=\"%s/%s/top_edit_top\">編集</a>\n", cgiScriptName, g_project_name);
-    wiki_out(db_a, "top");
+    o(      "<div id=\"project_list\">\n"
+            "\t<h2>プロジェクトの追加</h2>\n");
+    o(      "\t<form action=\"%s/top_add_project_submit\" method=\"post\">\n", cgiScriptName);
+    o(      "\t\t<table>\n"
+            "\t\t\t<tr>\n"
+            "\t\t\t\t<th>プロジェクトID</th>\n"
+            "\t\t\t\t<th>並び順</th>\n"
+            "\t\t\t</tr>\n"
+            "\t\t\t<tr>\n"
+            "\t\t\t\t<td><input type=\"text\" name=\"project_new.name\" value=\"\" /></td>\n"
+            "\t\t\t\t<td><input type=\"text\" name=\"project_new.sort\" value=\"\" /></td>\n");
+    o(      "\t\t\t</tr>\n");
+    o(      "\t\t</table>\n");
+    o(      "\t\t<p>プロジェクト名は各プロジェクトの管理ツールから設定してください。</p>\n");
+    o(      "\t\t<input type=\"submit\" value=\"追加\" />\n");
+    o(      "\t</form>\n");
     o(      "</div>\n");
     top_output_footer();
     db_finish(db_a);
 }
-void top_edit_top_action()
+
+void top_update_project_submit_action()
 {
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
+    char* value_a = xalloc(sizeof(char) * VALUE_LENGTH);
 
+    cgiFormString("edit_top", value_a, VALUE_LENGTH);
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
-    top_output_header("トップページの編集");
-    o(      "<h2>トップページの編集</h2>\n"
-            "<div id=\"top\">\n"
-            "<h3>トップページの編集</h3>\n"
-            "<div id=\"description\">簡易wikiの文法でトップページのコンテンツの編集を行ない、更新ボタンを押してください。</div>\n"
-            "<form id=\"edit_top_form\" action=\"%s/%s/top_edit_top_submit\" method=\"post\">\n", cgiScriptName, g_project_name);
-    o(      "<textarea name=\"edit_top\" id=\"edit_top\" rows=\"3\" cols=\"10\">");
-    wiki_content_out(db_a, "top");
-    o(      "</textarea>\n"
-            "<div>&nbsp;</div>\n"
-            "<input class=\"button\" type=\"submit\" value=\"更新\" />\n"
-            "</form>"
-            "<div>\n"
-            "<h3>簡易wikiのサポートする文法</h3>\n"
-            "<ul>\n"
-            "<li>行頭に*を記述した行は、大見出しになります。</li>\n"
-            "<li>行頭に**を記述した行は、中見出しになります。</li>\n"
-            "<li>行頭に***を記述した行は、小見出しになります。</li>\n"
-            "<li>行頭に****を記述した行は、極小見出しになります。</li>\n"
-            "<li>行頭に-を記述した行は、箇条書きになります。</li>\n"
-            "<li>行頭に----を記述した行は、区切り線になります。</li>\n"
-            "<li>行頭が >| から始まる行から、行頭が |< から始まる行までは、整形済みブロックになります。</li>\n"
-            "</ul>\n"
-            "<h5>例</h5>\n"
-            "<pre>\n"
-            "*編集可能領域\n"
-            "自由に編集できます。\n"
-            "右側の「トップページの編集」のリンクから編集してください。\n"
-            "色々な用途に使用してください。\n"
-            "-お知らせ\n"
-            "-Starbug1の使い方についての注意事項など\n"
-            "\n"
-            ">|\n"
-            "void displayWidgets (Iterable<Widget> widgets) {\n"
-            "  for (Widget w : widgets) {\n"
-            "    w.display();\n"
-            "  }\n"
-            "}\n"
-            "|<\n"
-            "</pre>\n"
-            "</div>\n"
-            "</div>\n");
+    wiki_save(db_a, "top", value_a);
     db_finish(db_a);
-    top_output_footer();
-}
+    xfree(value_a);
 
-void top_edit_top_submit_action()
+    redirect("", NULL);
+}
+void top_add_project_submit_action()
 {
     Database* db_a;
     char buffer[DEFAULT_LENGTH];

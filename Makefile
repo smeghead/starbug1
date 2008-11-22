@@ -24,6 +24,7 @@ default: index.cgi admin.cgi
 
 admin.o: admin.c util.h list.h data.h dbutil.h simple_string.h admin_project.h
 admin_project.o: admin_project.c data.h list.h db_project.h dbutil.h util.h simple_string.h db_top.h wiki.h
+admin_top.o: admin_top.c data.h list.h db_project.h dbutil.h util.h simple_string.h db_top.h wiki.h
 csv.o: csv.c csv.h list.h simple_string.h util.h data.h dbutil.h
 data.o: data.c data.h list.h util.h dbutil.h simple_string.h
 db_project.o: db_project.c data.h list.h db_project.h dbutil.h util.h simple_string.h
@@ -42,7 +43,7 @@ index.cgi: list.o simple_string.o data.o dbutil.o db_project.o db_top.o hook.o u
 	$(CC) -o $@ $^ $(LFLAGS)
 	strip $@
 
-admin.cgi: list.o simple_string.o data.o dbutil.o db_project.o db_top.o util.o wiki.o admin_project.o admin.o
+admin.cgi: list.o simple_string.o data.o dbutil.o db_project.o db_top.o util.o wiki.o admin_project.o admin_top.o admin.o
 	$(CC) -o $@ $^ $(LFLAGS)
 	strip $@
 
