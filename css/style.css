@@ -457,6 +457,47 @@ table.item_table textarea {
 }
 
 #menu {
+/*     background: #ccc; */
+/*     float: left; */
+/*     width: 100%; */
+/*     border: solid #333 1px; */
+    margin-bottom: 2px;
+    position:    absolute;
+    top:         3px; 
+/*     left:        21em;  */
+    right:       0px;
+}
+#menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+#menu li {
+    float: right;
+    font-size: 85%;
+    margin: 0;
+    padding: 0;
+/*     border-left: solid #003F00 1px; */
+}
+#menu a {
+/*     background: #eee bottom right no-repeat; */
+    color: #000000;
+    display: block;
+    float: left;
+    margin: 0;
+    padding: 0px 12px;
+/*     text-decoration: none; */
+}
+#menu a.current {
+/*     background: #666 bottom center no-repeat; */
+/*     color: #ffffff; */
+}
+#menu a:hover {
+    background: #999 bottom center no-repeat;
+    color: #ffffff;
+    padding-bottom: 0px;    
+}
+#projectmenu {
     background: #ccc;
     float: left;
     list-style: none;
@@ -466,14 +507,14 @@ table.item_table textarea {
     border: solid #333 1px;
     margin-bottom: 8px;
 }
-#menu li {
+#projectmenu li {
     float: left;
     font-size: 85%;
     margin: 0;
     padding: 0;
     border-right: solid #003F00 1px;
 }
-#menu a {
+#projectmenu a {
     background: #eee bottom right no-repeat;
     color: #000000;
     display: block;
@@ -482,11 +523,11 @@ table.item_table textarea {
     padding: 0px 12px;
     text-decoration: none;
 }
-#menu a.current {
+#projectmenu a.current {
     background: #666 bottom center no-repeat;
     color: #ffffff;
 }
-#menu a:hover {
+#projectmenu a:hover {
     background: #999 bottom center no-repeat;
     color: #ffffff;
     padding-bottom: 0px;    

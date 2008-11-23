@@ -120,10 +120,16 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
             "<body>\n"
             "<a name=\"top\"></a>\n"
             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName, g_project_name);
-    o("<div>\n"
-      "<ul id='menu'>\n");
+    o("<div id='menu'>\n"
+      "<ul>\n");
+    o("\t<li><a href='%s/top/' title=\"全体のトップページのプロジェクト一覧を表示します\">プロジェクト一覧</a></li>\n", cgiScriptName);
     o("\t<li><a href='%s' title=\"ホームへ移動します\">ホーム</a></li>\n", project->home_url);
-    o("\t<li><a %s href='%s/top/' title=\"トップページへ移動します\">トップ</a></li>\n", navi == NAVI_TOP ? "class=\"current\"" : "", cgiScriptName);
+    o("</ul>\n"
+      "<br clear='all' />\n"
+      "</div>\n");
+    o("<div>\n"
+      "<ul id='projectmenu'>\n");
+    o("\t<li><a %s href='%s/%s/' title=\"ダッシュボードへ移動します\">トップ</a></li>\n", navi == NAVI_TOP ? "class=\"current\"" : "", cgiScriptName, g_project_name);
     o("\t<li><a %s href='%s/%s/list' title=\"状態別のチケット一覧を参照します\">状態別チケット一覧</a></li>\n", navi == NAVI_LIST ? "class=\"current\"" : "", cgiScriptName, g_project_name);
     o("\t<li><a %s href='%s/%s/register' title=\"新規にチケットを登録します\">チケット登録</a></li>\n", navi == NAVI_REGISTER ? "class=\"current\"" : "", cgiScriptName, g_project_name);
     o("\t<li><a %s href='%s/%s/search' title=\"チケットを検索します\">チケット検索</a></li>\n", navi == NAVI_SEARCH ? "class=\"current\"" : "", cgiScriptName, g_project_name);
