@@ -82,7 +82,7 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
             "<body>\n"
             "<a name=\"top\"></a>\n"
             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/../index.%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n"
-            "<ul id=\"menu\">\n", cgiScriptName, get_ext(cgiScriptName), g_project_name);
+            "<ul id=\"projectmenu\">\n", cgiScriptName, get_ext(cgiScriptName), g_project_name);
     o(      "\t<li><a %s href=\"%s/%s/\">管理ツールメニュー</a></li>\n", navi == NAVI_MENU ? "class=\"current\"" : "", cgiScriptName, g_project_name);
     o(      "\t\t<li><a %s href=\"%s/%s/project\">プロジェクトの設定</a></li>\n", navi == NAVI_PROJECT ? "class=\"current\"" : "", cgiScriptName, g_project_name);
     o(      "\t\t<li><a %s href=\"%s/%s/env\">環境設定</a></li>\n", navi == NAVI_ENV ? "class=\"current\"" : "", cgiScriptName, g_project_name);

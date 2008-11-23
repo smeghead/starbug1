@@ -90,9 +90,9 @@ void top_top_action()
     top_output_header("トップページ");
     o(      "<div id=\"project_menu\">\n"
             "\t<a href=\"%s/../admin.%s/%s/\">全体の管理</a>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name);
-    o(      "<div id=\"project_list\">\n"
-            "\t<h2>プロジェクト一覧</h2>\n"
-            "\t<ul>\n");
+    o(      "\t<div id=\"project_list\">\n"
+            "\t\t<h2>プロジェクト一覧</h2>\n"
+            "\t\t<ul>\n");
     foreach (it, project_infos_a) {
         ProjectInfo* p = it->element;
         Database* db_project_a;
@@ -106,12 +106,13 @@ void top_top_action()
         sprintf(db_name, "db/%d.db", p->id);
         db_project_a = db_init(db_name);
         project_a = db_get_project(db_project_a, project_a);
-        o(      "\t\t\t<li><a href=\"%s/%s\">%s</a></li>\n", cgiScriptName, p->name, project_a->name);
+        o(      "\t\t\t\t<li><a href=\"%s/%s\">%s</a></li>\n", cgiScriptName, p->name, project_a->name);
         project_free(project_a);
         db_finish(db_project_a);
     }
     list_free(project_infos_a);
-    o(      "\t</ul>\n");
+    o(      "\t\t</ul>\n");
+    o(      "\t</div>\n");
     o(      "</div>\n");
     o(      "<div id=\"dashboard\">\n");
     o(      "<a href=\"%s/%s/top_edit_top\">編集</a>\n", cgiScriptName, g_project_name);

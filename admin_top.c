@@ -107,6 +107,7 @@ void top_top_action()
         }
         o("</div>\n");
     }
+    o(      "</div>\n");
     cgiStringArrayFree(multi);
     o(      "<div id=\"project_list\">\n"
             "\t<h2>プロジェクト一覧</h2>\n");
@@ -139,40 +140,44 @@ void top_top_action()
         o(      "\t\t\t</tr>\n");
     }
     list_free(project_infos_a);
-    o(      "\t\t\t</tr>\n");
     o(      "\t\t</table>\n");
     o(      "\t\t<p>既存のプロジェクトIDを変更すると、プロジェクトのURLが変わってしまうので注意してください。</p>\n");
     o(      "\t\t<input type=\"submit\" value=\"更新\" />\n");
     o(      "\t</form>\n");
-    o(      "</div>\n");
-    o(      "<div id=\"project_list\">\n"
-            "\t<h2>プロジェクトの追加</h2>\n");
-    o(      "\t<form action=\"%s/top/top_add_project_submit\" method=\"post\">\n", cgiScriptName);
-    o(      "\t\t<table>\n"
-            "\t\t\t<tr>\n"
-            "\t\t\t\t<th>プロジェクトID</th>\n"
-            "\t\t\t\t<th>並び順</th>\n"
-            "\t\t\t</tr>\n"
-            "\t\t\t<tr>\n"
-            "\t\t\t\t<td><input type=\"text\" name=\"project_new.name\" value=\"\" /></td>\n"
-            "\t\t\t\t<td><input type=\"text\" name=\"project_new.sort\" value=\"\" /></td>\n");
-    o(      "\t\t\t</tr>\n");
-    o(      "\t\t</table>\n");
-    o(      "\t\t<p>プロジェクト名は各プロジェクトの管理ツールから設定してください。</p>\n");
-    o(      "\t\t<input type=\"submit\" value=\"追加\" />\n");
-    o(      "\t</form>\n");
+    o(      "\t<div id=\"project_add\">\n"
+            "\t\t<h2>プロジェクトの追加</h2>\n");
+    o(      "\t\t<form action=\"%s/top/top_add_project_submit\" method=\"post\">\n", cgiScriptName);
+    o(      "\t\t\t<table>\n"
+            "\t\t\t\t<tr>\n"
+            "\t\t\t\t\t<th>プロジェクトID</th>\n"
+            "\t\t\t\t\t<th>並び順</th>\n"
+            "\t\t\t\t</tr>\n"
+            "\t\t\t\t<tr>\n"
+            "\t\t\t\t\t<td><input type=\"text\" name=\"project_new.name\" value=\"\" /></td>\n"
+            "\t\t\t\t\t<td><input type=\"text\" name=\"project_new.sort\" value=\"\" /></td>\n");
+    o(      "\t\t\t\t</tr>\n");
+    o(      "\t\t\t</table>\n");
+    o(      "\t\t\t<p>プロジェクト名は各プロジェクトの管理ツールから設定してください。</p>\n");
+    o(      "\t\t\t<input type=\"submit\" value=\"追加\" />\n");
+    o(      "\t\t</form>\n");
+    o(      "\t</div>\n");
     o(      "</div>\n");
     top_output_footer();
     db_finish(db_a);
 }
 
+static bool validate_project_id(char* name)
+{
+    if (strcmp(name, "top") == 0) {
+        return false;
+    }
+    return true;
+}
 void top_update_project_submit_action()
 {
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
-    char* value_a = xalloc(sizeof(char) * VALUE_LENGTH);
 
-    cgiFormString("edit_top", value_a, VALUE_LENGTH);
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     {
         List* project_infos_a;
@@ -189,6 +194,12 @@ void top_update_project_submit_action()
 
             sprintf(param_name, "project_%d.name", p->id);
             cgiFormString(param_name, name, DEFAULT_LENGTH);
+            if (!validate_project_id(name)) {
+                list_free(project_infos_a);
+                db_finish(db_a);
+                redirect("", "[ERROR] プロジェクトID topは予約されています。");
+                return;
+            }
             strcpy(p->name, name);
             sprintf(param_name, "project_%d.sort", p->id);
             cgiFormString(param_name, sort, DEFAULT_LENGTH);
@@ -198,7 +209,6 @@ void top_update_project_submit_action()
         list_free(project_infos_a);
     }
     db_finish(db_a);
-    xfree(value_a);
 
     redirect("", "更新しました。");
 }
@@ -215,6 +225,12 @@ void top_add_project_submit_action()
 
         d("db->name: %s\n", db_a->name);
         cgiFormString("project_new.name", name, DEFAULT_LENGTH);
+        if (!validate_project_id(name)) {
+            project_info_free(project_info);
+            db_finish(db_a);
+            redirect("", "[ERROR] プロジェクトID topは予約されています。");
+            return;
+        }
         strcpy(project_info->name, name);
         cgiFormString("project_new.sort", sort, DEFAULT_LENGTH);
         project_info->sort = atoi(sort);
