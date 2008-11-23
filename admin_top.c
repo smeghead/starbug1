@@ -90,7 +90,7 @@ void top_top_action()
     project_infos_a = db_top_get_all_project_infos(db_a, project_infos_a);
     top_output_header("全体の管理");
     o(      "<div id=\"project_menu\">\n"
-            "\t<a href=\"%s/../index.%s/%s/\">全体のトップページへ</a>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name);
+            "\t<a href=\"%s/../index.%s/%s/\">全体のトップページへ</a>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
     /* メッセージの取得 */
     if ((cgiFormStringMultiple("message", &multi)) != cgiFormNotFound) {
         int i = 0;

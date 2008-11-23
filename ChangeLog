@@ -1,6 +1,8 @@
 2008-11-23  smeghead <smeghead@users.sourceforge.jp>
 
     * 予約されているtopというプロジェクトIDを追加できないようにした。 
+    * プロジェクトIDにURLで使用できない文字が指定された場合に対応した。
+      プロジェクトIDをURLとして使用する場合は、urlエンコードするようにした。
 
 2008-11-23  smeghead <smeghead@users.sourceforge.jp>
 

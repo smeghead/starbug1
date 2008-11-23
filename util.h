@@ -75,6 +75,7 @@ void set_date_string(char*);
 char* get_ext(char*);
 
 extern char g_project_name[DEFAULT_LENGTH];
+extern char g_project_name_4_url[DEFAULT_LENGTH];
 extern char g_action_name[DEFAULT_LENGTH];
 extern char g_path_info[DEFAULT_LENGTH];
 #endif

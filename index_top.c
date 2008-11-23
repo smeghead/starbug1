@@ -89,7 +89,7 @@ void top_top_action()
     project_infos_a = db_top_get_all_project_infos(db_a, project_infos_a);
     top_output_header("トップページ");
     o(      "<div id=\"project_menu\">\n"
-            "\t<a href=\"%s/../admin.%s/%s/\">全体の管理</a>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name);
+            "\t<a href=\"%s/../admin.%s/%s/\">全体の管理</a>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
     o(      "\t<div id=\"project_list\">\n"
             "\t\t<h2>プロジェクト一覧</h2>\n"
             "\t\t<ul>\n");
@@ -115,7 +115,7 @@ void top_top_action()
     o(      "\t</div>\n");
     o(      "</div>\n");
     o(      "<div id=\"dashboard\">\n");
-    o(      "<a href=\"%s/%s/top_edit_top\">編集</a>\n", cgiScriptName, g_project_name);
+    o(      "<a href=\"%s/%s/top_edit_top\">編集</a>\n", cgiScriptName, g_project_name_4_url);
     wiki_out(db_a, "top");
     o(      "</div>\n");
     top_output_footer();
@@ -132,7 +132,7 @@ void top_edit_top_action()
             "<div id=\"top\">\n"
             "<h3>トップページの編集</h3>\n"
             "<div id=\"description\">簡易wikiの文法でトップページのコンテンツの編集を行ない、更新ボタンを押してください。</div>\n"
-            "<form id=\"edit_top_form\" action=\"%s/%s/top_edit_top_submit\" method=\"post\">\n", cgiScriptName, g_project_name);
+            "<form id=\"edit_top_form\" action=\"%s/%s/top_edit_top_submit\" method=\"post\">\n", cgiScriptName, g_project_name_4_url);
     o(      "<textarea name=\"edit_top\" id=\"edit_top\" rows=\"3\" cols=\"10\">");
     wiki_content_out(db_a, "top");
     o(      "</textarea>\n"

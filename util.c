@@ -12,6 +12,7 @@
 
 /* プロジェクト名 */
 char g_project_name[DEFAULT_LENGTH] = "";
+char g_project_name_4_url[DEFAULT_LENGTH] = "";
 /* アクション名 */
 char g_action_name[DEFAULT_LENGTH] = "";
 /* PATH_INFO */
@@ -129,8 +130,12 @@ ActionType analysis_action()
             strcpy(g_path_info, index + 1);
         }
     }
+    /* URLとして使われるプロジェクトID。URL encodeする。 */
+    url_encode((unsigned char*)g_project_name, (unsigned char*)g_project_name_4_url, DEFAULT_LENGTH);
+
     sprintf(index_cgi_file_name, "index.%s", get_ext(cgiScriptName));
     sprintf(admin_cgi_file_name, "admin.%s", get_ext(cgiScriptName));
+    /* 実行するモードの判定 */
     if (strstr(script_name, index_cgi_file_name)) {
         if (strcmp(g_project_name, "top") == 0) {
             d("actiontype top\n");
@@ -336,6 +341,7 @@ unsigned long url_encode(unsigned char* csource, unsigned char* cbuffer, unsigne
     if(!llength) { return lresultcount; }
     if(lbuffersize < (llength * 3 + 1)) { return lresultcount; }
 
+    d("encoding: %s\n", csource);
     while(1) {
         cbyte = *(csource + lcount);
         if( ((cbyte >= 0x81) && (cbyte <= 0x9F)) ||
@@ -349,10 +355,6 @@ unsigned long url_encode(unsigned char* csource, unsigned char* cbuffer, unsigne
             strncpy((char*)cbuffer + lresultcount, (char*)ctemp, 4);
             lcount++;
             lresultcount += 3;
-        } else if(cbyte == 0x20) {                                  /* 1 バイト半角スペース(" ")だった場合 */
-            strncpy((char*)cbuffer + lresultcount, "+", 2);
-            lcount++;
-            lresultcount++;
         } else if( ((cbyte >= 0x40) && (cbyte <= 0x5A)) ||          /* @A-Z */
                 ((cbyte >= 0x61) && (cbyte <= 0x7A)) ||             /* a-z */
                 ((cbyte >= 0x30) && (cbyte <= 0x39)) ||             /* 0-9 */
@@ -371,6 +373,7 @@ unsigned long url_encode(unsigned char* csource, unsigned char* cbuffer, unsigne
         }
         if(lcount == llength) { break; }
     }
+    d("encoded: %s\n", cbuffer);
     return lresultcount;                                            /* cbuffer に書き込んだ文字列のサイズを返す */
 }
 char* get_filename_without_path(char* path)

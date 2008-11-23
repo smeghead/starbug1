@@ -73,7 +73,7 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
             "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />"
             "\t<title>%s 管理ツール - %s</title>\n", project->name, title);
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName);
-    o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/%s/setting_file/user.css\" />\n", cgiScriptName, g_project_name);
+    o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/%s/setting_file/user.css\" />\n", cgiScriptName, g_project_name_4_url);
     if (script_name) {
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/prototype.js\"></script>\n", cgiScriptName);
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/%s\"></script>\n", cgiScriptName, script_name);
@@ -82,14 +82,14 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
             "<body>\n"
             "<a name=\"top\"></a>\n"
             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/../index.%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n"
-            "<ul id=\"projectmenu\">\n", cgiScriptName, get_ext(cgiScriptName), g_project_name);
-    o(      "\t<li><a %s href=\"%s/%s/\">管理ツールメニュー</a></li>\n", navi == NAVI_MENU ? "class=\"current\"" : "", cgiScriptName, g_project_name);
-    o(      "\t\t<li><a %s href=\"%s/%s/project\">プロジェクトの設定</a></li>\n", navi == NAVI_PROJECT ? "class=\"current\"" : "", cgiScriptName, g_project_name);
-    o(      "\t\t<li><a %s href=\"%s/%s/env\">環境設定</a></li>\n", navi == NAVI_ENV ? "class=\"current\"" : "", cgiScriptName, g_project_name);
-    o(      "\t\t<li><a %s href=\"%s/%s/items\">項目設定</a></li>\n", navi == NAVI_ITEM ? "class=\"current\"" : "", cgiScriptName, g_project_name);
-    o(      "\t\t<li><a %s href=\"%s/%s/style\">スタイル設定</a></li>\n", navi == NAVI_STYLE ? "class=\"current\"" : "", cgiScriptName, g_project_name);
-    o(      "\t\t<li><a %s href=\"%s/%s/admin_help\">ヘルプ</a></li>\n", navi == NAVI_ADMIN_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_name);
-    o(      "\t<li><a href=\"%s/../index.%s/%s/\">", cgiScriptName, get_ext(cgiScriptName), g_project_name);h(project->name); o("トップへ</a></li>\n");
+            "<ul id=\"projectmenu\">\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
+    o(      "\t<li><a %s href=\"%s/%s/\">管理ツールメニュー</a></li>\n", navi == NAVI_MENU ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
+    o(      "\t\t<li><a %s href=\"%s/%s/project\">プロジェクトの設定</a></li>\n", navi == NAVI_PROJECT ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
+    o(      "\t\t<li><a %s href=\"%s/%s/env\">環境設定</a></li>\n", navi == NAVI_ENV ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
+    o(      "\t\t<li><a %s href=\"%s/%s/items\">項目設定</a></li>\n", navi == NAVI_ITEM ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
+    o(      "\t\t<li><a %s href=\"%s/%s/style\">スタイル設定</a></li>\n", navi == NAVI_STYLE ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
+    o(      "\t\t<li><a %s href=\"%s/%s/admin_help\">ヘルプ</a></li>\n", navi == NAVI_ADMIN_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
+    o(      "\t<li><a href=\"%s/../index.%s/%s/\">", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);h(project->name); o("トップへ</a></li>\n");
     o(      "</ul>\n"
             "<br clear=\"all\" />\n");
 }
@@ -143,10 +143,10 @@ void top_action()
     o("<h3>管理ツールメニュー</h3>\n");
     o("<div id=\"admin_menu\">\n");
     o("\t<dl>\n");
-    o("\t\t<dt><a href=\"%s/%s/project\">プロジェクト設定</a></dt><dd>プロジェクトの基本的な情報の設定です。</dd>\n", cgiScriptName, g_project_name);
-    o("\t\t<dt><a href=\"%s/%s/env\">環境設定</a></dt><dd>URLの設定です。</dd>\n", cgiScriptName, g_project_name);
-    o("\t\t<dt><a href=\"%s/%s/items\">項目設定</a></dt><dd>チケットの項目についての設定です。</dd>\n", cgiScriptName, g_project_name);
-    o("\t\t<dt><a href=\"%s/%s/style\">スタイル設定</a></dt><dd>スタイルシートの設定です。</dd>\n", cgiScriptName, g_project_name);
+    o("\t\t<dt><a href=\"%s/%s/project\">プロジェクト設定</a></dt><dd>プロジェクトの基本的な情報の設定です。</dd>\n", cgiScriptName, g_project_name_4_url);
+    o("\t\t<dt><a href=\"%s/%s/env\">環境設定</a></dt><dd>URLの設定です。</dd>\n", cgiScriptName, g_project_name_4_url);
+    o("\t\t<dt><a href=\"%s/%s/items\">項目設定</a></dt><dd>チケットの項目についての設定です。</dd>\n", cgiScriptName, g_project_name_4_url);
+    o("\t\t<dt><a href=\"%s/%s/style\">スタイル設定</a></dt><dd>スタイルシートの設定です。</dd>\n", cgiScriptName, g_project_name_4_url);
     o("\t</dl>\n");
     o("</div>\n");
     o("<h3>メール送信機能について</h3>\n");
@@ -176,7 +176,7 @@ void project_action()
 
     o("<h2>%s 管理ツール</h2>", project_a->name);
     o("<div id=\"setting_form\">\n");
-    o("\t<form id=\"management_form\" action=\"%s/%s/project_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName, g_project_name);
+    o("\t<form id=\"management_form\" action=\"%s/%s/project_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName, g_project_name_4_url);
     o("\t\t<h3>プロジェクト設定</h3>\n");
     o("\t\t<table summary=\"project table\">\n");
     o("\t\t\t<tr>\n");
@@ -266,7 +266,7 @@ void env_action()
 
     o("<h2>%s 管理ツール</h2>", project_a->name);
     o("<div id=\"setting_form\">\n");
-    o("\t<form id=\"management_form\" action=\"%s/%s/env_submit\" method=\"post\">\n", cgiScriptName, g_project_name);
+    o("\t<form id=\"management_form\" action=\"%s/%s/env_submit\" method=\"post\">\n", cgiScriptName, g_project_name_4_url);
     o("\t\t<h3>環境設定</h3>\n");
     o("\t\t<table summary=\"project table\">\n");
     o("\t\t\t<tr>\n");
@@ -324,10 +324,10 @@ void items_action()
     o("<div id=\"top\">\n");
     project_free(project_a);
     o("<div id=\"setting_form\">\n"
-      "\t<form id=\"management_form\" action=\"%s/%s/items_submit\" method=\"post\">\n", cgiScriptName, g_project_name);
+      "\t<form id=\"management_form\" action=\"%s/%s/items_submit\" method=\"post\">\n", cgiScriptName, g_project_name_4_url);
     o("\t\t<h3>項目設定</h3>\n"
       "\t\t<div class=\"description\">チケットID、投稿日時は編集できません。件名、投稿者、状態は、基本属性のため編集できる内容に制限があります。(削除不可、チケット属性、返信専用属性変更不可)</div>\n"
-      "\t\t<div><a href=\"%s/%s/new_item\">新規項目の追加</a></div>\n", cgiScriptName, g_project_name);
+      "\t\t<div><a href=\"%s/%s/new_item\">新規項目の追加</a></div>\n", cgiScriptName, g_project_name_4_url);
 
     list_alloc(element_types_a, ElementType);
     element_types_a = db_get_element_types_all(db_a, element_types_a);
@@ -514,7 +514,7 @@ void items_action()
           "\t\t</table>\n");
         if (et->id > BASIC_ELEMENT_MAX) {
             /* 基本項目は削除できないようにする。 */
-            o("\t\t<div class=\"delete_item\"><a href=\"%s/%s/delete_item/%d\">", cgiScriptName, g_project_name, et->id);o("この項目(");h(et->name);o(")の削除</a></div>\n");
+            o("\t\t<div class=\"delete_item\"><a href=\"%s/%s/delete_item/%d\">", cgiScriptName, g_project_name_4_url, et->id);o("この項目(");h(et->name);o(")の削除</a></div>\n");
         }
         list_free(items_a);
         o("\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
@@ -666,7 +666,7 @@ void new_item_action()
             "<h3>項目の追加</h3>\n"
             "<div class=\"description\">チケットに新しい項目を追加します。追加する項目についての情報を入力し、追加ボタンを押してください。</div>\n"
             "<form id=\"new_item_form\" action=\"%s/%s/new_item_submit\" method=\"post\">\n"
-            "<table class=\"item_table\" summary=\"new item table\">\n", cgiScriptName, g_project_name);
+            "<table class=\"item_table\" summary=\"new item table\">\n", cgiScriptName, g_project_name_4_url);
     o("\t\t\t<tr>\n");
     o("\t\t\t\t<th class=\"required\">項目名<span class=\"required\">※</span></th>\n");
     o("\t\t\t\t<td>\n");
@@ -878,7 +878,7 @@ void delete_item_action()
             "登録されているチケットの項目についても参照できなくなります。</strong></div>"
             "<div class=\"infomation\">削除してよければ、削除ボタンを押してください。</div>\n"
             "<input class=\"button\" type=\"submit\" value=\"削除\" />\n"
-            "</form>\n", cgiScriptName, g_project_name, iid);
+            "</form>\n", cgiScriptName, g_project_name_4_url, iid);
     o(      "</div>\n");
     db_finish(db_a);
     output_footer();
@@ -918,7 +918,7 @@ void style_action()
     o(      "<div id=\"top\">\n"
             "<h3>スタイルシートの編集</h3>\n"
             "<div id=\"description\">スタイルシートの編集を行ない、更新ボタンを押してください。</div>\n"
-            "<form id=\"edit_css_form\" action=\"%s/%s/style_submit\" method=\"post\">\n", cgiScriptName, g_project_name);
+            "<form id=\"edit_css_form\" action=\"%s/%s/style_submit\" method=\"post\">\n", cgiScriptName, g_project_name_4_url);
     o(      "<textarea name=\"edit_css\" id=\"edit_top\" rows=\"3\" cols=\"10\">");
     {
         /* user.css の出力 */
