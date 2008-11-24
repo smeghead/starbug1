@@ -852,7 +852,6 @@ void new_item_submit_action()
 }
 void delete_item_action()
 {
-    char path_info[DEFAULT_LENGTH];
     char* e_type_id;
     int iid;
     Project* project_a = project_new();
@@ -860,10 +859,10 @@ void delete_item_action()
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
 
-    strcpy(path_info, cgiPathInfo);
-    e_type_id = strchr(path_info + 1, '/');
-    if (e_type_id) e_type_id++;
+    d("g_path_info: %s\n", g_path_info);
+    e_type_id = g_path_info;
     iid = atoi(e_type_id);
+    d("iid: %d\n", iid);
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, "項目削除", "delete_item.js", NAVI_OTHER);
@@ -886,15 +885,17 @@ void delete_item_action()
 }
 void delete_item_submit_action()
 {
-    char path_info[DEFAULT_LENGTH];
     char* e_type_id;
     int iid;
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
 
-    strcpy(path_info, cgiPathInfo);
-    e_type_id = strchr(path_info + 1, '/');
-    if (e_type_id) e_type_id++;
+    /* postの時以外は処理しない。 */
+    if (strcmp(cgiRequestMethod, "POST") != 0) {
+        die("不正なリクエストです。");
+    }
+    d("g_path_info: %s\n", g_path_info);
+    e_type_id = g_path_info;
     iid = atoi(e_type_id);
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     db_begin(db_a);

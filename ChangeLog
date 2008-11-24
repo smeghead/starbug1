@@ -1,3 +1,8 @@
+2008-11-24  smeghead <smeghead@users.sourceforge.jp>
+
+    * 管理ツールの項目の削除が、機能しないバグを修正した。
+      cgiPathInfoの参照の方法が、複数プロジェクト前の方法だったのが原因だった。
+
 2008-11-23  smeghead <smeghead@users.sourceforge.jp>
 
     * 予約されているtopというプロジェクトIDを追加できないようにした。 
