@@ -220,7 +220,7 @@ static cgiFormResultType cgiHtmlEscapeDataMultiLine(char *data, int len)
                 char ticket_id[DEFAULT_LENGTH];
                 strncpy(ticket_id, ++data, ticket_syntax_len);
                 ticket_id[ticket_syntax_len] = '\0';
-                o("<a href=\"%s/ticket/%s\">#%s</a>", cgiScriptName, ticket_id, ticket_id);
+                o("<a href=\"%s/%s/ticket/%s\">#%s</a>", cgiScriptName, g_project_name_4_url, ticket_id, ticket_id);
                 data += ticket_syntax_len - 1;
                 len -= ticket_syntax_len;
             }
