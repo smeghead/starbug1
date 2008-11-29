@@ -144,7 +144,7 @@ void create_project_tables(Database* db)
     exec_query(
             db,
             "insert into setting_file(name, file_name, size, mime_type, content)"
-            "values ('user.css', 'user.css', 1382, 'text/css', '"
+            "values ('user.css', 'user.css', 1498, 'text/css', '"
             "@charset \"utf-8\";\n"
             "/* ================================ */\n"
             "/*  チケット一覧の状態の背景色設定  */\n"
