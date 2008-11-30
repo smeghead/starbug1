@@ -190,19 +190,69 @@ void exec_action()
             return cgiFormIO; \
         } \
     } 
-int get_ticket_syntax_len(char* data, size_t len)
+static const char PROJECT_SPLITTER = ':';
+
+int get_ticket_syntax_len(char* data, size_t len, char* project_id, char* ticket_id)
 {
+    char string[1024];
+    char* str;
     int ticket_syntax_len = 0;
+    char* block_p;
+    char* line_p;
+
+    memset(string, '\0', 1024);
+    strncpy(string, data, MIN(len, 1024 - 1));
+    str = string;
     if (len == 0) return ticket_syntax_len; /* 最後の文字だった */
-    data += 1; /* 1文字進める。 */
-    while (len--) {
-        if (*data < '0' || *data > '9') 
-            break; /* 数字でない場合は、breakする。 */
-        data++;
-        ticket_syntax_len++;
+
+    str += 1; /* 1文字進める。 */
+    block_p = strchr(str, ' ');
+    line_p = strchr(str, '\n');
+    if (!block_p)
+        block_p = str + strlen(str);
+    if (!line_p)
+        line_p = str + strlen(str);
+
+    /* 解析対象の文字列を特定 */
+    str[MIN(block_p - str, line_p - str)] = '\0';
+
+    {
+        char* project_mode = strchr(str, PROJECT_SPLITTER);
+        char* project_id_p = str;
+        char* ticket_no_p = str;
+
+        while (str++) {
+            if (*str == '\0') {
+                break;
+            } else if (project_mode) {
+                if (*str == PROJECT_SPLITTER) {
+                    /* プロジェクトIDモードであり、:を検出した場合 */
+                    ticket_no_p = ++str;
+                    /* :で終了している場合は、チケットリンクではない。 */
+                    if (*str == '\0')
+                        return 0;
+                } else if (project_id_p != ticket_no_p && *str >= '0' && *str <= '9') {
+                    /* プロジェクトIDモードであり、チケットNO検索中に、数字を検出した場合 */
+                    return 0;
+                }
+            } else if (!project_mode) {
+                if (*str >= '0' && *str <= '9') {
+                    /* プロジェクトIDモードではなく、数字を検出した場合 */
+                } else {
+                    /* else is no ticket link. */
+                    return 0;
+                }
+            }
+        }
+        if (project_id_p != ticket_no_p) {
+            strncpy(project_id, project_id_p, (ticket_no_p - 1) - project_id_p);
+        }
+        strcpy(ticket_id, ticket_no_p);
+        ticket_syntax_len = (ticket_no_p - string) + strlen(ticket_no_p);
     }
     return ticket_syntax_len;
 }
+
 /*
  * 複数行テキストの領域では、pre記法をサポートする。
  * チケットリンクをサポートする。
@@ -213,14 +263,24 @@ static cgiFormResultType cgiHtmlEscapeDataMultiLine(char *data, int len)
     while (len--) {
         if (*data == '#') {
             int ticket_syntax_len;
-            ticket_syntax_len = get_ticket_syntax_len(data, len);
+            char project_id[DEFAULT_LENGTH];
+            char ticket_id[DEFAULT_LENGTH];
+            ticket_syntax_len = get_ticket_syntax_len(data, len, project_id, ticket_id);
             if (ticket_syntax_len == 0) {
                 TRYPUTC(*data);
             } else {
-                char ticket_id[DEFAULT_LENGTH];
-                strncpy(ticket_id, ++data, ticket_syntax_len);
-                ticket_id[ticket_syntax_len] = '\0';
-                o("<a href=\"%s/%s/ticket/%s\">#%s</a>", cgiScriptName, g_project_name_4_url, ticket_id, ticket_id);
+                char display_text[DEFAULT_LENGTH];
+                if (strlen(project_id) == 0) {
+                    strcpy(project_id, g_project_name_4_url);
+                    strcpy(display_text, ticket_id);
+                } else {
+                    sprintf(display_text, "%s:%s", project_id, ticket_id);
+                }
+                o("<a href=\"%s/%s/ticket/%s\">#%s</a>",
+                        cgiScriptName, 
+                        project_id, 
+                        ticket_id, 
+                        display_text);
                 data += ticket_syntax_len - 1;
                 len -= ticket_syntax_len;
             }

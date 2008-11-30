@@ -73,6 +73,8 @@ void get_cookie_string(char*, char*);
 int base64_decode(const unsigned char*, unsigned char*);
 void set_date_string(char*);
 char* get_ext(char*);
+#define MIN(a,b) (((a)<(b))?(a):(b)) 
+#define MAX(a,b) (((a )>(b))?(a):(b))
 
 extern char g_project_name[DEFAULT_LENGTH];
 extern char g_project_name_4_url[DEFAULT_LENGTH];
