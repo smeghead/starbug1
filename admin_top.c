@@ -42,7 +42,7 @@ void top_output_header(char* title)
             "\t<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\" />\n"
             "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />\n");
     o(        "\t<title>Starbug1 - %s</title>\n", title);
-/*     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName); */
+    o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName);
     string_free(base_url_a);
     o(      "</head>\n"
             "<body>\n"
@@ -141,8 +141,9 @@ void top_top_action()
     }
     list_free(project_infos_a);
     o(      "\t\t</table>\n");
+    o(      "\t\t<p>プロジェクト名は各プロジェクトの管理ツールから設定してください。</p>\n");
     o(      "\t\t<p>既存のプロジェクトIDを変更すると、プロジェクトのURLが変わってしまうので注意してください。</p>\n");
-    o(      "\t\t<input type=\"submit\" value=\"更新\" />\n");
+    o(      "\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
     o(      "\t</form>\n");
     o(      "\t<div id=\"project_add\">\n"
             "\t\t<h2>プロジェクトの追加</h2>\n");
@@ -158,7 +159,7 @@ void top_top_action()
     o(      "\t\t\t\t</tr>\n");
     o(      "\t\t\t</table>\n");
     o(      "\t\t\t<p>プロジェクト名は各プロジェクトの管理ツールから設定してください。</p>\n");
-    o(      "\t\t\t<input type=\"submit\" value=\"追加\" />\n");
+    o(      "\t\t\t<input class=\"button\" type=\"submit\" value=\"追加\" />\n");
     o(      "\t\t</form>\n");
     o(      "\t</div>\n");
     o(      "</div>\n");
@@ -166,6 +167,23 @@ void top_top_action()
     db_finish(db_a);
 }
 
+static bool validate_project_id_exists(Database* db, char* name)
+{
+    bool ret = true;
+    List* project_infos_a;
+    Iterator* it;
+    list_alloc(project_infos_a, ProjectInfo);
+    project_infos_a = db_top_get_all_project_infos(db, project_infos_a);
+    foreach (it, project_infos_a) {
+        ProjectInfo* p = it->element;
+        if (strcmp(name, p->name) == 0) {
+            ret = false;
+            break;
+        }
+    }
+    list_free(project_infos_a);
+    return ret;
+}
 static bool validate_project_id(char* name)
 {
     if (strcmp(name, "top") == 0) {
@@ -200,6 +218,14 @@ void top_update_project_submit_action()
                 redirect("", "[ERROR] プロジェクトID topは予約されています。");
                 return;
             }
+            if (!validate_project_id_exists(db_a, name)) {
+                char message[DEFAULT_LENGTH];
+                list_free(project_infos_a);
+                db_finish(db_a);
+                sprintf(message, "[ERROR] プロジェクトID %sは既に存在しています。", name);
+                redirect("", message);
+                return;
+            }
             strcpy(p->name, name);
             sprintf(param_name, "project_%d.sort", p->id);
             cgiFormString(param_name, sort, DEFAULT_LENGTH);
@@ -229,6 +255,14 @@ void top_add_project_submit_action()
             project_info_free(project_info);
             db_finish(db_a);
             redirect("", "[ERROR] プロジェクトID topは予約されています。");
+            return;
+        }
+        if (!validate_project_id_exists(db_a, name)) {
+            char message[DEFAULT_LENGTH];
+            project_info_free(project_info);
+            db_finish(db_a);
+            sprintf(message, "[ERROR] プロジェクトID %sは既に存在しています。", name);
+            redirect("", message);
             return;
         }
         strcpy(project_info->name, name);
