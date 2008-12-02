@@ -1,3 +1,7 @@
+2008-12-02  smeghead <smeghead@users.sourceforge.jp>
+
+    * チケットリンクのバグを修正した。
+
 2008-12-01  smeghead <smeghead@users.sourceforge.jp>
 
     * プロジェクトの管理ツールで、既に存在するプロジェクトを追加できないようにした。

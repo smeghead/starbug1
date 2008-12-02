@@ -195,62 +195,71 @@ static const char PROJECT_SPLITTER = ':';
 int get_ticket_syntax_len(char* data, size_t len, char* project_id, char* ticket_id)
 {
     char string[1024];
-    char* str;
-    int ticket_syntax_len = 0;
+    int index = 0;
     char* block_p;
     char* line_p;
 
     memset(string, '\0', 1024);
     strncpy(string, data, MIN(len, 1024 - 1));
-    str = string;
-    if (len == 0) return ticket_syntax_len; /* 最後の文字だった */
+    if (len == 0) return index; /* 最後の文字だった */
 
-    str += 1; /* 1文字進める。 */
-    block_p = strchr(str, ' ');
-    line_p = strchr(str, '\n');
+    block_p = strchr(string, ' ');
+    line_p = strchr(string, '\n');
     if (!block_p)
-        block_p = str + strlen(str);
+        block_p = string + strlen(string);
     if (!line_p)
-        line_p = str + strlen(str);
+        line_p = string + strlen(string);
 
     /* 解析対象の文字列を特定 */
-    str[MIN(block_p - str, line_p - str)] = '\0';
+    string[MIN(block_p - string, line_p - string)] = '\0';
 
     {
-        char* project_mode = strchr(str, PROJECT_SPLITTER);
-        char* project_id_p = str;
-        char* ticket_no_p = str;
+        char* project_mode = strchr(string, PROJECT_SPLITTER);
+        char* project_id_p = string + 1;
+        char* ticket_no_p = string + 1;
 
-        while (str++) {
-            if (*str == '\0') {
+        while (index++, 1) { /* each char */
+            /* 
+             *              * 一文字つづ進めていく。
+             *                           * 途中でチケットリンクでないと判定された場合は、index を 0 にして、breakする。
+             *                                        * チケットリンクが終了したら、breakする。
+             *                                                     */
+            if (string[index] == '\0') {
                 break;
             } else if (project_mode) {
-                if (*str == PROJECT_SPLITTER) {
+                /* #プロジェクト:チケットモード */
+                if (string[index] == PROJECT_SPLITTER) {
                     /* プロジェクトIDモードであり、:を検出した場合 */
-                    ticket_no_p = ++str;
+                    ticket_no_p = &string[index + 1];
                     /* :で終了している場合は、チケットリンクではない。 */
-                    if (*str == '\0')
-                        return 0;
-                } else if (project_id_p != ticket_no_p && *str >= '0' && *str <= '9') {
-                    /* プロジェクトIDモードであり、チケットNO検索中に、数字を検出した場合 */
-                    return 0;
+                    if (string[index + 1] < '0' || string[index + 1] > '9') {
+                        index = 0; break;
+                    }
+                } else if (project_id_p != ticket_no_p && (string[index] < '0' || string[index] > '9')) {
+                    /* チケットNO検索中に、数字以外を検出した場合 */
+                    string[index] = '\0'; break; /* 一つ前までがチケットリンクとなる。 */
                 }
             } else if (!project_mode) {
-                if (*str >= '0' && *str <= '9') {
-                    /* プロジェクトIDモードではなく、数字を検出した場合 */
+                /* #チケットモード */
+                if (string[index] >= '0' && string[index] <= '9') {
+                    /* プロジェクトIDモードではなく、数字を検出した場合 (正常) */
                 } else {
-                    /* else is no ticket link. */
-                    return 0;
+                    /* reached to end. */
+                    string[index] = '\0'; break; /* 一つ前までがチケットリンクとなる。 */
                 }
             }
+        }
+        if (index < 2) {
+            /* チケットリンクではない。 */
+            return 0;
         }
         if (project_id_p != ticket_no_p) {
             strncpy(project_id, project_id_p, (ticket_no_p - 1) - project_id_p);
         }
         strcpy(ticket_id, ticket_no_p);
-        ticket_syntax_len = (ticket_no_p - string) + strlen(ticket_no_p);
+        /*         index = (ticket_no_p - string) + strlen(ticket_no_p); */
     }
-    return ticket_syntax_len;
+    return index;
 }
 
 /*
@@ -265,7 +274,10 @@ static cgiFormResultType cgiHtmlEscapeDataMultiLine(char *data, int len)
             int ticket_syntax_len;
             char project_id[DEFAULT_LENGTH];
             char ticket_id[DEFAULT_LENGTH];
-            ticket_syntax_len = get_ticket_syntax_len(data, len, project_id, ticket_id);
+            memset(project_id, '\0', DEFAULT_LENGTH);
+            memset(ticket_id, '\0', DEFAULT_LENGTH);
+            /* ループの最初でlenが減っているので、get_ticket_syntax_lenに渡すときは戻して呼び出す。 */
+            ticket_syntax_len = get_ticket_syntax_len(data, ++len, project_id, ticket_id);
             if (ticket_syntax_len == 0) {
                 TRYPUTC(*data);
             } else {
