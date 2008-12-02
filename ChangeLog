@@ -1,6 +1,7 @@
 2008-12-02  smeghead <smeghead@users.sourceforge.jp>
 
     * チケットリンクのバグを修正した。
+    * チケットリンクのテストコードを追加。
 
 2008-12-01  smeghead <smeghead@users.sourceforge.jp>
 
