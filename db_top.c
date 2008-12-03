@@ -18,7 +18,7 @@ List* db_top_get_all_project_infos(Database* db, List* project_infos)
     const char *sql;
     sqlite3_stmt *stmt = NULL;
 
-    sql = "select id, name, sort from project_info where deleted = 0 order by sort";
+    sql = "select id, name, sort, deleted from project_info order by sort";
     if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
 
@@ -28,6 +28,7 @@ List* db_top_get_all_project_infos(Database* db, List* project_infos)
         project_info->id = sqlite3_column_int(stmt, 0);
         strncpy(project_info->name, (char*)sqlite3_column_text(stmt, 1), DEFAULT_LENGTH - 1);
         project_info->sort = sqlite3_column_int(stmt, 2);
+        project_info->deleted = sqlite3_column_int(stmt, 3);
         list_add(project_infos, project_info);
     }
     if (SQLITE_DONE != r)
@@ -44,7 +45,7 @@ ProjectInfo* db_top_get_project_info(Database* db, ProjectInfo* project_info, ch
     const char *sql;
     sqlite3_stmt *stmt = NULL;
 
-    sql = "select id, name from project_info where deleted = 0 and name = ?";
+    sql = "select id, name, sort, deleted from project_info where deleted = 0 and name = ?";
     if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_text(stmt, 1, project_name, strlen(project_name), NULL);
@@ -52,6 +53,8 @@ ProjectInfo* db_top_get_project_info(Database* db, ProjectInfo* project_info, ch
     while (SQLITE_ROW == sqlite3_step(stmt)) {
         project_info->id = sqlite3_column_int(stmt, 0);
         strncpy(project_info->name, (char*)sqlite3_column_text(stmt, 1), DEFAULT_LENGTH - 1);
+        project_info->sort = sqlite3_column_int(stmt, 2);
+        project_info->deleted = sqlite3_column_int(stmt, 3);
         break;
     }
     sqlite3_finalize(stmt);
@@ -66,9 +69,10 @@ void db_top_update_project_infos(Database* db, List* project_infos)
 
     foreach (it, project_infos) {
         ProjectInfo* pi = it->element;
-        exec_query(db, "update project_info set name = ?, sort = ? where id = ?",
+        exec_query(db, "update project_info set name = ?, sort = ? , deleted = ? where id = ?",
                 COLUMN_TYPE_TEXT, pi->name,
                 COLUMN_TYPE_INT, pi->sort,
+                COLUMN_TYPE_INT, pi->deleted,
                 COLUMN_TYPE_INT, pi->id,
                 COLUMN_TYPE_END);
     }

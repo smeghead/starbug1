@@ -73,6 +73,7 @@ void get_cookie_string(char*, char*);
 int base64_decode(const unsigned char*, unsigned char*);
 void set_date_string(char*);
 char* get_ext(char*);
+void page_not_found();
 #define MIN(a,b) (((a)<(b))?(a):(b)) 
 #define MAX(a,b) (((a )>(b))?(a):(b))
 

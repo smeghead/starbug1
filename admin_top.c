@@ -117,6 +117,7 @@ void top_top_action()
             "\t\t\t\t<th>プロジェクト名</th>\n"
             "\t\t\t\t<th>プロジェクトID</th>\n"
             "\t\t\t\t<th>並び順</th>\n"
+            "\t\t\t\t<th>削除</th>\n"
             "\t\t\t</tr>\n");
     foreach (it, project_infos_a) {
         ProjectInfo* p = it->element;
@@ -135,8 +136,9 @@ void top_top_action()
         o(      "\t\t\t\t<td>%s</td>\n", project_a->name);
         project_free(project_a);
         db_finish(db_project_a);
-        o(      "\t\t\t\t<td><input type=\"text\" name=\"project_%d.name\" value=\"%s\" /></td>\n", p->id, p->name);
-        o(      "\t\t\t\t<td><input type=\"text\" name=\"project_%d.sort\" value=\"%d\" /></td>\n", p->id, p->sort);
+        o(      "\t\t\t\t<td><input type=\"text\" name=\"project_%d.name\" class=\"project_id\" value=\"%s\" /></td>\n", p->id, p->name);
+        o(      "\t\t\t\t<td><input type=\"text\" name=\"project_%d.sort\" class=\"number\" value=\"%d\" /></td>\n", p->id, p->sort);
+        o(      "\t\t\t\t<td><input type=\"checkbox\" class=\"checkbox\" name=\"project_%d.deleted\" id=\"project_%d.deleted\" value=\"1\" %s /></td>\n", p->id, p->id, p->deleted ? "checked=\"checked\"" : "");
         o(      "\t\t\t</tr>\n");
     }
     list_free(project_infos_a);
@@ -154,8 +156,8 @@ void top_top_action()
             "\t\t\t\t\t<th>並び順</th>\n"
             "\t\t\t\t</tr>\n"
             "\t\t\t\t<tr>\n"
-            "\t\t\t\t\t<td><input type=\"text\" name=\"project_new.name\" value=\"\" /></td>\n"
-            "\t\t\t\t\t<td><input type=\"text\" name=\"project_new.sort\" value=\"\" /></td>\n");
+            "\t\t\t\t\t<td><input type=\"text\" name=\"project_new.name\" class=\"project_id\" value=\"\" /></td>\n"
+            "\t\t\t\t\t<td><input type=\"text\" name=\"project_new.sort\" class=\"number\" value=\"\" /></td>\n");
     o(      "\t\t\t\t</tr>\n");
     o(      "\t\t\t</table>\n");
     o(      "\t\t\t<p>プロジェクト名は各プロジェクトの管理ツールから設定してください。</p>\n");
@@ -167,7 +169,7 @@ void top_top_action()
     db_finish(db_a);
 }
 
-static bool validate_project_id_exists(Database* db, char* name)
+static bool validate_project_id_exists(Database* db, char* name, int id)
 {
     bool ret = true;
     List* project_infos_a;
@@ -176,6 +178,7 @@ static bool validate_project_id_exists(Database* db, char* name)
     project_infos_a = db_top_get_all_project_infos(db, project_infos_a);
     foreach (it, project_infos_a) {
         ProjectInfo* p = it->element;
+        if (p->id == id) continue;
         if (strcmp(name, p->name) == 0) {
             ret = false;
             break;
@@ -207,6 +210,7 @@ void top_update_project_submit_action()
             ProjectInfo* p = it->element;
             char name[DEFAULT_LENGTH];
             char sort[DEFAULT_LENGTH];
+            char deleted[DEFAULT_LENGTH];
             char param_name[DEFAULT_LENGTH];
             if (p->id == 1) continue; /* topは更新対象外 */ 
 
@@ -218,7 +222,7 @@ void top_update_project_submit_action()
                 redirect("", "[ERROR] プロジェクトID topは予約されています。");
                 return;
             }
-            if (!validate_project_id_exists(db_a, name)) {
+            if (!validate_project_id_exists(db_a, name, p->id)) {
                 char message[DEFAULT_LENGTH];
                 list_free(project_infos_a);
                 db_finish(db_a);
@@ -230,6 +234,13 @@ void top_update_project_submit_action()
             sprintf(param_name, "project_%d.sort", p->id);
             cgiFormString(param_name, sort, DEFAULT_LENGTH);
             p->sort = atoi(sort);
+            sprintf(param_name, "project_%d.deleted", p->id);
+            cgiFormString(param_name, deleted, DEFAULT_LENGTH);
+            if (strlen(deleted)) {
+                p->deleted = 1;
+            } else {
+                p->deleted = 0;
+            }
         }
         db_top_update_project_infos(db_a, project_infos_a);
         list_free(project_infos_a);
@@ -257,7 +268,7 @@ void top_add_project_submit_action()
             redirect("", "[ERROR] プロジェクトID topは予約されています。");
             return;
         }
-        if (!validate_project_id_exists(db_a, name)) {
+        if (!validate_project_id_exists(db_a, name, 0)) {
             char message[DEFAULT_LENGTH];
             project_info_free(project_info);
             db_finish(db_a);

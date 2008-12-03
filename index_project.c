@@ -159,8 +159,25 @@ void output_footer()
             "</div>\n"
             "</body>\n</html>\n", cgiScriptName, VERSION);
 }
+bool is_enabled_project(char* project_name)
+{
+    Database* db_a;
+    ProjectInfo* project_info_a = project_info_new();
+    int id = 0;
+    db_a = db_init("db/1.db");
+    project_info_a = db_top_get_project_info(db_a, project_info_a, project_name);
+    id = project_info_a->id;
+    project_info_free(project_info_a);
+    db_finish(db_a);
+    d("id: %d\n", id);
+    return id ? 1 : 0;
+}
 int index_project_main() {
     register_actions();
+    if (is_enabled_project(g_project_name) == 0) {
+        page_not_found();
+        return 0;
+    }
     exec_action();
     free_action_actions();
     return 0;

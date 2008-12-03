@@ -23,6 +23,7 @@ typedef struct {
     int id;
     char name[DEFAULT_LENGTH];
     int sort;
+    int deleted;
 } ProjectInfo;
 ProjectInfo* project_info_new();
 void project_info_free(ProjectInfo*);

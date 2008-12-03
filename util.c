@@ -22,6 +22,7 @@ unsigned long url_encode(unsigned char*, unsigned char*, unsigned long);
 static Action* get_actions();
 
 void redirect_raw(const char*);
+void page_not_found();
 
 Action* actions = NULL;
 int alloc_count = 0;
@@ -550,6 +551,12 @@ void base64_encode(const unsigned char *src, unsigned char *dist)
         p++;
     }
     if (i) enclode_char(bb, i - 1, dist, j);
+}
+void page_not_found()
+{
+    o("Status: 404 Not Found.\r\n");
+    o("Content-Type: text/plain; charset=utf-8;\r\n\r\n");
+    o("404 Not Found.\r\n");
 }
 void redirect_raw(const char* path)
 {

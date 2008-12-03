@@ -102,6 +102,9 @@ void top_top_action()
             /* idが1のプロジェクトはトップなので、表示しない。 */
             continue;
         }
+        if (p->deleted) {
+            continue;
+        }
         project_a = project_new();
         sprintf(db_name, "db/%d.db", p->id);
         db_project_a = db_init(db_name);

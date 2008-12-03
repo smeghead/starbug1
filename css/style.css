@@ -142,6 +142,9 @@ input.calendar {
 input.number {
     width: 40px;
 }
+input.project_id {
+    width: 100px;
+}
 input.button {
     width: 100px;
 }

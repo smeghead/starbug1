@@ -1,7 +1,13 @@
+2008-12-03  smeghead <smeghead@users.sourceforge.jp>
+
+    * プロジェクトの削除機能を追加した。
+    * プロジェクト情報の更新ができないバグを修正した。入力チェックの不備
+
 2008-12-02  smeghead <smeghead@users.sourceforge.jp>
 
     * チケットリンクのバグを修正した。
     * チケットリンクのテストコードを追加。
+    * リリース準備
 
 2008-12-01  smeghead <smeghead@users.sourceforge.jp>
 
