@@ -122,6 +122,7 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName, g_project_name_4_url);
     o("<div id='menu'>\n"
       "<ul>\n");
+    o("\t<li><a href='%s/%s/rss' title=\"RSS Feed\"><img src=\"%s/../img/rss.png\" alt=\"rss\" /></a></li>\n", cgiScriptName, g_project_name_4_url, cgiScriptName);
     o("\t<li><a href='%s/top/' title=\"全体のトップページのプロジェクト一覧を表示します\">プロジェクト一覧</a></li>\n", cgiScriptName);
     o("\t<li><a href='%s' title=\"ホームへ移動します\">ホーム</a></li>\n", project->home_url);
     o("</ul>\n"
@@ -135,7 +136,6 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
     o("\t<li><a %s href='%s/%s/search' title=\"チケットを検索します\">チケット検索</a></li>\n", navi == NAVI_SEARCH ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
     o("\t<li><a %s href='%s/%s/statistics' title=\"統計情報を表示します\">統計情報</a></li>\n", navi == NAVI_STATISTICS ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
     o("\t<li><a %s href='%s/%s/register_at_once' title=\"複数新規にチケットを登録します\">チケット一括登録</a></li>\n", navi == NAVI_REGISTER_AT_ONCE ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
-    o("\t<li><a %s href='%s/%s/rss' title=\"RSS Feed\">RSS Feed</a></li>\n", navi == NAVI_RSS ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
     o("\t<li><a %s href='%s/%s/help' title=\"ヘルプを参照します\">ヘルプ</a></li>\n", navi == NAVI_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
     o("\t<li><a %s href='%s/../admin.%s/%s' title=\"各種設定を行ないます\">管理ツール</a></li>\n", navi == NAVI_MANAGEMENT ? "class=\"current\"" : "", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
     o("</ul>\n"
