@@ -1,3 +1,8 @@
+2008-12-07  smeghead <smeghead@users.sourceforge.jp>
+
+    * 管理ツールのプロジェクト一覧へのリンクが全体の管理へのリンクになっていた
+      ので、全体のトップへのリンクに修正した。
+
 2008-12-03  smeghead <smeghead@users.sourceforge.jp>
 
     * プロジェクトの削除機能を追加した。
