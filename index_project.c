@@ -451,7 +451,7 @@ void list_action()
         result_a = db_get_tickets_by_status(db_a, s->name, result_a);
         list_free(conditions_a);
 
-        o("<a name=\""); u(s->name); o("\"></a>\n");
+        o("<a id=\""); u(s->name); o("\" name=\""); u(s->name); o("\"></a>\n");
         o("<div>\n");
         o("<h4 class=\"status\">");h(s->name);o("&nbsp;(%d件)&nbsp;<a href=\"#top\">↑</a></h4>\n", s->count);
         if (result_a->hit_count == LIST_COUNT_PER_LIST_PAGE) {
