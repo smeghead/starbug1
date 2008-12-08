@@ -109,7 +109,7 @@ void top_top_action()
         sprintf(db_name, "db/%d.db", p->id);
         db_project_a = db_init(db_name);
         project_a = db_get_project(db_project_a, project_a);
-        o(      "\t\t\t\t<li><a href=\"%s/%s\">%s</a></li>\n", cgiScriptName, p->name, project_a->name);
+        o(      "\t\t\t\t<li><a href=\"%s/", cgiScriptName); u(p->name); o("\">"); h(project_a->name); o("</li>\n");
         project_free(project_a);
         db_finish(db_project_a);
     }

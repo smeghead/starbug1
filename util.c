@@ -278,7 +278,8 @@ static cgiFormResultType cgiHtmlEscapeDataMultiLine(char *data, int len)
             memset(project_id, '\0', DEFAULT_LENGTH);
             memset(ticket_id, '\0', DEFAULT_LENGTH);
             /* ループの最初でlenが減っているので、get_ticket_syntax_lenに渡すときは戻して呼び出す。 */
-            ticket_syntax_len = get_ticket_syntax_len(data, ++len, project_id, ticket_id);
+            ticket_syntax_len = get_ticket_syntax_len(data, len + 1, project_id, ticket_id);
+            d("ticket_syntax_len: %d \n", ticket_syntax_len);
             if (ticket_syntax_len == 0) {
                 TRYPUTC(*data);
             } else {
@@ -295,7 +296,7 @@ static cgiFormResultType cgiHtmlEscapeDataMultiLine(char *data, int len)
                         ticket_id, 
                         display_text);
                 data += ticket_syntax_len - 1;
-                len -= ticket_syntax_len;
+                len -= ticket_syntax_len - 1;
             }
         } else if (len > 2 && *data == '>' &&
                 *(data + 1) == '|' &&

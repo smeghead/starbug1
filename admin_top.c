@@ -133,10 +133,10 @@ void top_top_action()
         db_project_a = db_init(db_name);
         project_a = db_get_project(db_project_a, project_a);
         o(      "\t\t\t<tr>\n");
-        o(      "\t\t\t\t<td>%s</td>\n", project_a->name);
+        o(      "\t\t\t\t<td>"); h(project_a->name); o("</td>\n");
         project_free(project_a);
         db_finish(db_project_a);
-        o(      "\t\t\t\t<td><input type=\"text\" name=\"project_%d.name\" class=\"project_id\" value=\"%s\" /></td>\n", p->id, p->name);
+        o(      "\t\t\t\t<td><input type=\"text\" name=\"project_%d.name\" class=\"project_id\" value=\"", p->id); h(p->name); o("\" /></td>\n");
         o(      "\t\t\t\t<td><input type=\"text\" name=\"project_%d.sort\" class=\"number\" value=\"%d\" /></td>\n", p->id, p->sort);
         o(      "\t\t\t\t<td><input type=\"checkbox\" class=\"checkbox\" name=\"project_%d.deleted\" id=\"project_%d.deleted\" value=\"1\" %s /></td>\n", p->id, p->id, p->deleted ? "checked=\"checked\"" : "");
         o(      "\t\t\t</tr>\n");

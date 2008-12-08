@@ -1,3 +1,13 @@
+2008-12-08  smeghead <smeghead@users.sourceforge.jp>
+
+    * トップページのリンクの出力方法でHTMLエンコードが行なわれていなかったのを修正した。
+    * 状態別チケット一覧のアンカーリンクの名前をurlエンコードするようにした。
+    * チケットリンクの処理で、#が存在するがリンクで無かった場合にゴミが表示されるのを修正した。
+
+2008-12-07  smeghead <smeghead@users.sourceforge.jp>
+
+    * 1.2.3-alphaリリース
+
 2008-12-07  smeghead <smeghead@users.sourceforge.jp>
 
     * 管理ツールのプロジェクト一覧へのリンクが全体の管理へのリンクになっていた
@@ -15,6 +25,10 @@
     * チケットリンクのバグを修正した。
     * チケットリンクのテストコードを追加。
     * リリース準備
+
+2008-12-01  smeghead <smeghead@users.sourceforge.jp>
+
+    * 1.2.2-alphaリリース
 
 2008-12-01  smeghead <smeghead@users.sourceforge.jp>
 
