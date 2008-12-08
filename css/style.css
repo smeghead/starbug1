@@ -367,9 +367,6 @@ span.required {
     text-align: center;
     height: 30px;
 }
-#state_index ul {
-    white-space: nowrap;
-}
 
 #state_index li {
     margin:0px 0px 0px 0px;
@@ -586,6 +583,10 @@ table.item_table textarea {
 #calendar .onmouse {
     background-color: #FF9A31;
     cursor: pointer;
+}
+canvas.graph {
+    width: 100%;
+    height: 300px;
 }
 div.graph {
     width: 100%;
