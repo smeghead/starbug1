@@ -438,7 +438,7 @@ void list_action()
         u(s->name);
         o("\" title=\"ページ内へのリンク\">");
         h(s->name);
-        o("</a>");
+        o("</a>&nbsp;\n");
     }
     o("</div>\n"
       "<br clear=\"all\" />\n");

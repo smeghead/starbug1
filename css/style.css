@@ -367,6 +367,9 @@ span.required {
     text-align: center;
     height: 30px;
 }
+#state_index ul {
+    white-space: nowrap;
+}
 
 #state_index li {
     margin:0px 0px 0px 0px;
