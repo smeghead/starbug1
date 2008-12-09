@@ -123,21 +123,21 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
     o("<div id='menu'>\n"
       "<ul>\n");
     o("\t<li><a href='%s/%s/rss' title=\"RSS Feed\"><img src=\"%s/../img/rss.png\" alt=\"rss\" /></a></li>\n", cgiScriptName, g_project_name_4_url, cgiScriptName);
-    o("\t<li><a href='%s/top/' title=\"全体のトップページのプロジェクト一覧を表示します\">プロジェクト一覧</a></li>\n", cgiScriptName);
-    o("\t<li><a href='%s' title=\"ホームへ移動します\">ホーム</a></li>\n", project->home_url);
+    o("\t<li><a href='%s/top/' title=\"トップページのサブプロジェクト一覧を表示します\">トップページ(サブプロジェクト一覧)</a></li>\n", cgiScriptName);
+    o("\t<li><a href='%s' title=\"ホームへ移動します\">", project->home_url); h(project->home_description); o("</a></li>\n");
     o("</ul>\n"
       "<br clear='all' />\n"
       "</div>\n");
     o("<div>\n"
       "<ul id='projectmenu'>\n");
-    o("\t<li><a %s href='%s/%s/' title=\"ダッシュボードへ移動します\">トップ</a></li>\n", navi == NAVI_TOP ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
+    o("\t<li><a %s href='%s/%s/' title=\"サブプロジェクトトップへ移動します\">サブプロジェクトトップ</a></li>\n", navi == NAVI_TOP ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
     o("\t<li><a %s href='%s/%s/list' title=\"状態別のチケット一覧を参照します\">状態別チケット一覧</a></li>\n", navi == NAVI_LIST ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
     o("\t<li><a %s href='%s/%s/register' title=\"新規にチケットを登録します\">チケット登録</a></li>\n", navi == NAVI_REGISTER ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
     o("\t<li><a %s href='%s/%s/search' title=\"チケットを検索します\">チケット検索</a></li>\n", navi == NAVI_SEARCH ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
     o("\t<li><a %s href='%s/%s/statistics' title=\"統計情報を表示します\">統計情報</a></li>\n", navi == NAVI_STATISTICS ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
     o("\t<li><a %s href='%s/%s/register_at_once' title=\"複数新規にチケットを登録します\">チケット一括登録</a></li>\n", navi == NAVI_REGISTER_AT_ONCE ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
     o("\t<li><a %s href='%s/%s/help' title=\"ヘルプを参照します\">ヘルプ</a></li>\n", navi == NAVI_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
-    o("\t<li><a %s href='%s/../admin.%s/%s' title=\"各種設定を行ないます\">管理ツール</a></li>\n", navi == NAVI_MANAGEMENT ? "class=\"current\"" : "", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
+    o("\t<li><a %s href='%s/../admin.%s/%s' title=\"各種設定を行ないます\">サブプロジェクトの管理</a></li>\n", navi == NAVI_MANAGEMENT ? "class=\"current\"" : "", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
     o("</ul>\n"
       "<br clear='all' />\n"
       "</div>\n");
@@ -1916,7 +1916,7 @@ void top_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, "トップページ", NULL, NAVI_TOP);
+    output_header(project_a, "プロジェクトトップ", NULL, NAVI_TOP);
     list_alloc(states_a, State);
     states_a = db_get_states(db_a, states_a);
     o(      "<div id=\"info\">\n");
@@ -1980,7 +1980,7 @@ void top_action()
     o(      "<div id=\"main_body\">\n"
             "<div class=\"top_edit\">\n"
             "<a id=\"new_ticket_link\" href=\"%s/%s/register\">新しいチケットを登録する</a>&nbsp;\n", cgiScriptName, g_project_name_4_url);
-    o(      "<a href=\"%s/%s/edit_top\">トップページの編集</a>\n", cgiScriptName, g_project_name_4_url);
+    o(      "<a href=\"%s/%s/edit_top\">ページの編集</a>\n", cgiScriptName, g_project_name_4_url);
     o(      "</div>\n");
     wiki_out(db_a, "top");
     o(      "</div>\n"

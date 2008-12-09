@@ -63,6 +63,18 @@ ProjectInfo* db_top_get_project_info(Database* db, ProjectInfo* project_info, ch
 
 ERROR_LABEL(db->handle)
 }
+void db_top_update_project(Database* db, Project* project)
+{
+    exec_query(db, "update setting set value = ? where name = 'project_name'",
+            COLUMN_TYPE_TEXT, project->name,
+            COLUMN_TYPE_END);
+    exec_query(db, "update setting set value = ? where name = 'home_description'",
+            COLUMN_TYPE_TEXT, project->home_description,
+            COLUMN_TYPE_END);
+    exec_query(db, "update setting set value = ? where name = 'home_url'",
+            COLUMN_TYPE_TEXT, project->home_url,
+            COLUMN_TYPE_END);
+}
 void db_top_update_project_infos(Database* db, List* project_infos)
 {
     Iterator* it;

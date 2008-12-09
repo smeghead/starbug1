@@ -488,7 +488,7 @@ table.item_table textarea {
     display: block;
     float: left;
     margin: 0;
-    padding: 0px 12px;
+    padding: 0px 5px;
 /*     text-decoration: none; */
 }
 #menu a.current {
@@ -523,7 +523,7 @@ table.item_table textarea {
     display: block;
     float: left;
     margin: 0;
-    padding: 0px 12px;
+    padding: 0px 8px;
     text-decoration: none;
 }
 #projectmenu a.current {

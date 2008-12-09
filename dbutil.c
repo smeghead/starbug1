@@ -81,6 +81,24 @@ void create_top_tables(Database* db)
     db_begin(db);
     exec_query(
             db,
+            "create table setting( "
+            " name text primary key, "
+            " value text "
+            ");", COLUMN_TYPE_END);
+    exec_query(
+            db,
+            "insert into setting(name, value)"
+            "values ('project_name', 'メインプロジェクト');", COLUMN_TYPE_END);
+    exec_query(
+            db,
+            "insert into setting(name, value)"
+            "values ('home_description', 'ホーム');", COLUMN_TYPE_END);
+    exec_query(
+            db,
+            "insert into setting(name, value)"
+            "values ('home_url', '');", COLUMN_TYPE_END);
+    exec_query(
+            db,
             "create table project_info ( "
             " id integer not null primary key, "
             " name text, "
@@ -128,6 +146,10 @@ void create_project_tables(Database* db)
             db,
             "insert into setting(name, value)"
             "values ('project_name', 'BTS');", COLUMN_TYPE_END);
+    exec_query(
+            db,
+            "insert into setting(name, value)"
+            "values ('home_description', 'ホーム');", COLUMN_TYPE_END);
     exec_query(
             db,
             "insert into setting(name, value)"
@@ -492,7 +514,7 @@ void create_project_tables(Database* db)
             db,
             "insert into wiki(id, name, content, registerdate) values (NULL, 'top', '"
             "*編集可能領域\n"
-            "自由に編集できます。右側の「トップページの編集」のリンクから編集してください。色々な用途に使用してください。\n"
+            "自由に編集できます。右側の「ページの編集」のリンクから編集してください。色々な用途に使用してください。\n"
             "-お知らせ\n"
             "-Starbug1の使い方についての注意事項など\n"
             "', current_timestamp);", COLUMN_TYPE_END);

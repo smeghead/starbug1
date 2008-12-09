@@ -27,7 +27,7 @@ void top_register_actions()
     REG_ACTION(top_edit_top_submit);
 }
 
-void top_output_header(char* title)
+void top_output_header(char* title, Project* project)
 {
     String* base_url_a = string_new(0);
     base_url_a = get_base_url(base_url_a);
@@ -47,8 +47,12 @@ void top_output_header(char* title)
     o(      "</head>\n"
             "<body>\n"
             "<a name=\"top\"></a>\n"
-            "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\">Starbug1</a> トップページ</h1>\n");
+            "<h1 id=\"toptitle\" title=\"Starbug1\">"); h(project->name); o("</h1>\n");
 /*             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/../img/starbug1.jpg\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName); */
+    o(      "<div id=\"project_menu\">\n"
+            "\t<a href=\"%s\">", project->home_url); h(project->home_description); o("</a>\n");
+    o(      "\t<a href=\"%s/../admin.%s/%s/\">プロジェクトの管理</a>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
+    o(      "</div>\n");
 }
 void top_output_footer()
 {
@@ -82,17 +86,18 @@ void top_top_action()
     char buffer[DEFAULT_LENGTH];
     List* project_infos_a;
     Iterator* it;
+    Project* project_a = project_new();
 
     list_alloc(project_infos_a, ProjectInfo);
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_infos_a = db_top_get_all_project_infos(db_a, project_infos_a);
-    top_output_header("トップページ");
-    o(      "<div id=\"project_menu\">\n"
-            "\t<a href=\"%s/../admin.%s/%s/\">全体の管理</a>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
-    o(      "\t<div id=\"project_list\">\n"
-            "\t\t<h2>プロジェクト一覧</h2>\n"
-            "\t\t<ul>\n");
+    project_a = db_get_project(db_a, project_a);
+    top_output_header("トップページ", project_a);
+    project_free(project_a);
+    o(      "<div id=\"project_list\">\n"
+            "\t<h2>サブプロジェクト一覧</h2>\n"
+            "\t<ul>\n");
     foreach (it, project_infos_a) {
         ProjectInfo* p = it->element;
         Database* db_project_a;
@@ -114,11 +119,10 @@ void top_top_action()
         db_finish(db_project_a);
     }
     list_free(project_infos_a);
-    o(      "\t\t</ul>\n");
-    o(      "\t</div>\n");
+    o(      "\t</ul>\n");
     o(      "</div>\n");
     o(      "<div id=\"dashboard\">\n");
-    o(      "<a href=\"%s/%s/top_edit_top\">編集</a>\n", cgiScriptName, g_project_name_4_url);
+    o(      "<a href=\"%s/%s/top_edit_top\">ページの編集</a>\n", cgiScriptName, g_project_name_4_url);
     wiki_out(db_a, "top");
     o(      "</div>\n");
     top_output_footer();
@@ -128,13 +132,16 @@ void top_edit_top_action()
 {
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
+    Project* project_a = project_new();
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
-    top_output_header("トップページの編集");
-    o(      "<h2>トップページの編集</h2>\n"
+    project_a = db_get_project(db_a, project_a);
+    top_output_header("ページの編集", project_a);
+    project_free(project_a);
+    o(      "<h2>ページの編集</h2>\n"
             "<div id=\"top\">\n"
-            "<h3>トップページの編集</h3>\n"
-            "<div id=\"description\">簡易wikiの文法でトップページのコンテンツの編集を行ない、更新ボタンを押してください。</div>\n"
+            "<h3>ページの編集</h3>\n"
+            "<div id=\"description\">簡易wikiの文法でページのコンテンツの編集を行ない、更新ボタンを押してください。</div>\n"
             "<form id=\"edit_top_form\" action=\"%s/%s/top_edit_top_submit\" method=\"post\">\n", cgiScriptName, g_project_name_4_url);
     o(      "<textarea name=\"edit_top\" id=\"edit_top\" rows=\"3\" cols=\"10\">");
     wiki_content_out(db_a, "top");
@@ -157,7 +164,7 @@ void top_edit_top_action()
             "<pre>\n"
             "*編集可能領域\n"
             "自由に編集できます。\n"
-            "右側の「トップページの編集」のリンクから編集してください。\n"
+            "右側の「ページの編集」のリンクから編集してください。\n"
             "色々な用途に使用してください。\n"
             "-お知らせ\n"
             "-Starbug1の使い方についての注意事項など\n"

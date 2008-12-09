@@ -827,6 +827,8 @@ Project* db_get_project(Database* db, Project* project)
         char* name = (char*)sqlite3_column_text(stmt, 0);
         if (strcmp(name, "project_name") == 0)
             strcpy(project->name, (char*)sqlite3_column_text(stmt, 1));
+        else if (strcmp(name, "home_description") == 0)
+            strcpy(project->home_description, (char*)sqlite3_column_text(stmt, 1));
         else if (strcmp(name, "home_url") == 0)
             strcpy(project->home_url, (char*)sqlite3_column_text(stmt, 1));
     }
@@ -844,6 +846,14 @@ void db_update_project(Database* db, Project* project)
             "value = ? "
             "where name = 'project_name'",
             COLUMN_TYPE_TEXT, project->name,
+            COLUMN_TYPE_END) != 1)
+        die("no seting to update? or too many?");
+    if (exec_query(
+            db,
+            "update setting set "
+            "value = ? "
+            "where name = 'home_description'",
+            COLUMN_TYPE_TEXT, project->home_description,
             COLUMN_TYPE_END) != 1)
         die("no seting to update? or too many?");
     if (exec_query(

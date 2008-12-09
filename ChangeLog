@@ -1,3 +1,25 @@
+2008-12-10  smeghead <smeghead@users.sourceforge.jp>
+
+    * 全体のトップをトップページ、追加するBTSをサブプロジェクトと呼ぶように修正。
+    * ホームというリンクのリンク先を変更する機能は存在したが、ホームというリンク名も修正できる機能を追加した
+    * トップをプロジェクトと呼ぶことにしたので、トップに名前を付けられるように修正。
+      それに伴ない、以前のバージョン(1.2.1-alpha から
+      1.2.3-alpha)から移行する場合、下のSQLを、<Starbug1>/db/1.db
+      に対して実行する必要がある。
+      $ cd <Starbug1>/db/
+      $ sqlite3 1.db
+      sqlite> create table setting(name text primary key, value text );
+      sqlite> insert into setting(name, value) values ('project_name', 'メインプロジェクト');
+      sqlite> insert into setting(name, value) values ('home_description', 'ホーム');
+      sqlite> insert into setting(name, value) values ('home_url', '');
+      sqlite> .quit
+      また、2.db 3.db
+      など2以降のが存在する場合、それぞれに対して以下のSQLを実行する必要がある。
+      $ cd <Starbug1>/db/
+      $ sqlite3 2.db
+      sqlite> insert into setting(name, value) values ('home_description', 'ホーム');
+      sqlite> .quit
+
 2008-12-08  smeghead <smeghead@users.sourceforge.jp>
 
     * トップページのリンクの出力方法でHTMLエンコードが行なわれていなかったのを修正した。

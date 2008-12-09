@@ -30,6 +30,7 @@ void project_info_free(ProjectInfo*);
 
 typedef struct {
   char name[DEFAULT_LENGTH];
+  char home_description[DEFAULT_LENGTH];
   char home_url[DEFAULT_LENGTH];
 } Project;
 Project* project_new();

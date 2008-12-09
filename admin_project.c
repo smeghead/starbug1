@@ -84,7 +84,7 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/../index.%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
     o(      "<div id='menu'>\n"
             "<ul>\n");
-    o(      "\t<li><a href='%s/../index.%s/top/' title=\"全体のトップページのプロジェクト一覧を表示します\">プロジェクト一覧</a></li>\n", cgiScriptName, get_ext(cgiScriptName));
+    o(      "\t<li><a href='%s/../index.%s/top/' title=\"トップページのサブプロジェクト一覧を表示します\">トップページ（サブプロジェクト一覧)</a></li>\n", cgiScriptName, get_ext(cgiScriptName));
     o(      "\t<li><a href='%s' title=\"ホームへ移動します\">ホーム</a></li>\n", project->home_url);
     o(      "</ul>\n"
             "<br clear='all' />\n"
@@ -96,7 +96,7 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
     o(      "\t\t<li><a %s href=\"%s/%s/items\">項目設定</a></li>\n", navi == NAVI_ITEM ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
     o(      "\t\t<li><a %s href=\"%s/%s/style\">スタイル設定</a></li>\n", navi == NAVI_STYLE ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
     o(      "\t\t<li><a %s href=\"%s/%s/admin_help\">ヘルプ</a></li>\n", navi == NAVI_ADMIN_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
-    o(      "\t<li><a href=\"%s/../index.%s/%s/\">", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);h(project->name); o("トップへ</a></li>\n");
+    o(      "\t<li><a href=\"%s/../index.%s/%s/\">", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);h(project->name); o("へ</a></li>\n");
     o(      "</ul>\n"
             "<br clear=\"all\" />\n");
 }
@@ -169,7 +169,7 @@ void top_action()
     db_finish(db_a);
 }
 /**
- * プロジェクト設定画面をを表示するaction。
+ * サブプロジェクト設定画面をを表示するaction。
  */
 void project_action()
 {
@@ -179,15 +179,15 @@ void project_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, "プロジェクト設定", "management.js", NAVI_PROJECT);
+    output_header(project_a, "サブプロジェクト設定", "management.js", NAVI_PROJECT);
 
     o("<h2>%s 管理ツール</h2>", project_a->name);
     o("<div id=\"setting_form\">\n");
     o("\t<form id=\"management_form\" action=\"%s/%s/project_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName, g_project_name_4_url);
-    o("\t\t<h3>プロジェクト設定</h3>\n");
+    o("\t\t<h3>サブプロジェクト設定</h3>\n");
     o("\t\t<table summary=\"project table\">\n");
     o("\t\t\t<tr>\n");
-    o("\t\t\t\t<th>プロジェクト名</th>\n");
+    o("\t\t\t\t<th>サブプロジェクト名</th>\n");
     o("\t\t\t\t<td><input type=\"text\" name=\"project.name\" value=\"");h(project_a->name);o("\" maxlength=\"1000\" /></td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t\t<tr>\n");
@@ -229,7 +229,7 @@ void fill_upload_content_setting_file(SettingFile* sf)
     cgiFormFileClose(file);
 }
 /**
- * プロジェクト設定を更新するaction。
+ * サブプロジェクト設定を更新するaction。
  */
 void project_submit_action()
 {
@@ -277,10 +277,17 @@ void env_action()
     o("\t\t<h3>環境設定</h3>\n");
     o("\t\t<table summary=\"project table\">\n");
     o("\t\t\t<tr>\n");
-    o("\t\t\t\t<th>home_url</th>\n");
+    o("\t\t\t\t<th>ホームリンク名</th>\n");
+    o("\t\t\t\t<td>\n");
+    o("\t\t\t\t\t<input type=\"text\" name=\"project.home_description\" value=\"");h(project_a->home_description);o("\" maxlength=\"1000\" />\n");
+    o("\t\t\t\t\t<div class=\"description\">ホーム アンカーのリンク名を指定します。</div>\n");
+    o("\t\t\t\t</td>\n");
+    o("\t\t\t<tr>\n");
+    o("\t\t\t</tr>\n");
+    o("\t\t\t\t<th>ホームリンク先</th>\n");
     o("\t\t\t\t<td>\n");
     o("\t\t\t\t\t<input type=\"text\" name=\"project.home_url\" value=\"");h(project_a->home_url);o("\" maxlength=\"1000\" />\n");
-    o("\t\t\t\t\t<div class=\"description\">各ページに表示されるナビゲーションメニューの、\"ホーム\" アンカーのリンク先を指定します。</div>\n");
+    o("\t\t\t\t\t<div class=\"description\">ホーム アンカーのリンク先を指定します。</div>\n");
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t</table>\n");
@@ -303,6 +310,7 @@ void env_submit_action()
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     db_begin(db_a);
     project_a = db_get_project(db_a, project_a);
+    cgiFormStringNoNewlines("project.home_description", project_a->home_description, DEFAULT_LENGTH);
     cgiFormStringNoNewlines("project.home_url", project_a->home_url, DEFAULT_LENGTH);
 
     db_update_project(db_a, project_a);
