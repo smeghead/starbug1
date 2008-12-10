@@ -1,5 +1,8 @@
 2008-12-10  smeghead <smeghead@users.sourceforge.jp>
 
+
+2008-12-10  smeghead <smeghead@users.sourceforge.jp>
+
     * 全体のトップをトップページ、追加するBTSをサブプロジェクトと呼ぶように修正。
     * ホームというリンクのリンク先を変更する機能は存在したが、ホームというリンク名も修正できる機能を追加した
     * トップをプロジェクトと呼ぶことにしたので、トップに名前を付けられるように修正。
@@ -19,6 +22,7 @@
       $ sqlite3 2.db
       sqlite> insert into setting(name, value) values ('home_description', 'ホーム');
       sqlite> .quit
+    * Seleniumのテストコード修正。
 
 2008-12-08  smeghead <smeghead@users.sourceforge.jp>
 
