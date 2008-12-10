@@ -91,7 +91,7 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
             "</div>\n");
     o(      "<ul id=\"projectmenu\">\n");
     o(      "\t<li><a %s href=\"%s/%s/\">管理ツールメニュー</a></li>\n", navi == NAVI_MENU ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
-    o(      "\t\t<li><a %s href=\"%s/%s/project\">プロジェクトの設定</a></li>\n", navi == NAVI_PROJECT ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
+    o(      "\t\t<li><a %s href=\"%s/%s/project\">サブプロジェクト設定</a></li>\n", navi == NAVI_PROJECT ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
     o(      "\t\t<li><a %s href=\"%s/%s/env\">環境設定</a></li>\n", navi == NAVI_ENV ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
     o(      "\t\t<li><a %s href=\"%s/%s/items\">項目設定</a></li>\n", navi == NAVI_ITEM ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
     o(      "\t\t<li><a %s href=\"%s/%s/style\">スタイル設定</a></li>\n", navi == NAVI_STYLE ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
