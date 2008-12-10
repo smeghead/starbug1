@@ -23,6 +23,7 @@
       sqlite> insert into setting(name, value) values ('home_description', 'ホーム');
       sqlite> .quit
     * Seleniumのテストコード修正。
+    * トップページのサブプロジェクト一覧のリンクの閉じタグが抜けていたのを追加した。
 
 2008-12-08  smeghead <smeghead@users.sourceforge.jp>
 
