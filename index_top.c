@@ -42,16 +42,18 @@ void top_output_header(char* title, Project* project)
             "\t<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\" />\n"
             "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />\n");
     o(        "\t<title>Starbug1 - %s</title>\n", title);
-    o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName);
+    o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/top.css\" />\n", cgiScriptName);
     string_free(base_url_a);
     o(      "</head>\n"
             "<body>\n"
             "<a name=\"top\"></a>\n"
             "<h1 id=\"toptitle\" title=\"Starbug1\">"); h(project->name); o("</h1>\n");
 /*             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/../img/starbug1.jpg\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName); */
-    o(      "<div id=\"project_menu\">\n"
-            "\t<a href=\"%s\">", project->home_url); h(project->home_description); o("</a>\n");
-    o(      "\t<a href=\"%s/../admin.%s/%s/\">プロジェクトの管理</a>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
+    o(      "<div id=\"projectmenu\">\n"
+            "\t<ul>\n"
+            "\t\t<li><a href=\"%s\">", project->home_url); h(project->home_description); o("</a></li>\n");
+    o(      "\t\t<li><a href=\"%s/../admin.%s/%s/\">プロジェクトの管理</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
+    o(      "\t</ul>\n");
     o(      "</div>\n");
 }
 void top_output_footer()
@@ -94,7 +96,6 @@ void top_top_action()
     project_infos_a = db_top_get_all_project_infos(db_a, project_infos_a);
     project_a = db_get_project(db_a, project_a);
     top_output_header("トップページ", project_a);
-    project_free(project_a);
     o(      "<div id=\"project_list\">\n"
             "\t<h2>サブプロジェクト一覧</h2>\n"
             "\t<ul>\n");
@@ -121,10 +122,13 @@ void top_top_action()
     list_free(project_infos_a);
     o(      "\t</ul>\n");
     o(      "</div>\n");
-    o(      "<div id=\"dashboard\">\n");
+    o(      "<div id=\"dashboard\">\n"
+            "\t<h2>説明</h2>\n");
     o(      "<a href=\"%s/%s/top_edit_top\">ページの編集</a>\n", cgiScriptName, g_project_name_4_url);
     wiki_out(db_a, "top");
     o(      "</div>\n");
+    o(      "<br clear=\"all\" />\n");
+    project_free(project_a);
     top_output_footer();
     db_finish(db_a);
 }

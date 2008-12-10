@@ -44,13 +44,18 @@ void top_output_header(char* title, Project* project)
             "\t<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\" />\n"
             "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />\n");
     o(        "\t<title>Starbug1 - %s</title>\n", title);
-    o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName);
+    o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/top.css\" />\n", cgiScriptName);
     string_free(base_url_a);
     o(      "</head>\n"
             "<body>\n"
             "<a name=\"top\"></a>\n"
             "<h1 id=\"toptitle\" title=\"Starbug1\">"); h(project->name); o(" プロジェクトの管理</h1>\n");
 /*             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/../img/starbug1.jpg\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName); */
+    o(      "<div id=\"projectmenu\">\n"
+            "\t<ul>\n"
+            "\t\t<li><a href=\"%s/../index.%s/%s/\">トップページへ</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
+    o(      "\t</ul>\n"
+            "</div>\n");
 }
 void top_output_footer()
 {
@@ -93,8 +98,6 @@ void top_top_action()
     project_infos_a = db_top_get_all_project_infos(db_a, project_infos_a);
     project_a = db_get_project(db_a, project_a);
     top_output_header("プロジェクトの管理", project_a);
-    o(      "<div id=\"project_menu\">\n"
-            "\t<a href=\"%s/../index.%s/%s/\">トップページへ</a>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
     /* メッセージの取得 */
     if ((cgiFormStringMultiple("message", &multi)) != cgiFormNotFound) {
         int i = 0;
@@ -111,7 +114,6 @@ void top_top_action()
         }
         o("</div>\n");
     }
-    o(      "</div>\n");
     cgiStringArrayFree(multi);
     o(      "<div id=\"project_info\">\n"
             "\t<h2>プロジェクト情報の設定</h2>\n");
@@ -173,6 +175,7 @@ void top_top_action()
     o(      "\t\t<p>削除すると、トップページの一覧から表示されなくなります。データは消去されません。再度削除チェックボックスのチェックを外すことで、再び参照することができるようになります。</p>\n");
     o(      "\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
     o(      "\t</form>\n");
+    o(      "\t</div>\n");
     o(      "\t<div id=\"project_add\">\n"
             "\t\t<h2>サブプロジェクトの追加</h2>\n");
     o(      "\t\t<form action=\"%s/top/top_add_project_submit\" method=\"post\">\n", cgiScriptName);
@@ -190,7 +193,6 @@ void top_top_action()
     o(      "\t\t\t<input class=\"button\" type=\"submit\" value=\"追加\" />\n");
     o(      "\t\t</form>\n");
     o(      "\t</div>\n");
-    o(      "</div>\n");
     top_output_footer();
     db_finish(db_a);
 }

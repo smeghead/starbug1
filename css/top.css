@@ -1,0 +1,214 @@
+@charset "utf-8";
+
+/* ---------------------- */
+/* initialize rule        */
+/* ---------------------- */
+@import url("default.css");
+/* ---------------------- */
+/* end of initialize rule */
+/* ---------------------- */
+
+body,tbody {
+    margin: 0px 0px 0px 0px;
+    font-size: 90%;
+}
+
+a:link {
+    color: #0051E9;
+}
+
+a:visited {
+    color: #005585;
+}
+
+a:hover {
+    color: #80af00;
+}
+select:focus,
+input:focus,
+textarea:focus {
+    background-color: #ffffe0;
+}
+h1 {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 10px;
+/*     text-align: center; */
+    vertical-align: middle;
+    color: white;
+    background-color: #00108C;
+}
+h2 {
+    font-weight: bold;
+    font-size: 130%;
+    margin: 3px 0px 3px 0px;
+    padding: 3px 0px 0px 10px;
+    border-color: #00108C;
+    border-style: solid;
+    border-width: 0px 0px 2px 0px;
+}
+h3 {
+    font-size: 120%;
+    font-weight: bold;
+    background-color: #E7EFFF;
+    padding: 3px 3px 0px 10px;
+    margin: 5px 0px 5px 10px;
+    border-color: #00108C;
+    border-style: solid;
+    border-width: 0px 0px 2px 15px;
+}
+h4 {
+    font-weight: bold;
+    font-size: 95%;
+    margin: 2px 10px;
+}
+h5 {
+    font-weight: bold;
+    margin: 0px 0px 3px 5px;
+}
+h6 {
+    color: #00108C;
+    font-size: 90%;
+    font-weight: bold;
+    margin: 0px 0px 3px 8px;
+}
+hr {
+    width: 100%;
+}
+.message {
+    margin: 0px 0px 0px 30px;
+}
+
+#mainmenu {
+    width:100%;
+    margin:0px 0px 0px 0px;
+    text-align: center;
+}
+
+#mainmenu li {
+    margin:0px 0px 0px 0px;
+    list-style:none;
+    padding:3px 10px;
+    float:left;
+}
+
+#main {
+    width: 75%;
+    float: left;
+}
+#main h3 {
+    width: 95%;
+}
+#footer {
+    clear : both;
+}
+#footer div address {
+    margin:0px;
+    padding:0px;
+}
+#info ul,
+#info li {
+    margin:0px 0px 0px 0px;
+}
+
+
+#menu {
+/*     background: #ccc; */
+/*     float: left; */
+/*     width: 100%; */
+/*     border: solid #333 1px; */
+    margin-bottom: 2px;
+    position:    absolute;
+    top:         3px; 
+/*     left:        21em;  */
+    right:       0px;
+}
+#menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+#menu li {
+    float: right;
+    font-size: 85%;
+    margin: 0;
+    padding: 0;
+/*     border-left: solid #003F00 1px; */
+}
+#menu a {
+/*     background: #eee bottom right no-repeat; */
+    color: #000000;
+    display: block;
+    float: left;
+    margin: 0;
+    padding: 0px 5px;
+/*     text-decoration: none; */
+}
+#menu a.current {
+/*     background: #666 bottom center no-repeat; */
+/*     color: #ffffff; */
+}
+#menu a:hover {
+    background: #999 bottom center no-repeat;
+    color: #ffffff;
+    padding-bottom: 0px;
+}
+#projectmenu {
+    margin-bottom: 30px;
+}
+#projectmenu ul {
+    float: left;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    border: solid #333 1px;
+    margin-bottom: 0px;
+}
+#projectmenu li {
+    float: left;
+    font-size: 85%;
+    margin: 0;
+    padding: 0;
+    border-right: solid #003F00 1px;
+}
+#projectmenu a {
+    background: #eef bottom right no-repeat;
+    color: #000000;
+    display: block;
+    float: left;
+    margin: 0;
+    padding: 0px 8px;
+    text-decoration: none;
+}
+#projectmenu a.current {
+    background: #666 bottom center no-repeat;
+    color: #ffffff;
+}
+#projectmenu a:hover {
+    background: #9ac bottom center no-repeat;
+    color: #ffffff;
+    padding-bottom: 0px;    
+}
+#project_list,
+#project_info,
+#project_add {
+    padding:0px 10px;
+/*     width: 30%; */
+/*     float: left; */
+}
+#project_list ul {
+    margin: 0px;
+    padding: 3px;
+}
+#project_list li {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+}
+#dashboard {
+    padding-left:10px;
+    padding-right:10px;
+/*     width: 65%; */
+/*     float: left; */
+}
+/* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
