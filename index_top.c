@@ -88,14 +88,14 @@ void top_top_action()
     char buffer[DEFAULT_LENGTH];
     List* project_infos_a;
     Iterator* it;
-    Project* project_a = project_new();
+    Project* top_project_a = project_new();
 
     list_alloc(project_infos_a, ProjectInfo);
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_infos_a = db_top_get_all_project_infos(db_a, project_infos_a);
-    project_a = db_get_project(db_a, project_a);
-    top_output_header("トップページ", project_a);
+    top_project_a = db_get_project(db_a, top_project_a);
+    top_output_header("トップページ", top_project_a);
     o(      "<div id=\"project_list\">\n"
             "\t<h2>サブプロジェクト一覧</h2>\n"
             "\t<ul>\n");
@@ -126,9 +126,10 @@ void top_top_action()
             "\t<h2>説明</h2>\n");
     o(      "<a href=\"%s/%s/top_edit_top\">ページの編集</a>\n", cgiScriptName, g_project_name_4_url);
     wiki_out(db_a, "top");
+    d("pass wiki_out end\n");
     o(      "</div>\n");
     o(      "<br clear=\"all\" />\n");
-    project_free(project_a);
+    project_free(top_project_a);
     top_output_footer();
     db_finish(db_a);
 }

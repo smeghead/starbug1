@@ -1,5 +1,7 @@
-2008-12-10  smeghead <smeghead@users.sourceforge.jp>
+2008-12-12  smeghead <smeghead@users.sourceforge.jp>
 
+    * トップページのデザインを修正した。
+    * wikiの出力でエラーが発生することがあったのを修正した。
 
 2008-12-10  smeghead <smeghead@users.sourceforge.jp>
 

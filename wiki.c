@@ -101,61 +101,62 @@ typedef enum LINE_MODE {
 void wiki_out(Database* db, char* page_name)
 {
     Wiki* wiki_a = wiki_new();
-    char line[MAX_WIDTH];
+    char* line_a;
     char* c;
     char* p;
     LineMode mode = LINE_MODE_NORMAL;
 
     wiki_a = db_get_newest_wiki(db, page_name, wiki_a);
     p = wiki_a->content;
+    /* FIXME 非効率だけど、安全のために、1行分のバッファに全文の長さを確保する。 */
+    line_a = xalloc(sizeof(char) * strlen(wiki_a->content));
     buf_clear();
     while ((strlen(p) != 0)) {
         if ((c = strchr(p, '\n')) != NULL) {
             int len = c - p;
-            strncpy(line, p, len);
-            line[len] = '\0';
+            strncpy(line_a, p, len);
+            line_a[len] = '\0';
             p += len + 1;
         } else {
-            strcpy(line, p);
+            strcpy(line_a, p);
             p += strlen(p);
         }
-        if (mode == LINE_MODE_PRE && strncmp(line, "|<", strlen("|<")) != 0) {
+        if (mode == LINE_MODE_PRE && strncmp(line_a, "|<", strlen("|<")) != 0) {
             /* LINE_MODE_PRE中は、成形済ブロック */
-            buf_add(TYPE_PRE, line);
-        } else if (mode == LINE_MODE_NORMAL && strncmp(line, ">|", strlen(">|")) == 0) {
+            buf_add(TYPE_PRE, line_a);
+        } else if (mode == LINE_MODE_NORMAL && strncmp(line_a, ">|", strlen(">|")) == 0) {
             /* 成形済ブロック終了 */
             buf_flush();
             mode = LINE_MODE_PRE;
-        } else if (mode == LINE_MODE_PRE && strncmp(line, "|<", strlen("|<")) == 0) {
+        } else if (mode == LINE_MODE_PRE && strncmp(line_a, "|<", strlen("|<")) == 0) {
             /* 成形済ブロック開始 */
             buf_flush();
             mode = LINE_MODE_NORMAL;
-        } else if (strncmp(line, "****", strlen("****")) == 0) {
+        } else if (strncmp(line_a, "****", strlen("****")) == 0) {
             buf_flush();
-            element_out("h6", line + strlen("****"));
-        } else if (strncmp(line, "***", strlen("***")) == 0) {
+            element_out("h6", line_a + strlen("****"));
+        } else if (strncmp(line_a, "***", strlen("***")) == 0) {
             buf_flush();
-            element_out("h5", line + strlen("***"));
-        } else if (strncmp(line, "**", strlen("**")) == 0) {
+            element_out("h5", line_a + strlen("***"));
+        } else if (strncmp(line_a, "**", strlen("**")) == 0) {
             buf_flush();
-            element_out("h4", line + strlen("**"));
-        } else if (strncmp(line, "*", strlen("*")) == 0) {
+            element_out("h4", line_a + strlen("**"));
+        } else if (strncmp(line_a, "*", strlen("*")) == 0) {
             buf_flush();
-            element_out("h3", line + strlen("*"));
-        } else if (strncmp(line, "----", strlen("----")) == 0) {
+            element_out("h3", line_a + strlen("*"));
+        } else if (strncmp(line_a, "----", strlen("----")) == 0) {
             buf_flush();
             element_out_without_content("hr");
-        } else if (strncmp(line, "-", strlen("-")) == 0) {
-            buf_add(TYPE_LI, line + strlen("-"));
-/*         } else if (strncmp(line, " ", strlen(" ")) == 0) { */
-/*             buf_add(TYPE_PRE, line); */
-        } else if (strncmp(line, "\n", strlen("\n")) == 0) {
+        } else if (strncmp(line_a, "-", strlen("-")) == 0) {
+            buf_add(TYPE_LI, line_a + strlen("-"));
+        } else if (strncmp(line_a, "\n", strlen("\n")) == 0) {
             buf_flush();
         } else {
-            buf_add(TYPE_TEXT, line);
+            buf_add(TYPE_TEXT, line_a);
         }
     }
     buf_flush();
+    xfree(line_a);
     wiki_free(wiki_a);
 }
 void wiki_content_out(Database* db, char* page_name)
