@@ -34,7 +34,7 @@ h1 {
     vertical-align: middle;
 /*     color: white; */
 /*     background-color: #00108C; */
-    border-bottom: solid #00108C 5px;
+/*     border-bottom: solid #00108C 5px; */
 }
 h2 {
     font-weight: bold;
@@ -43,7 +43,7 @@ h2 {
     padding: 0px 0px 0px 10px;
     border-color: #00108C;
     border-style: solid;
-    border-width: 0px 0px 2px 0px;
+    border-width: 0px 0px 3px 0px;
 }
 h3 {
     font-size: 120%;
@@ -168,30 +168,31 @@ table tr td {
     padding-bottom: 0px;
 }
 #projectmenu {
-    margin: 10px 0px 0px 0px;
+    margin: 10px 0px 50px 0px;
 }
 #projectmenu ul {
+    background: #ccc;
     float: left;
     list-style: none;
-    margin: 0px;
-    padding: 0px;
-    width: 99%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
     border: solid #333 1px;
-    margin-bottom: 0px;
+    margin-bottom: 8px;
 }
 #projectmenu li {
     float: left;
     font-size: 85%;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
     border-right: solid #003F00 1px;
 }
 #projectmenu a {
-    background: #eef bottom right no-repeat;
+    background: #eee bottom right no-repeat;
     color: #000000;
     display: block;
     float: left;
-    margin: 0px;
+    margin: 0;
     padding: 0px 8px;
     text-decoration: none;
 }
@@ -200,10 +201,53 @@ table tr td {
     color: #ffffff;
 }
 #projectmenu a:hover {
-    background: #9ac bottom center no-repeat;
+    background: #999 bottom center no-repeat;
     color: #ffffff;
     padding-bottom: 0px;    
 }
+
+
+
+
+
+
+/* #projectmenu { */
+/*     margin: 10px 0px 50px 0px; */
+/* } */
+/* #projectmenu ul { */
+/*     float: left; */
+/*     list-style: none; */
+/*     margin: 0px; */
+/*     padding: 0px; */
+/*     width: 99%; */
+/*     border: solid #333 1px; */
+/*     margin-bottom: 0px; */
+/* } */
+/* #projectmenu li { */
+/*     float: left; */
+/*     font-size: 85%; */
+/*     margin: 0px; */
+/*     padding: 0px; */
+/*     border-right: solid #003F00 1px; */
+/* } */
+/* #projectmenu a { */
+/*     background: #eef bottom right no-repeat; */
+/*     color: #000000; */
+/*     display: block; */
+/*     float: left; */
+/*     margin: 0px; */
+/*     padding: 0px 8px; */
+/*     text-decoration: none; */
+/* } */
+/* #projectmenu a.current { */
+/*     background: #666 bottom center no-repeat; */
+/*     color: #ffffff; */
+/* } */
+/* #projectmenu a:hover { */
+/*     background: #9ac bottom center no-repeat; */
+/*     color: #ffffff; */
+/*     padding-bottom: 0px;     */
+/* } */
 #project_list,
 #project_info,
 #project_add {
