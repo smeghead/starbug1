@@ -503,7 +503,7 @@ void items_action()
           "\t\t\t\t<th>デフォルト値</th>\n"
           "\t\t\t\t<td>\n");
         if (et->type == ELEM_TYPE_TEXTAREA) {
-            o("\t\t\t\t\t<textarea name=\"field%d.default_value\" rows=\"2\" cols=\"10\" maxlength=\"1000\" >", et->id);h(et->default_value);o("</textarea>\n");
+            o("\t\t\t\t\t<textarea name=\"field%d.default_value\" rows=\"2\" cols=\"10\" >", et->id);h(et->default_value);o("</textarea>\n");
         } else {
             o("\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field%d.default_value\" value=\"%s\" maxlength=\"1000\" />\n", et->id, et->default_value);
         }

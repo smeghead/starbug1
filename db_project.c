@@ -986,22 +986,23 @@ List* db_get_states_has_not_close(Database* db, List* states)
     sqlite3_stmt *stmt = NULL;
 
     sprintf(sql, 
-            "select m.field%d as name, count(t.id) as count "
+            "select l.id, m.field%d as name, count(t.id) as count "
             "from ticket as t "
             "inner join message as m "
             " on m.id = t.last_message_id "
             "inner join list_item as l "
             " on l.name = m.m.field%d "
             "where l.close = 0 "
-            "group by m.field%d "
+            "group by l.id, m.field%d "
             "order by l.sort ", ELEM_ID_STATUS, ELEM_ID_STATUS, ELEM_ID_STATUS);
     if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         State* s = list_new_element(states);
-        strcpy(s->name, (char*)sqlite3_column_text(stmt, 0));
-        s->count = sqlite3_column_int(stmt, 1);
+        s->id = sqlite3_column_int(stmt, 0);
+        strcpy(s->name, (char*)sqlite3_column_text(stmt, 1));
+        s->count = sqlite3_column_int(stmt, 2);
         list_add(states, s);
     }
     if (SQLITE_DONE != r)
