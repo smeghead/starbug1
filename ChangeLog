@@ -1,3 +1,7 @@
+2008-12-16  smeghead <smeghead@users.sourceforge.jp>
+
+    * .htaccessファイルにAddHandlerの定義を追加した。
+
 2008-12-12  smeghead <smeghead@users.sourceforge.jp>
 
     * トップページのデザインを修正した。
