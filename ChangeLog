@@ -1,3 +1,8 @@
+2008-12-23  smeghead <smeghead@users.sourceforge.jp>
+
+    * トップページのHTMLのタイトルにプロジェクト名を表示するようにした。
+    * サブプロジェクトの管理ツールのホームリンクの表示名も動的に変更するようにした。
+
 2008-12-16  smeghead <smeghead@users.sourceforge.jp>
 
     * .htaccessファイルにAddHandlerの定義を追加した。

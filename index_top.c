@@ -41,7 +41,7 @@ void top_output_header(char* title, Project* project)
             "\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n"
             "\t<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\" />\n"
             "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />\n");
-    o(        "\t<title>Starbug1 - %s</title>\n", title);
+    o(        "\t<title>Starbug1 - "); h(project->name); o(" %s</title>\n", title);
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/top.css\" />\n", cgiScriptName);
     string_free(base_url_a);
     o(      "</head>\n"
@@ -51,7 +51,7 @@ void top_output_header(char* title, Project* project)
 /*             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/../img/starbug1.jpg\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName); */
     o(      "<div id=\"projectmenu\">\n"
             "\t<ul>\n"
-            "\t\t<li><a href=\"%s\">", project->home_url); h(project->home_description); o("</a></li>\n");
+            "\t\t<li><a href=\""); h(project->home_url); o("\">"); h(project->home_description); o("</a></li>\n");
     o(      "\t\t<li><a href=\"%s/../admin.%s/%s/\">プロジェクトの管理</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
     o(      "\t</ul>\n");
     o(      "</div>\n");

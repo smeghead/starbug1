@@ -84,10 +84,10 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/../index.%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
     o(      "<div id='menu'>\n"
             "<ul>\n");
-    o(      "\t<li><a href='%s/../index.%s/top/' title=\"トップページのサブプロジェクト一覧を表示します\">トップページ（サブプロジェクト一覧)</a></li>\n", cgiScriptName, get_ext(cgiScriptName));
-    o(      "\t<li><a href='%s' title=\"ホームへ移動します\">ホーム</a></li>\n", project->home_url);
+    o(      "\t<li><a href=\"%s/../index.%s/top/\" title=\"トップページのサブプロジェクト一覧を表示します\">トップページ（サブプロジェクト一覧)</a></li>\n", cgiScriptName, get_ext(cgiScriptName));
+    o(      "\t<li><a href=\""); h(project->home_url); o("\" title=\""); h(project->name); o("へ移動します\">"); h(project->name); o("</a></li>\n");
     o(      "</ul>\n"
-            "<br clear='all' />\n"
+            "<br clear=\"all\" />\n"
             "</div>\n");
     o(      "<ul id=\"projectmenu\">\n");
     o(      "\t<li><a %s href=\"%s/%s/\">管理ツールメニュー</a></li>\n", navi == NAVI_MENU ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
