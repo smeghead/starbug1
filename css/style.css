@@ -584,12 +584,12 @@ table.item_table textarea {
     background-color: #FF9A31;
     cursor: pointer;
 }
-canvas.graph {
+div.graph {
     width: 100%;
     height: 300px;
 }
-div.graph {
-    width: 100%;
+div.graph canvas {
+    width: 600px;
     height: 300px;
 }
 div.delete_item {

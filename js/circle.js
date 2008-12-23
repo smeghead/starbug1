@@ -113,6 +113,7 @@ html5jp.graph.circle.prototype.draw = function(items, inparams) {
 		};
 		lpos.cx = lpos.x + lpos.h * 1.4; // 文字表示開始位置(x座標)
 		lpos.cw = this.canvas.width - lpos.cx;       // 文字表示幅
+		//lpos.cw = this.canvas.width - lpos.cx;       // 文字表示幅
 		/* 仮に挿入したDIV要素を削除 */
 		tmpdiv.parentNode.removeChild(tmpdiv);
 	}

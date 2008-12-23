@@ -15,7 +15,6 @@ typedef enum _NAVI {
     NAVI_OTHER,
     NAVI_MENU,
     NAVI_PROJECT,
-    NAVI_ENV,
     NAVI_ITEM,
     NAVI_STYLE,
     NAVI_ADMIN_HELP
@@ -26,8 +25,6 @@ void register_actions();
 void top_action();
 void project_action();
 void project_submit_action();
-void env_action();
-void env_submit_action();
 void items_action();
 void items_submit_action();
 void style_action();
@@ -48,8 +45,6 @@ void register_actions()
     REG_ACTION(top);
     REG_ACTION(project);
     REG_ACTION(project_submit);
-    REG_ACTION(env);
-    REG_ACTION(env_submit);
     REG_ACTION(items);
     REG_ACTION(items_submit);
     REG_ACTION(style);
@@ -85,14 +80,12 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
     o(      "<div id='menu'>\n"
             "<ul>\n");
     o(      "\t<li><a href=\"%s/../index.%s/top/\" title=\"トップページのサブプロジェクト一覧を表示します\">トップページ（サブプロジェクト一覧)</a></li>\n", cgiScriptName, get_ext(cgiScriptName));
-    o(      "\t<li><a href=\""); h(project->home_url); o("\" title=\""); h(project->name); o("へ移動します\">"); h(project->name); o("</a></li>\n");
     o(      "</ul>\n"
             "<br clear=\"all\" />\n"
             "</div>\n");
     o(      "<ul id=\"projectmenu\">\n");
     o(      "\t<li><a %s href=\"%s/%s/\">管理ツールメニュー</a></li>\n", navi == NAVI_MENU ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
     o(      "\t\t<li><a %s href=\"%s/%s/project\">サブプロジェクト設定</a></li>\n", navi == NAVI_PROJECT ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
-    o(      "\t\t<li><a %s href=\"%s/%s/env\">環境設定</a></li>\n", navi == NAVI_ENV ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
     o(      "\t\t<li><a %s href=\"%s/%s/items\">項目設定</a></li>\n", navi == NAVI_ITEM ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
     o(      "\t\t<li><a %s href=\"%s/%s/style\">スタイル設定</a></li>\n", navi == NAVI_STYLE ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
     o(      "\t\t<li><a %s href=\"%s/%s/admin_help\">ヘルプ</a></li>\n", navi == NAVI_ADMIN_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
@@ -151,7 +144,6 @@ void top_action()
     o("<div id=\"admin_menu\">\n");
     o("\t<dl>\n");
     o("\t\t<dt><a href=\"%s/%s/project\">プロジェクト設定</a></dt><dd>プロジェクトの基本的な情報の設定です。</dd>\n", cgiScriptName, g_project_name_4_url);
-    o("\t\t<dt><a href=\"%s/%s/env\">環境設定</a></dt><dd>URLの設定です。</dd>\n", cgiScriptName, g_project_name_4_url);
     o("\t\t<dt><a href=\"%s/%s/items\">項目設定</a></dt><dd>チケットの項目についての設定です。</dd>\n", cgiScriptName, g_project_name_4_url);
     o("\t\t<dt><a href=\"%s/%s/style\">スタイル設定</a></dt><dd>スタイルシートの設定です。</dd>\n", cgiScriptName, g_project_name_4_url);
     o("\t</dl>\n");
@@ -254,68 +246,6 @@ void project_submit_action()
         db_update_top_image(db_a, sf_a);
     }
     setting_file_free(sf_a);
-    db_commit(db_a);
-    db_finish(db_a);
-    redirect("", "更新しました");
-}
-/**
- * 環境設定の設定画面をを表示するaction。
- */
-void env_action()
-{
-    Project* project_a = project_new();
-    Database* db_a;
-    char buffer[DEFAULT_LENGTH];
-
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
-    project_a = db_get_project(db_a, project_a);
-    output_header(project_a, "環境設定", "management.js", NAVI_ENV);
-
-    o("<h2>%s 管理ツール</h2>", project_a->name);
-    o("<div id=\"setting_form\">\n");
-    o("\t<form id=\"management_form\" action=\"%s/%s/env_submit\" method=\"post\">\n", cgiScriptName, g_project_name_4_url);
-    o("\t\t<h3>環境設定</h3>\n");
-    o("\t\t<table summary=\"project table\">\n");
-    o("\t\t\t<tr>\n");
-    o("\t\t\t\t<th>ホームリンク名</th>\n");
-    o("\t\t\t\t<td>\n");
-    o("\t\t\t\t\t<input type=\"text\" name=\"project.home_description\" value=\"");h(project_a->home_description);o("\" maxlength=\"1000\" />\n");
-    o("\t\t\t\t\t<div class=\"description\">ホーム アンカーのリンク名を指定します。</div>\n");
-    o("\t\t\t\t</td>\n");
-    o("\t\t\t<tr>\n");
-    o("\t\t\t</tr>\n");
-    o("\t\t\t\t<th>ホームリンク先</th>\n");
-    o("\t\t\t\t<td>\n");
-    o("\t\t\t\t\t<input type=\"text\" name=\"project.home_url\" value=\"");h(project_a->home_url);o("\" maxlength=\"1000\" />\n");
-    o("\t\t\t\t\t<div class=\"description\">ホーム アンカーのリンク先を指定します。</div>\n");
-    o("\t\t\t\t</td>\n");
-    o("\t\t\t</tr>\n");
-    o("\t\t</table>\n");
-    o("\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
-    o("\t</form>\n");
-    o("</div>\n");
-    project_free(project_a);
-    output_footer();
-    db_finish(db_a);
-}
-/**
- * 環境設定を更新するaction。
- */
-void env_submit_action()
-{
-    Project* project_a = project_new();
-    Database* db_a;
-    char buffer[DEFAULT_LENGTH];
-
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
-    db_begin(db_a);
-    project_a = db_get_project(db_a, project_a);
-    cgiFormStringNoNewlines("project.home_description", project_a->home_description, DEFAULT_LENGTH);
-    cgiFormStringNoNewlines("project.home_url", project_a->home_url, DEFAULT_LENGTH);
-
-    db_update_project(db_a, project_a);
-
-    project_free(project_a);
     db_commit(db_a);
     db_finish(db_a);
     redirect("", "更新しました");

@@ -124,7 +124,6 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
       "<ul>\n");
     o("\t<li><a href='%s/%s/rss' title=\"RSS Feed\"><img src=\"%s/../img/rss.png\" alt=\"rss\" /></a></li>\n", cgiScriptName, g_project_name_4_url, cgiScriptName);
     o("\t<li><a href='%s/top/' title=\"トップページのサブプロジェクト一覧を表示します\">トップページ(サブプロジェクト一覧)</a></li>\n", cgiScriptName);
-    o("\t<li><a href='%s' title=\"ホームへ移動します\">", project->home_url); h(project->home_description); o("</a></li>\n");
     o("</ul>\n"
       "<br clear='all' />\n"
       "</div>\n");
@@ -2124,12 +2123,12 @@ got_item:
                 foreach (it_item, items_a) {
                     State* s = it_item->element;
                     int count = s == NULL ? 0 : s->count;
-                    o("\t\t[\""); h(s->name); o("\t(%d)\", %d]", count, count);
+                    o("\t\t[\""); o(s->name); o("\t(%d)\", %d]", count, count); /* html5ライブラリ側でエスケープしてるので、s->nameはエクケープしない */
                     if (iterator_next(it_item)) o(",");
                     o("\n");
                 }
                 o(      "\t\t];\n"
-                        "\t\tdocument.write('<canvas height=\"300\" id=\"graph_%d\"></canvas>');\n"
+                        "\t\tdocument.write('<canvas id=\"graph_%d\"></canvas>');\n"
                         "\t\t// -->\n"
                         "\t\t</script>\n", et->id);
                 o("</div>\n");
