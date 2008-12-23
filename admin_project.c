@@ -65,8 +65,8 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
             "<head>\n"
             "\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n"
             "\t<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\" />\n"
-            "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />"
-            "\t<title>%s 管理ツール - %s</title>\n", project->name, title);
+            "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />");
+    o(        "\t<title>管理ツール - "); h(project->name); o(" - "); h(title); o("</title>\n");
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName);
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/%s/setting_file/user.css\" />\n", cgiScriptName, g_project_name_4_url);
     if (script_name) {

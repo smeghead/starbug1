@@ -29,8 +29,8 @@
     print_error_page(__FILE__, __LINE__, msg);\
     exit(1);\
 }
-#define h(str)      cgiHtmlEscape(str == NULL ? "" : str)
-#define v(str)      cgiValueEscape(str == NULL ? "" : str)
+#define h(str)      cgi_escape(str == NULL ? "" : str)
+#define v(str)      cgi_escape(str == NULL ? "" : str)
 void u(char*);
 
 typedef enum {
@@ -81,5 +81,6 @@ extern char g_project_name[DEFAULT_LENGTH];
 extern char g_project_name_4_url[DEFAULT_LENGTH];
 extern char g_action_name[DEFAULT_LENGTH];
 extern char g_path_info[DEFAULT_LENGTH];
+void cgi_escape(char*);
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

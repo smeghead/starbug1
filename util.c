@@ -391,6 +391,49 @@ static cgiFormResultType cgiHtmlEscapeDataMailaddress(char *data, int len)
     }
     return cgiFormSuccess;
 }
+static cgiFormResultType cgi_html_escape(char *data, int len)
+{
+    while (len--) {
+        if (*data == '<') {
+            TRYPUTC('&');
+            TRYPUTC('l');
+            TRYPUTC('t');
+            TRYPUTC(';');
+        } else if (*data == '&') {
+            TRYPUTC('&');
+            TRYPUTC('a');
+            TRYPUTC('m');
+            TRYPUTC('p');
+            TRYPUTC(';');
+        } else if (*data == '>') {
+            TRYPUTC('&');
+            TRYPUTC('g');
+            TRYPUTC('t');
+            TRYPUTC(';');
+        } else if (*data == '"') {
+            TRYPUTC('&');
+            TRYPUTC('q');
+            TRYPUTC('o');
+            TRYPUTC('u');
+            TRYPUTC('t');
+            TRYPUTC(';');
+        } else if (*data == '\'') {
+            TRYPUTC('&');
+            TRYPUTC('#');
+            TRYPUTC('3');
+            TRYPUTC('9');
+            TRYPUTC(';');
+        } else {
+            TRYPUTC(*data);
+        }
+        data++;
+    }
+    return cgiFormSuccess;
+}
+void cgi_escape(char *s)
+{
+    cgi_html_escape(s, (int) strlen(s));
+}
 
 void hmail(char *s)
 {
