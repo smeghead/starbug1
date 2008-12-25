@@ -1,3 +1,7 @@
+2008-12-26  smeghead <smeghead@users.sourceforge.jp>
+
+    * チケット詳細ページの文言の修正
+
 2008-12-23  smeghead <smeghead@users.sourceforge.jp>
 
     * IEで統計情報のグラフがエラーになることがあったのを修正した。CSSでの幅指定をピクセル指定に戻した。

@@ -1222,7 +1222,7 @@ void ticket_action()
     o(" &nbsp;</h2>\n");
     o(      "<div id=\"ticket_newest\">\n"
             "<h3>チケット最新情報</h3>\n"
-            "<div class=\"description\">チケットの最新情報です。最新チケットのチケット属性の付いている属性と全添付ファイルを表示しています。</div>\n"
+            "<div class=\"description\">チケットの最新情報です。最新チケットのチケット属性の付いている項目と全添付ファイルを表示しています。</div>\n"
             "<table summary=\"newest table\">\n"
             "\t<tr>\n"
             "\t\t<th>ID</th>\n"
