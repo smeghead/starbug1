@@ -1,5 +1,9 @@
 2008-12-26  smeghead <smeghead@users.sourceforge.jp>
 
+    * htmlタグから xml:lang lang 属性を削除した。これらがあると中国語がIE6で文字化けするため。
+
+2008-12-26  smeghead <smeghead@users.sourceforge.jp>
+
     * チケット詳細ページの文言の修正
 
 2008-12-23  smeghead <smeghead@users.sourceforge.jp>

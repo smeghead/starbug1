@@ -102,7 +102,7 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
     cgiHeaderContentType("text/html; charset=utf-8;");
     /* Top of the page */
     o(      "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"
-            "<html xml:lang=\"ja\" lang=\"ja\" xmlns=\"http://www.w3.org/1999/xhtml\">\n"
+            "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
             "<head>\n"
             "\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n"
             "\t<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\" />\n"
