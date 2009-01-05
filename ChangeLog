@@ -1,3 +1,7 @@
+2009-01-05  smeghead <smeghead@users.sourceforge.jp>
+
+    * 存在しないURLが指定された時リダイレクト後に、dieを呼び出すのをやめた。500エラーが帰らないようにするため。
+
 2008-12-26  smeghead <smeghead@users.sourceforge.jp>
 
     * htmlタグから xml:lang lang 属性を削除した。これらがあると中国語がIE6で文字化けするため。

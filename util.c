@@ -120,7 +120,7 @@ ActionType analysis_action()
         strncpy(g_project_name, path_info + 1, DEFAULT_LENGTH);
     } else {
         redirect_raw("top");
-        die("redirect to top.");
+        return ret; /* ACTION_TYPE_NONE を返却する。 */
     }
     if ((index = strchr(g_project_name, '/'))) {
         *index = '\0';
@@ -221,10 +221,10 @@ int get_ticket_syntax_len(char* data, size_t len, char* project_id, char* ticket
 
         while (index++, 1) { /* each char */
             /* 
-             *              * 一文字つづ進めていく。
-             *                           * 途中でチケットリンクでないと判定された場合は、index を 0 にして、breakする。
-             *                                        * チケットリンクが終了したら、breakする。
-             *                                                     */
+             * 一文字つづ進めていく。
+             * 途中でチケットリンクでないと判定された場合は、index を 0 にして、breakする。
+             * チケットリンクが終了したら、breakする。
+             */
             if (string[index] == '\0') {
                 break;
             } else if (project_mode) {
