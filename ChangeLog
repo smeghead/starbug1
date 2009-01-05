@@ -1,6 +1,7 @@
 2009-01-05  smeghead <smeghead@users.sourceforge.jp>
 
     * 存在しないURLが指定された時リダイレクト後に、dieを呼び出すのをやめた。500エラーが帰らないようにするため。
+    * ブラウザの幅が狭い場合に、状態別チケット一覧とチケット検索でレイアウトが崩れる問題を修正。cssの修正
 
 2008-12-26  smeghead <smeghead@users.sourceforge.jp>
 
