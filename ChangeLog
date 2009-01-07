@@ -1,3 +1,7 @@
+2009-01-07  smeghead <smeghead@users.sourceforge.jp>
+
+    * メール送信のモジュールの作成中。現在存在するフックの仕組みをC言語の動的ライブラリに拡張する作業中。
+
 2009-01-05  smeghead <smeghead@users.sourceforge.jp>
 
     * 存在しないURLが指定された時リダイレクト後に、dieを呼び出すのをやめた。500エラーが帰らないようにするため。

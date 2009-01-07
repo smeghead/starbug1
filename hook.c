@@ -4,6 +4,7 @@
 #include <cgic.h>
 #include <dirent.h>
 #include <sys/stat.h>
+#include <dlfcn.h>
 #include "data.h"
 #include "util.h"
 #include "hook.h"
@@ -62,6 +63,15 @@ static String* create_json(String* content, Project* project, Message* message, 
     string_append(content, "]}}");
     return content;
 }
+char* get_script_dir(char* script_dir)
+{
+    char* p;
+    strcpy(script_dir, getenv("SCRIPT_FILENAME"));
+    if ((p = strrchr(script_dir, '/'))) {
+        *p = '\0';
+    }
+    return script_dir;
+}
 HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, List* element_types)
 {
     char hook_dir[DEFAULT_LENGTH] = "script";
@@ -80,9 +90,52 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
         strcpy(filename, dp->d_name);
         sprintf(hook_command, "%s/%s", hook_dir, filename);
         stat(hook_command, &fi);
-        if (!S_ISDIR(fi.st_mode) &&                        //ファイルで、
-                (fi.st_mode & S_IXUSR) &&                  //所有者が実行可能で
-                (strstr(filename, "hook_") == filename)) { // ファイル名がhook_から始まる。
+        d("hook filename: %s\n", filename);
+        if (!S_ISDIR(fi.st_mode) &&                        /*ファイルで、 */
+                (fi.st_mode & S_IRUSR) &&                  /*所有者が読取可能で */
+                (strstr(filename, "hook_") == filename) && /* ファイル名がhook_から始まる。 */
+                (strcmp(get_ext(filename), "so") == 0)) {       /* 拡張子がso */
+            /* プラグインの実行 */
+            int ret;
+            HOOK_RESULT* result;
+            void* handle;
+            char script_dir[DEFAULT_LENGTH];
+            char dlpath[DEFAULT_LENGTH];
+
+            result = list_new_element(hook->results);
+            sprintf(dlpath, "%s/%s", get_script_dir(script_dir), hook_command);
+        d("dlopen %s\n", dlpath);
+            handle = dlopen(dlpath, RTLD_LAZY);
+            if (!handle) {
+                d("dlopen failed: %s\n", dlerror());
+                sprintf(result->message, "[ERROR] hook処理(%s)でエラーが発生しました。(プラグインの読み込みに失敗しました。%s)", hook_command, dlerror());
+            } else {
+                char* error;
+                int (*func)(Project* project, Message* message, List* elements, List* element_types);
+        d("dlsym\n");
+                func = dlsym(handle, "execute");
+                if ((error = dlerror()) != NULL) {
+        d("dlsym error %s\n", error);
+                    fputs(error, stderr);
+                } else {
+                    d("func\n");
+                    ret = (*func)(project, message, elements, element_types);
+                    if (ret == 0) {
+                        d("ok\n");
+                        sprintf(result->message, "hook処理(%s)を実行しました。", hook_command);
+                    } else {
+                        d("ng\n");
+                        sprintf(result->message, "[ERROR] hook処理(%s)でエラーが発生しました。(return code: %d)", hook_command, ret);
+                    }
+                }
+            }
+        d("dlclose\n");
+            dlclose(handle);
+            list_add(hook->results, result);
+        } else if (!S_ISDIR(fi.st_mode) &&                 /*ファイルで、 */
+                (fi.st_mode & S_IXUSR) &&                  /*所有者が実行可能で */
+                (strstr(filename, "hook_") == filename)) { /* ファイル名がhook_から始まる。 */
+            /* 外部実行ファイルの実行 */
             int ret;
             char* val_a;
             HOOK_RESULT* result;
