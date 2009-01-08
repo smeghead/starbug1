@@ -9,11 +9,12 @@
 #include "../../data.h"
 #include "../../util.h"
 
-static int wait(struct pollfd *targets, int timeout)
+static int wait(int soc, struct pollfd *target, int timeout)
 {
     int ret = 0;
     while(1) {
-        ret = poll(targets, 2, timeout);
+        ret = poll(target, 1, timeout);
+        d("wait ret %d\n", ret);
         if (ret == -1 && errno != EINTR) {
             /* エラー */
             return -1;
@@ -21,7 +22,8 @@ static int wait(struct pollfd *targets, int timeout)
             /* timeout */
             return -2;
         }
-        if (targets[1].revents & (POLLIN | POLLERR)) {
+        d("send %d POLLIN %d | POLLERR %d\n", target->revents, POLLIN, POLLERR);
+        if (target->revents & (POLLIN | POLLERR)) {
             /* 送信準備OK */
             return 0;
         }
@@ -40,12 +42,11 @@ int execute(Project* project, Message* message, List* elements, List* element_ty
     int soc;
     char hbuf[NI_MAXHOST], sbuf[NI_MAXHOST];
     int error;
-    struct pollfd targets[2];
+    struct pollfd target;
 
-    d("start\n");
+    d("start %s:%s\n", SMTP_SERVER, SMTP_PORT);
     strcpy(hostnm, SMTP_SERVER);
     strcpy(portnm, SMTP_PORT);
-    d("p 1\n");
 
     memset(&hints, 0, sizeof(hints));
     hints.ai_socktype = SOCK_STREAM;
@@ -54,60 +55,52 @@ int execute(Project* project, Message* message, List* elements, List* element_ty
         fprintf(stderr, "getaddrinfo: %s %s:%s\n", hostnm, portnm, gai_strerror(error));
         return -1;
     }
-    d("p 2\n");
 
     soc = -1;
     for (res = res0; res; res = res->ai_next) {
-        d("p 3\n");
         error = getnameinfo(res->ai_addr, res->ai_addrlen, hbuf, sizeof(hbuf), sbuf,
                 sizeof(sbuf), NI_NUMERICHOST | NI_NUMERICSERV);
-        d("p 3 1\n");
         if (error) {
             fprintf(stderr, "getnameinfo: %s %s:%s\n", hostnm, portnm, gai_strerror(error));
             continue;
         }
-        d("p 3 2\n");
         fprintf(stderr, "trying %s port %s \n", hbuf, sbuf);
         soc = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
         if (soc < 0) {
             continue;
         }
-        d("p 3 3\n");
         if (connect(soc, res->ai_addr, res->ai_addrlen) < 0) {
-        d("p 3 4\n");
             close(soc);
             soc = -1;
             continue;
         } else {
-        d("p 3 5\n");
             d("connected\n");
             fprintf(stderr, "connect: Success\n");
             break;
         }
     }
-    d("p 4\n");
     freeaddrinfo(res0);
 
     if (soc < 0) {
         fprintf(stderr, "no destination to connect to\n");
         return -1;
     }
-    targets[0].fd = soc;
-    targets[0].events = POLLIN | POLLERR;
-    targets[1].fd = fileno(stdin);
-    targets[1].events = POLLIN | POLLERR;
+    target.fd = soc;
+    target.events = POLLIN | POLLERR;
 
     setbuf(stdout, NULL);
 
     {
         int ret;
-        fprintf(stderr, "HELO");
-        send_data(soc, "HELO example.com");
-        ret = wait(targets, -1);
+        ret = wait(soc, &target, 5000);
         if (ret < 1) return ret;
-        fprintf(stderr, "QUIT");
+        send_data(soc, "HELO example.com");
+        ret = wait(soc, &target, 5000);
+        if (ret < 1) return ret;
         send_data(soc, "QUIT");
     }
+    d("close\n");
+    close(soc);
 
     return 0;
 }

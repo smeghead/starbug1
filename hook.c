@@ -90,7 +90,6 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
         strcpy(filename, dp->d_name);
         sprintf(hook_command, "%s/%s", hook_dir, filename);
         stat(hook_command, &fi);
-        d("hook filename: %s\n", filename);
         if (!S_ISDIR(fi.st_mode) &&                        /*ファイルで、 */
                 (fi.st_mode & S_IRUSR) &&                  /*所有者が読取可能で */
                 (strstr(filename, "hook_") == filename) && /* ファイル名がhook_から始まる。 */
@@ -104,7 +103,6 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
 
             result = list_new_element(hook->results);
             sprintf(dlpath, "%s/%s", get_script_dir(script_dir), hook_command);
-        d("dlopen %s\n", dlpath);
             handle = dlopen(dlpath, RTLD_LAZY);
             if (!handle) {
                 d("dlopen failed: %s\n", dlerror());
@@ -112,13 +110,12 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
             } else {
                 char* error;
                 int (*func)(Project* project, Message* message, List* elements, List* element_types);
-        d("dlsym\n");
                 func = dlsym(handle, "execute");
                 if ((error = dlerror()) != NULL) {
-        d("dlsym error %s\n", error);
+                    d("dlsym error %s\n", error);
                     fputs(error, stderr);
                 } else {
-                    d("func\n");
+                    d("execute func\n");
                     ret = (*func)(project, message, elements, element_types);
                     if (ret == 0) {
                         d("ok\n");
@@ -129,7 +126,7 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
                     }
                 }
             }
-        d("dlclose\n");
+            d("dlclose\n");
             dlclose(handle);
             list_add(hook->results, result);
         } else if (!S_ISDIR(fi.st_mode) &&                 /*ファイルで、 */

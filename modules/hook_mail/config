@@ -1,0 +1,7 @@
+# メール通知の設定
+SMTP_SERVER = 127.0.0.1
+SMTP_PORT = 25
+TO = smeghead
+FROM = smeghead
+
+# vim: set fenc=utf-8:
