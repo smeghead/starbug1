@@ -1,6 +1,7 @@
 2009-01-08  smeghead <smeghead@users.sourceforge.jp>
 
     * メール送信のモジュールの作成中。
+    * インストールの説明を更新した。Starbug1のコンパイルには、gnuのmakeが必要であることを追記した。
 
 2009-01-07  smeghead <smeghead@users.sourceforge.jp>
 

@@ -1,3 +1,4 @@
+
 インストール方法
 
  ・ SQLite3のインストール
@@ -63,11 +64,14 @@ Starbug1のコンパイル
 
 取得したソースを展開しコンパイルします。
 
-$ tar zxf starbug-x.x.x.tar.gz
+$ tar zxf starbug1-x.x.x.tar.gz
 $ cd starbug1
-$ gmake
-$ gmake webapp
+$ make
+$ make webapp
 
+
+?Starbug1をコンパイルする場合は、gnuのmakeが必要です。OSがFreeBSDなどの場合で、
+makeがgnuのmakeでない場合は、gmakeを使用してコンパイルしてください。
 
 dist/starbug1 ディレクトリに、webアプリ一式が生成されます。
 
@@ -102,6 +106,7 @@ $ cat .htaccess
 # エラーページの指定
 ErrorDocument 500 /starbug1/error.html
 # CGIの実行許可
+AddHandler cgi-script cgi
 Options +ExecCGI
 # 初期ページの設定
 DirectoryIndex index.cgi
@@ -214,6 +219,8 @@ hook機能に登録された外部スクリプトでエラーが発生した場合は、「登録が完了しまし
 
 添付のメール送信スクリプトの設定方法
 
+添付のメール送信スクリプトの設定には、多少perlの知識が必要となります。
+
 Starbug1に添付されているメール送信スクリプトの設定方法を説明します。 ${Starbug1
 のインストールディレクトリ}/scriptディレクトリに、sample.hook_sendmail.pl が存
 在します。以下のコマンドで、メール送信スクリプトをhook_で始まるファイル名に変更
@@ -242,6 +249,15 @@ my $options = {
   to => 'project-ml@example.com'
 };
 
+
+設定後、シンタックスエラーが無いかをチェックします。cオプションを指定して実行し
+てください。
+
+# perl -c hook_sendmail.pl
+
+
+注意: ここで、モジュールが見付からないというエラーが発生した場合は、不足してい
+るライブラリをインストールしてください。
 
 以上の設定を行なった後、チケットの登録・返信を行なって、動作確認を行なってくだ
 さい。
@@ -312,4 +328,3 @@ print "Content-Type: text/plain;\n\nhello.";
 Webサーバプロセスユーザが、starbug1ディレクトリに書き込み権限があるか確認してく
 ださい。データベースファイルを格納するために、Webサーバプロセスユーザが
 starbug1ディレクトリに書き込み可能となっている必要があります。
-
