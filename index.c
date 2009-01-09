@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <cgic.h>
+#include "alloc.h"
 #include "util.h"
 #include "index_top.h"
 #include "index_project.h"

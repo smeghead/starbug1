@@ -8,22 +8,26 @@
 #include <poll.h>
 #include "../../data.h"
 #include "../../util.h"
+#include "../../simple_string.h"
 
 static int wait(int soc, struct pollfd *target, int timeout)
 {
     int ret = 0;
     while(1) {
         ret = poll(target, 1, timeout);
-        d("wait ret %d\n", ret);
+        d("poll ret %d\n", ret);
         if (ret == -1 && errno != EINTR) {
             /* エラー */
             return -1;
         } else if (ret == 0) {
             /* timeout */
+        d("poll timeout \n");
             return -2;
         }
-        d("send %d POLLIN %d | POLLERR %d\n", target->revents, POLLIN, POLLERR);
         if (target->revents & (POLLIN | POLLERR)) {
+            char buf[DEFAULT_LENGTH];
+            recv(soc, buf, sizeof(buf), 0);
+            d("recv: %s\n", buf);
             /* 送信準備OK */
             return 0;
         }
@@ -31,10 +35,21 @@ static int wait(int soc, struct pollfd *target, int timeout)
 }
 int send_data(int soc, char* buf)
 {
+    d("send: %s\n", buf);
     send(soc, buf, strlen(buf), 0);
     return 0;
 }
-int execute(Project* project, Message* message, List* elements, List* element_types)
+int build_data(String* buf, char* project_id, Project* project, Message* message, List* elements, List* element_types)
+{
+    string_appendf(buf, "From: %s\r\n", FROM);
+    string_appendf(buf, "To: %s\r\n", TO);
+    string_appendf(buf, "Subject: [%s:%d]Starbug1 notify.\r\n", project_id, message->id);
+    string_appendf(buf, "Content-Type: text/plain; charset=utf-8;\r\n\r\n");
+    string_appendf(buf, "Content-Transfer-Encoding: base64\n");
+    string_appendf(buf, "test.\r\n.\r\n");
+    return 0;
+}
+int execute(char* project_id, Project* project, Message* message, List* elements, List* element_types)
 {
     char hostnm[1024];
     char portnm[1024];
@@ -90,15 +105,46 @@ int execute(Project* project, Message* message, List* elements, List* element_ty
 
     setbuf(stdout, NULL);
 
+    d("=====\n");
     {
         int ret;
+        String* data_string_a = string_new(0);
+        char command[DEFAULT_LENGTH];
+
+    d("start \n");
         ret = wait(soc, &target, 5000);
-        if (ret < 1) return ret;
-        send_data(soc, "HELO example.com");
+    d("ret %d\n", ret);
+        if (ret < 0) return ret;
+        sprintf(command, "HELO %s\r\n", SMTP_SERVER);
+        send_data(soc, command);
         ret = wait(soc, &target, 5000);
-        if (ret < 1) return ret;
-        send_data(soc, "QUIT");
+    d("ret %d\n", ret);
+        if (ret < 0) return ret;
+        sprintf(command, "MAIL FROM: %s\r\n", FROM);
+        send_data(soc, command);
+        ret = wait(soc, &target, 5000);
+    d("ret %d\n", ret);
+        if (ret < 0) return ret;
+        sprintf(command, "RCPT TO: %s\r\n", TO);
+        send_data(soc, command);
+        ret = wait(soc, &target, 5000);
+    d("ret %d\n", ret);
+        if (ret < 0) return ret;
+        sprintf(command, "DATA\r\n");
+        send_data(soc, command);
+
+        /* data */
+        build_data(data_string_a, project_id, project, message, elements, element_types);
+        ret = wait(soc, &target, 5000);
+        if (ret < 0) return ret;
+        send_data(soc, string_rawstr(data_string_a));
+
+        ret = wait(soc, &target, 5000);
+        if (ret < 0) return ret;
+    d("ret %d\n", ret);
+        send_data(soc, "QUIT\r\n");
     }
+    d("=====\n");
     d("close\n");
     close(soc);
 

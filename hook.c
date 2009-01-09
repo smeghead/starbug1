@@ -6,6 +6,7 @@
 #include <sys/stat.h>
 #include <dlfcn.h>
 #include "data.h"
+#include "alloc.h"
 #include "util.h"
 #include "hook.h"
 #include "simple_string.h"
@@ -109,14 +110,14 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
                 sprintf(result->message, "[ERROR] hook処理(%s)でエラーが発生しました。(プラグインの読み込みに失敗しました。%s)", hook_command, dlerror());
             } else {
                 char* error;
-                int (*func)(Project* project, Message* message, List* elements, List* element_types);
+                int (*func)(char* project_id, Project* project, Message* message, List* elements, List* element_types);
                 func = dlsym(handle, "execute");
                 if ((error = dlerror()) != NULL) {
                     d("dlsym error %s\n", error);
                     fputs(error, stderr);
                 } else {
                     d("execute func\n");
-                    ret = (*func)(project, message, elements, element_types);
+                    ret = func(g_project_name, project, message, elements, element_types);
                     if (ret == 0) {
                         d("ok\n");
                         sprintf(result->message, "hook処理(%s)を実行しました。", hook_command);

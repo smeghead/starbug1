@@ -6,6 +6,7 @@
 #include "db_project.h"
 #include "db_top.h"
 #include "dbutil.h"
+#include "alloc.h"
 #include "util.h"
 #include "wiki.h"
 

@@ -4,6 +4,7 @@
 #include <cgic.h>
 #include "csv.h"
 #include "list.h"
+#include "alloc.h"
 #include "util.h"
 #include "simple_string.h"
 

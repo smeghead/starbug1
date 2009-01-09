@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "alloc.h"
 #include "util.h"
 #include "list.h"
 

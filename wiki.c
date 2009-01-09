@@ -3,6 +3,7 @@
 #include <string.h>
 #include <cgic.h>
 #include "wiki.h"
+#include "alloc.h"
 #include "util.h"
 #include "db_project.h"
 

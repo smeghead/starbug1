@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <cgic.h>
+#include "alloc.h"
 #include "util.h"
 #include "admin_project.h"
 #include "admin_top.h"

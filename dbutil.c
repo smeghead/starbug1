@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <sys/stat.h>
+#include "alloc.h"
 #include "util.h"
 #include "dbutil.h"
 

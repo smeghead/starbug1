@@ -4,6 +4,7 @@
 #include <sqlite3.h>
 #include "data.h"
 #include "db_project.h"
+#include "alloc.h"
 #include "util.h"
 #include "dbutil.h"
 #include "simple_string.h"

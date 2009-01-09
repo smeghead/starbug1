@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdlib.h>
 #include <time.h>
 #include <sys/time.h>
 #include <cgic.h>
 #include <iconv.h>
 #include <errno.h>
+#include "alloc.h"
 #include "util.h"
 #include "hook.h"
 
@@ -25,26 +25,7 @@ void redirect_raw(const char*);
 void page_not_found();
 
 Action* actions = NULL;
-int alloc_count = 0;
 
-void* xalloc(size_t size)
-{
-    void* p;
-    p = calloc(1, size);
-    if (!p) {
-        die("memory error.");
-    }
-    alloc_count++;
-/*     d("xalloc: %p\n", p); */
-    return p;
-}
-void xfree(void* p)
-{
-/*     d("xfree: %p\n", p); */
-    alloc_count--;
-    free(p);
-    p = NULL;
-}
 static Action* get_actions()
 {
     return actions;
@@ -73,7 +54,7 @@ void free_action_actions()
         xfree(old);
     }
     xfree(actions);
-    d("alloc_count: %d\n", alloc_count);
+    d("alloc_count: %d\n", get_alloc_count());
 }
 
 /* 復帰できないエラーが発生した場合にエラーページを表示する。 */

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "data.h"
+#include "alloc.h"
 #include "util.h"
 #include "simple_string.h"
 

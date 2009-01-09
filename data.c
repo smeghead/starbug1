@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "data.h"
+#include "alloc.h"
 #include "util.h"
 
 char* get_element_value(List* elements, ElementType* et)

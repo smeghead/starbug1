@@ -7,6 +7,7 @@
 #include "db_project.h"
 #include "dbutil.h"
 #include "list.h"
+#include "alloc.h"
 #include "util.h"
 #include "wiki.h"
 #include "hook.h"
