@@ -37,10 +37,11 @@ static String* create_json(String* content, Project* project, Message* message, 
     Iterator* it;
     String* base_url_a = string_new(0);
     base_url_a = get_base_url(base_url_a);
-    string_appendf(content, "{project:{name: \"%s\"}, ticket:{id: %d, url: \"%s/ticket/%d\",fields:[",
+    string_appendf(content, "{project:{name: \"%s\"}, ticket:{id: %d, url: \"%s/%s/ticket/%d\",fields:[",
             project->name,
             message->id,
             string_rawstr(base_url_a),
+            g_project_name,
             message->id);
     string_free(base_url_a);
     foreach (it, element_types) {
@@ -110,14 +111,17 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
                 sprintf(result->message, "[ERROR] hook処理(%s)でエラーが発生しました。(プラグインの読み込みに失敗しました。%s)", hook_command, dlerror());
             } else {
                 char* error;
-                int (*func)(char* project_id, Project* project, Message* message, List* elements, List* element_types);
+                int (*func)(char* base_url, char* project_id, Project* project, Message* message, List* elements, List* element_types);
                 func = dlsym(handle, "execute");
                 if ((error = dlerror()) != NULL) {
                     d("dlsym error %s\n", error);
                     fputs(error, stderr);
                 } else {
+                    String* base_url_a = string_new(0);
+                    base_url_a = get_base_url(base_url_a);
                     d("execute func\n");
-                    ret = func(g_project_name, project, message, elements, element_types);
+                    ret = func(string_rawstr(base_url_a), g_project_name, project, message, elements, element_types);
+                    string_free(base_url_a);
                     if (ret == 0) {
                         d("ok\n");
                         sprintf(result->message, "hook処理(%s)を実行しました。", hook_command);

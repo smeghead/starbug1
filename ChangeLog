@@ -1,3 +1,7 @@
+2009-01-11  smeghead <smeghead@users.sourceforge.jp>
+
+    * メール送信のモジュールの作成中。現在、マルチバイトを含まないメールを送信できる状態。
+
 2009-01-08  smeghead <smeghead@users.sourceforge.jp>
 
     * メール送信のモジュールの作成中。
