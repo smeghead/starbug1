@@ -1,3 +1,11 @@
+2009-01-20  smeghead <smeghead@users.sourceforge.jp>
+
+    * チケット一括登録で改行を含む項目を正しくパースできなかったのを修正した。
+
+2009-01-11  smeghead <smeghead@users.sourceforge.jp>
+
+    * 1.2.6-bataリリース
+
 2009-01-11  smeghead <smeghead@users.sourceforge.jp>
 
     * メール送信のモジュールの作成中。現在、マルチバイトを含まないメールを送信できる状態。
@@ -27,6 +35,10 @@
 
 2008-12-23  smeghead <smeghead@users.sourceforge.jp>
 
+    * 1.2.5-bataリリース
+
+2008-12-23  smeghead <smeghead@users.sourceforge.jp>
+
     * IEで統計情報のグラフがエラーになることがあったのを修正した。CSSでの幅指定をピクセル指定に戻した。
     * グラフの項目の名称は、HTML5ライブラリでHTMLエスケープしてるので、エスケープせずにjavascriptに渡すようにした。
     * サブプロジェクトのホームリンクを削除した。トップにホームリンクを作成できるので、機能として冗長でわかりにくくなるため。
@@ -41,6 +53,10 @@
 2008-12-16  smeghead <smeghead@users.sourceforge.jp>
 
     * .htaccessファイルにAddHandlerの定義を追加した。
+
+2008-12-12  smeghead <smeghead@users.sourceforge.jp>
+
+    * 1.2.4-bataリリース
 
 2008-12-12  smeghead <smeghead@users.sourceforge.jp>
 

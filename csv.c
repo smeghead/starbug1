@@ -89,7 +89,7 @@ Csv* csv_new(char* content)
                     csv->field_count = field_count;
             }
         }
-        if (*p == '\n') {
+        if (mode != CSV_MODE_QUOTED_DATA && *p == '\n') {
             list_add(csv->lines, line);
             csv->line_count++;
             field_count = 0;
