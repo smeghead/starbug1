@@ -1,3 +1,8 @@
+2009-02-19  smeghead <smeghead@users.sourceforge.jp>
+
+    * Firefox3でグラフの凡例の文字が、ずれていたのを修正した。
+      CSSの定義を削除した。
+
 2009-01-20  smeghead <smeghead@users.sourceforge.jp>
 
     * チケット一括登録で改行を含む項目を正しくパースできなかったのを修正した。
