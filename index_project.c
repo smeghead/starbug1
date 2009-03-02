@@ -8,6 +8,7 @@
 #include "dbutil.h"
 #include "list.h"
 #include "alloc.h"
+#include "conv.h"
 #include "util.h"
 #include "wiki.h"
 #include "hook.h"

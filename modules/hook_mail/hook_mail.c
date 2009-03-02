@@ -33,19 +33,23 @@ static int wait(int soc, struct pollfd *target, int timeout)
         }
     }
 }
-int send_data(int soc, char* buf)
+static int send_data(int soc, char* buf)
 {
     d("send: %s\n", buf);
     send(soc, buf, strlen(buf), 0);
     return 0;
 }
-int build_data(String* buf, char* base_url, char* project_id, Project* project, Message* message, List* elements, List* element_types)
+static int build_header(String* buf, char* base_url, char* project_id, Project* project, Message* message, List* elements, List* element_types)
 {
     string_appendf(buf, "From: %s\r\n", FROM);
     string_appendf(buf, "To: %s\r\n", TO);
     string_appendf(buf, "Subject: [%s:%d]Starbug1 notify.\r\n", project_id, message->id);
     string_appendf(buf, "Content-Type: text/plain;\r\n");
     string_appendf(buf, "\r\n");
+    return 0;
+}
+static int build_body(String* buf, char* base_url, char* project_id, Project* project, Message* message, List* elements, List* element_types)
+{
     string_appendf(buf, "a ticket has updated. please check this url.\r\n");
     string_appendf(buf, " %s/%s/ticket/%d\r\n", base_url, project_id, message->id);
     string_appendf(buf, "\r\n.\r\n");
@@ -136,10 +140,12 @@ int execute(char* base_url, char* project_id, Project* project, Message* message
         send_data(soc, command);
 
         /* data */
-        build_data(data_string_a, base_url, project_id, project, message, elements, element_types);
+        build_header(data_string_a, base_url, project_id, project, message, elements, element_types);
+        build_body(data_string_a, base_url, project_id, project, message, elements, element_types);
         ret = wait(soc, &target, 5000);
         if (ret < 0) return ret;
         send_data(soc, string_rawstr(data_string_a));
+        string_free(data_string_a);
 
         ret = wait(soc, &target, 5000);
         if (ret < 0) return ret;
@@ -152,6 +158,8 @@ int execute(char* base_url, char* project_id, Project* project, Message* message
 
     return 0;
 }
+
+/* 以下、テスト用関数 */
 void conv(char*, char*);
 int main(int argc, char** argv)
 {
