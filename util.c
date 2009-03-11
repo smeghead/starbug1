@@ -394,8 +394,8 @@ static cgiFormResultType cgi_html_escape(char *data, int len)
         } else if (*data == '"') {
             TRYPUTC('&');
             TRYPUTC('q');
-            TRYPUTC('o');
             TRYPUTC('u');
+            TRYPUTC('o');
             TRYPUTC('t');
             TRYPUTC(';');
         } else if (*data == '\'') {

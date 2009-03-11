@@ -1,3 +1,11 @@
+2009-03-11  smeghead <smeghead@users.sourceforge.jp>
+
+    * "のHTMLエスケープの処理が間違っていたのを修正した。スペルミス
+
+2009-03-09  smeghead <smeghead@users.sourceforge.jp>
+
+    * 日付のフィールドに保存した値が返信時に、テキストフィールに表示されない問題を修正した。
+
 2009-02-19  smeghead <smeghead@users.sourceforge.jp>
 
     * Firefox3でグラフの凡例の文字が、ずれていたのを修正した。

@@ -1044,7 +1044,7 @@ void output_form_element(Database* db, List* elements, ElementType* et)
             break;
         case ELEM_TYPE_DATE:
             o("<span>\n");
-            o("<input type=\"text\" class=\"calendar\" id=\"field%d\" name=\"field%d\" value=\"\n",
+            o("<input type=\"text\" class=\"calendar\" id=\"field%d\" name=\"field%d\" value=\"",
                     et->id, et->id);
             v(value);
             o("\" maxlength=\"%d\"/>\n"
