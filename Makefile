@@ -1,4 +1,4 @@
-VERSION = 1.2.6-beta
+VERSION = 1.2.7-beta
 CC = gcc
 CC_VERSION = ${shell gcc --version | grep 'gcc.*[0-9]\.' | sed -e 's/gcc[^0-9]*\([0-9]\).*/\1/g'}
 CFLAGS = -I/usr/include -I/usr/local/include -I. -DVERSION=\"${VERSION}\" -O3 -Wall
