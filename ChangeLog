@@ -1,6 +1,6 @@
 2009-03-16  smeghead <smeghead@users.sourceforge.jp>
 
-    * 統計情報グラフの要素数が多い場合には、少数派の項目をその他として扱うように修正した。
+    * 統計情報グラフのサイズ指定をStarbug1 1.1系のサイズ指定にした。
 
 2009-03-11  smeghead <smeghead@users.sourceforge.jp>
 

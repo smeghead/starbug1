@@ -2130,7 +2130,7 @@ got_item:
                     o("\n");
                 }
                 o(      "\t\t];\n"
-                        "\t\tdocument.write('<canvas width=\"400\" height=\"300\" id=\"graph_%d\"></canvas>');\n"
+                        "\t\tdocument.write('<canvas width=\"400\" height=\"250\" id=\"graph_%d\"></canvas>');\n"
                         "\t\t// -->\n"
                         "\t\t</script>\n", et->id);
                 o("</div>\n");
