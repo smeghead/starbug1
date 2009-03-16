@@ -2092,6 +2092,7 @@ void statistics_action()
         List* items_a;
         List* all_items_a;
         Iterator* it_item;
+        int item_index, other_count;
 
         list_alloc(items_a, State);
         list_alloc(all_items_a, ListItem);
@@ -2122,11 +2123,22 @@ got_item:
                         "\t\t<script type=\"text/javascript\">\n"
                         "\t\t<!--\n"
                         "\t\tvar graph_%d = [\n", et->id);
+                item_index = 0;
+                other_count = 0; /* その他として扱われた数 */
                 foreach (it_item, items_a) {
                     State* s = it_item->element;
                     int count = s == NULL ? 0 : s->count;
-                    o("\t\t[\""); o(s->name); o("\t(%d)\", %d]", count, count); /* html5ライブラリ側でエスケープしてるので、s->nameはエクケープしない */
-                    if (iterator_next(it_item)) o(",");
+                    if (item_index < 5) {
+                        o("\t\t[\""); o(s->name); o("\t(%d)\", %d]", count, count); /* html5ライブラリ側でエスケープしてるので、s->nameはエクケープしない */
+                        if (iterator_next(it_item)) o(",");
+                        o("\n");
+                    } else {
+                        other_count += count;
+                    }
+                    item_index++;
+                }
+                if (other_count) {
+                    o("\t\t[\"その他\t(%d)\", %d]", other_count, other_count);
                     o("\n");
                 }
                 o(      "\t\t];\n"

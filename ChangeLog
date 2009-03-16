@@ -1,3 +1,7 @@
+2009-03-16  smeghead <smeghead@users.sourceforge.jp>
+
+    * 統計情報グラフの要素数が多い場合には、少数派の項目をその他として扱うように修正した。
+
 2009-03-11  smeghead <smeghead@users.sourceforge.jp>
 
     * "のHTMLエスケープの処理が間違っていたのを修正した。スペルミス
