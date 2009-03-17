@@ -77,10 +77,10 @@ void print_error_page(char* file_name, int line_number, char* message)
                 message);
     o(      "<hr />"
             "<div align=\"right\">"
-            "<address>Copyright smeghead 2007 - 2008.</address>"
+            "<address>%s.</address>"
             "</div>"
         "</body>"
-        "</html>");
+        "</html>", COPYRIGHT);
 }
 
 ActionType analysis_action()

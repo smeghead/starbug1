@@ -155,10 +155,10 @@ void output_footer()
             "\t</a>\n"
             "</p>\n"
             "<div><address>Powered by cgic &amp; SQLite3.</address></div>\n"
-            "<div><address>Starbug1 version: %s. Copyright smeghead 2007 - 2008.</address></div>\n"
+            "<div><address>Starbug1 version: %s. %s.</address></div>\n"
             "</div>\n"
             "</div>\n"
-            "</body>\n</html>\n", cgiScriptName, VERSION);
+            "</body>\n</html>\n", cgiScriptName, VERSION, COPYRIGHT);
 }
 bool is_enabled_project(char* project_name)
 {

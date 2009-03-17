@@ -1,7 +1,8 @@
 VERSION = 1.2.7-beta
+COPYRIGHT = Copyright\ smeghead\ 2007\ -\ 2008
 CC = gcc
 CC_VERSION = ${shell gcc --version | grep 'gcc.*[0-9]\.' | sed -e 's/gcc[^0-9]*\([0-9]\).*/\1/g'}
-CFLAGS = -I/usr/include -I/usr/local/include -I. -DVERSION=\"${VERSION}\" -O3 -Wall
+CFLAGS = -I/usr/include -I/usr/local/include -I. -DVERSION=\"${VERSION}\" -DCOPYRIGHT=\"${COPYRIGHT}\" -O3 -Wall
 LFLAGS = -L/usr/lib -L/usr/local/lib -lsqlite3 -lcgic -ldl
 ifeq ($(CC_VERSION), 3)
 	CFLAGS += -W
