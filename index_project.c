@@ -948,18 +948,18 @@ void report_html_download_action()
     list_free(conditions_a);
     condition_free(sort_a);
 
-    o("Content-Disposition: attachment; filename=\"report.xls\"\r\n");
+    o("Content-Disposition: attachment; filename=\"report.html\"\r\n");
     cgiHeaderContentType("application/vnd.ms-excel");
 
     o(  "<html>"
-        "<head><title>report.html</title></head>"
+        "<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /><title>report</title></head>"
         "<body>");
     o(  "<table><tr><td>");
     h(project_a->name); o("</td></tr>\r\n");
     project_free(project_a);
     output_ticket_information_4_html_report_header(element_types_a);
     output_ticket_information_4_html_report(db_a, result_a, element_types_a);
-    o(  "</body>"
+    o(  "</table></body>"
         "</html>");
     db_finish(db_a);
     list_free(element_types_a);
