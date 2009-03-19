@@ -49,6 +49,7 @@ void edit_top_action();
 void edit_top_submit_action();
 void download_action();
 void report_csv_download_action();
+void report_html_download_action();
 void rss_action();
 void top_action();
 void setting_file_action();
@@ -90,6 +91,7 @@ void register_actions()
     REG_ACTION(download);
     REG_ACTION(rss);
     REG_ACTION(report_csv_download);
+    REG_ACTION(report_html_download);
     REG_ACTION(top);
     REG_ACTION(setting_file);
 }
@@ -771,7 +773,11 @@ void search_action()
             o("(%d)&nbsp;", s->count);
         }
         o(      "]&nbsp;");
-        o(      "<a href=\"%s/%s/report_csv_download?%s\" target=\"_blank\">検索結果をCSVでダウンロードする。</a>\n",
+        o(      "<a href=\"%s/%s/report_csv_download?%s\" target=\"_blank\">検索結果をCSV形式でダウンロードする。</a>\n",
+                cgiScriptName,
+                g_project_name_4_url,
+                string_rawstr(query_string_a));
+        o(      "<a href=\"%s/%s/report_html_download?%s\" target=\"_blank\">検索結果をHTMLでダウンロードする。(excelで表示する)</a>\n",
                 cgiScriptName,
                 g_project_name_4_url,
                 string_rawstr(query_string_a));
@@ -827,6 +833,52 @@ void output_ticket_information_4_csv_report(Database* db, SearchResult* result, 
         free_element_list(elements_a);
     }
 }
+void output_ticket_information_4_html_report_header(List* element_types)
+{
+    Iterator* it;
+
+    o("<tr><td>");
+    h("ID"); 
+    o("</td><td>");
+    foreach (it, element_types) {
+        ElementType* et = it->element;
+        if (!et->ticket_property) continue;
+        h(et->name);
+        o("</td><td>");
+    }
+    h("投稿日時");
+    o("</td><td>");
+    h("最終更新日時");
+    o("</td><td>");
+    h("放置日数");
+    o("</td></tr>\r\n");
+}
+void output_ticket_information_4_html_report(Database* db, SearchResult* result, List* element_types)
+{
+    Iterator* it;
+    Iterator* it_msg;
+
+    foreach (it_msg, result->messages) {
+        Message* message = it_msg->element;
+        List* elements_a;
+        char id_str[NUM_LENGTH];
+        sprintf(id_str, "%d", message->id);
+        list_alloc(elements_a, Element);
+        elements_a = db_get_last_elements(db, message->id, elements_a);
+        o("<tr><td>");
+        h(id_str); o("</td><td>");
+        foreach (it, element_types) {
+            ElementType* et = it->element;
+            if (!et->ticket_property) continue;
+            h(get_element_value_by_id(elements_a, et->id)); o("</td><td>");
+        }
+        h(get_element_value_by_id(elements_a, ELEM_ID_REGISTERDATE)); o("</td><td>");
+        h(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE)); o("</td><td>");
+        h(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE_PASSED));
+        o("</td></tr>\r\n");
+        free_element_list(elements_a);
+    }
+}
 /**
  * CSVレポートをダウンロードするaction。
  */
@@ -863,6 +915,52 @@ void report_csv_download_action()
     project_free(project_a);
     output_ticket_information_4_csv_report_header(element_types_a);
     output_ticket_information_4_csv_report(db_a, result_a, element_types_a);
+    db_finish(db_a);
+    list_free(element_types_a);
+    search_result_free(result_a);
+}
+/**
+ * エクセルで表示するためのHTMLレポートをダウンロードするaction。
+ */
+void report_html_download_action()
+{
+    SearchResult* result_a = search_result_new();
+    List* element_types_a;
+    List* conditions_a = NULL;
+    Condition* sort_a = NULL;
+    Project* project_a = project_new();
+    char q[DEFAULT_LENGTH];
+    Database* db_a;
+    char buffer[DEFAULT_LENGTH];
+
+    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    project_a = db_get_project(db_a, project_a);
+    list_alloc(element_types_a, ElementType);
+
+    element_types_a = db_get_element_types_all(db_a, element_types_a);
+    /* 検索 */
+    list_alloc(conditions_a, Condition);
+    conditions_a = create_conditions(conditions_a, element_types_a, false);
+    cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
+    sort_a = condition_new();
+    create_sort_condition(sort_a);
+    result_a = db_search_tickets_4_report(db_a, conditions_a, q, sort_a, result_a);
+    list_free(conditions_a);
+    condition_free(sort_a);
+
+    o("Content-Disposition: attachment; filename=\"report.xls\"\r\n");
+    cgiHeaderContentType("application/vnd.ms-excel");
+
+    o(  "<html>"
+        "<head><title>report.html</title></head>"
+        "<body>");
+    o(  "<table><tr><td>");
+    h(project_a->name); o("</td></tr>\r\n");
+    project_free(project_a);
+    output_ticket_information_4_html_report_header(element_types_a);
+    output_ticket_information_4_html_report(db_a, result_a, element_types_a);
+    o(  "</body>"
+        "</html>");
     db_finish(db_a);
     list_free(element_types_a);
     search_result_free(result_a);
