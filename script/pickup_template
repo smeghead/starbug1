@@ -1,6 +1,7 @@
 #!/bin/sh
 TEMPLATE_DIR=template
 rm -rf $TEMPLATE_DIR
-mkdir -p $TEMPLATE_DIR/{css,db}
-cat pickup_template.sql | sqlite3 `dirname $0`/../db/starbug1.db | sqlite3 $TEMPLATE_DIR/db/starbug1.db
-cp `dirname $0`/../css/user.css $TEMPLATE_DIR/css/
+mkdir -p $TEMPLATE_DIR/db
+for f in ../db/*.db 
+do cat pickup_template.sql | sqlite3 $f | sqlite3 $TEMPLATE_DIR/db/$f
+done

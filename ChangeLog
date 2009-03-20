@@ -1,3 +1,7 @@
+2009-03-20  smeghead <smeghead@users.sourceforge.jp>
+
+    * 設定情報のエクスポートのスクリプトを更新した。
+
 2009-03-19  smeghead <smeghead@users.sourceforge.jp>
 
     * 検索結果のCSV形式でのダウンロードに加えて、HTML形式でダウンロードして
