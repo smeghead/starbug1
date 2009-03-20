@@ -1,6 +1,7 @@
 2009-03-20  smeghead <smeghead@users.sourceforge.jp>
 
     * 設定情報のエクスポートのスクリプトを更新した。
+    * トップの管理ツールで、サブプロジェクトのデータベースパスを表示するようにした。
 
 2009-03-19  smeghead <smeghead@users.sourceforge.jp>
 

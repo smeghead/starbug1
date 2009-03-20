@@ -143,6 +143,7 @@ void top_top_action()
     o(      "\t\t<table>\n"
             "\t\t\t<tr>\n"
             "\t\t\t\t<th>サブプロジェクト名</th>\n"
+            "\t\t\t\t<th>データベースパス</th>\n"
             "\t\t\t\t<th>サブプロジェクトID</th>\n"
             "\t\t\t\t<th>並び順</th>\n"
             "\t\t\t\t<th>削除</th>\n"
@@ -162,6 +163,7 @@ void top_top_action()
         project_a = db_get_project(db_project_a, project_a);
         o(      "\t\t\t<tr>\n");
         o(      "\t\t\t\t<td>"); h(project_a->name); o("</td>\n");
+        o(      "\t\t\t\t<td>"); h(db_name); o("</td>\n");
         project_free(project_a);
         db_finish(db_project_a);
         o(      "\t\t\t\t<td><input type=\"text\" name=\"project_%d.name\" class=\"project_id\" value=\"", p->id); h(p->name); o("\" /></td>\n");
