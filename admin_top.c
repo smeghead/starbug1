@@ -53,8 +53,9 @@ void top_output_header(char* title, Project* project)
             "<h1 id=\"toptitle\" title=\"Starbug1\">"); h(project->name); o(" プロジェクトの管理</h1>\n");
 /*             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/../img/starbug1.jpg\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName); */
     o(      "<div id=\"projectmenu\">\n"
-            "\t<ul>\n"
-            "\t\t<li><a href=\"%s/../index.%s/%s/\">トップページへ</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
+            "\t<ul>\n");
+    o(      "\t\t<li><a href=\"%s/../index.%s/%s/\">プロジェクトトップ</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
+    o(      "\t\t<li><a href=\"%s/../admin.%s/%s/\">プロジェクトの管理</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
     o(      "\t</ul>\n"
             "</div>\n");
 }
