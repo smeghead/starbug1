@@ -625,14 +625,14 @@ void css_field(char* str)
 }
 String* get_base_url(String* buf)
 {
-    int is_ssl = strcmp(cgiServerProtocol, "HTTPS") == 0 ? 1 : 0;
+    int is_ssl = strcmp(getenv("HTTPS"), "") == 0 ? 0 : 1;
     int is_default_port_no = 
         (is_ssl && strcmp(cgiServerPort, "443") == 0) || (is_ssl == 0 && strcmp(cgiServerPort, "80") == 0);
     string_appendf(buf, "http%s://%s%s%s%s",
             is_ssl ? "s" : "",
+            cgiServerName,
             is_default_port_no ? "" : ":",
             is_default_port_no ? "" : cgiServerPort,
-            cgiServerName,
             cgiScriptName);
     return buf;
 }
