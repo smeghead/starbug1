@@ -3,7 +3,7 @@ COPYRIGHT = Copyright\ smeghead\ 2007\ -\ 2009
 CC = gcc
 CC_VERSION = ${shell gcc --version | grep 'gcc.*[0-9]\.' | sed -e 's/gcc[^0-9]*\([0-9]\).*/\1/g'}
 CFLAGS = -I/usr/include -I/usr/local/include -I. -DVERSION=\"${VERSION}\" -DCOPYRIGHT=\"${COPYRIGHT}\" -O3 -Wall
-LFLAGS = -L/usr/lib -L/usr/local/lib -lsqlite3 -lcgic -ldl
+LFLAGS = -L/usr/lib -L/usr/local/lib -lsqlite3 -lcgic
 ifeq ($(CC_VERSION), 3)
 	CFLAGS += -W
 endif
@@ -11,6 +11,9 @@ ifeq ($(CC_VERSION), 4)
 	CFLAGS += -Wextra
 endif
 OS = ${shell uname}
+ifeq ($(OS), Linux)
+	LFLAGS += -ldl
+endif
 ifneq ($(OS), Linux)
 	LFLAGS += -liconv
 endif

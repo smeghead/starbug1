@@ -1,3 +1,8 @@
+2009-05-18  smeghead <smeghead@users.sourceforge.jp>
+
+    * FreeBSDの場合にも LFLAGS に、-ldl が付いていたため FreeBSD でコンパイル
+      に失敗していた。Linuxの場合に、 -ldl を付加するようにMakefileを修正した。
+
 2009-04-24  smeghead <smeghead@users.sourceforge.jp>
 
     * SSL接続時に、hookスクリプトに渡すホスト名を正しく作れない問題を修正した。
