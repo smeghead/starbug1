@@ -30,8 +30,6 @@ void top_register_actions()
 
 void top_output_header(char* title, Project* project)
 {
-    String* base_url_a = string_new(0);
-    base_url_a = get_base_url(base_url_a);
     o("Pragma: no-cache\r\n");
     o("Cache-Control: no-cache\t\n");
     cgiHeaderContentType("text/html; charset=utf-8;");
@@ -44,7 +42,6 @@ void top_output_header(char* title, Project* project)
             "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />\n");
     o(        "\t<title>Starbug1 - "); h(project->name); o(" - "); h(title); o("</title>\n");
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/top.css\" />\n", cgiScriptName);
-    string_free(base_url_a);
     o(      "</head>\n"
             "<body>\n"
             "<a name=\"top\"></a>\n"
