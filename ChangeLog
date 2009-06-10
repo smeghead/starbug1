@@ -1,3 +1,13 @@
+2009-06-10  smeghead  <smeghead@smeghead-laptop>
+
+	* 日本語によるメール送信処理の作成中
+
+2009-05-31  smeghead  <smeghead@smeghead-laptop>
+
+	* リクエストされたURLを求める処理に問題があったのを修正した。環境変数の
+    HTTPSを判定して、nullポインタを示していない場合、SSLとして判定するようにし
+    た。
+
 2009-05-18  smeghead <smeghead@users.sourceforge.jp>
 
     * FreeBSDの場合にも LFLAGS に、-ldl が付いていたため FreeBSD でコンパイル

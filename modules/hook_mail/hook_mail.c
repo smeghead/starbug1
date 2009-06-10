@@ -6,6 +6,8 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <poll.h>
+#include "../../alloc.h"
+#include "../../conv.h"
 #include "../../data.h"
 #include "../../util.h"
 #include "../../simple_string.h"
@@ -41,11 +43,15 @@ static int send_data(int soc, char* buf)
 }
 static int build_header(String* buf, char* base_url, char* project_id, Project* project, Message* message, List* elements, List* element_types)
 {
+    char* subject = get_element_value_by_id(elements, ELEM_ID_TITLE);
+    char* subject_b64_a = xalloc(sizeof(char) * strlen(subject) * 1.5); /* base64での増加分を考慮 */
+    base64_encode((unsigned char*)subject, (unsigned char*)subject_b64_a);
     string_appendf(buf, "From: %s\r\n", FROM);
     string_appendf(buf, "To: %s\r\n", TO);
-    string_appendf(buf, "Subject: [%s:%d]Starbug1 notify.\r\n", project_id, message->id);
+    string_appendf(buf, "Subject: [%s:%d]Starbug1 notify. =?UTF-8?B?%s?=\r\n", project_id, message->id, subject_b64_a);
     string_appendf(buf, "Content-Type: text/plain;\r\n");
     string_appendf(buf, "\r\n");
+    xfree(subject_b64_a);
     return 0;
 }
 static int build_body(String* buf, char* base_url, char* project_id, Project* project, Message* message, List* elements, List* element_types)
