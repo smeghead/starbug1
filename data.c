@@ -13,7 +13,7 @@ char* get_element_value(List* elements, ElementType* et)
     foreach (it, elements) {
         Element* e = it->element;
         if (et->id == e->element_type_id && e->str_val != NULL)
-            return e->str_val;
+            return string_rawstr(e->str_val);
     }
     return "";
 }
@@ -24,22 +24,21 @@ char* get_element_value_by_id(List* elements, const int type)
     foreach (it, elements) {
         Element* e = it->element;
         if (type == e->element_type_id && e->str_val != NULL)
-            return e->str_val;
+            return string_rawstr(e->str_val);
     }
     return "";
 }
 void set_element_value(Element* e, const char* val)
 {
-    e->str_val = xalloc(sizeof(char) * strlen(val) + 1);
-    strcpy(e->str_val, val);
+    string_set(e->str_val, val);
 }
 void set_condition_values(Condition* c, int element_type_id, int condition_type, char* value, char* cookie_value, bool cookie_restore)
 {
     c->element_type_id = element_type_id;
     c->condition_type = condition_type;
-    strcpy(c->value, value);
+    string_set(c->value, value);
     if (cookie_restore)
-        strcpy(c->cookie_value, cookie_value);
+        string_set(c->cookie_value, cookie_value);
 }
 char* get_condition_value(List* conditions, int element_type_id, int condition_type)
 {
@@ -65,11 +64,11 @@ int valid_condition_size(List* conditions)
 }
 bool valid_condition(Condition* c)
 {
-    return (strlen(c->value) || strlen(c->cookie_value)) ? true : false;
+    return (string_len(c->value) || string_len(c->cookie_value)) ? true : false;
 }
 char* get_condition_valid_value(Condition* c)
 {
-    return strlen(c->value) ? c->value : c->cookie_value;
+    return string_len(c->value) ? string_rawstr(c->value) : string_rawstr(c->cookie_value);
 }
 ProjectInfo* project_info_new()
 {
@@ -84,18 +83,28 @@ void project_info_free(ProjectInfo* pi)
 }
 Project* project_new()
 {
-    return xalloc(sizeof(Project));
+    Project* p = xalloc(sizeof(Project));
+    p->name = string_new(0);
+    p->home_description = string_new(0);
+    p->home_url = string_new(0);
+    return p;
 }
 void project_free(Project* p)
 {
+    string_free(p->name);
+    string_free(p->home_description);
+    string_free(p->home_url);
     xfree(p);
 }
 State* state_new()
 {
-    return xalloc(sizeof(State));
+    State* s = xalloc(sizeof(State));
+    s->name = string_new(0);
+    return s;
 }
 void state_free(State* s)
 {
+    string_free(s->name);
     xfree(s);
 }
 SearchResult* search_result_new()
@@ -108,12 +117,6 @@ SearchResult* search_result_new()
 void search_result_free(SearchResult* sr)
 {
     if (sr->messages) {
-        Iterator* it;
-        foreach (it, sr->messages) {
-            Message* m = it->element;
-            if (m->elements)
-                free_element_list(m->elements); /* リスト自体は、list_freeで開放するので、リスト要素だけ開放する。 */
-        }
         list_free(sr->messages);
     }
     if (sr->states) {
@@ -123,46 +126,71 @@ void search_result_free(SearchResult* sr)
 }
 ListItem* list_item_new()
 {
-    return xalloc(sizeof(ListItem));
+    ListItem* li = xalloc(sizeof(ListItem));
+    li->name = string_new(0);
+    return li;
 }
 void list_item_free(ListItem* li)
 {
+    string_free(li->name);
     xfree(li);
 }
 
 SettingFile* setting_file_new()
 {
-    return xalloc(sizeof(SettingFile));
+    SettingFile* sf = xalloc(sizeof(SettingFile));
+    sf->name = string_new(0);
+    sf->file_name = string_new(0);
+    sf->mime_type = string_new(0);
+    return sf;
 }
 void setting_file_free(SettingFile* file)
 {
+    string_free(file->name);
+    string_free(file->file_name);
+    string_free(file->mime_type);
     if (file->content)
         xfree(file->content);
     xfree(file);
 }
 Element* element_new()
 {
-    return xalloc(sizeof(Element));
+    Element* e = xalloc(sizeof(Element));
+    e->str_val = string_new(0);
+    return e;
 }
 void element_free(Element* e)
 {
+    string_free(e->str_val);
     xfree(e);
 }
 ElementType* element_type_new()
 {
-    return xalloc(sizeof(ElementType));
+    ElementType* et = xalloc(sizeof(ElementType));
+    et->name = string_new(0);
+    et->description = string_new(0);
+    et->default_value = string_new(0);
+    return et;
 }
 void element_type_free(ElementType* e)
 {
+    string_free(e->name);
+    string_free(e->description);
+    string_free(e->default_value);
     xfree(e);
 }
 
 ElementFile* element_file_new()
 {
-    return xalloc(sizeof(ElementFile));
+    ElementFile* ef = xalloc(sizeof(ElementFile));
+    ef->name = string_new(0);
+    ef->mime_type = string_new(0);
+    return ef;
 }
 void element_file_free(ElementFile* ef)
 {
+    string_free(ef->name);
+    string_free(ef->mime_type);
     if (ef->content)
         xfree(ef->content);
     xfree(ef);
@@ -176,35 +204,43 @@ Message* message_new()
 void message_free(Message* m)
 {
     if (m->elements)
-        free_element_list(m->elements);
+        list_free(m->elements);
     xfree(m);
 }
 Condition* condition_new()
 {
-    return xalloc(sizeof(Condition));
+    Condition* c = xalloc(sizeof(Condition));
+    c->value = string_new(0);
+    c->cookie_value = string_new(0);
+    return c;
 }
 void condition_free(Condition* c)
 {
+    string_free(c->value);
+    string_free(c->cookie_value);
     xfree(c);
 }
-void free_element_list(List* elements)
-{
-    Iterator* it;
-    foreach (it, elements) {
-        Element* e = it->element;
+/*void free_element_list(List* elements)*/
+/*{*/
+/*    Iterator* it;*/
+/*    foreach (it, elements) {*/
+/*        Element* e = it->element;*/
 /*         d("str_val:%s\n", e->str_val); */
-        if (e->str_val)
-            xfree(e->str_val);
-    }
-    list_free(elements);
-}
+/*        if (e->str_val)*/
+/*            xfree(e->str_val);*/
+/*    }*/
+/*    list_free(elements);*/
+/*}*/
 Wiki* wiki_new()
 {
 /*     d("wiki size: %d\n", sizeof(Wiki)); */
-    return xalloc(sizeof(Wiki));
+    Wiki* w = xalloc(sizeof(Wiki));
+    w->name = string_new(0);
+    return w;
 }
 void wiki_free(Wiki* wiki)
 {
+    string_free(wiki->name);
     xfree(wiki->content);
     xfree(wiki);
 }

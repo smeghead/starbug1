@@ -171,7 +171,7 @@ void wiki_save(Database* db, char* page_name, char* content)
 {
     Wiki* wiki_a = wiki_new();
     wiki_a->content = xalloc(sizeof(char) * strlen(content) + 1);
-    strcpy(wiki_a->name, page_name);
+    string_set(wiki_a->name, page_name);
     strcpy(wiki_a->content, content);
     db_register_wiki(db, wiki_a);
     wiki_free(wiki_a);

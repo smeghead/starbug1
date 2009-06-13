@@ -30,26 +30,26 @@ ProjectInfo* project_info_new();
 void project_info_free(ProjectInfo*);
 
 typedef struct {
-    char name[DEFAULT_LENGTH];
-    char home_description[DEFAULT_LENGTH];
-    char home_url[DEFAULT_LENGTH];
+    String* name;
+    String* home_description;
+    String* home_url;
 } Project;
 Project* project_new();
 void project_free(Project*);
 
 typedef struct {
     int element_type_id;
-    char* str_val;
+    String* str_val;
     int is_file;
 } Element;
 Element* element_new();
 void element_free(Element*);
 
 typedef struct {
-    char name[DEFAULT_LENGTH];
-    char file_name[DEFAULT_LENGTH];
+    String* name;
+    String* file_name;
     int size;
-    char mime_type[DEFAULT_LENGTH];
+    String* mime_type;
     char* content;
 } SettingFile;
 SettingFile* setting_file_new();
@@ -65,7 +65,7 @@ void message_free(Message*);
 typedef struct {
     int id;
     int element_type_id;
-    char name[256];
+    String* name;
     int close;
     int sort;
 } ListItem;
@@ -78,10 +78,10 @@ typedef struct {
     int ticket_property;
     int reply_property;
     int required;
-    char name[DEFAULT_LENGTH];
-    char description[DEFAULT_LENGTH];
+    String* name;
+    String* description;
     int auto_add_item;
-    char default_value[DEFAULT_LENGTH];
+    String* default_value;
     int display_in_list;
     int sort;
 } ElementType;
@@ -91,9 +91,9 @@ void element_type_free(ElementType*);
 typedef struct {
     int id;
     int element_type_id;
-    char name[DEFAULT_LENGTH];
+    String* name;
     int size;
-    char mime_type[DEFAULT_LENGTH];
+    String* mime_type;
     char* content;
 } ElementFile;
 ElementFile* element_file_new();
@@ -123,8 +123,8 @@ enum ELEM_ID {
 typedef struct {
     int element_type_id;
     int condition_type;
-    char value[DEFAULT_LENGTH];
-    char cookie_value[DEFAULT_LENGTH];
+    String* value;
+    String* cookie_value;
 } Condition;
 enum CONDITION_TYPE {
     CONDITION_TYPE_NORMAL,
@@ -141,7 +141,7 @@ char* get_condition_valid_value(Condition*);
 
 typedef struct {
     int id;
-    char name[DEFAULT_LENGTH];
+    String* name;
     int count;
 } State;
 State* state_new();
@@ -158,7 +158,7 @@ void search_result_free(SearchResult*);
 
 typedef struct {
     int id;
-    char name[DEFAULT_LENGTH];
+    String* name;
     char* content;
 } Wiki;
 Wiki* wiki_new();
@@ -168,7 +168,6 @@ char* get_element_value_by_id(List*, const int);
 char* get_element_value(List*, ElementType*);
 // int get_element_lid_by_id(List*, int);
 void set_element_value(Element*, const char*);
-void free_element_list(List*);
 
 
 

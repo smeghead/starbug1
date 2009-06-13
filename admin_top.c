@@ -44,13 +44,13 @@ void top_output_header(char* title, Project* project)
             "\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n"
             "\t<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\" />\n"
             "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />\n");
-    o(        "\t<title>Starbug1 - "); h(project->name); o(" - "); h(title); o("</title>\n");
+    o(        "\t<title>Starbug1 - "); h(string_rawstr(project->name)); o(" - "); h(title); o("</title>\n");
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/top.css\" />\n", cgiScriptName);
     string_free(base_url_a);
     o(      "</head>\n"
             "<body>\n"
             "<a name=\"top\"></a>\n"
-            "<h1 id=\"toptitle\" title=\"Starbug1\">"); h(project->name); o(" プロジェクトの管理</h1>\n");
+            "<h1 id=\"toptitle\" title=\"Starbug1\">"); h(string_rawstr(project->name)); o(" プロジェクトの管理</h1>\n");
 /*             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/../img/starbug1.jpg\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName); */
     o(      "<div id=\"projectmenu\">\n"
             "\t<ul>\n");
@@ -123,15 +123,15 @@ void top_top_action()
     o(      "\t\t<table>\n"
             "\t\t\t<tr>\n"
             "\t\t\t\t<th>プロジェクト名</th>\n"
-            "\t\t\t\t<td><input type=\"text\" name=\"project.name\" value=\""); v(project_a->name); o("\" maxlength=\"1000\" /></td>\n"
+            "\t\t\t\t<td><input type=\"text\" name=\"project.name\" value=\""); v(string_rawstr(project_a->name)); o("\" maxlength=\"1000\" /></td>\n"
             "\t\t\t</tr>\n"
             "\t\t\t<tr>\n"
             "\t\t\t\t<th>ホームリンク名</th>\n"
-            "\t\t\t\t<td><input type=\"text\" name=\"project.home_description\" value=\""); v(project_a->home_description); o("\" maxlength=\"1000\" /></td>\n"
+            "\t\t\t\t<td><input type=\"text\" name=\"project.home_description\" value=\""); v(string_rawstr(project_a->home_description)); o("\" maxlength=\"1000\" /></td>\n"
             "\t\t\t</tr>\n"
             "\t\t\t<tr>\n"
             "\t\t\t\t<th>ホームリンク先</th>\n"
-            "\t\t\t\t<td><input type=\"text\" name=\"project.home_url\" value=\""); v(project_a->home_url); o("\" maxlength=\"1000\" /></td>\n"
+            "\t\t\t\t<td><input type=\"text\" name=\"project.home_url\" value=\""); v(string_rawstr(project_a->home_url)); o("\" maxlength=\"1000\" /></td>\n"
             "\t\t\t</tr>\n");
     o(      "\t\t</table>\n");
     o(      "\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
@@ -163,7 +163,7 @@ void top_top_action()
         db_project_a = db_init(db_name);
         project_a = db_get_project(db_project_a, project_a);
         o(      "\t\t\t<tr>\n");
-        o(      "\t\t\t\t<td>"); h(project_a->name); o("</td>\n");
+        o(      "\t\t\t\t<td>"); h(string_rawstr(project_a->name)); o("</td>\n");
         o(      "\t\t\t\t<td>"); h(db_name); o("</td>\n");
         project_free(project_a);
         db_finish(db_project_a);
@@ -214,11 +214,11 @@ void top_update_project_info_submit_action()
 
         d("db->name: %s\n", db_a->name);
         cgiFormString("project.name", name, DEFAULT_LENGTH);
-        strcpy(project_a->name, name);
+        string_set(project_a->name, name);
         cgiFormString("project.home_description", home_description, DEFAULT_LENGTH);
-        strcpy(project_a->home_description, home_description);
+        string_set(project_a->home_description, home_description);
         cgiFormString("project.home_url", home_url, DEFAULT_LENGTH);
-        strcpy(project_a->home_url, home_url);
+        string_set(project_a->home_url, home_url);
         db_top_update_project(db_a, project_a);
         project_free(project_a);
     }

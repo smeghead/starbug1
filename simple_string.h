@@ -14,13 +14,13 @@ typedef struct _String {
 } String;
 
 String* string_new(size_t);
-void string_append(String*, char*);
+void string_append(String*, const char*);
 size_t string_len(String*);
 char* string_rawstr(String*);
 void string_free(String*);
 void string_replace(String*, char, char*);
 void string_appendf(String*, char*, ...);
-void string_set(String*, char*);
+void string_set(String*, const char*);
 
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

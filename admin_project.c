@@ -67,7 +67,7 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
             "\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n"
             "\t<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\" />\n"
             "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />");
-    o(        "\t<title>管理ツール - "); h(project->name); o(" - "); h(title); o("</title>\n");
+    o(        "\t<title>管理ツール - "); h(string_rawstr(project->name)); o(" - "); h(title); o("</title>\n");
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName);
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/%s/setting_file/user.css\" />\n", cgiScriptName, g_project_name_4_url);
     if (script_name) {
@@ -90,7 +90,7 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
     o(      "\t\t<li><a %s href=\"%s/%s/items\">項目設定</a></li>\n", navi == NAVI_ITEM ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
     o(      "\t\t<li><a %s href=\"%s/%s/style\">スタイル設定</a></li>\n", navi == NAVI_STYLE ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
     o(      "\t\t<li><a %s href=\"%s/%s/admin_help\">ヘルプ</a></li>\n", navi == NAVI_ADMIN_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
-    o(      "\t<li><a href=\"%s/../index.%s/%s/\">", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);h(project->name); o("へ</a></li>\n");
+    o(      "\t<li><a href=\"%s/../index.%s/%s/\">", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);h(string_rawstr(project->name)); o("へ</a></li>\n");
     o(      "</ul>\n"
             "<br clear=\"all\" />\n");
 }
@@ -138,7 +138,7 @@ void top_action()
     if (strlen(message) > 0) {
         o("<div class=\"complete_message\">"); h(message); o("&nbsp;</div>\n");
     }
-    o("<h2>"); h(project_a->name); o(" 管理ツール</h2>");
+    o("<h2>"); h(string_rawstr(project_a->name)); o(" 管理ツール</h2>");
     project_free(project_a);
     o("<div id=\"main_body\">\n");
     o("<h3>管理ツールメニュー</h3>\n");
@@ -174,14 +174,14 @@ void project_action()
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, "サブプロジェクト設定", "management.js", NAVI_PROJECT);
 
-    o("<h2>%s 管理ツール</h2>", project_a->name);
+    o("<h2>%s 管理ツール</h2>", string_rawstr(project_a->name));
     o("<div id=\"setting_form\">\n");
     o("\t<form id=\"management_form\" action=\"%s/%s/project_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName, g_project_name_4_url);
     o("\t\t<h3>サブプロジェクト設定</h3>\n");
     o("\t\t<table summary=\"project table\">\n");
     o("\t\t\t<tr>\n");
     o("\t\t\t\t<th>サブプロジェクト名</th>\n");
-    o("\t\t\t\t<td><input type=\"text\" name=\"project.name\" value=\"");h(project_a->name);o("\" maxlength=\"1000\" /></td>\n");
+    o("\t\t\t\t<td><input type=\"text\" name=\"project.name\" value=\"");h(string_rawstr(project_a->name));o("\" maxlength=\"1000\" /></td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t\t<tr>\n");
     o("\t\t\t\t<th>画像(ページの一番上に表示される画像です)</th>\n");
@@ -199,12 +199,14 @@ void fill_upload_content_setting_file(SettingFile* sf)
 {
     int got_count = 0;
     char* buffer;
+    char file_name[DEFAULT_LENGTH];
     char b[DEFAULT_LENGTH];
     cgiFilePtr file;
-    strcpy(sf->name, "top_image");
+    string_set(sf->name, "top_image");
     cgiFormFileSize("project.file", &sf->size);
-    cgiFormFileName("project.file", sf->file_name, DEFAULT_LENGTH);
-    cgiFormFileContentType("project.file", sf->mime_type, DEFAULT_LENGTH);
+    cgiFormFileName("project.file", file_name, DEFAULT_LENGTH);
+    string_set(sf->file_name, file_name);
+    cgiFormFileContentType("project.file", string_rawstr(sf->mime_type), DEFAULT_LENGTH);
     buffer = sf->content = xalloc(sizeof(char) * sf->size);
     if (cgiFormFileOpen("project.file", &file) != cgiFormSuccess) {
         die("Could not open the file.");
@@ -229,12 +231,14 @@ void project_submit_action()
     Project* project_a = project_new();
     SettingFile* sf_a = setting_file_new();
     Database* db_a;
+    char name[DEFAULT_LENGTH];
     char buffer[DEFAULT_LENGTH];
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     db_begin(db_a);
     project_a = db_get_project(db_a, project_a);
-    cgiFormStringNoNewlines("project.name", project_a->name, DEFAULT_LENGTH);
+    cgiFormStringNoNewlines("project.name", name, DEFAULT_LENGTH);
+    string_set(project_a->name, name);
     db_update_project(db_a, project_a);
     project_free(project_a);
 
@@ -266,7 +270,7 @@ void items_action()
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, "項目設定", "management.js", NAVI_ITEM);
 
-    o("<h2>%s 管理ツール</h2>", project_a->name);
+    o("<h2>%s 管理ツール</h2>", string_rawstr(project_a->name));
     o("<div id=\"top\">\n");
     project_free(project_a);
     o("<div id=\"setting_form\">\n"
@@ -281,7 +285,7 @@ void items_action()
     o("\t\t<ul id=\"field_list\">\n");
     foreach (it, element_types_a) {
         ElementType* et = it->element;
-        o("\t\t<li><a href=\"#field%d\">", et->id); h(et->name); o("</a></li>\n");
+        o("\t\t<li><a href=\"#field%d\">", et->id); hs(et->name); o("</a></li>\n");
     }
     o("\t\t</ul>\n"
       "\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
@@ -289,17 +293,17 @@ void items_action()
         ElementType* et = it->element;
         List* items_a;
         Iterator* it;
-        list_alloc(items_a, ListItem, NULL, NULL);
+        list_alloc(items_a, ListItem, list_item_new, list_item_free);
         items_a = db_get_list_item(db_a, et->id, items_a);
         o("\t\t<a name=\"field%d\"></a>\n", et->id);
-        o("\t\t<h4>"); h(et->name); o("&nbsp;<a href=\"#top\">↑</a></h4>\n");
+        o("\t\t<h4>"); hs(et->name); o("&nbsp;<a href=\"#top\">↑</a></h4>\n");
         o("\t\t<input type=\"hidden\" name=\"field_ids\" value=\"%d\" />\n", et->id);
         o("\t\t<table class=\"item_table\" summary=\"item table\">\n"
           "\t\t\t<tr>\n"
           "\t\t\t\t<th class=\"required\">項目名<span class=\"required\">※</span></th>\n"
           "\t\t\t\t<td>\n"
           "\t\t\t\t\t<input class=\"required\" id=\"field%d.name\" type=\"text\" name=\"field%d.name\" ", et->id, et->id);
-        o(                  "value=\"");h(et->name);o("\" maxlength=\"1000\" />\n"
+        o(                  "value=\"");hs(et->name);o("\" maxlength=\"1000\" />\n"
           "\t\t\t\t\t<div class=\"description\">項目名です。</div>\n"
           "\t\t\t\t\t<div id=\"field%d.name.required\" class=\"error\"></div>\n", et->id);
         o("\t\t\t\t</td>\n"
@@ -308,7 +312,7 @@ void items_action()
           "\t\t\t\t<th>項目の説明文</th>\n"
           "\t\t\t\t<td>\n"
           "\t\t\t\t\t<input type=\"text\" name=\"field%d.description\" ", et->id);
-        o(                  "value=\"");h(et->description);o("\" maxlength=\"1000\" />\n"
+        o(                  "value=\"");hs(et->description);o("\" maxlength=\"1000\" />\n"
           "\t\t\t\t\t<div class=\"description\">項目の説明文です。投稿時に表示されます。</div>\n"
           "\t\t\t\t</td>\n"
           "\t\t\t</tr>\n"
@@ -393,7 +397,7 @@ void items_action()
                     o("\t\t\t\t\t\t<tr>\n"
                       "\t\t\t\t\t\t\t<td>\n"
                       "\t\t\t\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field%d.list_item%d.name\" ", et->id, item->id);
-                    o(                       "value=\"");h(item->name);o("\" maxlength=\"1000\" />\n"
+                    o(                       "value=\"");hs(item->name);o("\" maxlength=\"1000\" />\n"
                       "\t\t\t\t\t\t\t</td>\n"
                       "\t\t\t\t\t\t\t<td>\n"
                       "\t\t\t\t\t\t\t\t<input class=\"checkbox\" type=\"checkbox\" name=\"field%d.list_item%d.close\" value=\"1\" %s />\n", et->id, item->id, (item->close == 1) ? "checked=\"checked\"" : "");
@@ -434,9 +438,9 @@ void items_action()
           "\t\t\t\t<th>デフォルト値</th>\n"
           "\t\t\t\t<td>\n");
         if (et->type == ELEM_TYPE_TEXTAREA) {
-            o("\t\t\t\t\t<textarea name=\"field%d.default_value\" rows=\"2\" cols=\"10\" >", et->id);h(et->default_value);o("</textarea>\n");
+            o("\t\t\t\t\t<textarea name=\"field%d.default_value\" rows=\"2\" cols=\"10\" >", et->id);hs(et->default_value);o("</textarea>\n");
         } else {
-            o("\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field%d.default_value\" value=\"%s\" maxlength=\"1000\" />\n", et->id, et->default_value);
+            o("\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field%d.default_value\" value=\"%s\" maxlength=\"1000\" />\n", et->id, string_rawstr(et->default_value));
         }
         o("\t\t\t\t\t<div class=\"description\">投稿画面、返信画面での項目の初期値です。</div>\n"
           "\t\t\t\t</td>\n"
@@ -460,7 +464,7 @@ void items_action()
           "\t\t</table>\n");
         if (et->id > BASIC_ELEMENT_MAX) {
             /* 基本項目は削除できないようにする。 */
-            o("\t\t<div class=\"delete_item\"><a href=\"%s/%s/delete_item/%d\">", cgiScriptName, g_project_name_4_url, et->id);o("この項目(");h(et->name);o(")の削除</a></div>\n");
+            o("\t\t<div class=\"delete_item\"><a href=\"%s/%s/delete_item/%d\">", cgiScriptName, g_project_name_4_url, et->id);o("この項目(");hs(et->name);o(")の削除</a></div>\n");
         }
         list_free(items_a);
         o("\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
@@ -507,11 +511,11 @@ void update_elements(Database* db)
 
         sprintf(name, "field%s.name", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-        strcpy(et_a->name, value);
+        string_set(et_a->name, value);
 
         sprintf(name, "field%s.description", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-        strcpy(et_a->description, value);
+        string_set(et_a->description, value);
 
         sprintf(name, "field%s.ticket_property", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
@@ -535,7 +539,7 @@ void update_elements(Database* db)
 
         sprintf(name, "field%s.default_value", id);
         cgiFormString(name, value, DEFAULT_LENGTH);
-        strcpy(et_a->default_value, value);
+        string_set(et_a->default_value, value);
 
         sprintf(name, "field%s.auto_add_item", id);
         cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
@@ -548,7 +552,7 @@ void update_elements(Database* db)
             case ELEM_TYPE_LIST_SINGLE:
             case ELEM_TYPE_LIST_MULTI:
                 /* 選択要素のあるelementだけ、list_itemの更新を行なう。 */
-                list_alloc(items_a, ListItem, NULL, NULL);
+                list_alloc(items_a, ListItem, list_item_new, list_item_free);
                 items_a = db_get_list_item(db, et_a->id, items_a);
                 foreach (it, items_a) {
                     ListItem* item = it->element;
@@ -556,7 +560,7 @@ void update_elements(Database* db)
                     strcpy(value, "");
                     sprintf(name, "field%d.list_item%d.name", et_a->id, item->id);
                     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-                    strcpy(item->name, value);
+                    string_set(item->name, value);
                     sprintf(name, "field%d.list_item%d.close", et_a->id, item->id);
                     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                     item->close = atoi(value);
@@ -578,7 +582,7 @@ void update_elements(Database* db)
                 if (strlen(value) > 0) {
                     ListItem* item_a = xalloc(sizeof(ListItem));
                     item_a->element_type_id = et_a->id;
-                    strcpy(item_a->name, value);
+                    string_set(item_a->name, value);
                     sprintf(name, "field%d.list_item_new.close", et_a->id);
                     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                     item_a->close = atoi(value);
@@ -606,7 +610,7 @@ void new_item_action()
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, "新規項目登録", "new_item.js", NAVI_OTHER);
 
-    o("<h2>%s 管理ツール</h2>", project_a->name);
+    o("<h2>%s 管理ツール</h2>", string_rawstr(project_a->name));
     project_free(project_a);
     o(      "<div id=\"new_item\">\n"
             "<h3>項目の追加</h3>\n"
@@ -749,9 +753,11 @@ void new_item_submit_action()
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     db_begin(db_a);
 
-    cgiFormStringNoNewlines("field.name", et_a->name, DEFAULT_LENGTH);
+    cgiFormStringNoNewlines("field.name", value, DEFAULT_LENGTH);
+    string_set(et_a->name, value);
 
-    cgiFormStringNoNewlines("field.description", et_a->description, DEFAULT_LENGTH);
+    cgiFormStringNoNewlines("field.description", value, DEFAULT_LENGTH);
+    string_set(et_a->description, value);
 
     cgiFormStringNoNewlines("field.type", value, DEFAULT_LENGTH);
     et_a->type = atoi(value);
@@ -777,8 +783,9 @@ void new_item_submit_action()
                 ListItem* item_a = xalloc(sizeof(ListItem));
                 item_a->element_type_id = e_type_id;
                 sprintf(name, "field.list_item_new%d.name", i);
-                cgiFormStringNoNewlines(name, item_a->name, DEFAULT_LENGTH);
-                if (strlen(item_a->name) > 0) {
+                cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+                string_set(item_a->name, value);
+                if (string_len(item_a->name) > 0) {
                     sprintf(name, "field.list_item_new%d.close", i);
                     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                     item_a->close = atoi(value);
@@ -814,10 +821,10 @@ void delete_item_action()
     output_header(project_a, "項目削除", "delete_item.js", NAVI_OTHER);
 
     et_a = db_get_element_type(db_a, iid, et_a);
-    o("<h2>%s 管理ツール</h2>", project_a->name);
+    o("<h2>%s 管理ツール</h2>", string_rawstr(project_a->name));
     project_free(project_a);
     o(      "<div id=\"delete_item/%d\">\n", iid);
-    o(      "<h3>項目(");h(et_a->name);o(")の削除</h3>\n"
+    o(      "<h3>項目(");hs(et_a->name);o(")の削除</h3>\n"
             "<form id=\"delete_item_form\" action=\"%s/%s/delete_item_submit/%d\" method=\"post\">\n"
             "<div class=\"infomation\"><strong>削除すると元には戻せません。"
             "登録されているチケットの項目についても参照できなくなります。</strong></div>"
@@ -860,7 +867,7 @@ void style_action()
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, "スタイル設定", "style.js", NAVI_STYLE);
-    o(      "<h2>%s 管理ツール</h2>", project_a->name);
+    o(      "<h2>%s 管理ツール</h2>", string_rawstr(project_a->name));
     project_free(project_a);
     o(      "<div id=\"top\">\n"
             "<h3>スタイルシートの編集</h3>\n"
@@ -890,16 +897,16 @@ void style_action()
             if (et->type == ELEM_TYPE_LIST_SINGLE && et->display_in_list) {
                 List* items_a;
                 Iterator* it_item;
-                list_alloc(items_a, ListItem, NULL, NULL);
+                list_alloc(items_a, ListItem, list_item_new, list_item_free);
                 items_a = db_get_list_item(db_a, et->id, items_a);
                 o(  "/* ================================ */ \n"
-                    "/* チケット一覧の"); h(et->name); o("の背景色設定     */\n");
+                    "/* チケット一覧の"); hs(et->name); o("の背景色設定     */\n");
                 o(  "/* ================================ */ \n");
                 foreach (it_item, items_a) {
                     ListItem* item = it_item->element;
-                    o("/* "); h(item->name); o(" */\n");
+                    o("/* "); hs(item->name); o(" */\n");
                     o("#ticket_list td.field%d-", et->id);
-                    css_field(item->name);
+                    css_field(string_rawstr(item->name));
                     o(" {\n");
                     o(" background-color: lightyellow !important;\n");
                     o("}\n");
@@ -919,13 +926,13 @@ void style_submit_action()
     SettingFile* sf_a = setting_file_new();
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
-    strcpy(sf_a->name, "user.css");
-    strcpy(sf_a->file_name, "");
+    string_set(sf_a->name, "user.css");
+    string_set(sf_a->file_name, "");
     sf_a->content = xalloc(sizeof(char) * VALUE_LENGTH);
 
     cgiFormString("edit_css", sf_a->content, VALUE_LENGTH);
     sf_a->size = strlen(sf_a->content);
-    strcpy(sf_a->mime_type, "text/css");
+    string_set(sf_a->mime_type, "text/css");
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     db_setting_file_save(db_a, sf_a);
     db_finish(db_a);
@@ -941,7 +948,7 @@ void admin_help_action()
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, "ヘルプ", NULL, NAVI_ADMIN_HELP);
-    o(      "<h2>");h(project_a->name);o("</h2>\n"
+    o(      "<h2>");h(string_rawstr(project_a->name));o("</h2>\n"
             "<div id=\"top\">\n");
     wiki_out(db_a, "adminhelp");
     o(      "</div>\n");

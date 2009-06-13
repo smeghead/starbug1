@@ -27,7 +27,7 @@ String* string_new(size_t block_size)
     string_init(str, block_size);
     return str;
 }
-void string_append(String* str, char* addstr)
+void string_append(String* str, const char* addstr)
 {
     size_t len = strlen(addstr);
     size_t size_needed = str->current_size + len + 1;
@@ -40,11 +40,11 @@ void string_append(String* str, char* addstr)
         }
         str->buf_size = new_size;
     }
-    strcat(str->raw_chars, addstr);
+    strcat(str->raw_chars, (char*)addstr);
     str->current_size += len;
 /*     printf("%d (size: %d)\n", str->current_size, str->buf_size); */
 }
-void string_set(String* str, char* newstr)
+void string_set(String* str, const char* newstr)
 {
     /* 存在していた文字列は破棄する。 */
     d("string_set\n");

@@ -49,7 +49,7 @@ static String* create_json(String* content, Project* project, Message* message, 
         String* field_a = string_new(0);
         String* name_a = string_new(0);
         String* value_a = string_new(0);
-        string_append(name_a, et->name);
+        string_append(name_a, string_rawstr(et->name));
         escape_quot(name_a);
         string_append(value_a, get_element_value(elements, et));
         escape_quot(value_a);

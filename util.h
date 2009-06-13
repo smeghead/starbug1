@@ -31,8 +31,11 @@
     exit(1);\
 }
 #define h(str)      cgi_escape(str == NULL ? "" : str)
+#define hs(str)      cgi_escape(string_rawstr(str))
 #define v(str)      cgi_escape(str == NULL ? "" : str)
+#define vs(str)      cgi_escape(string_rawstr(str))
 void u(char*);
+#define us(str)      u(string_rawstr(str))
 
 typedef enum {
     ACTION_TYPE_NONE,
