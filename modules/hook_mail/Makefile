@@ -14,5 +14,10 @@ $(PROGRAM):$(OBJS)
 deploy:
 	cp hook_mail.so ../../script/
 
+test:
+	gcc -DSMTP_SERVER=\"${SMTP_SERVER}\" -DSMTP_PORT=\"${SMTP_PORT}\" -DFROM=\"${FROM}\" -DTO=\"${TO}\" hook_mail.c \
+	 ../../list.o ../../data.o ../../simple_string.o ../../alloc.o ../../util.o ../../conv.o -lsqlite3 -lcgic
+	./a.out
+
 clean:
 	rm -rf $(OBJS)

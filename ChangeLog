@@ -1,3 +1,7 @@
+2009-06-13  smeghead  <smeghead@smeghead-laptop>
+
+	* 基本的なデータ構造に、simple_stringを使うように修正開始。
+
 2009-06-10  smeghead  <smeghead@smeghead-laptop>
 
 	* 日本語によるメール送信処理の作成中

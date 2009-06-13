@@ -22,7 +22,7 @@ HOOK* init_hook(HOOK_MODE mode)
     HOOK* hook = xalloc(sizeof(HOOK));
     List* results;
     hook->mode = mode;
-    list_alloc(results, HOOK_RESULT);
+    list_alloc(results, HOOK_RESULT, NULL, NULL);
     hook->results = results;
     return hook;
 }

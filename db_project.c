@@ -378,7 +378,7 @@ static String* get_search_sql_string(Database* db, List* conditions, Condition* 
     if (keywords->size > 0) {
         String* columns_a = string_new(0);
         List* element_types_a;
-        list_alloc(element_types_a, ElementType);
+        list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
         element_types_a = db_get_element_types_all(db, element_types_a);
         columns_a = create_columns_like_exp(element_types_a, "m_all", keywords, columns_a);
         if (valid_condition_size(conditions))
@@ -433,7 +433,7 @@ int set_conditions(Database* db, sqlite3_stmt* stmt, List* conditions, List* key
         List* element_types_a;
         Iterator* it_keyword;
         Iterator* it;
-        list_alloc(element_types_a, ElementType);
+        list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
         element_types_a = db_get_element_types_all(db, element_types_a);
         foreach (it_keyword, keywords) {
             char* word = it_keyword->element;
@@ -454,8 +454,8 @@ SearchResult* db_get_tickets_by_status(Database* db, const char* status, SearchR
     sqlite3_stmt *stmt = NULL;
     List* keywords_a;
 
-    list_alloc(keywords_a, char);
-    list_alloc(conditions, Condition);
+    list_alloc(keywords_a, char, NULL, NULL);
+    list_alloc(conditions, Condition, condition_new, condition_free);
     cond_status = list_new_element(conditions);
     cond_status->element_type_id = ELEM_ID_STATUS;
     strcpy(cond_status->value, status);
@@ -495,7 +495,7 @@ SearchResult* db_search_tickets(Database* db, List* conditions, char* q, Conditi
     sqlite3_stmt *stmt = NULL;
     List* keywords_a;
 
-    list_alloc(keywords_a, char);
+    list_alloc(keywords_a, char, NULL, NULL);
     keywords_a = parse_keywords(keywords_a, q);
     sql_a = get_search_sql_string(db, conditions, sorts, keywords_a, sql_a);
 
@@ -554,7 +554,7 @@ SearchResult* db_search_tickets_4_report(Database* db, List* conditions, char* q
     sqlite3_stmt *stmt = NULL;
     List* keywords_a;
 
-    list_alloc(keywords_a, char);
+    list_alloc(keywords_a, char, NULL, NULL);
     keywords_a = parse_keywords(keywords_a, q);
     sql_a = get_search_sql_string(db, conditions, sorts, keywords_a, sql_a);
 
@@ -606,7 +606,7 @@ List* db_get_last_elements_4_list(Database* db, const int ticket_id, List* eleme
     List* element_types_a = NULL;
     Iterator* it;
 
-    list_alloc(element_types_a, ElementType);
+    list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_element_types_4_list(db, element_types_a);
     create_columns_exp(element_types_a, "last_m", columns);
     sprintf(sql, "select t.id, org_m.field%d ", ELEM_ID_SENDER);
@@ -676,7 +676,7 @@ List* db_get_last_elements(Database* db, const int ticket_id, List* elements)
     List* element_types_a = NULL;
     char columns[DEFAULT_LENGTH] = "";
 
-    list_alloc(element_types_a, ElementType);
+    list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_element_types_all(db, element_types_a);
     create_columns_exp(element_types_a, "m", columns);
     strcpy(sql, "select m.id");
@@ -741,7 +741,7 @@ List* db_get_elements(Database* db, int message_id, List* elements)
     char columns[DEFAULT_LENGTH] = "";
     List* element_types_a = NULL;
 
-    list_alloc(element_types_a, ElementType);
+    list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_element_types_all(db, element_types_a);
     create_columns_exp(element_types_a, "m", columns);
 

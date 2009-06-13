@@ -306,7 +306,7 @@ void output_ticket_table_body(Database* db, SearchResult* result, List* element_
     foreach (it_msg, result->messages) {
         Message* message = it_msg->element;
         List* elements_a;
-        list_alloc(elements_a, Element);
+        list_alloc(elements_a, Element, element_new, element_free);
         elements_a = db_get_last_elements_4_list(db, message->id, elements_a);
         o("\t<tr>\n"
           "\t\t<td class=\"id field%d-\"><a href=\"%s/%s/ticket/%s\">%s</a></td>\n", 
@@ -421,11 +421,11 @@ void list_action()
         o("</div>\n");
     }
     cgiStringArrayFree(multi);
-    list_alloc(element_types_a, ElementType);
+    list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_element_types_4_list(db_a, element_types_a);
     o("<h2>"); h(project_a->name); o(" - 状態別チケット一覧</h2>\n");
     project_free(project_a);
-    list_alloc(states_a, State);
+    list_alloc(states_a, State, state_new, state_free);
     states_a = db_get_states(db_a, states_a);
     output_states(states_a, true);
     list_free(states_a);
@@ -433,7 +433,7 @@ void list_action()
     o("<div id=\"ticket_list\">\n"
       "<h3>状態別チケット一覧</h3>\n"
       "<div class=\"description\">未クローズの状態毎にチケットを表示しています。\n");
-    list_alloc(states_a, State);
+    list_alloc(states_a, State, state_new, state_free);
     states_a = db_get_states_has_not_close(db_a, states_a);
     foreach (it, states_a) {
         State* s = it->element;
@@ -448,7 +448,7 @@ void list_action()
         SearchResult* result_a = search_result_new();
 
         /* 検索 */
-        list_alloc(conditions_a, Condition);
+        list_alloc(conditions_a, Condition, condition_new, condition_free);
         result_a = db_get_tickets_by_status(db_a, s->name, result_a);
         list_free(conditions_a);
 
@@ -692,10 +692,10 @@ void search_action()
     condition_restore = (strlen(search_button) == 0 && strcmp(cookie_save_condition, "1") == 0)
         ? true : false;
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
-    list_alloc(element_types_a, ElementType);
+    list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_element_types_4_list(db_a, element_types_a);
     /* 検索 */
-    list_alloc(conditions_a, Condition);
+    list_alloc(conditions_a, Condition, condition_new, condition_free);
     conditions_a = create_conditions(conditions_a, element_types_a, condition_restore);
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
     if (strlen(q) == 0 && condition_restore) {
@@ -716,7 +716,7 @@ void search_action()
     o("<h2>"); h(project_a->name); o(" - チケット検索</h2>\n");
     project_free(project_a);
     condition_free(sort_a);
-    list_alloc(states_a, State);
+    list_alloc(states_a, State, state_new, state_free);
     states_a = db_get_states(db_a, states_a);
     output_states(states_a, true);
     list_free(states_a);
@@ -852,7 +852,7 @@ void output_ticket_information_4_csv_report(Database* db, SearchResult* result, 
         List* elements_a;
         char id_str[NUM_LENGTH];
         sprintf(id_str, "%d", message->id);
-        list_alloc(elements_a, Element);
+        list_alloc(elements_a, Element, element_new, element_free);
         elements_a = db_get_last_elements(db, message->id, elements_a);
         csv_field(id_str); o(",");
         foreach (it, element_types) {
@@ -897,7 +897,7 @@ void output_ticket_information_4_html_report(Database* db, SearchResult* result,
         List* elements_a;
         char id_str[NUM_LENGTH];
         sprintf(id_str, "%d", message->id);
-        list_alloc(elements_a, Element);
+        list_alloc(elements_a, Element, element_new, element_free);
         elements_a = db_get_last_elements(db, message->id, elements_a);
         o("<tr><td>");
         h(id_str); o("</td><td>");
@@ -929,11 +929,11 @@ void report_csv_download_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_a = db_get_project(db_a, project_a);
-    list_alloc(element_types_a, ElementType);
+    list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
 
     element_types_a = db_get_element_types_all(db_a, element_types_a);
     /* 検索 */
-    list_alloc(conditions_a, Condition);
+    list_alloc(conditions_a, Condition, condition_new, condition_free);
     conditions_a = create_conditions(conditions_a, element_types_a, false);
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
     sort_a = condition_new();
@@ -969,11 +969,11 @@ void report_html_download_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_a = db_get_project(db_a, project_a);
-    list_alloc(element_types_a, ElementType);
+    list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
 
     element_types_a = db_get_element_types_all(db_a, element_types_a);
     /* 検索 */
-    list_alloc(conditions_a, Condition);
+    list_alloc(conditions_a, Condition, condition_new, condition_free);
     conditions_a = create_conditions(conditions_a, element_types_a, false);
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
     sort_a = condition_new();
@@ -1040,7 +1040,7 @@ void output_form_element_4_condition(Database* db, ElementType* et, List* condit
             o("\" name=\"field");
             h(id);
             o("\">\n");
-            list_alloc(items_a, ListItem);
+            list_alloc(items_a, ListItem, NULL, NULL);
             items_a = db_get_list_item(db, et->id, items_a);
 
             o("<option value=\"\">&nbsp;</option>");
@@ -1130,7 +1130,7 @@ void output_form_element(Database* db, List* elements, ElementType* et)
             o("<select id=\"field%d\" name=\"field%d\">\n",
                     et->id, et->id);
             o("<option value=\"\">&nbsp;</option>\n");
-            list_alloc(items_a, ListItem);
+            list_alloc(items_a, ListItem, NULL, NULL);
             items_a = db_get_list_item(db, et->id, items_a);
             foreach (it, items_a) {
                 ListItem* item = it->element;
@@ -1148,7 +1148,7 @@ void output_form_element(Database* db, List* elements, ElementType* et)
 
             break;
         case ELEM_TYPE_LIST_MULTI:
-            list_alloc(items_a, ListItem);
+            list_alloc(items_a, ListItem, NULL, NULL);
             items_a = db_get_list_item(db, et->id, items_a);
             o("<select size=\"%d\" id=\"field%d", items_a->size + 1, et->id);
             o("\" name=\"field%d\" multiple=\"multiple\">\n", et->id);
@@ -1244,7 +1244,7 @@ void register_action()
     output_header(project_a, "チケット登録", "register.js", NAVI_REGISTER);
     output_calendar_js();
     o(      "<h2>"); h(project_a->name);o(" - チケット登録</h2>\n");
-    list_alloc(states_a, State);
+    list_alloc(states_a, State, state_new, state_free);
     states_a = db_get_states(db_a, states_a);
     output_states(states_a, false);
     list_free(states_a);
@@ -1258,7 +1258,7 @@ void register_action()
     {
         List* element_types_a;
         Iterator* it;
-        list_alloc(element_types_a, ElementType);
+        list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
         element_types_a = db_get_element_types_all(db_a, element_types_a);
         foreach (it, element_types_a) {
             ElementType* et = it->element;
@@ -1335,7 +1335,7 @@ void ticket_action()
             return;
     }
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
-    list_alloc(elements_a, Element);
+    list_alloc(elements_a, Element, element_new, element_free);
     elements_a = db_get_last_elements(db_a, iid, elements_a);
     if (elements_a->size == 0) {
         redirect("/list", "存在しないIDが指定されました。");
@@ -1347,7 +1347,7 @@ void ticket_action()
     output_calendar_js();
 
     message_ids_a = db_get_message_ids_a(db_a, iid);
-    list_alloc(element_types_a, ElementType);
+    list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_element_types_all(db_a, element_types_a);
     o("<h2 id=\"subject\">"); h(project_a->name); o(" - ");
     project_free(project_a);
@@ -1398,7 +1398,7 @@ void ticket_action()
       "\t\t\t<td>\n");
     for (i = 0; message_ids_a[i] != 0; i++) {
         List* attachment_elements_a;
-        list_alloc(attachment_elements_a, Element);
+        list_alloc(attachment_elements_a, Element, element_new, element_free);
         attachment_elements_a = db_get_elements(db_a, message_ids_a[i], attachment_elements_a);
         foreach (it, element_types_a) {
             ElementType* et = it->element;
@@ -1428,7 +1428,7 @@ void ticket_action()
     /* 履歴の表示 */
     for (i = 0; message_ids_a[i] != 0; i++) {
         List* previous = last_elements;
-        list_alloc(elements_a, Element);
+        list_alloc(elements_a, Element, element_new, element_free);
         last_elements = elements_a = db_get_elements(db_a, message_ids_a[i], elements_a);
         o(      "\t\t<h4 class=\"title\">%d: ", i + 1);
         h(get_element_value_by_id(elements_a, ELEM_ID_SENDER));
@@ -1593,7 +1593,7 @@ void register_submit_action()
     ticket_a = message_new();
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_a = db_get_project(db_a, project_a);
-    list_alloc(element_types_a, ElementType);
+    list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_element_types_all(db_a, element_types_a);
     cgiFormStringNoNewlines("ticket_id", ticket_id, NUM_LENGTH);
     if (mode == MODE_REGISTER)
@@ -1741,7 +1741,7 @@ void register_at_once_action()
     output_header(project_a, "チケット一括登録", "register_at_once.js", NAVI_REGISTER_AT_ONCE);
     output_calendar_js();
     o(      "<h2>"); h(project_a->name);o(" - チケット一括登録</h2>\n");
-    list_alloc(states_a, State);
+    list_alloc(states_a, State, state_new, state_free);
     states_a = db_get_states(db_a, states_a);
     output_states(states_a, true);
     list_free(states_a);
@@ -1803,7 +1803,7 @@ void register_at_once_confirm_action()
     output_header(project_a, "チケット一括登録確認", "register_at_once_submit.js", NAVI_REGISTER_AT_ONCE);
     output_calendar_js();
     o(      "<h2>"); h(project_a->name);o(" - チケット一括登録確認</h2>\n");
-    list_alloc(states_a, State);
+    list_alloc(states_a, State, state_new, state_free);
     states_a = db_get_states(db_a, states_a);
     output_states(states_a, true);
     list_free(states_a);
@@ -1819,7 +1819,7 @@ void register_at_once_confirm_action()
         List* element_types_a;
         Iterator* it;
         Iterator* it_line;
-        list_alloc(element_types_a, ElementType);
+        list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
         element_types_a = db_get_element_types_all(db_a, element_types_a);
         foreach (it, element_types_a) {
             ElementType* et = it->element;
@@ -1930,7 +1930,7 @@ void register_at_once_submit_action()
     cgiFormStringNoNewlines("fields_count", fields_count_str, 5);
     fields_count = atoi(fields_count_str);
     /* 項目一覧を取得する。 */
-    list_alloc(field_ids_a, int);
+    list_alloc(field_ids_a, int, NULL, NULL);
     for (i = 0; i < fields_count; i++) {
         char name[DEFAULT_LENGTH];
         char value[DEFAULT_LENGTH];
@@ -1992,7 +1992,7 @@ void register_at_once_submit_action()
             break;
         }
         /* 指定されていない項目は、デフォルト値を登録する。 */
-        list_alloc(element_types_a, ElementType);
+        list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
         element_types_a = db_get_element_types_all(db_a, element_types_a);
         foreach (it_et, element_types_a) {
             ElementType* et = it_et->element;
@@ -2048,20 +2048,20 @@ void top_action()
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, "プロジェクトトップ", NULL, NAVI_TOP);
-    list_alloc(states_a, State);
+    list_alloc(states_a, State, state_new, state_free);
     states_a = db_get_states(db_a, states_a);
     o(      "<div id=\"info\">\n");
     /* 最新情報の表示 */
     o(      "<div id=\"top_newest\">\n"
             "<h4>最新情報</h4>\n"
             "\t<ul>\n");
-    list_alloc(tickets_a, Message);
+    list_alloc(tickets_a, Message, message_new, message_free);
     tickets_a = db_get_newest_information(db_a, 10, tickets_a);
     if (tickets_a->size) {
         foreach (it, tickets_a) {
             Message* ticket = it->element;
             List* elements_a;
-            list_alloc(elements_a, Element);
+            list_alloc(elements_a, Element, element_new, element_free);
             elements_a = db_get_last_elements_4_list(db_a, ticket->id, elements_a);
             o("\t\t<li>\n");
             o("\t\t\t<a href=\"%s/%s/ticket/%d", cgiScriptName, g_project_name_4_url, ticket->id); o("\">");
@@ -2149,14 +2149,14 @@ void rss_action()
             "\t\t</items>\n"
             "\t</channel>\n");
 
-    list_alloc(tickets_a, Message);
+    list_alloc(tickets_a, Message, message_new, message_free);
     tickets_a = db_get_newest_information(db_a, 10, tickets_a);
     if (tickets_a != NULL) {
         foreach (it, tickets_a) {
             Message* ticket = it->element;
             List* elements_a;
             Iterator* it;
-            list_alloc(elements_a, Element);
+            list_alloc(elements_a, Element, element_new, element_free);
             elements_a = db_get_last_elements_4_list(db_a, ticket->id, elements_a);
             o(      "\t<item rdf:about=\"");h(project_a->home_url);o("%s/%s/ticket/%d\">\n", cgiScriptName, g_project_name_4_url, ticket->id);
             o(      "\t\t<title>ID:%5d ", ticket->id);
@@ -2209,7 +2209,7 @@ void statistics_action()
     output_header(project_a, "統計情報", "graph.js", NAVI_STATISTICS);
     output_graph_js();
     o(      "<h2>");h(project_a->name);o("</h2>\n");
-    list_alloc(states_a, State);
+    list_alloc(states_a, State, state_new, state_free);
     states_a = db_get_states(db_a, states_a);
     output_states(states_a, true);
     list_free(states_a);
@@ -2217,7 +2217,7 @@ void statistics_action()
             "<h3>統計情報</h3>\n"
             "\t<div class=\"description\">統計情報を表示します。</div>\n");
     project_free(project_a);
-    list_alloc(element_types_a, ElementType);
+    list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_element_types_all(db_a, element_types_a);
     foreach (it, element_types_a) {
         ElementType* et = it->element;
@@ -2225,8 +2225,8 @@ void statistics_action()
         List* all_items_a;
         Iterator* it_item;
 
-        list_alloc(items_a, State);
-        list_alloc(all_items_a, ListItem);
+        list_alloc(items_a, State, state_new, state_free);
+        list_alloc(all_items_a, ListItem, NULL, NULL);
         switch (et->type) {
             case ELEM_TYPE_LIST_SINGLE:
                 items_a = db_get_statictics(db_a, items_a, et->id);

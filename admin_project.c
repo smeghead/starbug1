@@ -275,7 +275,7 @@ void items_action()
       "\t\t<div class=\"description\">チケットID、投稿日時は編集できません。件名、投稿者、状態は、基本属性のため編集できる内容に制限があります。(削除不可、チケット属性、返信専用属性変更不可)</div>\n"
       "\t\t<div><a href=\"%s/%s/new_item\">新規項目の追加</a></div>\n", cgiScriptName, g_project_name_4_url);
 
-    list_alloc(element_types_a, ElementType);
+    list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_element_types_all(db_a, element_types_a);
     output_field_information_js();
     o("\t\t<ul id=\"field_list\">\n");
@@ -289,7 +289,7 @@ void items_action()
         ElementType* et = it->element;
         List* items_a;
         Iterator* it;
-        list_alloc(items_a, ListItem);
+        list_alloc(items_a, ListItem, NULL, NULL);
         items_a = db_get_list_item(db_a, et->id, items_a);
         o("\t\t<a name=\"field%d\"></a>\n", et->id);
         o("\t\t<h4>"); h(et->name); o("&nbsp;<a href=\"#top\">↑</a></h4>\n");
@@ -548,7 +548,7 @@ void update_elements(Database* db)
             case ELEM_TYPE_LIST_SINGLE:
             case ELEM_TYPE_LIST_MULTI:
                 /* 選択要素のあるelementだけ、list_itemの更新を行なう。 */
-                list_alloc(items_a, ListItem);
+                list_alloc(items_a, ListItem, NULL, NULL);
                 items_a = db_get_list_item(db, et_a->id, items_a);
                 foreach (it, items_a) {
                     ListItem* item = it->element;
@@ -883,14 +883,14 @@ void style_action()
         Iterator* it;
         o(      "<div class=\"description\">以下は、一覧の背景設定用のサンプルです。</div>\n");
         o(      "<pre>\n");
-        list_alloc(element_types_a, ElementType);
+        list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
         element_types_a = db_get_element_types_all(db_a, element_types_a);
         foreach (it, element_types_a) {
             ElementType* et = it->element;
             if (et->type == ELEM_TYPE_LIST_SINGLE && et->display_in_list) {
                 List* items_a;
                 Iterator* it_item;
-                list_alloc(items_a, ListItem);
+                list_alloc(items_a, ListItem, NULL, NULL);
                 items_a = db_get_list_item(db_a, et->id, items_a);
                 o(  "/* ================================ */ \n"
                     "/* チケット一覧の"); h(et->name); o("の背景色設定     */\n");

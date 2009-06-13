@@ -20,6 +20,7 @@ char* string_rawstr(String*);
 void string_free(String*);
 void string_replace(String*, char, char*);
 void string_appendf(String*, char*, ...);
+void string_set(String*, char*);
 
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

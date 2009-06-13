@@ -24,13 +24,14 @@ List* db_top_get_all_project_infos(Database* db, List* project_infos)
     sqlite3_reset(stmt);
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))) {
-        ProjectInfo* project_info = list_new_element(project_infos);
+        ProjectInfo* pi = list_new_element(project_infos);
 
-        project_info->id = sqlite3_column_int(stmt, 0);
-        strncpy(project_info->name, (char*)sqlite3_column_text(stmt, 1), DEFAULT_LENGTH - 1);
-        project_info->sort = sqlite3_column_int(stmt, 2);
-        project_info->deleted = sqlite3_column_int(stmt, 3);
-        list_add(project_infos, project_info);
+        pi->id = sqlite3_column_int(stmt, 0);
+/*    d("db_top_get_all_project_infos 1 [%x]\n", pi->name);*/
+        string_set(pi->name, (char*)sqlite3_column_text(stmt, 1));
+        pi->sort = sqlite3_column_int(stmt, 2);
+        pi->deleted = sqlite3_column_int(stmt, 3);
+        list_add(project_infos, pi);
     }
     if (SQLITE_DONE != r)
         goto error;
@@ -53,7 +54,7 @@ ProjectInfo* db_top_get_project_info(Database* db, ProjectInfo* project_info, ch
 
     while (SQLITE_ROW == sqlite3_step(stmt)) {
         project_info->id = sqlite3_column_int(stmt, 0);
-        strncpy(project_info->name, (char*)sqlite3_column_text(stmt, 1), DEFAULT_LENGTH - 1);
+        string_set(project_info->name, (char*)sqlite3_column_text(stmt, 1));
         project_info->sort = sqlite3_column_int(stmt, 2);
         project_info->deleted = sqlite3_column_int(stmt, 3);
         break;

@@ -54,9 +54,9 @@ Csv* csv_new(char* content)
     int field_count = 0;
     Csv* csv = xalloc(sizeof(Csv));
     /* create first line. */
-    list_alloc(csv->lines, CsvLine);
+    list_alloc(csv->lines, CsvLine, NULL, NULL);
     line = list_new_element(csv->lines);
-    list_alloc(line->fields, CsvField);
+    list_alloc(line->fields, CsvField, NULL, NULL);
     mark = p;
     while (1) {
         bool data_end = false;
@@ -94,7 +94,7 @@ Csv* csv_new(char* content)
             csv->line_count++;
             field_count = 0;
             line = list_new_element(csv->lines);
-            list_alloc(line->fields, CsvField); /* line を初期化 */
+            list_alloc(line->fields, CsvField, NULL, NULL); /* line を初期化 */
         } else if (*p == '\0') {
             list_add(csv->lines, line);
             csv->line_count++;

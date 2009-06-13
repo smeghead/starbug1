@@ -4,6 +4,7 @@
 #include "data.h"
 #include "alloc.h"
 #include "util.h"
+#include "simple_string.h"
 
 char* get_element_value(List* elements, ElementType* et)
 {
@@ -72,10 +73,13 @@ char* get_condition_valid_value(Condition* c)
 }
 ProjectInfo* project_info_new()
 {
-    return xalloc(sizeof(ProjectInfo));
+    ProjectInfo* pi =  xalloc(sizeof(ProjectInfo));
+    pi->name = string_new(0);
+    return pi;
 }
 void project_info_free(ProjectInfo* pi)
 {
+    string_free(pi->name);
     xfree(pi);
 }
 Project* project_new()
@@ -86,11 +90,19 @@ void project_free(Project* p)
 {
     xfree(p);
 }
+State* state_new()
+{
+    return xalloc(sizeof(State));
+}
+void state_free(State* s)
+{
+    xfree(s);
+}
 SearchResult* search_result_new()
 {
     SearchResult* result =  xalloc(sizeof(SearchResult));
-    list_alloc(result->messages, Message);
-    list_alloc(result->states, State);
+    list_alloc(result->messages, Message, message_new, message_free);
+    list_alloc(result->states, State, state_new, state_free);
     return result;
 }
 void search_result_free(SearchResult* sr)
@@ -128,6 +140,22 @@ void setting_file_free(SettingFile* file)
         xfree(file->content);
     xfree(file);
 }
+Element* element_new()
+{
+    return xalloc(sizeof(Element));
+}
+void element_free(Element* e)
+{
+    xfree(e);
+}
+ElementType* element_type_new()
+{
+    return xalloc(sizeof(ElementType));
+}
+void element_type_free(ElementType* e)
+{
+    xfree(e);
+}
 
 ElementFile* element_file_new()
 {
@@ -142,7 +170,7 @@ void element_file_free(ElementFile* ef)
 Message* message_new()
 {
     Message* message = xalloc(sizeof(Message));
-    list_alloc(message->elements, Element);
+    list_alloc(message->elements, Element, element_new, element_free);
     return message;
 }
 void message_free(Message* m)

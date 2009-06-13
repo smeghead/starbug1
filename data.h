@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include "list.h"
+#include "simple_string.h"
 
 #define VALUE_LENGTH 1048575
 #define MODE_LENGTH 10
@@ -21,7 +22,7 @@ typedef enum _bool {
 
 typedef struct {
     int id;
-    char name[DEFAULT_LENGTH];
+    String* name;
     int sort;
     int deleted;
 } ProjectInfo;
@@ -29,18 +30,20 @@ ProjectInfo* project_info_new();
 void project_info_free(ProjectInfo*);
 
 typedef struct {
-  char name[DEFAULT_LENGTH];
-  char home_description[DEFAULT_LENGTH];
-  char home_url[DEFAULT_LENGTH];
+    char name[DEFAULT_LENGTH];
+    char home_description[DEFAULT_LENGTH];
+    char home_url[DEFAULT_LENGTH];
 } Project;
 Project* project_new();
 void project_free(Project*);
 
 typedef struct {
-  int element_type_id;
-  char* str_val;
-  int is_file;
+    int element_type_id;
+    char* str_val;
+    int is_file;
 } Element;
+Element* element_new();
+void element_free(Element*);
 
 typedef struct {
     char name[DEFAULT_LENGTH];
@@ -53,35 +56,37 @@ SettingFile* setting_file_new();
 void setting_file_free(SettingFile*);
 
 typedef struct {
-  int id;
-  List* elements;
+    int id;
+    List* elements;
 } Message;
 Message* message_new();
 void message_free(Message*);
 
 typedef struct {
-  int id;
-  int element_type_id;
-  char name[256];
-  int close;
-  int sort;
+    int id;
+    int element_type_id;
+    char name[256];
+    int close;
+    int sort;
 } ListItem;
 ListItem* list_item_new();
 void list_item_free(ListItem*);
 
 typedef struct {
-  int id;
-  int type;
-  int ticket_property;
-  int reply_property;
-  int required;
-  char name[DEFAULT_LENGTH];
-  char description[DEFAULT_LENGTH];
-  int auto_add_item;
-  char default_value[DEFAULT_LENGTH];
-  int display_in_list;
-  int sort;
+    int id;
+    int type;
+    int ticket_property;
+    int reply_property;
+    int required;
+    char name[DEFAULT_LENGTH];
+    char description[DEFAULT_LENGTH];
+    int auto_add_item;
+    char default_value[DEFAULT_LENGTH];
+    int display_in_list;
+    int sort;
 } ElementType;
+ElementType* element_type_new();
+void element_type_free(ElementType*);
 
 typedef struct {
     int id;
@@ -95,13 +100,13 @@ ElementFile* element_file_new();
 void element_file_free(ElementFile*);
 
 enum ELEM_TYPE {
-  ELEM_TYPE_TEXT,
-  ELEM_TYPE_TEXTAREA,
-  ELEM_TYPE_CHECKBOX,
-  ELEM_TYPE_LIST_SINGLE,
-  ELEM_TYPE_LIST_MULTI,
-  ELEM_TYPE_UPLOADFILE,
-  ELEM_TYPE_DATE
+    ELEM_TYPE_TEXT,
+    ELEM_TYPE_TEXTAREA,
+    ELEM_TYPE_CHECKBOX,
+    ELEM_TYPE_LIST_SINGLE,
+    ELEM_TYPE_LIST_MULTI,
+    ELEM_TYPE_UPLOADFILE,
+    ELEM_TYPE_DATE
 };
 enum ELEM_ID {
     ELEM_ID_ID = -1,
@@ -116,10 +121,10 @@ enum ELEM_ID {
 #define BASIC_ELEMENT_MAX 3
 
 typedef struct {
-  int element_type_id;
-  int condition_type;
-  char value[DEFAULT_LENGTH];
-  char cookie_value[DEFAULT_LENGTH];
+    int element_type_id;
+    int condition_type;
+    char value[DEFAULT_LENGTH];
+    char cookie_value[DEFAULT_LENGTH];
 } Condition;
 enum CONDITION_TYPE {
     CONDITION_TYPE_NORMAL,
@@ -135,24 +140,26 @@ bool valid_condition(Condition*);
 char* get_condition_valid_value(Condition*);
 
 typedef struct {
-  int id;
-  char name[DEFAULT_LENGTH];
-  int count;
+    int id;
+    char name[DEFAULT_LENGTH];
+    int count;
 } State;
+State* state_new();
+void state_free(State*);
 
 typedef struct {
-  int hit_count;
-  int page;
-  List* messages;
-  List* states;
+    int hit_count;
+    int page;
+    List* messages;
+    List* states;
 } SearchResult;
 SearchResult* search_result_new();
 void search_result_free(SearchResult*);
 
 typedef struct {
-  int id;
-  char name[DEFAULT_LENGTH];
-  char* content;
+    int id;
+    char name[DEFAULT_LENGTH];
+    char* content;
 } Wiki;
 Wiki* wiki_new();
 void wiki_free(Wiki*);

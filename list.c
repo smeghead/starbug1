@@ -6,7 +6,14 @@
 /* Iteratorに格納する要素のalloc */
 void* list_new_element(List* list)
 {
-    return xalloc(list->element_size);
+    void* new_element; 
+    if (list->construstor) {
+        /* コンストラクタが指定されている場合はそれを利用する */
+        new_element = list->construstor();
+    } else {
+        new_element = xalloc(list->element_size);
+    }
+    return new_element;
 }
 /* Iteratorの取得 */
 Iterator* get_iterator(List* list)
@@ -44,7 +51,14 @@ void list_free(List* list)
     while (1) {
         Iterator* old_it = it;
         if (it == NULL) break;
-        if (it->element != NULL) xfree(it->element);
+        if (it->element != NULL) {
+            if (list->destructor) {
+                /* コンストラクタが指定されている場合はそれを利用する */
+                list->destructor(it->element);
+            } else {
+                xfree(it->element);
+            }
+        }
         it = it->next;
         xfree(old_it);
     }

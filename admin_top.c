@@ -94,7 +94,7 @@ void top_top_action()
     char** multi;
     Project* project_a = project_new();
 
-    list_alloc(project_infos_a, ProjectInfo);
+    list_alloc(project_infos_a, ProjectInfo, project_info_new, project_info_free);
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_infos_a = db_top_get_all_project_infos(db_a, project_infos_a);
@@ -167,7 +167,7 @@ void top_top_action()
         o(      "\t\t\t\t<td>"); h(db_name); o("</td>\n");
         project_free(project_a);
         db_finish(db_project_a);
-        o(      "\t\t\t\t<td><input type=\"text\" name=\"project_%d.name\" class=\"project_id\" value=\"", p->id); h(p->name); o("\" /></td>\n");
+        o(      "\t\t\t\t<td><input type=\"text\" name=\"project_%d.name\" class=\"project_id\" value=\"", p->id); h(string_rawstr(p->name)); o("\" /></td>\n");
         o(      "\t\t\t\t<td><input type=\"text\" name=\"project_%d.sort\" class=\"number\" value=\"%d\" /></td>\n", p->id, p->sort);
         o(      "\t\t\t\t<td><input type=\"checkbox\" class=\"checkbox\" name=\"project_%d.deleted\" id=\"project_%d.deleted\" value=\"1\" %s /></td>\n", p->id, p->id, p->deleted ? "checked=\"checked\"" : "");
         o(      "\t\t\t</tr>\n");
@@ -231,12 +231,12 @@ static bool validate_project_id_exists(Database* db, char* name, int id)
     bool ret = true;
     List* project_infos_a;
     Iterator* it;
-    list_alloc(project_infos_a, ProjectInfo);
+    list_alloc(project_infos_a, ProjectInfo, project_info_new, project_info_free);
     project_infos_a = db_top_get_all_project_infos(db, project_infos_a);
     foreach (it, project_infos_a) {
         ProjectInfo* p = it->element;
         if (p->id == id) continue;
-        if (strcmp(name, p->name) == 0) {
+        if (strcmp(name, string_rawstr(p->name)) == 0) {
             ret = false;
             break;
         }
@@ -260,7 +260,7 @@ void top_update_project_submit_action()
     {
         List* project_infos_a;
         Iterator* it;
-        list_alloc(project_infos_a, ProjectInfo);
+        list_alloc(project_infos_a, ProjectInfo, project_info_new, project_info_free);
 
         project_infos_a = db_top_get_all_project_infos(db_a, project_infos_a);
         foreach (it, project_infos_a) {
@@ -287,7 +287,7 @@ void top_update_project_submit_action()
                 redirect("", message);
                 return;
             }
-            strcpy(p->name, name);
+            string_set(p->name, name);
             sprintf(param_name, "project_%d.sort", p->id);
             cgiFormString(param_name, sort, DEFAULT_LENGTH);
             p->sort = atoi(sort);
@@ -315,29 +315,29 @@ void top_add_project_submit_action()
     {
         char name[DEFAULT_LENGTH];
         char sort[DEFAULT_LENGTH];
-        ProjectInfo* project_info = project_info_new();
+        ProjectInfo* pi_a = project_info_new();
 
         d("db->name: %s\n", db_a->name);
         cgiFormString("project_new.name", name, DEFAULT_LENGTH);
         if (!validate_project_id(name)) {
-            project_info_free(project_info);
+            project_info_free(pi_a);
             db_finish(db_a);
             redirect("", "[ERROR] プロジェクトID topは予約されています。");
             return;
         }
         if (!validate_project_id_exists(db_a, name, 0)) {
             char message[DEFAULT_LENGTH];
-            project_info_free(project_info);
+            project_info_free(pi_a);
             db_finish(db_a);
             sprintf(message, "[ERROR] プロジェクトID %sは既に存在しています。", name);
             redirect("", message);
             return;
         }
-        strcpy(project_info->name, name);
+        string_set(pi_a->name, name);
         cgiFormString("project_new.sort", sort, DEFAULT_LENGTH);
-        project_info->sort = atoi(sort);
-        db_top_register_project_info(db_a, project_info);
-        project_info_free(project_info);
+        pi_a->sort = atoi(sort);
+        db_top_register_project_info(db_a, pi_a);
+        project_info_free(pi_a);
     }
     db_finish(db_a);
 

@@ -22,7 +22,7 @@ ifeq ($(OS), CYGWIN_NT-5.1)
 endif
 
 #debug
-#CFLAGS += -DDEBUG
+CFLAGS += -DDEBUG
 
 default: index.cgi admin.cgi
 

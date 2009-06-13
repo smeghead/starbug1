@@ -6,11 +6,9 @@
 
 #define STRING_DEFAULT_SIZE 1024
 
-String* string_new(size_t block_size)
+void string_init(String* str, size_t block_size)
 {
-    String* str;
-/*     d("string size: %d\n", sizeof(String)); */
-    str = xalloc(sizeof(String));
+    d("string_init\n");
     if (block_size == 0) {
         str->block_size = STRING_DEFAULT_SIZE;
     } else {
@@ -19,6 +17,14 @@ String* string_new(size_t block_size)
     str->raw_chars = xalloc(sizeof(char) * str->block_size);
     str->buf_size = str->block_size;
     strcpy(str->raw_chars, "");
+    d("string_init end\n");
+}
+String* string_new(size_t block_size)
+{
+    String* str;
+/*     d("string size: %d\n", sizeof(String)); */
+    str = xalloc(sizeof(String));
+    string_init(str, block_size);
     return str;
 }
 void string_append(String* str, char* addstr)
@@ -37,6 +43,16 @@ void string_append(String* str, char* addstr)
     strcat(str->raw_chars, addstr);
     str->current_size += len;
 /*     printf("%d (size: %d)\n", str->current_size, str->buf_size); */
+}
+void string_set(String* str, char* newstr)
+{
+    /* 存在していた文字列は破棄する。 */
+    d("string_set\n");
+    d("string_set %s\n", string_rawstr(str));
+    xfree(str->raw_chars);
+    string_init(str, str->block_size);
+    string_append(str, newstr);
+    d("string_set end\n");
 }
 char* string_rawstr(String* str)
 {

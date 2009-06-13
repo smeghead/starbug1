@@ -89,7 +89,7 @@ void top_top_action()
     Iterator* it;
     Project* top_project_a = project_new();
 
-    list_alloc(project_infos_a, ProjectInfo);
+    list_alloc(project_infos_a, ProjectInfo, project_info_new, project_info_free);
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_infos_a = db_top_get_all_project_infos(db_a, project_infos_a);
@@ -114,7 +114,7 @@ void top_top_action()
         sprintf(db_name, "db/%d.db", p->id);
         db_project_a = db_init(db_name);
         project_a = db_get_project(db_project_a, project_a);
-        o(      "\t\t\t\t<li><a href=\"%s/", cgiScriptName); u(p->name); o("\">"); h(project_a->name); o("</a></li>\n");
+        o(      "\t\t\t\t<li><a href=\"%s/", cgiScriptName); u(string_rawstr(p->name)); o("\">"); h(project_a->name); o("</a></li>\n");
         project_free(project_a);
         db_finish(db_project_a);
     }
