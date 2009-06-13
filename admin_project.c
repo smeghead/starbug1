@@ -496,6 +496,7 @@ void update_elements(Database* db)
 {
     char** ids;
     int i = -1;
+
     if ((cgiFormStringMultiple("field_ids", &ids)) == cgiFormNotFound) {
         die("cannot find field_ids.");
     }
@@ -505,7 +506,7 @@ void update_elements(Database* db)
         char value[DEFAULT_LENGTH];
         List* items_a;
         Iterator* it;
-        ElementType* et_a = xalloc(sizeof(ElementType));
+        ElementType* et_a = element_type_new();
 
         et_a = db_get_element_type(db, atoi(id), et_a);
 
@@ -595,7 +596,7 @@ void update_elements(Database* db)
                 break;
         }
 
-        xfree(et_a);
+        element_type_free(et_a);
     }
     cgiStringArrayFree(ids);
 }
@@ -744,7 +745,7 @@ void new_item_action()
 }
 void new_item_submit_action()
 {
-    ElementType* et_a = xalloc(sizeof(ElementType));
+    ElementType* et_a = element_type_new();
     char value[DEFAULT_LENGTH];
     int i, e_type_id;
     Database* db_a;
@@ -798,7 +799,7 @@ void new_item_submit_action()
             }
             break;
     }
-    xfree(et_a);
+    element_type_free(et_a);
     db_commit(db_a);
     db_finish(db_a);
     redirect("", "追加しました");
@@ -808,7 +809,7 @@ void delete_item_action()
     char* e_type_id;
     int iid;
     Project* project_a = project_new();
-    ElementType* et_a = xalloc(sizeof(ElementType));
+    ElementType* et_a = element_type_new();
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
 
@@ -834,7 +835,7 @@ void delete_item_action()
     o(      "</div>\n");
     db_finish(db_a);
     output_footer();
-    xfree(et_a);
+    element_type_free(et_a);
 }
 void delete_item_submit_action()
 {

@@ -180,7 +180,7 @@ int db_register_ticket(Database* db, Message* ticket)
                 "select close from list_item "
                 "where list_item.element_type_id = ? and list_item.name = ?",
                 COLUMN_TYPE_INT, e->element_type_id,
-                COLUMN_TYPE_TEXT, e->str_val,
+                COLUMN_TYPE_TEXT, string_rawstr(e->str_val),
                 COLUMN_TYPE_END);
         if (c != INVALID_INT && c != 0) {
             closed = true;
@@ -898,11 +898,11 @@ void db_update_element_type(Database* db, ElementType* et)
             COLUMN_TYPE_INT, et->ticket_property,
             COLUMN_TYPE_INT, et->reply_property,
             COLUMN_TYPE_INT, et->required,
-            COLUMN_TYPE_TEXT, et->name,
-            COLUMN_TYPE_TEXT, et->description,
+            COLUMN_TYPE_TEXT, string_rawstr(et->name),
+            COLUMN_TYPE_TEXT, string_rawstr(et->description),
             COLUMN_TYPE_INT, et->sort,
             COLUMN_TYPE_INT, et->display_in_list,
-            COLUMN_TYPE_TEXT, et->default_value,
+            COLUMN_TYPE_TEXT, string_rawstr(et->default_value),
             COLUMN_TYPE_INT, et->auto_add_item,
             COLUMN_TYPE_INT, et->id,
             COLUMN_TYPE_END) != 1)
@@ -914,7 +914,7 @@ void db_update_list_item(Database* db, ListItem* item)
             db,
             "update list_item set "
             "name = ?, close = ?, sort = ? where id = ?",
-            COLUMN_TYPE_TEXT, item->name,
+            COLUMN_TYPE_TEXT, string_rawstr(item->name),
             COLUMN_TYPE_INT, item->close,
             COLUMN_TYPE_INT, item->sort,
             COLUMN_TYPE_INT, item->id,
@@ -955,8 +955,8 @@ int db_register_element_type(Database* db, ElementType* et)
             COLUMN_TYPE_INT, et->ticket_property,
             COLUMN_TYPE_INT, et->reply_property,
             COLUMN_TYPE_INT, et->required,
-            COLUMN_TYPE_TEXT, et->name,
-            COLUMN_TYPE_TEXT, et->description,
+            COLUMN_TYPE_TEXT, string_rawstr(et->name),
+            COLUMN_TYPE_TEXT, string_rawstr(et->description),
             COLUMN_TYPE_INT, et->auto_add_item,
             COLUMN_TYPE_INT, et->display_in_list,
             COLUMN_TYPE_INT, et->sort,
@@ -1223,7 +1223,7 @@ void db_register_wiki(Database* db, Wiki* wiki)
             db,
             "insert into wiki (id, name, content, registerdate)"
             "values (NULL, ?, ?, ?)",
-            COLUMN_TYPE_TEXT, wiki->name,
+            COLUMN_TYPE_TEXT, string_rawstr(wiki->name),
             COLUMN_TYPE_TEXT, wiki->content,
             COLUMN_TYPE_TEXT, registerdate,
             COLUMN_TYPE_END);
@@ -1271,11 +1271,11 @@ void db_setting_file_save(Database* db, SettingFile* sf)
                 " mime_type = ?, "
                 " content = ? "
                 "where name = ?",
-                COLUMN_TYPE_TEXT, sf->file_name,
+                COLUMN_TYPE_TEXT, string_rawstr(sf->file_name),
                 COLUMN_TYPE_INT, sf->size,
-                COLUMN_TYPE_TEXT, sf->mime_type,
+                COLUMN_TYPE_TEXT, string_rawstr(sf->mime_type),
                 COLUMN_TYPE_TEXT, sf->content,
-                COLUMN_TYPE_TEXT, sf->name,
+                COLUMN_TYPE_TEXT, string_rawstr(sf->name),
                 COLUMN_TYPE_END) != 1)
         die("failed to update setting file.");
 }
@@ -1328,9 +1328,9 @@ void db_update_top_image(Database* db, SettingFile* sf)
                 " mime_type = ?, "
                 " content = ? "
                 "where name = 'top_image'",
-                COLUMN_TYPE_TEXT, sf->file_name,
+                COLUMN_TYPE_TEXT, string_rawstr(sf->file_name),
                 COLUMN_TYPE_INT, sf->size,
-                COLUMN_TYPE_TEXT, sf->mime_type,
+                COLUMN_TYPE_TEXT, string_rawstr(sf->mime_type),
                 COLUMN_TYPE_BLOB_SETTING_FILE, sf,
                 COLUMN_TYPE_END) != 1)
         die("update failed.");

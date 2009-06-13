@@ -68,13 +68,13 @@ ERROR_LABEL(db->handle)
 void db_top_update_project(Database* db, Project* project)
 {
     exec_query(db, "update setting set value = ? where name = 'project_name'",
-            COLUMN_TYPE_TEXT, project->name,
+            COLUMN_TYPE_TEXT, string_rawstr(project->name),
             COLUMN_TYPE_END);
     exec_query(db, "update setting set value = ? where name = 'home_description'",
-            COLUMN_TYPE_TEXT, project->home_description,
+            COLUMN_TYPE_TEXT, string_rawstr(project->home_description),
             COLUMN_TYPE_END);
     exec_query(db, "update setting set value = ? where name = 'home_url'",
-            COLUMN_TYPE_TEXT, project->home_url,
+            COLUMN_TYPE_TEXT, string_rawstr(project->home_url),
             COLUMN_TYPE_END);
 }
 void db_top_update_project_infos(Database* db, List* project_infos)
@@ -84,7 +84,7 @@ void db_top_update_project_infos(Database* db, List* project_infos)
     foreach (it, project_infos) {
         ProjectInfo* pi = it->element;
         exec_query(db, "update project_info set name = ?, sort = ? , deleted = ? where id = ?",
-                COLUMN_TYPE_TEXT, pi->name,
+                COLUMN_TYPE_TEXT, string_rawstr(pi->name),
                 COLUMN_TYPE_INT, pi->sort,
                 COLUMN_TYPE_INT, pi->deleted,
                 COLUMN_TYPE_INT, pi->id,
@@ -95,7 +95,7 @@ void db_top_update_project_infos(Database* db, List* project_infos)
 void db_top_register_project_info(Database* db, ProjectInfo* project_info)
 {
     exec_query(db, "insert into project_info(id, name, sort) values (NULL, ?, ?)",
-            COLUMN_TYPE_TEXT, project_info->name,
+            COLUMN_TYPE_TEXT, string_rawstr(project_info->name),
             COLUMN_TYPE_INT, project_info->sort,
             COLUMN_TYPE_END);
     return;
