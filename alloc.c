@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "util.h"
 
 int alloc_count = 0;
 
@@ -12,12 +13,12 @@ void* xalloc(size_t size)
         exit(-1);
     }
     alloc_count++;
-/*     d("xalloc: %p\n", p); */
+    d("xalloc: %p\n", p); 
     return p;
 }
 void xfree(void* p)
 {
-/*     d("xfree: %p\n", p); */
+    d("xfree: %p\n", p); 
     alloc_count--;
     free(p);
     p = NULL;
