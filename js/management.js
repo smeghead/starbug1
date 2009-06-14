@@ -30,7 +30,6 @@ function initPage(e) {
             var row = parents[1]; //trオブジェクトを取得する。
             var row_template = $('row_template').innerHTML;
             row_template = row_template.replace(/\[id\]/g, field_id).replace(/\[no\]/g, no++);
-            alert(row_template);
             new Insertion.After(row, row_template);
         });
     });
