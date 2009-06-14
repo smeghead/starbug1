@@ -5,10 +5,11 @@
 #include "index_top.h"
 #include "index_project.h"
 
-/* index.cgiのエントリポイントになる関数  */
+/* index.cgi縺ｮ繧ｨ繝ｳ繝医Μ繝昴う繝ｳ繝医↓縺ｪ繧矩未謨ｰ  */
 int cgiMain() {
     ActionType type = analysis_action();
     int ret = 0;
+    d("pass %d\n", type);
     switch (type) {
         case ACTION_TYPE_INDEX_TOP:
             ret = index_top_main();

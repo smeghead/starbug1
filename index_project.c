@@ -2323,7 +2323,7 @@ void edit_top_action()
             "<li>行頭に****を記述した行は、極小見出しになります。</li>\n"
             "<li>行頭に-を記述した行は、箇条書きになります。</li>\n"
             "<li>行頭に----を記述した行は、区切り線になります。</li>\n"
-            "<li>行頭が >| から始まる行から、行頭が |< から始まる行までは、整形済みブロックになります。</li>\n"
+            "<li>行頭が &gt;| から始まる行から、行頭が |&lt; から始まる行までは、整形済みブロックになります。</li>\n"
             "</ul>\n"
             "<h5>例</h5>\n"
             "<pre>\n"
@@ -2396,6 +2396,7 @@ void setting_file_action()
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
 
+    d("start\n");
     strcpy(name, g_path_info);
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));

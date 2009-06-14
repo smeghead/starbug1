@@ -10,7 +10,7 @@
 #include "util.h"
 #include "wiki.h"
 
-#define ADD_ITEM_COUNT 5
+#define ADD_ITEM_COUNT 10
 
 typedef enum _NAVI {
     NAVI_OTHER,
@@ -69,7 +69,7 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
             "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />");
     o(        "\t<title>管理ツール - "); h(string_rawstr(project->name)); o(" - "); h(title); o("</title>\n");
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName);
-    o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/%s/setting_file/user.css\" />\n", cgiScriptName, g_project_name_4_url);
+    o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../index.%s/%s/setting_file/user.css\" />\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
     if (script_name) {
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/prototype.js\"></script>\n", cgiScriptName);
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/%s\"></script>\n", cgiScriptName, script_name);
@@ -399,34 +399,38 @@ void items_action()
                       "\t\t\t\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field%d.list_item%d.name\" ", et->id, item->id);
                     o(                       "value=\"");hs(item->name);o("\" maxlength=\"1000\" />\n"
                       "\t\t\t\t\t\t\t</td>\n"
-                      "\t\t\t\t\t\t\t<td>\n"
+                      "\t\t\t\t\t\t\t<td class=\"center\">\n"
                       "\t\t\t\t\t\t\t\t<input class=\"checkbox\" type=\"checkbox\" name=\"field%d.list_item%d.close\" value=\"1\" %s />\n", et->id, item->id, (item->close == 1) ? "checked=\"checked\"" : "");
                     o("\t\t\t\t\t\t\t</td>\n"
                       "\t\t\t\t\t\t\t<td>\n"
                       "\t\t\t\t\t\t\t\t<input class=\"number\" type=\"text\" name=\"field%d.list_item%d.sort\" value=\"%d\" maxlength=\"1000\" />\n", et->id, item->id, item->sort);
                     o("\t\t\t\t\t\t\t</td>\n"
-                      "\t\t\t\t\t\t\t<td>\n"
+                      "\t\t\t\t\t\t\t<td class=\"center\">\n"
                       "\t\t\t\t\t\t\t\t<input class=\"checkbox\" type=\"checkbox\" name=\"field%d.list_item%d.delete\" value=\"1\" />\n", et->id, item->id);
                     o("\t\t\t\t\t\t\t</td>\n"
                       "\t\t\t\t\t\t</tr>\n");
                 }
                 o("\t\t\t\t\t\t<tr>\n"
                   "\t\t\t\t\t\t\t<td>\n"
-                  "\t\t\t\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field%d.list_item_new.name\" value=\"\" maxlength=\"1000\" />\n", et->id);
+                  "\t\t\t\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field%d.list_item_new.name0\" value=\"\" maxlength=\"1000\" />\n", et->id);
+                o("\t\t\t\t\t\t\t</td>\n"
+                  "\t\t\t\t\t\t\t<td class=\"center\">\n"
+                  "\t\t\t\t\t\t\t\t<input class=\"checkbox\" type=\"checkbox\" name=\"field%d.list_item_new.close0\" value=\"\" />\n", et->id);
                 o("\t\t\t\t\t\t\t</td>\n"
                   "\t\t\t\t\t\t\t<td>\n"
-                  "\t\t\t\t\t\t\t\t<input class=\"checkbox\" type=\"checkbox\" name=\"field%d.list_item_new.close\" value=\"\" />\n", et->id);
+                  "\t\t\t\t\t\t\t\t<input class=\"number\" type=\"text\" name=\"field%d.list_item_new.sort0\" value=\"\" />\n", et->id);
                 o("\t\t\t\t\t\t\t</td>\n"
-                  "\t\t\t\t\t\t\t<td>\n"
-                  "\t\t\t\t\t\t\t\t<input class=\"number\" type=\"text\" name=\"field%d.list_item_new.sort\" value=\"\" />\n", et->id);
-                o("\t\t\t\t\t\t\t</td>\n"
-                  "\t\t\t\t\t\t\t<td>\n"
-                  "\t\t\t\t\t\t\t\t&nbsp;\n"
+                  "\t\t\t\t\t\t\t<td class=\"center\">\n"
+                  "\t\t\t\t\t\t\t\t<script type=\"text/javascript\">\n"
+                  "\t\t\t\t\t\t\t\t\t<!--\n"
+                  "\t\t\t\t\t\t\t\t\tdocument.write('<input type=\"button\" value=\"行追加\" id=\"add_new_row.field%d\" class=\"add_new_row\" />');\n"
+                  "\t\t\t\t\t\t\t\t\t//-->\n"
+                  "\t\t\t\t\t\t\t\t</script>\n"
                   "\t\t\t\t\t\t\t</td>\n"
                   "\t\t\t\t\t\t</tr>\n"
                   "\t\t\t\t\t</table>\n"
                   "\t\t\t\t\t<div class=\"description\">項目種別が選択式の場合の選択肢です。</div>\n"
-                  "\t\t\t\t\t<input id=\"field%d.auto_add_item\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.auto_add_item\" ", et->id, et->id);
+                  "\t\t\t\t\t<input id=\"field%d.auto_add_item\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.auto_add_item\" ", et->id, et->id, et->id);
                 o(                  "value=\"1\" %s />\n", et->auto_add_item == 1 ? "checked=\"checked\"" : "");
                 o("\t\t\t\t\t<label for=\"field%d.auto_add_item\">投稿時に、新規項目を指定可能とする。</label>\n", et->id);
                 o("\t\t\t\t\t<div class=\"description\">投稿時にテキストボックスを表示し、テキストボックスに入力された場合は、その項目を選択肢に追加する機能を付加するかどうかです。</div>\n"
@@ -461,6 +465,24 @@ void items_action()
         o("\t\t\t\t\t<div class=\"description\">チケット一覧、投稿画面、返信画面での項目の並び順です。</div>\n"
           "\t\t\t\t</td>\n"
           "\t\t\t</tr>\n"
+          "\t\t</table>\n");
+        o("\t\t<table style=\"display:none\">\n"
+          "\t\t\t<tbody id=\"row_template\">\n"
+          "\t\t\t<tr>\n"
+          "\t\t\t\t<td>\n"
+          "\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field[id].list_item_new.name[no]\" value=\"\" maxlength=\"1000\" />\n"
+          "\t\t\t\t</td>\n"
+          "\t\t\t\t<td class=\"center\">\n"
+          "\t\t\t\t\t<input class=\"checkbox\" type=\"checkbox\" name=\"field[id].list_item_new.close[no]\" value=\"\" />\n"
+          "\t\t\t\t</td>\n"
+          "\t\t\t\t<td>\n"
+          "\t\t\t\t\t<input class=\"number\" type=\"text\" name=\"field[id].list_item_new.sort[no]\" value=\"\" />\n"
+          "\t\t\t\t</td>\n"
+          "\t\t\t\t<td class=\"center\">\n"
+          "\t\t\t\t\t&nbsp;\n"
+          "\t\t\t\t</td>\n"
+          "\t\t\t</tr>\n"
+          "\t\t\t</tbody>\n"
           "\t\t</table>\n");
         if (et->id > BASIC_ELEMENT_MAX) {
             /* 基本項目は削除できないようにする。 */
@@ -501,6 +523,7 @@ void update_elements(Database* db)
         die("cannot find field_ids.");
     }
     while (ids[++i]) {
+        int j;
         char* id = ids[i];
         char name[DEFAULT_LENGTH];
         char value[DEFAULT_LENGTH];
@@ -576,22 +599,29 @@ void update_elements(Database* db)
                         db_update_list_item(db, item);
                 }
                 list_free(items_a);
-                strcpy(name, "");
-                strcpy(value, "");
-                sprintf(name, "field%d.list_item_new.name", et_a->id);
-                cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-                if (strlen(value) > 0) {
-                    ListItem* item_a = xalloc(sizeof(ListItem));
-                    item_a->element_type_id = et_a->id;
-                    string_set(item_a->name, value);
-                    sprintf(name, "field%d.list_item_new.close", et_a->id);
+                //新しい項目の追加
+                for (j = 0; j < 100; j++) {
+                    strcpy(name, "");
+                    strcpy(value, "");
+                    sprintf(name, "field%d.list_item_new.name%d", et_a->id, j);
                     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-                    item_a->close = atoi(value);
-                    sprintf(name, "field%d.list_item_new.sort", et_a->id);
-                    cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
-                    item_a->sort = atoi(value);
-                    db_register_list_item(db, item_a);
-                    xfree(item_a);
+                    if (strlen(value) > 0) {
+                        ListItem* item_a = list_item_new();
+                        item_a->element_type_id = et_a->id;
+                        d("%s\n", value);
+                        string_set(item_a->name, value);
+                        sprintf(name, "field%d.list_item_new.close%d", et_a->id, j);
+                        cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+                        item_a->close = atoi(value);
+                        sprintf(name, "field%d.list_item_new.sort%d", et_a->id, j);
+                        cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+                        item_a->sort = atoi(value);
+                        db_register_list_item(db, item_a);
+                        xfree(item_a);
+                    } else {
+                        //名称が取得できない場合は、追加終了
+                        break;
+                    }
                 }
                 break;
         }
@@ -781,7 +811,7 @@ void new_item_submit_action()
         case ELEM_TYPE_LIST_MULTI:
             for (i = 0; i < ADD_ITEM_COUNT; i++) {
                 char name[DEFAULT_LENGTH];
-                ListItem* item_a = xalloc(sizeof(ListItem));
+                ListItem* item_a = list_item_new();
                 item_a->element_type_id = e_type_id;
                 sprintf(name, "field.list_item_new%d.name", i);
                 cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);

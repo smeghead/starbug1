@@ -937,7 +937,7 @@ void db_register_list_item(Database* db, ListItem* item)
             "insert into list_item (id, element_type_id, name, close, sort)"
             "values (NULL, ?, ?, ?, ?)",
             COLUMN_TYPE_INT, item->element_type_id,
-            COLUMN_TYPE_TEXT, item->name,
+            COLUMN_TYPE_TEXT, string_rawstr(item->name),
             COLUMN_TYPE_INT, item->close,
             COLUMN_TYPE_INT, item->sort,
             COLUMN_TYPE_END);

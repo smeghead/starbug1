@@ -625,4 +625,10 @@ a#new_ticket_link {
 a#new_ticket_link:hover {
     background-color: #EFEFEF;
 }
+td.center {
+    text-align: center;
+}
+input.add_new_row {
+    width: 50px;
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
