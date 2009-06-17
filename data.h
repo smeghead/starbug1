@@ -11,7 +11,6 @@
 #define DEFAULT_LENGTH 1024
 #define NUM_LENGTH 20
 #define DATE_LENGTH 20
-#define MAX_FILE_SIZE 512
 #define LIST_COUNT_PER_LIST_PAGE 15
 #define LIST_COUNT_PER_SEARCH_PAGE 30
 
@@ -33,6 +32,7 @@ typedef struct {
     String* name;
     String* home_description;
     String* home_url;
+    int upload_max_size;
 } Project;
 Project* project_new();
 void project_free(Project*);

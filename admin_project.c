@@ -187,6 +187,10 @@ void project_action()
     o("\t\t\t\t<th>画像(ページの一番上に表示される画像です)</th>\n");
     o("\t\t\t\t<td><input type=\"file\" name=\"project.file\" /></td>\n");
     o("\t\t\t</tr>\n");
+    o("\t\t\t<tr>\n");
+    o("\t\t\t\t<th>ファイルアップロードの最大サイズ(Kb)</th>\n");
+    o("\t\t\t\t<td><input type=\"text\" name=\"project.upload_max_size\" value=\"%d\" /></td>\n", project_a->upload_max_size);
+    o("\t\t\t</tr>\n");
     o("\t\t</table>\n");
     o("\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
     o("\t</form>\n");
@@ -232,6 +236,7 @@ void project_submit_action()
     SettingFile* sf_a = setting_file_new();
     Database* db_a;
     char name[DEFAULT_LENGTH];
+    char upload_max_size_str[DEFAULT_LENGTH];
     char buffer[DEFAULT_LENGTH];
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
@@ -239,6 +244,8 @@ void project_submit_action()
     project_a = db_get_project(db_a, project_a);
     cgiFormStringNoNewlines("project.name", name, DEFAULT_LENGTH);
     string_set(project_a->name, name);
+    cgiFormStringNoNewlines("project.upload_max_size", upload_max_size_str, DEFAULT_LENGTH);
+    project_a->upload_max_size = atoi(upload_max_size_str);
     db_update_project(db_a, project_a);
     project_free(project_a);
 

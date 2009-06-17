@@ -1,3 +1,13 @@
+2009-06-17  smeghead <smeghead@users.sourceforge.jp>
+
+    * アップロードできるファイルの最大サイズを変更可能にした。以前のバージョン
+      からの移行の場合は、以下のSQLを各サブプロジェクトのデータベースファイル
+      に対して実行する必要があります。
+    $ cd db
+    $ echo "insert into setting(name, value) values ('upload_max_size', 512);" | sqlite3 2.db
+    ※2.db 以外にもサブプロジェクト用DBが存在している場合(3.db,
+    4.dbなど)は、それぞれのDBに対して同じSQLを実行してください。
+
 2009-06-14  smeghead  <smeghead@smeghead-laptop>
 
 	* 管理ツール側でユーザ定義のスタイルシートを読み込めないバグを修正した。

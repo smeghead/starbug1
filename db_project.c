@@ -831,7 +831,11 @@ Project* db_get_project(Database* db, Project* project)
             string_set(project->home_description, (char*)sqlite3_column_text(stmt, 1));
         else if (strcmp(name, "home_url") == 0)
             string_set(project->home_url, (char*)sqlite3_column_text(stmt, 1));
+        else if (strcmp(name, "upload_max_size") == 0)
+            project->upload_max_size = sqlite3_column_int(stmt, 1);
     }
+    /* アップロードファイルサイズの上限値が有効な値でない場合は、512kbを設定する。 */
+    project->upload_max_size = (project->upload_max_size <= 0) ? 512 : project->upload_max_size;
 
     sqlite3_finalize(stmt);
 
@@ -862,6 +866,14 @@ void db_update_project(Database* db, Project* project)
             "value = ? "
             "where name = 'home_url'",
             COLUMN_TYPE_TEXT, string_rawstr(project->home_url),
+            COLUMN_TYPE_END) != 1)
+        die("no seting to update? or too many?");
+    if (exec_query(
+            db,
+            "update setting set "
+            "value = ? "
+            "where name = 'upload_max_size'",
+            COLUMN_TYPE_INT, project->upload_max_size,
             COLUMN_TYPE_END) != 1)
         die("no seting to update? or too many?");
 }

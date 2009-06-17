@@ -56,7 +56,7 @@ void setting_file_action();
 void output_header(Project*, char*, char*, const NaviType);
 void output_footer();
 int public_main();
-void output_form_element(Database*, List*, ElementType*);
+void output_form_element(Database*, List*, ElementType*, Project*);
 void output_form_element_4_condition(Database*, ElementType*, List* conditions);
 ModeType get_mode();
 void output_calendar_js();
@@ -1084,7 +1084,7 @@ void output_form_element_4_condition(Database* db, ElementType* et, List* condit
 /**
  * form要素を表示する。
  */
-void output_form_element(Database* db, List* elements, ElementType* et)
+void output_form_element(Database* db, List* elements, ElementType* et, Project* project)
 {
     char* value = "";
     List* items_a;
@@ -1172,7 +1172,7 @@ void output_form_element(Database* db, List* elements, ElementType* et)
         case ELEM_TYPE_UPLOADFILE:
             o("<input type=\"file\" class=\"element\" id=\"field%d\" name=\"field%d\" />\n",
                     et->id, et->id);
-            o("<div class=\"description\">ファイルサイズは、%dKb以下になるようにしてください。</div>\n", MAX_FILE_SIZE);
+            o("<div class=\"description\">ファイルサイズは、%dKb以下になるようにしてください。</div>\n", project->upload_max_size);
             break;
         case ELEM_TYPE_DATE:
             o("<span>\n");
@@ -1254,7 +1254,6 @@ void register_action()
             "<noscript><div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div></noscript>\n");
     o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName, g_project_name_4_url);
     o(      "<table summary=\"input infomation\">\n");
-    project_free(project_a);
     {
         List* element_types_a;
         Iterator* it;
@@ -1286,7 +1285,7 @@ void register_action()
                 o("\t\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
             if (et->type == ELEM_TYPE_DATE)
                 o("\t\t<div id=\"field%d.datefield\" class=\"error\"></div>\n", et->id);
-            output_form_element(db_a, NULL, et);
+            output_form_element(db_a, NULL, et, project_a);
             o("\t\t\t<div class=\"description\">");hs(et->description);o("&nbsp;</div>\n");
             o("\t\t</td>\n");
             o("\t</tr>\n");
@@ -1296,6 +1295,7 @@ void register_action()
         output_field_information_js(element_types_a);
         list_free(element_types_a);
     }
+    project_free(project_a);
     o(      "<input class=\"button\" type=\"submit\" name=\"register\" value=\"登録\" />\n"
             "<input id=\"save2cookie\" type=\"checkbox\" name=\"save2cookie\" class=\"checkbox\" value=\"1\" %s />\n"
             "<label for=\"save2cookie\">投稿者を保存する。(cookie使用)</label>\n"
@@ -1351,7 +1351,6 @@ void ticket_action()
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_element_types_all(db_a, element_types_a);
     o("<h2 id=\"subject\">"); h(string_rawstr(project_a->name)); o(" - ");
-    project_free(project_a);
     h(string_rawstr(title_a));
     string_free(title_a);
     o(" &nbsp;</h2>\n");
@@ -1513,7 +1512,7 @@ void ticket_action()
             o("\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
         if (et->type == ELEM_TYPE_DATE)
             o("\t\t<div id=\"field%d.datefield\" class=\"error\"></div>\n", et->id);
-        output_form_element(db_a, last_elements, et);
+        output_form_element(db_a, last_elements, et, project_a);
         o("\t\t<div class=\"description\">");hs(et->description);o("&nbsp;</div>\n");
         o("\t</td>\n");
         o("\t</tr>\n");
@@ -1536,11 +1535,12 @@ void ticket_action()
             o("\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
         if (et->type == ELEM_TYPE_DATE)
             o("\t\t<div id=\"field%d.datefield\" class=\"error\"></div>\n", et->id);
-        output_form_element(db_a, NULL, et);
+        output_form_element(db_a, NULL, et, project_a);
         o("\t\t<div class=\"description\">");hs(et->description);o("&nbsp;</div>\n");
         o("\t</td>\n");
         o("\t</tr>\n");
     }
+    project_free(project_a);
     o(      "</table>\n");
     o(      "<input class=\"button\" type=\"submit\" name=\"reply\" value=\"返信\" />&nbsp;&nbsp;&nbsp;\n"
             "<input id=\"save2cookie\" type=\"checkbox\" name=\"save2cookie\" class=\"checkbox\" value=\"1\" %s />\n"
@@ -1667,7 +1667,7 @@ void register_submit_action()
                     cgiStringArrayFree(multi);
                     break;
                 case ELEM_TYPE_UPLOADFILE:
-                    if (get_upload_size(et->id) > (MAX_FILE_SIZE * 1024)) {
+                    if (get_upload_size(et->id) > (project_a->upload_max_size * 1024)) {
                         goto file_size_error;
                     }
                     cgiFormFileName(name, value_a, VALUE_LENGTH);
@@ -1720,7 +1720,7 @@ file_size_error:
     db_finish(db_a);
     output_header(project_a, "エラー", NULL, NAVI_OTHER);
     o("<h1>エラー発生</h1>\n"
-      "<div class=\"message\">ファイルサイズが大きすぎます。%dkbより大きいファイルは登録できません。ブラウザの戻るボタンで戻ってください。</div>\n", MAX_FILE_SIZE);
+      "<div class=\"message\">ファイルサイズが大きすぎます。%dkbより大きいファイルは登録できません。ブラウザの戻るボタンで戻ってください。</div>\n", project_a->upload_max_size);
     output_footer();
     project_free(project_a);
 }
@@ -1813,7 +1813,6 @@ void register_at_once_confirm_action()
             "<noscript><div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div></noscript>\n");
     o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/%s/register_at_once_submit\" method=\"post\">\n", cgiScriptName, g_project_name_4_url);
     o(      "<table summary=\"input infomation\">\n");
-    project_free(project_a);
     {
         int line_count = 0;
         List* element_types_a;
@@ -1836,11 +1835,12 @@ void register_at_once_confirm_action()
             o("</th><td>\n");
             if (et->required)
                 o("\t\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
-            output_form_element(db_a, NULL, et);
+            output_form_element(db_a, NULL, et, project_a);
             o("\t\t\t<div class=\"description\">");hs(et->description);o("&nbsp;</div>\n");
             o("\t\t</td>\n");
             o("\t</tr>\n");
         }
+        project_free(project_a);
         o("</table>\n");
         o("<input type=\"hidden\" name=\"fields_count\" value=\"%d\" />\n", csv_a->field_count);
         o(      "<table id=\"register_at_once_confirm\">\n"
