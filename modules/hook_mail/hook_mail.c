@@ -11,6 +11,7 @@
 #include "../../data.h"
 #include "../../util.h"
 #include "../../simple_string.h"
+/* #define d(...) printf(__VA_ARGS__) */
 
 static int wait(int soc, struct pollfd *target, int timeout)
 {
@@ -19,7 +20,7 @@ static int wait(int soc, struct pollfd *target, int timeout)
         ret = poll(target, 1, timeout);
         d("poll ret %d\n", ret);
         if (ret == -1 && errno != EINTR) {
-            /* ¥¨¥é¡¼ */
+            /* ã‚¨ãƒ©ãƒ¼ */
             return -1;
         } else if (ret == 0) {
             /* timeout */
@@ -30,7 +31,7 @@ static int wait(int soc, struct pollfd *target, int timeout)
             char buf[DEFAULT_LENGTH];
             recv(soc, buf, sizeof(buf), 0);
             d("recv: %s\n", buf);
-            /* Á÷¿®½àÈ÷OK */
+            /* é€ä¿¡æº–å‚™OK */
             return 0;
         }
     }
@@ -39,13 +40,38 @@ static int send_data(int soc, char* buf)
 {
     d("send: %s\n", buf);
     send(soc, buf, strlen(buf), 0);
+    d("sended \n");
     return 0;
+}
+static char* hook_get_element_value_by_id(List* elements, const int type)
+{
+    Iterator* it;
+    d("hook_get_element_value_by_id 0 %d\n", type);
+    if (elements == NULL) return "";
+    d("hook_get_element_value_by_id 1\n");
+    d("hook_get_element_value_by_id 1 %d \n", elements->size);
+    foreach (it, elements) {
+        Element* e = it->element;
+    d("hook_get_element_value_by_id 2 \n");
+    d("hook_get_element_value_by_id 2 %s\n", string_rawstr(e->str_val));
+        if (type == e->element_type_id && string_rawstr(e->str_val) != NULL)
+            return string_rawstr(e->str_val);
+    }
+    d("hook_get_element_value_by_id 3\n");
+    return "";
 }
 static int build_header(String* buf, char* base_url, char* project_id, Project* project, Message* message, List* elements, List* element_types)
 {
-    char* subject = get_element_value_by_id(elements, ELEM_ID_TITLE);
-    char* subject_b64_a = xalloc(sizeof(char) * strlen(subject) * 1.5); /* base64¤Ç¤ÎÁı²ÃÊ¬¤ò¹ÍÎ¸ */
+    char* subject;
+    char* subject_b64_a;
+    d("0\n");
+    subject = hook_get_element_value_by_id(elements, ELEM_ID_TITLE);
+    d("0\n");
+    d("0 %s\n", subject);
+    d("1\n");
+    subject_b64_a = xalloc(sizeof(char) * strlen(subject) * 1.5); /* base64ã§ã®å¢—åŠ åˆ†ã‚’è€ƒæ…® */
     base64_encode((unsigned char*)subject, (unsigned char*)subject_b64_a);
+    d("3 %s\n", subject_b64_a);
     string_appendf(buf, "From: %s\r\n", FROM);
     string_appendf(buf, "To: %s\r\n", TO);
     string_appendf(buf, "Subject: [%s:%d]Starbug1 notify. =?UTF-8?B?%s?=\r\n", project_id, message->id, subject_b64_a);
@@ -165,13 +191,14 @@ int execute(char* base_url, char* project_id, Project* project, Message* message
     return 0;
 }
 
-/* °Ê²¼¡¢¥Æ¥¹¥ÈÍÑ´Ø¿ô */
+/* ä»¥ä¸‹ã€ãƒ†ã‚¹ãƒˆç”¨é–¢æ•° */
 void conv(char*, char*);
 int main(int argc, char** argv)
 {
-    char* subject = "ÆüËÜ¸ì";
-    char* subject_b64_a = xalloc(sizeof(char) * strlen(subject) * 1.5); /* base64¤Ç¤ÎÁı²ÃÊ¬¤ò¹ÍÎ¸ */
+    char* subject = "æ—¥æœ¬èª";
+    char* subject_b64_a = xalloc(sizeof(char) * strlen(subject) * 1.5); /* base64ã§ã®å¢—åŠ åˆ†ã‚’è€ƒæ…® */
     base64_encode((unsigned char*)subject, (unsigned char*)subject_b64_a);
+    d("base64_encode: %s\n", subject_b64_a);
     xfree(subject_b64_a);
     return 0;
 /*    char* hostnm;*/

@@ -12,8 +12,9 @@ char* get_element_value(List* elements, ElementType* et)
     if (elements == NULL) return "";
     foreach (it, elements) {
         Element* e = it->element;
-        if (et->id == e->element_type_id && e->str_val != NULL)
-            return string_rawstr(e->str_val);
+        char* str = string_rawstr(e->str_val);
+        if (et->id == e->element_type_id && str != NULL)
+            return str;
     }
     return "";
 }
@@ -23,8 +24,9 @@ char* get_element_value_by_id(List* elements, const int type)
     if (elements == NULL) return "";
     foreach (it, elements) {
         Element* e = it->element;
-        if (type == e->element_type_id && e->str_val != NULL)
-            return string_rawstr(e->str_val);
+        char* str = string_rawstr(e->str_val);
+        if (type == e->element_type_id && str != NULL)
+            return str;
     }
     return "";
 }

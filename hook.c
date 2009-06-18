@@ -111,7 +111,7 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
                 sprintf(result->message, "[ERROR] hook処理(%s)でエラーが発生しました。(プラグインの読み込みに失敗しました。%s)", hook_command, dlerror());
             } else {
                 char* error;
-                int (*func)(char* base_url, char* project_id, Project* project, Message* message, List* elements, List* element_types);
+                int (*func)(char*, char*, Project*, Message*, List*, List*);
                 func = dlsym(handle, "execute");
                 if ((error = dlerror()) != NULL) {
                     d("dlsym error %s\n", error);

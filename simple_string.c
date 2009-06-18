@@ -8,7 +8,7 @@
 
 void string_init(String* str, size_t block_size)
 {
-    d("string_init\n");
+/*     d("string_init\n"); */
     if (block_size == 0) {
         str->block_size = STRING_DEFAULT_SIZE;
     } else {
@@ -17,7 +17,7 @@ void string_init(String* str, size_t block_size)
     str->raw_chars = xalloc(sizeof(char) * str->block_size);
     str->buf_size = str->block_size;
     strcpy(str->raw_chars, "");
-    d("string_init end\n");
+/*     d("string_init end\n"); */
 }
 String* string_new(size_t block_size)
 {
@@ -47,12 +47,12 @@ void string_append(String* str, const char* addstr)
 void string_set(String* str, const char* newstr)
 {
     /* 存在していた文字列は破棄する。 */
-    d("string_set\n");
-    d("string_set %s\n", string_rawstr(str));
+/*     d("string_set\n"); */
+/*     d("string_set %s\n", string_rawstr(str)); */
     xfree(str->raw_chars);
     string_init(str, str->block_size);
     string_append(str, newstr);
-    d("string_set end\n");
+/*     d("string_set end\n"); */
 }
 char* string_rawstr(String* str)
 {
