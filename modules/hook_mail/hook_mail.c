@@ -10,6 +10,7 @@
 #include "../../conv.h"
 #include "../../data.h"
 #include "../../util.h"
+#include "../../list.h"
 #include "../../simple_string.h"
 /* #define d(...) printf(__VA_ARGS__) */
 
@@ -24,7 +25,7 @@ static int wait(int soc, struct pollfd *target, int timeout)
             return -1;
         } else if (ret == 0) {
             /* timeout */
-        d("poll timeout \n");
+            d("poll timeout \n");
             return -2;
         }
         if (target->revents & (POLLIN | POLLERR)) {

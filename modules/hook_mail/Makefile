@@ -16,7 +16,7 @@ deploy:
 
 test:
 	gcc -DSMTP_SERVER=\"${SMTP_SERVER}\" -DSMTP_PORT=\"${SMTP_PORT}\" -DFROM=\"${FROM}\" -DTO=\"${TO}\" hook_mail.c \
-	 ../../list.o ../../data.o ../../simple_string.o ../../alloc.o ../../conv.o
+	 #../../list.o ../../data.o ../../simple_string.o ../../alloc.o ../../conv.o
 	./a.out
 
 clean:
