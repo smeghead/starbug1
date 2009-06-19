@@ -100,10 +100,6 @@ void create_top_tables(Database* db)
             "values ('home_url', '');", COLUMN_TYPE_END);
     exec_query(
             db,
-            "insert into setting(name, value)"
-            "values ('upload_max_size', 512);", COLUMN_TYPE_END);
-    exec_query(
-            db,
             "create table project_info ( "
             " id integer not null primary key, "
             " name text, "
@@ -159,6 +155,10 @@ void create_project_tables(Database* db)
             db,
             "insert into setting(name, value)"
             "values ('home_url', '');", COLUMN_TYPE_END);
+    exec_query(
+            db,
+            "insert into setting(name, value)"
+            "values ('upload_max_size', 512);", COLUMN_TYPE_END);
     exec_query(
             db,
             "create table setting_file( "

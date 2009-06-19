@@ -1,3 +1,8 @@
+2009-06-19  smeghead  <smeghead@smeghead-laptop>
+
+	* プロジェクト用のデータベース作成時に、ファイルアップロードの最大サイズの
+    レコードを追加するようにした。
+
 2009-06-17  smeghead <smeghead@users.sourceforge.jp>
 
     * アップロードできるファイルの最大サイズを変更可能にした。以前のバージョン
