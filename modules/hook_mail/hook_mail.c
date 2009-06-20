@@ -6,13 +6,12 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <poll.h>
-#include "../../alloc.h"
-#include "../../conv.h"
-#include "../../data.h"
-#include "../../util.h"
-#include "../../list.h"
-#include "../../simple_string.h"
-/* #define d(...) printf(__VA_ARGS__) */
+#include "../../hook_data.h"
+#define d(...) {\
+    FILE *fp = fopen("debug.log", "a");\
+    fprintf(fp, __VA_ARGS__);\
+    fclose(fp);\
+}
 
 static int wait(int soc, struct pollfd *target, int timeout)
 {
@@ -29,7 +28,7 @@ static int wait(int soc, struct pollfd *target, int timeout)
             return -2;
         }
         if (target->revents & (POLLIN | POLLERR)) {
-            char buf[DEFAULT_LENGTH];
+            char buf[1024];
             recv(soc, buf, sizeof(buf), 0);
             d("recv: %s\n", buf);
             /* 送信準備OK */
@@ -44,24 +43,24 @@ static int send_data(int soc, char* buf)
     d("sended \n");
     return 0;
 }
-static char* hook_get_element_value_by_id(List* elements, const int type)
-{
-    Iterator* it;
-    d("hook_get_element_value_by_id 0 %d\n", type);
-    if (elements == NULL) return "";
-    d("hook_get_element_value_by_id 1\n");
-    d("hook_get_element_value_by_id 1 %d \n", elements->size);
-    foreach (it, elements) {
-        Element* e = it->element;
-    d("hook_get_element_value_by_id 2 \n");
-    d("hook_get_element_value_by_id 2 %s\n", string_rawstr(e->str_val));
-        if (type == e->element_type_id && string_rawstr(e->str_val) != NULL)
-            return string_rawstr(e->str_val);
-    }
-    d("hook_get_element_value_by_id 3\n");
-    return "";
-}
-static int build_header(String* buf, char* base_url, char* project_id, Project* project, Message* message, List* elements, List* element_types)
+/* static char* hook_get_element_value_by_id(List* elements, const int type) */
+/* { */
+/*     Iterator* it; */
+/*     d("hook_get_element_value_by_id 0 %d\n", type); */
+/*     if (elements == NULL) return ""; */
+/*     d("hook_get_element_value_by_id 1\n"); */
+/*     d("hook_get_element_value_by_id 1 %d \n", elements->size); */
+/*     foreach (it, elements) { */
+/*         Element* e = it->element; */
+/*     d("hook_get_element_value_by_id 2 \n"); */
+/*     d("hook_get_element_value_by_id 2 %s\n", string_rawstr(e->str_val)); */
+/*         if (type == e->element_type_id && string_rawstr(e->str_val) != NULL) */
+/*             return string_rawstr(e->str_val); */
+/*     } */
+/*     d("hook_get_element_value_by_id 3\n"); */
+/*     return ""; */
+/* } */
+static int build_header(String* buf, HookMessage* message)
 {
     char* subject;
     char* subject_b64_a;
@@ -88,7 +87,7 @@ static int build_body(String* buf, char* base_url, char* project_id, Project* pr
     string_appendf(buf, "\r\n.\r\n");
     return 0;
 }
-int execute(char* base_url, char* project_id, Project* project, Message* message, List* elements, List* element_types)
+int execute(HookMessage* message)
 {
     char hostnm[1024];
     char portnm[1024];

@@ -89,6 +89,7 @@ dist:
 		tar zcf starbug1-${VERSION}.tar.gz starbug1-${VERSION} && \
 		rm -rf starbug1-${VERSION} && \
 		cd ..
+		echo "Befor you make new release, You may HAVE TO make tag!"
 
 cvsreleasetag:
 	@echo please tag by manual. 

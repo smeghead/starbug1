@@ -9,6 +9,7 @@
 #include "alloc.h"
 #include "util.h"
 #include "hook.h"
+#include "hook_data.h"
 #include "simple_string.h"
 
 static void put_env_a(char* name, char* value, char* buf)
@@ -65,6 +66,31 @@ static String* create_json(String* content, Project* project, Message* message, 
     string_append(content, "]}}");
     return content;
 }
+static HookMessage* create_hook_project(Project* project, Message* message, List* elements, List* element_types)
+{
+    Iterator* it;
+    int i = 0;
+    String* url_a = string_new(0);
+    url_a = get_base_url(url_a);
+    HookMessage* hook_message = xalloc(sizeof(HookMessage));
+    strncpy(hook_message->project_id, g_project_name, DEFAULT_LENGTH - 1);
+    strncpy(hook_message->project_name, string_rawstr(project->name), DEFAULT_LENGTH - 1);
+    hook_message->id = message->id;
+    string_appendf(url_a, "/ticket/%d", message->id);
+    strncpy(hook_message->url, string_rawstr(url_a), DEFAULT_LENGTH - 1);
+    string_free(url_a);
+    hook_message->elements_count = elements->size;
+    hook_message->elements = xalloc(sizeof(HookElement*) * elements->size);
+
+    foreach (it, element_types) {
+        ElementType* et = it->element;
+        HookElement* e = hook_message->elements[i++];
+        strncpy(e->name, string_rawstr(et->name), DEFAULT_LENGTH - 1);
+        strncpy(e->value, get_element_value(elements, et), DEFAULT_LENGTH - 1);
+    }
+
+    return hook_message;
+}
 char* get_script_dir(char* script_dir)
 {
     char* p;
@@ -81,11 +107,13 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
     DIR* dir;
     struct dirent *dp;
     struct stat fi;
+    HookMessage* hook_message_a;
 
     if ((dir = opendir(hook_dir)) == NULL) {
         return hook;
     }
     content_a = create_json(content_a, project, message, elements, element_types);
+    hook_message_a = create_hook_project(project, message, elements, element_types);
     for (dp = readdir(dir); dp != NULL; dp = readdir(dir)) {
         char hook_command[DEFAULT_LENGTH];
         char filename[DEFAULT_LENGTH];
@@ -111,7 +139,7 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
                 sprintf(result->message, "[ERROR] hook処理(%s)でエラーが発生しました。(プラグインの読み込みに失敗しました。%s)", hook_command, dlerror());
             } else {
                 char* error;
-                int (*func)(char*, char*, Project*, Message*, List*, List*);
+                int (*func)(HookMessage*);
                 func = dlsym(handle, "execute");
                 if ((error = dlerror()) != NULL) {
                     d("dlsym error %s\n", error);
@@ -120,7 +148,7 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
                     String* base_url_a = string_new(0);
                     base_url_a = get_base_url(base_url_a);
                     d("execute func\n");
-                    ret = func(string_rawstr(base_url_a), g_project_name, project, message, elements, element_types);
+                    ret = func(hook_message_a);
                     string_free(base_url_a);
                     if (ret == 0) {
                         d("ok\n");
@@ -156,6 +184,8 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
         }
     }
     string_free(content_a);
+    xfree(hook_message_a->elements);
+    xfree(hook_message_a);
     return hook;
 }
 size_t get_hook_message_size(HOOK* hook)

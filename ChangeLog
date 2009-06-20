@@ -1,7 +1,15 @@
-2009-06-19  smeghead  <smeghead@smeghead-laptop>
+2009-06-20  smeghead <smeghead@users.sourceforge.jp>
 
-	* プロジェクト用のデータベース作成時に、ファイルアップロードの最大サイズの
-    レコードを追加するようにした。
+    * 共有ライブラリのhookのインターフェースの変更。インターフェース用の構造体を本体に依存しない形で再定義した。
+
+2009-06-19  smeghead <smeghead@users.sourceforge.jp>
+
+    * 1.2.7-bataリリース
+
+2009-06-19  smeghead <smeghead@users.sourceforge.jp>
+
+    * プロジェクト用のデータベース作成時に、ファイルアップロードの最大サイズの
+      レコードを追加するようにした。
 
 2009-06-17  smeghead <smeghead@users.sourceforge.jp>
 
@@ -55,6 +63,10 @@
 
 2009-03-19  smeghead <smeghead@users.sourceforge.jp>
 
+    * 1.2.8-bataリリース
+
+2009-03-19  smeghead <smeghead@users.sourceforge.jp>
+
     * 検索結果のCSV形式でのダウンロードに加えて、HTML形式でダウンロードして
       エクセルで開くリンクを追加した。
 
@@ -65,6 +77,10 @@
 2009-03-16  smeghead <smeghead@users.sourceforge.jp>
 
     * 統計情報グラフのサイズ指定をStarbug1 1.1系のサイズ指定にした。
+
+2009-03-11  smeghead <smeghead@users.sourceforge.jp>
+
+    * 1.2.7-bataリリース
 
 2009-03-11  smeghead <smeghead@users.sourceforge.jp>
 
