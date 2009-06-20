@@ -13,6 +13,58 @@
     fclose(fp);\
 }
 
+static void* xalloc(size_t size)
+{
+    void* p;
+    p = calloc(1, size);
+    if (!p) {
+        d("memory error.");
+        exit(-1);
+    }
+    return p;
+}
+static void xfree(void* p)
+{
+    free(p);
+    p = NULL;
+}
+static unsigned char *base64 = (unsigned char *)"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+static void enc_char(unsigned long bb, int srclen, unsigned char *dist, int j)
+{
+    int x, i, base;
+
+    for (i = srclen; i < 2; i++) 
+        bb <<= 8;
+    for (base = 18, x = 0; x < srclen + 2; x++, base -= 6) {
+        dist[j++] = base64[(unsigned long)((bb>>base) & 0x3F)];
+    }
+    for (i = x; i < 4; i++) {
+        dist[j++] = (unsigned char)'=';
+    }
+}
+
+static void base64_enc(const unsigned char *src, unsigned char *dist)
+{
+    unsigned char *p = (unsigned char*)src;
+    unsigned long bb = (unsigned long)0;
+    int i = 0, j = 0;
+
+    while (*p) {
+        bb <<= 8;
+        bb |= (unsigned long)*p;
+
+        if (i == 2) {
+            enc_char(bb, i, dist, j);
+            j = j + 4;
+            i = 0;
+            bb = 0;
+        } else {
+            i++;
+        }
+        p++;
+    }
+    if (i) enc_char(bb, i - 1, dist, j);
+}
 static int wait(int soc, struct pollfd *target, int timeout)
 {
     int ret = 0;
@@ -60,32 +112,88 @@ static int send_data(int soc, char* buf)
 /*     d("hook_get_element_value_by_id 3\n"); */
 /*     return ""; */
 /* } */
-static int build_header(String* buf, HookMessage* message)
+static char* build_header(char* buf, HookMessage* message)
 {
-    char* subject;
-    char* subject_b64_a;
-    d("0\n");
-    subject = hook_get_element_value_by_id(elements, ELEM_ID_TITLE);
-    d("0\n");
-    d("0 %s\n", subject);
-    d("1\n");
-    subject_b64_a = xalloc(sizeof(char) * strlen(subject) * 1.5); /* base64での増加分を考慮 */
-    base64_encode((unsigned char*)subject, (unsigned char*)subject_b64_a);
-    d("3 %s\n", subject_b64_a);
-    string_appendf(buf, "From: %s\r\n", FROM);
-    string_appendf(buf, "To: %s\r\n", TO);
-    string_appendf(buf, "Subject: [%s:%d]Starbug1 notify. =?UTF-8?B?%s?=\r\n", project_id, message->id, subject_b64_a);
-    string_appendf(buf, "Content-Type: text/plain;\r\n");
-    string_appendf(buf, "\r\n");
-    xfree(subject_b64_a);
-    return 0;
+    char* realloc_p;
+    char* template;
+    char* subject_a;
+    int size;
+    int id_size = 10; /* ID用に確保する文字列のサイズ */
+
+    template = 
+        "From: %s\r\n"
+        "To: %s\r\n"
+        "Subject: [%s:%d]Starbug1 notify. =?UTF-8?B?%s?=\r\n"
+        "Content-Type: text/plain;\r\n"
+        "\r\n";
+    subject_a = xalloc(sizeof(char) * strlen(message->subject) * 2); /* base64での増加分を考慮 */
+    base64_enc((unsigned char*)message->subject, (unsigned char*)subject_a);
+    size =
+        strlen(template) +
+        strlen(FROM) +
+        strlen(TO) +
+        id_size * 2 +
+        strlen(subject_a) + 1;
+    realloc_p = realloc(buf, size);
+    if (realloc_p == NULL) {
+        d("memory error.");
+        exit(-1);
+    }
+    buf = realloc_p;
+    sprintf(buf, template, FROM, TO, message->project_id, message->id, subject_a);
+    xfree(subject_a);
+    return buf;
 }
-static int build_body(String* buf, char* base_url, char* project_id, Project* project, Message* message, List* elements, List* element_types)
+static char* build_body(char* buf, HookMessage* message)
 {
-    string_appendf(buf, "a ticket has updated. please check this url.\r\n");
-    string_appendf(buf, " %s/%s/ticket/%d\r\n", base_url, project_id, message->id);
-    string_appendf(buf, "\r\n.\r\n");
-    return 0;
+    char* realloc_p;
+    char* template;
+    char* content_b64_a;
+    int size;
+    int id_size = 10; /* ID用に確保する文字列のサイズ */
+
+    d("0 \n");
+    template =
+        "%sのチケットが更新されました。\r\n"
+        " %s\r\n"
+        " #%s:%d %s\r\n";
+
+    d("1 \n");
+    size =
+        strlen(template) +
+        strlen(message->project_name) +
+        id_size +
+        strlen(message->subject) + 1;
+    d("2 size: %d\n", size);
+    realloc_p = realloc(buf, sizeof(char) * size);
+    if (realloc_p == NULL) {
+        d("memory error.");
+        exit(-1);
+    }
+    d("3 \n");
+    d("3 %p\n", buf);
+    buf = realloc_p;
+    d("3 %p\n", buf);
+    sprintf(buf, template, message->project_name, message->url, message->project_id, message->id, message->subject);
+    d("4 %s\n", buf);
+    content_b64_a = xalloc(sizeof(char) * strlen(buf) * 2); /* base64での増加分を考慮 */
+    d("5 \n");
+    base64_enc((unsigned char*)buf, (unsigned char*)content_b64_a);
+    d("6 %s\n", content_b64_a);
+    d("6 %d\n", sizeof(char) * strlen(content_b64_a) + 1);
+    d("6 %p\n", buf);
+    realloc_p = realloc(buf, sizeof(char) * strlen(content_b64_a) + 1);
+    d("7 \n");
+    d("7.5 \n");
+    if (realloc_p == NULL) {
+        d("memory error.");
+        exit(-1);
+    }
+    d("8 \n");
+    buf = realloc_p;
+    strncpy(buf, content_b64_a, strlen(content_b64_a));
+    xfree(content_b64_a);
+    return buf;
 }
 int execute(HookMessage* message)
 {
@@ -105,7 +213,7 @@ int execute(HookMessage* message)
     hints.ai_socktype = SOCK_STREAM;
     error = getaddrinfo(hostnm, portnm, &hints, &res0);
     if (error) {
-        fprintf(stderr, "getaddrinfo: %s %s:%s\n", hostnm, portnm, gai_strerror(error));
+        d("getaddrinfo: %s %s:%s\n", hostnm, portnm, gai_strerror(error));
         return -1;
     }
 
@@ -114,10 +222,10 @@ int execute(HookMessage* message)
         error = getnameinfo(res->ai_addr, res->ai_addrlen, hbuf, sizeof(hbuf), sbuf,
                 sizeof(sbuf), NI_NUMERICHOST | NI_NUMERICSERV);
         if (error) {
-            fprintf(stderr, "getnameinfo: %s %s:%s\n", hostnm, portnm, gai_strerror(error));
+            d("getnameinfo: %s %s:%s\n", hostnm, portnm, gai_strerror(error));
             continue;
         }
-        fprintf(stderr, "trying %s port %s \n", hbuf, sbuf);
+        d("trying %s port %s \n", hbuf, sbuf);
         soc = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
         if (soc < 0) {
             continue;
@@ -128,14 +236,14 @@ int execute(HookMessage* message)
             continue;
         } else {
             d("connected\n");
-            fprintf(stderr, "connect: Success\n");
+            d("connect: Success\n");
             break;
         }
     }
     freeaddrinfo(res0);
 
     if (soc < 0) {
-        fprintf(stderr, "no destination to connect to\n");
+        d("no destination to connect to\n");
         return -1;
     }
     target.fd = soc;
@@ -146,42 +254,47 @@ int execute(HookMessage* message)
     d("=====\n");
     {
         int ret;
-        String* data_string_a = string_new(0);
-        char command[DEFAULT_LENGTH];
+        char* data_string_a = xalloc(1);
+        char command[1024];
 
-    d("start \n");
+        d("start \n");
         ret = wait(soc, &target, 5000);
-    d("ret %d\n", ret);
+        d("ret %d\n", ret);
         if (ret < 0) return ret;
         sprintf(command, "HELO %s\r\n", SMTP_SERVER);
         send_data(soc, command);
         ret = wait(soc, &target, 5000);
-    d("ret %d\n", ret);
+        d("ret %d\n", ret);
         if (ret < 0) return ret;
         sprintf(command, "MAIL FROM: %s\r\n", FROM);
         send_data(soc, command);
         ret = wait(soc, &target, 5000);
-    d("ret %d\n", ret);
+        d("ret %d\n", ret);
         if (ret < 0) return ret;
         sprintf(command, "RCPT TO: %s\r\n", TO);
         send_data(soc, command);
         ret = wait(soc, &target, 5000);
-    d("ret %d\n", ret);
+        d("ret %d\n", ret);
         if (ret < 0) return ret;
         sprintf(command, "DATA\r\n");
         send_data(soc, command);
 
         /* data */
-        build_header(data_string_a, base_url, project_id, project, message, elements, element_types);
-        build_body(data_string_a, base_url, project_id, project, message, elements, element_types);
+        data_string_a = build_header(data_string_a, message);
+        d("build_body \n");
+        data_string_a = build_body(data_string_a, message);
+        d("build_body end\n");
         ret = wait(soc, &target, 5000);
         if (ret < 0) return ret;
-        send_data(soc, string_rawstr(data_string_a));
-        string_free(data_string_a);
+        d("ret %d\n", ret);
+        send_data(soc, data_string_a);
+        d("data send \n");
+        xfree(data_string_a);
+        send_data(soc, "\r\n.\r\n");
 
         ret = wait(soc, &target, 5000);
         if (ret < 0) return ret;
-    d("ret %d\n", ret);
+        d("ret %d\n", ret);
         send_data(soc, "QUIT\r\n");
     }
     d("=====\n");
@@ -195,11 +308,11 @@ int execute(HookMessage* message)
 void conv(char*, char*);
 int main(int argc, char** argv)
 {
-    char* subject = "日本語";
-    char* subject_b64_a = xalloc(sizeof(char) * strlen(subject) * 1.5); /* base64での増加分を考慮 */
-    base64_encode((unsigned char*)subject, (unsigned char*)subject_b64_a);
-    d("base64_encode: %s\n", subject_b64_a);
-    xfree(subject_b64_a);
+/*     char* subject = "日本語"; */
+/*     char* subject_b64_a = xalloc(sizeof(char) * strlen(subject) * 1.5); |+base64での増加分を考慮+| */
+/*     base64_encode((unsigned char*)subject, (unsigned char*)subject_b64_a); */
+/*     d("base64_encode: %s\n", subject_b64_a); */
+/*     xfree(subject_b64_a); */
     return 0;
 /*    char* hostnm;*/
 /*    char* portnm;*/
