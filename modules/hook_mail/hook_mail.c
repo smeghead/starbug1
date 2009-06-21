@@ -254,8 +254,9 @@ int execute(HookMessage* message)
     d("=====\n");
     {
         int ret;
-        char* data_string_a = xalloc(1);
+        char* data_string_a = xalloc(sizeof(char));
         char command[1024];
+        strcpy(data_string_a, "");
 
         d("start \n");
         ret = wait(soc, &target, 5000);
