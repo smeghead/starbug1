@@ -1,3 +1,7 @@
+2009-06-22  smeghead <smeghead@users.sourceforge.jp>
+
+    * CSV形式でのダウンロードでは、文字コード変換しないように修正した。(今までは、UTF-8からCP932に変換していた)
+
 2009-06-20  smeghead <smeghead@users.sourceforge.jp>
 
     * 共有ライブラリのhookのインターフェースの変更。インターフェース用の構造体を本体に依存しない形で再定義した。

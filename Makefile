@@ -14,9 +14,6 @@ OS = ${shell uname}
 ifeq ($(OS), Linux)
 	LFLAGS += -ldl
 endif
-ifneq ($(OS), Linux)
-	LFLAGS += -liconv
-endif
 ifeq ($(OS), CYGWIN_NT-5.1)
 	LFLAGS += -static
 endif
