@@ -302,17 +302,11 @@ input {
     line-height: 1.2;
 }
 
-select:hover,
-input:hover,
-textarea:hover {
-/*     border-style: solid; */
-    border-color: #333;
-}
 
 select:focus,
-input:focus,
+input.text:focus,
+input.number:focus,
 textarea:focus {
-    background-color: #ffffe0;
 }
 
 textarea {

@@ -12,6 +12,12 @@
     fprintf(fp, __VA_ARGS__);\
     fclose(fp);\
 }
+#define SEND_DATA(soc, command) { \
+    int ret; \
+    ret = wait(soc, &target, 5000); \
+    if (ret < 0) return ret; \
+    send_data(soc, command); \
+}
 
 static void* xalloc(size_t size)
 {
@@ -73,20 +79,25 @@ static int wait(int soc, struct pollfd *target, int timeout)
         d("poll ret %d\n", ret);
         if (ret == -1 && errno != EINTR) {
             /* エラー */
-            return -1;
+            ret = -1;
+            break;
         } else if (ret == 0) {
             /* timeout */
             d("poll timeout \n");
-            return -2;
+            ret = -2;
+            break;
         }
         if (target->revents & (POLLIN | POLLERR)) {
             char buf[1024];
             recv(soc, buf, sizeof(buf), 0);
             d("recv: %s\n", buf);
             /* 送信準備OK */
-            return 0;
+            ret = 0;
+            break;
         }
     }
+    d("wait ret: %d\n", ret);
+    return ret;
 }
 static int send_data(int soc, char* buf)
 {
@@ -116,6 +127,7 @@ static char* build_header(char* buf, HookMessage* message)
 {
     char* realloc_p;
     char* template;
+    char* subject_org_a;
     char* subject_a;
     int size;
     int id_size = 10; /* ID用に確保する文字列のサイズ */
@@ -123,16 +135,23 @@ static char* build_header(char* buf, HookMessage* message)
     template = 
         "From: %s\r\n"
         "To: %s\r\n"
-        "Subject: [%s:%d]Starbug1 notify. =?UTF-8?B?%s?=\r\n"
-        "Content-Type: text/plain;\r\n"
+        "Subject: =?UTF-8?B?%s?=\r\n"
+        "Content-Type: text/plain; charset=UTF-8;\r\n"
+        "Content-Transfer-Encoding: base64\r\n"
         "\r\n";
-    subject_a = xalloc(sizeof(char) * strlen(message->subject) * 2); /* base64での増加分を考慮 */
-    base64_enc((unsigned char*)message->subject, (unsigned char*)subject_a);
+    d("subject: %s\n", message->subject);
+    subject_org_a = xalloc(sizeof(char) * (1024 + strlen(message->subject)) * 2); /* base64での増加分を考慮 */
+    subject_a = xalloc(sizeof(char) * (1024 + strlen(message->subject)) * 2); /* base64での増加分を考慮 */
+    sprintf(subject_org_a, "[%s:%d]Starbug1 notify. ", message->project_id, message->id);
+    strcat(subject_org_a, message->subject);
+    base64_enc((unsigned char*)subject_org_a, (unsigned char*)subject_a);
+    xfree(subject_org_a);
+    d("subject: %s\n", subject_a);
     size =
         strlen(template) +
         strlen(FROM) +
         strlen(TO) +
-        id_size * 2 +
+        id_size +
         strlen(subject_a) + 1;
     realloc_p = realloc(buf, size);
     if (realloc_p == NULL) {
@@ -140,7 +159,7 @@ static char* build_header(char* buf, HookMessage* message)
         exit(-1);
     }
     buf = realloc_p;
-    sprintf(buf, template, FROM, TO, message->project_id, message->id, subject_a);
+    sprintf(buf, template, FROM, TO, subject_a);
     xfree(subject_a);
     return buf;
 }
@@ -148,6 +167,7 @@ static char* build_body(char* buf, HookMessage* message)
 {
     char* realloc_p;
     char* template;
+    char* content_a;
     char* content_b64_a;
     int size;
     int id_size = 10; /* ID用に確保する文字列のサイズ */
@@ -162,27 +182,21 @@ static char* build_body(char* buf, HookMessage* message)
     size =
         strlen(template) +
         strlen(message->project_name) +
+        strlen(message->url) +
         id_size +
         strlen(message->subject) + 1;
     d("2 size: %d\n", size);
-    realloc_p = realloc(buf, sizeof(char) * size);
-    if (realloc_p == NULL) {
-        d("memory error.");
-        exit(-1);
-    }
-    d("3 \n");
-    d("3 %p\n", buf);
-    buf = realloc_p;
-    d("3 %p\n", buf);
-    sprintf(buf, template, message->project_name, message->url, message->project_id, message->id, message->subject);
+    content_a = xalloc(sizeof(char) * size);
+    d("3 %p\n", content_a);
+    sprintf(content_a, template, message->project_name, message->url, message->project_id, message->id, message->subject);
     d("4 %s\n", buf);
-    content_b64_a = xalloc(sizeof(char) * strlen(buf) * 2); /* base64での増加分を考慮 */
+    content_b64_a = xalloc(sizeof(char) * strlen(content_a) * 2); /* base64での増加分を考慮 */
     d("5 \n");
-    base64_enc((unsigned char*)buf, (unsigned char*)content_b64_a);
+    base64_enc((unsigned char*)content_a, (unsigned char*)content_b64_a);
     d("6 %s\n", content_b64_a);
-    d("6 %d\n", sizeof(char) * strlen(content_b64_a) + 1);
-    d("6 %p\n", buf);
-    realloc_p = realloc(buf, sizeof(char) * strlen(content_b64_a) + 1);
+    d("6.1 %d\n", sizeof(char) * strlen(content_b64_a) + 1);
+    d("6.2 %p\n", buf);
+    realloc_p = realloc(buf, sizeof(char) * (strlen(buf) + strlen(content_b64_a) + strlen("\r\n.\r\n") + 1));
     d("7 \n");
     d("7.5 \n");
     if (realloc_p == NULL) {
@@ -191,8 +205,12 @@ static char* build_body(char* buf, HookMessage* message)
     }
     d("8 \n");
     buf = realloc_p;
-    strncpy(buf, content_b64_a, strlen(content_b64_a));
+    strcat(buf, content_b64_a);
+    d("9 \n");
+    strcat(buf, "\r\n.\r\n"); /* 終端を追加する。 */
+    d("10 \n");
     xfree(content_b64_a);
+    d("11 \n");
     return buf;
 }
 int execute(HookMessage* message)
@@ -253,50 +271,30 @@ int execute(HookMessage* message)
 
     d("=====\n");
     {
-        int ret;
         char* data_string_a = xalloc(sizeof(char));
         char command[1024];
         strcpy(data_string_a, "");
 
         d("start \n");
-        ret = wait(soc, &target, 5000);
-        d("ret %d\n", ret);
-        if (ret < 0) return ret;
         sprintf(command, "HELO %s\r\n", SMTP_SERVER);
-        send_data(soc, command);
-        ret = wait(soc, &target, 5000);
-        d("ret %d\n", ret);
-        if (ret < 0) return ret;
+        SEND_DATA(soc, command);
         sprintf(command, "MAIL FROM: %s\r\n", FROM);
-        send_data(soc, command);
-        ret = wait(soc, &target, 5000);
-        d("ret %d\n", ret);
-        if (ret < 0) return ret;
+        SEND_DATA(soc, command);
         sprintf(command, "RCPT TO: %s\r\n", TO);
-        send_data(soc, command);
-        ret = wait(soc, &target, 5000);
-        d("ret %d\n", ret);
-        if (ret < 0) return ret;
+        SEND_DATA(soc, command);
         sprintf(command, "DATA\r\n");
-        send_data(soc, command);
+        SEND_DATA(soc, command);
 
         /* data */
         data_string_a = build_header(data_string_a, message);
         d("build_body \n");
         data_string_a = build_body(data_string_a, message);
         d("build_body end\n");
-        ret = wait(soc, &target, 5000);
-        if (ret < 0) return ret;
-        d("ret %d\n", ret);
-        send_data(soc, data_string_a);
+        SEND_DATA(soc, data_string_a);
         d("data send \n");
         xfree(data_string_a);
-        send_data(soc, "\r\n.\r\n");
 
-        ret = wait(soc, &target, 5000);
-        if (ret < 0) return ret;
-        d("ret %d\n", ret);
-        send_data(soc, "QUIT\r\n");
+        SEND_DATA(soc, "QUIT\r\n");
     }
     d("=====\n");
     d("close\n");
@@ -435,5 +433,4 @@ void conv(char* dest, char* src)
     *p_dest = '\0';
     printf("conv: %s\n", dest);
 }
-
-
+/* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

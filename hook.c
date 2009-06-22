@@ -72,7 +72,6 @@ static HookMessage* create_hook_project(Project* project, Message* message, List
     int i = 0;
     String* url_a = string_new(0);
 
-    d("create_hook_project 1\n");
     url_a = get_base_url(url_a);
     HookMessage* hook_message = xalloc(sizeof(HookMessage));
     strncpy(hook_message->project_id, g_project_name, DEFAULT_LENGTH - 1);
@@ -81,22 +80,18 @@ static HookMessage* create_hook_project(Project* project, Message* message, List
     string_appendf(url_a, "/ticket/%d", message->id);
     strncpy(hook_message->url, string_rawstr(url_a), DEFAULT_LENGTH - 1);
     string_free(url_a);
+    strncpy(hook_message->subject, get_element_value_by_id(elements, ELEM_ID_TITLE), DEFAULT_LENGTH - 1);
     d("create_hook_project 2\n");
     hook_message->elements_count = elements->size;
     d("create_hook_project 2 %d\n", sizeof(HookElement));
     hook_message->elements = xalloc(sizeof(HookElement) * elements->size);
 
-    d("create_hook_project 3\n");
     foreach (it, element_types) {
         ElementType* et = it->element;
         HookElement* e = &hook_message->elements[i++];
-    d("create_hook_project 4\n");
         strncpy(e->name, string_rawstr(et->name), DEFAULT_LENGTH - 1);
-    d("create_hook_project 4.2\n");
         strncpy(e->value, get_element_value(elements, et), DEFAULT_LENGTH - 1);
-    d("create_hook_project 4.5\n");
     }
-    d("create_hook_project 5\n");
 
     return hook_message;
 }
@@ -122,9 +117,7 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
         return hook;
     }
     content_a = create_json(content_a, project, message, elements, element_types);
-    d("exec_hook create_hook_project\n");
     hook_message_a = create_hook_project(project, message, elements, element_types);
-    d("exec_hook create_hook_project end\n");
     for (dp = readdir(dir); dp != NULL; dp = readdir(dir)) {
         char hook_command[DEFAULT_LENGTH];
         char filename[DEFAULT_LENGTH];
