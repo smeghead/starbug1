@@ -1,3 +1,8 @@
+2009-06-23  smeghead <smeghead@users.sourceforge.jp>
+
+    * チケット一覧などで状態などの背景に色を付けるためのスタイルシートの指定方法を変更した。
+      今までは、base64を元に独自の変換をした文字列をcssのクラス名としていたが、IDを示す数字にした。field3-1など。
+
 2009-06-22  smeghead <smeghead@users.sourceforge.jp>
 
     * CSV形式でのダウンロードでは、文字コード変換しないように修正した。(今までは、UTF-8からCP932に変換していた)

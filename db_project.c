@@ -130,6 +130,27 @@ List* db_get_list_item(Database* db, const int element_type, List* items)
 ERROR_LABEL(db->handle)
 }
 
+int db_get_list_item_id(Database* db, const int element_type, char* name)
+{
+    int r, id = 0;
+    const char *sql = "select id from list_item where element_type_id = ? and name = ?";
+    sqlite3_stmt *stmt = NULL;
+
+    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    sqlite3_reset(stmt);
+    sqlite3_bind_int(stmt, 1, element_type);
+    sqlite3_bind_text(stmt, 2, name, strlen(name), NULL);
+
+    if (SQLITE_ROW == (r = sqlite3_step(stmt))) {
+        id = sqlite3_column_int(stmt, 0);
+    }
+
+    sqlite3_finalize(stmt);
+
+    return id;
+
+ERROR_LABEL(db->handle)
+}
 void create_message_insert_sql(List* elements, char* buf)
 {
     Iterator* it;

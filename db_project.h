@@ -9,6 +9,7 @@ List* db_get_element_types_4_list(Database*, List*);
 List* db_get_element_types_all(Database*, List*);
 ElementType* db_get_element_type(Database*, int, ElementType*);
 List* db_get_list_item(Database*, const int, List*);
+int db_get_list_item_id(Database*, const int, char*);
 int db_register_ticket(Database*, Message*);
 void db_delete_ticket(Database*, Message*);
 SearchResult* db_search_tickets(Database*, List*, char*, Condition*, const int, SearchResult*);

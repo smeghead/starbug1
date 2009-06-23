@@ -318,9 +318,11 @@ void output_ticket_table_body(Database* db, SearchResult* result, List* element_
         foreach (it, element_types) {
             ElementType* et = it->element;
             char* val = get_element_value_by_id(elements_a, et->id);
-            o("\t\t<td class=\"field%d field%d-", et->id, et->id); 
-            if (et->type == ELEM_TYPE_LIST_SINGLE)
-                css_field(val);
+
+            o("\t\t<td class=\"field%d", et->id); 
+            if (et->type == ELEM_TYPE_LIST_SINGLE) {
+                o(" field%d-%d", et->id, db_get_list_item_id(db, et->id, val)); /* 毎回DBアクセスしているので無駄がある。 */
+            }
             o("\">");
             if (et->id == ELEM_ID_TITLE)
                 o("<a href=\"%s/%s/ticket/%d\">", cgiScriptName, g_project_name_4_url, message->id);

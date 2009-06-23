@@ -943,8 +943,7 @@ void style_action()
                 foreach (it_item, items_a) {
                     ListItem* item = it_item->element;
                     o("/* "); hs(item->name); o(" */\n");
-                    o("#ticket_list td.field%d-", et->id);
-                    css_field(string_rawstr(item->name));
+                    o("#ticket_list td.field%d-%d", et->id, item->id);
                     o(" {\n");
                     o(" background-color: lightyellow !important;\n");
                     o("}\n");
