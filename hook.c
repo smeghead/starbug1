@@ -77,7 +77,7 @@ static HookMessage* create_hook_project(Project* project, Message* message, List
     strncpy(hook_message->project_id, g_project_name, DEFAULT_LENGTH - 1);
     strncpy(hook_message->project_name, string_rawstr(project->name), DEFAULT_LENGTH - 1);
     hook_message->id = message->id;
-    string_appendf(url_a, "/ticket/%d", message->id);
+    string_appendf(url_a, "/%s/ticket/%d", g_project_name, message->id);
     strncpy(hook_message->url, string_rawstr(url_a), DEFAULT_LENGTH - 1);
     string_free(url_a);
     strncpy(hook_message->subject, get_element_value_by_id(elements, ELEM_ID_TITLE), DEFAULT_LENGTH - 1);
