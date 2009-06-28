@@ -246,4 +246,17 @@ void wiki_free(Wiki* wiki)
     xfree(wiki->content);
     xfree(wiki);
 }
+Ticket* ticket_new()
+{
+    Ticket* t = xalloc(sizeof(Ticket));
+    t->project_name = string_new(0);
+    t->subject = string_new(0);
+    return t;
+}
+void ticket_free(Ticket* t)
+{
+    xfree(t->project_name);
+    xfree(t->subject);
+    xfree(t);
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

@@ -17,6 +17,7 @@
 void top_top_action();
 void top_edit_top_action();
 void top_edit_top_submit_action();
+void top_search_action();
 
 /* prototype declares */
 int index_top_main();
@@ -26,6 +27,7 @@ void top_register_actions()
     REG_ACTION(top_top);
     REG_ACTION(top_edit_top);
     REG_ACTION(top_edit_top_submit);
+    REG_ACTION(top_search);
 }
 
 void top_output_header(char* title, Project* project)
@@ -120,6 +122,12 @@ void top_top_action()
     }
     list_free(project_infos_a);
     o(      "\t</ul>\n");
+    o(      "\t<h2>検索</h2>\n"
+            "\t<form action=\"%s/%s/top_search\" method=\"get\">\n", cgiScriptName, g_project_name_4_url);
+    o(      "\t\t<input type=\"text\" name=\"q\" />\n"
+            "\t\t<input type=\"submit\" value=\"検索\" />\n"
+            "\t</form>\n");
+
     o(      "</div>\n");
     o(      "<div id=\"dashboard\">\n"
             "\t<h2>説明</h2>\n");
@@ -200,5 +208,36 @@ void top_edit_top_submit_action()
     xfree(value_a);
 
     redirect("", NULL);
+}
+void top_search_action()
+{
+    Database* db_a;
+    char buffer[DEFAULT_LENGTH];
+    List* tickets_a;
+    Iterator* it;
+    char q[DEFAULT_LENGTH];
+    Project* top_project_a = project_new();
+
+    cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
+    list_alloc(tickets_a, Ticket, ticket_new, ticket_free);
+
+    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    tickets_a = db_top_search(db_a, q, tickets_a);
+    top_project_a = db_get_project(db_a, top_project_a);
+    top_output_header("トップページ", top_project_a);
+    o(      "<div id=\"project_list\">\n"
+            "\t<h2>検索結果</h2>\n"
+            "\t<ul>\n");
+    foreach (it, tickets_a) {
+        Ticket* t = it->element;
+        o(      "\t\t\t\t<li><a href=\"%s/%s/ticket/%d", cgiScriptName, string_rawstr(t->project_name), t->id);
+        o("\">a"); o("</a></li>\n");
+    }
+    list_free(tickets_a);
+    o(      "</div>\n");
+    o(      "<br clear=\"all\" />\n");
+    project_free(top_project_a);
+    top_output_footer();
+    db_finish(db_a);
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

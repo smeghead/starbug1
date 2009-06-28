@@ -169,7 +169,13 @@ char* get_element_value(List*, ElementType*);
 // int get_element_lid_by_id(List*, int);
 void set_element_value(Element*, const char*);
 
-
+typedef struct {
+    String* project_name;
+    int id;
+    String* subject;
+} Ticket;
+Ticket* ticket_new();
+void ticket_free(Ticket*);
 
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

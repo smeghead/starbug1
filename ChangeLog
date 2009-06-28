@@ -1,3 +1,7 @@
+2009-06-28  smeghead <smeghead@users.sourceforge.jp>
+
+    * チケットページにも状態別の検索リンクとID検索と新規チケットリンクを追加。
+
 2009-06-23  smeghead <smeghead@users.sourceforge.jp>
 
     * チケット一覧などで状態などの背景に色を付けるためのスタイルシートの指定方法を変更した。
@@ -13,7 +17,7 @@
 
 2009-06-19  smeghead <smeghead@users.sourceforge.jp>
 
-    * 1.2.7-bataリリース
+    * 1.2.9-bataリリース
 
 2009-06-19  smeghead <smeghead@users.sourceforge.jp>
 

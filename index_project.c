@@ -1330,6 +1330,7 @@ void ticket_action()
     char sender[DEFAULT_LENGTH];
     char buffer[DEFAULT_LENGTH];
     get_cookie_string(COOKIE_SENDER, sender);
+    List* states_a;
 
     strcpy(ticket_id, g_path_info);
     iid = atoi(ticket_id);
@@ -1356,6 +1357,10 @@ void ticket_action()
     h(string_rawstr(title_a));
     string_free(title_a);
     o(" &nbsp;</h2>\n");
+    list_alloc(states_a, State, state_new, state_free);
+    states_a = db_get_states(db_a, states_a);
+    output_states(states_a, true);
+    list_free(states_a);
     o(      "<div id=\"ticket_newest\">\n"
             "<h3>チケット最新情報</h3>\n"
             "<div class=\"description\">チケットの最新情報です。最新チケットのチケット属性の付いている項目と全添付ファイルを表示しています。</div>\n"

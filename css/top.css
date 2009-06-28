@@ -258,10 +258,19 @@ div.complete_message {
 /* } */
 #project_list,
 #project_info,
+#project_search,
 #project_add {
     padding:0px 10px;
 /*     width: 30%; */
 /*     float: left; */
+}
+#project_list {
+    float:left;
+    width:350px;
+}
+#project_list h2 {
+    margin:0px;
+    padding:0px;
 }
 #project_list ul {
     margin: 0px;
@@ -272,7 +281,8 @@ div.complete_message {
     padding: 0px;
 }
 #dashboard {
-    padding-left:10px;
+    float:auto;
+    padding-left:380px;
     padding-right:10px;
 /*     width: 65%; */
 /*     float: left; */

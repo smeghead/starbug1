@@ -115,5 +115,50 @@ char* db_top_get_project_db_name(char* project_name, char* buffer)
     db_finish(top_db_a);
     return buffer;
 }
+typedef struct {
+    int id;
+    int field_count;
+} DbInfo;
+List* db_top_search(Database* db, char* q, List* tickets)
+{
+    List* projects_a;
+    Iterator* it;
+    List* db_infos_a;
+    sqlite3_stmt *stmt = NULL;
+    /* プロジェクトの検索 */
+    list_alloc(db_infos_a, DbInfo, NULL, NULL);
+    list_alloc(projects_a, ProjectInfo, project_info_new, project_info_free);
+    projects_a = db_top_get_all_project_infos(db, projects_a);
+    foreach (it, projects_a) {
+        char sql[DEFAULT_LENGTH];
+        char db_name[DEFAULT_LENGTH];
+        ProjectInfo* pi = it->element;
+        if (pi->id == 1) continue; /* トップなので飛ばす。 */
+        if (pi->deleted) continue; /* 削除されたサブプロジェクトなので飛ばす。 */
+        d("%s\n", string_rawstr(pi->name));
+        sprintf(sql, "attach ? as db%d", pi->id);
+        sprintf(db_name, "db/%d.db", pi->id);
+        exec_query(db, sql,
+                COLUMN_TYPE_TEXT, db_name,
+                COLUMN_TYPE_END);
+        sprintf(sql, "select count(*) from db%d.element_type", pi->id);
+        if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+        sqlite3_reset(stmt);
 
+        if (SQLITE_ROW == sqlite3_step(stmt)) {
+            DbInfo* db_info = list_new_element(db_infos_a);
+            db_info->id = pi->id;
+            db_info->field_count = sqlite3_column_int(stmt, 0);
+            list_add(db_infos_a, db_info);
+            break;
+        }
+        sqlite3_finalize(stmt);
+    }
+    /* 検索用sql作成 */
+
+    list_free(db_infos_a);
+    return tickets;
+
+ERROR_LABEL(db->handle)
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
