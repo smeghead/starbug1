@@ -36,7 +36,7 @@ static void escape_quot(String* dist)
 static String* create_json(String* content, Project* project, Message* message, List* elements, List* element_types)
 {
     Iterator* it;
-    String* base_url_a = string_new(0);
+    String* base_url_a = string_new();
     base_url_a = get_base_url(base_url_a);
     string_appendf(content, "{project:{name: \"%s\"}, ticket:{id: %d, url: \"%s/%s/ticket/%d\",fields:[",
             project->name,
@@ -47,9 +47,9 @@ static String* create_json(String* content, Project* project, Message* message, 
     string_free(base_url_a);
     foreach (it, element_types) {
         ElementType* et = it->element;
-        String* field_a = string_new(0);
-        String* name_a = string_new(0);
-        String* value_a = string_new(0);
+        String* field_a = string_new();
+        String* name_a = string_new();
+        String* value_a = string_new();
         string_append(name_a, string_rawstr(et->name));
         escape_quot(name_a);
         string_append(value_a, get_element_value(elements, et));
@@ -70,7 +70,7 @@ static HookMessage* create_hook_project(Project* project, Message* message, List
 {
     Iterator* it;
     int i = 0;
-    String* url_a = string_new(0);
+    String* url_a = string_new();
 
     url_a = get_base_url(url_a);
     HookMessage* hook_message = xalloc(sizeof(HookMessage));
@@ -107,7 +107,7 @@ char* get_script_dir(char* script_dir)
 HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, List* element_types)
 {
     char hook_dir[DEFAULT_LENGTH] = "script";
-    String* content_a = string_new(0);
+    String* content_a = string_new();
     DIR* dir;
     struct dirent *dp;
     struct stat fi;
@@ -149,7 +149,7 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
                     d("dlsym error %s\n", error);
                     fputs(error, stderr);
                 } else {
-                    String* base_url_a = string_new(0);
+                    String* base_url_a = string_new();
                     base_url_a = get_base_url(base_url_a);
                     d("execute func\n");
                     ret = func(hook_message_a);

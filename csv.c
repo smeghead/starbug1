@@ -79,7 +79,7 @@ Csv* csv_new(char* content)
                 char buf_decorded[p - mark + 1];
                 memset(buf, '\0', p - mark + 1);
                 memset(buf_decorded, '\0', p - mark + 1);
-                field->data = string_new(0);
+                field->data = string_new();
                 strncpy(buf, mark, p - mark);
                 decord_csv_field(buf, buf_decorded);
                 string_append(field->data, buf_decorded);

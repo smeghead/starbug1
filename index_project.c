@@ -99,7 +99,7 @@ void register_actions()
 void output_header(Project* project, char* title, char* script_name, const NaviType navi)
 {
 
-    String* base_url_a = string_new(0);
+    String* base_url_a = string_new();
     base_url_a = get_base_url(base_url_a);
     o("Pragma: no-cache\r\n");
     o("Cache-Control: no-cache\t\n");
@@ -279,7 +279,7 @@ void output_ticket_table_header(List* element_types)
 {
     Iterator* it;
     char* reverse = strstr(cgiQueryString, "rsort=");
-    String* query_string_a = string_new(0);
+    String* query_string_a = string_new();
     query_string_a = format_query_string_without_sort_and_page(query_string_a);
 
     o(      "\t<tr>\n");
@@ -796,7 +796,7 @@ void search_action()
       "<h3>検索結果</h3>\n");
 
     if (result_a->messages->size) {
-        String* query_string_a = string_new(0);
+        String* query_string_a = string_new();
         Iterator* it;
 
         query_string_a = format_query_string_without_page(query_string_a);
@@ -1318,7 +1318,7 @@ void register_action()
  */
 void ticket_action()
 {
-    String* title_a = string_new(0);
+    String* title_a = string_new();
     char ticket_id[DEFAULT_LENGTH];
     List* elements_a = NULL;
     List* last_elements = NULL;

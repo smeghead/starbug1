@@ -12,7 +12,6 @@ int cgiMain() {
     d("pass %d\n", type);
     switch (type) {
         case ACTION_TYPE_INDEX_TOP:
-    d("top %d\n", type);
             ret = index_top_main();
             break;
         case ACTION_TYPE_INDEX:

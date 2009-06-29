@@ -42,5 +42,7 @@ enum SQLITE_RETURN {
     SQLITE_RETURN_OK,
     SQLITE_RETURN_ERROR
 };
+List* parse_keywords(List*, char*);
+String* create_columns_like_exp(List*, char*, List*, String*);
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

@@ -19,13 +19,17 @@ void string_init(String* str, size_t block_size)
     strcpy(str->raw_chars, "");
 /*     d("string_init end\n"); */
 }
-String* string_new(size_t block_size)
+String* string_new_by_block_size(size_t block_size)
 {
     String* str;
 /*     d("string size: %d\n", sizeof(String)); */
     str = xalloc(sizeof(String));
     string_init(str, block_size);
     return str;
+}
+String* string_new()
+{
+    return string_new_by_block_size(0);
 }
 void string_append(String* str, const char* addstr)
 {

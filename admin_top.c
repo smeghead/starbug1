@@ -32,7 +32,7 @@ void top_register_actions()
 
 void top_output_header(char* title, Project* project)
 {
-    String* base_url_a = string_new(0);
+    String* base_url_a = string_new();
     base_url_a = get_base_url(base_url_a);
     o("Pragma: no-cache\r\n");
     o("Cache-Control: no-cache\t\n");

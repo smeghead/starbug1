@@ -13,7 +13,8 @@ typedef struct _String {
     size_t current_size;
 } String;
 
-String* string_new(size_t);
+String* string_new();
+String* string_new_by_block_size(size_t);
 void string_append(String*, const char*);
 size_t string_len(String*);
 char* string_rawstr(String*);

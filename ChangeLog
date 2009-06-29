@@ -1,3 +1,7 @@
+2009-06-29  smeghead <smeghead@users.sourceforge.jp>
+
+    * サブプロジェクトの横断検索処理作成。
+
 2009-06-28  smeghead <smeghead@users.sourceforge.jp>
 
     * チケットページにも状態別の検索リンクとID検索と新規チケットリンクを追加。

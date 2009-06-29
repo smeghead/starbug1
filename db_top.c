@@ -115,6 +115,36 @@ char* db_top_get_project_db_name(char* project_name, char* buffer)
     db_finish(top_db_a);
     return buffer;
 }
+String* get_search_sql_string_per_project(Database* db, List* keywords, String* sql_string)
+{
+    string_appendf(sql_string,
+            "select "
+            " t.id as id, m.field%d as state "
+            "from ticket as t ", ELEM_ID_STATUS);
+    
+    if (keywords->size > 0)
+        string_append(sql_string, "inner join message as m_all on m_all.ticket_id = t.id ");
+
+    if (keywords->size > 0)
+        string_append(sql_string, "where ");
+    if (keywords->size > 0) {
+        String* columns_a = string_new();
+        List* element_types_a;
+        list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
+        element_types_a = db_get_element_types_all(db, element_types_a);
+        columns_a = create_columns_like_exp(element_types_a, "m_all", keywords, columns_a);
+        string_appendf(sql_string, "(%s)", string_rawstr(columns_a));
+        string_free(columns_a);
+        list_free(element_types_a);
+    }
+
+    string_append(sql_string, " group by t.id ");
+    string_append(sql_string, " order by ");
+    string_append(sql_string, " t.registerdate desc, t.id desc ");
+
+    d("sql: %s\n", string_rawstr(sql_string));
+    return sql_string;
+}
 typedef struct {
     int id;
     int field_count;
@@ -124,10 +154,16 @@ List* db_top_search(Database* db, char* q, List* tickets)
     List* projects_a;
     Iterator* it;
     List* db_infos_a;
+    List* sqls_a;
     sqlite3_stmt *stmt = NULL;
+    List* keywords_a;
+
+    list_alloc(keywords_a, String, string_new, string_free);
+    keywords_a = parse_keywords(keywords_a, q);
     /* プロジェクトの検索 */
     list_alloc(db_infos_a, DbInfo, NULL, NULL);
     list_alloc(projects_a, ProjectInfo, project_info_new, project_info_free);
+    list_alloc(sqls_a, String, string_new, string_free);
     projects_a = db_top_get_all_project_infos(db, projects_a);
     foreach (it, projects_a) {
         char sql[DEFAULT_LENGTH];
@@ -147,14 +183,18 @@ List* db_top_search(Database* db, char* q, List* tickets)
 
         if (SQLITE_ROW == sqlite3_step(stmt)) {
             DbInfo* db_info = list_new_element(db_infos_a);
+            String* s = list_new_element(sqls_a);
             db_info->id = pi->id;
             db_info->field_count = sqlite3_column_int(stmt, 0);
             list_add(db_infos_a, db_info);
+            /* 検索用sql作成 */
+            s = get_search_sql_string_per_project(db, keywords_a, s);
+            list_add(sqls_a, s);
             break;
         }
         sqlite3_finalize(stmt);
     }
-    /* 検索用sql作成 */
+    /* TODO sqlを合成して、検索を行なう。 */
 
     list_free(db_infos_a);
     return tickets;

@@ -75,7 +75,7 @@ char* get_condition_valid_value(Condition* c)
 ProjectInfo* project_info_new()
 {
     ProjectInfo* pi =  xalloc(sizeof(ProjectInfo));
-    pi->name = string_new(0);
+    pi->name = string_new();
     return pi;
 }
 void project_info_free(ProjectInfo* pi)
@@ -86,9 +86,9 @@ void project_info_free(ProjectInfo* pi)
 Project* project_new()
 {
     Project* p = xalloc(sizeof(Project));
-    p->name = string_new(0);
-    p->home_description = string_new(0);
-    p->home_url = string_new(0);
+    p->name = string_new();
+    p->home_description = string_new();
+    p->home_url = string_new();
     return p;
 }
 void project_free(Project* p)
@@ -101,7 +101,7 @@ void project_free(Project* p)
 State* state_new()
 {
     State* s = xalloc(sizeof(State));
-    s->name = string_new(0);
+    s->name = string_new();
     return s;
 }
 void state_free(State* s)
@@ -129,7 +129,7 @@ void search_result_free(SearchResult* sr)
 ListItem* list_item_new()
 {
     ListItem* li = xalloc(sizeof(ListItem));
-    li->name = string_new(0);
+    li->name = string_new();
     return li;
 }
 void list_item_free(ListItem* li)
@@ -141,9 +141,9 @@ void list_item_free(ListItem* li)
 SettingFile* setting_file_new()
 {
     SettingFile* sf = xalloc(sizeof(SettingFile));
-    sf->name = string_new(0);
-    sf->file_name = string_new(0);
-    sf->mime_type = string_new(0);
+    sf->name = string_new();
+    sf->file_name = string_new();
+    sf->mime_type = string_new();
     return sf;
 }
 void setting_file_free(SettingFile* file)
@@ -158,7 +158,7 @@ void setting_file_free(SettingFile* file)
 Element* element_new()
 {
     Element* e = xalloc(sizeof(Element));
-    e->str_val = string_new(0);
+    e->str_val = string_new();
     return e;
 }
 void element_free(Element* e)
@@ -169,9 +169,9 @@ void element_free(Element* e)
 ElementType* element_type_new()
 {
     ElementType* et = xalloc(sizeof(ElementType));
-    et->name = string_new(0);
-    et->description = string_new(0);
-    et->default_value = string_new(0);
+    et->name = string_new();
+    et->description = string_new();
+    et->default_value = string_new();
     return et;
 }
 void element_type_free(ElementType* e)
@@ -185,8 +185,8 @@ void element_type_free(ElementType* e)
 ElementFile* element_file_new()
 {
     ElementFile* ef = xalloc(sizeof(ElementFile));
-    ef->name = string_new(0);
-    ef->mime_type = string_new(0);
+    ef->name = string_new();
+    ef->mime_type = string_new();
     return ef;
 }
 void element_file_free(ElementFile* ef)
@@ -212,8 +212,8 @@ void message_free(Message* m)
 Condition* condition_new()
 {
     Condition* c = xalloc(sizeof(Condition));
-    c->value = string_new(0);
-    c->cookie_value = string_new(0);
+    c->value = string_new();
+    c->cookie_value = string_new();
     return c;
 }
 void condition_free(Condition* c)
@@ -237,7 +237,7 @@ Wiki* wiki_new()
 {
 /*     d("wiki size: %d\n", sizeof(Wiki)); */
     Wiki* w = xalloc(sizeof(Wiki));
-    w->name = string_new(0);
+    w->name = string_new();
     return w;
 }
 void wiki_free(Wiki* wiki)
@@ -249,8 +249,8 @@ void wiki_free(Wiki* wiki)
 Ticket* ticket_new()
 {
     Ticket* t = xalloc(sizeof(Ticket));
-    t->project_name = string_new(0);
-    t->subject = string_new(0);
+    t->project_name = string_new();
+    t->subject = string_new();
     return t;
 }
 void ticket_free(Ticket* t)

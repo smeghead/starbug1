@@ -729,4 +729,45 @@ int exec_query_scalar_int(Database* db, const char* sql, ...)
 
 ERROR_LABEL(db->handle)
 }
+List* parse_keywords(List* keywords, char* query)
+{
+    char* hit;
+    char* p = query;
+    if (strlen(p) == 0) {
+        return keywords;
+    }
+    while (1) {
+        hit = strchr(p, ' ');
+        if (hit == NULL) {
+            String* word = list_new_element(keywords);
+            string_set(word, p);
+            if (strlen(string_rawstr(word)))
+                list_add(keywords, word);
+            break;
+        } else {
+            String* word = list_new_element(keywords);
+            string_set(word, p);
+            p = hit + 1;
+            if (strlen(string_rawstr(word)))
+                list_add(keywords, word);
+        }
+    }
+    return keywords;
+}
+String* create_columns_like_exp(List* element_types, char* table_name, List* keywords, String* buf)
+{
+    Iterator* it_keyword;
+    Iterator* it;
+    foreach (it_keyword, keywords) {
+        foreach (it, element_types) {
+            char column_name[DEFAULT_LENGTH];
+            ElementType* et = it->element;
+            if (string_len(buf))
+                string_append(buf, "or ");
+            sprintf(column_name, "%s.field%d like '%%' || ? || '%%' ", table_name, et->id);
+            string_append(buf, column_name);
+        }
+    }
+    return buf;
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
