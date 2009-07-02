@@ -1,34 +1,34 @@
 #: index_top.c:56
 msgid "Project Top"
-msgstr "プロジェクトトップ"
+msgstr "ぷろじぇくととっぷ"
 
 #: index_top.c:57
 msgid "Project Management"
-msgstr "プロジェクト管理"
+msgstr ""
 
 #: index_top.c:100
 msgid "Top Page"
-msgstr "トップページ"
+msgstr ""
 
 #: index_top.c:103
 msgid "Sub Project List"
-msgstr "サブプロジェクト一覧"
+msgstr ""
 
 #: index_top.c:127 index_top.c:130
 msgid "Search"
-msgstr "検索"
+msgstr ""
 
 #: index_top.c:134
 msgid "Description"
-msgstr "説明"
+msgstr ""
 
 #: index_top.c:135
 msgid "Edit This Page"
-msgstr "ページを編集する"
+msgstr ""
 
 #: index_top.c:152 index_top.c:158
 msgid "Edit Page"
-msgstr "ページ編集"
+msgstr ""
 
 #: index_top.c:158
 msgid "Please edit by simple wiki syntax, press update button."

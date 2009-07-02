@@ -63,7 +63,7 @@ admin.cgi: list.o simple_string.o data.o dbutil.o db_project.o db_top.o alloc.o 
 	$(CC) -o $@ $^ $(LFLAGS)
 	strip $@
 
-.PHONY: clean webapp dist cvsreleasetag displayinstalldoc createresource compileresource
+.PHONY: clean webapp dist cvsreleasetag displayinstalldoc mergeresource compileresource
 clean:
 	rm -f *.o index.cgi admin.cgi
 	rm -rf ./dist
@@ -95,9 +95,10 @@ cvsreleasetag:
 displayinstalldoc:
 	w3m -dump http://starbug1.sourceforge.jp/install.php
 
-createresource:
-	xgettext -k_ --omit-header --msgid-bugs-address=smeghead@sourceforge.jp -L C -d locale/ja  *.c 
-	xgettext -k_ --omit-header --msgid-bugs-address=smeghead@sourceforge.jp -L C -d locale/zh  *.c 
+mergeresource:
+	xgettext -k_ --omit-header --msgid-bugs-address=smeghead@sourceforge.jp -L C -p locale  *.c 
+	msgmerge -U locale/ja.po locale/messages.po
+	msgmerge -U locale/zh.po locale/messages.po
 
 compileresource:
 	mkdir -p locale/ja/LC_MESSAGES
