@@ -1,0 +1,71 @@
+#: index_top.c:56
+msgid "Project Top"
+msgstr "プロジェクトトップ"
+
+#: index_top.c:57
+msgid "Project Management"
+msgstr "プロジェクト管理"
+
+#: index_top.c:100
+msgid "Top Page"
+msgstr "トップページ"
+
+#: index_top.c:103
+msgid "Sub Project List"
+msgstr "サブプロジェクト一覧"
+
+#: index_top.c:127 index_top.c:130
+msgid "Search"
+msgstr "検索"
+
+#: index_top.c:134
+msgid "Description"
+msgstr "説明"
+
+#: index_top.c:135
+msgid "Edit This Page"
+msgstr "ページを編集する"
+
+#: index_top.c:152 index_top.c:158
+msgid "Edit Page"
+msgstr "ページ編集"
+
+#: index_top.c:158
+msgid "Please edit by simple wiki syntax, press update button."
+msgstr ""
+
+#: index_top.c:164
+msgid "Update"
+msgstr ""
+
+#: index_top.c:176
+msgid "Simple wiki syntax"
+msgstr ""
+
+#: index_top.c:177
+msgid "A line starts by * become big headline."
+msgstr ""
+
+#: index_top.c:178
+msgid "A line starts by ** become medium headline."
+msgstr ""
+
+#: index_top.c:179
+msgid "A line starts by *** become small headline."
+msgstr ""
+
+#: index_top.c:180
+msgid "A line starts by **** become super small headline."
+msgstr ""
+
+#: index_top.c:181
+msgid "A line starts by - become item."
+msgstr ""
+
+#: index_top.c:182
+msgid "A line starts by ---- become delimitation."
+msgstr ""
+
+#: index_top.c:183
+msgid "From line starts by &gt;| to line starts by |&lt;, become block."
+msgstr ""

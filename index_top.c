@@ -97,7 +97,7 @@ void top_top_action()
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_infos_a = db_top_get_all_project_infos(db_a, project_infos_a);
     top_project_a = db_get_project(db_a, top_project_a);
-    top_output_header(_("トップページ"), top_project_a);
+    top_output_header(_("Top Page"), top_project_a);
     o(      "<div id=\"project_list\">\n"
             "\t<h2>%s</h2>\n"
             "\t<ul>\n", _("Sub Project List"));
