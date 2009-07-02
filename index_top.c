@@ -2,6 +2,7 @@
 #include <cgic.h>
 #include <string.h>
 #include <stdlib.h>
+#include <libintl.h>
 #include "data.h"
 #include "db_top.h"
 #include "db_project.h"
@@ -52,8 +53,8 @@ void top_output_header(char* title, Project* project)
     o(      "<div id=\"projectmenu\">\n"
             "\t<ul>\n"
             "\t\t<li><a href=\""); h(string_rawstr(project->home_url)); o("\">"); h(string_rawstr(project->home_description)); o("</a></li>\n");
-    o(      "\t\t<li><a href=\"%s/../index.%s/%s/\">プロジェクトトップ</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
-    o(      "\t\t<li><a href=\"%s/../admin.%s/%s/\">プロジェクトの管理</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
+    o(      "\t\t<li><a href=\"%s/../index.%s/%s/\">%s</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url, _("Project Top"));
+    o(      "\t\t<li><a href=\"%s/../admin.%s/%s/\">%s</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url, _("Project Management"));
     o(      "\t</ul>\n");
     o(      "</div>\n");
 }
@@ -96,10 +97,10 @@ void top_top_action()
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_infos_a = db_top_get_all_project_infos(db_a, project_infos_a);
     top_project_a = db_get_project(db_a, top_project_a);
-    top_output_header("トップページ", top_project_a);
+    top_output_header(_("トップページ"), top_project_a);
     o(      "<div id=\"project_list\">\n"
-            "\t<h2>サブプロジェクト一覧</h2>\n"
-            "\t<ul>\n");
+            "\t<h2>%s</h2>\n"
+            "\t<ul>\n", _("Sub Project List"));
     foreach (it, project_infos_a) {
         ProjectInfo* p = it->element;
         Database* db_project_a;
@@ -122,16 +123,16 @@ void top_top_action()
     }
     list_free(project_infos_a);
     o(      "\t</ul>\n");
-    o(      "\t<h2>検索</h2>\n"
-            "\t<form action=\"%s/%s/top_search\" method=\"get\">\n", cgiScriptName, g_project_name_4_url);
+    o(      "\t<h2>%s</h2>\n"
+            "\t<form action=\"%s/%s/top_search\" method=\"get\">\n", _("Search"), cgiScriptName, g_project_name_4_url);
     o(      "\t\t<input type=\"text\" name=\"q\" />\n"
-            "\t\t<input type=\"submit\" value=\"検索\" />\n"
-            "\t</form>\n");
+            "\t\t<input type=\"submit\" value=\"%s\" />\n"
+            "\t</form>\n", _("Search"));
 
     o(      "</div>\n");
     o(      "<div id=\"dashboard\">\n"
-            "\t<h2>説明</h2>\n");
-    o(      "<a href=\"%s/%s/top_edit_top\">ページの編集</a>\n", cgiScriptName, g_project_name_4_url);
+            "\t<h2>%s</h2>\n", _("Description"));
+    o(      "<a href=\"%s/%s/top_edit_top\">%s</a>\n", cgiScriptName, g_project_name_4_url, _("Edit This Page"));
     wiki_out(db_a, "top");
     d("pass wiki_out end\n");
     o(      "</div>\n");
@@ -148,30 +149,39 @@ void top_edit_top_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_a = db_get_project(db_a, project_a);
-    top_output_header("ページの編集", project_a);
+    top_output_header(_("Edit Page"), project_a);
     project_free(project_a);
-    o(      "<h2>ページの編集</h2>\n"
+    o(      "<h2>%s</h2>\n"
             "<div id=\"top\">\n"
-            "<h3>ページの編集</h3>\n"
-            "<div id=\"description\">簡易wikiの文法でページのコンテンツの編集を行ない、更新ボタンを押してください。</div>\n"
-            "<form id=\"edit_top_form\" action=\"%s/%s/top_edit_top_submit\" method=\"post\">\n", cgiScriptName, g_project_name_4_url);
+            "<h3>%s</h3>\n"
+            "<div id=\"description\">%s</div>\n",
+            _("Edit Page"), _("Edit Page"), _("Please edit by simple wiki syntax, press update button."));
+    o(      "<form id=\"edit_top_form\" action=\"%s/%s/top_edit_top_submit\" method=\"post\">\n", cgiScriptName, g_project_name_4_url);
     o(      "<textarea name=\"edit_top\" id=\"edit_top\" rows=\"3\" cols=\"10\">");
     wiki_content_out(db_a, "top");
     o(      "</textarea>\n"
             "<div>&nbsp;</div>\n"
-            "<input class=\"button\" type=\"submit\" value=\"更新\" />\n"
-            "</form>"
+            "<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("Update"));
+    o(      "</form>"
             "<div>\n"
-            "<h3>簡易wikiのサポートする文法</h3>\n"
+            "<h3>%s</h3>\n"
             "<ul>\n"
-            "<li>行頭に*を記述した行は、大見出しになります。</li>\n"
-            "<li>行頭に**を記述した行は、中見出しになります。</li>\n"
-            "<li>行頭に***を記述した行は、小見出しになります。</li>\n"
-            "<li>行頭に****を記述した行は、極小見出しになります。</li>\n"
-            "<li>行頭に-を記述した行は、箇条書きになります。</li>\n"
-            "<li>行頭に----を記述した行は、区切り線になります。</li>\n"
-            "<li>行頭が >| から始まる行から、行頭が |< から始まる行までは、整形済みブロックになります。</li>\n"
-            "</ul>\n"
+            "<li>%s</li>\n"
+            "<li>%s</li>\n"
+            "<li>%s</li>\n"
+            "<li>%s</li>\n"
+            "<li>%s</li>\n"
+            "<li>%s</li>\n"
+            "<li>%s</li>\n",
+            _("Simple wiki syntax"),
+            _("A line starts by * become big headline."),
+            _("A line starts by ** become medium headline."),
+            _("A line starts by *** become small headline."),
+            _("A line starts by **** become super small headline."),
+            _("A line starts by - become item."),
+            _("A line starts by ---- become delimitation."),
+            _("From line starts by &gt;| to line starts by |&lt;, become block."));
+    o(      "</ul>\n"
             "<h5>例</h5>\n"
             "<pre>\n"
             "*編集可能領域\n"

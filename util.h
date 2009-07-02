@@ -7,6 +7,8 @@
 #include "dbutil.h"
 #include "simple_string.h"
 
+#define _(s) gettext(s)
+
 #define REG_ACTION(action) register_action_actions(#action, action ## _action)
 #define o(...) fprintf(cgiOut, __VA_ARGS__)
 #ifdef DEBUG

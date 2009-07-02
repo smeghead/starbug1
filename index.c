@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <cgic.h>
+#include <libintl.h>
 #include "alloc.h"
 #include "util.h"
 #include "index_top.h"
@@ -10,6 +11,11 @@ int cgiMain() {
     ActionType type = analysis_action();
     int ret = 0;
     d("pass %d\n", type);
+
+    bindtextdomain("starbug1", "locale");
+    textdomain("starbug1");
+    setlocale(LC_MESSAGES, "ja_JP");
+
     switch (type) {
         case ACTION_TYPE_INDEX_TOP:
             ret = index_top_main();

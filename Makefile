@@ -63,7 +63,7 @@ admin.cgi: list.o simple_string.o data.o dbutil.o db_project.o db_top.o alloc.o 
 	$(CC) -o $@ $^ $(LFLAGS)
 	strip $@
 
-.PHONY: clean webapp dist cvsreleasetag displayinstalldoc
+.PHONY: clean webapp dist cvsreleasetag displayinstalldoc createresource compileresource
 clean:
 	rm -f *.o index.cgi admin.cgi
 	rm -rf ./dist
@@ -71,7 +71,7 @@ clean:
 webapp: default
 	@echo "Creating webapp..."
 	mkdir -p dist/starbug1
-	rsync -a --exclude=CVS js css img script *.html *.cgi dist/starbug1/
+	rsync -a --exclude=CVS js css img script locale *.html *.cgi dist/starbug1/
 	cp .htaccess dist/starbug1/dot.htaccess
 	find dist/starbug1 -name '*.cgi' -exec chmod +x {} \;
 	find dist/starbug1 -name '*.pl' -exec chmod +x {} \;
@@ -95,3 +95,12 @@ cvsreleasetag:
 displayinstalldoc:
 	w3m -dump http://starbug1.sourceforge.jp/install.php
 
+createresource:
+	xgettext -k_ --omit-header --msgid-bugs-address=smeghead@sourceforge.jp -L C -d locale/ja  *.c 
+	xgettext -k_ --omit-header --msgid-bugs-address=smeghead@sourceforge.jp -L C -d locale/zh  *.c 
+
+compileresource:
+	mkdir -p locale/ja/LC_MESSAGES
+	msgfmt -o locale/ja/LC_MESSAGES/starbug1.mo locale/ja.po 
+	mkdir -p locale/zh/LC_MESSAGES
+	msgfmt -o locale/zh/LC_MESSAGES/starbug1.mo locale/zh.po 
