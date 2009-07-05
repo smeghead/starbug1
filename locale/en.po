@@ -15,36 +15,36 @@ msgstr ""
 #: admin_project.c:283 admin_project.c:666 admin_project.c:880
 #: admin_project.c:931
 msgid "管理ツール"
-msgstr ""
+msgstr "Management Tool"
 
 #: admin_project.c:85 index_project.c:131
 msgid "トップページのサブプロジェクト一覧を表示します"
-msgstr ""
+msgstr "display top page."
 
 #: admin_project.c:86
 msgid "トップページ（サブプロジェクト一覧)"
-msgstr ""
+msgstr "Top Page(Sub Project List)"
 
 #: admin_project.c:91 admin_project.c:147
 msgid "管理ツールメニュー"
-msgstr ""
+msgstr "management tool's menu"
 
 #: admin_project.c:92 admin_project.c:178 admin_project.c:183
 msgid "サブプロジェクト設定"
-msgstr ""
+msgstr "sub project settings"
 
 #: admin_project.c:93 admin_project.c:151 admin_project.c:281
 #: admin_project.c:291
 msgid "項目設定"
-msgstr ""
+msgstr "columns settings"
 
 #: admin_project.c:94 admin_project.c:152 admin_project.c:930
 msgid "スタイル設定"
-msgstr ""
+msgstr "style settings"
 
 #: admin_project.c:95 index_project.c:143
 msgid "ヘルプ"
-msgstr ""
+msgstr "help"
 
 #: admin_project.c:96
 msgid "へ"
@@ -52,55 +52,55 @@ msgstr ""
 
 #: admin_project.c:138
 msgid "メニュー"
-msgstr ""
+msgstr "menu"
 
 #: admin_project.c:150
 msgid "プロジェクト設定"
-msgstr ""
+msgstr "sub project settings"
 
 #: admin_project.c:150
 msgid "プロジェクトの基本的な情報の設定です。"
-msgstr ""
+msgstr "this is basic project settings."
 
 #: admin_project.c:151
 msgid "チケットの項目についての設定です。"
-msgstr ""
+msgstr "this is settings of ticket columns."
 
 #: admin_project.c:152
 msgid "スタイルシートの設定です。"
-msgstr ""
+msgstr "this is style sheet settings."
 
 #: admin_project.c:155
 msgid "メール送信機能について"
-msgstr ""
+msgstr "about mail notify function."
 
 #: admin_project.c:157
 msgid ""
 "投稿時、返信時のメール送信は、hook機能により実現可能です。hook機能はサーバ上"
 "での設定が必要になります。hook機能の設定方法については、以下のサイトのインス"
 "トールのページを見てください。"
-msgstr ""
+msgstr "..."
 
 #: admin_project.c:186 admin_top.c:151
 msgid "サブプロジェクト名"
-msgstr ""
+msgstr "sub project name"
 
 #: admin_project.c:190
 msgid "画像(ページの一番上に表示される画像です)"
-msgstr ""
+msgstr "image(top image)"
 
 #: admin_project.c:194
 msgid "ファイルアップロードの最大サイズ(Kb)"
-msgstr ""
+msgstr "file upload max size(Kb)."
 
 #: admin_project.c:198 admin_project.c:304 admin_project.c:514
 #: admin_project.c:948 admin_top.c:137 index_project.c:2330 index_top.c:163
 msgid "更新"
-msgstr ""
+msgstr "Update"
 
 #: admin_project.c:266 admin_project.c:536
 msgid "更新しました"
-msgstr ""
+msgstr "Updated."
 
 #: admin_project.c:292
 msgid ""
@@ -110,27 +110,27 @@ msgstr ""
 
 #: admin_project.c:318 admin_project.c:677
 msgid "項目名"
-msgstr ""
+msgstr "column name"
 
 #: admin_project.c:321 admin_project.c:680
 msgid "項目名です。"
-msgstr ""
+msgstr "this is column name."
 
 #: admin_project.c:327 admin_project.c:685
 msgid "項目の説明文"
-msgstr ""
+msgstr "column description"
 
 #: admin_project.c:334 admin_project.c:688
 msgid "項目の説明文です。投稿時に表示されます。"
-msgstr ""
+msgstr "this is column description."
 
 #: admin_project.c:334
 msgid "必須項目"
-msgstr ""
+msgstr "required"
 
 #: admin_project.c:337
 msgid "必須項目とする。"
-msgstr ""
+msgstr "this column is required."
 
 #: admin_project.c:345
 msgid ""

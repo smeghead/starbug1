@@ -14,7 +14,7 @@ int cgiMain() {
 
     bindtextdomain("starbug1", "locale");
     textdomain("starbug1");
-    setlocale(LC_MESSAGES, "ja_JP");
+    setlocale(LC_MESSAGES, "en_US");
 
     switch (type) {
         case ACTION_TYPE_INDEX_TOP:

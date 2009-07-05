@@ -103,8 +103,8 @@ mergeresource:
 
 compileresource:
 	mkdir -p locale/ja/LC_MESSAGES
-	msgfmt -o locale/ja/LC_MESSAGES/starbug1.mo locale/ja.po 
+	msgfmt --no-hash -o locale/ja/LC_MESSAGES/starbug1.mo locale/ja.po 
 	mkdir -p locale/en/LC_MESSAGES
-	msgfmt -o locale/en/LC_MESSAGES/starbug1.mo locale/en.po 
+	msgfmt --no-hash -o locale/en/LC_MESSAGES/starbug1.mo locale/en.po 
 	mkdir -p locale/zh/LC_MESSAGES
-	msgfmt -o locale/zh/LC_MESSAGES/starbug1.mo locale/zh.po 
+	msgfmt --no-hash -o locale/zh/LC_MESSAGES/starbug1.mo locale/zh.po 

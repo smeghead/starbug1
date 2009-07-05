@@ -138,7 +138,7 @@ void top_top_action()
     o(      "\t</form>\n");
     o(      "</div>\n");
     project_free(project_a);
-    o(      "<div id=\"project_list\">\n"
+    o(      "<div id=\"sub_project_list\">\n"
             "\t<h2>%s</h2>\n", _("サブプロジェクト一覧"));
     o(      "\t<form action=\"%s/top/top_update_project_submit\" method=\"post\">\n", cgiScriptName);
     o(      "\t\t<table>\n"
