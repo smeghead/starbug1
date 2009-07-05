@@ -10,6 +10,7 @@
 #include "alloc.h"
 #include "conv.h"
 #include "util.h"
+#include "util.h"
 #include "wiki.h"
 #include "hook.h"
 #include "csv.h"
@@ -123,24 +124,24 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
     o(      "</head>\n"
             "<body>\n"
             "<a name=\"top\"></a>\n"
-            "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName, g_project_name_4_url);
+            "<h1 id=\"toptitle\" title=\"%s\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n", _("Starbug1"), cgiScriptName, g_project_name_4_url);
     o("<div id='menu'>\n"
       "<ul>\n");
     o("\t<li><a href='%s/%s/rss' title=\"RSS Feed\"><img src=\"%s/../img/rss.png\" alt=\"rss\" /></a></li>\n", cgiScriptName, g_project_name_4_url, cgiScriptName);
-    o("\t<li><a href='%s/top/' title=\"トップページのサブプロジェクト一覧を表示します\">トップページ(サブプロジェクト一覧)</a></li>\n", cgiScriptName);
+    o("\t<li><a href='%s/top/' title=\"%s\">%s</a></li>\n", cgiScriptName, _("トップページのサブプロジェクト一覧を表示します"), _("トップページ(サブプロジェクト一覧)"));
     o("</ul>\n"
       "<br clear='all' />\n"
       "</div>\n");
     o("<div>\n"
       "<ul id='projectmenu'>\n");
-    o("\t<li><a %s href='%s/%s/' title=\"サブプロジェクトトップへ移動します\">サブプロジェクトトップ</a></li>\n", navi == NAVI_TOP ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
-    o("\t<li><a %s href='%s/%s/list' title=\"状態別のチケット一覧を参照します\">状態別チケット一覧</a></li>\n", navi == NAVI_LIST ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
-    o("\t<li><a %s href='%s/%s/register' title=\"新規にチケットを登録します\">チケット登録</a></li>\n", navi == NAVI_REGISTER ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
-    o("\t<li><a %s href='%s/%s/search' title=\"チケットを検索します\">チケット検索</a></li>\n", navi == NAVI_SEARCH ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
-    o("\t<li><a %s href='%s/%s/statistics' title=\"統計情報を表示します\">統計情報</a></li>\n", navi == NAVI_STATISTICS ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
-    o("\t<li><a %s href='%s/%s/register_at_once' title=\"複数新規にチケットを登録します\">チケット一括登録</a></li>\n", navi == NAVI_REGISTER_AT_ONCE ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
-    o("\t<li><a %s href='%s/%s/help' title=\"ヘルプを参照します\">ヘルプ</a></li>\n", navi == NAVI_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url);
-    o("\t<li><a %s href='%s/../admin.%s/%s' title=\"各種設定を行ないます\">サブプロジェクトの管理</a></li>\n", navi == NAVI_MANAGEMENT ? "class=\"current\"" : "", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
+    o("\t<li><a %s href='%s/%s/' title=\"%s\">%s</a></li>\n", navi == NAVI_TOP ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("サブプロジェクトトップへ移動します"), _("サブプロジェクトトップ"));
+    o("\t<li><a %s href='%s/%s/list' title=\"%s\">%s</a></li>\n", navi == NAVI_LIST ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("状態別のチケット一覧を参照します"), _("状態別チケット一覧"));
+    o("\t<li><a %s href='%s/%s/register' title=\"%s\">%s</a></li>\n", navi == NAVI_REGISTER ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("新規にチケットを登録します"), _("チケット登録"));
+    o("\t<li><a %s href='%s/%s/search' title=\"%s\">%s</a></li>\n", navi == NAVI_SEARCH ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("チケットを検索します"), _("チケット検索"));
+    o("\t<li><a %s href='%s/%s/statistics' title=\"%s\">%s</a></li>\n", navi == NAVI_STATISTICS ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("統計情報を表示します"), _("統計情報"));
+    o("\t<li><a %s href='%s/%s/register_at_once' title=\"%s\">%s</a></li>\n", navi == NAVI_REGISTER_AT_ONCE ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("複数新規にチケットを登録します"), _("チケット一括登録"));
+    o("\t<li><a %s href='%s/%s/help' title=\"%s\">%s</a></li>\n", navi == NAVI_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("ヘルプを参照します"), _("ヘルプ"));
+    o("\t<li><a %s href='%s/../admin.%s/%s' title=\"%s\">%s</a></li>\n", navi == NAVI_MANAGEMENT ? "class=\"current\"" : "", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url, _("各種設定を行ないます"), _("サブプロジェクトの管理"));
     o("</ul>\n"
       "<br clear='all' />\n"
       "</div>\n");
@@ -270,10 +271,10 @@ void output_ticket_table_header_no_link(List* element_types)
         h(string_rawstr(et->name));
         o(    "</th>\n");
     }
-    o("\t\t<th class=\"registerdate\">投稿日時</th>\n"
-      "\t\t<th class=\"lastregisterdate\">最終更新日時</th>\n"
-      "\t\t<th class=\"leftdate\">放置日数</th>\n"
-      "\t</tr>\n");
+    o("\t\t<th class=\"registerdate\">%s</th>\n"
+      "\t\t<th class=\"lastregisterdate\">%s</th>\n"
+      "\t\t<th class=\"leftdate\">%s</th>\n"
+      "\t</tr>\n", _("投稿日時"), _("最終更新日時"), _("放置日数"));
 }
 void output_ticket_table_header(List* element_types)
 {
@@ -283,18 +284,18 @@ void output_ticket_table_header(List* element_types)
     query_string_a = format_query_string_without_sort_and_page(query_string_a);
 
     o(      "\t<tr>\n");
-    o(      "\t\t<th class=\"id\"><a href=\"%s/%s/search?%ssort=-1&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">ID</a></th>\n", cgiScriptName, g_project_name_4_url, reverse ? "" : "r", string_rawstr(query_string_a));
+    o(      "\t\t<th class=\"id\"><a href=\"%s/%s/search?%ssort=-1&amp;%s#result\" title=\"%s\">ID</a></th>\n", cgiScriptName, g_project_name_4_url, reverse ? "" : "r", string_rawstr(query_string_a), _("押す度に昇順、降順で並べ替えを行ないます。"));
     foreach (it, element_types) {
         ElementType* et = it->element;
         o("\t\t<th class=\"field%d\">\n", et->id);
-        o("\t\t\t<a href=\"%s/%s/search?%ssort=%d&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">", cgiScriptName, g_project_name_4_url, reverse ? "" : "r", et->id, string_rawstr(query_string_a));
+        o("\t\t\t<a href=\"%s/%s/search?%ssort=%d&amp;%s#result\" title=\"%s\">", cgiScriptName, g_project_name_4_url, reverse ? "" : "r", et->id, string_rawstr(query_string_a), _("押す度に昇順、降順で並べ替えを行ないます。"));
         hs(et->name);
         o("</a>\n");
         o("\t\t</th>\n");
     }
-    o("\t\t<th class=\"registerdate\"><a href=\"%s/%s/search?%ssort=-2&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">投稿日時</a></th>\n", cgiScriptName, g_project_name_4_url, reverse ? "" : "r", string_rawstr(query_string_a));
-    o("\t\t<th class=\"lastregisterdate\"><a href=\"%s/%s/search?%ssort=-3&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">最終更新日時</a></th>\n", cgiScriptName, g_project_name_4_url, reverse ? "" : "r", string_rawstr(query_string_a));
-    o("\t\t<th class=\"leftdate\"><a href=\"%s/%s/search?%ssort=-3&amp;%s#result\" title=\"押す度に昇順、降順で並べ替えを行ないます。\">放置日数</a></th>\n", cgiScriptName, g_project_name_4_url, reverse ? "" : "r", string_rawstr(query_string_a));
+    o("\t\t<th class=\"registerdate\"><a href=\"%s/%s/search?%ssort=-2&amp;%s#result\" title=\"%s\">%s</a></th>\n", cgiScriptName, g_project_name_4_url, reverse ? "" : "r", string_rawstr(query_string_a), _("押す度に昇順、降順で並べ替えを行ないます。"), _("投稿日時"));
+    o("\t\t<th class=\"lastregisterdate\"><a href=\"%s/%s/search?%ssort=-3&amp;%s#result\" title=\"%s\">%s</a></th>\n", cgiScriptName, g_project_name_4_url, reverse ? "" : "r", string_rawstr(query_string_a), _("押す度に昇順、降順で並べ替えを行ないます。"), _("最終更新日時"));
+    o("\t\t<th class=\"leftdate\"><a href=\"%s/%s/search?%ssort=-3&amp;%s#result\" title=\"%s\">%s</a></th>\n", cgiScriptName, g_project_name_4_url, reverse ? "" : "r", string_rawstr(query_string_a), _("押す度に昇順、降順で並べ替えを行ないます。"), _("放置日数"));
     o("\t</tr>\n");
     string_free(query_string_a);
 }
@@ -366,7 +367,7 @@ void output_states(List* states, bool with_new_ticket_link)
         o("\t\t<li>\n");
         o("\t\t\t<a href=\"%s/%s/search?field%d=", cgiScriptName, g_project_name_4_url, ELEM_ID_STATUS);
         us(s->name);
-        o("\" title=\"状態を条件にして検索を行ないます。\">");
+        o("\" title=\"%s\">", _("状態を条件にして検索を行ないます。"));
         hs(s->name);
         o("</a>");
         o("(%d)\n", s->count);
@@ -374,13 +375,13 @@ void output_states(List* states, bool with_new_ticket_link)
     }
     o("\t\t<li>\n");
     o("\t\t\t<form action=\"%s/%s/search\" method=\"get\">\n", cgiScriptName, g_project_name_4_url);
-    o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" maxlength=\"%d\" value=\"\" />\n", NUM_LENGTH - 1);
-    o("\t\t\t\t<input type=\"submit\" class=\"button\" value=\"ID指定で表示\" />\n"
+    o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"%s\" maxlength=\"%d\" value=\"\" />\n", _("入力したIDのチケットを表示します。"), NUM_LENGTH - 1);
+    o("\t\t\t\t<input type=\"submit\" class=\"button\" value=\"%s\" />\n"
       "\t\t\t</form>\n"
-      "\t\t</li>\n");
+      "\t\t</li>\n", _("ID指定で表示"));
     if (with_new_ticket_link) {
         o("\t\t<li>\n"
-          "\t\t\t<a id=\"new_ticket_link\" href=\"%s/%s/register\">新しいチケットを登録する</a>\n", cgiScriptName, g_project_name_4_url);
+          "\t\t\t<a id=\"new_ticket_link\" href=\"%s/%s/register\">%s</a>\n", cgiScriptName, g_project_name_4_url, _("新しいチケットを登録する"));
         o("\t\t</li>\n");
     }
     o("\t</ul>\n"
@@ -405,7 +406,7 @@ void list_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, "状態別チケット一覧", NULL, NAVI_LIST);
+    output_header(project_a, _("状態別チケット一覧"), NULL, NAVI_LIST);
     /* メッセージの取得 */
     if ((cgiFormStringMultiple("message", &multi)) != cgiFormNotFound) {
         int i = 0;
@@ -425,7 +426,7 @@ void list_action()
     cgiStringArrayFree(multi);
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_element_types_4_list(db_a, element_types_a);
-    o("<h2>"); h(string_rawstr(project_a->name)); o(" - 状態別チケット一覧</h2>\n");
+    o("<h2>"); h(string_rawstr(project_a->name)); o(" - %s</h2>\n", _("状態別チケット一覧"));
     project_free(project_a);
     list_alloc(states_a, State, state_new, state_free);
     states_a = db_get_states(db_a, states_a);
@@ -433,13 +434,13 @@ void list_action()
     list_free(states_a);
     fflush(cgiOut);
     o("<div id=\"ticket_list\">\n"
-      "<h3>状態別チケット一覧</h3>\n"
-      "<div class=\"description\">未クローズの状態毎にチケットを表示しています。\n");
+      "<h3>%s</h3>\n"
+      "<div class=\"description\">%s\n", _("状態別チケット一覧"), _("未クローズの状態毎にチケットを表示しています。"));
     list_alloc(states_a, State, state_new, state_free);
     states_a = db_get_states_has_not_close(db_a, states_a);
     foreach (it, states_a) {
         State* s = it->element;
-        o("\t\t\t<a href=\"#state%d""\" title=\"ページ内へのリンク\">", s->id);
+        o("\t\t\t<a href=\"#state%d""\" title=\"%s\">", s->id, _("ページ内へのリンク"));
         hs(s->name);
         o("</a>&nbsp;\n");
     }
@@ -458,22 +459,22 @@ void list_action()
         o("<div>\n");
         o("<h4 class=\"status\">");hs(s->name);o("&nbsp;(%d件)&nbsp;<a href=\"#top\">↑</a></h4>\n", s->count);
         if (result_a->hit_count == LIST_COUNT_PER_LIST_PAGE) {
-            o("\t\t<div class=\"infomation\">新しい%d件のみを表示しています。<a href=\"%s/%s/search?field%d=", 
-                    result_a->hit_count, 
+            o("\t\t<div class=\"infomation\">%s%d%s<a href=\"%s/%s/search?field%d=", _("新しい"), 
+                    result_a->hit_count, _("件のみを表示しています。"),
                     cgiScriptName,
                     g_project_name_4_url,
                     ELEM_ID_STATUS);
             us(s->name);
-            o("\">状態が"); hs(s->name); o("である全てのチケットを表示する</a></div>\n");
+            o("\">%s", _("状態が")); hs(s->name); o("%s</a></div>\n", _("である全てのチケットを表示する"));
         }
         output_ticket_table_status_index(db_a, result_a, element_types_a);
         if (result_a->hit_count == LIST_COUNT_PER_LIST_PAGE) {
-            o("\t\t<div class=\"infomation\">続きがあります。<a href=\"%s/%s/search?field%d=", 
+            o("\t\t<div class=\"infomation\">%s<a href=\"%s/%s/search?field%d=", _("続きがあります。"), 
                     cgiScriptName,
                     g_project_name_4_url,
                     ELEM_ID_STATUS);
             us(s->name);
-            o("\">状態が"); hs(s->name); o("である全てのチケットを表示する</a></div>\n");
+            o("\">%s", _("状態が")); hs(s->name); o("%s</a></div>\n", _("である全てのチケットを表示する"));
         }
         search_result_free(result_a);
         o("</div>\n");
@@ -713,9 +714,9 @@ void search_action()
     /* 検索条件を保存のチェックボックスがチェックされている場合は、保存。それ意外はクリアする。 */
     save_condition2cookie(conditions_a, q, condition_will_save);
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, "チケット検索", "calendar.js", NAVI_SEARCH);
+    output_header(project_a, _("チケット検索"), "calendar.js", NAVI_SEARCH);
     output_calendar_js();
-    o("<h2>"); h(string_rawstr(project_a->name)); o(" - チケット検索</h2>\n");
+    o("<h2>"); h(string_rawstr(project_a->name)); o(" - %s</h2>\n", _("チケット検索"));
     project_free(project_a);
     condition_free(sort_a);
     list_alloc(states_a, State, state_new, state_free);
@@ -723,39 +724,39 @@ void search_action()
     output_states(states_a, true);
     list_free(states_a);
     o("<div id=\"condition_form\">\n"
-      "<h3>検索条件</h3>\n"
-      "<div class=\"description\">検索条件を入力して検索ボタンを押してください。</div>\n");
+      "<h3>%s</h3>\n"
+      "<div class=\"description\">%s</div>\n", _("検索条件"), _("検索条件を入力して検索ボタンを押してください。"));
     o("<form action=\"%s/%s/search\" method=\"get\">\n", cgiScriptName, g_project_name_4_url);
     o(      "<table summary=\"condition table\">\n");
     o("<tr>\n"
-      "\t<th>キーワード検索</th>\n"
+      "\t<th>%s</th>\n"
       "\t<td>\n"
-      "\t\t<input type=\"text\" class=\"conditionelement\" name=\"q\" value=\""); v(q); o("\" maxlength=\"%d\" />\n", DEFAULT_LENGTH - 1);
-    o("\t\t<div class=\"description\">履歴も含めて全ての項目から検索を行ないます。</div>\n"
+      "\t\t<input type=\"text\" class=\"conditionelement\" name=\"q\" value=\"", _("キーワード検索")); v(q); o("\" maxlength=\"%d\" />\n", DEFAULT_LENGTH - 1);
+    o("\t\t<div class=\"description\">%s</div>\n"
       "\t</td>\n"
-      "\t<th>投稿日時</th>\n"
+      "\t<th>%s</th>\n"
       "\t<td>\n"
       "\t\t<span>\n"
-      "\t\t<input type=\"text\" class=\"calendar\" name=\"registerdate.from\" value=\""); v(get_condition_value(conditions_a, ELEM_ID_REGISTERDATE, CONDITION_TYPE_DATE_FROM)); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
+      "\t\t<input type=\"text\" class=\"calendar\" name=\"registerdate.from\" value=\"", _("履歴も含めて全ての項目から検索を行ないます。"), _("投稿日時")); v(get_condition_value(conditions_a, ELEM_ID_REGISTERDATE, CONDITION_TYPE_DATE_FROM)); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
     o("\t\t</span>\n"
       "〜\n"
       "\t\t<span>\n"
       "\t\t<input type=\"text\" class=\"calendar\" name=\"registerdate.to\" value=\""); v(get_condition_value(conditions_a, ELEM_ID_REGISTERDATE, CONDITION_TYPE_DATE_TO)); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
     o("\t\t</span>\n"
-      "\t\t<div class=\"description\">yyyy-mm-dd形式で入力してください。</div>\n"
+      "\t\t<div class=\"description\">%s</div>\n"
       "\t</td>\n"
-      "\t<th>更新日時</th>\n"
+      "\t<th>%s</th>\n"
       "\t<td>\n"
       "\t\t<span>\n"
-      "\t\t<input type=\"text\" class=\"calendar\" name=\"lastregisterdate.from\" value=\""); v(get_condition_value(conditions_a, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_FROM)); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
+      "\t\t<input type=\"text\" class=\"calendar\" name=\"lastregisterdate.from\" value=\"", _("yyyy-mm-dd形式で入力してください。"), _("更新日時")); v(get_condition_value(conditions_a, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_FROM)); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
     o("\t\t</span>\n"
       "〜\n"
       "\t\t<span>\n"
       "\t\t<input type=\"text\" class=\"calendar\" name=\"lastregisterdate.to\" value=\""); v(get_condition_value(conditions_a, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_TO)); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
     o("\t\t</span>\n"
-      "\t\t<div class=\"description\">yyyy-mm-dd形式で入力してください。</div>\n"
+      "\t\t<div class=\"description\">%s</div>\n"
       "\t</td>\n"
-      "</tr>\n");
+      "</tr>\n", _("yyyy-mm-dd形式で入力してください。"));
     col_index = 1;
     foreach (it, element_types_a) {
         ElementType* et = it->element;
@@ -784,16 +785,16 @@ void search_action()
     }
     list_free(conditions_a);
     o("</table>\n"
-      "<input name=\"search_button\" class=\"button\" type=\"submit\" value=\"検索\" />"
+      "<input name=\"search_button\" class=\"button\" type=\"submit\" value=\"%s\" />"
       "<input id=\"save_condition\" type=\"checkbox\" name=\"save_condition\" class=\"checkbox\" value=\"1\" %s />\n"
-      "<label for=\"save_condition\">検索条件を保存する。(cookie使用)</label>\n",
-      condition_will_save ? "checked=\"checked\"" : "");
+      "<label for=\"save_condition\">%s</label>\n", _("検索"),
+      condition_will_save ? "checked=\"checked\"" : "", _("検索条件を保存する。(cookie使用)"));
     o("</form>\n"
       "</div>\n");
     fflush(cgiOut);
     o("<div id=\"ticket_list\">\n"
       "<a name=\"result\"></a>\n"
-      "<h3>検索結果</h3>\n");
+      "<h3>%s</h3>\n", _("検索結果"));
 
     if (result_a->messages->size) {
         String* query_string_a = string_new();
@@ -801,7 +802,7 @@ void search_action()
 
         query_string_a = format_query_string_without_page(query_string_a);
         o(      "<div class=\"infomation\">");
-        o(      "%d件ヒットしました。\n", result_a->hit_count);
+        o(      "%d%s\n", result_a->hit_count, _("件ヒットしました。"));
         o(      "[&nbsp;");
         foreach (it, result_a->states) {
             State* s = it->element;
@@ -809,14 +810,14 @@ void search_action()
             o("(%d)&nbsp;", s->count);
         }
         o(      "]&nbsp;");
-        o(      "<a href=\"%s/%s/report_csv_download?%s\" target=\"_blank\">検索結果をCSV形式でダウンロードする。</a>\n",
+        o(      "<a href=\"%s/%s/report_csv_download?%s\" target=\"_blank\">%s</a>\n",
                 cgiScriptName,
                 g_project_name_4_url,
-                string_rawstr(query_string_a));
-        o(      "<a href=\"%s/%s/report_html_download?%s\" target=\"_blank\">検索結果をHTMLでダウンロードする。(excelで表示する)</a>\n",
+                string_rawstr(query_string_a), _("検索結果をCSV形式でダウンロードする。"));
+        o(      "<a href=\"%s/%s/report_html_download?%s\" target=\"_blank\">%s</a>\n",
                 cgiScriptName,
                 g_project_name_4_url,
-                string_rawstr(query_string_a));
+                string_rawstr(query_string_a), _("検索結果をHTMLでダウンロードする。(excelで表示する)"));
         o(      "</div>\n");
         output_navigater(result_a, string_rawstr(query_string_a));
         output_ticket_table(db_a, result_a, element_types_a);
@@ -840,9 +841,9 @@ void output_ticket_information_4_csv_report_header(List* element_types)
         if (!et->ticket_property) continue;
         csv_field(string_rawstr(et->name)); o(",");
     }
-    csv_field("投稿日時"); o(",");
-    csv_field("最終更新日時"); o(",");
-    csv_field("放置日数"); o("\r\n");
+    csv_field(_("投稿日時")); o(",");
+    csv_field(_("最終更新日時")); o(",");
+    csv_field(_("放置日数")); o("\r\n");
 }
 void output_ticket_information_4_csv_report(Database* db, SearchResult* result, List* element_types)
 {
@@ -882,11 +883,11 @@ void output_ticket_information_4_html_report_header(List* element_types)
         hs(et->name);
         o("</td><td>");
     }
-    h("投稿日時");
+    h(_("投稿日時"));
     o("</td><td>");
-    h("最終更新日時");
+    h(_("最終更新日時"));
     o("</td><td>");
-    h("放置日数");
+    h(_("放置日数"));
     o("</td></tr>\r\n");
 }
 void output_ticket_information_4_html_report(Database* db, SearchResult* result, List* element_types)
@@ -1174,7 +1175,7 @@ void output_form_element(Database* db, List* elements, ElementType* et, Project*
         case ELEM_TYPE_UPLOADFILE:
             o("<input type=\"file\" class=\"element\" id=\"field%d\" name=\"field%d\" />\n",
                     et->id, et->id);
-            o("<div class=\"description\">ファイルサイズは、%dKb以下になるようにしてください。</div>\n", project->upload_max_size);
+            o("<div class=\"description\">%s%d%s</div>\n", _("ファイルサイズは、"), project->upload_max_size, _("Kb以下になるようにしてください。"));
             break;
         case ELEM_TYPE_DATE:
             o("<span>\n");
@@ -1183,7 +1184,7 @@ void output_form_element(Database* db, List* elements, ElementType* et, Project*
             v(value);
             o("\" maxlength=\"%d\"/>\n"
               "</span>\n"
-              "<div class=\"description\">yyyy-mm-dd形式で入力してください。</div>\n", DATE_LENGTH - 1);
+              "<div class=\"description\">%s</div>\n", DATE_LENGTH - 1, _("yyyy-mm-dd形式で入力してください。"));
             break;
     }
     switch (et->type) {
@@ -1193,7 +1194,7 @@ void output_form_element(Database* db, List* elements, ElementType* et, Project*
                 /* 新規項目を設定可能である場合、テキストボックスを表示する。 */
                 o("<input type=\"text\" class=\"element_new_item\" id=\"field%d.new_item\" name=\"field%d.new_item\" maxlength=\"%d\" />\n",
                     et->id, et->id, DEFAULT_LENGTH -1 );
-                o("選択肢を追加する場合はテキストボックスに入力してください。\n");
+                o(_("選択肢を追加する場合はテキストボックスに入力してください。\n"));
             }
             break;
     }
@@ -1243,17 +1244,17 @@ void register_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, "チケット登録", "register.js", NAVI_REGISTER);
+    output_header(project_a, _("チケット登録"), "register.js", NAVI_REGISTER);
     output_calendar_js();
-    o(      "<h2>"); h(string_rawstr(project_a->name));o(" - チケット登録</h2>\n");
+    o(      "<h2>"); h(string_rawstr(project_a->name));o(" - %s</h2>\n", _("チケット登録"));
     list_alloc(states_a, State, state_new, state_free);
     states_a = db_get_states(db_a, states_a);
     output_states(states_a, false);
     list_free(states_a);
     o(      "<div id=\"input_form\">\n"
-            "<h3>チケット登録</h3>\n"
-            "<div class=\"description\">新規チケットを登録する場合は、以下のフォームを記入し登録ボタンを押してください。</div>\n"
-            "<noscript><div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div></noscript>\n");
+            "<h3>%s</h3>\n"
+            "<div class=\"description\">%s</div>\n"
+            "<noscript><div class=\"description\">%s</div></noscript>\n", _("チケット登録"), _("新規チケットを登録する場合は、以下のフォームを記入し登録ボタンを押してください。"), _("※必須項目の入力チェックは、javascriptで行なっています。"));
     o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName, g_project_name_4_url);
     o(      "<table summary=\"input infomation\">\n");
     {
@@ -1280,7 +1281,7 @@ void register_action()
             }
             hs(et->name);
             if (et->required) {
-                o("<span class=\"required\">※</span>");
+                o("<span class=\"required\">%s</span>", _("※"));
             }
             o("</th><td>\n");
             if (et->required)
@@ -1298,18 +1299,12 @@ void register_action()
         list_free(element_types_a);
     }
     project_free(project_a);
-    o(      "<input class=\"button\" type=\"submit\" name=\"register\" value=\"登録\" />\n"
+    o(      "<input class=\"button\" type=\"submit\" name=\"register\" value=\"%s\" />\n"
             "<input id=\"save2cookie\" type=\"checkbox\" name=\"save2cookie\" class=\"checkbox\" value=\"1\" %s />\n"
-            "<label for=\"save2cookie\">投稿者を保存する。(cookie使用)</label>\n"
+            "<label for=\"save2cookie\">%s</label>\n"
             "</form>\n"
-            "</div>\n", strlen(sender) ? "checked=\"checked\"" : "");
-    o(      "<div class=\"description\">\n"
-            "\t<ul>\n"
-            "\t\t<li>複数行テキスト項目の内容では、#1 のように書くと、ID が 1 のチケットのチケット詳細ページへのリンクとなります。</li>\n"
-            "\t\t<li>複数行テキスト項目の内容では、#bts:1 のように書くと、プロジェクトIDがbtsであるプロジェクトの、ID が 1 のチケットのチケット詳細ページへのリンクとなります。</li>\n"
-            "\t\t<li>複数行テキスト項目の内容では、行頭が &gt;| から始まる行から、行頭が |&lt; から始まる行までは、整形済みブロックになります。</li>\n"
-            "\t</ul>\n"
-            "</div>\n");
+            "</div>\n", _("登録"), strlen(sender) ? "checked=\"checked\"" : "", _("投稿者を保存する。(cookie使用)"));
+    print_field_help();
     db_finish(db_a);
     output_footer();
 }
@@ -1335,14 +1330,14 @@ void ticket_action()
     strcpy(ticket_id, g_path_info);
     iid = atoi(ticket_id);
     if (!iid) {
-        redirect("/list", "存在しないIDが指定されました。");
+        redirect("/list", _("存在しないIDが指定されました。"));
             return;
     }
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     list_alloc(elements_a, Element, element_new, element_free);
     elements_a = db_get_last_elements(db_a, iid, elements_a);
     if (elements_a->size == 0) {
-        redirect("/list", "存在しないIDが指定されました。");
+        redirect("/list", _("存在しないIDが指定されました。"));
         return;
     }
     string_appendf(title_a, "#%d %s", iid, get_element_value_by_id(elements_a, ELEM_ID_TITLE));
@@ -1362,12 +1357,12 @@ void ticket_action()
     output_states(states_a, true);
     list_free(states_a);
     o(      "<div id=\"ticket_newest\">\n"
-            "<h3>チケット最新情報</h3>\n"
-            "<div class=\"description\">チケットの最新情報です。最新チケットのチケット属性の付いている項目と全添付ファイルを表示しています。</div>\n"
+            "<h3>%s</h3>\n"
+            "<div class=\"description\">%s</div>\n"
             "<table summary=\"newest table\">\n"
             "\t<tr>\n"
             "\t\t<th>ID</th>\n"
-            "\t\t<td>%d</td>\n", iid);
+            "\t\t<td>%d</td>\n", _("チケット最新情報"), _("チケットの最新情報です。最新チケットのチケット属性の付いている項目と全添付ファイルを表示しています。"), iid);
     o(      "\t</tr>\n");
     foreach (it, element_types_a) {
         ElementType* et = it->element;
@@ -1401,8 +1396,8 @@ void ticket_action()
           "\t</tr>\n");
     }
     o("\t<tr>\n"
-      "\t\t<th>全添付ファイル</th>\n"
-      "\t\t\t<td>\n");
+      "\t\t<th>%s</th>\n"
+      "\t\t\t<td>\n", _("全添付ファイル"));
     for (i = 0; message_ids_a[i] != 0; i++) {
         List* attachment_elements_a;
         list_alloc(attachment_elements_a, Element, element_new, element_free);
@@ -1427,10 +1422,10 @@ void ticket_action()
       "\t</tr>\n"
             "</table>\n"
             "</div>"
-            "<div class=\"infomation\"><a href=\"#reply\">返信する</a></div>\n"
+            "<div class=\"infomation\"><a href=\"#reply\">%s</a></div>\n"
             "<div id=\"ticket_history\">\n"
-            "<h3>チケット履歴</h3>\n"
-            "<div class=\"description\">チケットの履歴情報です。</div>\n");
+            "<h3>%s</h3>\n"
+            "<div class=\"description\">%s</div>\n", _("返信する"), _("チケット履歴"), _("チケットの履歴情報です。"));
     list_free(elements_a);
     /* 履歴の表示 */
     for (i = 0; message_ids_a[i] != 0; i++) {
@@ -1498,14 +1493,14 @@ void ticket_action()
     /* フォームの表示 */
     o(      "<a name=\"reply\"></a>\n"
             "<div id=\"input_form\">\n"
-            "<h3>チケット返信</h3>\n"
-            "<form id=\"reply_form\" name=\"reply_form\" action=\"%s/%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName, g_project_name_4_url);
+            "<h3>%s</h3>\n"
+            "<form id=\"reply_form\" name=\"reply_form\" action=\"%s/%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", _("チケット返信"), cgiScriptName, g_project_name_4_url);
     o(      "<input type=\"hidden\" name=\"ticket_id\" value=\"%s\" />\n", ticket_id);
-    o(      "<div class=\"description\">返信を行なう場合は、以下のフォームに内容を記入して返信ボタンを押してください。</div>\n"
-            "<noscript><div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div></noscript>\n");
-    o(      "<h4>チケット情報の更新</h4>\n"
-            "<div class=\"description\">チケット情報(チケットの状態など)を更新する必要がある場合は、以下の情報を変更してください。</div>\n"
-            "<table class=\"reply_table\" summary=\"input table\">\n");
+    o(      "<div class=\"description\">%s</div>\n"
+            "<noscript><div class=\"description\">%s</div></noscript>\n", _("返信を行なう場合は、以下のフォームに内容を記入して返信ボタンを押してください。"), _("※必須項目の入力チェックは、javascriptで行なっています。"));
+    o(      "<h4>%s</h4>\n"
+            "<div class=\"description\">%s</div>\n"
+            "<table class=\"reply_table\" summary=\"input table\">\n", _("チケット情報の更新"), _("チケット情報(チケットの状態など)を更新する必要がある場合は、以下の情報を変更してください。"));
     foreach (it, element_types_a) {
         ElementType* et = it->element;
         if (et->ticket_property == 0) continue;
@@ -1526,9 +1521,9 @@ void ticket_action()
     }
     o(      "</table>\n");
     list_free(last_elements);
-    o(      "<h4>返信情報の追加</h4>\n"
-            "<div class=\"description\">返信情報を記入してください。</div>\n"
-            "<table summary=\"input table\">\n");
+    o(      "<h4>%s</h4>\n"
+            "<div class=\"description\">%s</div>\n"
+            "<table summary=\"input table\">\n", _("返信情報の追加"), _("返信情報を記入してください。"));
     foreach (it, element_types_a) {
         ElementType* et = it->element;
         if (et->ticket_property == 1) continue;
@@ -1536,7 +1531,7 @@ void ticket_action()
         o("\t\t<th %s>", et->required ? "class=\"required\"" : "");
         hs(et->name);
         if (et->required)
-            o("<span class=\"required\">※</span>");
+            o("<span class=\"required\">%s</span>", _("※"));
         o("</th>\n\t\t<td>");
         if (et->required)
             o("\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
@@ -1549,18 +1544,12 @@ void ticket_action()
     }
     project_free(project_a);
     o(      "</table>\n");
-    o(      "<input class=\"button\" type=\"submit\" name=\"reply\" value=\"返信\" />&nbsp;&nbsp;&nbsp;\n"
+    o(      "<input class=\"button\" type=\"submit\" name=\"reply\" value=\"%s\" />&nbsp;&nbsp;&nbsp;\n"
             "<input id=\"save2cookie\" type=\"checkbox\" name=\"save2cookie\" class=\"checkbox\" value=\"1\" %s />\n"
-            "<label for=\"save2cookie\">投稿者を保存する。(cookie使用)</label>\n"
+            "<label for=\"save2cookie\">%s</label>\n"
             "</form>\n"
-            "</div>\n", strlen(sender) ? "checked=\"checked\"" : "");
-    o(      "<div class=\"description\">\n"
-            "\t<ul>\n"
-            "\t\t<li>複数行テキスト項目の内容では、#1 のように書くと、ID が 1 のチケットのチケット詳細ページへのリンクとなります。</li>\n"
-            "\t\t<li>複数行テキスト項目の内容では、#bts:1 のように書くと、プロジェクトIDがbtsであるプロジェクトの、ID が 1 のチケットのチケット詳細ページへのリンクとなります。</li>\n"
-            "\t\t<li>複数行テキスト項目の内容では、行頭が &gt;| から始まる行から、行頭が |&lt; から始まる行までは、整形済みブロックになります。</li>\n"
-            "\t</ul>\n"
-            "</div>\n");
+            "</div>\n", _("返信"), strlen(sender) ? "checked=\"checked\"" : "", _("投稿者を保存する。(cookie使用)"));
+    print_field_help();
     output_field_information_js(element_types_a);
     db_finish(db_a);
     output_footer();
@@ -1725,9 +1714,13 @@ void register_submit_action()
 
 file_size_error:
     db_finish(db_a);
-    output_header(project_a, "エラー", NULL, NAVI_OTHER);
-    o("<h1>エラー発生</h1>\n"
-      "<div class=\"message\">ファイルサイズが大きすぎます。%dkbより大きいファイルは登録できません。ブラウザの戻るボタンで戻ってください。</div>\n", project_a->upload_max_size);
+    output_header(project_a, _("エラー"), NULL, NAVI_OTHER);
+    o("<h1>%s</h1>\n"
+      "<div class=\"message\">%s%d%s</div>\n",
+      _("エラー発生"),
+      _("ファイルサイズが大きすぎます。"),
+      project_a->upload_max_size,
+      _("kbより大きいファイルは登録できません。ブラウザの戻るボタンで戻ってください。"));
     output_footer();
     project_free(project_a);
 }
@@ -2320,37 +2313,9 @@ void edit_top_action()
     o(      "</textarea>\n"
             "<div>&nbsp;</div>\n"
             "<input class=\"button\" type=\"submit\" value=\"更新\" />\n"
-            "</form>"
-            "<div>\n"
-            "<h3>簡易wikiのサポートする文法</h3>\n"
-            "<ul>\n"
-            "<li>行頭に*を記述した行は、大見出しになります。</li>\n"
-            "<li>行頭に**を記述した行は、中見出しになります。</li>\n"
-            "<li>行頭に***を記述した行は、小見出しになります。</li>\n"
-            "<li>行頭に****を記述した行は、極小見出しになります。</li>\n"
-            "<li>行頭に-を記述した行は、箇条書きになります。</li>\n"
-            "<li>行頭に----を記述した行は、区切り線になります。</li>\n"
-            "<li>行頭が &gt;| から始まる行から、行頭が |&lt; から始まる行までは、整形済みブロックになります。</li>\n"
-            "</ul>\n"
-            "<h5>例</h5>\n"
-            "<pre>\n"
-            "*編集可能領域\n"
-            "自由に編集できます。\n"
-            "右側の「トップページの編集」のリンクから編集してください。\n"
-            "色々な用途に使用してください。\n"
-            "-お知らせ\n"
-            "-Starbug1の使い方についての注意事項など\n"
-            "\n"
-            ">|\n"
-            "void displayWidgets (Iterable<Widget> widgets) {\n"
-            "  for (Widget w : widgets) {\n"
-            "    w.display();\n"
-            "  }\n"
-            "}\n"
-            "|<\n"
-            "</pre>\n"
-            "</div>\n"
-            "</div>\n");
+            "</form>");
+    print_wiki_help();
+    o(      "</div>\n");
     db_finish(db_a);
     output_footer();
 }

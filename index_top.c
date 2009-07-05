@@ -2,7 +2,6 @@
 #include <cgic.h>
 #include <string.h>
 #include <stdlib.h>
-#include <libintl.h>
 #include "data.h"
 #include "db_top.h"
 #include "db_project.h"
@@ -162,45 +161,8 @@ void top_edit_top_action()
     o(      "</textarea>\n"
             "<div>&nbsp;</div>\n"
             "<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("Update"));
-    o(      "</form>"
-            "<div>\n"
-            "<h3>%s</h3>\n"
-            "<ul>\n"
-            "<li>%s</li>\n"
-            "<li>%s</li>\n"
-            "<li>%s</li>\n"
-            "<li>%s</li>\n"
-            "<li>%s</li>\n"
-            "<li>%s</li>\n"
-            "<li>%s</li>\n",
-            _("Simple wiki syntax"),
-            _("A line starts by * become big headline."),
-            _("A line starts by ** become medium headline."),
-            _("A line starts by *** become small headline."),
-            _("A line starts by **** become super small headline."),
-            _("A line starts by - become item."),
-            _("A line starts by ---- become delimitation."),
-            _("From line starts by &gt;| to line starts by |&lt;, become block."));
-    o(      "</ul>\n"
-            "<h5>例</h5>\n"
-            "<pre>\n"
-            "*編集可能領域\n"
-            "自由に編集できます。\n"
-            "右側の「ページの編集」のリンクから編集してください。\n"
-            "色々な用途に使用してください。\n"
-            "-お知らせ\n"
-            "-Starbug1の使い方についての注意事項など\n"
-            "\n"
-            ">|\n"
-            "void displayWidgets (Iterable<Widget> widgets) {\n"
-            "  for (Widget w : widgets) {\n"
-            "    w.display();\n"
-            "  }\n"
-            "}\n"
-            "|<\n"
-            "</pre>\n"
-            "</div>\n"
-            "</div>\n");
+    o(      "</form>");
+    print_wiki_help();
     db_finish(db_a);
     top_output_footer();
 }
@@ -234,10 +196,10 @@ void top_search_action()
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     tickets_a = db_top_search(db_a, q, tickets_a);
     top_project_a = db_get_project(db_a, top_project_a);
-    top_output_header("トップページ", top_project_a);
+    top_output_header(_("Top Page"), top_project_a);
     o(      "<div id=\"project_list\">\n"
-            "\t<h2>検索結果</h2>\n"
-            "\t<ul>\n");
+            "\t<h2>%s</h2>\n"
+            "\t<ul>\n", _("Serach Result"));
     foreach (it, tickets_a) {
         Ticket* t = it->element;
         o(      "\t\t\t\t<li><a href=\"%s/%s/ticket/%d", cgiScriptName, string_rawstr(t->project_name), t->id);

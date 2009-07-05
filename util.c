@@ -680,4 +680,17 @@ char* get_ext(char* path)
     }
     return "";
 }
+void print_field_help()
+{
+    o(      "<div class=\"description\">\n"
+            "\t<ul>\n"
+            "\t\t<li>%s</li>\n"
+            "\t\t<li>%s</li>\n"
+            "\t\t<li>%s</li>\n"
+            "\t</ul>\n"
+            "</div>\n",
+            _("複数行テキスト項目の内容では、#1 のように書くと、ID が 1 のチケットのチケット詳細ページへのリンクとなります。"),
+            _("複数行テキスト項目の内容では、#bts:1 のように書くと、プロジェクトIDがbtsであるプロジェクトの、ID が 1 のチケットのチケット詳細ページへのリンクとなります。"),
+            _("複数行テキスト項目の内容では、行頭が &gt;| から始まる行から、行頭が |&lt; から始まる行までは、整形済みブロックになります。"));
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

@@ -2,6 +2,7 @@
 #define UTIL_H
 /* ユーティリティ関数を定義するファイル */
 #include <sqlite3.h>
+#include <libintl.h>
 #include "list.h"
 #include "data.h"
 #include "dbutil.h"
@@ -84,5 +85,6 @@ extern char g_project_name_4_url[DEFAULT_LENGTH];
 extern char g_action_name[DEFAULT_LENGTH];
 extern char g_path_info[DEFAULT_LENGTH];
 void cgi_escape(char*);
+void print_field_help();
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
