@@ -1695,9 +1695,9 @@ void register_submit_action()
         hook = exec_hook(hook, project_a, ticket_a, ticket_a->elements, element_types_a);
         d("exec_hook\n");
         if (mode == MODE_REGISTER)
-            complete_message = "登録しました。";
+            complete_message = _("登録しました。");
         else if (mode == MODE_REPLY)
-            complete_message = "返信しました。";
+            complete_message = _("返信しました。");
         d("finish\n");
         project_free(project_a);
         list_free(element_types_a);
@@ -1738,24 +1738,29 @@ void register_at_once_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, "チケット一括登録", "register_at_once.js", NAVI_REGISTER_AT_ONCE);
+    output_header(project_a, _("チケット一括登録"), "register_at_once.js", NAVI_REGISTER_AT_ONCE);
     output_calendar_js();
-    o(      "<h2>"); h(string_rawstr(project_a->name));o(" - チケット一括登録</h2>\n");
+    o(      "<h2>"); h(string_rawstr(project_a->name));o(" - %s</h2>\n", _("チケット一括登録"));
     list_alloc(states_a, State, state_new, state_free);
     states_a = db_get_states(db_a, states_a);
     output_states(states_a, true);
     list_free(states_a);
     o(      "<div id=\"input_form\">\n"
-            "<h3>チケット一括登録</h3>\n"
+            "<h3>%s</h3>\n"
             "<div class=\"description\">\n"
-            "新規チケットを一括登録する場合は、以下のフォームにチケット情報をCSV形式で記入し解析ボタンを押してください。登録の手順の詳細は以下のとおりです。\n"
+            "%s\n"
             "\t<ul>\n"
-            "\t\t<li>チケット一括登録ページ(このページ)で、登録したい複数のチケットの情報をCSV形式で貼り付けて、解析ボタンを押す。</li>\n"
-            "\t\t<li>チケット一括登録確認ページで、解析結果が表示されるので、各フィールドに対応する項目を選択し、登録ボタンを押す。</li>\n"
-            "\t\t<li>登録完了。</li>\n"
+            "\t\t<li>%s</li>\n"
+            "\t\t<li>%s</li>\n"
+            "\t\t<li>%s</li>\n"
             "\t</ul>\n"
             "</div>\n"
-            "<noscript><div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div></noscript>\n");
+            "<noscript><div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div></noscript>\n",
+            _("チケット一括登録"),
+            _("新規チケットを一括登録する場合は、以下のフォームにチケット情報をCSV形式で記入し解析ボタンを押してください。登録の手順の詳細は以下のとおりです。"),
+            _("チケット一括登録ページ(このページ)で、登録したい複数のチケットの情報をCSV形式で貼り付けて、解析ボタンを押す。"),
+            _("チケット一括登録確認ページで、解析結果が表示されるので、各フィールドに対応する項目を選択し、登録ボタンを押す。"),
+            _("登録完了。"));
     o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/%s/register_at_once_confirm\" method=\"post\">\n", cgiScriptName, g_project_name_4_url);
     project_free(project_a);
     {
@@ -1767,14 +1772,14 @@ void register_at_once_action()
           "</th><td>\n"
           "\t\t\t<div id=\"csvdata.required\" class=\"error\"></div>\n"
           "\t\t\t<textarea name=\"csvdata\" id=\"csvdata\" rows=\"5\" cols=\"5\"></textarea>\n"
-          "\t\t\t<div class=\"description\">登録したいデータをCSV形式で貼り付けてください。次の画面で取り込むフィールドを設定可能です。&nbsp;</div>\n"
+          "\t\t\t<div class=\"description\">%s</div>\n"
           "\t\t</td>\n"
           "\t</tr>\n"
-          "</table>\n");
+          "</table>\n", _("登録したいデータをCSV形式で貼り付けてください。次の画面で取り込むフィールドを設定可能です。"));
     }
-    o(      "<input class=\"button\" type=\"submit\" name=\"register\" value=\"解析\" />\n"
+    o(      "<input class=\"button\" type=\"submit\" name=\"register\" value=\"%s\" />\n"
             "</form>\n"
-            "</div>\n");
+            "</div>\n", _("解析"));
     db_finish(db_a);
     output_footer();
 }
@@ -1800,17 +1805,20 @@ void register_at_once_confirm_action()
     xfree(content_a);
 
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, "チケット一括登録確認", "register_at_once_submit.js", NAVI_REGISTER_AT_ONCE);
+    output_header(project_a, _("チケット一括登録確認"), "register_at_once_submit.js", NAVI_REGISTER_AT_ONCE);
     output_calendar_js();
-    o(      "<h2>"); h(string_rawstr(project_a->name));o(" - チケット一括登録確認</h2>\n");
+    o(      "<h2>"); h(string_rawstr(project_a->name));o(" - %s</h2>\n", _("チケット一括登録確認"));
     list_alloc(states_a, State, state_new, state_free);
     states_a = db_get_states(db_a, states_a);
     output_states(states_a, true);
     list_free(states_a);
     o(      "<div id=\"input_form\">\n"
-            "<h3>チケット一括登録確認</h3>\n"
-            "<div class=\"description\">各桁の登録対象コンボボックスの選択値を、その桁のデータの登録対象となる項目を選択して、登録ボタンを押してください。</div>\n"
-            "<noscript><div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div></noscript>\n");
+            "<h3>%s</h3>\n"
+            "<div class=\"description\">%s</div>\n"
+            "<noscript><div class=\"description\">%s</div></noscript>\n",
+            _("チケット一括登録確認"),
+            _("各桁の登録対象コンボボックスの選択値を、その桁のデータの登録対象となる項目を選択して、登録ボタンを押してください。"),
+            _("※必須項目の入力チェックは、javascriptで行なっています。"));
     o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/%s/register_at_once_submit\" method=\"post\">\n", cgiScriptName, g_project_name_4_url);
     o(      "<table summary=\"input infomation\">\n");
     {
@@ -1845,11 +1853,11 @@ void register_at_once_confirm_action()
         o("<input type=\"hidden\" name=\"fields_count\" value=\"%d\" />\n", csv_a->field_count);
         o(      "<table id=\"register_at_once_confirm\">\n"
                 "\t<tr>\n");
-        o(  "\t\t<th>登録<br />対象</th>\n");
+        o(  "\t\t<th>%s</th>\n", _("登録<br />対象"));
         for (i = 0; i < csv_a->field_count; i++) {
             o(  "\t\t<th>\n");
             o(  "\t\t\t<select name=\"col_field%d\">\n", i);
-            o(  "\t\t\t\t<option value=\"\">無視</option>\n");
+            o(  "\t\t\t\t<option value=\"\">%s</option>\n", _("無視"));
             foreach (it, element_types_a) {
                 ElementType* et = it->element;
                 if (et->id == ELEM_ID_SENDER) continue;
@@ -1885,16 +1893,18 @@ void register_at_once_confirm_action()
         o("</table>\n");
         list_free(element_types_a);
     }
-    o(      "<input class=\"button\" type=\"submit\" name=\"register\" value=\"登録\" />\n"
+    o(      "<input class=\"button\" type=\"submit\" name=\"register\" value=\"%s\" />\n"
             "<input id=\"save2cookie\" type=\"checkbox\" name=\"save2cookie\" class=\"checkbox\" value=\"1\" %s />\n"
-            "<label for=\"save2cookie\">投稿者を保存する。(cookie使用)</label>\n"
-            "</form>\n", strlen(sender) ? "checked=\"checked\"" : "");
+            "<label for=\"save2cookie\">%s</label>\n"
+            "</form>\n", _("登録"), strlen(sender) ? "checked=\"checked\"" : "", _("投稿者を保存する。(cookie使用)"));
     o(      "<div class=\"description\">\n"
             "\t<ul>\n"
-            "\t\t<li>登録対象コンボボックスの選択値を、「無視」のまま登録すると、登録対象から省かれます。</li>\n"
-            "\t\t<li>登録する各値は、入力チェックが行なわれませんので、登録前に確認してください。</li>\n"
+            "\t\t<li>%s</li>\n"
+            "\t\t<li>%s</li>\n"
             "\t</ul>\n"
-            "</div>\n");
+            "</div>\n",
+            _("登録対象コンボボックスの選択値を、「無視」のまま登録すると、登録対象から省かれます。"),
+            _("登録する各値は、入力チェックが行なわれませんので、登録前に確認してください。"));
     o(      "</div>\n");
     db_finish(db_a);
     csv_free(csv_a);
@@ -2024,10 +2034,10 @@ void register_at_once_submit_action()
 
     if (registered_tickets_count) {
         char message[DEFAULT_LENGTH];
-        sprintf(message, "%d件登録しました。", registered_tickets_count);
+        sprintf(message, "%d%s", registered_tickets_count, _("件登録しました。"));
         redirect("/list", message);
     } else {
-        redirect("/list", "登録されたチケットはありませんでした。戻るボタンで戻って確認してください。");
+        redirect("/list", _("登録されたチケットはありませんでした。戻るボタンで戻って確認してください。"));
     }
     list_free(field_ids_a);
     return;
@@ -2047,14 +2057,14 @@ void top_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, "プロジェクトトップ", NULL, NAVI_TOP);
+    output_header(project_a, _("プロジェクトトップ"), NULL, NAVI_TOP);
     list_alloc(states_a, State, state_new, state_free);
     states_a = db_get_states(db_a, states_a);
     o(      "<div id=\"info\">\n");
     /* 最新情報の表示 */
     o(      "<div id=\"top_newest\">\n"
-            "<h4>最新情報</h4>\n"
-            "\t<ul>\n");
+            "<h4>%s</h4>\n"
+            "\t<ul>\n", _("最新情報"));
     list_alloc(tickets_a, Message, message_new, message_free);
     tickets_a = db_get_newest_information(db_a, 10, tickets_a);
     if (tickets_a->size) {
@@ -2071,15 +2081,15 @@ void top_action()
             list_free(elements_a);
         }
     } else {
-        o("<li>最新情報がありません。</li>\n");
+        o("<li>%s</li>\n", _("最新情報がありません。"));
     }
     list_free(tickets_a);
     o(      "\t</ul>\n"
             "</div>\n");
     /* stateの表示 */
     o(      "<div id=\"top_state_index\">\n"
-            "<h4>状態別件数</h4>\n"
-            "\t<ul>\n");
+            "<h4>%s</h4>\n"
+            "\t<ul>\n", _("状態別件数"));
     if (states_a->size) {
         foreach (it, states_a) {
             State* s = it->element;
@@ -2091,27 +2101,27 @@ void top_action()
             o("\t\t</li>\n");
         }
     } else {
-        o("<li>チケット情報がありません。</li>\n");
+        o("<li>%s</li>\n", _("チケット情報がありません。"));
     }
     list_free(states_a);
     o(      "\t</ul>\n"
             "</div>\n");
     /* ID検索フォームの表示 */
     o(      "<div id=\"top_id_search\">\n"
-            "<h4>ID検索</h4>\n"
-            "\t<form action=\"%s/%s/search\" method=\"get\">\n", cgiScriptName, g_project_name_4_url);
-    o(      "\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"入力したIDのチケットを表示します。\" maxlength=\"%d\" />\n", DEFAULT_LENGTH - 1);
-    o(      "\t\t<input type=\"submit\" class=\"button\" value=\"表示\" />\n"
+            "<h4>%s</h4>\n"
+            "\t<form action=\"%s/%s/search\" method=\"get\">\n", _("ID検索"), cgiScriptName, g_project_name_4_url);
+    o(      "\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"%s\" maxlength=\"%d\" />\n", _("入力したIDのチケットを表示します。"), DEFAULT_LENGTH - 1);
+    o(      "\t\t<input type=\"submit\" class=\"button\" value=\"%s\" />\n"
             "\t</form>\n"
             "</div>\n"
             "</div>\n"
             "<div id=\"main\">\n"
-            "<h2>");h(string_rawstr(project_a->name));o("&nbsp;</h2>\n");
+            "<h2>", _("表示"));h(string_rawstr(project_a->name));o("&nbsp;</h2>\n");
     project_free(project_a);
     o(      "<div id=\"main_body\">\n"
             "<div class=\"top_edit\">\n"
-            "<a id=\"new_ticket_link\" href=\"%s/%s/register\">新しいチケットを登録する</a>&nbsp;\n", cgiScriptName, g_project_name_4_url);
-    o(      "<a href=\"%s/%s/edit_top\">ページの編集</a>\n", cgiScriptName, g_project_name_4_url);
+            "<a id=\"new_ticket_link\" href=\"%s/%s/register\">%s</a>&nbsp;\n", cgiScriptName, g_project_name_4_url, _("新しいチケットを登録する"));
+    o(      "<a href=\"%s/%s/edit_top\">%s</a>\n", cgiScriptName, g_project_name_4_url, _("ページの編集"));
     o(      "</div>\n");
     wiki_out(db_a, "top");
     o(      "</div>\n"
@@ -2164,10 +2174,10 @@ void rss_action()
             o(      "</title>\n");
             o(      "\t\t<link>");h(string_rawstr(project_a->home_url));o("%s/%s/ticket/%d</link>\n", cgiScriptName, g_project_name_4_url, ticket->id);
             o(      "\t\t<description><![CDATA[\n");
-            o(      "投稿者: ");
+            o(      "%s: ", _("投稿者"));
             hmail(get_element_value_by_id(elements_a, ELEM_ID_ORG_SENDER));
             o("\n");
-            o(      "投稿日: ");
+            o(      "%s: ", _("投稿日"));
             h(get_element_value_by_id(elements_a, ELEM_ID_REGISTERDATE));
             o("\n");
             foreach (it, elements_a) {
@@ -2206,7 +2216,7 @@ void statistics_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, "統計情報", "graph.js", NAVI_STATISTICS);
+    output_header(project_a, _("統計情報"), "graph.js", NAVI_STATISTICS);
     output_graph_js();
     o(      "<h2>");h(string_rawstr(project_a->name));o("</h2>\n");
     list_alloc(states_a, State, state_new, state_free);
@@ -2214,8 +2224,8 @@ void statistics_action()
     output_states(states_a, true);
     list_free(states_a);
     o(      "<div id=\"top\">\n"
-            "<h3>統計情報</h3>\n"
-            "\t<div class=\"description\">統計情報を表示します。</div>\n");
+            "<h3>%s</h3>\n"
+            "\t<div class=\"description\">%s</div>\n", _("統計情報"), _("統計情報を表示します。"));
     project_free(project_a);
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_element_types_all(db_a, element_types_a);
@@ -2239,8 +2249,8 @@ got_item:
                 hs(et->name);
                 o(      "\t</h4>"
                   "<div class=\"graph\">\n"
-                  "<noscript>JavaScriptでグラフを表示しています。JavaScriptが有効なブラウザで見てください。\n"
-                        "\t<ul>\n");
+                  "<noscript>%s\n"
+                        "\t<ul>\n", _("JavaScriptでグラフを表示しています。JavaScriptが有効なブラウザで見てください。"));
                 foreach (it_item, all_items_a) {
                     ListItem* item = it_item->element;
                     State* s = get_statictics(item->id, items_a);
@@ -2301,19 +2311,23 @@ void edit_top_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, "トップページの編集", "edit_top.js", NAVI_OTHER);
+    output_header(project_a, _("トップページの編集"), "edit_top.js", NAVI_OTHER);
     project_free(project_a);
-    o(      "<h2>トップページの編集</h2>\n"
+    o(      "<h2>%s</h2>\n"
             "<div id=\"top\">\n"
-            "<h3>トップページの編集</h3>\n"
-            "<div id=\"description\">簡易wikiの文法でトップページのコンテンツの編集を行ない、更新ボタンを押してください。</div>\n"
-            "<form id=\"edit_top_form\" action=\"%s/%s/edit_top_submit\" method=\"post\">\n", cgiScriptName, g_project_name_4_url);
+            "<h3>%s</h3>\n"
+            "<div id=\"description\">%s</div>\n"
+            "<form id=\"edit_top_form\" action=\"%s/%s/edit_top_submit\" method=\"post\">\n",
+            _("トップページの編集"),
+            _("トップページの編集"),
+            _("簡易wikiの文法でトップページのコンテンツの編集を行ない、更新ボタンを押してください。"),
+            cgiScriptName, g_project_name_4_url);
     o(      "<textarea name=\"edit_top\" id=\"edit_top\" rows=\"3\" cols=\"10\">");
     wiki_content_out(db_a, "top");
     o(      "</textarea>\n"
             "<div>&nbsp;</div>\n"
-            "<input class=\"button\" type=\"submit\" value=\"更新\" />\n"
-            "</form>");
+            "<input class=\"button\" type=\"submit\" value=\"%s\" />\n"
+            "</form>", _("更新"));
     print_wiki_help();
     o(      "</div>\n");
     db_finish(db_a);
@@ -2359,7 +2373,7 @@ void download_action()
 
 error:
     cgiHeaderContentType("text/plain; charset=utf-8;");
-    o("error: ファイルがありません。");
+    o(_("error: ファイルがありません。"));
 }
 void setting_file_action()
 {
@@ -2386,6 +2400,6 @@ void setting_file_action()
 
 error:
     cgiHeaderContentType("text/plain; charset=utf-8;");
-    o("error: ファイルがありません。");
+    o(_("error: ファイルがありません。"));
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

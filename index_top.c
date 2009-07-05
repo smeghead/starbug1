@@ -52,8 +52,8 @@ void top_output_header(char* title, Project* project)
     o(      "<div id=\"projectmenu\">\n"
             "\t<ul>\n"
             "\t\t<li><a href=\""); h(string_rawstr(project->home_url)); o("\">"); h(string_rawstr(project->home_description)); o("</a></li>\n");
-    o(      "\t\t<li><a href=\"%s/../index.%s/%s/\">%s</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url, _("Project Top"));
-    o(      "\t\t<li><a href=\"%s/../admin.%s/%s/\">%s</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url, _("Project Management"));
+    o(      "\t\t<li><a href=\"%s/../index.%s/%s/\">%s</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url, _("プロジェクトトップ"));
+    o(      "\t\t<li><a href=\"%s/../admin.%s/%s/\">%s</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url, _("プロジェクト管理"));
     o(      "\t</ul>\n");
     o(      "</div>\n");
 }
@@ -96,10 +96,10 @@ void top_top_action()
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_infos_a = db_top_get_all_project_infos(db_a, project_infos_a);
     top_project_a = db_get_project(db_a, top_project_a);
-    top_output_header(_("Top Page"), top_project_a);
+    top_output_header(_("トップページ"), top_project_a);
     o(      "<div id=\"project_list\">\n"
             "\t<h2>%s</h2>\n"
-            "\t<ul>\n", _("Sub Project List"));
+            "\t<ul>\n", _("サブプロジェクト一覧"));
     foreach (it, project_infos_a) {
         ProjectInfo* p = it->element;
         Database* db_project_a;
@@ -123,15 +123,15 @@ void top_top_action()
     list_free(project_infos_a);
     o(      "\t</ul>\n");
     o(      "\t<h2>%s</h2>\n"
-            "\t<form action=\"%s/%s/top_search\" method=\"get\">\n", _("Search"), cgiScriptName, g_project_name_4_url);
+            "\t<form action=\"%s/%s/top_search\" method=\"get\">\n", _("検索"), cgiScriptName, g_project_name_4_url);
     o(      "\t\t<input type=\"text\" name=\"q\" />\n"
             "\t\t<input type=\"submit\" value=\"%s\" />\n"
-            "\t</form>\n", _("Search"));
+            "\t</form>\n", _("検索"));
 
     o(      "</div>\n");
     o(      "<div id=\"dashboard\">\n"
-            "\t<h2>%s</h2>\n", _("Description"));
-    o(      "<a href=\"%s/%s/top_edit_top\">%s</a>\n", cgiScriptName, g_project_name_4_url, _("Edit This Page"));
+            "\t<h2>%s</h2>\n", _("説明"));
+    o(      "<a href=\"%s/%s/top_edit_top\">%s</a>\n", cgiScriptName, g_project_name_4_url, _("トップページの編集"));
     wiki_out(db_a, "top");
     d("pass wiki_out end\n");
     o(      "</div>\n");
@@ -148,19 +148,19 @@ void top_edit_top_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_a = db_get_project(db_a, project_a);
-    top_output_header(_("Edit Page"), project_a);
+    top_output_header(_("ページの編集"), project_a);
     project_free(project_a);
     o(      "<h2>%s</h2>\n"
             "<div id=\"top\">\n"
             "<h3>%s</h3>\n"
             "<div id=\"description\">%s</div>\n",
-            _("Edit Page"), _("Edit Page"), _("Please edit by simple wiki syntax, press update button."));
+            _("ページの編集"), _("ページの編集"), _("簡易wikiの文法でページのコンテンツの編集を行ない、更新ボタンを押してください。"));
     o(      "<form id=\"edit_top_form\" action=\"%s/%s/top_edit_top_submit\" method=\"post\">\n", cgiScriptName, g_project_name_4_url);
     o(      "<textarea name=\"edit_top\" id=\"edit_top\" rows=\"3\" cols=\"10\">");
     wiki_content_out(db_a, "top");
     o(      "</textarea>\n"
             "<div>&nbsp;</div>\n"
-            "<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("Update"));
+            "<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("更新"));
     o(      "</form>");
     print_wiki_help();
     db_finish(db_a);
@@ -196,10 +196,10 @@ void top_search_action()
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     tickets_a = db_top_search(db_a, q, tickets_a);
     top_project_a = db_get_project(db_a, top_project_a);
-    top_output_header(_("Top Page"), top_project_a);
+    top_output_header(_("トップページ"), top_project_a);
     o(      "<div id=\"project_list\">\n"
             "\t<h2>%s</h2>\n"
-            "\t<ul>\n", _("Serach Result"));
+            "\t<ul>\n", _("検索結果"));
     foreach (it, tickets_a) {
         Ticket* t = it->element;
         o(      "\t\t\t\t<li><a href=\"%s/%s/ticket/%d", cgiScriptName, string_rawstr(t->project_name), t->id);

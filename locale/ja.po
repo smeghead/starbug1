@@ -1,71 +1,965 @@
-#: index_top.c:56
-msgid "Project Top"
-msgstr "ぷろじぇくととっぷ"
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: smeghead@sourceforge.jp\n"
+"POT-Creation-Date: 2009-07-05 22:12+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: smeghead <smeghead@sourceforge.jp>\n"
+"Language-Team: smeghead <smeghead@sourceforge.jp>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 
-#: index_top.c:57
-msgid "Project Management"
+#: admin_project.c:70 admin_project.c:144 admin_project.c:180
+#: admin_project.c:283 admin_project.c:666 admin_project.c:880
+#: admin_project.c:931
+msgid "管理ツール"
 msgstr ""
 
-#: index_top.c:100
-msgid "Top Page"
+#: admin_project.c:85 index_project.c:131
+msgid "トップページのサブプロジェクト一覧を表示します"
 msgstr ""
 
-#: index_top.c:103
-msgid "Sub Project List"
+#: admin_project.c:86
+msgid "トップページ（サブプロジェクト一覧)"
 msgstr ""
 
-#: index_top.c:127 index_top.c:130
-msgid "Search"
+#: admin_project.c:91 admin_project.c:147
+msgid "管理ツールメニュー"
 msgstr ""
 
+#: admin_project.c:92 admin_project.c:178 admin_project.c:183
+msgid "サブプロジェクト設定"
+msgstr ""
+
+#: admin_project.c:93 admin_project.c:151 admin_project.c:281
+#: admin_project.c:291
+msgid "項目設定"
+msgstr ""
+
+#: admin_project.c:94 admin_project.c:152 admin_project.c:930
+msgid "スタイル設定"
+msgstr ""
+
+#: admin_project.c:95 index_project.c:143
+msgid "ヘルプ"
+msgstr ""
+
+#: admin_project.c:96
+msgid "へ"
+msgstr ""
+
+#: admin_project.c:138
+msgid "メニュー"
+msgstr ""
+
+#: admin_project.c:150
+msgid "プロジェクト設定"
+msgstr ""
+
+#: admin_project.c:150
+msgid "プロジェクトの基本的な情報の設定です。"
+msgstr ""
+
+#: admin_project.c:151
+msgid "チケットの項目についての設定です。"
+msgstr ""
+
+#: admin_project.c:152
+msgid "スタイルシートの設定です。"
+msgstr ""
+
+#: admin_project.c:155
+msgid "メール送信機能について"
+msgstr ""
+
+#: admin_project.c:157
+msgid ""
+"投稿時、返信時のメール送信は、hook機能により実現可能です。hook機能はサーバ上"
+"での設定が必要になります。hook機能の設定方法については、以下のサイトのインス"
+"トールのページを見てください。"
+msgstr ""
+
+#: admin_project.c:186 admin_top.c:151
+msgid "サブプロジェクト名"
+msgstr ""
+
+#: admin_project.c:190
+msgid "画像(ページの一番上に表示される画像です)"
+msgstr ""
+
+#: admin_project.c:194
+msgid "ファイルアップロードの最大サイズ(Kb)"
+msgstr ""
+
+#: admin_project.c:198 admin_project.c:304 admin_project.c:514
+#: admin_project.c:948 admin_top.c:137 index_project.c:2330 index_top.c:163
+msgid "更新"
+msgstr ""
+
+#: admin_project.c:266 admin_project.c:536
+msgid "更新しました"
+msgstr ""
+
+#: admin_project.c:292
+msgid ""
+"チケットID、投稿日時は編集できません。件名、投稿者、状態は、基本属性のため編"
+"集できる内容に制限があります。(削除不可、チケット属性、返信専用属性変更不可)"
+msgstr ""
+
+#: admin_project.c:318 admin_project.c:677
+msgid "項目名"
+msgstr ""
+
+#: admin_project.c:321 admin_project.c:680
+msgid "項目名です。"
+msgstr ""
+
+#: admin_project.c:327 admin_project.c:685
+msgid "項目の説明文"
+msgstr ""
+
+#: admin_project.c:334 admin_project.c:688
+msgid "項目の説明文です。投稿時に表示されます。"
+msgstr ""
+
+#: admin_project.c:334
+msgid "必須項目"
+msgstr ""
+
+#: admin_project.c:337
+msgid "必須項目とする。"
+msgstr ""
+
+#: admin_project.c:345
+msgid ""
+"入力しないと投稿できない属性とするかどうかです。ただし、チェックはJavaScript"
+"で行なうのみです。"
+msgstr ""
+
+#: admin_project.c:346 admin_project.c:692
+msgid "チケット属性"
+msgstr ""
+
+#: admin_project.c:348 admin_project.c:696
+msgid "チケット属性とする。"
+msgstr ""
+
+#: admin_project.c:354 admin_project.c:698
+msgid "返信の属性としてではなくチケット自体の属性として定義するかどうかです。"
+msgstr ""
+
+#: admin_project.c:355 admin_project.c:699
+msgid ""
+"返信時にチケット属性を指定した項目を書き換えた場合、書き換えた内容がチケット"
+"最新情報に表示されるようになります。"
+msgstr ""
+
+#: admin_project.c:356 admin_project.c:700
+msgid ""
+"チケット属性を指定していない項目は、チケット最新情報に表示されません。チケッ"
+"ト属性を指定していない項目はチケット履歴から参照することになります。"
+msgstr ""
+
+#: admin_project.c:360 admin_project.c:705
+msgid "返信専用属性"
+msgstr ""
+
+#: admin_project.c:364 admin_project.c:709
+msgid "返信専用属性とする。"
+msgstr ""
+
+#: admin_project.c:369 admin_project.c:711
+msgid ""
+"新規の登録時には、入力項目としないかどうかです。チェックした場合、新規の登録"
+"時には、入力項目になりません。"
+msgstr ""
+
+#: admin_project.c:370 admin_project.c:712
+msgid ""
+"返信の時のみ入力できる項目となります。チケットの対応時期などの返信する人でな"
+"ければわからない項目は、返信専用属性とすることで、新規登録時の不要な入力の手"
+"間を減らすことができます。"
+msgstr ""
+
+#: admin_project.c:374 admin_project.c:717
+msgid "項目種別"
+msgstr ""
+
+#: admin_project.c:379 admin_project.c:721
+msgid "1行テキスト(input[type=text])"
+msgstr ""
+
+#: admin_project.c:382 admin_project.c:725
+msgid "複数行テキスト(textarea)"
+msgstr ""
+
+#: admin_project.c:385 admin_project.c:729
+msgid "真偽値(input[type=checkbox])"
+msgstr ""
+
+#: admin_project.c:388 admin_project.c:733
+msgid "選択リスト(select)"
+msgstr ""
+
+#: admin_project.c:391 admin_project.c:737
+msgid "複数選択可能リスト(select[multiple=multiple])"
+msgstr ""
+
+#: admin_project.c:394 admin_project.c:741
+msgid "ファイル(input[type=file])"
+msgstr ""
+
+#: admin_project.c:397 admin_project.c:745
+msgid "日付(input[type=text])"
+msgstr ""
+
+#: admin_project.c:414 admin_project.c:750
+msgid "選択要素"
+msgstr ""
+
+#: admin_project.c:414 admin_project.c:754
+msgid "選択肢名"
+msgstr ""
+
+#: admin_project.c:414 admin_project.c:755
+msgid "クローズを意味する"
+msgstr ""
+
+#: admin_project.c:414 admin_project.c:484 admin_project.c:756
+#: admin_project.c:788 admin_top.c:151 admin_top.c:190
+msgid "並び順"
+msgstr ""
+
+#: admin_project.c:414 admin_project.c:893 admin_top.c:151
+msgid "削除"
+msgstr ""
+
+#: admin_project.c:448
+msgid "行追加"
+msgstr ""
+
+#: admin_project.c:454 admin_project.c:772
+msgid "項目種別が選択式の場合の選択肢です。"
+msgstr ""
+
+#: admin_project.c:457 admin_project.c:775
+msgid "投稿時に、新規項目を指定可能とする。"
+msgstr ""
+
+#: admin_project.c:460 admin_project.c:776
+msgid ""
+"投稿時にテキストボックスを表示し、テキストボックスに入力された場合は、その項"
+"目を選択肢に追加する機能を付加するかどうかです。"
+msgstr ""
+
+#: admin_project.c:465
+msgid "デフォルト値"
+msgstr ""
+
+#: admin_project.c:471
+msgid "投稿画面、返信画面での項目の初期値です。"
+msgstr ""
+
+#: admin_project.c:475 admin_project.c:780
+msgid "チケット一覧表示"
+msgstr ""
+
+#: admin_project.c:479
+msgid "項目をチケット一覧に表示する。"
+msgstr ""
+
+#: admin_project.c:480 admin_project.c:784
+msgid "項目をチケット一覧で表示するかどうかです。"
+msgstr ""
+
+#: admin_project.c:490 admin_project.c:791
+msgid "チケット一覧、投稿画面、返信画面での項目の並び順です。"
+msgstr ""
+
+#: admin_project.c:511
+msgid "この項目("
+msgstr ""
+
+#: admin_project.c:511 admin_project.c:883
+msgid ")の削除"
+msgstr ""
+
+#: admin_project.c:664
+msgid "新規項目登録"
+msgstr ""
+
+#: admin_project.c:673
+msgid "項目の追加"
+msgstr ""
+
+#: admin_project.c:674
+msgid ""
+"チケットに新しい項目を追加します。追加する項目についての情報を入力し、追加ボ"
+"タンを押してください。"
+msgstr ""
+
+#: admin_project.c:746
+msgid ""
+"項目を入力する時の入力形式です。項目種別は、追加後に変更することができませ"
+"ん。"
+msgstr ""
+
+#: admin_project.c:795 admin_top.c:197
+msgid "追加"
+msgstr ""
+
+#: admin_project.c:860
+msgid "追加しました"
+msgstr ""
+
+#: admin_project.c:877
+msgid "項目削除"
+msgstr ""
+
+#: admin_project.c:883
+msgid "項目("
+msgstr ""
+
+#: admin_project.c:890
+msgid "削除すると元には戻せません。"
+msgstr ""
+
+#: admin_project.c:891
+msgid "登録されているチケットの項目についても参照できなくなります。"
+msgstr ""
+
+#: admin_project.c:892
+msgid "削除してよければ、削除ボタンを押してください。"
+msgstr ""
+
+#: admin_project.c:909
+msgid "不正なリクエストです。"
+msgstr ""
+
+#: admin_project.c:919
+msgid "削除しました"
+msgstr ""
+
+#: admin_project.c:935
+msgid "スタイルシートの編集"
+msgstr ""
+
+#: admin_project.c:935
+msgid "スタイルシートの編集を行ない、更新ボタンを押してください。"
+msgstr ""
+
+#: admin_project.c:952
+msgid "以下は、一覧の背景設定用のサンプルです。"
+msgstr ""
+
+#: admin_project.c:964
+msgid "チケット一覧の"
+msgstr ""
+
+#: admin_project.c:964
+msgid "の背景色設定"
+msgstr ""
+
+#: admin_project.c:1000 admin_top.c:307
+msgid "更新しました。"
+msgstr ""
+
+#: admin_top.c:53 admin_top.c:58 admin_top.c:102
+msgid "プロジェクトの管理"
+msgstr ""
+
+#: admin_top.c:57 index_project.c:2060 index_top.c:55
+msgid "プロジェクトトップ"
+msgstr ""
+
+#: admin_top.c:121
+msgid "プロジェクト情報の設定"
+msgstr ""
+
+#: admin_top.c:126
+msgid "プロジェクト名"
+msgstr ""
+
+#: admin_top.c:129
+msgid "ホームリンク名"
+msgstr ""
+
+#: admin_top.c:133
+msgid "ホームリンク先"
+msgstr ""
+
+#: admin_top.c:142 index_top.c:102
+msgid "サブプロジェクト一覧"
+msgstr ""
+
+#: admin_top.c:151
+msgid "データベースパス"
+msgstr ""
+
+#: admin_top.c:151 admin_top.c:190
+msgid "サブプロジェクトID"
+msgstr ""
+
+#: admin_top.c:177 admin_top.c:196
+msgid ""
+"サブプロジェクト名は各サブプロジェクトの管理ツールから設定してください。"
+msgstr ""
+
+#: admin_top.c:178
+msgid ""
+"既存のサブプロジェクトIDを変更すると、サブプロジェクトのURLが変わってしまうの"
+"で注意してください。"
+msgstr ""
+
+#: admin_top.c:179
+msgid ""
+"削除すると、トップページの一覧から表示されなくなります。データは消去されませ"
+"ん。再度削除チェックボックスのチェックを外すことで、再び参照することができる"
+"ようになります。"
+msgstr ""
+
+#: admin_top.c:184
+msgid "サブプロジェクトの追加"
+msgstr ""
+
+#: admin_top.c:227
+msgid "修正しました。"
+msgstr ""
+
+#: admin_top.c:279 admin_top.c:325
+msgid "[ERROR] プロジェクトID topは予約されています。"
+msgstr ""
+
+#: admin_top.c:286 admin_top.c:332
+msgid "[ERROR] プロジェクトID"
+msgstr ""
+
+#: admin_top.c:286 admin_top.c:332
+msgid "は既に存在しています。"
+msgstr ""
+
+#: admin_top.c:344
+msgid "追加しました。"
+msgstr ""
+
+#: index_project.c:127
+msgid "Starbug1"
+msgstr ""
+
+#: index_project.c:131
+msgid "トップページ(サブプロジェクト一覧)"
+msgstr ""
+
+#: index_project.c:137
+msgid "サブプロジェクトトップへ移動します"
+msgstr ""
+
+#: index_project.c:137
+msgid "サブプロジェクトトップ"
+msgstr ""
+
+#: index_project.c:138
+msgid "状態別のチケット一覧を参照します"
+msgstr ""
+
+#: index_project.c:138 index_project.c:409 index_project.c:429
+#: index_project.c:438
+msgid "状態別チケット一覧"
+msgstr ""
+
+#: index_project.c:139
+msgid "新規にチケットを登録します"
+msgstr ""
+
+#: index_project.c:139 index_project.c:1247 index_project.c:1249
+#: index_project.c:1257
+msgid "チケット登録"
+msgstr ""
+
+#: index_project.c:140
+msgid "チケットを検索します"
+msgstr ""
+
+#: index_project.c:140 index_project.c:717 index_project.c:719
+msgid "チケット検索"
+msgstr ""
+
+#: index_project.c:141
+msgid "統計情報を表示します"
+msgstr ""
+
+#: index_project.c:141 index_project.c:2219 index_project.c:2228
+msgid "統計情報"
+msgstr ""
+
+#: index_project.c:142
+msgid "複数新規にチケットを登録します"
+msgstr ""
+
+#: index_project.c:142 index_project.c:1741 index_project.c:1743
+#: index_project.c:1759
+msgid "チケット一括登録"
+msgstr ""
+
+#: index_project.c:143
+msgid "ヘルプを参照します"
+msgstr ""
+
+#: index_project.c:144
+msgid "各種設定を行ないます"
+msgstr ""
+
+#: index_project.c:144
+msgid "サブプロジェクトの管理"
+msgstr ""
+
+#: index_project.c:277 index_project.c:296 index_project.c:740
+#: index_project.c:844 index_project.c:886
+msgid "投稿日時"
+msgstr ""
+
+#: index_project.c:277 index_project.c:297 index_project.c:845
+#: index_project.c:888
+msgid "最終更新日時"
+msgstr ""
+
+#: index_project.c:277 index_project.c:298 index_project.c:846
+#: index_project.c:890
+msgid "放置日数"
+msgstr ""
+
+#: index_project.c:287 index_project.c:291 index_project.c:296
+#: index_project.c:297 index_project.c:298
+msgid "押す度に昇順、降順で並べ替えを行ないます。"
+msgstr ""
+
+#: index_project.c:370
+msgid "状態を条件にして検索を行ないます。"
+msgstr ""
+
+#: index_project.c:378 index_project.c:2113
+msgid "入力したIDのチケットを表示します。"
+msgstr ""
+
+#: index_project.c:381
+msgid "ID指定で表示"
+msgstr ""
+
+#: index_project.c:384 index_project.c:2123
+msgid "新しいチケットを登録する"
+msgstr ""
+
+#: index_project.c:438
+msgid "未クローズの状態毎にチケットを表示しています。"
+msgstr ""
+
+#: index_project.c:443
+msgid "ページ内へのリンク"
+msgstr ""
+
+#: index_project.c:462
+msgid "新しい"
+msgstr ""
+
+#: index_project.c:463
+msgid "件のみを表示しています。"
+msgstr ""
+
+#: index_project.c:468 index_project.c:477
+msgid "状態が"
+msgstr ""
+
+#: index_project.c:468 index_project.c:477
+msgid "である全てのチケットを表示する"
+msgstr ""
+
+#: index_project.c:472
+msgid "続きがあります。"
+msgstr ""
+
+#: index_project.c:728
+msgid "検索条件"
+msgstr ""
+
+#: index_project.c:728
+msgid "検索条件を入力して検索ボタンを押してください。"
+msgstr ""
+
+#: index_project.c:734
+msgid "キーワード検索"
+msgstr ""
+
+#: index_project.c:740
+msgid "履歴も含めて全ての項目から検索を行ないます。"
+msgstr ""
+
+#: index_project.c:751 index_project.c:759 index_project.c:1187
+msgid "yyyy-mm-dd形式で入力してください。"
+msgstr ""
+
+#: index_project.c:751
+msgid "更新日時"
+msgstr ""
+
+#: index_project.c:790 index_top.c:126 index_top.c:129
+msgid "検索"
+msgstr ""
+
+#: index_project.c:791
+msgid "検索条件を保存する。(cookie使用)"
+msgstr ""
+
+#: index_project.c:797 index_top.c:202
+msgid "検索結果"
+msgstr ""
+
+#: index_project.c:805
+msgid "件ヒットしました。"
+msgstr ""
+
+#: index_project.c:816
+msgid "検索結果をCSV形式でダウンロードする。"
+msgstr ""
+
+#: index_project.c:820
+msgid "検索結果をHTMLでダウンロードする。(excelで表示する)"
+msgstr ""
+
+#: index_project.c:1178
+msgid "ファイルサイズは、"
+msgstr ""
+
+#: index_project.c:1178
+msgid "Kb以下になるようにしてください。"
+msgstr ""
+
+#: index_project.c:1197
+msgid "選択肢を追加する場合はテキストボックスに入力してください。\n"
+msgstr ""
+
+#: index_project.c:1257
+msgid ""
+"新規チケットを登録する場合は、以下のフォームを記入し登録ボタンを押してくださ"
+"い。"
+msgstr ""
+
+#: index_project.c:1257 index_project.c:1500 index_project.c:1821
+msgid "※必須項目の入力チェックは、javascriptで行なっています。"
+msgstr ""
+
+#: index_project.c:1284 index_project.c:1534
+msgid "※"
+msgstr ""
+
+#: index_project.c:1306 index_project.c:1899
+msgid "登録"
+msgstr ""
+
+#: index_project.c:1306 index_project.c:1551 index_project.c:1899
+msgid "投稿者を保存する。(cookie使用)"
+msgstr ""
+
+#: index_project.c:1333 index_project.c:1340
+msgid "存在しないIDが指定されました。"
+msgstr ""
+
+#: index_project.c:1365
+msgid "チケット最新情報"
+msgstr ""
+
+#: index_project.c:1365
+msgid ""
+"チケットの最新情報です。最新チケットのチケット属性の付いている項目と全添付"
+"ファイルを表示しています。"
+msgstr ""
+
+#: index_project.c:1400
+msgid "全添付ファイル"
+msgstr ""
+
+#: index_project.c:1428
+msgid "返信する"
+msgstr ""
+
+#: index_project.c:1428
+msgid "チケット履歴"
+msgstr ""
+
+#: index_project.c:1428
+msgid "チケットの履歴情報です。"
+msgstr ""
+
+#: index_project.c:1497
+msgid "チケット返信"
+msgstr ""
+
+#: index_project.c:1500
+msgid ""
+"返信を行なう場合は、以下のフォームに内容を記入して返信ボタンを押してくださ"
+"い。"
+msgstr ""
+
+#: index_project.c:1503
+msgid "チケット情報の更新"
+msgstr ""
+
+#: index_project.c:1503
+msgid ""
+"チケット情報(チケットの状態など)を更新する必要がある場合は、以下の情報を変更"
+"してください。"
+msgstr ""
+
+#: index_project.c:1526
+msgid "返信情報の追加"
+msgstr ""
+
+#: index_project.c:1526
+msgid "返信情報を記入してください。"
+msgstr ""
+
+#: index_project.c:1551
+msgid "返信"
+msgstr ""
+
+#: index_project.c:1698
+msgid "登録しました。"
+msgstr ""
+
+#: index_project.c:1700
+msgid "返信しました。"
+msgstr ""
+
+#: index_project.c:1717
+msgid "エラー"
+msgstr ""
+
+#: index_project.c:1720
+msgid "エラー発生"
+msgstr ""
+
+#: index_project.c:1721
+msgid "ファイルサイズが大きすぎます。"
+msgstr ""
+
+#: index_project.c:1723
+msgid ""
+"kbより大きいファイルは登録できません。ブラウザの戻るボタンで戻ってください。"
+msgstr ""
+
+#: index_project.c:1760
+msgid ""
+"新規チケットを一括登録する場合は、以下のフォームにチケット情報をCSV形式で記入"
+"し解析ボタンを押してください。登録の手順の詳細は以下のとおりです。"
+msgstr ""
+
+#: index_project.c:1761
+msgid ""
+"チケット一括登録ページ(このページ)で、登録したい複数のチケットの情報をCSV形式"
+"で貼り付けて、解析ボタンを押す。"
+msgstr ""
+
+#: index_project.c:1762
+msgid ""
+"チケット一括登録確認ページで、解析結果が表示されるので、各フィールドに対応す"
+"る項目を選択し、登録ボタンを押す。"
+msgstr ""
+
+#: index_project.c:1763
+msgid "登録完了。"
+msgstr ""
+
+#: index_project.c:1778
+msgid ""
+"登録したいデータをCSV形式で貼り付けてください。次の画面で取り込むフィールドを"
+"設定可能です。"
+msgstr ""
+
+#: index_project.c:1782
+msgid "解析"
+msgstr ""
+
+#: index_project.c:1808 index_project.c:1810 index_project.c:1819
+msgid "チケット一括登録確認"
+msgstr ""
+
+#: index_project.c:1820
+msgid ""
+"各桁の登録対象コンボボックスの選択値を、その桁のデータの登録対象となる項目を"
+"選択して、登録ボタンを押してください。"
+msgstr ""
+
+#: index_project.c:1856
+msgid "登録<br />対象"
+msgstr ""
+
+#: index_project.c:1860
+msgid "無視"
+msgstr ""
+
+#: index_project.c:1906
+msgid ""
+"登録対象コンボボックスの選択値を、「無視」のまま登録すると、登録対象から省か"
+"れます。"
+msgstr ""
+
+#: index_project.c:1907
+msgid ""
+"登録する各値は、入力チェックが行なわれませんので、登録前に確認してください。"
+msgstr ""
+
+#: index_project.c:2037
+msgid "件登録しました。"
+msgstr ""
+
+#: index_project.c:2040
+msgid ""
+"登録されたチケットはありませんでした。戻るボタンで戻って確認してください。"
+msgstr ""
+
+#: index_project.c:2067
+msgid "最新情報"
+msgstr ""
+
+#: index_project.c:2084
+msgid "最新情報がありません。"
+msgstr ""
+
+#: index_project.c:2092
+msgid "状態別件数"
+msgstr ""
+
+#: index_project.c:2104
+msgid "チケット情報がありません。"
+msgstr ""
+
+#: index_project.c:2112
+msgid "ID検索"
+msgstr ""
+
+#: index_project.c:2119
+msgid "表示"
+msgstr ""
+
+#: index_project.c:2124 index_top.c:151 index_top.c:157
+msgid "ページの編集"
+msgstr ""
+
+#: index_project.c:2177
+msgid "投稿者"
+msgstr ""
+
+#: index_project.c:2180
+msgid "投稿日"
+msgstr ""
+
+#: index_project.c:2228
+msgid "統計情報を表示します。"
+msgstr ""
+
+#: index_project.c:2253
+msgid ""
+"JavaScriptでグラフを表示しています。JavaScriptが有効なブラウザで見てくださ"
+"い。"
+msgstr ""
+
+#: index_project.c:2314 index_project.c:2321 index_project.c:2322
 #: index_top.c:134
-msgid "Description"
+msgid "トップページの編集"
 msgstr ""
 
-#: index_top.c:135
-msgid "Edit This Page"
+#: index_project.c:2323
+msgid ""
+"簡易wikiの文法でトップページのコンテンツの編集を行ない、更新ボタンを押してく"
+"ださい。"
 msgstr ""
 
-#: index_top.c:152 index_top.c:158
-msgid "Edit Page"
+#: index_project.c:2376 index_project.c:2403
+msgid "error: ファイルがありません。"
 msgstr ""
 
-#: index_top.c:158
-msgid "Please edit by simple wiki syntax, press update button."
+#: index_top.c:56
+msgid "プロジェクト管理"
 msgstr ""
 
-#: index_top.c:164
-msgid "Update"
+#: index_top.c:99 index_top.c:199
+msgid "トップページ"
 msgstr ""
 
-#: index_top.c:176
+#: index_top.c:133
+msgid "説明"
+msgstr ""
+
+#: index_top.c:157
+msgid ""
+"簡易wikiの文法でページのコンテンツの編集を行ない、更新ボタンを押してくださ"
+"い。"
+msgstr ""
+
+#: util.c:692
+msgid ""
+"複数行テキスト項目の内容では、#1 のように書くと、ID が 1 のチケットのチケット"
+"詳細ページへのリンクとなります。"
+msgstr ""
+
+#: util.c:693
+msgid ""
+"複数行テキスト項目の内容では、#bts:1 のように書くと、プロジェクトIDがbtsであ"
+"るプロジェクトの、ID が 1 のチケットのチケット詳細ページへのリンクとなりま"
+"す。"
+msgstr ""
+
+#: util.c:694
+msgid ""
+"複数行テキスト項目の内容では、行頭が &gt;| から始まる行から、行頭が |&lt; か"
+"ら始まる行までは、整形済みブロックになります。"
+msgstr ""
+
+#: wiki.c:191
 msgid "Simple wiki syntax"
 msgstr ""
 
-#: index_top.c:177
+#: wiki.c:192
 msgid "A line starts by * become big headline."
 msgstr ""
 
-#: index_top.c:178
+#: wiki.c:193
 msgid "A line starts by ** become medium headline."
 msgstr ""
 
-#: index_top.c:179
+#: wiki.c:194
 msgid "A line starts by *** become small headline."
 msgstr ""
 
-#: index_top.c:180
+#: wiki.c:195
 msgid "A line starts by **** become super small headline."
 msgstr ""
 
-#: index_top.c:181
+#: wiki.c:196
 msgid "A line starts by - become item."
 msgstr ""
 
-#: index_top.c:182
+#: wiki.c:197
 msgid "A line starts by ---- become delimitation."
 msgstr ""
 
-#: index_top.c:183
+#: wiki.c:198
 msgid "From line starts by &gt;| to line starts by |&lt;, become block."
 msgstr ""
+
+#: wiki.c:205
+msgid "example"
+msgstr ""
+
+#: wiki.c:205
+msgid ""
+"*sample\n"
+"-edit this.\n"
+msgstr ""
+
+#~ msgid "Project Top"
+#~ msgstr "ぷろじぇくととっぷ"
+
+#, fuzzy
+#~ msgid "project name"
+#~ msgstr "ぷろじぇくととっぷ"

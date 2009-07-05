@@ -50,12 +50,12 @@ void top_output_header(char* title, Project* project)
     o(      "</head>\n"
             "<body>\n"
             "<a name=\"top\"></a>\n"
-            "<h1 id=\"toptitle\" title=\"Starbug1\">"); h(string_rawstr(project->name)); o(" プロジェクトの管理</h1>\n");
+            "<h1 id=\"toptitle\" title=\"Starbug1\">"); h(string_rawstr(project->name)); o(" %s</h1>\n", _("プロジェクトの管理"));
 /*             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/../img/starbug1.jpg\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName); */
     o(      "<div id=\"projectmenu\">\n"
             "\t<ul>\n");
-    o(      "\t\t<li><a href=\"%s/../index.%s/%s/\">プロジェクトトップ</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
-    o(      "\t\t<li><a href=\"%s/../admin.%s/%s/\">プロジェクトの管理</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
+    o(      "\t\t<li><a href=\"%s/../index.%s/%s/\">%s</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url, _("プロジェクトトップ"));
+    o(      "\t\t<li><a href=\"%s/../admin.%s/%s/\">%s</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url, _("プロジェクトの管理"));
     o(      "\t</ul>\n"
             "</div>\n");
 }
@@ -99,7 +99,7 @@ void top_top_action()
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_infos_a = db_top_get_all_project_infos(db_a, project_infos_a);
     project_a = db_get_project(db_a, project_a);
-    top_output_header("プロジェクトの管理", project_a);
+    top_output_header(_("プロジェクトの管理"), project_a);
     /* メッセージの取得 */
     if ((cgiFormStringMultiple("message", &multi)) != cgiFormNotFound) {
         int i = 0;
@@ -118,37 +118,37 @@ void top_top_action()
     }
     cgiStringArrayFree(multi);
     o(      "<div id=\"project_info\">\n"
-            "\t<h2>プロジェクト情報の設定</h2>\n");
+            "\t<h2>%s</h2>\n", _("プロジェクト情報の設定"));
     o(      "\t<form action=\"%s/top/top_update_project_info_submit\" method=\"post\">\n", cgiScriptName);
     o(      "\t\t<table>\n"
             "\t\t\t<tr>\n"
-            "\t\t\t\t<th>プロジェクト名</th>\n"
-            "\t\t\t\t<td><input type=\"text\" name=\"project.name\" value=\""); v(string_rawstr(project_a->name)); o("\" maxlength=\"1000\" /></td>\n"
+            "\t\t\t\t<th>%s</th>\n"
+            "\t\t\t\t<td><input type=\"text\" name=\"project.name\" value=\"", _("プロジェクト名")); v(string_rawstr(project_a->name)); o("\" maxlength=\"1000\" /></td>\n"
             "\t\t\t</tr>\n"
             "\t\t\t<tr>\n"
-            "\t\t\t\t<th>ホームリンク名</th>\n"
-            "\t\t\t\t<td><input type=\"text\" name=\"project.home_description\" value=\""); v(string_rawstr(project_a->home_description)); o("\" maxlength=\"1000\" /></td>\n"
+            "\t\t\t\t<th>%s</th>\n", _("ホームリンク名"));
+    o(      "\t\t\t\t<td><input type=\"text\" name=\"project.home_description\" value=\""); v(string_rawstr(project_a->home_description)); o("\" maxlength=\"1000\" /></td>\n"
             "\t\t\t</tr>\n"
             "\t\t\t<tr>\n"
-            "\t\t\t\t<th>ホームリンク先</th>\n"
-            "\t\t\t\t<td><input type=\"text\" name=\"project.home_url\" value=\""); v(string_rawstr(project_a->home_url)); o("\" maxlength=\"1000\" /></td>\n"
+            "\t\t\t\t<th>%s</th>\n", _("ホームリンク先"));
+    o(      "\t\t\t\t<td><input type=\"text\" name=\"project.home_url\" value=\""); v(string_rawstr(project_a->home_url)); o("\" maxlength=\"1000\" /></td>\n"
             "\t\t\t</tr>\n");
     o(      "\t\t</table>\n");
-    o(      "\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
+    o(      "\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("更新"));
     o(      "\t</form>\n");
     o(      "</div>\n");
     project_free(project_a);
     o(      "<div id=\"project_list\">\n"
-            "\t<h2>サブプロジェクト一覧</h2>\n");
+            "\t<h2>%s</h2>\n", _("サブプロジェクト一覧"));
     o(      "\t<form action=\"%s/top/top_update_project_submit\" method=\"post\">\n", cgiScriptName);
     o(      "\t\t<table>\n"
             "\t\t\t<tr>\n"
-            "\t\t\t\t<th>サブプロジェクト名</th>\n"
-            "\t\t\t\t<th>データベースパス</th>\n"
-            "\t\t\t\t<th>サブプロジェクトID</th>\n"
-            "\t\t\t\t<th>並び順</th>\n"
-            "\t\t\t\t<th>削除</th>\n"
-            "\t\t\t</tr>\n");
+            "\t\t\t\t<th>%s</th>\n"
+            "\t\t\t\t<th>%s</th>\n"
+            "\t\t\t\t<th>%s</th>\n"
+            "\t\t\t\t<th>%s</th>\n"
+            "\t\t\t\t<th>%s</th>\n"
+            "\t\t\t</tr>\n", _("サブプロジェクト名"), _("データベースパス"), _("サブプロジェクトID"), _("並び順"), _("削除"));
     foreach (it, project_infos_a) {
         ProjectInfo* p = it->element;
         Database* db_project_a;
@@ -174,27 +174,27 @@ void top_top_action()
     }
     list_free(project_infos_a);
     o(      "\t\t</table>\n");
-    o(      "\t\t<p>サブプロジェクト名は各サブプロジェクトの管理ツールから設定してください。</p>\n");
-    o(      "\t\t<p>既存のサブプロジェクトIDを変更すると、サブプロジェクトのURLが変わってしまうので注意してください。</p>\n");
-    o(      "\t\t<p>削除すると、トップページの一覧から表示されなくなります。データは消去されません。再度削除チェックボックスのチェックを外すことで、再び参照することができるようになります。</p>\n");
+    o(      "\t\t<p>%s</p>\n", _("サブプロジェクト名は各サブプロジェクトの管理ツールから設定してください。"));
+    o(      "\t\t<p>%s</p>\n", _("既存のサブプロジェクトIDを変更すると、サブプロジェクトのURLが変わってしまうので注意してください。"));
+    o(      "\t\t<p>%s</p>\n", _("削除すると、トップページの一覧から表示されなくなります。データは消去されません。再度削除チェックボックスのチェックを外すことで、再び参照することができるようになります。"));
     o(      "\t\t<input class=\"button\" type=\"submit\" value=\"更新\" />\n");
     o(      "\t</form>\n");
     o(      "\t</div>\n");
     o(      "\t<div id=\"project_add\">\n"
-            "\t\t<h2>サブプロジェクトの追加</h2>\n");
+            "\t\t<h2>%s</h2>\n", _("サブプロジェクトの追加"));
     o(      "\t\t<form action=\"%s/top/top_add_project_submit\" method=\"post\">\n", cgiScriptName);
     o(      "\t\t\t<table>\n"
             "\t\t\t\t<tr>\n"
-            "\t\t\t\t\t<th>サブプロジェクトID</th>\n"
-            "\t\t\t\t\t<th>並び順</th>\n"
-            "\t\t\t\t</tr>\n"
-            "\t\t\t\t<tr>\n"
+            "\t\t\t\t\t<th>%s</th>\n"
+            "\t\t\t\t\t<th>%s</th>\n"
+            "\t\t\t\t</tr>\n", _("サブプロジェクトID"), _("並び順"));
+    o(      "\t\t\t\t<tr>\n"
             "\t\t\t\t\t<td><input type=\"text\" name=\"project_new.name\" class=\"project_id\" value=\"\" /></td>\n"
             "\t\t\t\t\t<td><input type=\"text\" name=\"project_new.sort\" class=\"number\" value=\"\" /></td>\n");
     o(      "\t\t\t\t</tr>\n");
     o(      "\t\t\t</table>\n");
-    o(      "\t\t\t<p>サブプロジェクト名は各サブプロジェクトの管理ツールから設定してください。</p>\n");
-    o(      "\t\t\t<input class=\"button\" type=\"submit\" value=\"追加\" />\n");
+    o(      "\t\t\t<p>%s</p>\n", _("サブプロジェクト名は各サブプロジェクトの管理ツールから設定してください。"));
+    o(      "\t\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("追加"));
     o(      "\t\t</form>\n");
     o(      "\t</div>\n");
     top_output_footer();
@@ -224,7 +224,7 @@ void top_update_project_info_submit_action()
     }
     db_finish(db_a);
 
-    redirect("", "修正しました。");
+    redirect("", _("修正しました。"));
 }
 static bool validate_project_id_exists(Database* db, char* name, int id)
 {
@@ -276,14 +276,14 @@ void top_update_project_submit_action()
             if (!validate_project_id(name)) {
                 list_free(project_infos_a);
                 db_finish(db_a);
-                redirect("", "[ERROR] プロジェクトID topは予約されています。");
+                redirect("", _("[ERROR] プロジェクトID topは予約されています。"));
                 return;
             }
             if (!validate_project_id_exists(db_a, name, p->id)) {
                 char message[DEFAULT_LENGTH];
                 list_free(project_infos_a);
                 db_finish(db_a);
-                sprintf(message, "[ERROR] プロジェクトID %sは既に存在しています。", name);
+                sprintf(message, "%s %s %s", _("[ERROR] プロジェクトID"), name, _("は既に存在しています。"));
                 redirect("", message);
                 return;
             }
@@ -304,7 +304,7 @@ void top_update_project_submit_action()
     }
     db_finish(db_a);
 
-    redirect("", "更新しました。");
+    redirect("", _("更新しました。"));
 }
 void top_add_project_submit_action()
 {
@@ -322,14 +322,14 @@ void top_add_project_submit_action()
         if (!validate_project_id(name)) {
             project_info_free(pi_a);
             db_finish(db_a);
-            redirect("", "[ERROR] プロジェクトID topは予約されています。");
+            redirect("", _("[ERROR] プロジェクトID topは予約されています。"));
             return;
         }
         if (!validate_project_id_exists(db_a, name, 0)) {
             char message[DEFAULT_LENGTH];
             project_info_free(pi_a);
             db_finish(db_a);
-            sprintf(message, "[ERROR] プロジェクトID %sは既に存在しています。", name);
+            sprintf(message, "%s %s %s", _("[ERROR] プロジェクトID"), name, _("は既に存在しています。"));
             redirect("", message);
             return;
         }
@@ -341,6 +341,6 @@ void top_add_project_submit_action()
     }
     db_finish(db_a);
 
-    redirect("", "追加しました。");
+    redirect("", _("追加しました。"));
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
