@@ -671,7 +671,7 @@ void new_item_action()
             "<form id=\"new_item_form\" action=\"%s/%s/new_item_submit\" method=\"post\">\n"
             "<table class=\"item_table\" summary=\"new item table\">\n",
             _("add new column"),
-            _("チケットに新しい項目を追加します。追加する項目についての情報を入力し、追加ボタンを押してください。"),
+            _("[ticket add description]"),
             cgiScriptName, g_project_name_4_url);
     o("\t\t\t<tr>\n");
     o("\t\t\t\t<th class=\"required\">%s<span class=\"required\">※</span></th>\n", _("column name"));
@@ -743,7 +743,7 @@ void new_item_action()
             "type=\"radio\" name=\"field.type\" ", ELEM_TYPE_DATE);
     o(                  "value=\"%d\" />\n", ELEM_TYPE_DATE);
     o("\t\t\t\t\t<label for=\"field.type%d\">%s</label><br />\n", ELEM_TYPE_DATE, _("date(input[type=text])"));
-    o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("項目を入力する時の入力形式です。項目種別は、追加後に変更することができません。"));
+    o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("[ticket add column type description]"));
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
             o("\t\t\t<tr>\n");
@@ -792,7 +792,7 @@ void new_item_action()
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t\t</table>\n");
-    o("\t\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("追加"));
+    o("\t\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("Add"));
     o("\t\t\t</form>\n");
     o(      "</div>\n");
     db_finish(db_a);
@@ -857,7 +857,7 @@ void new_item_submit_action()
     element_type_free(et_a);
     db_commit(db_a);
     db_finish(db_a);
-    redirect("", _("追加しました"));
+    redirect("", _("added."));
 }
 void delete_item_action()
 {
@@ -874,22 +874,22 @@ void delete_item_action()
     d("iid: %d\n", iid);
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, _("項目削除"), "delete_item.js", NAVI_OTHER);
+    output_header(project_a, _("column delete"), "delete_item.js", NAVI_OTHER);
 
     et_a = db_get_element_type(db_a, iid, et_a);
     o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("Management Tool"));
     project_free(project_a);
     o(      "<div id=\"delete_item/%d\">\n", iid);
-    o(      "<h3>%s", _("項目("));hs(et_a->name);o("%s</h3>\n", _(")の削除"));
+    o(      "<h3>%s", _("この項目("));hs(et_a->name);o("%s</h3>\n", _(")の削除"));
     o(      "<form id=\"delete_item_form\" action=\"%s/%s/delete_item_submit/%d\" method=\"post\">\n"
             "<div class=\"infomation\"><strong>%s"
             "%s</strong></div>"
             "<div class=\"infomation\">%s</div>\n"
             "<input class=\"button\" type=\"submit\" value=\"%s\" />\n",
             cgiScriptName, g_project_name_4_url, iid,
-            _("削除すると元には戻せません。"),
-            _("登録されているチケットの項目についても参照できなくなります。"),
-            _("削除してよければ、削除ボタンを押してください。"),
+            _("if column has deleted, it's forever gone."),
+            _("this will disappear column of exists ticket."),
+            _("if you really want to delete, push delete button."),
             _("delete"));
     o(      "</form>\n");
     o(      "</div>\n");
@@ -906,7 +906,7 @@ void delete_item_submit_action()
 
     /* postの時以外は処理しない。 */
     if (strcmp(cgiRequestMethod, "POST") != 0) {
-        die(_("不正なリクエストです。"));
+        die(_("it is a invalid request."));
     }
     d("g_path_info: %s\n", g_path_info);
     e_type_id = g_path_info;
@@ -916,7 +916,7 @@ void delete_item_submit_action()
 
     db_delete_element_type(db_a, iid);
     db_commit(db_a);
-    redirect("", _("削除しました"));
+    redirect("", _("deleted."));
     db_finish(db_a);
 
 }
@@ -932,7 +932,7 @@ void style_action()
     project_free(project_a);
     o(      "<div id=\"top\">\n"
             "<h3>%s</h3>\n"
-            "<div id=\"description\">%s</div>\n", _("スタイルシートの編集"), _("スタイルシートの編集を行ない、更新ボタンを押してください。"));
+            "<div id=\"description\">%s</div>\n", _("edit style sheet"), _("edit style sheet setting and push update button."));
     o(      "<form id=\"edit_css_form\" action=\"%s/%s/style_submit\" method=\"post\">\n", cgiScriptName, g_project_name_4_url);
     o(      "<textarea name=\"edit_css\" id=\"edit_top\" rows=\"3\" cols=\"10\">");
     {
@@ -949,7 +949,7 @@ void style_action()
     {
         List* element_types_a;
         Iterator* it;
-        o(      "<div class=\"description\">%s</div>\n", _("以下は、一覧の背景設定用のサンプルです。"));
+        o(      "<div class=\"description\">%s</div>\n", _("below block is sample setting of ticket list table column."));
         o(      "<pre>\n");
         list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
         element_types_a = db_get_element_types_all(db_a, element_types_a);
@@ -961,7 +961,7 @@ void style_action()
                 list_alloc(items_a, ListItem, list_item_new, list_item_free);
                 items_a = db_get_list_item(db_a, et->id, items_a);
                 o(  "/* ================================ */ \n"
-                    "/* %s", _("チケット一覧の")); hs(et->name); o("%s     */\n", _("の背景色設定"));
+                    "/* %s", _("background-color settings of ")); hs(et->name); o("%s     */\n", _(".(background-color settings)"));
                 o(  "/* ================================ */ \n");
                 foreach (it_item, items_a) {
                     ListItem* item = it_item->element;

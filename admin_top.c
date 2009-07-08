@@ -194,7 +194,7 @@ void top_top_action()
     o(      "\t\t\t\t</tr>\n");
     o(      "\t\t\t</table>\n");
     o(      "\t\t\t<p>%s</p>\n", _("サブプロジェクト名は各サブプロジェクトの管理ツールから設定してください。"));
-    o(      "\t\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("追加"));
+    o(      "\t\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("Add"));
     o(      "\t\t</form>\n");
     o(      "\t</div>\n");
     top_output_footer();

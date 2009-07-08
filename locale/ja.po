@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2009-07-08 22:05+0900\n"
+"POT-Creation-Date: 2009-07-08 23:53+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: smeghead <smeghead@users.sourceforge.jp>\n"
 "Language-Team: smeghead <smeghead@users.sourceforge.jp>\n"
@@ -293,35 +293,35 @@ msgid "add new column"
 msgstr "項目の追加"
 
 #: admin_project.c:674
-msgid ""
+msgid "[ticket add description]"
+msgstr ""
 "チケットに新しい項目を追加します。追加する項目についての情報を入力し、追加ボ"
 "タンを押してください。"
-msgstr ""
 
 #: admin_project.c:709
 msgid "返信専用属性とする。"
 msgstr ""
 
 #: admin_project.c:746
-msgid ""
+msgid "[ticket add column type description]"
+msgstr ""
 "項目を入力する時の入力形式です。項目種別は、追加後に変更することができませ"
 "ん。"
-msgstr ""
 
 #: admin_project.c:795 admin_top.c:197
-msgid "追加"
-msgstr ""
+msgid "Add"
+msgstr "追加"
 
 #: admin_project.c:860
-msgid "追加しました"
-msgstr ""
+msgid "added."
+msgstr "追加しました"
 
 #: admin_project.c:877
-msgid "項目削除"
-msgstr ""
+msgid "column delete"
+msgstr "項目削除"
 
 #: admin_project.c:883
-msgid "項目("
+msgid "この項目("
 msgstr ""
 
 #: admin_project.c:883
@@ -329,44 +329,44 @@ msgid ")の削除"
 msgstr ""
 
 #: admin_project.c:890
-msgid "削除すると元には戻せません。"
-msgstr ""
+msgid "if column has deleted, it's forever gone."
+msgstr "削除すると元には戻せません。"
 
 #: admin_project.c:891
-msgid "登録されているチケットの項目についても参照できなくなります。"
-msgstr ""
+msgid "this will disappear column of exists ticket."
+msgstr "登録されているチケットの項目についても参照できなくなります。"
 
 #: admin_project.c:892
-msgid "削除してよければ、削除ボタンを押してください。"
-msgstr ""
+msgid "if you really want to delete, push delete button."
+msgstr "削除してよければ、削除ボタンを押してください。"
 
 #: admin_project.c:909
-msgid "不正なリクエストです。"
-msgstr ""
+msgid "it is a invalid request."
+msgstr "不正なリクエストです。"
 
 #: admin_project.c:919
-msgid "削除しました"
-msgstr ""
+msgid "deleted."
+msgstr "削除しました"
 
 #: admin_project.c:935
-msgid "スタイルシートの編集"
-msgstr ""
+msgid "edit style sheet"
+msgstr "スタイルシートの編集"
 
 #: admin_project.c:935
-msgid "スタイルシートの編集を行ない、更新ボタンを押してください。"
-msgstr ""
+msgid "edit style sheet setting and push update button."
+msgstr "スタイルシートの編集を行ない、更新ボタンを押してください。"
 
 #: admin_project.c:952
-msgid "以下は、一覧の背景設定用のサンプルです。"
-msgstr ""
+msgid "below block is sample setting of ticket list table column."
+msgstr "以下は、一覧の背景設定用のサンプルです。"
 
 #: admin_project.c:964
-msgid "チケット一覧の"
-msgstr ""
+msgid "background-color settings of "
+msgstr "チケット一覧の"
 
 #: admin_project.c:964
-msgid "の背景色設定"
-msgstr ""
+msgid ".(background-color settings)"
+msgstr "の背景色設定"
 
 #: admin_project.c:1000
 msgid "Updated."
