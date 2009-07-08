@@ -1,11 +1,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: smeghead@sourceforge.jp\n"
-"POT-Creation-Date: 2009-07-05 22:12+0900\n"
+"Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
+"POT-Creation-Date: 2009-07-08 22:05+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: smeghead <smeghead@sourceforge.jp>\n"
-"Language-Team: smeghead <smeghead@sourceforge.jp>\n"
+"Last-Translator: smeghead <smeghead@users.sourceforge.jp>\n"
+"Language-Team: smeghead <smeghead@users.sourceforge.jp>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,290 +13,293 @@ msgstr ""
 #: admin_project.c:70 admin_project.c:144 admin_project.c:180
 #: admin_project.c:283 admin_project.c:666 admin_project.c:880
 #: admin_project.c:931
-msgid "管理ツール"
-msgstr ""
+msgid "Management Tool"
+msgstr "管理ツール"
 
 #: admin_project.c:85 index_project.c:131
-msgid "トップページのサブプロジェクト一覧を表示します"
-msgstr ""
+msgid "display sub projects list at top page."
+msgstr "トップページのサブプロジェクト一覧を表示します"
 
 #: admin_project.c:86
-msgid "トップページ（サブプロジェクト一覧)"
-msgstr ""
+msgid "Top Page(Sub projects list)"
+msgstr "トップページ（サブプロジェクト一覧)"
 
 #: admin_project.c:91 admin_project.c:147
-msgid "管理ツールメニュー"
-msgstr ""
+msgid "Management Tool Menu"
+msgstr "管理ツールメニュー"
 
-#: admin_project.c:92 admin_project.c:178 admin_project.c:183
-msgid "サブプロジェクト設定"
-msgstr ""
+#: admin_project.c:92 admin_project.c:150 admin_project.c:178
+#: admin_project.c:183
+msgid "Sub Project Settings"
+msgstr "サブプロジェクト設定"
 
 #: admin_project.c:93 admin_project.c:151 admin_project.c:281
 #: admin_project.c:291
-msgid "項目設定"
-msgstr ""
+msgid "Columns Settings"
+msgstr "項目設定"
 
 #: admin_project.c:94 admin_project.c:152 admin_project.c:930
-msgid "スタイル設定"
-msgstr ""
+msgid "Style Settings"
+msgstr "スタイル設定"
 
 #: admin_project.c:95 index_project.c:143
-msgid "ヘルプ"
-msgstr ""
+msgid "Help"
+msgstr "ヘルプ"
 
 #: admin_project.c:96
-msgid "へ"
-msgstr ""
+msgid "to"
+msgstr " "
+
+#: admin_project.c:96
+msgid "to(suffix)"
+msgstr "へ"
 
 #: admin_project.c:138
-msgid "メニュー"
-msgstr ""
+msgid "Menu"
+msgstr "メニュー"
 
 #: admin_project.c:150
-msgid "プロジェクト設定"
-msgstr ""
-
-#: admin_project.c:150
-msgid "プロジェクトの基本的な情報の設定です。"
-msgstr ""
+msgid "This is basic sub projects settings."
+msgstr "プロジェクトの基本的な情報の設定です。"
 
 #: admin_project.c:151
-msgid "チケットの項目についての設定です。"
-msgstr ""
+msgid "This is Columns Settings of Tickets."
+msgstr "チケットの項目についての設定です。"
 
 #: admin_project.c:152
-msgid "スタイルシートの設定です。"
-msgstr ""
+msgid "This is StyleSheet Settings."
+msgstr "スタイルシートの設定です。"
 
 #: admin_project.c:155
-msgid "メール送信機能について"
-msgstr ""
+msgid "About mail notify features"
+msgstr "メール送信機能について"
 
 #: admin_project.c:157
-msgid ""
+msgid "[mail notify messages]"
+msgstr ""
 "投稿時、返信時のメール送信は、hook機能により実現可能です。hook機能はサーバ上"
 "での設定が必要になります。hook機能の設定方法については、以下のサイトのインス"
 "トールのページを見てください。"
-msgstr ""
 
 #: admin_project.c:186 admin_top.c:151
-msgid "サブプロジェクト名"
-msgstr ""
+msgid "sub project name"
+msgstr "サブプロジェクト名"
 
 #: admin_project.c:190
-msgid "画像(ページの一番上に表示される画像です)"
-msgstr ""
+msgid "icon"
+msgstr "画像(ページの一番上に表示される画像です)"
 
 #: admin_project.c:194
-msgid "ファイルアップロードの最大サイズ(Kb)"
-msgstr ""
+msgid "file upload max size(Kb)"
+msgstr "ファイルアップロードの最大サイズ(Kb)"
 
 #: admin_project.c:198 admin_project.c:304 admin_project.c:514
-#: admin_project.c:948 admin_top.c:137 index_project.c:2330 index_top.c:163
-msgid "更新"
-msgstr ""
+#: admin_project.c:948 index_project.c:2330 index_top.c:163
+msgid "Update"
+msgstr "更新"
 
 #: admin_project.c:266 admin_project.c:536
 msgid "更新しました"
 msgstr ""
 
 #: admin_project.c:292
-msgid ""
+msgid "[columns setting description]"
+msgstr ""
 "チケットID、投稿日時は編集できません。件名、投稿者、状態は、基本属性のため編"
 "集できる内容に制限があります。(削除不可、チケット属性、返信専用属性変更不可)"
-msgstr ""
 
 #: admin_project.c:318 admin_project.c:677
-msgid "項目名"
-msgstr ""
+msgid "column name"
+msgstr "項目名"
 
 #: admin_project.c:321 admin_project.c:680
-msgid "項目名です。"
-msgstr ""
+msgid "This is name of ticket column."
+msgstr "項目名です。"
 
 #: admin_project.c:327 admin_project.c:685
-msgid "項目の説明文"
-msgstr ""
+msgid "description"
+msgstr "項目の説明文"
 
 #: admin_project.c:334 admin_project.c:688
-msgid "項目の説明文です。投稿時に表示されます。"
-msgstr ""
+msgid ""
+"This is description of ticket column. when register or replay, it is "
+"displayed."
+msgstr "項目の説明文です。投稿時に表示されます。"
 
 #: admin_project.c:334
-msgid "必須項目"
-msgstr ""
+msgid "required"
+msgstr "必須項目"
 
 #: admin_project.c:337
-msgid "必須項目とする。"
-msgstr ""
+msgid "this column must not be empty."
+msgstr "必須項目とする。"
 
 #: admin_project.c:345
-msgid ""
+msgid "[require description]"
+msgstr ""
 "入力しないと投稿できない属性とするかどうかです。ただし、チェックはJavaScript"
 "で行なうのみです。"
-msgstr ""
 
 #: admin_project.c:346 admin_project.c:692
-msgid "チケット属性"
-msgstr ""
+msgid "attribute of ticket"
+msgstr "チケット属性"
 
 #: admin_project.c:348 admin_project.c:696
-msgid "チケット属性とする。"
-msgstr ""
+msgid "this column will be attribute of ticket."
+msgstr "チケット属性とする。"
 
 #: admin_project.c:354 admin_project.c:698
-msgid "返信の属性としてではなくチケット自体の属性として定義するかどうかです。"
-msgstr ""
+msgid "[attribute of ticket description1]"
+msgstr "返信の属性としてではなくチケット自体の属性として定義するかどうかです。"
 
 #: admin_project.c:355 admin_project.c:699
-msgid ""
+msgid "[attribute of ticket description2]"
+msgstr ""
 "返信時にチケット属性を指定した項目を書き換えた場合、書き換えた内容がチケット"
 "最新情報に表示されるようになります。"
-msgstr ""
 
 #: admin_project.c:356 admin_project.c:700
-msgid ""
+msgid "[attribute of ticket description3]"
+msgstr ""
 "チケット属性を指定していない項目は、チケット最新情報に表示されません。チケッ"
 "ト属性を指定していない項目はチケット履歴から参照することになります。"
-msgstr ""
 
 #: admin_project.c:360 admin_project.c:705
-msgid "返信専用属性"
-msgstr ""
+msgid "reply only"
+msgstr "返信専用属性"
 
-#: admin_project.c:364 admin_project.c:709
-msgid "返信専用属性とする。"
-msgstr ""
+#: admin_project.c:364
+msgid "this column will be reply only."
+msgstr "返信専用属性とする。"
 
 #: admin_project.c:369 admin_project.c:711
-msgid ""
+msgid "[reply only description1]"
+msgstr ""
 "新規の登録時には、入力項目としないかどうかです。チェックした場合、新規の登録"
 "時には、入力項目になりません。"
-msgstr ""
 
 #: admin_project.c:370 admin_project.c:712
-msgid ""
+msgid "[reply only description2]"
+msgstr ""
 "返信の時のみ入力できる項目となります。チケットの対応時期などの返信する人でな"
 "ければわからない項目は、返信専用属性とすることで、新規登録時の不要な入力の手"
 "間を減らすことができます。"
-msgstr ""
 
 #: admin_project.c:374 admin_project.c:717
-msgid "項目種別"
-msgstr ""
+msgid "column type"
+msgstr "項目種別"
 
 #: admin_project.c:379 admin_project.c:721
-msgid "1行テキスト(input[type=text])"
-msgstr ""
+msgid "one line text(input[type=text])"
+msgstr "1行テキスト(input[type=text])"
 
 #: admin_project.c:382 admin_project.c:725
-msgid "複数行テキスト(textarea)"
-msgstr ""
+msgid "multi line text(textarea)"
+msgstr "複数行テキスト(textarea)"
 
 #: admin_project.c:385 admin_project.c:729
-msgid "真偽値(input[type=checkbox])"
-msgstr ""
+msgid "boolean(input[type=checkbox])"
+msgstr "真偽値(input[type=checkbox])"
 
 #: admin_project.c:388 admin_project.c:733
-msgid "選択リスト(select)"
-msgstr ""
+msgid "selection list(select)"
+msgstr "選択リスト(select)"
 
 #: admin_project.c:391 admin_project.c:737
-msgid "複数選択可能リスト(select[multiple=multiple])"
-msgstr ""
+msgid "multi selection list(select[multiple=multiple])"
+msgstr "複数選択可能リスト(select[multiple=multiple])"
 
 #: admin_project.c:394 admin_project.c:741
-msgid "ファイル(input[type=file])"
-msgstr ""
+msgid "file(input[type=file])"
+msgstr "ファイル(input[type=file])"
 
 #: admin_project.c:397 admin_project.c:745
-msgid "日付(input[type=text])"
-msgstr ""
+msgid "date(input[type=text])"
+msgstr "日付(input[type=text])"
 
 #: admin_project.c:414 admin_project.c:750
-msgid "選択要素"
-msgstr ""
+msgid "selection element"
+msgstr "選択要素"
 
 #: admin_project.c:414 admin_project.c:754
-msgid "選択肢名"
-msgstr ""
+msgid "element name"
+msgstr "選択肢名"
 
 #: admin_project.c:414 admin_project.c:755
-msgid "クローズを意味する"
-msgstr ""
+msgid "means closed"
+msgstr "クローズを意味する"
 
 #: admin_project.c:414 admin_project.c:484 admin_project.c:756
-#: admin_project.c:788 admin_top.c:151 admin_top.c:190
-msgid "並び順"
-msgstr ""
+#: admin_project.c:788
+msgid "sort"
+msgstr "並び順"
 
-#: admin_project.c:414 admin_project.c:893 admin_top.c:151
-msgid "削除"
-msgstr ""
+#: admin_project.c:414 admin_project.c:893
+msgid "delete"
+msgstr "削除"
 
 #: admin_project.c:448
-msgid "行追加"
-msgstr ""
+msgid "add line"
+msgstr "行追加"
 
 #: admin_project.c:454 admin_project.c:772
-msgid "項目種別が選択式の場合の選択肢です。"
-msgstr ""
+msgid "selection element when this column is selection list."
+msgstr "項目種別が選択式の場合の選択肢です。"
 
 #: admin_project.c:457 admin_project.c:775
-msgid "投稿時に、新規項目を指定可能とする。"
-msgstr ""
+msgid "when register, you can input new selection element."
+msgstr "投稿時に、新規項目を指定可能とする。"
 
 #: admin_project.c:460 admin_project.c:776
-msgid ""
+msgid "[add line description]"
+msgstr ""
 "投稿時にテキストボックスを表示し、テキストボックスに入力された場合は、その項"
 "目を選択肢に追加する機能を付加するかどうかです。"
-msgstr ""
 
 #: admin_project.c:465
-msgid "デフォルト値"
-msgstr ""
+msgid "default value"
+msgstr "デフォルト値"
 
 #: admin_project.c:471
 msgid "投稿画面、返信画面での項目の初期値です。"
 msgstr ""
 
 #: admin_project.c:475 admin_project.c:780
-msgid "チケット一覧表示"
-msgstr ""
+msgid "display in ticket list"
+msgstr "チケット一覧表示"
 
-#: admin_project.c:479
-msgid "項目をチケット一覧に表示する。"
-msgstr ""
+#: admin_project.c:479 admin_project.c:784
+msgid "display this column in ticket list."
+msgstr "項目をチケット一覧に表示する。"
 
-#: admin_project.c:480 admin_project.c:784
-msgid "項目をチケット一覧で表示するかどうかです。"
-msgstr ""
+#: admin_project.c:480
+msgid "[display in ticket list description]"
+msgstr "項目をチケット一覧で表示するかどうかです。"
 
 #: admin_project.c:490 admin_project.c:791
-msgid "チケット一覧、投稿画面、返信画面での項目の並び順です。"
-msgstr ""
+msgid "sort no in ticket lists."
+msgstr "チケット一覧、投稿画面、返信画面での項目の並び順です。"
 
 #: admin_project.c:511
-msgid "この項目("
-msgstr ""
+msgid "delete this column("
+msgstr "この項目("
 
-#: admin_project.c:511 admin_project.c:883
-msgid ")の削除"
-msgstr ""
+#: admin_project.c:511
+msgid ")(delete this column)"
+msgstr ")の削除"
 
-#: admin_project.c:664
-msgid "新規項目登録"
-msgstr ""
-
-#: admin_project.c:673
-msgid "項目の追加"
-msgstr ""
+#: admin_project.c:664 admin_project.c:673
+msgid "add new column"
+msgstr "項目の追加"
 
 #: admin_project.c:674
 msgid ""
 "チケットに新しい項目を追加します。追加する項目についての情報を入力し、追加ボ"
 "タンを押してください。"
+msgstr ""
+
+#: admin_project.c:709
+msgid "返信専用属性とする。"
 msgstr ""
 
 #: admin_project.c:746
@@ -319,6 +322,10 @@ msgstr ""
 
 #: admin_project.c:883
 msgid "項目("
+msgstr ""
+
+#: admin_project.c:883
+msgid ")の削除"
 msgstr ""
 
 #: admin_project.c:890
@@ -361,9 +368,9 @@ msgstr ""
 msgid "の背景色設定"
 msgstr ""
 
-#: admin_project.c:1000 admin_top.c:307
-msgid "更新しました。"
-msgstr ""
+#: admin_project.c:1000
+msgid "Updated."
+msgstr "更新しました"
 
 #: admin_top.c:53 admin_top.c:58 admin_top.c:102
 msgid "プロジェクトの管理"
@@ -389,6 +396,10 @@ msgstr ""
 msgid "ホームリンク先"
 msgstr ""
 
+#: admin_top.c:137
+msgid "更新"
+msgstr ""
+
 #: admin_top.c:142 index_top.c:102
 msgid "サブプロジェクト一覧"
 msgstr ""
@@ -399,6 +410,14 @@ msgstr ""
 
 #: admin_top.c:151 admin_top.c:190
 msgid "サブプロジェクトID"
+msgstr ""
+
+#: admin_top.c:151 admin_top.c:190
+msgid "並び順"
+msgstr ""
+
+#: admin_top.c:151
+msgid "削除"
 msgstr ""
 
 #: admin_top.c:177 admin_top.c:196
@@ -439,6 +458,10 @@ msgstr ""
 msgid "は既に存在しています。"
 msgstr ""
 
+#: admin_top.c:307
+msgid "更新しました。"
+msgstr ""
+
 #: admin_top.c:344
 msgid "追加しました。"
 msgstr ""
@@ -448,8 +471,8 @@ msgid "Starbug1"
 msgstr ""
 
 #: index_project.c:131
-msgid "トップページ(サブプロジェクト一覧)"
-msgstr ""
+msgid "top page(sub projects list)"
+msgstr "トップページ（サブプロジェクト一覧)"
 
 #: index_project.c:137
 msgid "サブプロジェクトトップへ移動します"
@@ -956,6 +979,12 @@ msgid ""
 "*sample\n"
 "-edit this.\n"
 msgstr ""
+
+#~ msgid "this is default value."
+#~ msgstr "投稿画面、返信画面での項目の初期値です。"
+
+#~ msgid "Add new column"
+#~ msgstr "新規項目登録"
 
 #~ msgid "Project Top"
 #~ msgstr "ぷろじぇくととっぷ"

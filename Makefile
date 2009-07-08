@@ -96,15 +96,15 @@ displayinstalldoc:
 	w3m -dump http://starbug1.sourceforge.jp/install.php
 
 mergeresource:
-	xgettext --from-code=utf-8 -k_ --msgid-bugs-address=smeghead@sourceforge.jp -L C -p locale  *.c 
+	xgettext --from-code=utf-8 -k_ --msgid-bugs-address=smeghead@users.sourceforge.jp -L C -p locale  *.c 
 	msgmerge -U locale/ja.po locale/messages.po
 	msgmerge -U locale/en.po locale/messages.po
 	msgmerge -U locale/zh.po locale/messages.po
 
 compileresource:
 	mkdir -p locale/ja/LC_MESSAGES
-	msgfmt --no-hash -o locale/ja/LC_MESSAGES/starbug1.mo locale/ja.po 
+	msgfmt -o locale/ja/LC_MESSAGES/starbug1.mo locale/ja.po 
 	mkdir -p locale/en/LC_MESSAGES
-	msgfmt --no-hash -o locale/en/LC_MESSAGES/starbug1.mo locale/en.po 
+	msgfmt -o locale/en/LC_MESSAGES/starbug1.mo locale/en.po 
 	mkdir -p locale/zh/LC_MESSAGES
-	msgfmt --no-hash -o locale/zh/LC_MESSAGES/starbug1.mo locale/zh.po 
+	msgfmt -o locale/zh/LC_MESSAGES/starbug1.mo locale/zh.po 

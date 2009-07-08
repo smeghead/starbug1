@@ -128,7 +128,7 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
     o("<div id='menu'>\n"
       "<ul>\n");
     o("\t<li><a href='%s/%s/rss' title=\"RSS Feed\"><img src=\"%s/../img/rss.png\" alt=\"rss\" /></a></li>\n", cgiScriptName, g_project_name_4_url, cgiScriptName);
-    o("\t<li><a href='%s/top/' title=\"%s\">%s</a></li>\n", cgiScriptName, _("トップページのサブプロジェクト一覧を表示します"), _("トップページ(サブプロジェクト一覧)"));
+    o("\t<li><a href='%s/top/' title=\"%s\">%s</a></li>\n", cgiScriptName, _("display sub projects list at top page."), _("top page(sub projects list)"));
     o("</ul>\n"
       "<br clear='all' />\n"
       "</div>\n");
@@ -140,7 +140,7 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
     o("\t<li><a %s href='%s/%s/search' title=\"%s\">%s</a></li>\n", navi == NAVI_SEARCH ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("チケットを検索します"), _("チケット検索"));
     o("\t<li><a %s href='%s/%s/statistics' title=\"%s\">%s</a></li>\n", navi == NAVI_STATISTICS ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("統計情報を表示します"), _("統計情報"));
     o("\t<li><a %s href='%s/%s/register_at_once' title=\"%s\">%s</a></li>\n", navi == NAVI_REGISTER_AT_ONCE ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("複数新規にチケットを登録します"), _("チケット一括登録"));
-    o("\t<li><a %s href='%s/%s/help' title=\"%s\">%s</a></li>\n", navi == NAVI_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("ヘルプを参照します"), _("ヘルプ"));
+    o("\t<li><a %s href='%s/%s/help' title=\"%s\">%s</a></li>\n", navi == NAVI_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("ヘルプを参照します"), _("Help"));
     o("\t<li><a %s href='%s/../admin.%s/%s' title=\"%s\">%s</a></li>\n", navi == NAVI_MANAGEMENT ? "class=\"current\"" : "", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url, _("各種設定を行ないます"), _("サブプロジェクトの管理"));
     o("</ul>\n"
       "<br clear='all' />\n"
@@ -2327,7 +2327,7 @@ void edit_top_action()
     o(      "</textarea>\n"
             "<div>&nbsp;</div>\n"
             "<input class=\"button\" type=\"submit\" value=\"%s\" />\n"
-            "</form>", _("更新"));
+            "</form>", _("Update"));
     print_wiki_help();
     o(      "</div>\n");
     db_finish(db_a);

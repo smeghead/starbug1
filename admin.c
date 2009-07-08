@@ -8,6 +8,11 @@
 int cgiMain() {
     ActionType type = analysis_action();
     int ret = 0;
+
+    bindtextdomain("starbug1", "locale");
+    textdomain("starbug1");
+    setlocale(LC_ALL, "ja_JP.UTF-8");
+
     switch (type) {
         case ACTION_TYPE_ADMIN_TOP:
             ret = admin_top_main();

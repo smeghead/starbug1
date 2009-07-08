@@ -148,7 +148,7 @@ void top_top_action()
             "\t\t\t\t<th>%s</th>\n"
             "\t\t\t\t<th>%s</th>\n"
             "\t\t\t\t<th>%s</th>\n"
-            "\t\t\t</tr>\n", _("サブプロジェクト名"), _("データベースパス"), _("サブプロジェクトID"), _("並び順"), _("削除"));
+            "\t\t\t</tr>\n", _("sub project name"), _("データベースパス"), _("サブプロジェクトID"), _("並び順"), _("削除"));
     foreach (it, project_infos_a) {
         ProjectInfo* p = it->element;
         Database* db_project_a;

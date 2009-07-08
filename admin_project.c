@@ -67,7 +67,7 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
             "\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n"
             "\t<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\" />\n"
             "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />");
-    o(        "\t<title>%s - ", _("管理ツール")); h(string_rawstr(project->name)); o(" - "); h(title); o("</title>\n");
+    o(        "\t<title>%s - ", _("Management Tool")); h(string_rawstr(project->name)); o(" - "); h(title); o("</title>\n");
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName);
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../index.%s/%s/setting_file/user.css\" />\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
     if (script_name) {
@@ -82,18 +82,18 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
             "<ul>\n");
     o(      "\t<li><a href=\"%s/../index.%s/top/\" title=\"%s\">%s</a></li>\n",
             cgiScriptName, get_ext(cgiScriptName),
-            _("トップページのサブプロジェクト一覧を表示します"),
-            _("トップページ（サブプロジェクト一覧)"));
+            _("display sub projects list at top page."),
+            _("Top Page(Sub projects list)"));
     o(      "</ul>\n"
             "<br clear=\"all\" />\n"
             "</div>\n");
     o(      "<ul id=\"projectmenu\">\n");
-    o(      "\t<li><a %s href=\"%s/%s/\">%s</a></li>\n", navi == NAVI_MENU ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("管理ツールメニュー"));
-    o(      "\t\t<li><a %s href=\"%s/%s/project\">%s</a></li>\n", navi == NAVI_PROJECT ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("サブプロジェクト設定"));
-    o(      "\t\t<li><a %s href=\"%s/%s/items\">%s</a></li>\n", navi == NAVI_ITEM ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("項目設定"));
-    o(      "\t\t<li><a %s href=\"%s/%s/style\">%s</a></li>\n", navi == NAVI_STYLE ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("スタイル設定"));
-    o(      "\t\t<li><a %s href=\"%s/%s/admin_help\">%s</a></li>\n", navi == NAVI_ADMIN_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("ヘルプ"));
-    o(      "\t<li><a href=\"%s/../index.%s/%s/\">", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);h(string_rawstr(project->name)); o("%s</a></li>\n", _("へ"));
+    o(      "\t<li><a %s href=\"%s/%s/\">%s</a></li>\n", navi == NAVI_MENU ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("Management Tool Menu"));
+    o(      "\t\t<li><a %s href=\"%s/%s/project\">%s</a></li>\n", navi == NAVI_PROJECT ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("Sub Project Settings"));
+    o(      "\t\t<li><a %s href=\"%s/%s/items\">%s</a></li>\n", navi == NAVI_ITEM ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("Columns Settings"));
+    o(      "\t\t<li><a %s href=\"%s/%s/style\">%s</a></li>\n", navi == NAVI_STYLE ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("Style Settings"));
+    o(      "\t\t<li><a %s href=\"%s/%s/admin_help\">%s</a></li>\n", navi == NAVI_ADMIN_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("Help"));
+    o(      "\t<li><a href=\"%s/../index.%s/%s/\">%s", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url, _("to"));h(string_rawstr(project->name)); o("%s</a></li>\n", _("to(suffix)"));
     o(      "</ul>\n"
             "<br clear=\"all\" />\n");
 }
@@ -135,26 +135,26 @@ void top_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, _("メニュー"), NULL, NAVI_MENU);
+    output_header(project_a, _("Menu"), NULL, NAVI_MENU);
 
     cgiFormStringNoNewlines("message", message, DEFAULT_LENGTH);
     if (strlen(message) > 0) {
         o("<div class=\"complete_message\">"); h(message); o("&nbsp;</div>\n");
     }
-    o("<h2>"); h(string_rawstr(project_a->name)); o(" %s</h2>", _("管理ツール"));
+    o("<h2>"); h(string_rawstr(project_a->name)); o(" %s</h2>", _("Management Tool"));
     project_free(project_a);
     o("<div id=\"main_body\">\n");
-    o("<h3>%s</h3>\n", _("管理ツールメニュー"));
+    o("<h3>%s</h3>\n", _("Management Tool Menu"));
     o("<div id=\"admin_menu\">\n");
     o("\t<dl>\n");
-    o("\t\t<dt><a href=\"%s/%s/project\">%s</a></dt><dd>%s</dd>\n", cgiScriptName, g_project_name_4_url, _("プロジェクト設定"), _("プロジェクトの基本的な情報の設定です。"));
-    o("\t\t<dt><a href=\"%s/%s/items\">%s</a></dt><dd>%s</dd>\n", cgiScriptName, g_project_name_4_url, _("項目設定"), _("チケットの項目についての設定です。"));
-    o("\t\t<dt><a href=\"%s/%s/style\">%s</a></dt><dd>%s</dd>\n", cgiScriptName, g_project_name_4_url, _("スタイル設定"), _("スタイルシートの設定です。"));
+    o("\t\t<dt><a href=\"%s/%s/project\">%s</a></dt><dd>%s</dd>\n", cgiScriptName, g_project_name_4_url, _("Sub Project Settings"), _("This is basic sub projects settings."));
+    o("\t\t<dt><a href=\"%s/%s/items\">%s</a></dt><dd>%s</dd>\n", cgiScriptName, g_project_name_4_url, _("Columns Settings"), _("This is Columns Settings of Tickets."));
+    o("\t\t<dt><a href=\"%s/%s/style\">%s</a></dt><dd>%s</dd>\n", cgiScriptName, g_project_name_4_url, _("Style Settings"), _("This is StyleSheet Settings."));
     o("\t</dl>\n");
     o("</div>\n");
-    o("<h3>%s</h3>\n", _("メール送信機能について"));
+    o("<h3>%s</h3>\n", _("About mail notify features"));
     o("<div class=\"description\">\n");
-    o("\t%s\n", _("投稿時、返信時のメール送信は、hook機能により実現可能です。hook機能はサーバ上での設定が必要になります。hook機能の設定方法については、以下のサイトのインストールのページを見てください。"));
+    o("\t%s\n", _("[mail notify messages]"));
     o("\t<ul>\n"
       "\t\t<li><a href=\"http://starbug1.sourceforge.jp/\">http://starbug1.sourceforge.jp/</a></li>\n"
       "\t</ul>\n");
@@ -175,27 +175,27 @@ void project_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, _("サブプロジェクト設定"), "management.js", NAVI_PROJECT);
+    output_header(project_a, _("Sub Project Settings"), "management.js", NAVI_PROJECT);
 
-    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("管理ツール"));
+    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("Management Tool"));
     o("<div id=\"setting_form\">\n");
     o("\t<form id=\"management_form\" action=\"%s/%s/project_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName, g_project_name_4_url);
-    o("\t\t<h3>%s</h3>\n", _("サブプロジェクト設定"));
+    o("\t\t<h3>%s</h3>\n", _("Sub Project Settings"));
     o("\t\t<table summary=\"project table\">\n");
     o("\t\t\t<tr>\n");
-    o("\t\t\t\t<th>%s</th>\n", _("サブプロジェクト名"));
+    o("\t\t\t\t<th>%s</th>\n", _("sub project name"));
     o("\t\t\t\t<td><input type=\"text\" name=\"project.name\" value=\"");h(string_rawstr(project_a->name));o("\" maxlength=\"1000\" /></td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t\t<tr>\n");
-    o("\t\t\t\t<th>%s</th>\n", _("画像(ページの一番上に表示される画像です)"));
+    o("\t\t\t\t<th>%s</th>\n", _("icon"));
     o("\t\t\t\t<td><input type=\"file\" name=\"project.file\" /></td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t\t<tr>\n");
-    o("\t\t\t\t<th>%s</th>\n", _("ファイルアップロードの最大サイズ(Kb)"));
+    o("\t\t\t\t<th>%s</th>\n", _("file upload max size(Kb)"));
     o("\t\t\t\t<td><input type=\"text\" name=\"project.upload_max_size\" value=\"%d\" /></td>\n", project_a->upload_max_size);
     o("\t\t\t</tr>\n");
     o("\t\t</table>\n");
-    o("\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("更新"));
+    o("\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("Update"));
     o("\t</form>\n");
     o("</div>\n");
     project_free(project_a);
@@ -278,9 +278,9 @@ void items_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, _("項目設定"), "management.js", NAVI_ITEM);
+    output_header(project_a, _("Columns Settings"), "management.js", NAVI_ITEM);
 
-    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("管理ツール"));
+    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("Management Tool"));
     o("<div id=\"top\">\n");
     project_free(project_a);
     o("<div id=\"setting_form\">\n"
@@ -288,8 +288,8 @@ void items_action()
     o("\t\t<h3>%s</h3>\n"
       "\t\t<div class=\"description\">%s</div>\n"
       "\t\t<div><a href=\"%s/%s/new_item\">新規項目の追加</a></div>\n",
-      _("項目設定"),
-      _("チケットID、投稿日時は編集できません。件名、投稿者、状態は、基本属性のため編集できる内容に制限があります。(削除不可、チケット属性、返信専用属性変更不可)"),
+      _("Columns Settings"),
+      _("[columns setting description]"),
       cgiScriptName, g_project_name_4_url);
 
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
@@ -301,7 +301,7 @@ void items_action()
         o("\t\t<li><a href=\"#field%d\">", et->id); hs(et->name); o("</a></li>\n");
     }
     o("\t\t</ul>\n"
-      "\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("更新"));
+      "\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("Update"));
     foreach (it, element_types_a) {
         ElementType* et = it->element;
         List* items_a;
@@ -315,26 +315,26 @@ void items_action()
           "\t\t\t<tr>\n"
           "\t\t\t\t<th class=\"required\">%s<span class=\"required\">※</span></th>\n"
           "\t\t\t\t<td>\n"
-          "\t\t\t\t\t<input class=\"required\" id=\"field%d.name\" type=\"text\" name=\"field%d.name\" ", _("項目名"), et->id, et->id);
+          "\t\t\t\t\t<input class=\"required\" id=\"field%d.name\" type=\"text\" name=\"field%d.name\" ", _("column name"), et->id, et->id);
         o(                  "value=\"");hs(et->name);o("\" maxlength=\"1000\" />\n"
           "\t\t\t\t\t<div class=\"description\">%s</div>\n"
-          "\t\t\t\t\t<div id=\"field%d.name.required\" class=\"error\"></div>\n", _("項目名です。"), et->id);
+          "\t\t\t\t\t<div id=\"field%d.name.required\" class=\"error\"></div>\n", _("This is name of ticket column."), et->id);
         o("\t\t\t\t</td>\n"
           "\t\t\t</tr>\n"
           "\t\t\t<tr>\n"
           "\t\t\t\t<th>%s</th>\n"
           "\t\t\t\t<td>\n"
-          "\t\t\t\t\t<input type=\"text\" name=\"field%d.description\" ", _("項目の説明文"), et->id);
+          "\t\t\t\t\t<input type=\"text\" name=\"field%d.description\" ", _("description"), et->id);
         o(                  "value=\"");hs(et->description);o("\" maxlength=\"1000\" />\n"
           "\t\t\t\t\t<div class=\"description\">%s</div>\n"
           "\t\t\t\t</td>\n"
           "\t\t\t</tr>\n"
           "\t\t\t<tr>\n"
           "\t\t\t\t<th>%s</th>\n"
-          "\t\t\t\t<td>\n", _("項目の説明文です。投稿時に表示されます。"), _("必須項目"));
+          "\t\t\t\t<td>\n", _("This is description of ticket column. when register or replay, it is displayed."), _("required"));
         o("\t\t\t\t\t<input id=\"field%d.required\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.required\" ", et->id, et->id);
         o(                  "value=\"1\" %s />\n", et->required == 1 ? "checked=\"checked\"" : "");
-        o("\t\t\t\t\t<label for=\"field%d.required\">%s</label>\n", et->id, _("必須項目とする。"));
+        o("\t\t\t\t\t<label for=\"field%d.required\">%s</label>\n", et->id, _("this column must not be empty."));
         o("\t\t\t\t\t<div class=\"description\">%s</div>\n"
           "\t\t\t\t</td>\n"
           "\t\t\t</tr>\n"
@@ -342,59 +342,59 @@ void items_action()
           "\t\t\t\t<th>%s</th>\n"
           "\t\t\t\t<td>\n"
           "\t\t\t\t\t<input id=\"field%d.ticket_property\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.ticket_property\" ",
-          _("入力しないと投稿できない属性とするかどうかです。ただし、チェックはJavaScriptで行なうのみです。"),
-          _("チケット属性"), et->id, et->id);
+          _("[require description]"),
+          _("attribute of ticket"), et->id, et->id);
         o(                  "value=\"1\" %s %s />\n", et->ticket_property == 1 ? "checked=\"checked\"" : "", et->id <= BASIC_ELEMENT_MAX ? "disabled=\"disabled\"" : "");
-        o("\t\t\t\t\t<label for=\"field%d.ticket_property\">%s</label>\n", et->id, _("チケット属性とする。"));
+        o("\t\t\t\t\t<label for=\"field%d.ticket_property\">%s</label>\n", et->id, _("this column will be attribute of ticket."));
         o("\t\t\t\t\t<div class=\"description\">\n"
           "\t\t\t\t\t\t%s\n"
           "\t\t\t\t\t\t%s\n"
           "\t\t\t\t\t\t%s\n"
           "\t\t\t\t\t</div>\n",
-          _("返信の属性としてではなくチケット自体の属性として定義するかどうかです。"),
-          _("返信時にチケット属性を指定した項目を書き換えた場合、書き換えた内容がチケット最新情報に表示されるようになります。"),
-          _("チケット属性を指定していない項目は、チケット最新情報に表示されません。チケット属性を指定していない項目はチケット履歴から参照することになります。"));
+          _("[attribute of ticket description1]"),
+          _("[attribute of ticket description2]"),
+          _("[attribute of ticket description3]"));
         o("\t\t\t\t</td>\n"
           "\t\t\t</tr>\n"
           "\t\t\t<tr>\n"
-          "\t\t\t\t<th>%s</th>\n", _("返信専用属性"));
+          "\t\t\t\t<th>%s</th>\n", _("reply only"));
         o("\t\t\t\t<td>\n"
           "\t\t\t\t\t<input id=\"field%d.reply_property\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.reply_property\" ", et->id, et->id);
         o(                  "value=\"1\" %s %s />\n", et->reply_property == 1 ? "checked=\"checked\"" : "", et->id <= BASIC_ELEMENT_MAX ? "disabled=\"disabled\"" : "");
-        o("\t\t\t\t\t<label for=\"field%d.reply_property\">%s</label>\n", et->id, _("返信専用属性とする。"));
+        o("\t\t\t\t\t<label for=\"field%d.reply_property\">%s</label>\n", et->id, _("this column will be reply only."));
         o("\t\t\t\t\t<div class=\"description\">\n"
           "\t\t\t\t\t\t%s\n"
           "\t\t\t\t\t\t%s\n"
           "\t\t\t\t\t</div>\n",
-          _("新規の登録時には、入力項目としないかどうかです。チェックした場合、新規の登録時には、入力項目になりません。"),
-          _("返信の時のみ入力できる項目となります。チケットの対応時期などの返信する人でなければわからない項目は、返信専用属性とすることで、新規登録時の不要な入力の手間を減らすことができます。"));
+          _("[reply only description1]"),
+          _("[reply only description2]"));
         o("\t\t\t\t</td>\n"
           "\t\t\t</tr>\n"
           "\t\t\t<tr>\n"
-          "\t\t\t\t<th>%s</th>\n", _("項目種別"));
+          "\t\t\t\t<th>%s</th>\n", _("column type"));
         o("\t\t\t\t<td>\n"
           "\t\t\t\t\t<input type=\"hidden\" name=\"field%d.element_type_id\" value=\"%d\" />\n", et->id, et->type);
         switch (et->type) {
             case ELEM_TYPE_TEXT:
-                o(_("1行テキスト(input[type=text])"));
+                o(_("one line text(input[type=text])"));
                 break;
             case ELEM_TYPE_TEXTAREA:
-                o(_("複数行テキスト(textarea)"));
+                o(_("multi line text(textarea)"));
                 break;
             case ELEM_TYPE_CHECKBOX:
-                o(_("真偽値(input[type=checkbox])"));
+                o(_("boolean(input[type=checkbox])"));
                 break;
             case ELEM_TYPE_LIST_SINGLE:
-                o(_("選択リスト(select)"));
+                o(_("selection list(select)"));
                 break;
             case ELEM_TYPE_LIST_MULTI:
-                o(_("複数選択可能リスト(select[multiple=multiple])"));
+                o(_("multi selection list(select[multiple=multiple])"));
                 break;
             case ELEM_TYPE_UPLOADFILE:
-                o(_("ファイル(input[type=file])"));
+                o(_("file(input[type=file])"));
                 break;
             case ELEM_TYPE_DATE:
-                o(_("日付(input[type=text])"));
+                o(_("date(input[type=text])"));
                 break;
         }
         o("\t\t\t\t</td>\n");
@@ -411,7 +411,7 @@ void items_action()
                   "\t\t\t\t\t\t\t<th class=\"close\">%s</th>\n"
                   "\t\t\t\t\t\t\t<th>%s</th>\n"
                   "\t\t\t\t\t\t\t<th class=\"delete\">%s</th>\n"
-                  "\t\t\t\t\t\t</tr>\n", _("選択要素"), _("選択肢名"), _("クローズを意味する"), _("並び順"), _("削除"));
+                  "\t\t\t\t\t\t</tr>\n", _("selection element"), _("element name"), _("means closed"), _("sort"), _("delete"));
                 foreach (it, items_a) {
                     ListItem* item = it->element;
                     o("\t\t\t\t\t\t<tr>\n"
@@ -445,24 +445,24 @@ void items_action()
                   "\t\t\t\t\t\t\t\t\t<!--\n"
                   "\t\t\t\t\t\t\t\t\tdocument.write('<input type=\"button\" value=\"%s\" id=\"add_new_row.field%d\" class=\"add_new_row\" />');\n"
                   "\t\t\t\t\t\t\t\t\t//-->\n"
-                  "\t\t\t\t\t\t\t\t</script>\n", _("行追加"), et->id);
+                  "\t\t\t\t\t\t\t\t</script>\n", _("add line"), et->id);
                 o("\t\t\t\t\t\t\t</td>\n"
                   "\t\t\t\t\t\t</tr>\n"
                   "\t\t\t\t\t</table>\n"
                   "\t\t\t\t\t<div class=\"description\">%s</div>\n"
                   "\t\t\t\t\t<input id=\"field%d.auto_add_item\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.auto_add_item\" ",
-                  _("項目種別が選択式の場合の選択肢です。"),
+                  _("selection element when this column is selection list."),
                   et->id, et->id);
                 o(                  "value=\"1\" %s />\n", et->auto_add_item == 1 ? "checked=\"checked\"" : "");
-                o("\t\t\t\t\t<label for=\"field%d.auto_add_item\">%s</label>\n", et->id, _("投稿時に、新規項目を指定可能とする。"));
+                o("\t\t\t\t\t<label for=\"field%d.auto_add_item\">%s</label>\n", et->id, _("when register, you can input new selection element."));
                 o("\t\t\t\t\t<div class=\"description\">%s</div>\n"
                   "\t\t\t\t</td>\n"
-                  "\t\t\t</tr>\n", _("投稿時にテキストボックスを表示し、テキストボックスに入力された場合は、その項目を選択肢に追加する機能を付加するかどうかです。"));
+                  "\t\t\t</tr>\n", _("[add line description]"));
                 break;
         }
         o("\t\t\t<tr>\n"
           "\t\t\t\t<th>%s</th>\n"
-          "\t\t\t\t<td>\n", _("デフォルト値"));
+          "\t\t\t\t<td>\n", _("default value"));
         if (et->type == ELEM_TYPE_TEXTAREA) {
             o("\t\t\t\t\t<textarea name=\"field%d.default_value\" rows=\"2\" cols=\"10\" >", et->id);hs(et->default_value);o("</textarea>\n");
         } else {
@@ -472,22 +472,22 @@ void items_action()
         o("\t\t\t\t</td>\n"
           "\t\t\t</tr>\n"
           "\t\t\t<tr>\n");
-        o("\t\t\t\t<th>%s</th>\n", _("チケット一覧表示"));
+        o("\t\t\t\t<th>%s</th>\n", _("display in ticket list"));
         o("\t\t\t\t<td>\n"
           "\t\t\t\t\t<input id=\"field%d.display_in_list\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.display_in_list\" ", et->id, et->id);
         o(                  "value=\"1\" %s maxlength=\"1000\" />\n", et->display_in_list == 1 ? "checked=\"checked\"" : "");
-        o("\t\t\t\t\t<label for=\"field%d.display_in_list\">%s</label>\n", et->id, _("項目をチケット一覧に表示する。"));
-        o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("項目をチケット一覧で表示するかどうかです。"));
+        o("\t\t\t\t\t<label for=\"field%d.display_in_list\">%s</label>\n", et->id, _("display this column in ticket list."));
+        o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("[display in ticket list description]"));
         o("\t\t\t\t</td>\n"
           "\t\t\t</tr>\n"
           "\t\t\t<tr>\n"
-          "\t\t\t\t<th>%s</th>\n", _("並び順"));
+          "\t\t\t\t<th>%s</th>\n", _("sort"));
         o("\t\t\t\t<td>\n"
           "\t\t\t\t\t<input class=\"number\" type=\"text\" name=\"field%d.sort\" value=\"%d\" maxlength=\"5\" />\n", et->id, et->sort);
         o("\t\t\t\t\t<div class=\"description\">%s</div>\n"
           "\t\t\t\t</td>\n"
           "\t\t\t</tr>\n"
-          "\t\t</table>\n", _("チケット一覧、投稿画面、返信画面での項目の並び順です。"));
+          "\t\t</table>\n", _("sort no in ticket lists."));
         o("\t\t<table style=\"display:none\">\n"
           "\t\t\t<tbody id=\"row_template\">\n"
           "\t\t\t<tr>\n"
@@ -508,10 +508,10 @@ void items_action()
           "\t\t</table>\n");
         if (et->id > BASIC_ELEMENT_MAX) {
             /* 基本項目は削除できないようにする。 */
-            o("\t\t<div class=\"delete_item\"><a href=\"%s/%s/delete_item/%d\">", cgiScriptName, g_project_name_4_url, et->id);o(_("この項目("));hs(et->name);o("%s</a></div>\n", _(")の削除"));
+            o("\t\t<div class=\"delete_item\"><a href=\"%s/%s/delete_item/%d\">", cgiScriptName, g_project_name_4_url, et->id);o(_("delete this column("));hs(et->name);o("%s</a></div>\n", _(")(delete this column)"));
         }
         list_free(items_a);
-        o("\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("更新"));
+        o("\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("Update"));
     }
     list_free(element_types_a);
     o("\t</form>\n"
@@ -661,99 +661,99 @@ void new_item_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, _("新規項目登録"), "new_item.js", NAVI_OTHER);
+    output_header(project_a, _("add new column"), "new_item.js", NAVI_OTHER);
 
-    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("管理ツール"));
+    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("Management Tool"));
     project_free(project_a);
     o(      "<div id=\"new_item\">\n"
             "<h3>%s</h3>\n"
             "<div class=\"description\">%s</div>\n"
             "<form id=\"new_item_form\" action=\"%s/%s/new_item_submit\" method=\"post\">\n"
             "<table class=\"item_table\" summary=\"new item table\">\n",
-            _("項目の追加"),
+            _("add new column"),
             _("チケットに新しい項目を追加します。追加する項目についての情報を入力し、追加ボタンを押してください。"),
             cgiScriptName, g_project_name_4_url);
     o("\t\t\t<tr>\n");
-    o("\t\t\t\t<th class=\"required\">%s<span class=\"required\">※</span></th>\n", _("項目名"));
+    o("\t\t\t\t<th class=\"required\">%s<span class=\"required\">※</span></th>\n", _("column name"));
     o("\t\t\t\t<td>\n");
     o("\t\t\t\t\t<input id=\"field.name\" type=\"text\" name=\"field.name\" value=\"\" maxlength=\"1000\" />\n");
-    o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("項目名です。"));
+    o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("This is name of ticket column."));
     o("\t\t\t\t\t<div id=\"field.name.required\" class=\"error\"></div>\n");
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t\t<tr>\n");
-    o("\t\t\t\t<th>%s</th>\n", _("項目の説明文"));
+    o("\t\t\t\t<th>%s</th>\n", _("description"));
     o("\t\t\t\t<td>\n");
     o("\t\t\t\t\t<input type=\"text\" name=\"field.description\" value=\"\" maxlength=\"1000\" />\n");
-    o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("項目の説明文です。投稿時に表示されます。"));
+    o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("This is description of ticket column. when register or replay, it is displayed."));
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t\t<tr>\n");
-    o("\t\t\t\t<th>%s</th>\n", _("チケット属性"));
+    o("\t\t\t\t<th>%s</th>\n", _("attribute of ticket"));
     o("\t\t\t\t<td>\n");
     o("\t\t\t\t\t<input id=\"field.ticket_property\" class=\"checkbox\" type=\"checkbox\" name=\"field.ticket_property\" ");
     o(                  "value=\"1\" />\n");
-    o("\t\t\t\t\t<label for=\"field.ticket_property\">%s</label>\n", _("チケット属性とする。"));
+    o("\t\t\t\t\t<label for=\"field.ticket_property\">%s</label>\n", _("this column will be attribute of ticket."));
     o("\t\t\t\t\t<div class=\"description\">\n");
-    o("\t\t\t\t\t\t%s\n", _("返信の属性としてではなくチケット自体の属性として定義するかどうかです。"));
-    o("\t\t\t\t\t\t%s\n", _("返信時にチケット属性を指定した項目を書き換えた場合、書き換えた内容がチケット最新情報に表示されるようになります。"));
-    o("\t\t\t\t\t\t%s\n", _("チケット属性を指定していない項目は、チケット最新情報に表示されません。チケット属性を指定していない項目はチケット履歴から参照することになります。"));
+    o("\t\t\t\t\t\t%s\n", _("[attribute of ticket description1]"));
+    o("\t\t\t\t\t\t%s\n", _("[attribute of ticket description2]"));
+    o("\t\t\t\t\t\t%s\n", _("[attribute of ticket description3]"));
     o("\t\t\t\t\t</div>\n");
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t\t<tr>\n");
-    o("\t\t\t\t<th>%s</th>\n", _("返信専用属性"));
+    o("\t\t\t\t<th>%s</th>\n", _("reply only"));
     o("\t\t\t\t<td>\n");
     o("\t\t\t\t\t<input id=\"field.reply_property\" class=\"checkbox\" type=\"checkbox\" name=\"field.reply_property\" ");
     o(                  "value=\"1\" />\n");
     o("\t\t\t\t\t<label for=\"field.reply_property\">%s</label>\n", _("返信専用属性とする。"));
     o("\t\t\t\t\t<div class=\"description\">\n");
-    o("\t\t\t\t\t\t%s\n", _("新規の登録時には、入力項目としないかどうかです。チェックした場合、新規の登録時には、入力項目になりません。"));
-    o("\t\t\t\t\t\t%s\n", _("返信の時のみ入力できる項目となります。チケットの対応時期などの返信する人でなければわからない項目は、返信専用属性とすることで、新規登録時の不要な入力の手間を減らすことができます。"));
+    o("\t\t\t\t\t\t%s\n", _("[reply only description1]"));
+    o("\t\t\t\t\t\t%s\n", _("[reply only description2]"));
     o("\t\t\t\t\t</div>\n");
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t\t<tr>\n");
-    o("\t\t\t\t<th>%s</th>\n", _("項目種別"));
+    o("\t\t\t\t<th>%s</th>\n", _("column type"));
     o("\t\t\t\t<td>\n");
     o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" type=\"radio\" name=\"field.type\" ", ELEM_TYPE_TEXT);
     o(                  "value=\"%d\" checked=\"checked\" />\n", ELEM_TYPE_TEXT);
-    o("\t\t\t\t\t<label for=\"field.type%d\">%s</label><br />\n", ELEM_TYPE_TEXT, _("1行テキスト(input[type=text])"));
+    o("\t\t\t\t\t<label for=\"field.type%d\">%s</label><br />\n", ELEM_TYPE_TEXT, _("one line text(input[type=text])"));
     o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" "
             "type=\"radio\" name=\"field.type\" ", ELEM_TYPE_TEXTAREA);
     o(                  "value=\"%d\" />\n", ELEM_TYPE_TEXTAREA);
-    o("\t\t\t\t\t<label for=\"field.type%d\">%s</label><br />\n", ELEM_TYPE_TEXTAREA, _("複数行テキスト(textarea)"));
+    o("\t\t\t\t\t<label for=\"field.type%d\">%s</label><br />\n", ELEM_TYPE_TEXTAREA, _("multi line text(textarea)"));
     o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" "
             "type=\"radio\" name=\"field.type\" ", ELEM_TYPE_CHECKBOX);
     o(                  "value=\"%d\" />\n", ELEM_TYPE_CHECKBOX);
-    o("\t\t\t\t\t<label for=\"field.type%d\">%s</label><br />\n", ELEM_TYPE_CHECKBOX, _("真偽値(input[type=checkbox])"));
+    o("\t\t\t\t\t<label for=\"field.type%d\">%s</label><br />\n", ELEM_TYPE_CHECKBOX, _("boolean(input[type=checkbox])"));
     o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" "
             "type=\"radio\" name=\"field.type\" ", ELEM_TYPE_LIST_SINGLE);
     o(                  "value=\"%d\" />\n", ELEM_TYPE_LIST_SINGLE);
-    o("\t\t\t\t\t<label for=\"field.type%d\">%s</label><br />\n", ELEM_TYPE_LIST_SINGLE, _("選択リスト(select)"));
+    o("\t\t\t\t\t<label for=\"field.type%d\">%s</label><br />\n", ELEM_TYPE_LIST_SINGLE, _("selection list(select)"));
     o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" "
             "type=\"radio\" name=\"field.type\" ", ELEM_TYPE_LIST_MULTI);
     o(                  "value=\"%d\" />\n", ELEM_TYPE_LIST_MULTI);
-    o("\t\t\t\t\t<label for=\"field.type%d\">%s</label><br />\n", ELEM_TYPE_LIST_MULTI, _("複数選択可能リスト(select[multiple=multiple])"));
+    o("\t\t\t\t\t<label for=\"field.type%d\">%s</label><br />\n", ELEM_TYPE_LIST_MULTI, _("multi selection list(select[multiple=multiple])"));
     o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" "
             "type=\"radio\" name=\"field.type\" ", ELEM_TYPE_UPLOADFILE);
     o(                  "value=\"%d\" />\n", ELEM_TYPE_UPLOADFILE);
-    o("\t\t\t\t\t<label for=\"field.type%d\">%s</label><br />\n", ELEM_TYPE_UPLOADFILE, _("ファイル(input[type=file])"));
+    o("\t\t\t\t\t<label for=\"field.type%d\">%s</label><br />\n", ELEM_TYPE_UPLOADFILE, _("file(input[type=file])"));
     o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" "
             "type=\"radio\" name=\"field.type\" ", ELEM_TYPE_DATE);
     o(                  "value=\"%d\" />\n", ELEM_TYPE_DATE);
-    o("\t\t\t\t\t<label for=\"field.type%d\">%s</label><br />\n", ELEM_TYPE_DATE, _("日付(input[type=text])"));
+    o("\t\t\t\t\t<label for=\"field.type%d\">%s</label><br />\n", ELEM_TYPE_DATE, _("date(input[type=text])"));
     o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("項目を入力する時の入力形式です。項目種別は、追加後に変更することができません。"));
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
             o("\t\t\t<tr>\n");
-            o("\t\t\t\t<th>%s</th>\n", _("選択要素"));
+            o("\t\t\t\t<th>%s</th>\n", _("selection element"));
             o("\t\t\t\t<td>\n");
             o("\t\t\t\t\t<table class=\"list_item\">\n");
             o("\t\t\t\t\t\t<tr>\n");
-            o("\t\t\t\t\t\t\t<th>%s</th>\n", _("選択肢名"));
-            o("\t\t\t\t\t\t\t<th class=\"close\">%s</th>\n", _("クローズを意味する"));
-            o("\t\t\t\t\t\t\t<th>%s</th>\n", _("並び順"));
+            o("\t\t\t\t\t\t\t<th>%s</th>\n", _("element name"));
+            o("\t\t\t\t\t\t\t<th class=\"close\">%s</th>\n", _("means closed"));
+            o("\t\t\t\t\t\t\t<th>%s</th>\n", _("sort"));
             o("\t\t\t\t\t\t</tr>\n");
             for (i = 0; i < ADD_ITEM_COUNT; i++) {
                 o("\t\t\t\t\t\t<tr>\n");
@@ -769,26 +769,26 @@ void new_item_action()
                 o("\t\t\t\t\t\t</tr>\n");
             }
             o("\t\t\t\t\t</table>\n");
-            o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("項目種別が選択式の場合の選択肢です。"));
+            o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("selection element when this column is selection list."));
             o("\t\t\t\t\t<input id=\"field.auto_add_item\" class=\"checkbox\" type=\"checkbox\" name=\"field.auto_add_item\" ");
             o(                  "value=\"1\" />\n");
-            o("\t\t\t\t\t<label for=\"field.auto_add_item\">%s</label>\n", _("投稿時に、新規項目を指定可能とする。"));
-            o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("投稿時にテキストボックスを表示し、テキストボックスに入力された場合は、その項目を選択肢に追加する機能を付加するかどうかです。"));
+            o("\t\t\t\t\t<label for=\"field.auto_add_item\">%s</label>\n", _("when register, you can input new selection element."));
+            o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("[add line description]"));
             o("\t\t\t\t</td>\n");
             o("\t\t\t</tr>\n");
     o("\t\t\t<tr>\n");
-    o("\t\t\t\t<th>%s</th>\n", _("チケット一覧表示"));
+    o("\t\t\t\t<th>%s</th>\n", _("display in ticket list"));
     o("\t\t\t\t<td>\n");
     o("\t\t\t\t\t<input class=\"checkbox\" type=\"checkbox\" name=\"field.display_in_list\" ");
     o(                  "value=\"1\" />\n");
-    o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("項目をチケット一覧で表示するかどうかです。"));
+    o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("display this column in ticket list."));
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t\t<tr>\n");
-    o("\t\t\t\t<th>%s</th>\n", _("並び順"));
+    o("\t\t\t\t<th>%s</th>\n", _("sort"));
     o("\t\t\t\t<td>\n");
     o("\t\t\t\t\t<input class=\"number\" type=\"text\" name=\"field.sort\" value=\"\" maxlength=\"5\" />\n");
-    o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("チケット一覧、投稿画面、返信画面での項目の並び順です。"));
+    o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("sort no in ticket lists."));
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t\t</table>\n");
@@ -877,7 +877,7 @@ void delete_item_action()
     output_header(project_a, _("項目削除"), "delete_item.js", NAVI_OTHER);
 
     et_a = db_get_element_type(db_a, iid, et_a);
-    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("管理ツール"));
+    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("Management Tool"));
     project_free(project_a);
     o(      "<div id=\"delete_item/%d\">\n", iid);
     o(      "<h3>%s", _("項目("));hs(et_a->name);o("%s</h3>\n", _(")の削除"));
@@ -890,7 +890,7 @@ void delete_item_action()
             _("削除すると元には戻せません。"),
             _("登録されているチケットの項目についても参照できなくなります。"),
             _("削除してよければ、削除ボタンを押してください。"),
-            _("削除"));
+            _("delete"));
     o(      "</form>\n");
     o(      "</div>\n");
     db_finish(db_a);
@@ -927,8 +927,8 @@ void style_action()
     Project* project_a = project_new();
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, _("スタイル設定"), "style.js", NAVI_STYLE);
-    o(      "<h2>%s %s</h2>", string_rawstr(project_a->name), _("管理ツール"));
+    output_header(project_a, _("Style Settings"), "style.js", NAVI_STYLE);
+    o(      "<h2>%s %s</h2>", string_rawstr(project_a->name), _("Management Tool"));
     project_free(project_a);
     o(      "<div id=\"top\">\n"
             "<h3>%s</h3>\n"
@@ -945,7 +945,7 @@ void style_action()
     o(      "</textarea>\n"
             "<div>&nbsp;</div>\n"
             "<input class=\"button\" type=\"submit\" value=\"%s\" />\n"
-            "</form>", _("更新"));
+            "</form>", _("Update"));
     {
         List* element_types_a;
         Iterator* it;
@@ -997,7 +997,7 @@ void style_submit_action()
     db_setting_file_save(db_a, sf_a);
     db_finish(db_a);
 
-    redirect("", _("更新しました。"));
+    redirect("", _("Updated."));
     setting_file_free(sf_a);
 }
 void admin_help_action()

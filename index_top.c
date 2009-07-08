@@ -160,7 +160,7 @@ void top_edit_top_action()
     wiki_content_out(db_a, "top");
     o(      "</textarea>\n"
             "<div>&nbsp;</div>\n"
-            "<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("更新"));
+            "<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("Update"));
     o(      "</form>");
     print_wiki_help();
     db_finish(db_a);
