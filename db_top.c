@@ -115,15 +115,19 @@ char* db_top_get_project_db_name(char* project_name, char* buffer)
     db_finish(top_db_a);
     return buffer;
 }
-String* get_search_sql_string_per_project(Database* db, List* keywords, String* sql_string)
+typedef struct {
+    int id;
+    int field_count;
+} DbInfo;
+String* get_search_sql_string_per_project(Database* db, DbInfo* db_info, List* keywords, String* sql_string)
 {
     string_appendf(sql_string,
             "select "
             " t.id as id, m.field%d as state "
-            "from ticket as t ", ELEM_ID_STATUS);
+            "from db%d.ticket as t ", ELEM_ID_STATUS, db_info->id);
     
     if (keywords->size > 0)
-        string_append(sql_string, "inner join message as m_all on m_all.ticket_id = t.id ");
+        string_appendf(sql_string, "inner join db%d.message as m_all on m_all.ticket_id = t.id ", db_info->id);
 
     if (keywords->size > 0)
         string_append(sql_string, "where ");
@@ -145,18 +149,16 @@ String* get_search_sql_string_per_project(Database* db, List* keywords, String* 
     d("sql: %s\n", string_rawstr(sql_string));
     return sql_string;
 }
-typedef struct {
-    int id;
-    int field_count;
-} DbInfo;
 List* db_top_search(Database* db, char* q, List* tickets)
 {
     List* projects_a;
     Iterator* it;
     List* db_infos_a;
     List* sqls_a;
+    String* sql_search_a = string_new();
     sqlite3_stmt *stmt = NULL;
     List* keywords_a;
+    int i;
 
     list_alloc(keywords_a, String, string_new, string_free);
     keywords_a = parse_keywords(keywords_a, q);
@@ -169,9 +171,9 @@ List* db_top_search(Database* db, char* q, List* tickets)
         char sql[DEFAULT_LENGTH];
         char db_name[DEFAULT_LENGTH];
         ProjectInfo* pi = it->element;
+
         if (pi->id == 1) continue; /* トップなので飛ばす。 */
         if (pi->deleted) continue; /* 削除されたサブプロジェクトなので飛ばす。 */
-        d("%s\n", string_rawstr(pi->name));
         sprintf(sql, "attach ? as db%d", pi->id);
         sprintf(db_name, "db/%d.db", pi->id);
         exec_query(db, sql,
@@ -188,13 +190,46 @@ List* db_top_search(Database* db, char* q, List* tickets)
             db_info->field_count = sqlite3_column_int(stmt, 0);
             list_add(db_infos_a, db_info);
             /* 検索用sql作成 */
-            s = get_search_sql_string_per_project(db, keywords_a, s);
+            s = get_search_sql_string_per_project(db, db_info, keywords_a, s);
             list_add(sqls_a, s);
-            break;
         }
         sqlite3_finalize(stmt);
     }
-    /* TODO sqlを合成して、検索を行なう。 */
+    list_free(projects_a);
+    /* sqlを合成する。 */
+    string_append(sql_search_a, "select id from (\n");
+    foreach (it, sqls_a) {
+        String* sql = it->element;
+        string_append(sql_search_a, string_rawstr(sql));
+        if (iterator_next(it))
+            string_append(sql_search_a, "\n union \n");
+    }
+    string_append(sql_search_a, "\n) order by id\n");
+    d("%s\n", string_rawstr(sql_search_a));
+    if (sqlite3_prepare(db->handle, string_rawstr(sql_search_a), string_len(sql_search_a), &stmt, NULL) == SQLITE_ERROR) goto error;
+    sqlite3_reset(stmt);
+    foreach (it, db_infos_a) { /* DBの数だけ */
+        DbInfo* db_info = it->element;
+        Iterator* it_k;
+        foreach (it_k, keywords_a) { /* キーワードの数だけ */
+            String* k = it_k->element;
+            for (i = 0; i < db_info->field_count; i++) { /* カラムの数だけ */
+                sqlite3_bind_text(stmt, 1, string_rawstr(k), string_len(k), NULL);
+            }
+        }
+    }
+
+    if (SQLITE_ROW == sqlite3_step(stmt)) {
+        Ticket* t = list_new_element(tickets);
+        /* TODO 検索結果を受け取る */
+
+        list_add(tickets, t);
+    }
+    sqlite3_finalize(stmt);
+
+    list_free(keywords_a);
+    list_free(sqls_a);
+    string_free(sql_search_a);
 
     list_free(db_infos_a);
     return tickets;

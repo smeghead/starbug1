@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: starbug 1\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2009-07-08 23:53+0900\n"
+"POT-Creation-Date: 2009-07-09 22:17+0900\n"
 "PO-Revision-Date: 2009-07-02 22:23+0900\n"
 "Last-Translator: smeghead <smeghead@sourceforge.jp>\n"
 "Language-Team: Japanese\n"
@@ -93,7 +93,7 @@ msgid "file upload max size(Kb)"
 msgstr ""
 
 #: admin_project.c:198 admin_project.c:304 admin_project.c:514
-#: admin_project.c:948 index_project.c:2330 index_top.c:163
+#: admin_project.c:948 admin_top.c:137 index_project.c:2333 index_top.c:163
 msgid "Update"
 msgstr ""
 
@@ -216,11 +216,11 @@ msgid "means closed"
 msgstr ""
 
 #: admin_project.c:414 admin_project.c:484 admin_project.c:756
-#: admin_project.c:788
+#: admin_project.c:788 admin_top.c:151 admin_top.c:190
 msgid "sort"
 msgstr ""
 
-#: admin_project.c:414 admin_project.c:893
+#: admin_project.c:414 admin_project.c:893 admin_top.c:151
 msgid "delete"
 msgstr ""
 
@@ -348,78 +348,70 @@ msgstr ""
 msgid ".(background-color settings)"
 msgstr ""
 
-#: admin_project.c:1000
+#: admin_project.c:1000 admin_top.c:307
 msgid "Updated."
 msgstr ""
 
 #: admin_top.c:53 admin_top.c:58 admin_top.c:102
-msgid "プロジェクトの管理"
-msgstr ""
+#, fuzzy
+msgid "Project Management"
+msgstr "chinese"
 
-#: admin_top.c:57 index_project.c:2060 index_top.c:55
-msgid "プロジェクトトップ"
-msgstr ""
+#: admin_top.c:57 index_project.c:2063 index_top.c:55
+msgid "Project Top"
+msgstr "chinese"
 
 #: admin_top.c:121
-msgid "プロジェクト情報の設定"
+msgid "Project Information Settings"
 msgstr ""
 
 #: admin_top.c:126
-msgid "プロジェクト名"
-msgstr ""
+#, fuzzy
+msgid "project name"
+msgstr "chinese"
 
 #: admin_top.c:129
-msgid "ホームリンク名"
+msgid "home link name"
 msgstr ""
 
 #: admin_top.c:133
-msgid "ホームリンク先"
+msgid "home link refference"
 msgstr ""
 
-#: admin_top.c:137
-msgid "更新"
-msgstr "Update"
-
-#: admin_top.c:142 index_top.c:102
-msgid "サブプロジェクト一覧"
-msgstr ""
+#: admin_top.c:142
+#, fuzzy
+msgid "Sub Projects List"
+msgstr "chinese"
 
 #: admin_top.c:151
-msgid "データベースパス"
+msgid "database path"
 msgstr ""
 
 #: admin_top.c:151 admin_top.c:190
-msgid "サブプロジェクトID"
-msgstr ""
+#, fuzzy
+msgid "sub project id"
+msgstr "chinese"
 
-#: admin_top.c:151 admin_top.c:190
-msgid "並び順"
-msgstr ""
-
-#: admin_top.c:151
-msgid "削除"
-msgstr ""
-
-#: admin_top.c:177 admin_top.c:196
-msgid ""
-"サブプロジェクト名は各サブプロジェクトの管理ツールから設定してください。"
+#: admin_top.c:177
+msgid "[project settings description1]"
 msgstr ""
 
 #: admin_top.c:178
-msgid ""
-"既存のサブプロジェクトIDを変更すると、サブプロジェクトのURLが変わってしまうの"
-"で注意してください。"
+msgid "[project settings description2]"
 msgstr ""
 
 #: admin_top.c:179
-msgid ""
-"削除すると、トップページの一覧から表示されなくなります。データは消去されませ"
-"ん。再度削除チェックボックスのチェックを外すことで、再び参照することができる"
-"ようになります。"
+msgid "[project settings description3]"
 msgstr ""
 
 #: admin_top.c:184
-msgid "サブプロジェクトの追加"
+#, fuzzy
+msgid "add sub project"
+msgstr "chinese"
+
+#: admin_top.c:196
+msgid ""
+"サブプロジェクト名は各サブプロジェクトの管理ツールから設定してください。"
 msgstr ""
 
 #: admin_top.c:227
@@ -427,23 +419,27 @@ msgid "修正しました。"
 msgstr ""
 
 #: admin_top.c:279 admin_top.c:325
-msgid "[ERROR] プロジェクトID topは予約されています。"
+msgid "[ERROR] projectid top is reserved."
 msgstr ""
 
-#: admin_top.c:286 admin_top.c:332
+#: admin_top.c:286
+msgid "[ERROR] projectid("
+msgstr ""
+
+#: admin_top.c:286
+msgid ") is already exists."
+msgstr ""
+
+#: admin_top.c:332
 msgid "[ERROR] プロジェクトID"
 msgstr ""
 
-#: admin_top.c:286 admin_top.c:332
+#: admin_top.c:332
 msgid "は既に存在しています。"
 msgstr ""
 
-#: admin_top.c:307
-msgid "更新しました。"
-msgstr ""
-
 #: admin_top.c:344
-msgid "追加しました。"
+msgid "Added."
 msgstr ""
 
 #: index_project.c:127
@@ -455,53 +451,54 @@ msgid "top page(sub projects list)"
 msgstr ""
 
 #: index_project.c:137
-msgid "サブプロジェクトトップへ移動します"
+msgid "move to top of sub project."
 msgstr ""
 
 #: index_project.c:137
-msgid "サブプロジェクトトップ"
-msgstr ""
+#, fuzzy
+msgid "SubProject Top"
+msgstr "chinese"
 
 #: index_project.c:138
-msgid "状態別のチケット一覧を参照します"
+msgid "This is ticket list by status."
 msgstr ""
 
 #: index_project.c:138 index_project.c:409 index_project.c:429
 #: index_project.c:438
-msgid "状態別チケット一覧"
+msgid "Ticket List by Status"
 msgstr ""
 
 #: index_project.c:139
-msgid "新規にチケットを登録します"
+msgid "register new ticket"
 msgstr ""
 
 #: index_project.c:139 index_project.c:1247 index_project.c:1249
-#: index_project.c:1257
-msgid "チケット登録"
+#: index_project.c:1258
+msgid "Register Ticket"
 msgstr ""
 
 #: index_project.c:140
-msgid "チケットを検索します"
+msgid "search tickets."
 msgstr ""
 
 #: index_project.c:140 index_project.c:717 index_project.c:719
-msgid "チケット検索"
+msgid "Search Tickets"
 msgstr ""
 
-#: index_project.c:141
-msgid "統計情報を表示します"
+#: index_project.c:141 index_project.c:2231
+msgid "display statictics."
 msgstr ""
 
-#: index_project.c:141 index_project.c:2219 index_project.c:2228
-msgid "統計情報"
+#: index_project.c:141 index_project.c:2222 index_project.c:2231
+msgid "Statictics"
 msgstr ""
 
 #: index_project.c:142
 msgid "複数新規にチケットを登録します"
 msgstr ""
 
-#: index_project.c:142 index_project.c:1741 index_project.c:1743
-#: index_project.c:1759
+#: index_project.c:142 index_project.c:1744 index_project.c:1746
+#: index_project.c:1762
 msgid "チケット一括登録"
 msgstr ""
 
@@ -541,7 +538,7 @@ msgstr ""
 msgid "状態を条件にして検索を行ないます。"
 msgstr ""
 
-#: index_project.c:378 index_project.c:2113
+#: index_project.c:378 index_project.c:2116
 msgid "入力したIDのチケットを表示します。"
 msgstr ""
 
@@ -549,7 +546,7 @@ msgstr ""
 msgid "ID指定で表示"
 msgstr ""
 
-#: index_project.c:384 index_project.c:2123
+#: index_project.c:384 index_project.c:2126
 msgid "新しいチケットを登録する"
 msgstr ""
 
@@ -641,243 +638,239 @@ msgstr ""
 msgid "選択肢を追加する場合はテキストボックスに入力してください。\n"
 msgstr ""
 
-#: index_project.c:1257
+#: index_project.c:1259
 msgid ""
 "新規チケットを登録する場合は、以下のフォームを記入し登録ボタンを押してくださ"
 "い。"
 msgstr ""
 
-#: index_project.c:1257 index_project.c:1500 index_project.c:1821
+#: index_project.c:1260 index_project.c:1503 index_project.c:1824
 msgid "※必須項目の入力チェックは、javascriptで行なっています。"
 msgstr ""
 
-#: index_project.c:1284 index_project.c:1534
+#: index_project.c:1287 index_project.c:1537
 msgid "※"
 msgstr ""
 
-#: index_project.c:1306 index_project.c:1899
+#: index_project.c:1309 index_project.c:1902
 msgid "登録"
 msgstr ""
 
-#: index_project.c:1306 index_project.c:1551 index_project.c:1899
+#: index_project.c:1309 index_project.c:1554 index_project.c:1902
 msgid "投稿者を保存する。(cookie使用)"
 msgstr ""
 
-#: index_project.c:1333 index_project.c:1340
+#: index_project.c:1336 index_project.c:1343
 msgid "存在しないIDが指定されました。"
 msgstr ""
 
-#: index_project.c:1365
+#: index_project.c:1368
 msgid "チケット最新情報"
 msgstr ""
 
-#: index_project.c:1365
+#: index_project.c:1368
 msgid ""
 "チケットの最新情報です。最新チケットのチケット属性の付いている項目と全添付"
 "ファイルを表示しています。"
 msgstr ""
 
-#: index_project.c:1400
+#: index_project.c:1403
 msgid "全添付ファイル"
 msgstr ""
 
-#: index_project.c:1428
+#: index_project.c:1431
 msgid "返信する"
 msgstr ""
 
-#: index_project.c:1428
+#: index_project.c:1431
 msgid "チケット履歴"
 msgstr ""
 
-#: index_project.c:1428
+#: index_project.c:1431
 msgid "チケットの履歴情報です。"
 msgstr ""
 
-#: index_project.c:1497
+#: index_project.c:1500
 msgid "チケット返信"
 msgstr ""
 
-#: index_project.c:1500
+#: index_project.c:1503
 msgid ""
 "返信を行なう場合は、以下のフォームに内容を記入して返信ボタンを押してくださ"
 "い。"
 msgstr ""
 
-#: index_project.c:1503
+#: index_project.c:1506
 msgid "チケット情報の更新"
 msgstr ""
 
-#: index_project.c:1503
+#: index_project.c:1506
 msgid ""
 "チケット情報(チケットの状態など)を更新する必要がある場合は、以下の情報を変更"
 "してください。"
 msgstr ""
 
-#: index_project.c:1526
+#: index_project.c:1529
 msgid "返信情報の追加"
 msgstr ""
 
-#: index_project.c:1526
+#: index_project.c:1529
 msgid "返信情報を記入してください。"
 msgstr ""
 
-#: index_project.c:1551
+#: index_project.c:1554
 msgid "返信"
 msgstr ""
 
-#: index_project.c:1698
+#: index_project.c:1701
 msgid "登録しました。"
 msgstr ""
 
-#: index_project.c:1700
+#: index_project.c:1703
 msgid "返信しました。"
 msgstr ""
 
-#: index_project.c:1717
+#: index_project.c:1720
 msgid "エラー"
 msgstr ""
 
-#: index_project.c:1720
+#: index_project.c:1723
 msgid "エラー発生"
 msgstr ""
 
-#: index_project.c:1721
+#: index_project.c:1724
 msgid "ファイルサイズが大きすぎます。"
 msgstr ""
 
-#: index_project.c:1723
+#: index_project.c:1726
 msgid ""
 "kbより大きいファイルは登録できません。ブラウザの戻るボタンで戻ってください。"
 msgstr ""
 
-#: index_project.c:1760
+#: index_project.c:1763
 msgid ""
 "新規チケットを一括登録する場合は、以下のフォームにチケット情報をCSV形式で記入"
 "し解析ボタンを押してください。登録の手順の詳細は以下のとおりです。"
 msgstr ""
 
-#: index_project.c:1761
+#: index_project.c:1764
 msgid ""
 "チケット一括登録ページ(このページ)で、登録したい複数のチケットの情報をCSV形式"
 "で貼り付けて、解析ボタンを押す。"
 msgstr ""
 
-#: index_project.c:1762
+#: index_project.c:1765
 msgid ""
 "チケット一括登録確認ページで、解析結果が表示されるので、各フィールドに対応す"
 "る項目を選択し、登録ボタンを押す。"
 msgstr ""
 
-#: index_project.c:1763
+#: index_project.c:1766
 msgid "登録完了。"
 msgstr ""
 
-#: index_project.c:1778
+#: index_project.c:1781
 msgid ""
 "登録したいデータをCSV形式で貼り付けてください。次の画面で取り込むフィールドを"
 "設定可能です。"
 msgstr ""
 
-#: index_project.c:1782
+#: index_project.c:1785
 msgid "解析"
 msgstr ""
 
-#: index_project.c:1808 index_project.c:1810 index_project.c:1819
+#: index_project.c:1811 index_project.c:1813 index_project.c:1822
 msgid "チケット一括登録確認"
 msgstr ""
 
-#: index_project.c:1820
+#: index_project.c:1823
 msgid ""
 "各桁の登録対象コンボボックスの選択値を、その桁のデータの登録対象となる項目を"
 "選択して、登録ボタンを押してください。"
 msgstr ""
 
-#: index_project.c:1856
+#: index_project.c:1859
 msgid "登録<br />対象"
 msgstr ""
 
-#: index_project.c:1860
+#: index_project.c:1863
 msgid "無視"
 msgstr ""
 
-#: index_project.c:1906
+#: index_project.c:1909
 msgid ""
 "登録対象コンボボックスの選択値を、「無視」のまま登録すると、登録対象から省か"
 "れます。"
 msgstr ""
 
-#: index_project.c:1907
+#: index_project.c:1910
 msgid ""
 "登録する各値は、入力チェックが行なわれませんので、登録前に確認してください。"
 msgstr ""
 
-#: index_project.c:2037
+#: index_project.c:2040
 msgid "件登録しました。"
 msgstr ""
 
-#: index_project.c:2040
+#: index_project.c:2043
 msgid ""
 "登録されたチケットはありませんでした。戻るボタンで戻って確認してください。"
 msgstr ""
 
-#: index_project.c:2067
+#: index_project.c:2070
 msgid "最新情報"
 msgstr ""
 
-#: index_project.c:2084
+#: index_project.c:2087
 msgid "最新情報がありません。"
 msgstr ""
 
-#: index_project.c:2092
+#: index_project.c:2095
 msgid "状態別件数"
 msgstr ""
 
-#: index_project.c:2104
+#: index_project.c:2107
 msgid "チケット情報がありません。"
 msgstr ""
 
-#: index_project.c:2112
+#: index_project.c:2115
 msgid "ID検索"
 msgstr ""
 
-#: index_project.c:2119
+#: index_project.c:2122
 msgid "表示"
 msgstr ""
 
-#: index_project.c:2124 index_top.c:151 index_top.c:157
+#: index_project.c:2127 index_top.c:151 index_top.c:157
 msgid "ページの編集"
 msgstr ""
 
-#: index_project.c:2177
+#: index_project.c:2180
 msgid "投稿者"
 msgstr ""
 
-#: index_project.c:2180
+#: index_project.c:2183
 msgid "投稿日"
 msgstr ""
 
-#: index_project.c:2228
-msgid "統計情報を表示します。"
-msgstr ""
-
-#: index_project.c:2253
+#: index_project.c:2256
 msgid ""
 "JavaScriptでグラフを表示しています。JavaScriptが有効なブラウザで見てくださ"
 "い。"
 msgstr ""
 
-#: index_project.c:2314 index_project.c:2321 index_project.c:2322
+#: index_project.c:2317 index_project.c:2324 index_project.c:2325
 #: index_top.c:134
 msgid "トップページの編集"
 msgstr ""
 
-#: index_project.c:2323
+#: index_project.c:2326
 msgid ""
 "簡易wikiの文法でトップページのコンテンツの編集を行ない、更新ボタンを押してく"
 "ださい。"
 msgstr ""
 
-#: index_project.c:2376 index_project.c:2403
+#: index_project.c:2379 index_project.c:2406
 msgid "error: ファイルがありません。"
 msgstr ""
 
@@ -887,6 +880,10 @@ msgstr ""
 
 #: index_top.c:99 index_top.c:199
 msgid "トップページ"
+msgstr ""
+
+#: index_top.c:102
+msgid "サブプロジェクト一覧"
 msgstr ""
 
 #: index_top.c:133
@@ -959,6 +956,9 @@ msgid ""
 "*sample\n"
 "-edit this.\n"
 msgstr ""
+
+#~ msgid "更新"
+#~ msgstr "Update"
 
 #~ msgid "項目名"
 #~ msgstr "column name"
@@ -1034,6 +1034,3 @@ msgstr ""
 
 #~ msgid "サブプロジェクト設定"
 #~ msgstr "sub project settings"
-
-#~ msgid "Project Top"
-#~ msgstr "chinese"

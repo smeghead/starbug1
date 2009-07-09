@@ -52,7 +52,7 @@ void top_output_header(char* title, Project* project)
     o(      "<div id=\"projectmenu\">\n"
             "\t<ul>\n"
             "\t\t<li><a href=\""); h(string_rawstr(project->home_url)); o("\">"); h(string_rawstr(project->home_description)); o("</a></li>\n");
-    o(      "\t\t<li><a href=\"%s/../index.%s/%s/\">%s</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url, _("プロジェクトトップ"));
+    o(      "\t\t<li><a href=\"%s/../index.%s/%s/\">%s</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url, _("Project Top"));
     o(      "\t\t<li><a href=\"%s/../admin.%s/%s/\">%s</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url, _("プロジェクト管理"));
     o(      "\t</ul>\n");
     o(      "</div>\n");
