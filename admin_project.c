@@ -287,10 +287,11 @@ void items_action()
       "\t<form id=\"management_form\" action=\"%s/%s/items_submit\" method=\"post\">\n", cgiScriptName, g_project_name_4_url);
     o("\t\t<h3>%s</h3>\n"
       "\t\t<div class=\"description\">%s</div>\n"
-      "\t\t<div><a href=\"%s/%s/new_item\">新規項目の追加</a></div>\n",
+      "\t\t<div><a href=\"%s/%s/new_item\">%s</a></div>\n",
       _("Columns Settings"),
       _("[columns setting description]"),
-      cgiScriptName, g_project_name_4_url);
+      cgiScriptName, g_project_name_4_url,
+      _("add new column"));
 
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
@@ -324,7 +325,7 @@ void items_action()
           "\t\t\t<tr>\n"
           "\t\t\t\t<th>%s</th>\n"
           "\t\t\t\t<td>\n"
-          "\t\t\t\t\t<input type=\"text\" name=\"field%d.description\" ", _("description"), et->id);
+          "\t\t\t\t\t<input type=\"text\" name=\"field%d.description\" ", _("column description"), et->id);
         o(                  "value=\"");hs(et->description);o("\" maxlength=\"1000\" />\n"
           "\t\t\t\t\t<div class=\"description\">%s</div>\n"
           "\t\t\t\t</td>\n"
@@ -682,7 +683,7 @@ void new_item_action()
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t\t<tr>\n");
-    o("\t\t\t\t<th>%s</th>\n", _("description"));
+    o("\t\t\t\t<th>%s</th>\n", _("column description"));
     o("\t\t\t\t<td>\n");
     o("\t\t\t\t\t<input type=\"text\" name=\"field.description\" value=\"\" maxlength=\"1000\" />\n");
     o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("This is description of ticket column. when register or replay, it is displayed."));
