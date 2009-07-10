@@ -293,7 +293,7 @@ void items_action()
       cgiScriptName, g_project_name_4_url);
 
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
-    element_types_a = db_get_element_types_all(db_a, element_types_a);
+    element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
     output_field_information_js();
     o("\t\t<ul id=\"field_list\">\n");
     foreach (it, element_types_a) {
@@ -952,7 +952,7 @@ void style_action()
         o(      "<div class=\"description\">%s</div>\n", _("below block is sample setting of ticket list table column."));
         o(      "<pre>\n");
         list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
-        element_types_a = db_get_element_types_all(db_a, element_types_a);
+        element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
         foreach (it, element_types_a) {
             ElementType* et = it->element;
             if (et->type == ELEM_TYPE_LIST_SINGLE && et->display_in_list) {

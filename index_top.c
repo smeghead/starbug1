@@ -206,6 +206,7 @@ void top_search_action()
         o("\">a"); o("</a></li>\n");
     }
     list_free(tickets_a);
+    o(      "</ul>\n");
     o(      "</div>\n");
     o(      "<br clear=\"all\" />\n");
     project_free(top_project_a);

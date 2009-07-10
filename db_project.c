@@ -12,18 +12,30 @@
 
 void create_columns_exp(List*, char*, char*);
 
-static List* db_get_element_types(Database* db, bool all, List* element_types)
+static List* db_get_element_types(Database* db, DbInfo* db_info, bool all, List* element_types)
 {
     int r;
-    const char *sql;
+    String* sql_a = string_new();
     sqlite3_stmt *stmt = NULL;
+    char db_id[10] = "";
 
-    if (all) {
-        sql = "select id, type, ticket_property, reply_property, required, name, description, display_in_list, sort, default_value, auto_add_item from element_type where deleted = 0 order by sort";
-    } else {
-        sql = "select id, type, ticket_property, reply_property, required, name, description, display_in_list, sort, default_value, auto_add_item from element_type where deleted = 0 and display_in_list = 1 order by sort";
+    if (db_info) {
+        sprintf(db_id, "db%d.", db_info->id);
     }
-    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (all) {
+        string_appendf(sql_a,
+                "select id, type, ticket_property, reply_property, required, name, "
+                "  description, display_in_list, sort, default_value, auto_add_item "
+                "from %selement_type "
+                "where deleted = 0 order by sort", db_id);
+    } else {
+        string_appendf(sql_a,
+                "select id, type, ticket_property, reply_property, required, name, "
+                "  description, display_in_list, sort, default_value, auto_add_item "
+                "from %selement_type "
+                "where deleted = 0 and display_in_list = 1 order by sort", db_id);
+    }
+    if (sqlite3_prepare(db->handle, string_rawstr(sql_a), string_len(sql_a), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
 
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
@@ -49,19 +61,28 @@ static List* db_get_element_types(Database* db, bool all, List* element_types)
     if (SQLITE_DONE != r)
         goto error;
 
+    string_free(sql_a);
     sqlite3_finalize(stmt);
 
     return element_types;
 
 ERROR_LABEL(db->handle)
 }
-List* db_get_element_types_4_list(Database* db, List* elements)
+/*
+ * 引数のdb_infoは、index_top.cから呼び出すようになったために追加した引数。
+ * その他から呼び出す場合は、NULLを指定する。
+ */
+List* db_get_element_types_4_list(Database* db, DbInfo* db_info, List* elements)
 {
-    return db_get_element_types(db, false, elements);
+    return db_get_element_types(db, db_info, false, elements);
 }
-List* db_get_element_types_all(Database* db, List* elements)
+/*
+ * 引数のdb_infoは、index_top.cから呼び出すようになったために追加した引数。
+ * その他から呼び出す場合は、NULLを指定する。
+ */
+List* db_get_element_types_all(Database* db, DbInfo* db_info, List* elements)
 {
-    return db_get_element_types(db, true, elements);
+    return db_get_element_types(db, db_info, true, elements);
 }
 ElementType* db_get_element_type(Database* db, int id, ElementType* e)
 {
@@ -358,7 +379,7 @@ static String* get_search_sql_string(Database* db, List* conditions, Condition* 
         String* columns_a = string_new(0);
         List* element_types_a;
         list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
-        element_types_a = db_get_element_types_all(db, element_types_a);
+        element_types_a = db_get_element_types_all(db, NULL, element_types_a);
         columns_a = create_columns_like_exp(element_types_a, "m_all", keywords, columns_a);
         if (valid_condition_size(conditions))
             string_append(sql_string, " and ");
@@ -413,7 +434,7 @@ int set_conditions(Database* db, sqlite3_stmt* stmt, List* conditions, List* key
         Iterator* it_keyword;
         Iterator* it;
         list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
-        element_types_a = db_get_element_types_all(db, element_types_a);
+        element_types_a = db_get_element_types_all(db, NULL, element_types_a);
         foreach (it_keyword, keywords) {
             String* word = it_keyword->element;
             foreach (it, element_types_a) {
@@ -585,7 +606,7 @@ List* db_get_last_elements_4_list(Database* db, const int ticket_id, List* eleme
     Iterator* it;
 
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
-    element_types_a = db_get_element_types_4_list(db, element_types_a);
+    element_types_a = db_get_element_types_4_list(db, NULL, element_types_a);
     create_columns_exp(element_types_a, "last_m", columns);
     sprintf(sql, "select t.id, org_m.field%d ", ELEM_ID_SENDER);
     strcat(sql, columns);
@@ -655,7 +676,7 @@ List* db_get_last_elements(Database* db, const int ticket_id, List* elements)
     char columns[DEFAULT_LENGTH] = "";
 
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
-    element_types_a = db_get_element_types_all(db, element_types_a);
+    element_types_a = db_get_element_types_all(db, NULL, element_types_a);
     create_columns_exp(element_types_a, "m", columns);
     strcpy(sql, "select m.id");
     strcat(sql, columns);
@@ -720,7 +741,7 @@ List* db_get_elements(Database* db, int message_id, List* elements)
     List* element_types_a = NULL;
 
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
-    element_types_a = db_get_element_types_all(db, element_types_a);
+    element_types_a = db_get_element_types_all(db, NULL, element_types_a);
     create_columns_exp(element_types_a, "m", columns);
 
     strcpy(sql, "select m.registerdate");

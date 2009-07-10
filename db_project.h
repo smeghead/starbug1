@@ -5,8 +5,8 @@
 #include "data.h"
 #include "dbutil.h"
 
-List* db_get_element_types_4_list(Database*, List*);
-List* db_get_element_types_all(Database*, List*);
+List* db_get_element_types_4_list(Database*, DbInfo*, List*);
+List* db_get_element_types_all(Database*, DbInfo*, List*);
 ElementType* db_get_element_type(Database*, int, ElementType*);
 List* db_get_list_item(Database*, const int, List*);
 int db_get_list_item_id(Database*, const int, char*);

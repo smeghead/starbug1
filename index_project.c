@@ -425,7 +425,7 @@ void list_action()
     }
     cgiStringArrayFree(multi);
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
-    element_types_a = db_get_element_types_4_list(db_a, element_types_a);
+    element_types_a = db_get_element_types_4_list(db_a, NULL, element_types_a);
     o("<h2>"); h(string_rawstr(project_a->name)); o(" - %s</h2>\n", _("Ticket List by Status"));
     project_free(project_a);
     list_alloc(states_a, State, state_new, state_free);
@@ -696,7 +696,7 @@ void search_action()
         ? true : false;
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
-    element_types_a = db_get_element_types_4_list(db_a, element_types_a);
+    element_types_a = db_get_element_types_4_list(db_a, NULL, element_types_a);
     /* 検索 */
     list_alloc(conditions_a, Condition, condition_new, condition_free);
     conditions_a = create_conditions(conditions_a, element_types_a, condition_restore);
@@ -934,7 +934,7 @@ void report_csv_download_action()
     project_a = db_get_project(db_a, project_a);
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
 
-    element_types_a = db_get_element_types_all(db_a, element_types_a);
+    element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
     /* 検索 */
     list_alloc(conditions_a, Condition, condition_new, condition_free);
     conditions_a = create_conditions(conditions_a, element_types_a, false);
@@ -974,7 +974,7 @@ void report_html_download_action()
     project_a = db_get_project(db_a, project_a);
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
 
-    element_types_a = db_get_element_types_all(db_a, element_types_a);
+    element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
     /* 検索 */
     list_alloc(conditions_a, Condition, condition_new, condition_free);
     conditions_a = create_conditions(conditions_a, element_types_a, false);
@@ -1264,7 +1264,7 @@ void register_action()
         List* element_types_a;
         Iterator* it;
         list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
-        element_types_a = db_get_element_types_all(db_a, element_types_a);
+        element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
         foreach (it, element_types_a) {
             ElementType* et = it->element;
             char class_name[32] = "";
@@ -1350,7 +1350,7 @@ void ticket_action()
 
     message_ids_a = db_get_message_ids_a(db_a, iid);
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
-    element_types_a = db_get_element_types_all(db_a, element_types_a);
+    element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
     o("<h2 id=\"subject\">"); h(string_rawstr(project_a->name)); o(" - ");
     h(string_rawstr(title_a));
     string_free(title_a);
@@ -1594,7 +1594,7 @@ void register_submit_action()
     db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
     project_a = db_get_project(db_a, project_a);
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
-    element_types_a = db_get_element_types_all(db_a, element_types_a);
+    element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
     cgiFormStringNoNewlines("ticket_id", ticket_id, NUM_LENGTH);
     if (mode == MODE_REGISTER)
         ticket_a->id = -1;
@@ -1830,7 +1830,7 @@ void register_at_once_confirm_action()
         Iterator* it;
         Iterator* it_line;
         list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
-        element_types_a = db_get_element_types_all(db_a, element_types_a);
+        element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
         foreach (it, element_types_a) {
             ElementType* et = it->element;
             /* 返信専用属性は表示しない。 */
@@ -2006,7 +2006,7 @@ void register_at_once_submit_action()
         }
         /* 指定されていない項目は、デフォルト値を登録する。 */
         list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
-        element_types_a = db_get_element_types_all(db_a, element_types_a);
+        element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
         foreach (it_et, element_types_a) {
             ElementType* et = it_et->element;
             Element* element = NULL;
@@ -2231,7 +2231,7 @@ void statistics_action()
             "\t<div class=\"description\">%s</div>\n", _("Statictics"), _("display statictics."));
     project_free(project_a);
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
-    element_types_a = db_get_element_types_all(db_a, element_types_a);
+    element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
     foreach (it, element_types_a) {
         ElementType* et = it->element;
         List* items_a;
