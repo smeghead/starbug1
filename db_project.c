@@ -833,6 +833,8 @@ Project* db_get_project(Database* db, Project* project)
             string_set(project->home_url, (char*)sqlite3_column_text(stmt, 1));
         else if (strcmp(name, "upload_max_size") == 0)
             project->upload_max_size = sqlite3_column_int(stmt, 1);
+        else if (strcmp(name, "locale") == 0)
+            string_set(project->locale, (char*)sqlite3_column_text(stmt, 1));
     }
     /* アップロードファイルサイズの上限値が有効な値でない場合は、512kbを設定する。 */
     project->upload_max_size = (project->upload_max_size <= 0) ? 512 : project->upload_max_size;

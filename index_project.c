@@ -114,7 +114,7 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
             "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />\n");
     o(        "\t<title>"); h(string_rawstr(project->name)); o(" - "); h(title); o("</title>\n");
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName);
-    o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/%s/setting_file/user.css\" />\n", cgiScriptName, g_project_name_4_url);
+    o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/%s/setting_file/user.css\" />\n", cgiScriptName, g_project_code_4_url);
     if (script_name) {
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/prototype.js\"></script>\n", cgiScriptName);
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/%s\"></script>\n", cgiScriptName, script_name);
@@ -124,24 +124,24 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
     o(      "</head>\n"
             "<body>\n"
             "<a name=\"top\"></a>\n"
-            "<h1 id=\"toptitle\" title=\"%s\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n", _("Starbug1"), cgiScriptName, g_project_name_4_url);
+            "<h1 id=\"toptitle\" title=\"%s\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n", _("Starbug1"), cgiScriptName, g_project_code_4_url);
     o("<div id='menu'>\n"
       "<ul>\n");
-    o("\t<li><a href='%s/%s/rss' title=\"RSS Feed\"><img src=\"%s/../img/rss.png\" alt=\"rss\" /></a></li>\n", cgiScriptName, g_project_name_4_url, cgiScriptName);
+    o("\t<li><a href='%s/%s/rss' title=\"RSS Feed\"><img src=\"%s/../img/rss.png\" alt=\"rss\" /></a></li>\n", cgiScriptName, g_project_code_4_url, cgiScriptName);
     o("\t<li><a href='%s/top/' title=\"%s\">%s</a></li>\n", cgiScriptName, _("display sub projects list at top page."), _("top page(sub projects list)"));
     o("</ul>\n"
       "<br clear='all' />\n"
       "</div>\n");
     o("<div>\n"
       "<ul id='projectmenu'>\n");
-    o("\t<li><a %s href='%s/%s/' title=\"%s\">%s</a></li>\n", navi == NAVI_TOP ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("move to top of sub project."), _("SubProject Top"));
-    o("\t<li><a %s href='%s/%s/list' title=\"%s\">%s</a></li>\n", navi == NAVI_LIST ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("This is ticket list by status."), _("Ticket List by Status"));
-    o("\t<li><a %s href='%s/%s/register' title=\"%s\">%s</a></li>\n", navi == NAVI_REGISTER ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("register new ticket"), _("Register Ticket"));
-    o("\t<li><a %s href='%s/%s/search' title=\"%s\">%s</a></li>\n", navi == NAVI_SEARCH ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("search tickets."), _("Search Tickets"));
-    o("\t<li><a %s href='%s/%s/statistics' title=\"%s\">%s</a></li>\n", navi == NAVI_STATISTICS ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("display statictics."), _("Statictics"));
-    o("\t<li><a %s href='%s/%s/register_at_once' title=\"%s\">%s</a></li>\n", navi == NAVI_REGISTER_AT_ONCE ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("Register Tickets At Once"), _("Register Tickets At Once"));
-    o("\t<li><a %s href='%s/%s/help' title=\"%s\">%s</a></li>\n", navi == NAVI_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("displya help."), _("Help"));
-    o("\t<li><a %s href='%s/../admin.%s/%s' title=\"%s\">%s</a></li>\n", navi == NAVI_MANAGEMENT ? "class=\"current\"" : "", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url, _("seveal settings."), _("Sub Project Settings"));
+    o("\t<li><a %s href='%s/%s/' title=\"%s\">%s</a></li>\n", navi == NAVI_TOP ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("move to top of sub project."), _("SubProject Top"));
+    o("\t<li><a %s href='%s/%s/list' title=\"%s\">%s</a></li>\n", navi == NAVI_LIST ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("This is ticket list by status."), _("Ticket List by Status"));
+    o("\t<li><a %s href='%s/%s/register' title=\"%s\">%s</a></li>\n", navi == NAVI_REGISTER ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("register new ticket"), _("Register Ticket"));
+    o("\t<li><a %s href='%s/%s/search' title=\"%s\">%s</a></li>\n", navi == NAVI_SEARCH ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("search tickets."), _("Search Tickets"));
+    o("\t<li><a %s href='%s/%s/statistics' title=\"%s\">%s</a></li>\n", navi == NAVI_STATISTICS ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("display statictics."), _("Statictics"));
+    o("\t<li><a %s href='%s/%s/register_at_once' title=\"%s\">%s</a></li>\n", navi == NAVI_REGISTER_AT_ONCE ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("Register Tickets At Once"), _("Register Tickets At Once"));
+    o("\t<li><a %s href='%s/%s/help' title=\"%s\">%s</a></li>\n", navi == NAVI_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("display help."), _("Help"));
+    o("\t<li><a %s href='%s/../admin.%s/%s' title=\"%s\">%s</a></li>\n", navi == NAVI_MANAGEMENT ? "class=\"current\"" : "", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url, _("seveal settings."), _("Sub Project Settings"));
     o("</ul>\n"
       "<br clear='all' />\n"
       "</div>\n");
@@ -178,7 +178,7 @@ bool is_enabled_project(char* project_name)
 }
 int index_project_main() {
     register_actions();
-    if (is_enabled_project(g_project_name) == 0) {
+    if (is_enabled_project(g_project_code) == 0) {
         page_not_found();
         return 0;
     }
@@ -192,17 +192,17 @@ void output_navigater(SearchResult* result, char* query_string)
     if (result->hit_count < LIST_COUNT_PER_SEARCH_PAGE) return;
     o("<div class=\"navigater\">\n");
     if (result->page > 0)
-        o("<a href=\"%s/%s/search?p=%d&amp;%s\">&lt;&lt;</a>\n", cgiScriptName, g_project_name_4_url, result->page - 1, query_string);
+        o("<a href=\"%s/%s/search?p=%d&amp;%s\">&lt;&lt;</a>\n", cgiScriptName, g_project_code_4_url, result->page - 1, query_string);
     for (i = 0; i * LIST_COUNT_PER_SEARCH_PAGE < result->hit_count; i++) {
         if (i < result->page - 5 || i > result->page + 5)
             continue;
         if (i == result->page)
             o("%d\n", i + 1);
         else
-            o("<a href=\"%s/%s/search?p=%d&amp;%s\">%d</a>\n", cgiScriptName, g_project_name_4_url, i, query_string, i + 1);
+            o("<a href=\"%s/%s/search?p=%d&amp;%s\">%d</a>\n", cgiScriptName, g_project_code_4_url, i, query_string, i + 1);
     }
     if (result->page * LIST_COUNT_PER_SEARCH_PAGE < result->hit_count - LIST_COUNT_PER_SEARCH_PAGE)
-        o("<a href=\"%s/%s/search?p=%d&amp;%s\">&gt;&gt;</a>\n", cgiScriptName, g_project_name_4_url, result->page + 1, query_string);
+        o("<a href=\"%s/%s/search?p=%d&amp;%s\">&gt;&gt;</a>\n", cgiScriptName, g_project_code_4_url, result->page + 1, query_string);
     o("</div>\n");
 }
 String* format_query_string_without_page(String* buffer)
@@ -284,18 +284,18 @@ void output_ticket_table_header(List* element_types)
     query_string_a = format_query_string_without_sort_and_page(query_string_a);
 
     o(      "\t<tr>\n");
-    o(      "\t\t<th class=\"id\"><a href=\"%s/%s/search?%ssort=-1&amp;%s#result\" title=\"%s\">ID</a></th>\n", cgiScriptName, g_project_name_4_url, reverse ? "" : "r", string_rawstr(query_string_a), _("asc or desc sorting."));
+    o(      "\t\t<th class=\"id\"><a href=\"%s/%s/search?%ssort=-1&amp;%s#result\" title=\"%s\">ID</a></th>\n", cgiScriptName, g_project_code_4_url, reverse ? "" : "r", string_rawstr(query_string_a), _("asc or desc sorting."));
     foreach (it, element_types) {
         ElementType* et = it->element;
         o("\t\t<th class=\"field%d\">\n", et->id);
-        o("\t\t\t<a href=\"%s/%s/search?%ssort=%d&amp;%s#result\" title=\"%s\">", cgiScriptName, g_project_name_4_url, reverse ? "" : "r", et->id, string_rawstr(query_string_a), _("asc or desc sorting."));
+        o("\t\t\t<a href=\"%s/%s/search?%ssort=%d&amp;%s#result\" title=\"%s\">", cgiScriptName, g_project_code_4_url, reverse ? "" : "r", et->id, string_rawstr(query_string_a), _("asc or desc sorting."));
         hs(et->name);
         o("</a>\n");
         o("\t\t</th>\n");
     }
-    o("\t\t<th class=\"registerdate\"><a href=\"%s/%s/search?%ssort=-2&amp;%s#result\" title=\"%s\">%s</a></th>\n", cgiScriptName, g_project_name_4_url, reverse ? "" : "r", string_rawstr(query_string_a), _("asc or desc sorting."), _("register date"));
-    o("\t\t<th class=\"lastregisterdate\"><a href=\"%s/%s/search?%ssort=-3&amp;%s#result\" title=\"%s\">%s</a></th>\n", cgiScriptName, g_project_name_4_url, reverse ? "" : "r", string_rawstr(query_string_a), _("asc or desc sorting."), _("last update date"));
-    o("\t\t<th class=\"leftdate\"><a href=\"%s/%s/search?%ssort=-3&amp;%s#result\" title=\"%s\">%s</a></th>\n", cgiScriptName, g_project_name_4_url, reverse ? "" : "r", string_rawstr(query_string_a), _("asc or desc sorting."), _("leaved days"));
+    o("\t\t<th class=\"registerdate\"><a href=\"%s/%s/search?%ssort=-2&amp;%s#result\" title=\"%s\">%s</a></th>\n", cgiScriptName, g_project_code_4_url, reverse ? "" : "r", string_rawstr(query_string_a), _("asc or desc sorting."), _("register date"));
+    o("\t\t<th class=\"lastregisterdate\"><a href=\"%s/%s/search?%ssort=-3&amp;%s#result\" title=\"%s\">%s</a></th>\n", cgiScriptName, g_project_code_4_url, reverse ? "" : "r", string_rawstr(query_string_a), _("asc or desc sorting."), _("last update date"));
+    o("\t\t<th class=\"leftdate\"><a href=\"%s/%s/search?%ssort=-3&amp;%s#result\" title=\"%s\">%s</a></th>\n", cgiScriptName, g_project_code_4_url, reverse ? "" : "r", string_rawstr(query_string_a), _("asc or desc sorting."), _("leaved days"));
     o("\t</tr>\n");
     string_free(query_string_a);
 }
@@ -313,7 +313,7 @@ void output_ticket_table_body(Database* db, SearchResult* result, List* element_
           "\t\t<td class=\"id field%d-\"><a href=\"%s/%s/ticket/%s\">%s</a></td>\n", 
                 ELEM_ID_ID, 
                 cgiScriptName, 
-                g_project_name_4_url,
+                g_project_code_4_url,
                 get_element_value_by_id(elements_a, ELEM_ID_ID), 
                 get_element_value_by_id(elements_a, ELEM_ID_ID));
         foreach (it, element_types) {
@@ -326,7 +326,7 @@ void output_ticket_table_body(Database* db, SearchResult* result, List* element_
             }
             o("\">");
             if (et->id == ELEM_ID_TITLE)
-                o("<a href=\"%s/%s/ticket/%d\">", cgiScriptName, g_project_name_4_url, message->id);
+                o("<a href=\"%s/%s/ticket/%d\">", cgiScriptName, g_project_code_4_url, message->id);
             if (et->id == ELEM_ID_SENDER)
                 hmail(get_element_value_by_id(elements_a, ELEM_ID_ORG_SENDER)); /* 最初の投稿者を表示する。 */
             else
@@ -365,7 +365,7 @@ void output_states(List* states, bool with_new_ticket_link)
     foreach (it, states) {
         State* s = it->element;
         o("\t\t<li>\n");
-        o("\t\t\t<a href=\"%s/%s/search?field%d=", cgiScriptName, g_project_name_4_url, ELEM_ID_STATUS);
+        o("\t\t\t<a href=\"%s/%s/search?field%d=", cgiScriptName, g_project_code_4_url, ELEM_ID_STATUS);
         us(s->name);
         o("\" title=\"%s\">", _("search by status."));
         hs(s->name);
@@ -374,14 +374,14 @@ void output_states(List* states, bool with_new_ticket_link)
         o("\t\t</li>\n");
     }
     o("\t\t<li>\n");
-    o("\t\t\t<form action=\"%s/%s/search\" method=\"get\">\n", cgiScriptName, g_project_name_4_url);
+    o("\t\t\t<form action=\"%s/%s/search\" method=\"get\">\n", cgiScriptName, g_project_code_4_url);
     o("\t\t\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"%s\" maxlength=\"%d\" value=\"\" />\n", _("display the ticket on inputed id."), NUM_LENGTH - 1);
     o("\t\t\t\t<input type=\"submit\" class=\"button\" value=\"%s\" />\n"
       "\t\t\t</form>\n"
       "\t\t</li>\n", _("id search"));
     if (with_new_ticket_link) {
         o("\t\t<li>\n"
-          "\t\t\t<a id=\"new_ticket_link\" href=\"%s/%s/register\">%s</a>\n", cgiScriptName, g_project_name_4_url, _("Register New Ticket."));
+          "\t\t\t<a id=\"new_ticket_link\" href=\"%s/%s/register\">%s</a>\n", cgiScriptName, g_project_code_4_url, _("Register New Ticket."));
         o("\t\t</li>\n");
     }
     o("\t</ul>\n"
@@ -404,7 +404,7 @@ void list_action()
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("Ticket List by Status"), NULL, NAVI_LIST);
     /* メッセージの取得 */
@@ -462,7 +462,7 @@ void list_action()
             o("\t\t<div class=\"infomation\">%s%d%s<a href=\"%s/%s/search?field%d=", _("new"), 
                     result_a->hit_count, _("件のみを表示しています。"),
                     cgiScriptName,
-                    g_project_name_4_url,
+                    g_project_code_4_url,
                     ELEM_ID_STATUS);
             us(s->name);
             o("\">%s", _("display tickets that status is ")); hs(s->name); o("%s</a></div>\n", _(".(display status)"));
@@ -471,7 +471,7 @@ void list_action()
         if (result_a->hit_count == LIST_COUNT_PER_LIST_PAGE) {
             o("\t\t<div class=\"infomation\">%s<a href=\"%s/%s/search?field%d=", _("see more..."), 
                     cgiScriptName,
-                    g_project_name_4_url,
+                    g_project_code_4_url,
                     ELEM_ID_STATUS);
             us(s->name);
             o("\">%s", _("display tickets that status is ")); hs(s->name); o("%s</a></div>\n", _(".(display stauts)"));
@@ -519,7 +519,7 @@ List* create_conditions(List* conditions, List* element_types, bool cookie_resto
                 cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                 sprintf(cookie_name,
                         COOKIE_CONDITION_FORMAT ".from",
-                        g_project_name_4_url,
+                        g_project_code_4_url,
                         et->id);
                 get_cookie_string(cookie_name, cookie_value);
                 c = list_new_element(conditions);
@@ -530,7 +530,7 @@ List* create_conditions(List* conditions, List* element_types, bool cookie_resto
                 cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                 sprintf(cookie_name,
                         COOKIE_CONDITION_FORMAT ".to",
-                        g_project_name_4_url,
+                        g_project_code_4_url,
                         et->id);
                 get_cookie_string(cookie_name, cookie_value);
                 c = list_new_element(conditions);
@@ -542,7 +542,7 @@ List* create_conditions(List* conditions, List* element_types, bool cookie_resto
                 cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                 sprintf(cookie_name,
                         COOKIE_CONDITION_FORMAT,
-                        g_project_name_4_url,
+                        g_project_code_4_url,
                         et->id);
                 get_cookie_string(cookie_name, cookie_value);
                 c = list_new_element(conditions);
@@ -555,7 +555,7 @@ List* create_conditions(List* conditions, List* element_types, bool cookie_resto
     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
     sprintf(cookie_name,
             COOKIE_CONDITION_FORMAT ".from",
-            g_project_name_4_url,
+            g_project_code_4_url,
             ELEM_ID_REGISTERDATE);
     get_cookie_string(cookie_name, cookie_value);
     c = list_new_element(conditions);
@@ -565,7 +565,7 @@ List* create_conditions(List* conditions, List* element_types, bool cookie_resto
     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
     sprintf(cookie_name,
             COOKIE_CONDITION_FORMAT ".to",
-            g_project_name_4_url,
+            g_project_code_4_url,
             ELEM_ID_REGISTERDATE);
     get_cookie_string(cookie_name, cookie_value);
     c = list_new_element(conditions);
@@ -576,7 +576,7 @@ List* create_conditions(List* conditions, List* element_types, bool cookie_resto
     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
     sprintf(cookie_name,
             COOKIE_CONDITION_FORMAT ".from",
-            g_project_name_4_url,
+            g_project_code_4_url,
             ELEM_ID_LASTREGISTERDATE);
     get_cookie_string(cookie_name, cookie_value);
     c = list_new_element(conditions);
@@ -586,7 +586,7 @@ List* create_conditions(List* conditions, List* element_types, bool cookie_resto
     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
     sprintf(cookie_name,
             COOKIE_CONDITION_FORMAT ".to",
-            g_project_name_4_url,
+            g_project_code_4_url,
             ELEM_ID_LASTREGISTERDATE);
     get_cookie_string(cookie_name, cookie_value);
     c = list_new_element(conditions);
@@ -607,26 +607,26 @@ static void save_condition2cookie(List* conditions, char* q, bool save)
                 case CONDITION_TYPE_DATE_TO:
                 case CONDITION_TYPE_DATE_FROM:
                     sprintf(cookie_key, COOKIE_CONDITION_FORMAT ".%s",
-                            g_project_name_4_url,
+                            g_project_code_4_url,
                             c->element_type_id,
                             c->condition_type == CONDITION_TYPE_DATE_FROM ? "from" : "to");
                     break;
                 default:
                     sprintf(cookie_key, COOKIE_CONDITION_FORMAT,
-                            g_project_name_4_url,
+                            g_project_code_4_url,
                             c->element_type_id);
             }
         } else {
             switch (c->element_type_id) {
                 case ELEM_ID_REGISTERDATE:
                     sprintf(cookie_key, COOKIE_CONDITION_FORMAT ".%s",
-                            g_project_name_4_url,
+                            g_project_code_4_url,
                             ELEM_ID_REGISTERDATE,
                             c->condition_type == CONDITION_TYPE_DATE_FROM ? "from" : "to");
                     break;
                 case ELEM_ID_LASTREGISTERDATE:
                     sprintf(cookie_key, COOKIE_CONDITION_FORMAT ".%s",
-                            g_project_name_4_url,
+                            g_project_code_4_url,
                             ELEM_ID_LASTREGISTERDATE,
                             c->condition_type == CONDITION_TYPE_DATE_FROM ? "from" : "to");
                     break;
@@ -641,8 +641,8 @@ static void save_condition2cookie(List* conditions, char* q, bool save)
             clear_cookie(cookie_key);
         }
     }
-    sprintf(cookie_key_keyword, COOKIE_CONDITION_KEYWORD_FORMAT, g_project_name_4_url);
-    sprintf(cookie_key_save_condition, COOKIE_SAVE_CONDITION_FORMAT, g_project_name_4_url);
+    sprintf(cookie_key_keyword, COOKIE_CONDITION_KEYWORD_FORMAT, g_project_code_4_url);
+    sprintf(cookie_key_save_condition, COOKIE_SAVE_CONDITION_FORMAT, g_project_code_4_url);
     if (save) {
         d("set cookie: keyword, %s\n", q);
         set_cookie(cookie_key_keyword, q);
@@ -687,14 +687,14 @@ void search_action()
     /* 検索条件のcookie保存 */
     cgiFormStringNoNewlines("search_button", search_button, DEFAULT_LENGTH);
     cgiFormStringNoNewlines("save_condition", save_condition, NUM_LENGTH);
-    sprintf(cookie_key_save_condition, COOKIE_SAVE_CONDITION_FORMAT, g_project_name_4_url);
+    sprintf(cookie_key_save_condition, COOKIE_SAVE_CONDITION_FORMAT, g_project_code_4_url);
     get_cookie_string(cookie_key_save_condition, cookie_save_condition);
     condition_will_save = (strcmp(save_condition, "1") == 0 ||
             (strlen(search_button) == 0 && strcmp(cookie_save_condition, "1") == 0))
         ? true : false;
     condition_restore = (strlen(search_button) == 0 && strcmp(cookie_save_condition, "1") == 0)
         ? true : false;
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_element_types_4_list(db_a, NULL, element_types_a);
     /* 検索 */
@@ -703,7 +703,7 @@ void search_action()
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
     if (strlen(q) == 0 && condition_restore) {
         char cookie_key_keyword[DEFAULT_LENGTH];
-        sprintf(cookie_key_keyword, COOKIE_CONDITION_KEYWORD_FORMAT, g_project_name_4_url);
+        sprintf(cookie_key_keyword, COOKIE_CONDITION_KEYWORD_FORMAT, g_project_code_4_url);
         /* 検索条件を保存する状況で、queryStringが指定されていなかったら、cookieから復元する。 */
         get_cookie_string(cookie_key_keyword, q);
     }
@@ -726,7 +726,7 @@ void search_action()
     o("<div id=\"condition_form\">\n"
       "<h3>%s</h3>\n"
       "<div class=\"description\">%s</div>\n", _("search condition"), _("input search conditions and push 'search'."));
-    o("<form action=\"%s/%s/search\" method=\"get\">\n", cgiScriptName, g_project_name_4_url);
+    o("<form action=\"%s/%s/search\" method=\"get\">\n", cgiScriptName, g_project_code_4_url);
     o(      "<table summary=\"condition table\">\n");
     o("<tr>\n"
       "\t<th>%s</th>\n"
@@ -812,11 +812,11 @@ void search_action()
         o(      "]&nbsp;");
         o(      "<a href=\"%s/%s/report_csv_download?%s\" target=\"_blank\">%s</a>\n",
                 cgiScriptName,
-                g_project_name_4_url,
+                g_project_code_4_url,
                 string_rawstr(query_string_a), _("CVS Format Download"));
         o(      "<a href=\"%s/%s/report_html_download?%s\" target=\"_blank\">%s</a>\n",
                 cgiScriptName,
-                g_project_name_4_url,
+                g_project_code_4_url,
                 string_rawstr(query_string_a), _("HTML Format Download(exel)"));
         o(      "</div>\n");
         output_navigater(result_a, string_rawstr(query_string_a));
@@ -930,7 +930,7 @@ void report_csv_download_action()
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
 
@@ -970,7 +970,7 @@ void report_html_download_action()
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
 
@@ -1175,7 +1175,7 @@ void output_form_element(Database* db, List* elements, ElementType* et, Project*
         case ELEM_TYPE_UPLOADFILE:
             o("<input type=\"file\" class=\"element\" id=\"field%d\" name=\"field%d\" />\n",
                     et->id, et->id);
-            o("<div class=\"description\">%s%d%s</div>\n", _("file seze must below "), project->upload_max_size, _("Kb(file size)"));
+            o("<div class=\"description\">%s %d %s</div>\n", _("file seze must below"), project->upload_max_size, _("Kb(file size)"));
             break;
         case ELEM_TYPE_DATE:
             o("<span>\n");
@@ -1242,7 +1242,7 @@ void register_action()
     char sender[DEFAULT_LENGTH];
     get_cookie_string(COOKIE_SENDER, sender);
 
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("Register Ticket"), "register.js", NAVI_REGISTER);
     output_calendar_js();
@@ -1258,7 +1258,7 @@ void register_action()
             _("Register Ticket"),
             _("input below form and push register button."),
             _("note: they are checked by only JavaScript."));
-    o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName, g_project_name_4_url);
+    o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName, g_project_code_4_url);
     o(      "<table summary=\"input infomation\">\n");
     {
         List* element_types_a;
@@ -1336,7 +1336,7 @@ void ticket_action()
         redirect("/list", _("not exists id."));
             return;
     }
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     list_alloc(elements_a, Element, element_new, element_free);
     elements_a = db_get_last_elements(db_a, iid, elements_a);
     if (elements_a->size == 0) {
@@ -1386,7 +1386,7 @@ void ticket_action()
                         char* id_str = get_element_value_by_id(elements_a, ELEM_ID_ID);
                         o("<a href=\"%s/%s/download/%d/", 
                                 cgiScriptName, 
-                                g_project_name_4_url,
+                                g_project_code_4_url,
                                 db_get_element_file_id(db_a, atoi(id_str), et->id)); 
                         u(value);
                         o("\" target=\"_blank\">");h(value); o("</a>\n");
@@ -1413,7 +1413,7 @@ void ticket_action()
                 o("\t\t<span>\n");
                 o("<a href=\"%s/%s/download/%d/", 
                         cgiScriptName, 
-                        g_project_name_4_url,
+                        g_project_code_4_url,
                         db_get_element_file_id(db_a, message_ids_a[i], et->id)); 
                 u(attachment_file_name); o("\" target=\"_blank\">");h(attachment_file_name); o("</a>\n");
                 o("\t\t&nbsp;</span>\n");
@@ -1470,13 +1470,13 @@ void ticket_action()
                             char buf[DEFAULT_LENGTH];
                             char* mime_type;
                             int file_id = db_get_element_file_id(db_a, message_ids_a[i], et->id);
-                            o("<a href=\"%s/%s/download/%d/", cgiScriptName, g_project_name_4_url, file_id); 
+                            o("<a href=\"%s/%s/download/%d/", cgiScriptName, g_project_code_4_url, file_id); 
                             u(value); o("\" target=\"_blank\">");h(value); o("</a>\n");
                             mime_type = db_get_element_file_mime_type(db_a, message_ids_a[i], et->id, buf);
                             if (strstr(mime_type, "image") != NULL) {
                                 o("<div>\n");
                                 o("<img class=\"attachment_image\" src=\"%s/%s/download/%d\" alt=\"attachment file\" />\n",
-                                        cgiScriptName, g_project_name_4_url, file_id);
+                                        cgiScriptName, g_project_code_4_url, file_id);
                                 o("</div>\n");
                             }
                         }
@@ -1497,7 +1497,7 @@ void ticket_action()
     o(      "<a name=\"reply\"></a>\n"
             "<div id=\"input_form\">\n"
             "<h3>%s</h3>\n"
-            "<form id=\"reply_form\" name=\"reply_form\" action=\"%s/%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", _("Reply Ticket"), cgiScriptName, g_project_name_4_url);
+            "<form id=\"reply_form\" name=\"reply_form\" action=\"%s/%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", _("Reply Ticket"), cgiScriptName, g_project_code_4_url);
     o(      "<input type=\"hidden\" name=\"ticket_id\" value=\"%s\" />\n", ticket_id);
     o(      "<div class=\"description\">%s</div>\n"
             "<noscript><div class=\"description\">%s</div></noscript>\n", _("input form and push reply."), _("note: they are checked by only JavaScript."));
@@ -1591,7 +1591,7 @@ void register_submit_action()
     if (mode == MODE_INVALID)
         die("requested invalid mode.");
     ticket_a = message_new();
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
@@ -1739,7 +1739,7 @@ void register_at_once_action()
     char sender[DEFAULT_LENGTH];
     get_cookie_string(COOKIE_SENDER, sender);
 
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("Register Tickets At Once"), "register_at_once.js", NAVI_REGISTER_AT_ONCE);
     output_calendar_js();
@@ -1764,7 +1764,7 @@ void register_at_once_action()
             _("[register ticket at once description2]"),
             _("[register ticket at once description3]"),
             _("register finish."));
-    o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/%s/register_at_once_confirm\" method=\"post\">\n", cgiScriptName, g_project_name_4_url);
+    o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/%s/register_at_once_confirm\" method=\"post\">\n", cgiScriptName, g_project_code_4_url);
     project_free(project_a);
     {
         /* 一括用、CSV形式フィールド */
@@ -1802,7 +1802,7 @@ void register_at_once_confirm_action()
     char* content_a = xalloc(sizeof(char) * VALUE_LENGTH);
     get_cookie_string(COOKIE_SENDER, sender);
 
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     cgiFormString("csvdata", content_a, VALUE_LENGTH);
     csv_a = csv_new(content_a);
     xfree(content_a);
@@ -1822,7 +1822,7 @@ void register_at_once_confirm_action()
             _("register tickets at once confirm"),
             _("[register ticket at once description5]"),
             _("note: they are checked by only JavaScript."));
-    o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/%s/register_at_once_submit\" method=\"post\">\n", cgiScriptName, g_project_name_4_url);
+    o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/%s/register_at_once_submit\" method=\"post\">\n", cgiScriptName, g_project_code_4_url);
     o(      "<table summary=\"input infomation\">\n");
     {
         int line_count = 0;
@@ -1958,7 +1958,7 @@ void register_at_once_submit_action()
         }
         list_add(field_ids_a, field_id);
     }
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     db_begin(db_a);
     while (1) {
         Message* ticket_a = message_new();
@@ -2058,7 +2058,7 @@ void top_action()
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("Project Top"), NULL, NAVI_TOP);
     list_alloc(states_a, State, state_new, state_free);
@@ -2077,7 +2077,7 @@ void top_action()
             list_alloc(elements_a, Element, element_new, element_free);
             elements_a = db_get_last_elements_4_list(db_a, ticket->id, elements_a);
             o("\t\t<li>\n");
-            o("\t\t\t<a href=\"%s/%s/ticket/%d", cgiScriptName, g_project_name_4_url, ticket->id); o("\">");
+            o("\t\t\t<a href=\"%s/%s/ticket/%d", cgiScriptName, g_project_code_4_url, ticket->id); o("\">");
             h(get_element_value_by_id(elements_a, ELEM_ID_TITLE));
             o(      "</a>\n");
             o("\t\t</li>\n");
@@ -2097,7 +2097,7 @@ void top_action()
         foreach (it, states_a) {
             State* s = it->element;
             o("\t\t<li>\n");
-            o("\t\t\t<a href=\"%s/%s/search?field%d=", cgiScriptName, g_project_name_4_url, ELEM_ID_STATUS); us(s->name); o("\">");
+            o("\t\t\t<a href=\"%s/%s/search?field%d=", cgiScriptName, g_project_code_4_url, ELEM_ID_STATUS); us(s->name); o("\">");
             hs(s->name);
             o("\t\t\t</a>\n");
             o("(%d)", s->count);
@@ -2112,7 +2112,7 @@ void top_action()
     /* ID検索フォームの表示 */
     o(      "<div id=\"top_id_search\">\n"
             "<h4>%s</h4>\n"
-            "\t<form action=\"%s/%s/search\" method=\"get\">\n", _("ID search"), cgiScriptName, g_project_name_4_url);
+            "\t<form action=\"%s/%s/search\" method=\"get\">\n", _("ID search"), cgiScriptName, g_project_code_4_url);
     o(      "\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"%s\" maxlength=\"%d\" />\n", _("display the ticket on inputed id."), DEFAULT_LENGTH - 1);
     o(      "\t\t<input type=\"submit\" class=\"button\" value=\"%s\" />\n"
             "\t</form>\n"
@@ -2123,8 +2123,8 @@ void top_action()
     project_free(project_a);
     o(      "<div id=\"main_body\">\n"
             "<div class=\"top_edit\">\n"
-            "<a id=\"new_ticket_link\" href=\"%s/%s/register\">%s</a>&nbsp;\n", cgiScriptName, g_project_name_4_url, _("Register New Ticket."));
-    o(      "<a href=\"%s/%s/edit_top\">%s</a>\n", cgiScriptName, g_project_name_4_url, _("edit page"));
+            "<a id=\"new_ticket_link\" href=\"%s/%s/register\">%s</a>&nbsp;\n", cgiScriptName, g_project_code_4_url, _("Register New Ticket."));
+    o(      "<a href=\"%s/%s/edit_top\">%s</a>\n", cgiScriptName, g_project_code_4_url, _("edit page"));
     o(      "</div>\n");
     wiki_out(db_a, "top");
     o(      "</div>\n"
@@ -2141,7 +2141,7 @@ void rss_action()
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
     cgiHeaderContentType("text/xml; charset=utf-8;");
     o(      "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"
@@ -2150,14 +2150,14 @@ void rss_action()
             "\t\txmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" \n"
             "\t\txml:lang=\"ja\">\n"
             "\n"
-            "\t<channel rdf:about=\"");h(string_rawstr(project_a->home_url));o("%s/%s/rss\">\n", cgiScriptName, g_project_name_4_url);
+            "\t<channel rdf:about=\"");h(string_rawstr(project_a->home_url));o("%s/%s/rss\">\n", cgiScriptName, g_project_code_4_url);
     o(      "\t\t<title>");h(string_rawstr(project_a->name)); o("</title>\n"
             "\t\t<link>");h(string_rawstr(project_a->home_url));o("/bt/</link>\n");
     o(      "\t\t<description>");h(string_rawstr(project_a->name));o("</description>\n"
             "\t\t<items>\n"
             "\t\t\t<rdf:Seq>\n");
-    o(      "\t\t\t\t<rdf:li rdf:resource=\"");h(cgiServerName);o("%s/%s/list\"/>\n", cgiScriptName, g_project_name_4_url);
-    o(      "\t\t\t\t<rdf:li rdf:resource=\"");h(cgiServerName);o("%s/%s/register\"/>\n", cgiScriptName, g_project_name_4_url);
+    o(      "\t\t\t\t<rdf:li rdf:resource=\"");h(cgiServerName);o("%s/%s/list\"/>\n", cgiScriptName, g_project_code_4_url);
+    o(      "\t\t\t\t<rdf:li rdf:resource=\"");h(cgiServerName);o("%s/%s/register\"/>\n", cgiScriptName, g_project_code_4_url);
     o(      "\t\t\t</rdf:Seq>\n"
             "\t\t</items>\n"
             "\t</channel>\n");
@@ -2171,11 +2171,11 @@ void rss_action()
             Iterator* it;
             list_alloc(elements_a, Element, element_new, element_free);
             elements_a = db_get_last_elements_4_list(db_a, ticket->id, elements_a);
-            o(      "\t<item rdf:about=\"");h(string_rawstr(project_a->home_url));o("%s/%s/ticket/%d\">\n", cgiScriptName, g_project_name_4_url, ticket->id);
+            o(      "\t<item rdf:about=\"");h(string_rawstr(project_a->home_url));o("%s/%s/ticket/%d\">\n", cgiScriptName, g_project_code_4_url, ticket->id);
             o(      "\t\t<title>ID:%5d ", ticket->id);
             h(get_element_value_by_id(elements_a, ELEM_ID_TITLE));
             o(      "</title>\n");
-            o(      "\t\t<link>");h(string_rawstr(project_a->home_url));o("%s/%s/ticket/%d</link>\n", cgiScriptName, g_project_name_4_url, ticket->id);
+            o(      "\t\t<link>");h(string_rawstr(project_a->home_url));o("%s/%s/ticket/%d</link>\n", cgiScriptName, g_project_code_4_url, ticket->id);
             o(      "\t\t<description><![CDATA[\n");
             o(      "%s: ", _("registerer"));
             hmail(get_element_value_by_id(elements_a, ELEM_ID_ORG_SENDER));
@@ -2217,7 +2217,7 @@ void statistics_action()
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("Statictics"), "graph.js", NAVI_STATISTICS);
     output_graph_js();
@@ -2295,7 +2295,7 @@ void help_action()
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, "ヘルプ", NULL, NAVI_HELP);
     o(      "<h2>");h(string_rawstr(project_a->name));o("</h2>\n"
@@ -2312,7 +2312,7 @@ void edit_top_action()
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("edit top page"), "edit_top.js", NAVI_OTHER);
     project_free(project_a);
@@ -2324,7 +2324,7 @@ void edit_top_action()
             _("edit top page"),
             _("edit top page"),
             _("[wiki description1]"),
-            cgiScriptName, g_project_name_4_url);
+            cgiScriptName, g_project_code_4_url);
     o(      "<textarea name=\"edit_top\" id=\"edit_top\" rows=\"3\" cols=\"10\">");
     wiki_content_out(db_a, "top");
     o(      "</textarea>\n"
@@ -2343,7 +2343,7 @@ void edit_top_submit_action()
     char buffer[DEFAULT_LENGTH];
 
     cgiFormString("edit_top", value_a, VALUE_LENGTH);
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     wiki_save(db_a, "top", value_a);
     db_finish(db_a);
     xfree(value_a);
@@ -2361,7 +2361,7 @@ void download_action()
     strcpy(element_id_str, g_path_info);
     element_file_id = atoi(element_id_str);
 
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     file_a = db_get_element_file(db_a, element_file_id, file_a);
     if (!file_a) goto error;
     o("Content-Type: %s\r\n", string_rawstr(file_a->mime_type));
@@ -2388,7 +2388,7 @@ void setting_file_action()
     d("start\n");
     strcpy(name, g_path_info);
 
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     file_a = db_get_setting_file(db_a, name, file_a);
     if (!file_a) goto error;
     o("Content-Type: %s\r\n", string_rawstr(file_a->mime_type));

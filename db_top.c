@@ -3,6 +3,7 @@
 #include <string.h>
 #include <sqlite3.h>
 #include "data.h"
+#include "db_top.h"
 #include "db_project.h"
 #include "alloc.h"
 #include "util.h"
@@ -27,8 +28,7 @@ List* db_top_get_all_project_infos(Database* db, List* project_infos)
         ProjectInfo* pi = list_new_element(project_infos);
 
         pi->id = sqlite3_column_int(stmt, 0);
-/*    d("db_top_get_all_project_infos 1 [%x]\n", pi->name);*/
-        string_set(pi->name, (char*)sqlite3_column_text(stmt, 1));
+        string_set(pi->code, (char*)sqlite3_column_text(stmt, 1));
         pi->sort = sqlite3_column_int(stmt, 2);
         pi->deleted = sqlite3_column_int(stmt, 3);
         list_add(project_infos, pi);
@@ -54,7 +54,7 @@ ProjectInfo* db_top_get_project_info(Database* db, ProjectInfo* project_info, ch
 
     while (SQLITE_ROW == sqlite3_step(stmt)) {
         project_info->id = sqlite3_column_int(stmt, 0);
-        string_set(project_info->name, (char*)sqlite3_column_text(stmt, 1));
+        string_set(project_info->code, (char*)sqlite3_column_text(stmt, 1));
         project_info->sort = sqlite3_column_int(stmt, 2);
         project_info->deleted = sqlite3_column_int(stmt, 3);
         break;
@@ -76,6 +76,9 @@ void db_top_update_project(Database* db, Project* project)
     exec_query(db, "update setting set value = ? where name = 'home_url'",
             COLUMN_TYPE_TEXT, string_rawstr(project->home_url),
             COLUMN_TYPE_END);
+    exec_query(db, "update setting set value = ? where name = 'locale'",
+            COLUMN_TYPE_TEXT, string_rawstr(project->locale),
+            COLUMN_TYPE_END);
 }
 void db_top_update_project_infos(Database* db, List* project_infos)
 {
@@ -84,7 +87,7 @@ void db_top_update_project_infos(Database* db, List* project_infos)
     foreach (it, project_infos) {
         ProjectInfo* pi = it->element;
         exec_query(db, "update project_info set name = ?, sort = ? , deleted = ? where id = ?",
-                COLUMN_TYPE_TEXT, string_rawstr(pi->name),
+                COLUMN_TYPE_TEXT, string_rawstr(pi->code),
                 COLUMN_TYPE_INT, pi->sort,
                 COLUMN_TYPE_INT, pi->deleted,
                 COLUMN_TYPE_INT, pi->id,
@@ -95,7 +98,7 @@ void db_top_update_project_infos(Database* db, List* project_infos)
 void db_top_register_project_info(Database* db, ProjectInfo* project_info)
 {
     exec_query(db, "insert into project_info(id, name, sort) values (NULL, ?, ?)",
-            COLUMN_TYPE_TEXT, string_rawstr(project_info->name),
+            COLUMN_TYPE_TEXT, string_rawstr(project_info->code),
             COLUMN_TYPE_INT, project_info->sort,
             COLUMN_TYPE_END);
     return;
@@ -143,6 +146,17 @@ String* get_search_sql_string_per_project(Database* db, DbInfo* db_info, List* k
     d("sql: %s\n", string_rawstr(sql_string));
     return sql_string;
 }
+void set_project_code_by_ticket(Ticket* t, List* projects)
+{
+    Iterator* it;
+    foreach (it, projects) {
+        ProjectInfo* pi = it->element;
+        if (pi->id == t->project_id) {
+            string_set(t->project_code, string_rawstr(pi->code));
+            break;
+        }
+    }
+}
 List* db_top_search(Database* db, char* q, List* tickets)
 {
     List* projects_a;
@@ -153,6 +167,7 @@ List* db_top_search(Database* db, char* q, List* tickets)
     sqlite3_stmt *stmt = NULL;
     List* keywords_a;
     int i, r;
+    int index = 1;
 
     list_alloc(keywords_a, String, string_new, string_free);
     keywords_a = parse_keywords(keywords_a, q);
@@ -190,7 +205,6 @@ List* db_top_search(Database* db, char* q, List* tickets)
         }
         sqlite3_finalize(stmt);
     }
-    list_free(projects_a);
     /* sqlを合成する。 */
     string_append(sql_search_a, "select project_id, id from (\n");
     foreach (it, sqls_a) {
@@ -208,10 +222,9 @@ List* db_top_search(Database* db, char* q, List* tickets)
         Iterator* it_k;
         foreach (it_k, keywords_a) { /* キーワードの数だけ */
             String* k = it_k->element;
-            int index = 1;
             for (i = 0; i < db_info->field_count; i++) { /* カラムの数だけ */
                 sqlite3_bind_text(stmt, index++, string_rawstr(k), string_len(k), NULL);
-                d("settext %s\n", string_rawstr(k));
+                d("settext %d:%s\n", index - 1, string_rawstr(k));
             }
         }
     }
@@ -234,8 +247,81 @@ List* db_top_search(Database* db, char* q, List* tickets)
     string_free(sql_search_a);
 
     list_free(db_infos_a);
+    /* チケットのタイトルとプロジェクト名を取得する */
+    foreach (it, tickets) {
+        Ticket* t = it->element;
+        set_project_code_by_ticket(t, projects_a);
+        t->project_name = db_top_get_project_name(db, t, t->project_name);
+        t->title = db_top_get_title(db, t, t->title);
+
+    }
+    list_free(projects_a);
     return tickets;
 
 ERROR_LABEL(db->handle)
+}
+String* db_top_get_project_name(Database* db, Ticket* t, String* project_name)
+{
+    String* sql_a = string_new();
+    sqlite3_stmt *stmt = NULL;
+
+    string_appendf(sql_a,
+            "select value "
+            "from db%d.setting "
+            "where name = 'project_name'", t->project_id);
+    if (sqlite3_prepare(db->handle, string_rawstr(sql_a), string_len(sql_a), &stmt, NULL) == SQLITE_ERROR) goto error;
+    sqlite3_reset(stmt);
+
+    if (SQLITE_ROW == sqlite3_step(stmt)) {
+        string_set(project_name, (char*)sqlite3_column_text(stmt, 0));
+    }
+    string_free(sql_a);
+
+    sqlite3_finalize(stmt);
+
+    return project_name;
+
+ERROR_LABEL(db->handle)
+}
+String* db_top_get_title(Database* db, Ticket* t, String* title)
+{
+    String* sql_a = string_new();
+    sqlite3_stmt *stmt = NULL;
+
+    string_appendf(sql_a,
+            "select field%d "
+            "from db%d.message "
+            "where ticket_id = ? order by registerdate desc limit 1", ELEM_ID_TITLE, t->project_id);
+    if (sqlite3_prepare(db->handle, string_rawstr(sql_a), string_len(sql_a), &stmt, NULL) == SQLITE_ERROR) goto error;
+    sqlite3_reset(stmt);
+    sqlite3_bind_int(stmt, 1, t->id);
+
+    if (SQLITE_ROW == sqlite3_step(stmt)) {
+        string_set(title, (char*)sqlite3_column_text(stmt, 0));
+    }
+    string_free(sql_a);
+
+    sqlite3_finalize(stmt);
+
+    return title;
+
+ERROR_LABEL(db->handle)
+}
+void db_top_set_locale()
+{
+    Project* top_project_a = project_new();
+    char locale[10];
+    char buffer[DEFAULT_LENGTH];
+    Database* db_a;
+
+    db_a = db_init(db_top_get_project_db_name("top", buffer));
+    top_project_a = db_get_project(db_a, top_project_a);
+    db_finish(db_a);
+    sprintf(locale, "%s.UTF-8", string_rawstr(top_project_a->locale));
+    bindtextdomain("starbug1", "locale");
+    textdomain("starbug1");
+    setlocale(LC_ALL, locale);
+
+    project_free(top_project_a);
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

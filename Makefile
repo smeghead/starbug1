@@ -20,6 +20,7 @@ endif
 
 #debug
 CFLAGS += -DDEBUG
+#CFLAGS += -DMEMORYDEBUG
 
 default: index.cgi admin.cgi
 

@@ -4,14 +4,14 @@
 #include "util.h"
 #include "admin_project.h"
 #include "admin_top.h"
+#include "db_top.h"
+
 /* 繧ｨ繝ｳ繝医Μ繝昴う繝ｳ繝医→縺ｪ繧九ヵ繧｡繧､繝ｫ */
 int cgiMain() {
     ActionType type = analysis_action();
     int ret = 0;
 
-    bindtextdomain("starbug1", "locale");
-    textdomain("starbug1");
-/*     setlocale(LC_ALL, "ja_JP.UTF-8"); */
+    db_top_set_locale();
 
     switch (type) {
         case ACTION_TYPE_ADMIN_TOP:

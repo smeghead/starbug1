@@ -69,7 +69,7 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
             "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />");
     o(        "\t<title>%s - ", _("Management Tool")); h(string_rawstr(project->name)); o(" - "); h(title); o("</title>\n");
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName);
-    o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../index.%s/%s/setting_file/user.css\" />\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
+    o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../index.%s/%s/setting_file/user.css\" />\n", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url);
     if (script_name) {
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/prototype.js\"></script>\n", cgiScriptName);
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/%s\"></script>\n", cgiScriptName, script_name);
@@ -77,7 +77,7 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
     o(      "</head>\n"
             "<body>\n"
             "<a name=\"top\"></a>\n"
-            "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/../index.%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url);
+            "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/../index.%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url);
     o(      "<div id='menu'>\n"
             "<ul>\n");
     o(      "\t<li><a href=\"%s/../index.%s/top/\" title=\"%s\">%s</a></li>\n",
@@ -88,12 +88,12 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
             "<br clear=\"all\" />\n"
             "</div>\n");
     o(      "<ul id=\"projectmenu\">\n");
-    o(      "\t<li><a %s href=\"%s/%s/\">%s</a></li>\n", navi == NAVI_MENU ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("Management Tool Menu"));
-    o(      "\t\t<li><a %s href=\"%s/%s/project\">%s</a></li>\n", navi == NAVI_PROJECT ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("Sub Project Settings"));
-    o(      "\t\t<li><a %s href=\"%s/%s/items\">%s</a></li>\n", navi == NAVI_ITEM ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("Columns Settings"));
-    o(      "\t\t<li><a %s href=\"%s/%s/style\">%s</a></li>\n", navi == NAVI_STYLE ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("Style Settings"));
-    o(      "\t\t<li><a %s href=\"%s/%s/admin_help\">%s</a></li>\n", navi == NAVI_ADMIN_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_name_4_url, _("Help"));
-    o(      "\t<li><a href=\"%s/../index.%s/%s/\">%s", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url, _("to"));h(string_rawstr(project->name)); o("%s</a></li>\n", _("to(suffix)"));
+    o(      "\t<li><a %s href=\"%s/%s/\">%s</a></li>\n", navi == NAVI_MENU ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("Management Tool Menu"));
+    o(      "\t\t<li><a %s href=\"%s/%s/project\">%s</a></li>\n", navi == NAVI_PROJECT ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("Sub Project Settings"));
+    o(      "\t\t<li><a %s href=\"%s/%s/items\">%s</a></li>\n", navi == NAVI_ITEM ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("Columns Settings"));
+    o(      "\t\t<li><a %s href=\"%s/%s/style\">%s</a></li>\n", navi == NAVI_STYLE ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("Style Settings"));
+    o(      "\t\t<li><a %s href=\"%s/%s/admin_help\">%s</a></li>\n", navi == NAVI_ADMIN_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("Help"));
+    o(      "\t<li><a href=\"%s/../index.%s/%s/\">%s", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url, _("to"));h(string_rawstr(project->name)); o("%s</a></li>\n", _("to(suffix)"));
     o(      "</ul>\n"
             "<br clear=\"all\" />\n");
 }
@@ -133,7 +133,7 @@ void top_action()
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("Menu"), NULL, NAVI_MENU);
 
@@ -147,9 +147,9 @@ void top_action()
     o("<h3>%s</h3>\n", _("Management Tool Menu"));
     o("<div id=\"admin_menu\">\n");
     o("\t<dl>\n");
-    o("\t\t<dt><a href=\"%s/%s/project\">%s</a></dt><dd>%s</dd>\n", cgiScriptName, g_project_name_4_url, _("Sub Project Settings"), _("This is basic sub projects settings."));
-    o("\t\t<dt><a href=\"%s/%s/items\">%s</a></dt><dd>%s</dd>\n", cgiScriptName, g_project_name_4_url, _("Columns Settings"), _("This is Columns Settings of Tickets."));
-    o("\t\t<dt><a href=\"%s/%s/style\">%s</a></dt><dd>%s</dd>\n", cgiScriptName, g_project_name_4_url, _("Style Settings"), _("This is StyleSheet Settings."));
+    o("\t\t<dt><a href=\"%s/%s/project\">%s</a></dt><dd>%s</dd>\n", cgiScriptName, g_project_code_4_url, _("Sub Project Settings"), _("This is basic sub projects settings."));
+    o("\t\t<dt><a href=\"%s/%s/items\">%s</a></dt><dd>%s</dd>\n", cgiScriptName, g_project_code_4_url, _("Columns Settings"), _("This is Columns Settings of Tickets."));
+    o("\t\t<dt><a href=\"%s/%s/style\">%s</a></dt><dd>%s</dd>\n", cgiScriptName, g_project_code_4_url, _("Style Settings"), _("This is StyleSheet Settings."));
     o("\t</dl>\n");
     o("</div>\n");
     o("<h3>%s</h3>\n", _("About mail notify features"));
@@ -173,13 +173,13 @@ void project_action()
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("Sub Project Settings"), "management.js", NAVI_PROJECT);
 
     o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("Management Tool"));
     o("<div id=\"setting_form\">\n");
-    o("\t<form id=\"management_form\" action=\"%s/%s/project_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName, g_project_name_4_url);
+    o("\t<form id=\"management_form\" action=\"%s/%s/project_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName, g_project_code_4_url);
     o("\t\t<h3>%s</h3>\n", _("Sub Project Settings"));
     o("\t\t<table summary=\"project table\">\n");
     o("\t\t\t<tr>\n");
@@ -242,7 +242,7 @@ void project_submit_action()
     char upload_max_size_str[DEFAULT_LENGTH];
     char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     db_begin(db_a);
     project_a = db_get_project(db_a, project_a);
     cgiFormStringNoNewlines("project.name", name, DEFAULT_LENGTH);
@@ -276,7 +276,7 @@ void items_action()
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("Columns Settings"), "management.js", NAVI_ITEM);
 
@@ -284,13 +284,13 @@ void items_action()
     o("<div id=\"top\">\n");
     project_free(project_a);
     o("<div id=\"setting_form\">\n"
-      "\t<form id=\"management_form\" action=\"%s/%s/items_submit\" method=\"post\">\n", cgiScriptName, g_project_name_4_url);
+      "\t<form id=\"management_form\" action=\"%s/%s/items_submit\" method=\"post\">\n", cgiScriptName, g_project_code_4_url);
     o("\t\t<h3>%s</h3>\n"
       "\t\t<div class=\"description\">%s</div>\n"
       "\t\t<div><a href=\"%s/%s/new_item\">%s</a></div>\n",
       _("Columns Settings"),
       _("[columns setting description]"),
-      cgiScriptName, g_project_name_4_url,
+      cgiScriptName, g_project_code_4_url,
       _("add new column"));
 
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
@@ -509,7 +509,7 @@ void items_action()
           "\t\t</table>\n");
         if (et->id > BASIC_ELEMENT_MAX) {
             /* 基本項目は削除できないようにする。 */
-            o("\t\t<div class=\"delete_item\"><a href=\"%s/%s/delete_item/%d\">", cgiScriptName, g_project_name_4_url, et->id);o(_("delete this column("));hs(et->name);o("%s</a></div>\n", _(")(delete this column)"));
+            o("\t\t<div class=\"delete_item\"><a href=\"%s/%s/delete_item/%d\">", cgiScriptName, g_project_code_4_url, et->id);o(_("delete this column("));hs(et->name);o("%s</a></div>\n", _(")(delete this column)"));
         }
         list_free(items_a);
         o("\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("Update"));
@@ -529,7 +529,7 @@ void items_submit_action()
 {
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     db_begin(db_a);
     update_elements();
     db_commit(db_a);
@@ -660,7 +660,7 @@ void new_item_action()
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("add new column"), "new_item.js", NAVI_OTHER);
 
@@ -673,7 +673,7 @@ void new_item_action()
             "<table class=\"item_table\" summary=\"new item table\">\n",
             _("add new column"),
             _("[ticket add description]"),
-            cgiScriptName, g_project_name_4_url);
+            cgiScriptName, g_project_code_4_url);
     o("\t\t\t<tr>\n");
     o("\t\t\t\t<th class=\"required\">%s<span class=\"required\">※</span></th>\n", _("column name"));
     o("\t\t\t\t<td>\n");
@@ -807,7 +807,7 @@ void new_item_submit_action()
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     db_begin(db_a);
 
     cgiFormStringNoNewlines("field.name", value, DEFAULT_LENGTH);
@@ -873,7 +873,7 @@ void delete_item_action()
     e_type_id = g_path_info;
     iid = atoi(e_type_id);
     d("iid: %d\n", iid);
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("column delete"), "delete_item.js", NAVI_OTHER);
 
@@ -887,7 +887,7 @@ void delete_item_action()
             "%s</strong></div>"
             "<div class=\"infomation\">%s</div>\n"
             "<input class=\"button\" type=\"submit\" value=\"%s\" />\n",
-            cgiScriptName, g_project_name_4_url, iid,
+            cgiScriptName, g_project_code_4_url, iid,
             _("if column has deleted, it's forever gone."),
             _("this will disappear column of exists ticket."),
             _("if you really want to delete, push delete button."),
@@ -912,7 +912,7 @@ void delete_item_submit_action()
     d("g_path_info: %s\n", g_path_info);
     e_type_id = g_path_info;
     iid = atoi(e_type_id);
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     db_begin(db_a);
 
     db_delete_element_type(db_a, iid);
@@ -926,7 +926,7 @@ void style_action()
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
     Project* project_a = project_new();
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("Style Settings"), "style.js", NAVI_STYLE);
     o(      "<h2>%s %s</h2>", string_rawstr(project_a->name), _("Management Tool"));
@@ -934,7 +934,7 @@ void style_action()
     o(      "<div id=\"top\">\n"
             "<h3>%s</h3>\n"
             "<div id=\"description\">%s</div>\n", _("edit style sheet"), _("edit style sheet setting and push update button."));
-    o(      "<form id=\"edit_css_form\" action=\"%s/%s/style_submit\" method=\"post\">\n", cgiScriptName, g_project_name_4_url);
+    o(      "<form id=\"edit_css_form\" action=\"%s/%s/style_submit\" method=\"post\">\n", cgiScriptName, g_project_code_4_url);
     o(      "<textarea name=\"edit_css\" id=\"edit_top\" rows=\"3\" cols=\"10\">");
     {
         /* user.css の出力 */
@@ -994,7 +994,7 @@ void style_submit_action()
     cgiFormString("edit_css", sf_a->content, VALUE_LENGTH);
     sf_a->size = strlen(sf_a->content);
     string_set(sf_a->mime_type, "text/css");
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     db_setting_file_save(db_a, sf_a);
     db_finish(db_a);
 
@@ -1006,7 +1006,7 @@ void admin_help_action()
     Project* project_a = project_new();
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, "ヘルプ", NULL, NAVI_ADMIN_HELP);
     o(      "<h2>");h(string_rawstr(project_a->name));o("</h2>\n"

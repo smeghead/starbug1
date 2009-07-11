@@ -10,9 +10,9 @@
 #include "util.h"
 #include "hook.h"
 
-/* プロジェクト名 */
-char g_project_name[DEFAULT_LENGTH] = "";
-char g_project_name_4_url[DEFAULT_LENGTH] = "";
+/* プロジェクトコード */
+char g_project_code[DEFAULT_LENGTH] = "";
+char g_project_code_4_url[DEFAULT_LENGTH] = "";
 /* アクション名 */
 char g_action_name[DEFAULT_LENGTH] = "";
 /* PATH_INFO */
@@ -91,20 +91,20 @@ ActionType analysis_action()
     char admin_cgi_file_name[DEFAULT_LENGTH] = "";
     ActionType ret = ACTION_TYPE_NONE;
 
-    memset(g_project_name, 0, DEFAULT_LENGTH);
+    memset(g_project_code, 0, DEFAULT_LENGTH);
     memset(g_action_name, 0, DEFAULT_LENGTH);
     memset(g_path_info, 0, DEFAULT_LENGTH);
     d("************************************\n");
     d("REQUEST: %s%s\n", script_name, path_info);
     if (strlen(path_info) > 1) {
-        strncpy(g_project_name, path_info + 1, DEFAULT_LENGTH);
+        strncpy(g_project_code, path_info + 1, DEFAULT_LENGTH);
     } else {
         redirect_raw("top");
         return ret; /* ACTION_TYPE_NONE を返却する。 */
     }
-    if ((index = strchr(g_project_name, '/'))) {
+    if ((index = strchr(g_project_code, '/'))) {
         *index = '\0';
-        strncpy(g_action_name, index + 1, DEFAULT_LENGTH - (strlen(g_project_name) + 1));
+        strncpy(g_action_name, index + 1, DEFAULT_LENGTH - (strlen(g_project_code) + 1));
         if ((index = strchr(g_action_name, '/'))) {
             *index = '\0';
             /* 残りをpath_infoとする */
@@ -112,13 +112,13 @@ ActionType analysis_action()
         }
     }
     /* URLとして使われるプロジェクトID。URL encodeする。 */
-    url_encode((unsigned char*)g_project_name, (unsigned char*)g_project_name_4_url, DEFAULT_LENGTH);
+    url_encode((unsigned char*)g_project_code, (unsigned char*)g_project_code_4_url, DEFAULT_LENGTH);
 
     sprintf(index_cgi_file_name, "index.%s", get_ext(cgiScriptName));
     sprintf(admin_cgi_file_name, "admin.%s", get_ext(cgiScriptName));
     /* 実行するモードの判定 */
     if (strstr(script_name, index_cgi_file_name)) {
-        if (strcmp(g_project_name, "top") == 0) {
+        if (strcmp(g_project_code, "top") == 0) {
             d("actiontype top\n");
             ret = ACTION_TYPE_INDEX_TOP;
         } else {
@@ -126,8 +126,8 @@ ActionType analysis_action()
             ret = ACTION_TYPE_INDEX;
         }
     } else if (strstr(script_name, admin_cgi_file_name)) {
-        d("g_project_name: %s\n", g_project_name);
-        if (strcmp(g_project_name, "top") == 0) {
+        d("g_project_code: %s\n", g_project_code);
+        if (strcmp(g_project_code, "top") == 0) {
             d("actiontype admin top\n");
             ret = ACTION_TYPE_ADMIN_TOP;
         } else {
@@ -266,7 +266,7 @@ static cgiFormResultType cgiHtmlEscapeDataMultiLine(char *data, int len)
             } else {
                 char display_text[DEFAULT_LENGTH];
                 if (strlen(project_id) == 0) {
-                    strcpy(project_id, g_project_name_4_url);
+                    strcpy(project_id, g_project_code_4_url);
                     strcpy(display_text, ticket_id);
                 } else {
                     sprintf(display_text, "%s:%s", project_id, ticket_id);
@@ -519,7 +519,7 @@ void redirect(const char* path, const char* message)
         strcat(uri, "?message=");
         strcat(uri, parambuf);
     }
-    sprintf(redirecturi, "%s/%s%s", cgiScriptName, g_project_name, uri);
+    sprintf(redirecturi, "%s/%s%s", cgiScriptName, g_project_code, uri);
     o("Status: 302 Temporary Redirection\r\n");
     cgiHeaderLocation(redirecturi);
 }
@@ -553,7 +553,7 @@ void redirect_with_hook_messages(const char* path, const char* message, List* re
             i++;
         }
     }
-    sprintf(redirecturi, "%s/%s%s", cgiScriptName, g_project_name, uri);
+    sprintf(redirecturi, "%s/%s%s", cgiScriptName, g_project_code, uri);
     o("Status: 302 Temporary Redirection\r\n");
     cgiHeaderLocation(redirecturi);
 }

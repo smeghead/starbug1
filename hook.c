@@ -42,7 +42,7 @@ static String* create_json(String* content, Project* project, Message* message, 
             project->name,
             message->id,
             string_rawstr(base_url_a),
-            g_project_name,
+            g_project_code,
             message->id);
     string_free(base_url_a);
     foreach (it, element_types) {
@@ -74,10 +74,10 @@ static HookMessage* create_hook_project(Project* project, Message* message, List
 
     url_a = get_base_url(url_a);
     HookMessage* hook_message = xalloc(sizeof(HookMessage));
-    strncpy(hook_message->project_id, g_project_name, DEFAULT_LENGTH - 1);
+    strncpy(hook_message->project_id, g_project_code, DEFAULT_LENGTH - 1);
     strncpy(hook_message->project_name, string_rawstr(project->name), DEFAULT_LENGTH - 1);
     hook_message->id = message->id;
-    string_appendf(url_a, "/%s/ticket/%d", g_project_name, message->id);
+    string_appendf(url_a, "/%s/ticket/%d", g_project_code, message->id);
     strncpy(hook_message->url, string_rawstr(url_a), DEFAULT_LENGTH - 1);
     string_free(url_a);
     strncpy(hook_message->subject, get_element_value_by_id(elements, ELEM_ID_TITLE), DEFAULT_LENGTH - 1);
@@ -140,7 +140,7 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
             handle = dlopen(dlpath, RTLD_LAZY);
             if (!handle) {
                 d("dlopen failed: %s\n", dlerror());
-                sprintf(result->message, "[ERROR] hook処理(%s)でエラーが発生しました。(プラグインの読み込みに失敗しました。%s)", hook_command, dlerror());
+                sprintf(result->message, _("[ERROR] hook処理(%s)でエラーが発生しました。(プラグインの読み込みに失敗しました。%s)"), hook_command, dlerror());
             } else {
                 char* error;
                 int (*func)(HookMessage*);
@@ -156,10 +156,10 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
                     string_free(base_url_a);
                     if (ret == 0) {
                         d("ok\n");
-                        sprintf(result->message, "hook処理(%s)を実行しました。", hook_command);
+                        sprintf(result->message, _("hook処理(%s)を実行しました。"), hook_command);
                     } else {
                         d("ng\n");
-                        sprintf(result->message, "[ERROR] hook処理(%s)でエラーが発生しました。(return code: %d)", hook_command, ret);
+                        sprintf(result->message, _("[ERROR] hook処理(%s)でエラーが発生しました。(return code: %d)"), hook_command, ret);
                     }
                 }
             }
@@ -180,9 +180,9 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
             ret = system(hook_command);
             xfree(val_a);
             if (ret == 0) {
-                sprintf(result->message, "hook処理(%s)を実行しました。", hook_command);
+                sprintf(result->message, _("hook処理(%s)を実行しました。"), hook_command);
             } else {
-                sprintf(result->message, "[ERROR] hook処理(%s)でエラーが発生しました。(return code: %d)", hook_command, ret);
+                sprintf(result->message, _("[ERROR] hook処理(%s)でエラーが発生しました。(return code: %d)"), hook_command, ret);
             }
             list_add(hook->results, result);
         }

@@ -265,6 +265,12 @@ div.complete_message {
 /*     width: 30%; */
 /*     float: left; */
 }
+#main-content {
+    margin:0px;
+    padding:0px;
+/*     width: 65%; */
+/*     float: left; */
+}
 #project_list {
     float:left;
     width:350px;
@@ -282,9 +288,8 @@ div.complete_message {
     padding: 0px;
 }
 #dashboard {
-    float:auto;
-    padding-left:380px;
-    padding-right:10px;
+    margin: 0px;
+    padding:0px 10px 0px 390px;
 /*     width: 65%; */
 /*     float: left; */
 }

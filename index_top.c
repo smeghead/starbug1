@@ -52,15 +52,18 @@ void top_output_header(char* title, Project* project)
     o(      "<div id=\"projectmenu\">\n"
             "\t<ul>\n"
             "\t\t<li><a href=\""); h(string_rawstr(project->home_url)); o("\">"); h(string_rawstr(project->home_description)); o("</a></li>\n");
-    o(      "\t\t<li><a href=\"%s/../index.%s/%s/\">%s</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url, _("Project Top"));
-    o(      "\t\t<li><a href=\"%s/../admin.%s/%s/\">%s</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_name_4_url, _("Project Management"));
+    o(      "\t\t<li><a href=\"%s/../index.%s/%s/\">%s</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url, _("Project Top"));
+    o(      "\t\t<li><a href=\"%s/../admin.%s/%s/\">%s</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url, _("Project Management"));
     o(      "\t</ul>\n");
-    o(      "</div>\n");
+    o(      "</div>\n"
+            "<br clear=\"all\" />\n"
+            "<div id=\"main-content\">");
 }
 void top_output_footer()
 {
     /* Finish up the page */
-    o(      "<div id=\"footer\">\n"
+    o(      "</div>\n"
+            "<div id=\"footer\">\n"
             "<hr />\n"
             "<div align=\"right\">\n"
             "<p>\n"
@@ -93,7 +96,7 @@ void top_top_action()
 
     list_alloc(project_infos_a, ProjectInfo, project_info_new, project_info_free);
 
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_infos_a = db_top_get_all_project_infos(db_a, project_infos_a);
     top_project_a = db_get_project(db_a, top_project_a);
     top_output_header(_("Top Page"), top_project_a);
@@ -116,14 +119,14 @@ void top_top_action()
         sprintf(db_name, "db/%d.db", p->id);
         db_project_a = db_init(db_name);
         project_a = db_get_project(db_project_a, project_a);
-        o(      "\t\t\t\t<li><a href=\"%s/", cgiScriptName); u(string_rawstr(p->name)); o("\">"); h(string_rawstr(project_a->name)); o("</a></li>\n");
+        o(      "\t\t\t\t<li><a href=\"%s/", cgiScriptName); u(string_rawstr(p->code)); o("\">"); h(string_rawstr(project_a->name)); o("</a></li>\n");
         project_free(project_a);
         db_finish(db_project_a);
     }
     list_free(project_infos_a);
     o(      "\t</ul>\n");
     o(      "\t<h2>%s</h2>\n"
-            "\t<form action=\"%s/%s/top_search\" method=\"get\">\n", _("search"), cgiScriptName, g_project_name_4_url);
+            "\t<form action=\"%s/%s/top_search\" method=\"get\">\n", _("search"), cgiScriptName, g_project_code_4_url);
     o(      "\t\t<input type=\"text\" name=\"q\" />\n"
             "\t\t<input type=\"submit\" value=\"%s\" />\n"
             "\t</form>\n", _("search"));
@@ -131,7 +134,7 @@ void top_top_action()
     o(      "</div>\n");
     o(      "<div id=\"dashboard\">\n"
             "\t<h2>%s</h2>\n", _("description"));
-    o(      "<a href=\"%s/%s/top_edit_top\">%s</a>\n", cgiScriptName, g_project_name_4_url, _("edit top page"));
+    o(      "<a href=\"%s/%s/top_edit_top\">%s</a>\n", cgiScriptName, g_project_code_4_url, _("edit top page"));
     wiki_out(db_a, "top");
     d("pass wiki_out end\n");
     o(      "</div>\n");
@@ -146,7 +149,7 @@ void top_edit_top_action()
     char buffer[DEFAULT_LENGTH];
     Project* project_a = project_new();
 
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
     top_output_header(_("ページの編集"), project_a);
     project_free(project_a);
@@ -155,7 +158,7 @@ void top_edit_top_action()
             "<h3>%s</h3>\n"
             "<div id=\"description\">%s</div>\n",
             _("edit page"), _("edit page"), _("[wiki syntax description1]"));
-    o(      "<form id=\"edit_top_form\" action=\"%s/%s/top_edit_top_submit\" method=\"post\">\n", cgiScriptName, g_project_name_4_url);
+    o(      "<form id=\"edit_top_form\" action=\"%s/%s/top_edit_top_submit\" method=\"post\">\n", cgiScriptName, g_project_code_4_url);
     o(      "<textarea name=\"edit_top\" id=\"edit_top\" rows=\"3\" cols=\"10\">");
     wiki_content_out(db_a, "top");
     o(      "</textarea>\n"
@@ -174,7 +177,7 @@ void top_edit_top_submit_action()
     char* value_a = xalloc(sizeof(char) * VALUE_LENGTH);
 
     cgiFormString("edit_top", value_a, VALUE_LENGTH);
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     wiki_save(db_a, "top", value_a);
     db_finish(db_a);
     xfree(value_a);
@@ -193,23 +196,23 @@ void top_search_action()
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
     list_alloc(tickets_a, Ticket, ticket_new, ticket_free);
 
-    db_a = db_init(db_top_get_project_db_name(g_project_name, buffer));
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     tickets_a = db_top_search(db_a, q, tickets_a);
     top_project_a = db_get_project(db_a, top_project_a);
     top_output_header(_("Top Page"), top_project_a);
+    project_free(top_project_a);
     o(      "<div id=\"project_list\">\n"
             "\t<h2>%s</h2>\n"
             "\t<ul>\n", _("search result"));
     foreach (it, tickets_a) {
         Ticket* t = it->element;
-        o(      "\t\t\t\t<li><a href=\"%s/%s/ticket/%d", cgiScriptName, string_rawstr(t->project_name), t->id);
-        o("\">a"); o("</a></li>\n");
+        o(      "\t\t\t\t<li><a href=\"%s/%s/ticket/%d", cgiScriptName, string_rawstr(t->project_code), t->id);
+        o("\">"); h(string_rawstr(t->project_name)); o(" "); h(string_rawstr(t->title)); o("</a></li>\n");
     }
     list_free(tickets_a);
     o(      "</ul>\n");
     o(      "</div>\n");
     o(      "<br clear=\"all\" />\n");
-    project_free(top_project_a);
     top_output_footer();
     db_finish(db_a);
 }

@@ -1,3 +1,12 @@
+2009-07-11  smeghead <smeghead@users.sourceforge.jp>
+
+    * 複数サブプロジェクトの検索処理の実装中
+    * 変数名g_project_name,g_project_name_4_urlをg_project_code,g_project_code_4_urlに変更した。
+    * メモリリークを探す時のためのオプションMEMORYDEBUGを追加した。
+    * プロジェクト用のdbのsettingテーブルにロケール用のレコードを追加した。
+      $ su
+      # echo "insert into setting(name, value) values ('locale', 'ja_JP');" | sqlite3 1.db
+
 2009-07-10  smeghead <smeghead@users.sourceforge.jp>
 
     * 複数サブプロジェクトの検索処理の実装中

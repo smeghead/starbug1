@@ -17,7 +17,7 @@
     char time[20];\
     FILE *fp = fopen("debug.log", "a");\
     set_date_string(time);\
-    fprintf(fp, "[%s] {%s/%s}\t", time, g_project_name, g_action_name);\
+    fprintf(fp, "[%s] {%s/%s}\t", time, g_project_code, g_action_name);\
     fprintf(fp, __VA_ARGS__);\
     fclose(fp);\
 }
@@ -80,8 +80,8 @@ void page_not_found();
 #define MIN(a,b) (((a)<(b))?(a):(b)) 
 #define MAX(a,b) (((a )>(b))?(a):(b))
 
-extern char g_project_name[DEFAULT_LENGTH];
-extern char g_project_name_4_url[DEFAULT_LENGTH];
+extern char g_project_code[DEFAULT_LENGTH];
+extern char g_project_code_4_url[DEFAULT_LENGTH];
 extern char g_action_name[DEFAULT_LENGTH];
 extern char g_path_info[DEFAULT_LENGTH];
 void cgi_escape(char*);

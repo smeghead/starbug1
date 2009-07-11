@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-/*#include "util.h"*/
+#include "util.h"
 
 int alloc_count = 0;
 
-void* xalloc(size_t size)
+void* _xalloc(size_t size, char* file, int line)
 {
     void* p;
     p = calloc(1, size);
@@ -13,12 +13,20 @@ void* xalloc(size_t size)
         exit(-1);
     }
     alloc_count++;
-/*    d("xalloc: %p\n", p); */
+#ifdef MEMORYDEBUG
+    d("xalloc: %p (%s:%d)\n", p, file, line);
+#else
+    if (file == NULL || line == 0) {} /* 警告回避 */
+#endif
     return p;
 }
-void xfree(void* p)
+void _xfree(void* p, char* file, int line)
 {
-/*    d("xfree: %p\n", p); */
+#ifdef MEMORYDEBUG
+    d("xfree: %p (%s:%d)\n", p, file, line);
+#else
+    if (file == NULL || line == 0) {} /* 警告回避 */
+#endif
     alloc_count--;
     free(p);
     p = NULL;

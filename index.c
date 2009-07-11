@@ -5,16 +5,13 @@
 #include "util.h"
 #include "index_top.h"
 #include "index_project.h"
+#include "db_top.h"
 
 /* index.cgi縺ｮ繧ｨ繝ｳ繝医Μ繝昴う繝ｳ繝医↓縺ｪ繧矩未謨ｰ  */
 int cgiMain() {
     ActionType type = analysis_action();
     int ret = 0;
-    d("pass %d\n", type);
-
-    bindtextdomain("starbug1", "locale");
-    textdomain("starbug1");
-/*     setlocale(LC_ALL, "ja_JP.UTF-8"); */
+    db_top_set_locale();
 
     switch (type) {
         case ACTION_TYPE_INDEX_TOP:

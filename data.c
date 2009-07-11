@@ -75,12 +75,12 @@ char* get_condition_valid_value(Condition* c)
 ProjectInfo* project_info_new()
 {
     ProjectInfo* pi =  xalloc(sizeof(ProjectInfo));
-    pi->name = string_new();
+    pi->code = string_new();
     return pi;
 }
 void project_info_free(ProjectInfo* pi)
 {
-    string_free(pi->name);
+    string_free(pi->code);
     xfree(pi);
 }
 Project* project_new()
@@ -89,6 +89,7 @@ Project* project_new()
     p->name = string_new();
     p->home_description = string_new();
     p->home_url = string_new();
+    p->locale = string_new();
     return p;
 }
 void project_free(Project* p)
@@ -96,6 +97,7 @@ void project_free(Project* p)
     string_free(p->name);
     string_free(p->home_description);
     string_free(p->home_url);
+    string_free(p->locale);
     xfree(p);
 }
 State* state_new()
@@ -249,14 +251,16 @@ void wiki_free(Wiki* wiki)
 Ticket* ticket_new()
 {
     Ticket* t = xalloc(sizeof(Ticket));
+    t->project_code = string_new();
     t->project_name = string_new();
-    t->subject = string_new();
+    t->title = string_new();
     return t;
 }
 void ticket_free(Ticket* t)
 {
-    xfree(t->project_name);
-    xfree(t->subject);
+    string_free(t->project_code);
+    string_free(t->project_name);
+    string_free(t->title);
     xfree(t);
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

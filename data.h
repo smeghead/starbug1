@@ -21,7 +21,7 @@ typedef enum _bool {
 
 typedef struct {
     int id;
-    String* name;
+    String* code;
     int sort;
     int deleted;
 } ProjectInfo;
@@ -33,6 +33,7 @@ typedef struct {
     String* home_description;
     String* home_url;
     int upload_max_size;
+    String* locale;
 } Project;
 Project* project_new();
 void project_free(Project*);
@@ -171,9 +172,10 @@ void set_element_value(Element*, const char*);
 
 typedef struct {
     int project_id;
+    String* project_code;
     String* project_name;
     int id;
-    String* subject;
+    String* title;
 } Ticket;
 Ticket* ticket_new();
 void ticket_free(Ticket*);
