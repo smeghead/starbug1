@@ -318,6 +318,7 @@ void db_top_set_locale()
     top_project_a = db_get_project(db_a, top_project_a);
     db_finish(db_a);
     sprintf(locale, "%s.UTF-8", string_rawstr(top_project_a->locale));
+    d("locale: %s\n", locale);
     bindtextdomain("starbug1", "locale");
     textdomain("starbug1");
     setlocale(LC_ALL, locale);

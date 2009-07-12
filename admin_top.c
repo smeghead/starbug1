@@ -50,12 +50,12 @@ void top_output_header(char* title, Project* project)
     o(      "</head>\n"
             "<body>\n"
             "<a name=\"top\"></a>\n"
-            "<h1 id=\"toptitle\" title=\"Starbug1\">"); h(string_rawstr(project->name)); o(" %s</h1>\n", _("Project Management"));
+            "<h1 id=\"toptitle\" title=\"Starbug1\">"); h(string_rawstr(project->name)); o(" %s</h1>\n", _("project management"));
 /*             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/../img/starbug1.jpg\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName); */
     o(      "<div id=\"projectmenu\">\n"
             "\t<ul>\n");
-    o(      "\t\t<li><a href=\"%s/../index.%s/%s/\">%s</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url, _("Project Top"));
-    o(      "\t\t<li><a href=\"%s/../admin.%s/%s/\">%s</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url, _("Project Management"));
+    o(      "\t\t<li><a href=\"%s/../index.%s/%s/\">%s</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url, _("project top"));
+    o(      "\t\t<li><a href=\"%s/../admin.%s/%s/\">%s</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url, _("project management"));
     o(      "\t</ul>\n"
             "</div>\n"
             "<br clear=\"all\" />\n"
@@ -102,7 +102,7 @@ void top_top_action()
     db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_infos_a = db_top_get_all_project_infos(db_a, project_infos_a);
     project_a = db_get_project(db_a, project_a);
-    top_output_header(_("Project Management"), project_a);
+    top_output_header(_("project management"), project_a);
     /* メッセージの取得 */
     if ((cgiFormStringMultiple("message", &multi)) != cgiFormNotFound) {
         int i = 0;
@@ -121,7 +121,7 @@ void top_top_action()
     }
     cgiStringArrayFree(multi);
     o(      "<div id=\"project_info\">\n"
-            "\t<h2>%s</h2>\n", _("Project Information Settings"));
+            "\t<h2>%s</h2>\n", _("project information settings"));
     o(      "\t<form action=\"%s/top/top_update_project_info_submit\" method=\"post\">\n", cgiScriptName);
     o(      "\t\t<table>\n"
             "\t\t\t<tr>\n"
@@ -141,12 +141,12 @@ void top_top_action()
     o(      "\t\t\t\t<td><input type=\"text\" name=\"project.locale\" value=\""); v(string_rawstr(project_a->locale)); o("\" maxlength=\"9\" /></td>\n"
             "\t\t\t</tr>\n");
     o(      "\t\t</table>\n");
-    o(      "\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("Update"));
+    o(      "\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("update"));
     o(      "\t</form>\n");
     o(      "</div>\n");
     project_free(project_a);
     o(      "<div id=\"sub_project_list\">\n"
-            "\t<h2>%s</h2>\n", _("Sub Projects List"));
+            "\t<h2>%s</h2>\n", _("sub projects list"));
     o(      "\t<form action=\"%s/top/top_update_project_submit\" method=\"post\">\n", cgiScriptName);
     o(      "\t\t<table>\n"
             "\t\t\t<tr>\n"
@@ -184,7 +184,7 @@ void top_top_action()
     o(      "\t\t<p>%s</p>\n", _("[project settings description1]"));
     o(      "\t\t<p>%s</p>\n", _("[project settings description2]"));
     o(      "\t\t<p>%s</p>\n", _("[project settings description3]"));
-    o(      "\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("Update"));
+    o(      "\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("update"));
     o(      "\t</form>\n");
     o(      "\t</div>\n");
     o(      "\t<div id=\"project_add\">\n"
@@ -201,7 +201,7 @@ void top_top_action()
     o(      "\t\t\t\t</tr>\n");
     o(      "\t\t\t</table>\n");
     o(      "\t\t\t<p>%s</p>\n", _("[sub project name description]"));
-    o(      "\t\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("Add"));
+    o(      "\t\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("add"));
     o(      "\t\t</form>\n");
     o(      "\t</div>\n");
     top_output_footer();
@@ -234,7 +234,7 @@ void top_update_project_info_submit_action()
     }
     db_finish(db_a);
 
-    redirect("", _("Updated."));
+    redirect("", _("updated."));
 }
 static bool validate_project_code_exists(Database* db, char* code, int id)
 {
@@ -286,14 +286,14 @@ void top_update_project_submit_action()
             if (!validate_project_code(code)) {
                 list_free(project_infos_a);
                 db_finish(db_a);
-                redirect("", _("[ERROR] projectid top is reserved."));
+                redirect("", _("[error] projectid top is reserved."));
                 return;
             }
             if (!validate_project_code_exists(db_a, code, p->id)) {
                 char message[DEFAULT_LENGTH];
                 list_free(project_infos_a);
                 db_finish(db_a);
-                sprintf(message, "%s %s %s", _("[ERROR] projectid("), code, _(") is already exists."));
+                sprintf(message, "%s %s %s", _("[error] projectid("), code, _(") is already exists."));
                 redirect("", message);
                 return;
             }
@@ -314,7 +314,7 @@ void top_update_project_submit_action()
     }
     db_finish(db_a);
 
-    redirect("", _("Updated."));
+    redirect("", _("updated."));
 }
 void top_add_project_submit_action()
 {
@@ -332,14 +332,14 @@ void top_add_project_submit_action()
         if (!validate_project_code(code)) {
             project_info_free(pi_a);
             db_finish(db_a);
-            redirect("", _("[ERROR] projectid top is reserved."));
+            redirect("", _("[error] projectid top is reserved."));
             return;
         }
         if (!validate_project_code_exists(db_a, code, 0)) {
             char message[DEFAULT_LENGTH];
             project_info_free(pi_a);
             db_finish(db_a);
-            sprintf(message, "%s %s %s", _("[ERROR] projectid("), code, _(") is already exists."));
+            sprintf(message, "%s %s %s", _("[error] projectid("), code, _(") is already exists."));
             redirect("", message);
             return;
         }
@@ -351,6 +351,6 @@ void top_add_project_submit_action()
     }
     db_finish(db_a);
 
-    redirect("", _("Added."));
+    redirect("", _("added."));
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2009-07-11 23:39+0900\n"
+"POT-Creation-Date: 2009-07-12 19:22+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: smeghead <smeghead@users.sourceforge.jp>\n"
 "Language-Team: smeghead <smeghead@users.sourceforge.jp>\n"
@@ -13,37 +13,37 @@ msgstr ""
 #: admin_project.c:70 admin_project.c:144 admin_project.c:180
 #: admin_project.c:283 admin_project.c:667 admin_project.c:881
 #: admin_project.c:932
-msgid "Management Tool"
+msgid "management tool"
 msgstr "管理ツール"
 
 #: admin_project.c:85 index_project.c:131
 msgid "display sub projects list at top page."
 msgstr "トップページのサブプロジェクト一覧を表示します"
 
-#: admin_project.c:86
-msgid "Top Page(Sub projects list)"
+#: admin_project.c:86 index_project.c:131
+msgid "top page(sub projects list)"
 msgstr "トップページ（サブプロジェクト一覧)"
 
 #: admin_project.c:91 admin_project.c:147
-msgid "Management Tool Menu"
+msgid "management tool menu"
 msgstr "管理ツールメニュー"
 
 #: admin_project.c:92 admin_project.c:150 admin_project.c:178
 #: admin_project.c:183 index_project.c:144
-msgid "Sub Project Settings"
+msgid "sub project settings"
 msgstr "サブプロジェクト設定"
 
 #: admin_project.c:93 admin_project.c:151 admin_project.c:281
 #: admin_project.c:291
-msgid "Columns Settings"
+msgid "columns settings"
 msgstr "項目設定"
 
 #: admin_project.c:94 admin_project.c:152 admin_project.c:931
-msgid "Style Settings"
+msgid "style settings"
 msgstr "スタイル設定"
 
 #: admin_project.c:95 index_project.c:143
-msgid "Help"
+msgid "help"
 msgstr "ヘルプ"
 
 #: admin_project.c:96
@@ -55,23 +55,23 @@ msgid "to(suffix)"
 msgstr "へ"
 
 #: admin_project.c:138
-msgid "Menu"
+msgid "menu"
 msgstr "メニュー"
 
 #: admin_project.c:150
-msgid "This is basic sub projects settings."
+msgid "this is basic sub projects settings."
 msgstr "プロジェクトの基本的な情報の設定です。"
 
 #: admin_project.c:151
-msgid "This is Columns Settings of Tickets."
+msgid "this is columns settings of tickets."
 msgstr "チケットの項目についての設定です。"
 
 #: admin_project.c:152
-msgid "This is StyleSheet Settings."
+msgid "this is stylesheet settings."
 msgstr "スタイルシートの設定です。"
 
 #: admin_project.c:155
-msgid "About mail notify features"
+msgid "about mail notify features"
 msgstr "メール送信機能について"
 
 #: admin_project.c:157
@@ -81,7 +81,7 @@ msgstr ""
 "での設定が必要になります。hook機能の設定方法については、以下のサイトのインス"
 "トールのページを見てください。"
 
-#: admin_project.c:186 admin_top.c:155
+#: admin_project.c:186 admin_top.c:158
 msgid "sub project name"
 msgstr "サブプロジェクト名"
 
@@ -90,18 +90,19 @@ msgid "icon"
 msgstr "画像(ページの一番上に表示される画像です)"
 
 #: admin_project.c:194
-msgid "file upload max size(Kb)"
+msgid "file upload max size(kb)"
 msgstr "ファイルアップロードの最大サイズ(Kb)"
 
 #: admin_project.c:198 admin_project.c:305 admin_project.c:515
-#: admin_project.c:949 admin_top.c:141 admin_top.c:184 index_project.c:2333
-#: index_top.c:163
-msgid "Update"
+#: admin_project.c:949 admin_top.c:144 admin_top.c:187 index_project.c:2333
+#: index_top.c:166
+msgid "update"
 msgstr "更新"
 
-#: admin_project.c:266 admin_project.c:537
-msgid "更新しました"
-msgstr ""
+#: admin_project.c:266 admin_project.c:537 admin_project.c:1001
+#: admin_top.c:237 admin_top.c:317
+msgid "updated."
+msgstr "更新しました"
 
 #: admin_project.c:292
 msgid "[columns setting description]"
@@ -117,8 +118,12 @@ msgstr "新規項目の追加"
 msgid "column name"
 msgstr "項目名"
 
+#: admin_project.c:319 index_project.c:1287 index_project.c:1537
+msgid "*"
+msgstr "※"
+
 #: admin_project.c:322 admin_project.c:681
-msgid "This is name of ticket column."
+msgid "this is name of ticket column."
 msgstr "項目名です。"
 
 #: admin_project.c:328 admin_project.c:686
@@ -127,7 +132,7 @@ msgstr "項目の説明文"
 
 #: admin_project.c:335 admin_project.c:689
 msgid ""
-"This is description of ticket column. when register or replay, it is "
+"this is description of ticket column. when register or replay, it is "
 "displayed."
 msgstr "項目の説明文です。投稿時に表示されます。"
 
@@ -173,7 +178,7 @@ msgstr ""
 msgid "reply only"
 msgstr "返信専用属性"
 
-#: admin_project.c:365
+#: admin_project.c:365 admin_project.c:710
 msgid "this column will be reply only."
 msgstr "返信専用属性とする。"
 
@@ -235,11 +240,11 @@ msgid "means closed"
 msgstr "クローズを意味する"
 
 #: admin_project.c:415 admin_project.c:485 admin_project.c:757
-#: admin_project.c:789 admin_top.c:155 admin_top.c:194
+#: admin_project.c:789 admin_top.c:158 admin_top.c:197
 msgid "sort"
 msgstr "並び順"
 
-#: admin_project.c:415 admin_project.c:894 admin_top.c:155
+#: admin_project.c:415 admin_project.c:894 admin_top.c:158
 msgid "delete"
 msgstr "削除"
 
@@ -266,8 +271,8 @@ msgid "default value"
 msgstr "デフォルト値"
 
 #: admin_project.c:472
-msgid "投稿画面、返信画面での項目の初期値です。"
-msgstr ""
+msgid "this is default value."
+msgstr "投稿画面、返信画面での項目の初期値です。"
 
 #: admin_project.c:476 admin_project.c:781
 msgid "display in ticket list"
@@ -285,13 +290,13 @@ msgstr "項目をチケット一覧で表示するかどうかです。"
 msgid "sort no in ticket lists."
 msgstr "チケット一覧、投稿画面、返信画面での項目の並び順です。"
 
-#: admin_project.c:512
+#: admin_project.c:512 admin_project.c:884
 msgid "delete this column("
-msgstr "この項目("
+msgstr ""
 
-#: admin_project.c:512
+#: admin_project.c:512 admin_project.c:884
 msgid ")(delete this column)"
-msgstr ")の削除"
+msgstr ""
 
 #: admin_project.c:675
 msgid "[ticket add description]"
@@ -299,35 +304,23 @@ msgstr ""
 "チケットに新しい項目を追加します。追加する項目についての情報を入力し、追加ボ"
 "タンを押してください。"
 
-#: admin_project.c:710
-msgid "返信専用属性とする。"
-msgstr ""
-
 #: admin_project.c:747
 msgid "[ticket add column type description]"
 msgstr ""
 "項目を入力する時の入力形式です。項目種別は、追加後に変更することができませ"
 "ん。"
 
-#: admin_project.c:796 admin_top.c:201
-msgid "Add"
+#: admin_project.c:796 admin_top.c:204
+msgid "add"
 msgstr "追加"
 
-#: admin_project.c:861
+#: admin_project.c:861 admin_top.c:354
 msgid "added."
 msgstr "追加しました"
 
 #: admin_project.c:878
 msgid "column delete"
 msgstr "項目削除"
-
-#: admin_project.c:884
-msgid "この項目("
-msgstr ""
-
-#: admin_project.c:884
-msgid ")の削除"
-msgstr ""
 
 #: admin_project.c:891
 msgid "if column has deleted, it's forever gone."
@@ -369,120 +362,113 @@ msgstr "チケット一覧の"
 msgid ".(background-color settings)"
 msgstr "の背景色設定"
 
-#: admin_project.c:1001 admin_top.c:234 admin_top.c:314
-msgid "Updated."
-msgstr "更新しました"
-
-#: admin_top.c:53 admin_top.c:58 admin_top.c:102 index_top.c:56
-msgid "Project Management"
+#: admin_top.c:53 admin_top.c:58 admin_top.c:105 index_top.c:56
+msgid "project management"
 msgstr "プロジェクトの管理"
 
 #: admin_top.c:57 index_project.c:2063 index_top.c:55
-msgid "Project Top"
+msgid "project top"
 msgstr "プロジェクトトップ"
 
-#: admin_top.c:121
-msgid "Project Information Settings"
+#: admin_top.c:124
+msgid "project information settings"
 msgstr "プロジェクト情報の設定"
 
-#: admin_top.c:126
+#: admin_top.c:129
 msgid "project name"
 msgstr "プロジェクト名"
 
-#: admin_top.c:129
+#: admin_top.c:132
 msgid "home link name"
 msgstr "ホームリンク名"
 
-#: admin_top.c:133
+#: admin_top.c:136
 msgid "home link refference"
 msgstr "ホームリンク先"
 
-#: admin_top.c:137
+#: admin_top.c:140
 msgid "locale"
-msgstr ""
+msgstr "ロケール"
 
-#: admin_top.c:146 index_top.c:102
-msgid "Sub Projects List"
+#: admin_top.c:149 index_top.c:105
+msgid "sub projects list"
 msgstr "サブプロジェクト一覧"
 
-#: admin_top.c:155
+#: admin_top.c:158
 msgid "database path"
 msgstr "データベースパス"
 
-#: admin_top.c:155 admin_top.c:194
+#: admin_top.c:158 admin_top.c:197
 msgid "sub project id"
 msgstr "サブプロジェクトID"
 
-#: admin_top.c:181
+#: admin_top.c:184
 msgid "[project settings description1]"
 msgstr ""
 "サブプロジェクト名は各サブプロジェクトの管理ツールから設定してください。"
 
-#: admin_top.c:182
+#: admin_top.c:185
 msgid "[project settings description2]"
 msgstr ""
 "既存のサブプロジェクトIDを変更すると、サブプロジェクトのURLが変わってしまうの"
 "で注意してください。"
 
-#: admin_top.c:183
+#: admin_top.c:186
 msgid "[project settings description3]"
 msgstr ""
 "削除すると、トップページの一覧から表示されなくなります。データは消去されませ"
 "ん。再度削除チェックボックスのチェックを外すことで、再び参照することができる"
 "ようになります。"
 
-#: admin_top.c:188
+#: admin_top.c:191
 msgid "add sub project"
 msgstr "サブプロジェクトの追加"
 
-#: admin_top.c:200
+#: admin_top.c:203
 msgid "[sub project name description]"
 msgstr ""
 "サブプロジェクト名は各サブプロジェクトの管理ツールから設定してください。"
 
-#: admin_top.c:286 admin_top.c:332
-msgid "[ERROR] projectid top is reserved."
+#: admin_top.c:289 admin_top.c:335
+msgid "[error] projectid top is reserved."
 msgstr "[ERROR] プロジェクトID topは予約されています。"
 
-#: admin_top.c:293 admin_top.c:339
-msgid "[ERROR] projectid("
+#: admin_top.c:296 admin_top.c:342
+msgid "[error] projectid("
 msgstr "[ERROR] プロジェクトID"
 
-#: admin_top.c:293 admin_top.c:339
+#: admin_top.c:296 admin_top.c:342
 msgid ") is already exists."
 msgstr "は既に存在しています。"
 
-#: admin_top.c:351
-msgid "Added."
-msgstr "追加しました。"
-
 #: dbutil.c:93
-msgid "メインプロジェクト"
-msgstr ""
+msgid "main project"
+msgstr "メインプロジェクト"
 
-#: dbutil.c:99 dbutil.c:166
-msgid "ホーム"
-msgstr ""
+#: dbutil.c:99 dbutil.c:164
+msgid "home"
+msgstr "ホーム"
 
 #: dbutil.c:109
 msgid "ja_JP"
-msgstr ""
+msgstr "ja_JP"
 
-#: dbutil.c:140
-msgid ""
+#: dbutil.c:140 dbutil.c:522 wiki.c:208
+msgid "[wiki syntax example]"
+msgstr ""
 "*編集可能領域\n"
 "自由に編集できます。上の「編集」のリンクから編集してください。色々な用途に使"
 "用してください。\n"
 "-お知らせ\n"
-"-Starbug1の使い方についての注意事項など\n"
-msgstr ""
+"-Starbug1の使い方についての注意事項など"
 
-#: dbutil.c:160
-msgid "BTS"
-msgstr ""
+#: dbutil.c:158
+msgid "bts"
+msgstr "BTS"
 
-#: dbutil.c:189
-msgid ""
+#: dbutil.c:183
+msgid "[style sheet default value]"
+msgstr ""
 "@charset \"utf-8\";\n"
 "/* ================================ */\n"
 "/*  チケット一覧の状態の背景色設定  */\n"
@@ -542,140 +528,132 @@ msgid ""
 "\n"
 "body {\n"
 "        /* background-color:    lightcyan; */\n"
-"}\n"
+"}"
+
+#: dbutil.c:359
+msgid "title"
+msgstr "件名"
+
+#: dbutil.c:360
+msgid "please input title that means content correctly."
+msgstr "内容を簡潔に表すような件名を入力してください。"
+
+#: dbutil.c:367 index_project.c:2180
+msgid "registerer"
+msgstr "投稿者"
+
+#: dbutil.c:368
+msgid "please input your name."
+msgstr "投稿者を入力してください。"
+
+#: dbutil.c:375
+msgid "status"
+msgstr "状態"
+
+#: dbutil.c:376
+msgid "please select status."
+msgstr "状態を選択してください。"
+
+#: dbutil.c:377 dbutil.c:432 index_project.c:462
+msgid "new"
+msgstr "新規"
+
+#: dbutil.c:384
+msgid "category"
+msgstr "カテゴリ"
+
+#: dbutil.c:385
+msgid "please select category."
+msgstr "カテゴリを選択してください。"
+
+#: dbutil.c:392
+msgid "priority"
+msgstr "優先度"
+
+#: dbutil.c:393
+msgid "please select priority."
+msgstr "優先度を選択してください。"
+
+#: dbutil.c:400
+msgid "detail"
+msgstr "詳細"
+
+#: dbutil.c:401
+msgid "please describe the detail."
+msgstr "的確に記述してください。"
+
+#: dbutil.c:408
+msgid "reproduction procedure"
+msgstr "再現手順"
+
+#: dbutil.c:409
+msgid ""
+"please describe the condition and the procedure to reproduce the problem."
 msgstr ""
 
-#: dbutil.c:418
-msgid "件名"
-msgstr ""
+#: dbutil.c:416
+msgid "comment"
+msgstr "コメント"
 
-#: dbutil.c:419
-msgid "内容を簡潔に表すような件名を入力してください。"
-msgstr ""
-
-#: dbutil.c:426
-msgid "投稿者"
-msgstr ""
-
-#: dbutil.c:427
-msgid "投稿者を入力してください。"
-msgstr ""
-
-#: dbutil.c:434
-msgid "状態"
-msgstr ""
+#: dbutil.c:417
+msgid "please describe the comment."
+msgstr "コメントを記述してください。"
 
 #: dbutil.c:435
-msgid "状態を選択してください。"
-msgstr ""
+msgid "accepted"
+msgstr "受付済"
 
-#: dbutil.c:442
-msgid "カテゴリ"
-msgstr ""
+#: dbutil.c:438
+msgid "fixed"
+msgstr "修正済"
 
-#: dbutil.c:443
-msgid "カテゴリを選択してください。"
-msgstr ""
+#: dbutil.c:441
+msgid "reservation"
+msgstr "保留"
+
+#: dbutil.c:444
+msgid "complete"
+msgstr "完了"
+
+#: dbutil.c:447
+msgid "wontfix"
+msgstr "対応せず"
 
 #: dbutil.c:450
-msgid "優先度"
-msgstr ""
+msgid "specification"
+msgstr "仕様通り"
 
-#: dbutil.c:451
-msgid "優先度を選択してください。"
-msgstr ""
+#: dbutil.c:453
+msgid "page"
+msgstr "画面"
 
-#: dbutil.c:458
-msgid "詳細"
-msgstr ""
+#: dbutil.c:456
+msgid "batch process"
+msgstr "バッチ処理"
 
 #: dbutil.c:459
-msgid "的確に記述してください。"
-msgstr ""
+msgid "document"
+msgstr "ドキュメント"
 
-#: dbutil.c:466
-msgid "再現手順"
-msgstr ""
+#: dbutil.c:462
+msgid "emergency"
+msgstr "緊急"
 
-#: dbutil.c:467
-msgid "問題を再現させるための条件と手順を記述してください。"
-msgstr ""
+#: dbutil.c:465
+msgid "high"
+msgstr "高"
 
-#: dbutil.c:474
-msgid "コメント"
-msgstr ""
+#: dbutil.c:468
+msgid "middle"
+msgstr "中"
 
-#: dbutil.c:475
-msgid "コメントを記述してください。"
-msgstr ""
+#: dbutil.c:471
+msgid "low"
+msgstr "低"
 
-#: dbutil.c:490
-msgid "新規"
+#: dbutil.c:527
+msgid "[help content]"
 msgstr ""
-
-#: dbutil.c:493
-msgid "受付済"
-msgstr ""
-
-#: dbutil.c:496
-msgid "修正済"
-msgstr ""
-
-#: dbutil.c:499
-msgid "保留"
-msgstr ""
-
-#: dbutil.c:502
-msgid "完了"
-msgstr ""
-
-#: dbutil.c:505
-msgid "対応せず"
-msgstr ""
-
-#: dbutil.c:508
-msgid "仕様通り"
-msgstr ""
-
-#: dbutil.c:511
-msgid "画面"
-msgstr ""
-
-#: dbutil.c:514
-msgid "バッチ処理"
-msgstr ""
-
-#: dbutil.c:517
-msgid "ドキュメント"
-msgstr ""
-
-#: dbutil.c:520
-msgid "緊急"
-msgstr ""
-
-#: dbutil.c:523
-msgid "高"
-msgstr ""
-
-#: dbutil.c:526
-msgid "中"
-msgstr ""
-
-#: dbutil.c:529
-msgid "低"
-msgstr ""
-
-#: dbutil.c:580
-msgid ""
-"*編集可能領域\n"
-"自由に編集できます。右側の「ページの編集」のリンクから編集してください。色々"
-"な用途に使用してください。\n"
-"-お知らせ\n"
-"-Starbug1の使い方についての注意事項など\n"
-msgstr ""
-
-#: dbutil.c:588
-msgid ""
 "*逆引きヘルプ\n"
 "**チケットを更新する方法は？\n"
 "チケットに対して更新を行なうアクションは、チケットの新規登録と、チケットに対"
@@ -766,11 +744,11 @@ msgid ""
 "Starbug1を複数立ち上げる際などに、1から設定しなくて済むように、運用中の"
 "Starbug1から設定情報をエクスポートすることができます。設定情報のエクスポート"
 "の方法については、以下のサイトのインストールのページを見てください。\n"
-"-http://starbug1.sourceforge.jp/\n"
-msgstr ""
+"-http://starbug1.sourceforge.jp/"
 
-#: dbutil.c:659
-msgid ""
+#: dbutil.c:532
+msgid "[admin help content]"
+msgstr ""
 "*管理ユーザ用説明\n"
 "各ページについての説明です。\n"
 "**メニュー\n"
@@ -808,49 +786,44 @@ msgid ""
 "状態などの選択肢の値を変更した場合(\"新規\" から \"new\"に変更した場合)は、再"
 "度このページで背景色の設定を行なってください。\n"
 "その際、ページの下部に、チケット一覧の背景設定用のサンプルが表示されますので"
-"参考にしてください。 \n"
-msgstr ""
+"参考にしてください。"
 
 #: hook.c:143
 #, c-format
-msgid ""
+msgid "[error] error occured in hook process(%s). failed to load plugin. %s"
+msgstr ""
 "[ERROR] hook処理(%s)でエラーが発生しました。(プラグインの読み込みに失敗しまし"
 "た。%s)"
-msgstr ""
 
 #: hook.c:159 hook.c:183
 #, c-format
-msgid "hook処理(%s)を実行しました。"
-msgstr ""
+msgid "executed hook process(%s)"
+msgstr "hook処理(%s)を実行しました。"
 
 #: hook.c:162 hook.c:185
 #, c-format
-msgid "[ERROR] hook処理(%s)でエラーが発生しました。(return code: %d)"
-msgstr ""
+msgid "[error] error occured in hook process(%s). (return code: %d)"
+msgstr "[ERROR] hook処理(%s)でエラーが発生しました。(return code: %d)"
 
 #: index_project.c:127
-msgid "Starbug1"
+msgid "starbug1"
 msgstr "Starbug1"
-
-#: index_project.c:131
-msgid "top page(sub projects list)"
-msgstr "トップページ（サブプロジェクト一覧)"
 
 #: index_project.c:137
 msgid "move to top of sub project."
 msgstr "サブプロジェクトトップへ移動します"
 
 #: index_project.c:137
-msgid "SubProject Top"
+msgid "subproject top"
 msgstr "サブプロジェクトトップ"
 
 #: index_project.c:138
-msgid "This is ticket list by status."
+msgid "this is ticket list by status."
 msgstr "状態別のチケット一覧を参照します"
 
 #: index_project.c:138 index_project.c:409 index_project.c:429
 #: index_project.c:438
-msgid "Ticket List by Status"
+msgid "ticket list by status"
 msgstr "状態別チケット一覧"
 
 #: index_project.c:139
@@ -859,7 +832,7 @@ msgstr "新規にチケットを登録します"
 
 #: index_project.c:139 index_project.c:1247 index_project.c:1249
 #: index_project.c:1258
-msgid "Register Ticket"
+msgid "register ticket"
 msgstr "チケット登録"
 
 #: index_project.c:140
@@ -867,7 +840,7 @@ msgid "search tickets."
 msgstr "チケットを検索します"
 
 #: index_project.c:140 index_project.c:717 index_project.c:719
-msgid "Search Tickets"
+msgid "search tickets"
 msgstr "チケット検索"
 
 #: index_project.c:141 index_project.c:2231
@@ -875,12 +848,12 @@ msgid "display statictics."
 msgstr "統計情報を表示します"
 
 #: index_project.c:141 index_project.c:2222 index_project.c:2231
-msgid "Statictics"
+msgid "statictics"
 msgstr "統計情報"
 
 #: index_project.c:142 index_project.c:1744 index_project.c:1746
 #: index_project.c:1762
-msgid "Register Tickets At Once"
+msgid "register tickets at once"
 msgstr "チケット一括登録"
 
 #: index_project.c:143
@@ -919,12 +892,12 @@ msgstr "状態を条件にして検索を行ないます。"
 msgid "display the ticket on inputed id."
 msgstr "入力したIDのチケットを表示します。"
 
-#: index_project.c:381
+#: index_project.c:381 index_project.c:2115
 msgid "id search"
 msgstr "ID指定で表示"
 
 #: index_project.c:384 index_project.c:2126
-msgid "Register New Ticket."
+msgid "register new ticket."
 msgstr "新しいチケットを登録する"
 
 #: index_project.c:438
@@ -935,29 +908,21 @@ msgstr "未クローズの状態毎にチケットを表示しています。"
 msgid "link to part of this page"
 msgstr "ページ内へのリンク"
 
-#: index_project.c:462
-msgid "new"
-msgstr ""
-
 #: index_project.c:463
-msgid "件のみを表示しています。"
-msgstr ""
+msgid "tickets is desplayed."
+msgstr "件のみを表示しています。"
 
 #: index_project.c:468 index_project.c:477
 msgid "display tickets that status is "
 msgstr "状態が"
 
-#: index_project.c:468
+#: index_project.c:468 index_project.c:477
 msgid ".(display status)"
 msgstr "である全てのチケットを表示する"
 
 #: index_project.c:472
 msgid "see more..."
 msgstr "続きがあります。"
-
-#: index_project.c:477
-msgid ".(display stauts)"
-msgstr "である全てのチケットを表示する"
 
 #: index_project.c:728
 msgid "search condition"
@@ -983,7 +948,7 @@ msgstr "yyyy-mm-dd形式で入力してください。"
 msgid "update date"
 msgstr "更新日時"
 
-#: index_project.c:790 index_top.c:126 index_top.c:129
+#: index_project.c:790 index_top.c:129 index_top.c:132
 msgid "search"
 msgstr "検索"
 
@@ -991,7 +956,7 @@ msgstr "検索"
 msgid "save conditions. (use cookie)"
 msgstr "検索条件を保存する。(cookie使用)"
 
-#: index_project.c:797 index_top.c:203
+#: index_project.c:797 index_top.c:206
 msgid "search result"
 msgstr "検索結果"
 
@@ -1000,19 +965,19 @@ msgid " tickets hits."
 msgstr "件ヒットしました。"
 
 #: index_project.c:816
-msgid "CVS Format Download"
+msgid "cvs format download"
 msgstr "検索結果をCSV形式でダウンロードする。"
 
 #: index_project.c:820
-msgid "HTML Format Download(exel)"
+msgid "html format download(exel)"
 msgstr "検索結果をHTMLでダウンロードする。(excelで表示する)"
 
 #: index_project.c:1178
-msgid "file seze must below"
+msgid "file size must below"
 msgstr "ファイルサイズは、"
 
 #: index_project.c:1178
-msgid "Kb(file size)"
+msgid "kb(file size)"
 msgstr "Kb以下になるようにしてください。"
 
 #: index_project.c:1197
@@ -1026,15 +991,11 @@ msgstr ""
 "い。"
 
 #: index_project.c:1260 index_project.c:1503 index_project.c:1824
-msgid "note: they are checked by only JavaScript."
+msgid "note: they are checked by only javascript."
 msgstr "※必須項目の入力チェックは、javascriptで行なっています。"
 
-#: index_project.c:1287 index_project.c:1537
-msgid "*"
-msgstr "※"
-
 #: index_project.c:1309 index_project.c:1902
-msgid "Register"
+msgid "register"
 msgstr "登録"
 
 #: index_project.c:1309 index_project.c:1554 index_project.c:1902
@@ -1046,11 +1007,11 @@ msgid "not exists id."
 msgstr "存在しないIDが指定されました。"
 
 #: index_project.c:1368 index_project.c:2070
-msgid "What's New"
+msgid "what's new"
 msgstr "チケット最新情報"
 
 #: index_project.c:1368
-msgid "This is latest updated tickets."
+msgid "this is latest updated tickets."
 msgstr ""
 "チケットの最新情報です。最新チケットのチケット属性の付いている項目と全添付"
 "ファイルを表示しています。"
@@ -1068,11 +1029,11 @@ msgid "ticket history"
 msgstr "チケット履歴"
 
 #: index_project.c:1431
-msgid "This is ticket histories."
+msgid "this is ticket histories."
 msgstr "チケットの履歴情報です。"
 
 #: index_project.c:1500
-msgid "Reply Ticket"
+msgid "reply ticket"
 msgstr "チケット返信"
 
 #: index_project.c:1503
@@ -1120,7 +1081,7 @@ msgid "file size is too large."
 msgstr "ファイルサイズが大きすぎます。"
 
 #: index_project.c:1726
-msgid "Kb. too large. back by browser's back button."
+msgid "kb. too large. back by browser's back button."
 msgstr ""
 "kbより大きいファイルは登録できません。ブラウザの戻るボタンで戻ってください。"
 
@@ -1206,21 +1167,13 @@ msgstr "状態別件数"
 msgid "there are no ticket information."
 msgstr "チケット情報がありません。"
 
-#: index_project.c:2115
-msgid "ID search"
-msgstr "ID検索"
-
 #: index_project.c:2122
 msgid "display"
-msgstr "表示"
+msgstr "ヘルプを参照します"
 
-#: index_project.c:2127 index_top.c:157
+#: index_project.c:2127 index_top.c:154 index_top.c:160
 msgid "edit page"
 msgstr "ページの編集"
-
-#: index_project.c:2180
-msgid "registerer"
-msgstr "投稿者"
 
 #: index_project.c:2256
 msgid "[graph description]"
@@ -1229,7 +1182,7 @@ msgstr ""
 "い。"
 
 #: index_project.c:2317 index_project.c:2324 index_project.c:2325
-#: index_top.c:134
+#: index_top.c:137
 msgid "edit top page"
 msgstr "トップページの編集"
 
@@ -1243,23 +1196,23 @@ msgstr ""
 msgid "error: there is no file."
 msgstr "error: ファイルがありません。"
 
-#: index_top.c:99 index_top.c:199
-msgid "Top Page"
+#: index_top.c:102 index_top.c:202
+msgid "top page"
 msgstr "トップページ"
 
-#: index_top.c:133
+#: index_top.c:136
 msgid "description"
 msgstr "説明"
 
-#: index_top.c:151
-msgid "ページの編集"
-msgstr ""
-
-#: index_top.c:157
+#: index_top.c:160
 msgid "[wiki syntax description1]"
 msgstr ""
 "簡易wikiの文法でページのコンテンツの編集を行ない、更新ボタンを押してくださ"
 "い。"
+
+#: index_top.c:216
+msgid "back to top"
+msgstr "トップページに戻る"
 
 #: util.c:692
 msgid "[ticket form syntax description1]"
@@ -1281,74 +1234,50 @@ msgstr ""
 "ら始まる行までは、整形済みブロックになります。"
 
 #: wiki.c:191
-msgid "Simple wiki syntax"
+msgid "simple wiki syntax"
 msgstr "簡易wikiのサポートする文法"
 
 #: wiki.c:192
-msgid "A line starts by * become big headline."
+msgid "a line starts by * become big headline."
 msgstr "行頭に*を記述した行は、大見出しになります。"
 
 #: wiki.c:193
-msgid "A line starts by ** become medium headline."
+msgid "a line starts by ** become medium headline."
 msgstr "行頭に**を記述した行は、中見出しになります。"
 
 #: wiki.c:194
-msgid "A line starts by *** become small headline."
+msgid "a line starts by *** become small headline."
 msgstr "行頭に***を記述した行は、小見出しになります。"
 
 #: wiki.c:195
-msgid "A line starts by **** become super small headline."
+msgid "a line starts by **** become super small headline."
 msgstr "行頭に****を記述した行は、極小見出しになります。"
 
 #: wiki.c:196
-msgid "A line starts by - become item."
+msgid "a line starts by - become item."
 msgstr "行頭に-を記述した行は、箇条書きになります。"
 
 #: wiki.c:197
-msgid "A line starts by ---- become delimitation."
+msgid "a line starts by ---- become delimitation."
 msgstr "行頭に----を記述した行は、区切り線になります。"
 
 #: wiki.c:198
-msgid "From line starts by &gt;| to line starts by |&lt;, become block."
+msgid "from line starts by &gt;| to line starts by |&lt;, become block."
 msgstr ""
 "行頭が &gt;| から始まる行から、行頭が |&lt; から始まる行までは、整形済みブ"
 "ロックになります。"
 
-#: wiki.c:205
+#: wiki.c:207
 msgid "example"
 msgstr "例"
 
-#: wiki.c:205
-msgid ""
-"*sample\n"
-"-edit this.\n"
+#: wiki.c:209
+msgid "[wiki syntax example code]"
 msgstr ""
-"*編集可能領域\n"
-"自由に編集できます。\n"
-"右側の「ページの編集」のリンクから編集してください。\n"
-"色々な用途に使用してください。\n"
-"-お知らせ\n"
-"-Starbug1の使い方についての注意事項など\n"
-"\n"
 ">|\n"
 "void displayWidgets (Iterable widgets) {\n"
 "  for (Widget w : widgets) {\n"
 "      w.display();\n"
 "  }\n"
 "}\n"
-"|<\n"
-
-#~ msgid "Main Project"
-#~ msgstr "メインプロジェクト"
-
-#~ msgid "Home"
-#~ msgstr "ホーム"
-
-#~ msgid "register tickets at once"
-#~ msgstr "新規に複数のチケットを登録します"
-
-#~ msgid "display new"
-#~ msgstr "新しい"
-
-#~ msgid "tickets."
-#~ msgstr "件のみを表示しています。"
+"|<"

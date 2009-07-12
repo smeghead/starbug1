@@ -90,13 +90,13 @@ void create_top_tables(Database* db)
             db,
             "insert into setting(name, value)"
             "values ('project_name', ?);", 
-            COLUMN_TYPE_TEXT, _("メインプロジェクト"),
+            COLUMN_TYPE_TEXT, _("main project"),
             COLUMN_TYPE_END);
     exec_query(
             db,
             "insert into setting(name, value)"
             "values ('home_description', ?);",
-            COLUMN_TYPE_TEXT, _("ホーム"),
+            COLUMN_TYPE_TEXT, _("home"),
             COLUMN_TYPE_END);
     exec_query(
             db,
@@ -137,15 +137,13 @@ void create_top_tables(Database* db)
     exec_query(
             db,
             "insert into wiki(id, name, content, registerdate) values (NULL, 'top', ?, current_timestamp);",
-            COLUMN_TYPE_TEXT, _("*編集可能領域\n"
-                "自由に編集できます。上の「編集」のリンクから編集してください。色々な用途に使用してください。\n"
-                "-お知らせ\n"
-                "-Starbug1の使い方についての注意事項など\n"),
+            COLUMN_TYPE_TEXT, _("[wiki syntax example]"),
             COLUMN_TYPE_END);
     db_commit(db);
 }
 void create_project_tables(Database* db)
 {
+    String* text_content = string_new();
     db_begin(db);
     exec_query(
             db,
@@ -157,13 +155,13 @@ void create_project_tables(Database* db)
             db,
             "insert into setting(name, value)"
             "values ('project_name', ?);",
-            COLUMN_TYPE_TEXT, _("BTS"),
+            COLUMN_TYPE_TEXT, _("bts"),
             COLUMN_TYPE_END);
     exec_query(
             db,
             "insert into setting(name, value)"
             "values ('home_description', ?);",
-            COLUMN_TYPE_TEXT, _("ホーム"),
+            COLUMN_TYPE_TEXT, _("home"),
             COLUMN_TYPE_END);
     exec_query(
             db,
@@ -182,70 +180,13 @@ void create_project_tables(Database* db)
             " mime_type text, "
             " content blob "
             ");", COLUMN_TYPE_END);
+    string_set(text_content, _("[style sheet default value]"));
     exec_query(
             db,
             "insert into setting_file(name, file_name, size, mime_type, content)"
-            "values ('user.css', 'user.css', 1421, 'text/css', ?);",
-            COLUMN_TYPE_TEXT, _("@charset \"utf-8\";\n"
-                "/* ================================ */\n"
-                "/*  チケット一覧の状態の背景色設定  */\n"
-                "/* ================================ */\n"
-                "/* 新規 */\n"
-                "#ticket_list td.field3-1 {\n"
-                "        background-color: lightpink !important;\n"
-                "}\n"
-                "/* 受付済 */\n"
-                "#ticket_list td.field3-2 {\n"
-                "        background-color: peachpuff !important;\n"
-                "}\n"
-                "/* 修正済 */\n"
-                "#ticket_list td.field3-3 {\n"
-                "        background-color: lightyellow !important;\n"
-                "}\n"
-                "/* 保留 */\n"
-                "#ticket_list td.field3-4 {\n"
-                "        background-color: white !important;\n"
-                "}\n"
-                "/* 完了 */\n"
-                "#ticket_list td.field3-5 {\n"
-                "        background-color: lightcyan !important;\n"
-                "}\n"
-                "/* 破棄 */\n"
-                "#ticket_list td.field3-6 {\n"
-                "        background-color: #ccc !important;\n"
-                "}\n"
-                "/* 対応せず */\n"
-                "#ticket_list td.field3-7 {\n"
-                "        background-color: #ccc !important;\n"
-                "}\n"
-                "/* 仕様通り */\n"
-                "#ticket_list td.field3-8 {\n"
-                "        background-color: #eee !important;\n"
-                "}\n"
-                "\n"
-                "/* ================================== */\n"
-                "/*  チケット一覧の優先度の背景色設定  */\n"
-                "/* ================================== */\n"
-                "/* 緊急 */\n"
-                "#ticket_list td.field5-11 {\n"
-                "        background-color: #FF8A8C !important;\n"
-                "}\n"
-                "/* 高 */\n"
-                "#ticket_list td.field5-12 {\n"
-                "        background-color: #FFCB8C !important;\n"
-                "}\n"
-                "/* 中 */\n"
-                "#ticket_list td.field5-13 {\n"
-                "        background-color: #FFFF94 !important;\n"
-                "}\n"
-                "/* 低 */\n"
-                "#ticket_list td.field5-14 {\n"
-                "        background-color: white !important;\n"
-                "}\n"
-                "\n"
-                "body {\n"
-                "        /* background-color:    lightcyan; */\n"
-                "}\n"),
+            "values ('user.css', 'user.css', ?, 'text/css', ?);",
+            COLUMN_TYPE_INT, string_len(text_content),
+            COLUMN_TYPE_TEXT, string_rawstr(text_content),
         COLUMN_TYPE_END);
     exec_query(
             db,
@@ -415,64 +356,65 @@ void create_project_tables(Database* db)
             "insert into element_type(id, type, ticket_property, reply_property, required, name, description, auto_add_item, default_value, display_in_list, sort) "
             "values (1, ?, 1, 0, 1, ?, ?, 0, '', 1, 1);", 
             COLUMN_TYPE_INT, ELEM_TYPE_TEXT,
-            COLUMN_TYPE_TEXT, _("件名"),
-            COLUMN_TYPE_TEXT, _("内容を簡潔に表すような件名を入力してください。"),
+            COLUMN_TYPE_TEXT, _("title"),
+            COLUMN_TYPE_TEXT, _("please input title that means content correctly."),
             COLUMN_TYPE_END);
     exec_query(
             db,
             "insert into element_type(id, type, ticket_property, reply_property, required, name, description, auto_add_item, default_value, display_in_list, sort) "
             "values (2, ?, 0, 0, 1, ?, ?, 0, '', 1, 2);",
             COLUMN_TYPE_INT, ELEM_TYPE_TEXT,
-            COLUMN_TYPE_TEXT, _("投稿者"),
-            COLUMN_TYPE_TEXT, _("投稿者を入力してください。"),
+            COLUMN_TYPE_TEXT, _("registerer"),
+            COLUMN_TYPE_TEXT, _("please input your name."),
             COLUMN_TYPE_END);
     exec_query(
             db,
             "insert into element_type(id, type, ticket_property, reply_property, required, name, description, auto_add_item, default_value, display_in_list, sort) "
-            "values (3, ?, 1, 0, 1, ?, ?, 0, '新規', 1, 3);", 
+            "values (3, ?, 1, 0, 1, ?, ?, 0, ?, 1, 3);", 
             COLUMN_TYPE_INT, ELEM_TYPE_LIST_SINGLE,
-            COLUMN_TYPE_TEXT, _("状態"),
-            COLUMN_TYPE_TEXT, _("状態を選択してください。"),
+            COLUMN_TYPE_TEXT, _("status"),
+            COLUMN_TYPE_TEXT, _("please select status."),
+            COLUMN_TYPE_TEXT, _("new"),
             COLUMN_TYPE_END);
     exec_query(
             db,
             "insert into element_type(id, type, ticket_property, reply_property, required, name, description, auto_add_item, default_value, display_in_list, sort) "
             "values (4, ?, 1, 0, 0, ?, ?, 1, '', 1, 4);", 
             COLUMN_TYPE_INT, ELEM_TYPE_LIST_MULTI,
-            COLUMN_TYPE_TEXT, _("カテゴリ"),
-            COLUMN_TYPE_TEXT, _("カテゴリを選択してください。"),
+            COLUMN_TYPE_TEXT, _("category"),
+            COLUMN_TYPE_TEXT, _("please select category."),
             COLUMN_TYPE_END);
     exec_query(
             db,
             "insert into element_type(id, type, ticket_property, reply_property, required, name, description, auto_add_item, default_value, display_in_list, sort) "
             "values (5, ?, 1, 0, 0, ?, ?, 0, '', 1, 5);", 
             COLUMN_TYPE_INT, ELEM_TYPE_LIST_SINGLE,
-            COLUMN_TYPE_TEXT, _("優先度"),
-            COLUMN_TYPE_TEXT, _("優先度を選択してください。"),
+            COLUMN_TYPE_TEXT, _("priority"),
+            COLUMN_TYPE_TEXT, _("please select priority."),
             COLUMN_TYPE_END);
     exec_query(
             db,
             "insert into element_type(id, type, ticket_property, reply_property, required, name, description, auto_add_item, default_value, display_in_list, sort) "
             "values (6, ?, 1, 0, 1, ?, ?, 0, '', 0, 6);",
             COLUMN_TYPE_INT, ELEM_TYPE_TEXTAREA,
-            COLUMN_TYPE_TEXT, _("詳細"),
-            COLUMN_TYPE_TEXT, _("的確に記述してください。"),
+            COLUMN_TYPE_TEXT, _("detail"),
+            COLUMN_TYPE_TEXT, _("please describe the detail."),
             COLUMN_TYPE_END);
     exec_query(
             db,
             "insert into element_type(id, type, ticket_property, reply_property, required, name, description, auto_add_item, default_value, display_in_list, sort) "
             "values (7, ?, 1, 0, 0, ?, ?, 0, '', 0, 7);", 
             COLUMN_TYPE_INT, ELEM_TYPE_TEXTAREA,
-            COLUMN_TYPE_TEXT, _("再現手順"),
-            COLUMN_TYPE_TEXT, _("問題を再現させるための条件と手順を記述してください。"),
+            COLUMN_TYPE_TEXT, _("reproduction procedure"),
+            COLUMN_TYPE_TEXT, _("please describe the condition and the procedure to reproduce the problem."),
             COLUMN_TYPE_END);
     exec_query(
             db,
             "insert into element_type(id, type, ticket_property, reply_property, required, name, description, auto_add_item, default_value, display_in_list, sort) "
             "values (8, ?, 0, 1, 0, ?, ?, 0, '', 0, 8);", 
             COLUMN_TYPE_INT, ELEM_TYPE_TEXTAREA,
-            COLUMN_TYPE_TEXT, _("コメント"),
-            COLUMN_TYPE_TEXT, _("コメントを記述してください。"),
+            COLUMN_TYPE_TEXT, _("comment"),
+            COLUMN_TYPE_TEXT, _("please describe the comment."),
             COLUMN_TYPE_END);
     exec_query(
             db,
@@ -487,46 +429,46 @@ void create_project_tables(Database* db)
             db,
             "create index index_list_item_0 on list_item (id, sort)", COLUMN_TYPE_END);
     exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (1, 3, ?, 0, 1);",
-            COLUMN_TYPE_TEXT, _("新規"),
+            COLUMN_TYPE_TEXT, _("new"),
             COLUMN_TYPE_END);
     exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (2, 3, ?, 0, 2);",
-            COLUMN_TYPE_TEXT, _("受付済"),
+            COLUMN_TYPE_TEXT, _("accepted"),
             COLUMN_TYPE_END);
     exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (3, 3, ?, 0, 3);",
-            COLUMN_TYPE_TEXT, _("修正済"),
+            COLUMN_TYPE_TEXT, _("fixed"),
             COLUMN_TYPE_END);
     exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (4, 3, ?, 0, 4);",
-            COLUMN_TYPE_TEXT, _("保留"),
+            COLUMN_TYPE_TEXT, _("reservation"),
             COLUMN_TYPE_END);
     exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (5, 3, ?, 1, 5);",
-            COLUMN_TYPE_TEXT, _("完了"),
+            COLUMN_TYPE_TEXT, _("complete"),
             COLUMN_TYPE_END);
     exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (6, 3, ?, 1, 6);",
-            COLUMN_TYPE_TEXT, _("対応せず"),
+            COLUMN_TYPE_TEXT, _("wontfix"),
             COLUMN_TYPE_END);
     exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (7, 3, ?, 1, 7);",
-            COLUMN_TYPE_TEXT, _("仕様通り"),
+            COLUMN_TYPE_TEXT, _("specification"),
             COLUMN_TYPE_END);
     exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (8, 4, ?, 0, 1);",
-            COLUMN_TYPE_TEXT, _("画面"),
+            COLUMN_TYPE_TEXT, _("page"),
             COLUMN_TYPE_END);
     exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (9, 4, ?, 0, 2);",
-            COLUMN_TYPE_TEXT, _("バッチ処理"),
+            COLUMN_TYPE_TEXT, _("batch process"),
             COLUMN_TYPE_END);
     exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (10, 4, ?, 0, 3);",
-            COLUMN_TYPE_TEXT, _("ドキュメント"),
+            COLUMN_TYPE_TEXT, _("document"),
             COLUMN_TYPE_END);
     exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (11, 5, ?, 0, 1);",
-            COLUMN_TYPE_TEXT, _("緊急"),
+            COLUMN_TYPE_TEXT, _("emergency"),
             COLUMN_TYPE_END);
     exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (12, 5, ?, 0, 2);",
-            COLUMN_TYPE_TEXT, _("高"),
+            COLUMN_TYPE_TEXT, _("high"),
             COLUMN_TYPE_END);
     exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (13, 5, ?, 0, 3);",
-            COLUMN_TYPE_TEXT, _("中"),
+            COLUMN_TYPE_TEXT, _("middle"),
             COLUMN_TYPE_END);
     exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (14, 5, ?, 0, 4);",
-            COLUMN_TYPE_TEXT, _("低"),
+            COLUMN_TYPE_TEXT, _("low"),
             COLUMN_TYPE_END);
     exec_query(
             db,
@@ -577,122 +519,17 @@ void create_project_tables(Database* db)
     exec_query(
             db,
             "insert into wiki(id, name, content, registerdate) values (NULL, 'top', ?, current_timestamp);",
-            COLUMN_TYPE_TEXT, _("*編集可能領域\n"
-                "自由に編集できます。右側の「ページの編集」のリンクから編集してください。色々な用途に使用してください。\n"
-                "-お知らせ\n"
-                "-Starbug1の使い方についての注意事項など\n"),
+            COLUMN_TYPE_TEXT, _("[wiki syntax example]"),
             COLUMN_TYPE_END);
     exec_query(
             db,
             "insert into wiki(id, name, content, registerdate) values (NULL, 'help', ?, current_timestamp);",
-            COLUMN_TYPE_TEXT, _("*逆引きヘルプ\n"
-                "**チケットを更新する方法は？\n"
-                "チケットに対して更新を行なうアクションは、チケットの新規登録と、チケットに対する返信のみです。 \n"
-
-                "**チケットを新規に作成するには？\n"
-                "ナビゲーションメニューの「チケット登録」をクリックしチケット登録ページに移動します。 フォームの各フィールドに値を入力して「登録」ボタンを押すことで新規にチケットを作成することができます。 \n"
-
-                "**チケットの詳細情報を見るには？\n"
-                "ナビゲーションの「状態別チケット一覧」または「チケット検索」からチケット情報の一覧を表示させることができます。チケット情報の一覧から、詳細情報を見たいチケットのIDか件名のリンクをクリックすることでチケット詳細ページに移動します。チケット詳細ページでは、チケットの最新情報、チケットの履歴を見ることができます。また、チケットに返信することもできます。  \n"
-
-                "**チケットを検索するには？\n"
-                "ナビゲーションメニューの「チケット検索」をクリックしチケット検索ページに移動します。 検索条件を入力して「検索」ボタンを押すことで検索を行なうことができます。 \n"
-
-                "**IDを指定してチケットの情報を見るには？\n"
-                "ナビゲーションメニューの「チケット登録」をクリックしチケット登録ページに移動します。「IDを指定で表示」ボタンの左のテキストボックスに、チケットIDを入力し、「IDを指定で表示」ボタンを押すことで、チケット詳細ページに移動します。 また、同様の「IDを指定で表示」ボタンは、トップページ、状態別チケット一覧ページにもあります。 \n"
-
-                "**チケットの項目をカスタマイズするには？\n"
-                "ナビゲーションメニューの「管理ツール」をクリックし管理ツールを開き、メニューの「項目設定」をクリックし、項目設定ページに移動します。\n"
-                "各項目の追加、削除、編集を行なうことができます。\n"
-
-                "**チケットの項目に添付資料(ファイル)を追加するには？\n"
-                "ナビゲーションメニューの「管理ツール」をクリックし管理ツールを開き、メニューの「項目設定」をクリックし、項目設定ページに移動します。\n"
-                "「新規項目を追加」リンクをクリックし、項目種別でファイルを選択して項目を追加してください。\n"
-
-                "**ある状態で進捗のないチケットを調べたい\n"
-                "チケット検索ページか状態別チケット一覧ページで、最終更新日時から現在までの日数を放置日数として表示しています。\n"
-                "放置日数を確認してください。\n"
-
-                "**投稿時、返信時にメーリングリストなどにメールを送信するには？\n"
-                "投稿時、返信時のメール送信は、hook機能により実現可能です。hook機能はサーバ上での設定が必要になります。hook機能の設定方法については、以下のサイトのインストールのページを見てください。\n"
-                "-http://starbug1.sourceforge.jp/\n"
-
-                "**チケットの項目をカスタマイズしたい\n"
-                "管理ツールの項目設定ページで、全ての項目のカスタマイズを行なうことができます。\n"
-                "件名、投稿者、状態は基本属性であるため、カスタマイズできる内容に制限があります。(削除不可、チケット属性、返信専用属性変更不可)\n"
-
-                "**複数のチケットを一括で登録したい\n"
-                "一括で登録したいチケットの情報を、CSV形式で準備することができれば、一括で登録することができます。プロジェクト管理ツールなどで出力したCSV形式のタスク一覧を利用することができます。\n"
-                "ナビゲーションメニューの「チケット一括登録」をクリックしチケット一括登録ページに移動します。\n"
-                "チケット一括登録ページで、登録したい複数のチケットの情報をCSV形式で貼り付けて、解析ボタンを押します。 \n"
-                "チケット一括登録確認ページで、解析結果が表示されるので、各フィールドに対応する項目を選択し、登録ボタンを押します。\n"
-
-                "**最新のチケットの情報をCSV形式でダウンロードしたい\n"
-                "チケット検索で検索した結果を「検索結果をCSVでダウンロードする。」のリンクからダウンロードできます。\n"
-
-                "**チケットに対して返信を行なうには？\n"
-                "ナビゲーションメニューの「状態別チケット一覧」または「チケット検索」からチケット情報の一覧を表示させることができます。チケット情報の一覧から、詳細情報を見たいチケットのIDか件名のリンクをクリックすることでチケット詳細ページに移動します。チケット詳細ページの下にチケット返信のフォームがありますので、必要な項目を入力して返信ボタンを押してください。  \n"
-
-                "**他チケットにリンクを貼るには？\n"
-                "複数行テキスト項目の値には、他のチケットの詳細ページへのリンクを貼ることができます。#1 のように、書くと、チケットIDが 1 のチケットへのリンクになります。  \n"
-
-                "**ソースコードなどを貼るには？\n"
-                "複数行テキスト項目の値には、整形済ブロック用の記法が用意されています。ソースコードなどを貼る場合に、インデントを崩さずに表示することができます。行頭が >| から始まる行から、行頭が |< から始まる行までを整形済ブロックとして表示します。  \n"
-
-                "**チケット一覧の状態などのセルの背景色などを変更したい\n"
-                "管理ツールのスタイル設定から、状態などの単一選択肢の項目の一覧表示時のスタイルシートをカスタマイズすることが可能です。カスタマイズするためには、CSSの知識が必要です。\n"
-
-                "**ページのスタイルを自由に設定したい\n"
-                "管理ツールのスタイル設定から、スタイルシートをカスタマイズすることが可能です。カスタマイズするためには、CSSの知識が必要です。\n"
-
-                "**データのバックアップをしたい\n"
-                "バックアップの方法については、以下のサイトのインストールのページを見てください。\n"
-                "-http://starbug1.sourceforge.jp/\n"
-
-                "**設定情報をエクスポートしたい\n"
-                "Starbug1を複数立ち上げる際などに、1から設定しなくて済むように、運用中のStarbug1から設定情報をエクスポートすることができます。設定情報のエクスポートの方法については、以下のサイトのインストールのページを見てください。\n"
-                "-http://starbug1.sourceforge.jp/\n"),
+            COLUMN_TYPE_TEXT, _("[help content]"),
             COLUMN_TYPE_END);
     exec_query(
             db,
             "insert into wiki(id, name, content, registerdate) values (NULL, 'adminhelp', ?, current_timestamp);",
-            COLUMN_TYPE_TEXT, _("*管理ユーザ用説明\n"
-                "各ページについての説明です。\n"
-
-                "**メニュー\n"
-                "管理ツールの各設定ページへのリンクです。\n"
-
-                "**プロジェクト設定\n"
-                "プロジェクト情報の設定をするページです。\n"
-                "各ページのヘッダ部分などに表示されるプロジェクト名を設定することができます。\n"
-
-                "**環境設定\n"
-                "環境に関する情報を設定するページです。\n"
-                "一般ユーザ向けページのナビゲーションメニューの「ホーム」のリンク先を設定するととができます。\n"
-
-                "**項目設定\n"
-                "チケットの項目を設定するページです。\n"
-                "チケットの項目を追加、修正、削除することができます。\n"
-                "***項目の追加\n"
-                "「新規項目の追加」リンクを押すことで、項目の追加ページに移動します。\n"
-                "各項目についての説明は、各項目の下に表示されています。\n"
-                "項目の項目種別は、追加するときにしか選択できません。\n"
-                "***項目の修正\n"
-                "各項目の設定内容を変更することができます。\n"
-                "各項目についての説明は、各項目の下に表示されています。\n"
-                "項目の情報についての設定後、「更新」ボタンを押すことで、項目の設定を修正できます。\n"
-                "項目の項目種別については、修正時に変更することはできません。 \n"
-                "***項目の削除\n"
-                "項目の削除を行なうことができます。\n"
-                "「この項目(カテゴリ)の削除」などのリンクを押すと削除確認ページに移動します。\n"
-                "削除確認ページで、削除ボタンを押すと項目が削除されます。\n"
-                "ただし、基本項目(件名、投稿者、状態)については、削除できません。 \n"
-
-                "**スタイル設定\n"
-                "各画面の見た目を変更することができます。\n"
-                "チケット一覧での状態などの項目の背景色は、ここで設定を行なってください。\n"
-                "状態などの選択肢の値を変更した場合(\"新規\" から \"new\"に変更した場合)は、再度このページで背景色の設定を行なってください。\n"
-                "その際、ページの下部に、チケット一覧の背景設定用のサンプルが表示されますので参考にしてください。 \n"),
+            COLUMN_TYPE_TEXT, _("[admin help content]"),
             COLUMN_TYPE_END);
     db_commit(db);
 }

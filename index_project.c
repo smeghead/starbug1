@@ -124,7 +124,7 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
     o(      "</head>\n"
             "<body>\n"
             "<a name=\"top\"></a>\n"
-            "<h1 id=\"toptitle\" title=\"%s\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n", _("Starbug1"), cgiScriptName, g_project_code_4_url);
+            "<h1 id=\"toptitle\" title=\"%s\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n", _("starbug1"), cgiScriptName, g_project_code_4_url);
     o("<div id='menu'>\n"
       "<ul>\n");
     o("\t<li><a href='%s/%s/rss' title=\"RSS Feed\"><img src=\"%s/../img/rss.png\" alt=\"rss\" /></a></li>\n", cgiScriptName, g_project_code_4_url, cgiScriptName);
@@ -134,14 +134,14 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
       "</div>\n");
     o("<div>\n"
       "<ul id='projectmenu'>\n");
-    o("\t<li><a %s href='%s/%s/' title=\"%s\">%s</a></li>\n", navi == NAVI_TOP ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("move to top of sub project."), _("SubProject Top"));
-    o("\t<li><a %s href='%s/%s/list' title=\"%s\">%s</a></li>\n", navi == NAVI_LIST ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("This is ticket list by status."), _("Ticket List by Status"));
-    o("\t<li><a %s href='%s/%s/register' title=\"%s\">%s</a></li>\n", navi == NAVI_REGISTER ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("register new ticket"), _("Register Ticket"));
-    o("\t<li><a %s href='%s/%s/search' title=\"%s\">%s</a></li>\n", navi == NAVI_SEARCH ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("search tickets."), _("Search Tickets"));
-    o("\t<li><a %s href='%s/%s/statistics' title=\"%s\">%s</a></li>\n", navi == NAVI_STATISTICS ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("display statictics."), _("Statictics"));
-    o("\t<li><a %s href='%s/%s/register_at_once' title=\"%s\">%s</a></li>\n", navi == NAVI_REGISTER_AT_ONCE ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("Register Tickets At Once"), _("Register Tickets At Once"));
-    o("\t<li><a %s href='%s/%s/help' title=\"%s\">%s</a></li>\n", navi == NAVI_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("display help."), _("Help"));
-    o("\t<li><a %s href='%s/../admin.%s/%s' title=\"%s\">%s</a></li>\n", navi == NAVI_MANAGEMENT ? "class=\"current\"" : "", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url, _("seveal settings."), _("Sub Project Settings"));
+    o("\t<li><a %s href='%s/%s/' title=\"%s\">%s</a></li>\n", navi == NAVI_TOP ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("move to top of sub project."), _("subproject top"));
+    o("\t<li><a %s href='%s/%s/list' title=\"%s\">%s</a></li>\n", navi == NAVI_LIST ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("this is ticket list by status."), _("ticket list by status"));
+    o("\t<li><a %s href='%s/%s/register' title=\"%s\">%s</a></li>\n", navi == NAVI_REGISTER ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("register new ticket"), _("register ticket"));
+    o("\t<li><a %s href='%s/%s/search' title=\"%s\">%s</a></li>\n", navi == NAVI_SEARCH ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("search tickets."), _("search tickets"));
+    o("\t<li><a %s href='%s/%s/statistics' title=\"%s\">%s</a></li>\n", navi == NAVI_STATISTICS ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("display statictics."), _("statictics"));
+    o("\t<li><a %s href='%s/%s/register_at_once' title=\"%s\">%s</a></li>\n", navi == NAVI_REGISTER_AT_ONCE ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("register tickets at once"), _("register tickets at once"));
+    o("\t<li><a %s href='%s/%s/help' title=\"%s\">%s</a></li>\n", navi == NAVI_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("display help."), _("help"));
+    o("\t<li><a %s href='%s/../admin.%s/%s' title=\"%s\">%s</a></li>\n", navi == NAVI_MANAGEMENT ? "class=\"current\"" : "", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url, _("seveal settings."), _("sub project settings"));
     o("</ul>\n"
       "<br clear='all' />\n"
       "</div>\n");
@@ -381,7 +381,7 @@ void output_states(List* states, bool with_new_ticket_link)
       "\t\t</li>\n", _("id search"));
     if (with_new_ticket_link) {
         o("\t\t<li>\n"
-          "\t\t\t<a id=\"new_ticket_link\" href=\"%s/%s/register\">%s</a>\n", cgiScriptName, g_project_code_4_url, _("Register New Ticket."));
+          "\t\t\t<a id=\"new_ticket_link\" href=\"%s/%s/register\">%s</a>\n", cgiScriptName, g_project_code_4_url, _("register new ticket."));
         o("\t\t</li>\n");
     }
     o("\t</ul>\n"
@@ -406,7 +406,7 @@ void list_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, _("Ticket List by Status"), NULL, NAVI_LIST);
+    output_header(project_a, _("ticket list by status"), NULL, NAVI_LIST);
     /* メッセージの取得 */
     if ((cgiFormStringMultiple("message", &multi)) != cgiFormNotFound) {
         int i = 0;
@@ -426,7 +426,7 @@ void list_action()
     cgiStringArrayFree(multi);
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_element_types_4_list(db_a, NULL, element_types_a);
-    o("<h2>"); h(string_rawstr(project_a->name)); o(" - %s</h2>\n", _("Ticket List by Status"));
+    o("<h2>"); h(string_rawstr(project_a->name)); o(" - %s</h2>\n", _("ticket list by status"));
     project_free(project_a);
     list_alloc(states_a, State, state_new, state_free);
     states_a = db_get_states(db_a, states_a);
@@ -435,7 +435,7 @@ void list_action()
     fflush(cgiOut);
     o("<div id=\"ticket_list\">\n"
       "<h3>%s</h3>\n"
-      "<div class=\"description\">%s\n", _("Ticket List by Status"), _("display unclosed tickets."));
+      "<div class=\"description\">%s\n", _("ticket list by status"), _("display unclosed tickets."));
     list_alloc(states_a, State, state_new, state_free);
     states_a = db_get_states_has_not_close(db_a, states_a);
     foreach (it, states_a) {
@@ -460,7 +460,7 @@ void list_action()
         o("<h4 class=\"status\">");hs(s->name);o("&nbsp;(%d件)&nbsp;<a href=\"#top\">↑</a></h4>\n", s->count);
         if (result_a->hit_count == LIST_COUNT_PER_LIST_PAGE) {
             o("\t\t<div class=\"infomation\">%s%d%s<a href=\"%s/%s/search?field%d=", _("new"), 
-                    result_a->hit_count, _("件のみを表示しています。"),
+                    result_a->hit_count, _("tickets is desplayed."),
                     cgiScriptName,
                     g_project_code_4_url,
                     ELEM_ID_STATUS);
@@ -474,7 +474,7 @@ void list_action()
                     g_project_code_4_url,
                     ELEM_ID_STATUS);
             us(s->name);
-            o("\">%s", _("display tickets that status is ")); hs(s->name); o("%s</a></div>\n", _(".(display stauts)"));
+            o("\">%s", _("display tickets that status is ")); hs(s->name); o("%s</a></div>\n", _(".(display status)"));
         }
         search_result_free(result_a);
         o("</div>\n");
@@ -714,9 +714,9 @@ void search_action()
     /* 検索条件を保存のチェックボックスがチェックされている場合は、保存。それ意外はクリアする。 */
     save_condition2cookie(conditions_a, q, condition_will_save);
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, _("Search Tickets"), "calendar.js", NAVI_SEARCH);
+    output_header(project_a, _("search tickets"), "calendar.js", NAVI_SEARCH);
     output_calendar_js();
-    o("<h2>"); h(string_rawstr(project_a->name)); o(" - %s</h2>\n", _("Search Tickets"));
+    o("<h2>"); h(string_rawstr(project_a->name)); o(" - %s</h2>\n", _("search tickets"));
     project_free(project_a);
     condition_free(sort_a);
     list_alloc(states_a, State, state_new, state_free);
@@ -813,11 +813,11 @@ void search_action()
         o(      "<a href=\"%s/%s/report_csv_download?%s\" target=\"_blank\">%s</a>\n",
                 cgiScriptName,
                 g_project_code_4_url,
-                string_rawstr(query_string_a), _("CVS Format Download"));
+                string_rawstr(query_string_a), _("cvs format download"));
         o(      "<a href=\"%s/%s/report_html_download?%s\" target=\"_blank\">%s</a>\n",
                 cgiScriptName,
                 g_project_code_4_url,
-                string_rawstr(query_string_a), _("HTML Format Download(exel)"));
+                string_rawstr(query_string_a), _("html format download(exel)"));
         o(      "</div>\n");
         output_navigater(result_a, string_rawstr(query_string_a));
         output_ticket_table(db_a, result_a, element_types_a);
@@ -1175,7 +1175,7 @@ void output_form_element(Database* db, List* elements, ElementType* et, Project*
         case ELEM_TYPE_UPLOADFILE:
             o("<input type=\"file\" class=\"element\" id=\"field%d\" name=\"field%d\" />\n",
                     et->id, et->id);
-            o("<div class=\"description\">%s %d %s</div>\n", _("file seze must below"), project->upload_max_size, _("Kb(file size)"));
+            o("<div class=\"description\">%s %d %s</div>\n", _("file size must below"), project->upload_max_size, _("kb(file size)"));
             break;
         case ELEM_TYPE_DATE:
             o("<span>\n");
@@ -1244,9 +1244,9 @@ void register_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, _("Register Ticket"), "register.js", NAVI_REGISTER);
+    output_header(project_a, _("register ticket"), "register.js", NAVI_REGISTER);
     output_calendar_js();
-    o(      "<h2>"); h(string_rawstr(project_a->name));o(" - %s</h2>\n", _("Register Ticket"));
+    o(      "<h2>"); h(string_rawstr(project_a->name));o(" - %s</h2>\n", _("register ticket"));
     list_alloc(states_a, State, state_new, state_free);
     states_a = db_get_states(db_a, states_a);
     output_states(states_a, false);
@@ -1255,9 +1255,9 @@ void register_action()
             "<h3>%s</h3>\n"
             "<div class=\"description\">%s</div>\n"
             "<noscript><div class=\"description\">%s</div></noscript>\n",
-            _("Register Ticket"),
+            _("register ticket"),
             _("input below form and push register button."),
-            _("note: they are checked by only JavaScript."));
+            _("note: they are checked by only javascript."));
     o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName, g_project_code_4_url);
     o(      "<table summary=\"input infomation\">\n");
     {
@@ -1306,7 +1306,7 @@ void register_action()
             "<input id=\"save2cookie\" type=\"checkbox\" name=\"save2cookie\" class=\"checkbox\" value=\"1\" %s />\n"
             "<label for=\"save2cookie\">%s</label>\n"
             "</form>\n"
-            "</div>\n", _("Register"), strlen(sender) ? "checked=\"checked\"" : "", _("save registerer.(use cookie)"));
+            "</div>\n", _("register"), strlen(sender) ? "checked=\"checked\"" : "", _("save registerer.(use cookie)"));
     print_field_help();
     db_finish(db_a);
     output_footer();
@@ -1365,7 +1365,7 @@ void ticket_action()
             "<table summary=\"newest table\">\n"
             "\t<tr>\n"
             "\t\t<th>ID</th>\n"
-            "\t\t<td>%d</td>\n", _("What's New"), _("This is latest updated tickets."), iid);
+            "\t\t<td>%d</td>\n", _("what's new"), _("this is latest updated tickets."), iid);
     o(      "\t</tr>\n");
     foreach (it, element_types_a) {
         ElementType* et = it->element;
@@ -1428,7 +1428,7 @@ void ticket_action()
             "<div class=\"infomation\"><a href=\"#reply\">%s</a></div>\n"
             "<div id=\"ticket_history\">\n"
             "<h3>%s</h3>\n"
-            "<div class=\"description\">%s</div>\n", _("reply"), _("ticket history"), _("This is ticket histories."));
+            "<div class=\"description\">%s</div>\n", _("reply"), _("ticket history"), _("this is ticket histories."));
     list_free(elements_a);
     /* 履歴の表示 */
     for (i = 0; message_ids_a[i] != 0; i++) {
@@ -1497,10 +1497,10 @@ void ticket_action()
     o(      "<a name=\"reply\"></a>\n"
             "<div id=\"input_form\">\n"
             "<h3>%s</h3>\n"
-            "<form id=\"reply_form\" name=\"reply_form\" action=\"%s/%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", _("Reply Ticket"), cgiScriptName, g_project_code_4_url);
+            "<form id=\"reply_form\" name=\"reply_form\" action=\"%s/%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", _("reply ticket"), cgiScriptName, g_project_code_4_url);
     o(      "<input type=\"hidden\" name=\"ticket_id\" value=\"%s\" />\n", ticket_id);
     o(      "<div class=\"description\">%s</div>\n"
-            "<noscript><div class=\"description\">%s</div></noscript>\n", _("input form and push reply."), _("note: they are checked by only JavaScript."));
+            "<noscript><div class=\"description\">%s</div></noscript>\n", _("input form and push reply."), _("note: they are checked by only javascript."));
     o(      "<h4>%s</h4>\n"
             "<div class=\"description\">%s</div>\n"
             "<table class=\"reply_table\" summary=\"input table\">\n", _("update ticket information"), _("[update ticket description]"));
@@ -1723,7 +1723,7 @@ file_size_error:
       _("error occured."),
       _("file size is too large."),
       project_a->upload_max_size,
-      _("Kb. too large. back by browser's back button."));
+      _("kb. too large. back by browser's back button."));
     output_footer();
     project_free(project_a);
 }
@@ -1741,9 +1741,9 @@ void register_at_once_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, _("Register Tickets At Once"), "register_at_once.js", NAVI_REGISTER_AT_ONCE);
+    output_header(project_a, _("register tickets at once"), "register_at_once.js", NAVI_REGISTER_AT_ONCE);
     output_calendar_js();
-    o(      "<h2>"); h(string_rawstr(project_a->name));o(" - %s</h2>\n", _("Register Tickets At Once"));
+    o(      "<h2>"); h(string_rawstr(project_a->name));o(" - %s</h2>\n", _("register tickets at once"));
     list_alloc(states_a, State, state_new, state_free);
     states_a = db_get_states(db_a, states_a);
     output_states(states_a, true);
@@ -1759,7 +1759,7 @@ void register_at_once_action()
             "\t</ul>\n"
             "</div>\n"
             "<noscript><div class=\"description\">※必須項目の入力チェックは、javascriptで行なっています。</div></noscript>\n",
-            _("Register Tickets At Once"),
+            _("register tickets at once"),
             _("[register ticket at once description1]"),
             _("[register ticket at once description2]"),
             _("[register ticket at once description3]"),
@@ -1821,7 +1821,7 @@ void register_at_once_confirm_action()
             "<noscript><div class=\"description\">%s</div></noscript>\n",
             _("register tickets at once confirm"),
             _("[register ticket at once description5]"),
-            _("note: they are checked by only JavaScript."));
+            _("note: they are checked by only javascript."));
     o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/%s/register_at_once_submit\" method=\"post\">\n", cgiScriptName, g_project_code_4_url);
     o(      "<table summary=\"input infomation\">\n");
     {
@@ -1899,7 +1899,7 @@ void register_at_once_confirm_action()
     o(      "<input class=\"button\" type=\"submit\" name=\"register\" value=\"%s\" />\n"
             "<input id=\"save2cookie\" type=\"checkbox\" name=\"save2cookie\" class=\"checkbox\" value=\"1\" %s />\n"
             "<label for=\"save2cookie\">%s</label>\n"
-            "</form>\n", _("Register"), strlen(sender) ? "checked=\"checked\"" : "", _("save registerer.(use cookie)"));
+            "</form>\n", _("register"), strlen(sender) ? "checked=\"checked\"" : "", _("save registerer.(use cookie)"));
     o(      "<div class=\"description\">\n"
             "\t<ul>\n"
             "\t\t<li>%s</li>\n"
@@ -2060,14 +2060,14 @@ void top_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, _("Project Top"), NULL, NAVI_TOP);
+    output_header(project_a, _("project top"), NULL, NAVI_TOP);
     list_alloc(states_a, State, state_new, state_free);
     states_a = db_get_states(db_a, states_a);
     o(      "<div id=\"info\">\n");
     /* 最新情報の表示 */
     o(      "<div id=\"top_newest\">\n"
             "<h4>%s</h4>\n"
-            "\t<ul>\n", _("What's New"));
+            "\t<ul>\n", _("what's new"));
     list_alloc(tickets_a, Message, message_new, message_free);
     tickets_a = db_get_newest_information(db_a, 10, tickets_a);
     if (tickets_a->size) {
@@ -2112,7 +2112,7 @@ void top_action()
     /* ID検索フォームの表示 */
     o(      "<div id=\"top_id_search\">\n"
             "<h4>%s</h4>\n"
-            "\t<form action=\"%s/%s/search\" method=\"get\">\n", _("ID search"), cgiScriptName, g_project_code_4_url);
+            "\t<form action=\"%s/%s/search\" method=\"get\">\n", _("id search"), cgiScriptName, g_project_code_4_url);
     o(      "\t\t<input type=\"text\" class=\"number\" name=\"id\" title=\"%s\" maxlength=\"%d\" />\n", _("display the ticket on inputed id."), DEFAULT_LENGTH - 1);
     o(      "\t\t<input type=\"submit\" class=\"button\" value=\"%s\" />\n"
             "\t</form>\n"
@@ -2123,7 +2123,7 @@ void top_action()
     project_free(project_a);
     o(      "<div id=\"main_body\">\n"
             "<div class=\"top_edit\">\n"
-            "<a id=\"new_ticket_link\" href=\"%s/%s/register\">%s</a>&nbsp;\n", cgiScriptName, g_project_code_4_url, _("Register New Ticket."));
+            "<a id=\"new_ticket_link\" href=\"%s/%s/register\">%s</a>&nbsp;\n", cgiScriptName, g_project_code_4_url, _("register new ticket."));
     o(      "<a href=\"%s/%s/edit_top\">%s</a>\n", cgiScriptName, g_project_code_4_url, _("edit page"));
     o(      "</div>\n");
     wiki_out(db_a, "top");
@@ -2219,7 +2219,7 @@ void statistics_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, _("Statictics"), "graph.js", NAVI_STATISTICS);
+    output_header(project_a, _("statictics"), "graph.js", NAVI_STATISTICS);
     output_graph_js();
     o(      "<h2>");h(string_rawstr(project_a->name));o("</h2>\n");
     list_alloc(states_a, State, state_new, state_free);
@@ -2228,7 +2228,7 @@ void statistics_action()
     list_free(states_a);
     o(      "<div id=\"top\">\n"
             "<h3>%s</h3>\n"
-            "\t<div class=\"description\">%s</div>\n", _("Statictics"), _("display statictics."));
+            "\t<div class=\"description\">%s</div>\n", _("statictics"), _("display statictics."));
     project_free(project_a);
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
@@ -2330,7 +2330,7 @@ void edit_top_action()
     o(      "</textarea>\n"
             "<div>&nbsp;</div>\n"
             "<input class=\"button\" type=\"submit\" value=\"%s\" />\n"
-            "</form>", _("Update"));
+            "</form>", _("update"));
     print_wiki_help();
     o(      "</div>\n");
     db_finish(db_a);

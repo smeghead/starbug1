@@ -188,30 +188,24 @@ void print_wiki_help()
             "<li>%s</li>\n"
             "<li>%s</li>\n"
             "<li>%s</li>\n",
-            _("Simple wiki syntax"),
-            _("A line starts by * become big headline."),
-            _("A line starts by ** become medium headline."),
-            _("A line starts by *** become small headline."),
-            _("A line starts by **** become super small headline."),
-            _("A line starts by - become item."),
-            _("A line starts by ---- become delimitation."),
-            _("From line starts by &gt;| to line starts by |&lt;, become block."));
+            _("simple wiki syntax"),
+            _("a line starts by * become big headline."),
+            _("a line starts by ** become medium headline."),
+            _("a line starts by *** become small headline."),
+            _("a line starts by **** become super small headline."),
+            _("a line starts by - become item."),
+            _("a line starts by ---- become delimitation."),
+            _("from line starts by &gt;| to line starts by |&lt;, become block."));
     o(      "</ul>\n"
             "<h5>%s</h5>\n"
             "<pre>\n"
             "%s"
+            "%s"
             "</pre>\n"
             "</div>\n"
-            "</div>\n", _("example"), _("*sample\n-edit this.\n"));
-/*     o(      "<div class=\"description\">\n" */
-/*             "\t<ul>\n" */
-/*             "\t\t<li>%s</li>\n" */
-/*             "\t\t<li>%s</li>\n" */
-/*             "\t\t<li>%s</li>\n" */
-/*             "\t</ul>\n" */
-/*             "</div>\n", */
-/*             _("複数行テキスト項目の内容では、#1 のように書くと、ID が 1 のチケットのチケット詳細ページへのリンクとなります。"), */
-/*             _("複数行テキスト項目の内容では、#bts:1 のように書くと、プロジェクトIDがbtsであるプロジェクトの、ID が 1 のチケットのチケット詳細ページへのリンクとなります。"), */
-/*             _("複数行テキスト項目の内容では、行頭が &gt;| から始まる行から、行頭が |&lt; から始まる行までは、整形済みブロックになります。")); */
+            "</div>\n",
+            _("example"),
+            _("[wiki syntax example]"),
+            _("[wiki syntax example code]"));
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

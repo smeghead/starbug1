@@ -140,7 +140,7 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
             handle = dlopen(dlpath, RTLD_LAZY);
             if (!handle) {
                 d("dlopen failed: %s\n", dlerror());
-                sprintf(result->message, _("[ERROR] hook処理(%s)でエラーが発生しました。(プラグインの読み込みに失敗しました。%s)"), hook_command, dlerror());
+                sprintf(result->message, _("[error] error occured in hook process(%s). failed to load plugin. %s"), hook_command, dlerror());
             } else {
                 char* error;
                 int (*func)(HookMessage*);
@@ -156,10 +156,10 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
                     string_free(base_url_a);
                     if (ret == 0) {
                         d("ok\n");
-                        sprintf(result->message, _("hook処理(%s)を実行しました。"), hook_command);
+                        sprintf(result->message, _("executed hook process(%s)"), hook_command);
                     } else {
                         d("ng\n");
-                        sprintf(result->message, _("[ERROR] hook処理(%s)でエラーが発生しました。(return code: %d)"), hook_command, ret);
+                        sprintf(result->message, _("[error] error occured in hook process(%s). (return code: %d)"), hook_command, ret);
                     }
                 }
             }
@@ -180,9 +180,9 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
             ret = system(hook_command);
             xfree(val_a);
             if (ret == 0) {
-                sprintf(result->message, _("hook処理(%s)を実行しました。"), hook_command);
+                sprintf(result->message, _("executed hook process(%s)"), hook_command);
             } else {
-                sprintf(result->message, _("[ERROR] hook処理(%s)でエラーが発生しました。(return code: %d)"), hook_command, ret);
+                sprintf(result->message, _("[error] error occured in hook process(%s). (return code: %d)"), hook_command, ret);
             }
             list_add(hook->results, result);
         }

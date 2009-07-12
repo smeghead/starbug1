@@ -67,7 +67,7 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
             "\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n"
             "\t<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\" />\n"
             "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />");
-    o(        "\t<title>%s - ", _("Management Tool")); h(string_rawstr(project->name)); o(" - "); h(title); o("</title>\n");
+    o(        "\t<title>%s - ", _("management tool")); h(string_rawstr(project->name)); o(" - "); h(title); o("</title>\n");
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName);
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../index.%s/%s/setting_file/user.css\" />\n", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url);
     if (script_name) {
@@ -83,16 +83,16 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
     o(      "\t<li><a href=\"%s/../index.%s/top/\" title=\"%s\">%s</a></li>\n",
             cgiScriptName, get_ext(cgiScriptName),
             _("display sub projects list at top page."),
-            _("Top Page(Sub projects list)"));
+            _("top page(sub projects list)"));
     o(      "</ul>\n"
             "<br clear=\"all\" />\n"
             "</div>\n");
     o(      "<ul id=\"projectmenu\">\n");
-    o(      "\t<li><a %s href=\"%s/%s/\">%s</a></li>\n", navi == NAVI_MENU ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("Management Tool Menu"));
-    o(      "\t\t<li><a %s href=\"%s/%s/project\">%s</a></li>\n", navi == NAVI_PROJECT ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("Sub Project Settings"));
-    o(      "\t\t<li><a %s href=\"%s/%s/items\">%s</a></li>\n", navi == NAVI_ITEM ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("Columns Settings"));
-    o(      "\t\t<li><a %s href=\"%s/%s/style\">%s</a></li>\n", navi == NAVI_STYLE ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("Style Settings"));
-    o(      "\t\t<li><a %s href=\"%s/%s/admin_help\">%s</a></li>\n", navi == NAVI_ADMIN_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("Help"));
+    o(      "\t<li><a %s href=\"%s/%s/\">%s</a></li>\n", navi == NAVI_MENU ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("management tool menu"));
+    o(      "\t\t<li><a %s href=\"%s/%s/project\">%s</a></li>\n", navi == NAVI_PROJECT ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("sub project settings"));
+    o(      "\t\t<li><a %s href=\"%s/%s/items\">%s</a></li>\n", navi == NAVI_ITEM ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("columns settings"));
+    o(      "\t\t<li><a %s href=\"%s/%s/style\">%s</a></li>\n", navi == NAVI_STYLE ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("style settings"));
+    o(      "\t\t<li><a %s href=\"%s/%s/admin_help\">%s</a></li>\n", navi == NAVI_ADMIN_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("help"));
     o(      "\t<li><a href=\"%s/../index.%s/%s/\">%s", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url, _("to"));h(string_rawstr(project->name)); o("%s</a></li>\n", _("to(suffix)"));
     o(      "</ul>\n"
             "<br clear=\"all\" />\n");
@@ -135,24 +135,24 @@ void top_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, _("Menu"), NULL, NAVI_MENU);
+    output_header(project_a, _("menu"), NULL, NAVI_MENU);
 
     cgiFormStringNoNewlines("message", message, DEFAULT_LENGTH);
     if (strlen(message) > 0) {
         o("<div class=\"complete_message\">"); h(message); o("&nbsp;</div>\n");
     }
-    o("<h2>"); h(string_rawstr(project_a->name)); o(" %s</h2>", _("Management Tool"));
+    o("<h2>"); h(string_rawstr(project_a->name)); o(" %s</h2>", _("management tool"));
     project_free(project_a);
     o("<div id=\"main_body\">\n");
-    o("<h3>%s</h3>\n", _("Management Tool Menu"));
+    o("<h3>%s</h3>\n", _("management tool menu"));
     o("<div id=\"admin_menu\">\n");
     o("\t<dl>\n");
-    o("\t\t<dt><a href=\"%s/%s/project\">%s</a></dt><dd>%s</dd>\n", cgiScriptName, g_project_code_4_url, _("Sub Project Settings"), _("This is basic sub projects settings."));
-    o("\t\t<dt><a href=\"%s/%s/items\">%s</a></dt><dd>%s</dd>\n", cgiScriptName, g_project_code_4_url, _("Columns Settings"), _("This is Columns Settings of Tickets."));
-    o("\t\t<dt><a href=\"%s/%s/style\">%s</a></dt><dd>%s</dd>\n", cgiScriptName, g_project_code_4_url, _("Style Settings"), _("This is StyleSheet Settings."));
+    o("\t\t<dt><a href=\"%s/%s/project\">%s</a></dt><dd>%s</dd>\n", cgiScriptName, g_project_code_4_url, _("sub project settings"), _("this is basic sub projects settings."));
+    o("\t\t<dt><a href=\"%s/%s/items\">%s</a></dt><dd>%s</dd>\n", cgiScriptName, g_project_code_4_url, _("columns settings"), _("this is columns settings of tickets."));
+    o("\t\t<dt><a href=\"%s/%s/style\">%s</a></dt><dd>%s</dd>\n", cgiScriptName, g_project_code_4_url, _("style settings"), _("this is stylesheet settings."));
     o("\t</dl>\n");
     o("</div>\n");
-    o("<h3>%s</h3>\n", _("About mail notify features"));
+    o("<h3>%s</h3>\n", _("about mail notify features"));
     o("<div class=\"description\">\n");
     o("\t%s\n", _("[mail notify messages]"));
     o("\t<ul>\n"
@@ -175,12 +175,12 @@ void project_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, _("Sub Project Settings"), "management.js", NAVI_PROJECT);
+    output_header(project_a, _("sub project settings"), "management.js", NAVI_PROJECT);
 
-    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("Management Tool"));
+    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("management tool"));
     o("<div id=\"setting_form\">\n");
     o("\t<form id=\"management_form\" action=\"%s/%s/project_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName, g_project_code_4_url);
-    o("\t\t<h3>%s</h3>\n", _("Sub Project Settings"));
+    o("\t\t<h3>%s</h3>\n", _("sub project settings"));
     o("\t\t<table summary=\"project table\">\n");
     o("\t\t\t<tr>\n");
     o("\t\t\t\t<th>%s</th>\n", _("sub project name"));
@@ -191,11 +191,11 @@ void project_action()
     o("\t\t\t\t<td><input type=\"file\" name=\"project.file\" /></td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t\t<tr>\n");
-    o("\t\t\t\t<th>%s</th>\n", _("file upload max size(Kb)"));
+    o("\t\t\t\t<th>%s</th>\n", _("file upload max size(kb)"));
     o("\t\t\t\t<td><input type=\"text\" name=\"project.upload_max_size\" value=\"%d\" /></td>\n", project_a->upload_max_size);
     o("\t\t\t</tr>\n");
     o("\t\t</table>\n");
-    o("\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("Update"));
+    o("\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("update"));
     o("\t</form>\n");
     o("</div>\n");
     project_free(project_a);
@@ -263,7 +263,7 @@ void project_submit_action()
     setting_file_free(sf_a);
     db_commit(db_a);
     db_finish(db_a);
-    redirect("", _("更新しました"));
+    redirect("", _("updated."));
 }
 /**
  * 項目設定画面をを表示するaction。
@@ -278,9 +278,9 @@ void items_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, _("Columns Settings"), "management.js", NAVI_ITEM);
+    output_header(project_a, _("columns settings"), "management.js", NAVI_ITEM);
 
-    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("Management Tool"));
+    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("management tool"));
     o("<div id=\"top\">\n");
     project_free(project_a);
     o("<div id=\"setting_form\">\n"
@@ -288,7 +288,7 @@ void items_action()
     o("\t\t<h3>%s</h3>\n"
       "\t\t<div class=\"description\">%s</div>\n"
       "\t\t<div><a href=\"%s/%s/new_item\">%s</a></div>\n",
-      _("Columns Settings"),
+      _("columns settings"),
       _("[columns setting description]"),
       cgiScriptName, g_project_code_4_url,
       _("add new column"));
@@ -302,7 +302,7 @@ void items_action()
         o("\t\t<li><a href=\"#field%d\">", et->id); hs(et->name); o("</a></li>\n");
     }
     o("\t\t</ul>\n"
-      "\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("Update"));
+      "\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("update"));
     foreach (it, element_types_a) {
         ElementType* et = it->element;
         List* items_a;
@@ -314,12 +314,12 @@ void items_action()
         o("\t\t<input type=\"hidden\" name=\"field_ids\" value=\"%d\" />\n", et->id);
         o("\t\t<table class=\"item_table\" summary=\"item table\">\n"
           "\t\t\t<tr>\n"
-          "\t\t\t\t<th class=\"required\">%s<span class=\"required\">※</span></th>\n"
+          "\t\t\t\t<th class=\"required\">%s<span class=\"required\">%s</span></th>\n"
           "\t\t\t\t<td>\n"
-          "\t\t\t\t\t<input class=\"required\" id=\"field%d.name\" type=\"text\" name=\"field%d.name\" ", _("column name"), et->id, et->id);
+          "\t\t\t\t\t<input class=\"required\" id=\"field%d.name\" type=\"text\" name=\"field%d.name\" ", _("column name"), _("*"), et->id, et->id);
         o(                  "value=\"");hs(et->name);o("\" maxlength=\"1000\" />\n"
           "\t\t\t\t\t<div class=\"description\">%s</div>\n"
-          "\t\t\t\t\t<div id=\"field%d.name.required\" class=\"error\"></div>\n", _("This is name of ticket column."), et->id);
+          "\t\t\t\t\t<div id=\"field%d.name.required\" class=\"error\"></div>\n", _("this is name of ticket column."), et->id);
         o("\t\t\t\t</td>\n"
           "\t\t\t</tr>\n"
           "\t\t\t<tr>\n"
@@ -332,7 +332,7 @@ void items_action()
           "\t\t\t</tr>\n"
           "\t\t\t<tr>\n"
           "\t\t\t\t<th>%s</th>\n"
-          "\t\t\t\t<td>\n", _("This is description of ticket column. when register or replay, it is displayed."), _("required"));
+          "\t\t\t\t<td>\n", _("this is description of ticket column. when register or replay, it is displayed."), _("required"));
         o("\t\t\t\t\t<input id=\"field%d.required\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.required\" ", et->id, et->id);
         o(                  "value=\"1\" %s />\n", et->required == 1 ? "checked=\"checked\"" : "");
         o("\t\t\t\t\t<label for=\"field%d.required\">%s</label>\n", et->id, _("this column must not be empty."));
@@ -469,7 +469,7 @@ void items_action()
         } else {
             o("\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field%d.default_value\" value=\"%s\" maxlength=\"1000\" />\n", et->id, string_rawstr(et->default_value));
         }
-        o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("投稿画面、返信画面での項目の初期値です。"));
+        o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("this is default value."));
         o("\t\t\t\t</td>\n"
           "\t\t\t</tr>\n"
           "\t\t\t<tr>\n");
@@ -512,7 +512,7 @@ void items_action()
             o("\t\t<div class=\"delete_item\"><a href=\"%s/%s/delete_item/%d\">", cgiScriptName, g_project_code_4_url, et->id);o(_("delete this column("));hs(et->name);o("%s</a></div>\n", _(")(delete this column)"));
         }
         list_free(items_a);
-        o("\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("Update"));
+        o("\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("update"));
     }
     list_free(element_types_a);
     o("\t</form>\n"
@@ -534,7 +534,7 @@ void items_submit_action()
     update_elements();
     db_commit(db_a);
     db_finish(db_a);
-    redirect("", _("更新しました"));
+    redirect("", _("updated."));
 }
 
 void update_elements(Database* db)
@@ -664,7 +664,7 @@ void new_item_action()
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("add new column"), "new_item.js", NAVI_OTHER);
 
-    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("Management Tool"));
+    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("management tool"));
     project_free(project_a);
     o(      "<div id=\"new_item\">\n"
             "<h3>%s</h3>\n"
@@ -678,7 +678,7 @@ void new_item_action()
     o("\t\t\t\t<th class=\"required\">%s<span class=\"required\">※</span></th>\n", _("column name"));
     o("\t\t\t\t<td>\n");
     o("\t\t\t\t\t<input id=\"field.name\" type=\"text\" name=\"field.name\" value=\"\" maxlength=\"1000\" />\n");
-    o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("This is name of ticket column."));
+    o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("this is name of ticket column."));
     o("\t\t\t\t\t<div id=\"field.name.required\" class=\"error\"></div>\n");
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
@@ -686,7 +686,7 @@ void new_item_action()
     o("\t\t\t\t<th>%s</th>\n", _("column description"));
     o("\t\t\t\t<td>\n");
     o("\t\t\t\t\t<input type=\"text\" name=\"field.description\" value=\"\" maxlength=\"1000\" />\n");
-    o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("This is description of ticket column. when register or replay, it is displayed."));
+    o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("this is description of ticket column. when register or replay, it is displayed."));
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t\t<tr>\n");
@@ -707,7 +707,7 @@ void new_item_action()
     o("\t\t\t\t<td>\n");
     o("\t\t\t\t\t<input id=\"field.reply_property\" class=\"checkbox\" type=\"checkbox\" name=\"field.reply_property\" ");
     o(                  "value=\"1\" />\n");
-    o("\t\t\t\t\t<label for=\"field.reply_property\">%s</label>\n", _("返信専用属性とする。"));
+    o("\t\t\t\t\t<label for=\"field.reply_property\">%s</label>\n", _("this column will be reply only."));
     o("\t\t\t\t\t<div class=\"description\">\n");
     o("\t\t\t\t\t\t%s\n", _("[reply only description1]"));
     o("\t\t\t\t\t\t%s\n", _("[reply only description2]"));
@@ -793,7 +793,7 @@ void new_item_action()
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
     o("\t\t\t</table>\n");
-    o("\t\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("Add"));
+    o("\t\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("add"));
     o("\t\t\t</form>\n");
     o(      "</div>\n");
     db_finish(db_a);
@@ -878,10 +878,10 @@ void delete_item_action()
     output_header(project_a, _("column delete"), "delete_item.js", NAVI_OTHER);
 
     et_a = db_get_element_type(db_a, iid, et_a);
-    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("Management Tool"));
+    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("management tool"));
     project_free(project_a);
     o(      "<div id=\"delete_item/%d\">\n", iid);
-    o(      "<h3>%s", _("この項目("));hs(et_a->name);o("%s</h3>\n", _(")の削除"));
+    o(      "<h3>%s", _("delete this column("));hs(et_a->name);o("%s</h3>\n", _(")(delete this column)"));
     o(      "<form id=\"delete_item_form\" action=\"%s/%s/delete_item_submit/%d\" method=\"post\">\n"
             "<div class=\"infomation\"><strong>%s"
             "%s</strong></div>"
@@ -928,8 +928,8 @@ void style_action()
     Project* project_a = project_new();
     db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, _("Style Settings"), "style.js", NAVI_STYLE);
-    o(      "<h2>%s %s</h2>", string_rawstr(project_a->name), _("Management Tool"));
+    output_header(project_a, _("style settings"), "style.js", NAVI_STYLE);
+    o(      "<h2>%s %s</h2>", string_rawstr(project_a->name), _("management tool"));
     project_free(project_a);
     o(      "<div id=\"top\">\n"
             "<h3>%s</h3>\n"
@@ -946,7 +946,7 @@ void style_action()
     o(      "</textarea>\n"
             "<div>&nbsp;</div>\n"
             "<input class=\"button\" type=\"submit\" value=\"%s\" />\n"
-            "</form>", _("Update"));
+            "</form>", _("update"));
     {
         List* element_types_a;
         Iterator* it;
@@ -998,7 +998,7 @@ void style_submit_action()
     db_setting_file_save(db_a, sf_a);
     db_finish(db_a);
 
-    redirect("", _("Updated."));
+    redirect("", _("updated."));
     setting_file_free(sf_a);
 }
 void admin_help_action()
