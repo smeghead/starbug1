@@ -97,12 +97,15 @@ void top_top_action()
     char** multi;
     Project* project_a = project_new();
 
+    d("top_top_action\n");
     list_alloc(project_infos_a, ProjectInfo, project_info_new, project_info_free);
 
     db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_infos_a = db_top_get_all_project_infos(db_a, project_infos_a);
     project_a = db_get_project(db_a, project_a);
+    d("top_top_action\n");
     top_output_header(_("project management"), project_a);
+    d("top_top_action\n");
     /* メッセージの取得 */
     if ((cgiFormStringMultiple("message", &multi)) != cgiFormNotFound) {
         int i = 0;
@@ -138,7 +141,7 @@ void top_top_action()
             "\t\t\t</tr>\n");
     o(      "\t\t\t<tr>\n"
             "\t\t\t\t<th>%s</th>\n", _("locale"));
-    o(      "\t\t\t\t<td><input type=\"text\" name=\"project.locale\" value=\""); v(string_rawstr(project_a->locale)); o("\" maxlength=\"9\" /></td>\n"
+    o(      "\t\t\t\t<td><input type=\"text\" name=\"project.locale\" value=\""); v(string_rawstr(project_a->locale)); o("\" maxlength=\"5\" /></td>\n"
             "\t\t\t</tr>\n");
     o(      "\t\t</table>\n");
     o(      "\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("update"));
@@ -217,7 +220,7 @@ void top_update_project_info_submit_action()
         char name[DEFAULT_LENGTH];
         char home_description[DEFAULT_LENGTH];
         char home_url[DEFAULT_LENGTH];
-        char locale[10];
+        char locale[16];
         Project* project_a = project_new();
 
         d("db->name: %s\n", db_a->name);
@@ -227,7 +230,7 @@ void top_update_project_info_submit_action()
         string_set(project_a->home_description, home_description);
         cgiFormString("project.home_url", home_url, DEFAULT_LENGTH);
         string_set(project_a->home_url, home_url);
-        cgiFormString("project.locale", locale, 9);
+        cgiFormString("project.locale", locale, 16);
         string_set(project_a->locale, locale);
         db_top_update_project(db_a, project_a);
         project_free(project_a);

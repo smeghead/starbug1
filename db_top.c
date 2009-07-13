@@ -310,7 +310,7 @@ ERROR_LABEL(db->handle)
 void db_top_set_locale()
 {
     Project* top_project_a = project_new();
-    char locale[10];
+    char locale[16];
     char buffer[DEFAULT_LENGTH];
     Database* db_a;
 
