@@ -812,18 +812,18 @@ void search_action()
             o("(%d)&nbsp;", s->count);
         }
         o(      "]&nbsp;");
-        o(      "<a href=\"%s/%s/report_csv_download?%s\" target=\"_blank\">%s</a>\n",
+        o(      "<a href=\"%s/%s/report_csv_download?%s\" target=\"_blank\" title=\"%s\">%s</a>\n",
                 cgiScriptName,
                 g_project_code_4_url,
-                string_rawstr(query_string_a), _("cvs format download"));
-        o(      "<a href=\"%s/%s/report_html_download?%s\" target=\"_blank\">%s</a>\n",
+                string_rawstr(query_string_a), _("[cvs format download description]"), _("csv format download"));
+        o(      "<a href=\"%s/%s/report_html_download?%s\" target=\"_blank\" title=\"%s\">%s</a>\n",
                 cgiScriptName,
                 g_project_code_4_url,
-                string_rawstr(query_string_a), _("html format download(exel)"));
-        o(      "<a href=\"%s/%s/report_rss_download?%s\" target=\"_blank\">%s</a>\n",
+                string_rawstr(query_string_a), _("[html format download description]"), _("html format download(exel)"));
+        o(      "<a href=\"%s/%s/report_rss_download?%s\" target=\"_blank\" title=\"%s\"><img src=\"%s/../img/rss.png\" alt=\"%s\" /></a>\n",
                 cgiScriptName,
                 g_project_code_4_url,
-                string_rawstr(query_string_a), _("rss format download"));
+                string_rawstr(query_string_a), _("[rss format download description]"), cgiScriptName, _("rss format download"));
         o(      "</div>\n");
         output_navigater(result_a, string_rawstr(query_string_a));
         output_ticket_table(db_a, result_a, element_types_a);
@@ -951,10 +951,6 @@ void output_ticket_information_4_rss_report(Database* db, SearchResult* result, 
             h(string_rawstr(et->name));
             o(": ");
             h(get_element_value(elements_a, et));
-/*         foreach (it, elements_a) { */
-/*             Element* e = it->element; */
-
-/*             h(string_rawstr(e->str_val)); */
             o("\n");
         }
         list_free(elements_a);
