@@ -51,6 +51,7 @@ void edit_top_submit_action();
 void download_action();
 void report_csv_download_action();
 void report_html_download_action();
+void report_rss_download_action();
 void rss_action();
 void top_action();
 void setting_file_action();
@@ -93,6 +94,7 @@ void register_actions()
     REG_ACTION(rss);
     REG_ACTION(report_csv_download);
     REG_ACTION(report_html_download);
+    REG_ACTION(report_rss_download);
     REG_ACTION(top);
     REG_ACTION(setting_file);
 }
@@ -818,6 +820,10 @@ void search_action()
                 cgiScriptName,
                 g_project_code_4_url,
                 string_rawstr(query_string_a), _("html format download(exel)"));
+        o(      "<a href=\"%s/%s/report_rss_download?%s\" target=\"_blank\">%s</a>\n",
+                cgiScriptName,
+                g_project_code_4_url,
+                string_rawstr(query_string_a), _("rss format download"));
         o(      "</div>\n");
         output_navigater(result_a, string_rawstr(query_string_a));
         output_ticket_table(db_a, result_a, element_types_a);
@@ -916,6 +922,46 @@ void output_ticket_information_4_html_report(Database* db, SearchResult* result,
         list_free(elements_a);
     }
 }
+void output_ticket_information_4_rss_report(Database* db, SearchResult* result, List* element_types, String* base_url)
+{
+    Iterator* it;
+    Iterator* it_msg;
+
+    foreach (it_msg, result->messages) {
+        Message* message = it_msg->element;
+        List* elements_a;
+        char id_str[NUM_LENGTH];
+        sprintf(id_str, "%d", message->id);
+        list_alloc(elements_a, Element, element_new, element_free);
+        elements_a = db_get_last_elements(db, message->id, elements_a);
+        o(      "\t<item rdf:about=\"");h(string_rawstr(base_url));o("/%s/ticket/%d\">\n", g_project_code_4_url, message->id);
+        o(      "\t\t<title>ID:%5d ", message->id);
+        h(get_element_value_by_id(elements_a, ELEM_ID_TITLE));
+        o(      "</title>\n");
+        o(      "\t\t<link>");h(string_rawstr(base_url));o("/%s/ticket/%d</link>\n", g_project_code_4_url, message->id);
+        o(      "\t\t<description><![CDATA[\n");
+        o(      "%s: ", _("registerer"));
+        hmail(get_element_value_by_id(elements_a, ELEM_ID_ORG_SENDER));
+        o("\n");
+        o(      "%s: ", _("register date"));
+        h(get_element_value_by_id(elements_a, ELEM_ID_REGISTERDATE));
+        o("\n");
+        foreach (it, element_types) {
+            ElementType* et = it->element;
+            h(string_rawstr(et->name));
+            o(": ");
+            h(get_element_value(elements_a, et));
+/*         foreach (it, elements_a) { */
+/*             Element* e = it->element; */
+
+/*             h(string_rawstr(e->str_val)); */
+            o("\n");
+        }
+        list_free(elements_a);
+        o(      "]]></description>\n"
+                "\t</item>\n");
+    }
+}
 /**
  * CSVレポートをダウンロードするaction。
  */
@@ -998,6 +1044,71 @@ void report_html_download_action()
     output_ticket_information_4_html_report(db_a, result_a, element_types_a);
     o(  "</table></body>"
         "</html>");
+    db_finish(db_a);
+    list_free(element_types_a);
+    search_result_free(result_a);
+}
+/**
+ * RSSレポートをダウンロードするaction。
+ */
+void report_rss_download_action()
+{
+    SearchResult* result_a = search_result_new();
+    List* element_types_a;
+    List* conditions_a = NULL;
+    Condition* sort_a = NULL;
+    Project* project_a = project_new();
+    char q[DEFAULT_LENGTH];
+    Database* db_a;
+    char buffer[DEFAULT_LENGTH];
+    Iterator* it;
+    String* base_url_a = string_new();
+    String* query_string_a = string_new();
+
+
+    base_url_a = get_base_url(base_url_a);
+
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    project_a = db_get_project(db_a, project_a);
+    list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
+
+    element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
+    /* 検索 */
+    list_alloc(conditions_a, Condition, condition_new, condition_free);
+    conditions_a = create_conditions(conditions_a, element_types_a, false);
+    cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
+    sort_a = condition_new();
+    create_sort_condition(sort_a);
+    result_a = db_search_tickets_4_report(db_a, conditions_a, q, sort_a, result_a);
+    list_free(conditions_a);
+    condition_free(sort_a);
+
+    cgiHeaderContentType("text/xml; charset=utf-8;");
+
+    query_string_a = format_query_string_without_page(query_string_a);
+    o(      "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"
+            "<rdf:RDF \n"
+            "\t\txmlns=\"http://purl.org/rss/1.0/\"\n"
+            "\t\txmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" \n"
+            "\t\txml:lang=\"ja\">\n"
+            "\n"
+            "\t<channel rdf:about=\"");h(string_rawstr(base_url_a));o("/%s/report_rss_download?%s\">\n", g_project_code_4_url, string_rawstr(query_string_a));
+    o(      "\t\t<title>");h(string_rawstr(project_a->name)); o("</title>\n"
+            "\t\t<link>");h(string_rawstr(project_a->home_url));o("/bt/</link>\n");
+    o(      "\t\t<description>");h(string_rawstr(project_a->name));o("</description>\n"
+            "\t\t<items>\n"
+            "\t\t\t<rdf:Seq>\n");
+    foreach (it, result_a->messages) {
+        Message* m = it->element;
+        o(      "\t\t\t\t<rdf:li rdf:resource=\"");h(string_rawstr(base_url_a));o("%s/ticket/%d\"/>\n", g_project_code_4_url, m->id);
+    }
+    o(      "\t\t\t</rdf:Seq>\n"
+            "\t\t</items>\n"
+            "\t</channel>\n");
+    output_ticket_information_4_rss_report(db_a, result_a, element_types_a, base_url_a);
+    project_free(project_a);
+    string_free(base_url_a);
+    o(      "</rdf:RDF>\n");
     db_finish(db_a);
     list_free(element_types_a);
     search_result_free(result_a);
@@ -2140,9 +2251,16 @@ void rss_action()
     Project* project_a = project_new();
     Database* db_a;
     char buffer[DEFAULT_LENGTH];
+    List* element_types_a;
+    String* base_url_a = string_new();
+
+    base_url_a = get_base_url(base_url_a);
 
     db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
+    list_alloc(tickets_a, Message, message_new, message_free);
+    tickets_a = db_get_newest_information(db_a, 10, tickets_a);
+
     cgiHeaderContentType("text/xml; charset=utf-8;");
     o(      "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"
             "<rdf:RDF \n"
@@ -2150,20 +2268,22 @@ void rss_action()
             "\t\txmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" \n"
             "\t\txml:lang=\"ja\">\n"
             "\n"
-            "\t<channel rdf:about=\"");h(string_rawstr(project_a->home_url));o("%s/%s/rss\">\n", cgiScriptName, g_project_code_4_url);
+            "\t<channel rdf:about=\"");h(string_rawstr(base_url_a));o("/%s/rss\">\n", g_project_code_4_url);
     o(      "\t\t<title>");h(string_rawstr(project_a->name)); o("</title>\n"
             "\t\t<link>");h(string_rawstr(project_a->home_url));o("/bt/</link>\n");
     o(      "\t\t<description>");h(string_rawstr(project_a->name));o("</description>\n"
             "\t\t<items>\n"
             "\t\t\t<rdf:Seq>\n");
-    o(      "\t\t\t\t<rdf:li rdf:resource=\"");h(cgiServerName);o("%s/%s/list\"/>\n", cgiScriptName, g_project_code_4_url);
-    o(      "\t\t\t\t<rdf:li rdf:resource=\"");h(cgiServerName);o("%s/%s/register\"/>\n", cgiScriptName, g_project_code_4_url);
+    foreach (it, tickets_a) {
+        Message* m = it->element;
+        o(      "\t\t\t\t<rdf:li rdf:resource=\"");h(string_rawstr(base_url_a));o("%s/ticket/%d\"/>\n", g_project_code_4_url, m->id);
+    }
     o(      "\t\t\t</rdf:Seq>\n"
             "\t\t</items>\n"
             "\t</channel>\n");
 
-    list_alloc(tickets_a, Message, message_new, message_free);
-    tickets_a = db_get_newest_information(db_a, 10, tickets_a);
+    list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
+    element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
     if (tickets_a != NULL) {
         foreach (it, tickets_a) {
             Message* ticket = it->element;
@@ -2183,9 +2303,11 @@ void rss_action()
             o(      "%s: ", _("register date"));
             h(get_element_value_by_id(elements_a, ELEM_ID_REGISTERDATE));
             o("\n");
-            foreach (it, elements_a) {
-                Element* e = it->element;
-                h(string_rawstr(e->str_val));
+            foreach (it, element_types_a) {
+                ElementType* et = it->element;
+                h(string_rawstr(et->name));
+                o(": ");
+                h(get_element_value(elements_a, et));
                 o("\n");
             }
             list_free(elements_a);
@@ -2193,8 +2315,10 @@ void rss_action()
                     "\t</item>\n");
         }
     }
+    string_free(base_url_a);
     project_free(project_a);
     list_free(tickets_a);
+    list_free(element_types_a);
     o(      "</rdf:RDF>\n");
     db_finish(db_a);
 }

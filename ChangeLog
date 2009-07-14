@@ -1,3 +1,7 @@
+2009-07-14  smeghead <smeghead@users.sourceforge.jp>
+
+    * 検索結果のRSSダウンロードを実装した。
+
 2009-07-11  smeghead <smeghead@users.sourceforge.jp>
 
     * 複数サブプロジェクトの検索処理の実装中
