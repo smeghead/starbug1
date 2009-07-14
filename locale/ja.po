@@ -292,11 +292,11 @@ msgstr "チケット一覧、投稿画面、返信画面での項目の並び順
 
 #: admin_project.c:512 admin_project.c:884
 msgid "delete this column("
-msgstr ""
+msgstr "この項目("
 
 #: admin_project.c:512 admin_project.c:884
 msgid ")(delete this column)"
-msgstr ""
+msgstr ")の削除"
 
 #: admin_project.c:675
 msgid "[ticket add description]"
