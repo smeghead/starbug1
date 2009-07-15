@@ -143,7 +143,7 @@ void exec_action()
     char action_name[DEFAULT_LENGTH];
     strcpy(action_name, g_action_name);
     for (a = get_actions(); a != NULL; a = a->next) {
-        d("action: %s %s\n", a->action_name, action_name);
+/*         d("action: %s %s\n", a->action_name, action_name); */
         if (!strcmp(action_name, a->action_name)) {
             d("=exec_action start: %s\n", a->action_name);
             a->action_func();

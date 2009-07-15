@@ -1,6 +1,7 @@
 2009-07-15  smeghead <smeghead@users.sourceforge.jp>
 
     * トップのスタイルシートの調整をした。
+    * 国際化の対応のためlocaleディレクトリの考慮をMakefileに追加した。
 
 2009-07-14  smeghead <smeghead@users.sourceforge.jp>
 
