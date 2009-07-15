@@ -1535,7 +1535,7 @@ void ticket_action()
             "<div class=\"infomation\"><a href=\"#reply\">%s</a></div>\n"
             "<div id=\"ticket_history\">\n"
             "<h3>%s</h3>\n"
-            "<div class=\"description\">%s</div>\n", _("reply"), _("ticket history"), _("this is ticket histories."));
+            "<div class=\"description\">%s</div>\n", _("go to reply"), _("ticket history"), _("this is ticket histories."));
     list_free(elements_a);
     /* 履歴の表示 */
     for (i = 0; message_ids_a[i] != 0; i++) {
