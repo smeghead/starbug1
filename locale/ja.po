@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2009-07-14 23:59+0900\n"
+"POT-Creation-Date: 2009-07-15 20:50+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: smeghead <smeghead@users.sourceforge.jp>\n"
 "Language-Team: smeghead <smeghead@users.sourceforge.jp>\n"
@@ -95,7 +95,7 @@ msgstr "ファイルアップロードの最大サイズ(Kb)"
 
 #: admin_project.c:198 admin_project.c:305 admin_project.c:515
 #: admin_project.c:949 admin_top.c:147 admin_top.c:190 index_project.c:2453
-#: index_top.c:166
+#: index_top.c:167
 msgid "update"
 msgstr "更新"
 
@@ -893,7 +893,7 @@ msgstr "状態を条件にして検索を行ないます。"
 msgid "display the ticket on inputed id."
 msgstr "入力したIDのチケットを表示します。"
 
-#: index_project.c:383 index_project.c:2222
+#: index_project.c:383 index_project.c:2222 index_project.c:2229
 msgid "id search"
 msgstr "ID指定で表示"
 
@@ -949,7 +949,7 @@ msgstr "yyyy-mm-dd形式で入力してください。"
 msgid "update date"
 msgstr "更新日時"
 
-#: index_project.c:792 index_top.c:129 index_top.c:132
+#: index_project.c:792 index_top.c:129 index_top.c:133
 msgid "search"
 msgstr "検索"
 
@@ -957,7 +957,7 @@ msgstr "検索"
 msgid "save conditions. (use cookie)"
 msgstr "検索条件を保存する。(cookie使用)"
 
-#: index_project.c:799 index_top.c:206
+#: index_project.c:799 index_top.c:207
 msgid "search result"
 msgstr "検索結果"
 
@@ -983,7 +983,9 @@ msgstr "EXCEL形式"
 
 #: index_project.c:826
 msgid "[rss format download description]"
-msgstr "検索結果をRSS形式でダウンロードする。検索結果をRSSリーダで監視することができます。"
+msgstr ""
+"検索結果をRSS形式でダウンロードする。検索結果をRSSリーダで監視することができ"
+"ます。"
 
 #: index_project.c:826
 msgid "rss format download"
@@ -1184,11 +1186,7 @@ msgstr "状態別件数"
 msgid "there are no ticket information."
 msgstr "チケット情報がありません。"
 
-#: index_project.c:2229
-msgid "display"
-msgstr "ヘルプを参照します"
-
-#: index_project.c:2234 index_top.c:154 index_top.c:160
+#: index_project.c:2234 index_top.c:155 index_top.c:161
 msgid "edit page"
 msgstr "ページの編集"
 
@@ -1199,7 +1197,7 @@ msgstr ""
 "い。"
 
 #: index_project.c:2437 index_project.c:2444 index_project.c:2445
-#: index_top.c:137
+#: index_top.c:138
 msgid "edit top page"
 msgstr "トップページの編集"
 
@@ -1213,21 +1211,25 @@ msgstr ""
 msgid "error: there is no file."
 msgstr "error: ファイルがありません。"
 
-#: index_top.c:102 index_top.c:202
+#: index_top.c:102 index_top.c:203
 msgid "top page"
 msgstr "トップページ"
 
-#: index_top.c:136
+#: index_top.c:130
+msgid "search by keyword for all sub projects."
+msgstr "全てのサブプロジェクトからキーワード検索を行ないます。"
+
+#: index_top.c:137
 msgid "description"
 msgstr "説明"
 
-#: index_top.c:160
+#: index_top.c:161
 msgid "[wiki syntax description1]"
 msgstr ""
 "簡易wikiの文法でページのコンテンツの編集を行ない、更新ボタンを押してくださ"
 "い。"
 
-#: index_top.c:216
+#: index_top.c:217
 msgid "back to top"
 msgstr "トップページに戻る"
 
@@ -1298,3 +1300,6 @@ msgstr ""
 "  }\n"
 "}\n"
 "|<"
+
+#~ msgid "display"
+#~ msgstr "表示"

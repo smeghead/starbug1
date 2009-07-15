@@ -127,6 +127,7 @@ void top_top_action()
     o(      "\t</ul>\n");
     o(      "\t<h2>%s</h2>\n"
             "\t<form action=\"%s/%s/top_search\" method=\"get\">\n", _("search"), cgiScriptName, g_project_code_4_url);
+    o(      "\t\t%s\n", _("search by keyword for all sub projects."));
     o(      "\t\t<input type=\"text\" name=\"q\" />\n"
             "\t\t<input type=\"submit\" value=\"%s\" />\n"
             "\t</form>\n", _("search"));
@@ -213,7 +214,7 @@ void top_search_action()
     o(      "</ul>\n");
     o(      "</div>\n");
     o(      "<br clear=\"all\">\n");
-    o(      "<a href=\"%s/top/\">%s</a>\n", cgiScriptName, _("back to top"));
+    o(      "<div class=\"navigation\"><a href=\"%s/top/\">%s</a></div>\n", cgiScriptName, _("back to top"));
     top_output_footer();
     db_finish(db_a);
 }

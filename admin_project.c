@@ -316,7 +316,7 @@ void items_action()
           "\t\t\t<tr>\n"
           "\t\t\t\t<th class=\"required\">%s<span class=\"required\">%s</span></th>\n"
           "\t\t\t\t<td>\n"
-          "\t\t\t\t\t<input class=\"required\" id=\"field%d.name\" type=\"text\" name=\"field%d.name\" ", _("column name"), _("*"), et->id, et->id);
+          "\t\t\t\t\t<input class=\"text required\" id=\"field%d.name\" type=\"text\" name=\"field%d.name\" ", _("column name"), _("*"), et->id, et->id);
         o(                  "value=\"");hs(et->name);o("\" maxlength=\"1000\" />\n"
           "\t\t\t\t\t<div class=\"description\">%s</div>\n"
           "\t\t\t\t\t<div id=\"field%d.name.required\" class=\"error\"></div>\n", _("this is name of ticket column."), et->id);
@@ -325,7 +325,7 @@ void items_action()
           "\t\t\t<tr>\n"
           "\t\t\t\t<th>%s</th>\n"
           "\t\t\t\t<td>\n"
-          "\t\t\t\t\t<input type=\"text\" name=\"field%d.description\" ", _("column description"), et->id);
+          "\t\t\t\t\t<input type=\"text\" class=\"text\" name=\"field%d.description\" ", _("column description"), et->id);
         o(                  "value=\"");hs(et->description);o("\" maxlength=\"1000\" />\n"
           "\t\t\t\t\t<div class=\"description\">%s</div>\n"
           "\t\t\t\t</td>\n"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: starbug 1\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2009-07-14 23:59+0900\n"
+"POT-Creation-Date: 2009-07-15 20:50+0900\n"
 "PO-Revision-Date: 2009-07-02 22:23+0900\n"
 "Last-Translator: smeghead <smeghead@sourceforge.jp>\n"
 "Language-Team: Chinese\n"
@@ -93,7 +93,7 @@ msgstr "文件上载最高尺寸(kb)"
 
 #: admin_project.c:198 admin_project.c:305 admin_project.c:515
 #: admin_project.c:949 admin_top.c:147 admin_top.c:190 index_project.c:2453
-#: index_top.c:166
+#: index_top.c:167
 msgid "update"
 msgstr "更新"
 
@@ -669,7 +669,7 @@ msgstr "由于状态的检索。 "
 msgid "display the ticket on inputed id."
 msgstr "在inputed被做了的id里(上)表示票。"
 
-#: index_project.c:383 index_project.c:2222
+#: index_project.c:383 index_project.c:2222 index_project.c:2229
 msgid "id search"
 msgstr "ID检索"
 
@@ -725,7 +725,7 @@ msgstr "输入格式: yyyy-mm-dd"
 msgid "update date"
 msgstr "更新日期"
 
-#: index_project.c:792 index_top.c:129 index_top.c:132
+#: index_project.c:792 index_top.c:129 index_top.c:133
 msgid "search"
 msgstr "检索"
 
@@ -733,7 +733,7 @@ msgstr "检索"
 msgid "save conditions. (use cookie)"
 msgstr "保存条件。(使用cookie)"
 
-#: index_project.c:799 index_top.c:206
+#: index_project.c:799 index_top.c:207
 msgid "search result"
 msgstr "检索结"
 
@@ -942,11 +942,7 @@ msgstr "票数"
 msgid "there are no ticket information."
 msgstr "全然没有票信息。"
 
-#: index_project.c:2229
-msgid "display"
-msgstr "显示器"
-
-#: index_project.c:2234 index_top.c:154 index_top.c:160
+#: index_project.c:2234 index_top.c:155 index_top.c:161
 msgid "edit page"
 msgstr "编辑页"
 
@@ -955,7 +951,7 @@ msgid "[graph description]"
 msgstr " "
 
 #: index_project.c:2437 index_project.c:2444 index_project.c:2445
-#: index_top.c:137
+#: index_top.c:138
 msgid "edit top page"
 msgstr "编辑首页"
 
@@ -967,19 +963,23 @@ msgstr " "
 msgid "error: there is no file."
 msgstr "error: 全然没有文件。"
 
-#: index_top.c:102 index_top.c:202
+#: index_top.c:102 index_top.c:203
 msgid "top page"
 msgstr "首页"
 
-#: index_top.c:136
+#: index_top.c:130
+msgid "search by keyword for all sub projects."
+msgstr ""
+
+#: index_top.c:137
 msgid "description"
 msgstr "说明"
 
-#: index_top.c:160
+#: index_top.c:161
 msgid "[wiki syntax description1]"
 msgstr " "
 
-#: index_top.c:216
+#: index_top.c:217
 msgid "back to top"
 msgstr "首位后退"
 
@@ -1034,3 +1034,6 @@ msgstr "例子"
 #: wiki.c:209
 msgid "[wiki syntax example code]"
 msgstr " "
+
+#~ msgid "display"
+#~ msgstr "显示器"

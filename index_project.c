@@ -1217,7 +1217,7 @@ void output_form_element(Database* db, List* elements, ElementType* et, Project*
     }
     switch (et->type) {
         case ELEM_TYPE_TEXT:
-            o("<input type=\"text\" class=\"element\" id=\"field%d\" name=\"field%d\" value=\"",
+            o("<input type=\"text\" class=\"text element\" id=\"field%d\" name=\"field%d\" value=\"",
                     et->id, et->id);
             v(value);
             o("\" maxlength=\"%d\" />\n", DEFAULT_LENGTH - 1);
@@ -2226,7 +2226,7 @@ void top_action()
             "</div>\n"
             "</div>\n"
             "<div id=\"main\">\n"
-            "<h2>", _("display"));h(string_rawstr(project_a->name));o("&nbsp;</h2>\n");
+            "<h2>", _("id search"));h(string_rawstr(project_a->name));o("&nbsp;</h2>\n");
     project_free(project_a);
     o(      "<div id=\"main_body\">\n"
             "<div class=\"top_edit\">\n"

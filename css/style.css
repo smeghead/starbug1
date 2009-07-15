@@ -129,13 +129,16 @@ table tr td {
     padding:3px;
 /*     border-bottom:1px dashed gray; */
 }
-input, textarea {
+textarea {
     width: 400px;
 }
 input.checkbox, input.radio {
     width: 20px;
 }
 
+input.text {
+    width: 400px;
+}
 input.calendar {
     width: 80px;
 }

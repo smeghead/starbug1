@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: starbug 1\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2009-07-14 23:59+0900\n"
+"POT-Creation-Date: 2009-07-15 20:50+0900\n"
 "PO-Revision-Date: 2009-07-02 22:23+0900\n"
 "Last-Translator: smeghead <smeghead@sourceforge.jp>\n"
 "Language-Team: English\n"
@@ -93,7 +93,7 @@ msgstr "File upload max size(Kb)"
 
 #: admin_project.c:198 admin_project.c:305 admin_project.c:515
 #: admin_project.c:949 admin_top.c:147 admin_top.c:190 index_project.c:2453
-#: index_top.c:166
+#: index_top.c:167
 msgid "update"
 msgstr "Update"
 
@@ -672,7 +672,7 @@ msgstr "Search by status."
 msgid "display the ticket on inputed id."
 msgstr "Display the ticket on inputed id."
 
-#: index_project.c:383 index_project.c:2222
+#: index_project.c:383 index_project.c:2222 index_project.c:2229
 msgid "id search"
 msgstr "ID search"
 
@@ -728,7 +728,7 @@ msgstr "Input format: yyyy-mm-dd"
 msgid "update date"
 msgstr "Update date"
 
-#: index_project.c:792 index_top.c:129 index_top.c:132
+#: index_project.c:792 index_top.c:129 index_top.c:133
 msgid "search"
 msgstr "Search"
 
@@ -736,7 +736,7 @@ msgstr "Search"
 msgid "save conditions. (use cookie)"
 msgstr "Save conditions. (use cookie)"
 
-#: index_project.c:799 index_top.c:206
+#: index_project.c:799 index_top.c:207
 msgid "search result"
 msgstr "Search Result"
 
@@ -945,11 +945,7 @@ msgstr "Ticket counts"
 msgid "there are no ticket information."
 msgstr "There are no ticket information."
 
-#: index_project.c:2229
-msgid "display"
-msgstr "Display"
-
-#: index_project.c:2234 index_top.c:154 index_top.c:160
+#: index_project.c:2234 index_top.c:155 index_top.c:161
 msgid "edit page"
 msgstr "Edit page"
 
@@ -958,7 +954,7 @@ msgid "[graph description]"
 msgstr " "
 
 #: index_project.c:2437 index_project.c:2444 index_project.c:2445
-#: index_top.c:137
+#: index_top.c:138
 msgid "edit top page"
 msgstr "Edit top page"
 
@@ -970,19 +966,23 @@ msgstr " "
 msgid "error: there is no file."
 msgstr "ERROR: There is no file."
 
-#: index_top.c:102 index_top.c:202
+#: index_top.c:102 index_top.c:203
 msgid "top page"
 msgstr "Top Page"
 
-#: index_top.c:136
+#: index_top.c:130
+msgid "search by keyword for all sub projects."
+msgstr ""
+
+#: index_top.c:137
 msgid "description"
 msgstr "Description"
 
-#: index_top.c:160
+#: index_top.c:161
 msgid "[wiki syntax description1]"
 msgstr " "
 
-#: index_top.c:216
+#: index_top.c:217
 msgid "back to top"
 msgstr "Back to top"
 
@@ -1037,3 +1037,6 @@ msgstr "Example"
 #: wiki.c:209
 msgid "[wiki syntax example code]"
 msgstr " "
+
+#~ msgid "display"
+#~ msgstr "Display"
