@@ -878,14 +878,6 @@ void db_update_project(Database* db, Project* project)
             COLUMN_TYPE_INT, project->upload_max_size,
             COLUMN_TYPE_END) != 1)
         die("no seting to update? or too many?");
-    if (exec_query(
-            db,
-            "update setting set "
-            "value = ? "
-            "where name = 'locale'",
-            COLUMN_TYPE_INT, project->locale,
-            COLUMN_TYPE_END) != 1)
-        die("no seting to update? or too many?");
 }
 void db_update_element_type(Database* db, ElementType* et)
 {
