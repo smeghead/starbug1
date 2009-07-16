@@ -544,7 +544,7 @@ int exec_query(Database* db, const char* sql, ...)
     int type;
     sqlite3_stmt *stmt = NULL;
 
-    d("sql: %s\n", sql);
+    d("exec_query sql: %s\n", sql);
     if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
 
     sqlite3_reset(stmt);

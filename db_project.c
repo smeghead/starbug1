@@ -354,7 +354,7 @@ static String* get_search_sql_string(Database* db, List* conditions, Condition* 
             char name[DEFAULT_LENGTH];
             char val[DEFAULT_LENGTH];
             if (cond->element_type_id > 0) continue;
-            if (string_len(cond->value) == 0) continue;
+            if (!valid_condition(cond)) continue;
             if (i++) string_append(sql_string, " and ");
             switch (cond->element_type_id) {
                 case ELEM_ID_REGISTERDATE:
@@ -370,6 +370,11 @@ static String* get_search_sql_string(Database* db, List* conditions, Condition* 
                     break;
                 case CONDITION_TYPE_DATE_TO:
                     sprintf(val, " (%s <= ?) ", name);
+                    break;
+                case CONDITION_TYPE_DAYS:
+                    sprintf(val, " (%s >= datetime(current_timestamp, 'utc', '-%s days', 'localtime')) ",
+                            name,
+                            get_condition_valid_value(cond));
                     break;
             }
             string_append(sql_string, val);
@@ -426,6 +431,7 @@ int set_conditions(Database* db, sqlite3_stmt* stmt, List* conditions, List* key
         Condition* cond = it->element;
         char* v;
         if (!valid_condition(cond)) continue;
+        if (cond->condition_type == CONDITION_TYPE_DAYS) continue; /* プレースフォルダが無いためスルーする */
         v = get_condition_valid_value(cond);
         sqlite3_bind_text(stmt, n++, v, strlen(v), NULL);
     }

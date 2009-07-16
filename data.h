@@ -130,7 +130,8 @@ typedef struct {
 enum CONDITION_TYPE {
     CONDITION_TYPE_NORMAL,
     CONDITION_TYPE_DATE_FROM,
-    CONDITION_TYPE_DATE_TO
+    CONDITION_TYPE_DATE_TO,
+    CONDITION_TYPE_DAYS
 };
 Condition* condition_new();
 void condition_free(Condition*);

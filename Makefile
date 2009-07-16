@@ -19,7 +19,7 @@ ifeq ($(OS), CYGWIN_NT-5.1)
 endif
 
 #debug
-#CFLAGS += -DDEBUG
+CFLAGS += -DDEBUG
 #CFLAGS += -DMEMORYDEBUG
 
 default: index.cgi admin.cgi
@@ -73,7 +73,7 @@ clean:
 webapp: default
 	@echo "Creating webapp..."
 	mkdir -p dist/starbug1
-	rsync -a --exclude=CVS js css img script locale *.html *.cgi dist/starbug1/
+	rsync -a --exclude=*.po --exclude=CVS js css img script locale *.html *.cgi dist/starbug1/
 	cp .htaccess dist/starbug1/dot.htaccess
 	find dist/starbug1 -name '*.cgi' -exec chmod +x {} \;
 	find dist/starbug1 -name '*.pl' -exec chmod +x {} \;

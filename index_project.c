@@ -594,6 +594,17 @@ List* create_conditions(List* conditions, List* element_types, bool cookie_resto
     c = list_new_element(conditions);
     set_condition_values(c, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_TO, value, cookie_value, cookie_restore);
     list_add(conditions, c);
+    /* 最近更新された日数 */
+    sprintf(name, "lastregisterdate.days");
+    cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
+    sprintf(cookie_name,
+            COOKIE_CONDITION_FORMAT ".days",
+            g_project_code_4_url,
+            ELEM_ID_LASTREGISTERDATE);
+    get_cookie_string(cookie_name, cookie_value);
+    c = list_new_element(conditions);
+    set_condition_values(c, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DAYS, value, cookie_value, cookie_restore);
+    list_add(conditions, c);
     return conditions;
 }
 static void save_condition2cookie(List* conditions, char* q, bool save)
@@ -627,10 +638,20 @@ static void save_condition2cookie(List* conditions, char* q, bool save)
                             c->condition_type == CONDITION_TYPE_DATE_FROM ? "from" : "to");
                     break;
                 case ELEM_ID_LASTREGISTERDATE:
-                    sprintf(cookie_key, COOKIE_CONDITION_FORMAT ".%s",
-                            g_project_code_4_url,
-                            ELEM_ID_LASTREGISTERDATE,
-                            c->condition_type == CONDITION_TYPE_DATE_FROM ? "from" : "to");
+                    switch (c->condition_type) {
+                        case CONDITION_TYPE_DAYS:
+                            sprintf(cookie_key, COOKIE_CONDITION_FORMAT ".days",
+                                    g_project_code_4_url,
+                                    ELEM_ID_LASTREGISTERDATE);
+                                    break;
+                        case CONDITION_TYPE_DATE_FROM:
+                        case CONDITION_TYPE_DATE_TO:
+                            sprintf(cookie_key, COOKIE_CONDITION_FORMAT ".%s",
+                                    g_project_code_4_url,
+                                    ELEM_ID_LASTREGISTERDATE,
+                                    c->condition_type == CONDITION_TYPE_DATE_FROM ? "from" : "to");
+                            break;
+                    }
                     break;
                 default:
                     die("It will never reach!");
@@ -756,9 +777,11 @@ void search_action()
       "\t\t<span>\n"
       "\t\t<input type=\"text\" class=\"calendar\" name=\"lastregisterdate.to\" value=\""); v(get_condition_value(conditions_a, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_TO)); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
     o("\t\t</span>\n"
-      "\t\t<div class=\"description\">%s</div>\n"
-      "\t</td>\n"
-      "</tr>\n", _("input format: yyyy-mm-dd"));
+      "\t\t<div class=\"description\">%s</div>\n", _("input format: yyyy-mm-dd"));
+    o("\t\t<input type=\"text\" class=\"number\" name=\"lastregisterdate.days\" value=\""); v(get_condition_value(conditions_a, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DAYS)); o("\" maxlength=\"3\" />%s\n", _("lastupdate days"));
+    o("\t\t<div class=\"description\">%s</div>\n", _("last updated in days."));
+    o("\t</td>\n"
+      "</tr>\n");
     col_index = 1;
     foreach (it, element_types_a) {
         ElementType* et = it->element;
