@@ -955,11 +955,11 @@ msgstr "更新日時"
 
 #: index_project.c:781
 msgid "after(lastupdate)"
-msgstr "過去"
+msgstr "放置日数"
 
 #: index_project.c:781
 msgid "days before"
-msgstr "日間"
+msgstr "日以内"
 
 #: index_project.c:782
 msgid "last updated in days."

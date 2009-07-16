@@ -778,7 +778,7 @@ void search_action()
       "\t\t<input type=\"text\" class=\"calendar\" name=\"lastregisterdate.to\" value=\""); v(get_condition_value(conditions_a, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_TO)); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
     o("\t\t</span>\n"
       "\t\t<div class=\"description\">%s</div>\n", _("input format: yyyy-mm-dd"));
-    o("\t\t<input type=\"text\" class=\"number\" name=\"lastregisterdate.days\" value=\""); v(get_condition_value(conditions_a, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DAYS)); o("\" maxlength=\"3\" />%s\n", _("lastupdate days"));
+    o("\t\t%s<input type=\"text\" class=\"number\" name=\"lastregisterdate.days\" value=\"", _("after(lastupdate)")); v(get_condition_value(conditions_a, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DAYS)); o("\" maxlength=\"3\" />%s\n", _("days before"));
     o("\t\t<div class=\"description\">%s</div>\n", _("last updated in days."));
     o("\t</td>\n"
       "</tr>\n");
