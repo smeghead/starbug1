@@ -319,9 +319,11 @@ void db_top_set_locale()
     db_finish(db_a);
     sprintf(locale, "%s.UTF-8", string_rawstr(top_project_a->locale));
     d("locale: %s\n", locale);
-    bindtextdomain("starbug1", "locale");
-    textdomain("starbug1");
-    setlocale(LC_ALL, locale);
+    setenv("LANG", locale, 1); /* FreeBSD(さくらインターネット)でsetlocaleが動作しない場合があったため、環境変数を書き換える。 */
+    d("setlocale: %s\n", setlocale(LC_ALL, locale));
+    d("bindtextdomain: %s\n", bindtextdomain("starbug1", "locale"));
+    d("textdomain: %s\n", textdomain("starbug1"));
+
 
     project_free(top_project_a);
 }
