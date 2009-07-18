@@ -19,11 +19,11 @@ msgstr "管理"
 
 #: admin_project.c:85 index_project.c:133
 msgid "display sub projects list at top page."
-msgstr "显示器subproject是首页名单做。"
+msgstr "表示副工程一览"
 
 #: admin_project.c:86 index_project.c:133
 msgid "top page(sub projects list)"
-msgstr "首页(辅助计划名单)"
+msgstr "首页(副工程一览)"
 
 #: admin_project.c:91 admin_project.c:147
 msgid "management tool menu"
@@ -32,12 +32,12 @@ msgstr "管理工具菜单"
 #: admin_project.c:92 admin_project.c:150 admin_project.c:178
 #: admin_project.c:183
 msgid "sub project settings"
-msgstr "subproject设定"
+msgstr "副工程设定"
 
 #: admin_project.c:93 admin_project.c:151 admin_project.c:281
 #: admin_project.c:291
 msgid "columns settings"
-msgstr "column设定"
+msgstr "项目设定"
 
 #: admin_project.c:94 admin_project.c:152 admin_project.c:931
 msgid "style settings"
@@ -61,15 +61,15 @@ msgstr "菜单"
 
 #: admin_project.c:150
 msgid "this is basic sub projects settings."
-msgstr "这是基本性的subproject设定。"
+msgstr "这是基本性的副工程设定"
 
 #: admin_project.c:151
 msgid "this is columns settings of tickets."
-msgstr "这是票的column设定。"
+msgstr "这是票的项目设定"
 
 #: admin_project.c:152
 msgid "this is stylesheet settings."
-msgstr "这是stylesheet设定。"
+msgstr "这是样式表设定"
 
 #: admin_project.c:155
 msgid "about mail notify features"
@@ -77,11 +77,11 @@ msgstr "关于邮件通知功能"
 
 #: admin_project.c:157
 msgid "[mail notify messages]"
-msgstr " "
+msgstr "hook功能能发送邮件。hook功能"
 
 #: admin_project.c:186 admin_top.c:161
 msgid "sub project name"
-msgstr "subproject名"
+msgstr "副工程名"
 
 #: admin_project.c:190
 msgid "icon"
@@ -108,11 +108,11 @@ msgstr " "
 
 #: admin_project.c:294 admin_project.c:665 admin_project.c:674
 msgid "add new column"
-msgstr "追加新的column"
+msgstr "追加新的项目"
 
 #: admin_project.c:319 admin_project.c:678
 msgid "column name"
-msgstr "column名"
+msgstr "项目名"
 
 #: admin_project.c:319 index_project.c:1417 index_project.c:1667
 msgid "*"
@@ -120,17 +120,17 @@ msgstr "*"
 
 #: admin_project.c:322 admin_project.c:681
 msgid "this is name of ticket column."
-msgstr "这是票column的名字。"
+msgstr "这是票项目的名字。"
 
 #: admin_project.c:328 admin_project.c:686
 msgid "column description"
-msgstr "column说明"
+msgstr "项目说明"
 
 #: admin_project.c:335 admin_project.c:689
 msgid ""
 "this is description of ticket column. when register or replay, it is "
 "displayed."
-msgstr "这是票column的说明。"
+msgstr "这是票项目的说明。"
 
 #: admin_project.c:335
 msgid "required"
@@ -138,7 +138,7 @@ msgstr "必要"
 
 #: admin_project.c:338
 msgid "this column must not be empty."
-msgstr "这个column是天空不变成。"
+msgstr "这个项目是天空不变成。"
 
 #: admin_project.c:346
 msgid "[require description]"
@@ -150,7 +150,7 @@ msgstr "票的属性"
 
 #: admin_project.c:349 admin_project.c:697
 msgid "this column will be attribute of ticket."
-msgstr "这个column是票的属性。"
+msgstr "这个项目是票的属性。"
 
 #: admin_project.c:355 admin_project.c:699
 msgid "[attribute of ticket description1]"
@@ -170,7 +170,7 @@ msgstr "只回答"
 
 #: admin_project.c:365 admin_project.c:710
 msgid "this column will be reply only."
-msgstr "这个column只是回答。"
+msgstr "这个项目只是回答。"
 
 #: admin_project.c:370 admin_project.c:712
 msgid "[reply only description1]"
@@ -182,7 +182,7 @@ msgstr " "
 
 #: admin_project.c:375 admin_project.c:718
 msgid "column type"
-msgstr "column类型"
+msgstr "项目类型"
 
 #: admin_project.c:380 admin_project.c:722
 msgid "one line text(input[type=text])"
@@ -190,7 +190,7 @@ msgstr "1个线文本(input[type=text])"
 
 #: admin_project.c:383 admin_project.c:726
 msgid "multi line text(textarea)"
-msgstr "multi线文本(textarea)"
+msgstr "复线文本(textarea)"
 
 #: admin_project.c:386 admin_project.c:730
 msgid "boolean(input[type=checkbox])"
@@ -202,7 +202,7 @@ msgstr "选择名单(select)"
 
 #: admin_project.c:392 admin_project.c:738
 msgid "multi selection list(select[multiple=multiple])"
-msgstr "multi选择名单(select[multiple=multiple])"
+msgstr "复选择名单(select[multiple=multiple])"
 
 #: admin_project.c:395 admin_project.c:742
 msgid "file(input[type=file])"
@@ -239,7 +239,7 @@ msgstr "追加线"
 
 #: admin_project.c:455 admin_project.c:773
 msgid "selection element when this column is selection list."
-msgstr "这个column作为选择名单的时候的，选择要素。"
+msgstr "这个项目作为选择名单的时候的，选择要素。"
 
 #: admin_project.c:458 admin_project.c:776
 msgid "when register, you can input new selection element."
@@ -263,7 +263,7 @@ msgstr "票名单的显示器"
 
 #: admin_project.c:480 admin_project.c:785
 msgid "display this column in ticket list."
-msgstr "表示票名单的这个column。"
+msgstr "表示票名单的这个项目。"
 
 #: admin_project.c:481
 msgid "[display in ticket list description]"
@@ -275,7 +275,7 @@ msgstr "分类在票中不倾斜。"
 
 #: admin_project.c:512 admin_project.c:884
 msgid "delete this column("
-msgstr "delete this column("
+msgstr "删掉这个项目("
 
 #: admin_project.c:512 admin_project.c:884
 msgid ")(delete this column)"
@@ -299,15 +299,15 @@ msgstr "被追加。"
 
 #: admin_project.c:878
 msgid "column delete"
-msgstr "column删掉"
+msgstr "项目删掉"
 
 #: admin_project.c:891
 msgid "if column has deleted, it's forever gone."
-msgstr "column如果删掉了，那个永久就去了。"
+msgstr "项目如果删掉了，那个永久就去了。"
 
 #: admin_project.c:892
 msgid "this will disappear column of exists ticket."
-msgstr "column如果删掉了，那个永久就去了。"
+msgstr "项目如果删掉了，那个永久就去了。"
 
 #: admin_project.c:893
 msgid "if you really want to delete, push delete button."
@@ -331,7 +331,7 @@ msgstr "编辑样式表 设定 ，请按更新按钮。"
 
 #: admin_project.c:953
 msgid "below block is sample setting of ticket list table column."
-msgstr "对块下有对票名单桌子column的样品设定。"
+msgstr "对块下有对票名单桌子项目的样品设定。"
 
 #: admin_project.c:965
 msgid "background-color settings of "
@@ -343,19 +343,19 @@ msgstr "."
 
 #: admin_top.c:53 admin_top.c:58 admin_top.c:107 index_top.c:56
 msgid "project management"
-msgstr "项目管理"
+msgstr "工程管理"
 
 #: admin_top.c:57 index_project.c:2193 index_top.c:55
 msgid "project top"
-msgstr "项目首位"
+msgstr "工程首位"
 
 #: admin_top.c:127
 msgid "project information settings"
-msgstr "项目信息设定"
+msgstr "工程信息设定"
 
 #: admin_top.c:132
 msgid "project name"
-msgstr "project名"
+msgstr "工程名"
 
 #: admin_top.c:135
 msgid "home link name"
@@ -379,7 +379,7 @@ msgstr "数据库传球"
 
 #: admin_top.c:161 admin_top.c:200
 msgid "sub project id"
-msgstr "sub project id"
+msgstr "副工程ID"
 
 #: admin_top.c:187
 msgid "[project settings description1]"
@@ -395,7 +395,7 @@ msgstr " "
 
 #: admin_top.c:194
 msgid "add sub project"
-msgstr "追加subproject "
+msgstr "追加副工程 "
 
 #: admin_top.c:206
 msgid "[sub project name description]"
@@ -403,11 +403,11 @@ msgstr " "
 
 #: admin_top.c:292 admin_top.c:338
 msgid "[error] projectid top is reserved."
-msgstr "[ERROR] project id首位被确保。"
+msgstr "[ERROR] 工程ID首位被确保。"
 
 #: admin_top.c:299 admin_top.c:345
 msgid "[error] projectid("
-msgstr "[ERROR] project id"
+msgstr "[ERROR] 工程ID"
 
 #: admin_top.c:299 admin_top.c:345
 msgid ") is already exists."
@@ -415,7 +415,7 @@ msgstr ")已经存在"
 
 #: dbutil.c:93
 msgid "main project"
-msgstr "主要的项目"
+msgstr "主要的工程"
 
 #: dbutil.c:99 dbutil.c:164
 msgid "home"
@@ -496,7 +496,7 @@ msgstr "再生手续"
 #: dbutil.c:409
 msgid ""
 "please describe the condition and the procedure to reproduce the problem."
-msgstr " "
+msgstr "请写再生手续"
 
 #: dbutil.c:416
 msgid "comment"
@@ -587,11 +587,11 @@ msgstr "Starbug1"
 
 #: index_project.c:139
 msgid "move to top of sub project."
-msgstr "subproject的首位动。"
+msgstr "副工程的首位动。"
 
 #: index_project.c:139
 msgid "subproject top"
-msgstr "subproject首位"
+msgstr "工程首位"
 
 #: index_project.c:140
 msgid "this is ticket list by status."
@@ -621,11 +621,11 @@ msgstr "检索票"
 
 #: index_project.c:143 index_project.c:2374
 msgid "display statictics."
-msgstr "显示器statictics。"
+msgstr "表示统计。"
 
 #: index_project.c:143 index_project.c:2365 index_project.c:2374
 msgid "statictics"
-msgstr ""
+msgstr "统计"
 
 #: index_project.c:144 index_project.c:1874 index_project.c:1876
 #: index_project.c:1892
@@ -634,16 +634,15 @@ msgstr "寄存器票一次"
 
 #: index_project.c:145
 msgid "display help."
-msgstr "显示器帮助。"
+msgstr "表示帮助。"
 
 #: index_project.c:146
 msgid "seveal settings."
-msgstr "seveal设定。"
+msgstr "几个设定。"
 
 #: index_project.c:146
-#, fuzzy
 msgid "management of sub project"
-msgstr "subproject的首位动。"
+msgstr "副工程管理"
 
 #: index_project.c:279 index_project.c:298 index_project.c:763
 #: index_project.c:873 index_project.c:915 index_project.c:969
@@ -684,7 +683,7 @@ msgstr "寄存器新票。"
 
 #: index_project.c:440
 msgid "display unclosed tickets."
-msgstr "显示器开了票。"
+msgstr "表示开了票。"
 
 #: index_project.c:445
 msgid "link to part of this page"
@@ -737,7 +736,7 @@ msgstr "上次的更新日期"
 
 #: index_project.c:781
 msgid "days before"
-msgstr ""
+msgstr "日间"
 
 #: index_project.c:782
 #, fuzzy
@@ -758,7 +757,7 @@ msgstr "检索结"
 
 #: index_project.c:830
 msgid " tickets hits."
-msgstr "tickets hits."
+msgstr "个票见来了"
 
 #: index_project.c:841
 #, fuzzy
@@ -785,7 +784,6 @@ msgid "[rss format download description]"
 msgstr " "
 
 #: index_project.c:849
-#, fuzzy
 msgid "rss format download"
 msgstr "cvs格式化下载"
 
@@ -1059,5 +1057,3 @@ msgstr "例子"
 msgid "[wiki syntax example code]"
 msgstr " "
 
-#~ msgid "display"
-#~ msgstr "显示器"
