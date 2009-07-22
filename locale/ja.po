@@ -1322,32 +1322,8 @@ msgstr ""
 "|<"
 
 #: js/calendar.js:13
-msgid "sun"
-msgstr "日"
-
-#: js/calendar.js:13
-msgid "mon"
-msgstr "月"
-
-#: js/calendar.js:13
-msgid "tue"
-msgstr "火"
-
-#: js/calendar.js:13
-msgid "wed"
-msgstr "水"
-
-#: js/calendar.js:13
-msgid "thu"
-msgstr "木"
-
-#: js/calendar.js:13
-msgid "fri"
-msgstr "金"
-
-#: js/calendar.js:13
-msgid "sat"
-msgstr "土"
+msgid "sun,mon,tue,wed,thu,fri,sat"
+msgstr "日,月,火,水,木,金,土"
 
 #: js/calendar.js:23
 msgid "year"

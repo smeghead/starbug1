@@ -231,9 +231,11 @@ void top_gettext_js_action()
         return;
     }
     cgiHeaderContentType("application/x-javascript; charset=utf-8;\n\n");
+    o("var _memo = {};\n");
     o("function _(key) {");
     o("    try {\n");
     o("        var message = key;\n");
+    o("        if (_memo[key]) return _memo[key];\n");
     o("        new Ajax.Request('%s/top/top_gettext_js', {\n", cgiScriptName);
     o("            method: 'post',\n");
     o("            parameters: {'key': key},\n");
@@ -243,6 +245,7 @@ void top_gettext_js_action()
     o("                    throw new Exception();\n");
     o("                } else {\n");
     o("                    message = http.responseText;\n");
+    o("                    _memo[key] = message;\n");
     o("                }\n");
     o("            }\n");
     o("        });\n");

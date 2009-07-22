@@ -16,7 +16,7 @@ Object.extend(Starbug1Calendar.Util, {
         return d;
     },
     createCalendar: function(date) {
-        var day_of_week = [_("sun"), _("mon"), _("tue"), _("wed"), _("thu"), _("fri"), _("sat")];
+        var day_of_week = _("sun,mon,tue,wed,thu,fri,sat").split(',');
         return '<table>' +
             '<tr class="title">' +
                 '<th id="pre">《</th>' +
