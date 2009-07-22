@@ -18,6 +18,7 @@ void top_top_action();
 void top_edit_top_action();
 void top_edit_top_submit_action();
 void top_search_action();
+void top_gettext_js_action();
 
 /* prototype declares */
 int index_top_main();
@@ -28,6 +29,7 @@ void top_register_actions()
     REG_ACTION(top_edit_top);
     REG_ACTION(top_edit_top_submit);
     REG_ACTION(top_search);
+    REG_ACTION(top_gettext_js);
 }
 
 void top_output_header(char* title, Project* project)
@@ -42,6 +44,7 @@ void top_output_header(char* title, Project* project)
             "\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n"
             "\t<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\" />\n"
             "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />\n");
+    o(      "\t<script type=\"text/javascript\" src=\"%s/../js/gettext.js\"></script>\n", cgiScriptName);
     o(        "\t<title>Starbug1 - "); h(string_rawstr(project->name)); o(" - "); h(title); o("</title>\n");
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/top.css\" />\n", cgiScriptName);
     o(      "</head>\n"
@@ -217,5 +220,35 @@ void top_search_action()
     o(      "<div class=\"navigation\"><a href=\"%s/top/\">%s</a></div>\n", cgiScriptName, _("back to top"));
     top_output_footer();
     db_finish(db_a);
+}
+void top_gettext_js_action()
+{
+    char key[DEFAULT_LENGTH];
+    cgiFormString("key", key, DEFAULT_LENGTH);
+    if (strlen(key)) {
+        cgiHeaderContentType("application/x-javascript; charset=utf-8;\n\n");
+        o(_(key));
+        return;
+    }
+    cgiHeaderContentType("application/x-javascript; charset=utf-8;\n\n");
+    o("function _(key) {");
+    o("    try {\n");
+    o("        var message = key;\n");
+    o("        new Ajax.Request('%s/top/top_gettext_js', {\n", cgiScriptName);
+    o("            method: 'post',\n");
+    o("            parameters: {'key': key},\n");
+    o("            asynchronous: false,\n");
+    o("            onComplete: function (http) {\n");
+    o("                if (http.responseText == 0) {\n");
+    o("                    throw new Exception();\n");
+    o("                } else {\n");
+    o("                    message = http.responseText;\n");
+    o("                }\n");
+    o("            }\n");
+    o("        });\n");
+    o("    } catch (e) {\n");
+    o("    }\n");
+    o("    return message;\n");
+    o("}\n");
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

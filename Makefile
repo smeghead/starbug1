@@ -102,7 +102,7 @@ displayinstalldoc:
 	w3m -dump http://starbug1.sourceforge.jp/install.php
 
 mergeresource:
-	xgettext --from-code=utf-8 -k_ --msgid-bugs-address=smeghead@users.sourceforge.jp -L C -p locale  *.c 
+	xgettext --from-code=utf-8 -k_ --msgid-bugs-address=smeghead@users.sourceforge.jp -L C -p locale  *.c js/*.js
 	msgmerge -U locale/ja.po locale/messages.po
 	msgmerge -U locale/en.po locale/messages.po
 	msgmerge -U locale/zh.po locale/messages.po

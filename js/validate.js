@@ -27,7 +27,7 @@ function check_input_value(fields) {
                 : (value.all(function(x){return x.empty();}) && new_item && $F(new_item).empty());
             var message = $(f.id + '.required');
             if (empty) {
-                message.innerHTML = "必須項目です。入力してください。";
+                message.innerHTML = _("it will reuqired. please describe.");
                 message.style.display = "block";
                 f.focus();
             } else {
@@ -45,7 +45,7 @@ function validate_datefield(fields) {
             var not_valid = $F(f).length != 0 && $F(f).match(/^\d{4}-\d{2}-\d{2}$/) != $F(f);
             var message = $(f.id + '.datefield');
             if (not_valid) {
-                message.innerHTML = "日付項目です。yyyy-mm-dd形式で入力してください。";
+                message.innerHTML = _("it is date column. please describe by yyyy-mm-dd format.");
                 message.style.display = "block";
                 f.focus();
             } else {

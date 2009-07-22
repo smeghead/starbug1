@@ -6,16 +6,16 @@ function initPage(e) {
         function(e) {
             try {
                 if (required_fields.length && !check_input_value(required_fields)) {
-                    alert('入力されていない必須項目があります。確認してください。');
+                    alert(_("there are some required columns. please check."));
                     Event.stop(e);
                     return false;
                 }
-                var dedide = confirm('更新します。よろしいですか？');
+                var dedide = confirm(_("it will updated. are you ok?"));
                 if (!dedide)
                     Event.stop(e);
                 return dedide;
             } catch(ex) {
-                alert('エラーが発生しました。' + ex);
+                alert(_("the error occurred.") + ex);
                 Event.stop(e);
             }
             return true;

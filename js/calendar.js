@@ -10,21 +10,21 @@ var Starbug1Calendar = {
     Util: Class.create()
 }; 
 Object.extend(Starbug1Calendar.Util, {
-    DAY_OF_WEEK: ["日", "月", "火", "水", "木", "金", "土"],
     getAddedDate: function(date, n) {
         var d = new Date();
         d.setTime(date.getTime() + (1000 * 60 * 60 * 24 * n));
         return d;
     },
     createCalendar: function(date) {
+        var day_of_week = [_("sun"), _("mon"), _("tue"), _("wed"), _("thu"), _("fri"), _("sat")];
         return '<table>' +
             '<tr class="title">' +
                 '<th id="pre">《</th>' +
-                '<th class="title" colspan="4">' + date.getFullYear() + '年' + (date.getMonth() + 1) + '月</th>' +
+                '<th class="title" colspan="4">' + date.getFullYear() + _("year") + (date.getMonth() + 1) + _("month") + '</th>' +
                 '<th id="close">×</th>' +
                 '<th id="next">》</th>' +
             '</td></tr>' +
-            '<tr>' + this.DAY_OF_WEEK.inject(
+            '<tr>' + day_of_week.inject(
                 '',
                 function(memo, val, i) {
                     return memo + '<th class="day_' + i + '">' + val + '</th>';

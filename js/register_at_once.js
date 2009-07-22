@@ -10,7 +10,7 @@ function initPage(e) {
                 var empty = $F(f).empty();
                 var message = $(f.id + '.required');
                 if (empty) {
-                    message.innerHTML = "必須項目です。入力してください。";
+                    message.innerHTML = _("it will reuqired. please describe.");
                     message.style.display = "block";
                     f.focus();
                 } else {
@@ -18,16 +18,16 @@ function initPage(e) {
                     message.style.display = "none";
                 }
                 if (empty) {
-                    alert('入力されていない必須項目または不正な値が指定された項目があります。確認してください。');
+                    alert(_("there are some required columns or invalid columns. please check."));
                     Event.stop(e);
                     return false;
                 }
-                var dedide = confirm('解析します。よろしいですか？');
+                var dedide = confirm(_("it will analyzed. are you ok?"));
                 if (!dedide)
                     Event.stop(e);
                 return dedide;
             } catch(ex) {
-                alert('エラーが発生しました。' + ex);
+                alert(_("the error occurred.") + ex);
                 Event.stop(e);
             }
         }

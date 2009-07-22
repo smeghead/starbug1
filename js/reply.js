@@ -8,23 +8,23 @@ function initPage(e) {
         function(e) {
             try {
                 if ($F('field3') == status_original) {
-                    if (!confirm('状態が変更されていませんが、間違いないですか？')) {
+                    if (!confirm(_("you not modify status, are you ok?"))) {
                         Event.stop(e);
                         return false;
                     }
                 }
                 if (!check_input_value(required_fields) ||
                         !validate_datefield(date_fields)) {
-                    alert('入力されていない必須項目または不正な値が指定された項目があります。確認してください。');
+                    alert(_("there are some required columns or invalid columns. please check."));
                     Event.stop(e);
                     return false;
                 }
-                var dedide = confirm('返信します。よろしいですか？');
+                var dedide = confirm(_("it will replied. are you ok?"));
                 if (!dedide) 
                     Event.stop(e);
                 return dedide;
             } catch(ex) {
-                alert('エラーが発生しました。' + ex);
+                alert(_("the error occurred.") + ex);
                 Event.stop(e);
             }
         }
