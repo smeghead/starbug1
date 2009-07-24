@@ -106,7 +106,7 @@ void create_top_tables(Database* db)
             db,
             "insert into setting(name, value)"
             "values ('locale', ?);", 
-            COLUMN_TYPE_TEXT, _("ja_JP"),
+            COLUMN_TYPE_TEXT, INITAIL_LOCALE, /* 初期ロケール */
             COLUMN_TYPE_END);
     exec_query(
             db,

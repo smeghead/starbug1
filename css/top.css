@@ -241,6 +241,9 @@ div.complete_message {
     margin: 5px;
     padding: 0px;
 }
+#search_result {
+    padding:0px 10px;
+}
 #dashboard {
     margin: 0px;
     padding:0px 10px 0px 390px;

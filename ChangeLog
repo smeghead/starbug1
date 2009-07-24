@@ -1,3 +1,8 @@
+2009-07-24  smeghead <smeghead@users.sourceforge.jp>
+
+    * ライセンスをGPLに変更する準備
+    * トップの検索結果の表示用CSSの変更。
+
 2009-07-22  smeghead <smeghead@users.sourceforge.jp>
 
     * javascriptのリソースを国際化した。
@@ -38,6 +43,7 @@
 
     * 複数サブプロジェクトの検索処理の実装中
     * 変数名g_project_name,g_project_name_4_urlをg_project_code,g_project_code_4_urlに変更した。
+    padding:0px 10px;
     * メモリリークを探す時のためのオプションMEMORYDEBUGを追加した。
     * プロジェクト用のdbのsettingテーブルにロケール用のレコードを追加した。
       $ su

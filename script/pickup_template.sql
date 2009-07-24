@@ -1,4 +1,6 @@
-.dump project
+.dump project_info
+.dump setting
+.dump setting_file
 .dump element_type
 .dump list_item
 .schema ticket

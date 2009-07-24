@@ -2,7 +2,10 @@ VERSION = 1.2.10-beta
 COPYRIGHT = Copyright\ smeghead\ 2007\ -\ 2009
 CC = gcc
 CC_VERSION = ${shell gcc --version | grep 'gcc.*[0-9]\.' | sed -e 's/gcc[^0-9]*\([0-9]\).*/\1/g'}
-CFLAGS = -I/usr/include -I/usr/local/include -I${HOME}/include -I. -DVERSION=\"${VERSION}\" -DCOPYRIGHT=\"${COPYRIGHT}\" -O3 -Wall
+ifndef INITAIL_LOCALE
+	INITAIL_LOCALE = ja_JP
+endif
+CFLAGS = -I/usr/include -I/usr/local/include -I${HOME}/include -I. -DVERSION=\"${VERSION}\" -DCOPYRIGHT=\"${COPYRIGHT}\" -DINITAIL_LOCALE=\"${INITAIL_LOCALE}\" -O3 -Wall
 LFLAGS = -L/usr/lib -L/usr/local/lib -I${HOME}/include -lsqlite3 -lcgic
 ifeq ($(CC_VERSION), 3)
 	CFLAGS += -W
@@ -77,7 +80,7 @@ clean:
 webapp: default
 	@echo "Creating webapp..."
 	mkdir -p dist/starbug1
-	rsync -a --exclude=*.po --exclude=CVS js css img script locale *.html *.cgi dist/starbug1/
+	rsync -a --exclude=*.po --exclude=CVS js css img script locale *.html *.cgi COPYING_cgic dist/starbug1/
 	cp .htaccess dist/starbug1/dot.htaccess
 	find dist/starbug1 -name '*.cgi' -exec chmod +x {} \;
 	find dist/starbug1 -name '*.pl' -exec chmod +x {} \;
@@ -92,7 +95,7 @@ dist:
 		tar zcf starbug1-${VERSION}.tar.gz starbug1-${VERSION} && \
 		rm -rf starbug1-${VERSION} && \
 		cd ..
-		echo "Befor you make new release, You may HAVE TO make tag!"
+		@echo "Befor you make new release, You may HAVE TO make tag!"
 
 cvsreleasetag:
 	@echo please tag by manual. 

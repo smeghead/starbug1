@@ -32,7 +32,7 @@ DirectoryIndex index.cgi
     deny from all
 </FilesMatch>
 # 見せるファイル
-<FilesMatch "(^$|\.html$|\.cgi$|\.jpg$|\.png$|\.gif$|\.css$|\.js$)">
+<FilesMatch "(^$|\.html$|\.cgi$|\.jpg$|\.png$|\.gif$|\.css$|\.js$|^COPYING_cgic$)">
     allow from all
 </FilesMatch>
 # vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8:

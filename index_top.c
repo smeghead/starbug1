@@ -74,11 +74,11 @@ void top_output_footer()
             "\t\t<img src=\"%s/../img/valid-xhtml10.gif\" alt=\"Valid XHTML 1.0 Transitional\" height=\"31\" width=\"88\" />\n"
             "\t</a>\n"
             "</p>\n"
-            "<div><address>Powered by cgic &amp; SQLite3.</address></div>\n"
+            "<div><address>Powered by <a href=\"%s/../COPYING_cgic\">cgic</a> &amp; SQLite3.</address></div>\n"
             "<div><address>Starbug1 version: %s. %s.</address></div>\n"
             "</div>\n"
             "</div>\n"
-            "</body>\n</html>\n", cgiScriptName, VERSION, COPYRIGHT);
+            "</body>\n</html>\n", cgiScriptName, cgiScriptName, VERSION, COPYRIGHT);
 }
 int index_top_main() {
     top_register_actions();
@@ -205,7 +205,7 @@ void top_search_action()
     top_project_a = db_get_project(db_a, top_project_a);
     top_output_header(_("top page"), top_project_a);
     project_free(top_project_a);
-    o(      "<div id=\"project_list\">\n"
+    o(      "<div id=\"search_result\">\n"
             "\t<h2>%s</h2>\n"
             "\t<ul>\n", _("search result"));
     foreach (it, tickets_a) {
