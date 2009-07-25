@@ -1,0 +1,1112 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
+"POT-Creation-Date: 2009-07-25 22:05+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: admin_project.c:70 admin_project.c:145 admin_project.c:181
+#: admin_project.c:284 admin_project.c:668 admin_project.c:882
+#: admin_project.c:933
+msgid "management tool"
+msgstr ""
+
+#: admin_project.c:86 index_project.c:134
+msgid "display sub projects list at top page."
+msgstr ""
+
+#: admin_project.c:87 index_project.c:134
+msgid "top page(sub projects list)"
+msgstr ""
+
+#: admin_project.c:92 admin_project.c:148
+msgid "management tool menu"
+msgstr ""
+
+#: admin_project.c:93 admin_project.c:151 admin_project.c:179
+#: admin_project.c:184
+msgid "sub project settings"
+msgstr ""
+
+#: admin_project.c:94 admin_project.c:152 admin_project.c:282
+#: admin_project.c:292
+msgid "columns settings"
+msgstr ""
+
+#: admin_project.c:95 admin_project.c:153 admin_project.c:932
+msgid "style settings"
+msgstr ""
+
+#: admin_project.c:96 index_project.c:146
+msgid "help"
+msgstr ""
+
+#: admin_project.c:97
+msgid "to"
+msgstr ""
+
+#: admin_project.c:97
+msgid "to(suffix)"
+msgstr ""
+
+#: admin_project.c:139
+msgid "menu"
+msgstr ""
+
+#: admin_project.c:151
+msgid "this is basic sub projects settings."
+msgstr ""
+
+#: admin_project.c:152
+msgid "this is columns settings of tickets."
+msgstr ""
+
+#: admin_project.c:153
+msgid "this is stylesheet settings."
+msgstr ""
+
+#: admin_project.c:156
+msgid "about mail notify features"
+msgstr ""
+
+#: admin_project.c:158
+msgid "[mail notify messages]"
+msgstr ""
+
+#: admin_project.c:187 admin_top.c:162
+msgid "sub project name"
+msgstr ""
+
+#: admin_project.c:191
+msgid "icon"
+msgstr ""
+
+#: admin_project.c:195
+msgid "file upload max size(kb)"
+msgstr ""
+
+#: admin_project.c:199 admin_project.c:306 admin_project.c:516
+#: admin_project.c:950 admin_top.c:148 admin_top.c:191 index_project.c:2477
+#: index_top.c:170
+msgid "update"
+msgstr ""
+
+#: admin_project.c:267 admin_project.c:538 admin_project.c:1002
+#: admin_top.c:241 admin_top.c:321
+msgid "updated."
+msgstr ""
+
+#: admin_project.c:293
+msgid "[columns setting description]"
+msgstr ""
+
+#: admin_project.c:295 admin_project.c:666 admin_project.c:675
+msgid "add new column"
+msgstr ""
+
+#: admin_project.c:320 admin_project.c:679
+msgid "column name"
+msgstr ""
+
+#: admin_project.c:320 index_project.c:1418 index_project.c:1668
+msgid "*"
+msgstr ""
+
+#: admin_project.c:323 admin_project.c:682
+msgid "this is name of ticket column."
+msgstr ""
+
+#: admin_project.c:329 admin_project.c:687
+msgid "column description"
+msgstr ""
+
+#: admin_project.c:336 admin_project.c:690
+msgid ""
+"this is description of ticket column. when register or replay, it is "
+"displayed."
+msgstr ""
+
+#: admin_project.c:336
+msgid "required"
+msgstr ""
+
+#: admin_project.c:339
+msgid "this column must not be empty."
+msgstr ""
+
+#: admin_project.c:347
+msgid "[require description]"
+msgstr ""
+
+#: admin_project.c:348 admin_project.c:694
+msgid "attribute of ticket"
+msgstr ""
+
+#: admin_project.c:350 admin_project.c:698
+msgid "this column will be attribute of ticket."
+msgstr ""
+
+#: admin_project.c:356 admin_project.c:700
+msgid "[attribute of ticket description1]"
+msgstr ""
+
+#: admin_project.c:357 admin_project.c:701
+msgid "[attribute of ticket description2]"
+msgstr ""
+
+#: admin_project.c:358 admin_project.c:702
+msgid "[attribute of ticket description3]"
+msgstr ""
+
+#: admin_project.c:362 admin_project.c:707
+msgid "reply only"
+msgstr ""
+
+#: admin_project.c:366 admin_project.c:711
+msgid "this column will be reply only."
+msgstr ""
+
+#: admin_project.c:371 admin_project.c:713
+msgid "[reply only description1]"
+msgstr ""
+
+#: admin_project.c:372 admin_project.c:714
+msgid "[reply only description2]"
+msgstr ""
+
+#: admin_project.c:376 admin_project.c:719
+msgid "column type"
+msgstr ""
+
+#: admin_project.c:381 admin_project.c:723
+msgid "one line text(input[type=text])"
+msgstr ""
+
+#: admin_project.c:384 admin_project.c:727
+msgid "multi line text(textarea)"
+msgstr ""
+
+#: admin_project.c:387 admin_project.c:731
+msgid "boolean(input[type=checkbox])"
+msgstr ""
+
+#: admin_project.c:390 admin_project.c:735
+msgid "selection list(select)"
+msgstr ""
+
+#: admin_project.c:393 admin_project.c:739
+msgid "multi selection list(select[multiple=multiple])"
+msgstr ""
+
+#: admin_project.c:396 admin_project.c:743
+msgid "file(input[type=file])"
+msgstr ""
+
+#: admin_project.c:399 admin_project.c:747
+msgid "date(input[type=text])"
+msgstr ""
+
+#: admin_project.c:416 admin_project.c:752
+msgid "selection element"
+msgstr ""
+
+#: admin_project.c:416 admin_project.c:756
+msgid "element name"
+msgstr ""
+
+#: admin_project.c:416 admin_project.c:757
+msgid "means closed"
+msgstr ""
+
+#: admin_project.c:416 admin_project.c:486 admin_project.c:758
+#: admin_project.c:790 admin_top.c:162 admin_top.c:201
+msgid "sort"
+msgstr ""
+
+#: admin_project.c:416 admin_project.c:895 admin_top.c:162
+msgid "delete"
+msgstr ""
+
+#: admin_project.c:450
+msgid "add line"
+msgstr ""
+
+#: admin_project.c:456 admin_project.c:774
+msgid "selection element when this column is selection list."
+msgstr ""
+
+#: admin_project.c:459 admin_project.c:777
+msgid "when register, you can input new selection element."
+msgstr ""
+
+#: admin_project.c:462 admin_project.c:778
+msgid "[add line description]"
+msgstr ""
+
+#: admin_project.c:467
+msgid "default value"
+msgstr ""
+
+#: admin_project.c:473
+msgid "this is default value."
+msgstr ""
+
+#: admin_project.c:477 admin_project.c:782
+msgid "display in ticket list"
+msgstr ""
+
+#: admin_project.c:481 admin_project.c:786
+msgid "display this column in ticket list."
+msgstr ""
+
+#: admin_project.c:482
+msgid "[display in ticket list description]"
+msgstr ""
+
+#: admin_project.c:492 admin_project.c:793
+msgid "sort no in ticket lists."
+msgstr ""
+
+#: admin_project.c:513 admin_project.c:885
+msgid "delete this column("
+msgstr ""
+
+#: admin_project.c:513 admin_project.c:885
+msgid ")(delete this column)"
+msgstr ""
+
+#: admin_project.c:676
+msgid "[ticket add description]"
+msgstr ""
+
+#: admin_project.c:748
+msgid "[ticket add column type description]"
+msgstr ""
+
+#: admin_project.c:797 admin_top.c:208
+msgid "add"
+msgstr ""
+
+#: admin_project.c:862 admin_top.c:358
+msgid "added."
+msgstr ""
+
+#: admin_project.c:879
+msgid "column delete"
+msgstr ""
+
+#: admin_project.c:892
+msgid "if column has deleted, it's forever gone."
+msgstr ""
+
+#: admin_project.c:893
+msgid "this will disappear column of exists ticket."
+msgstr ""
+
+#: admin_project.c:894
+msgid "if you really want to delete, push delete button."
+msgstr ""
+
+#: admin_project.c:911
+msgid "it is a invalid request."
+msgstr ""
+
+#: admin_project.c:921
+msgid "deleted."
+msgstr ""
+
+#: admin_project.c:937
+msgid "edit style sheet"
+msgstr ""
+
+#: admin_project.c:937
+msgid "edit style sheet setting and push update button."
+msgstr ""
+
+#: admin_project.c:954
+msgid "below block is sample setting of ticket list table column."
+msgstr ""
+
+#: admin_project.c:966
+msgid "background-color settings of "
+msgstr ""
+
+#: admin_project.c:966
+msgid ".(background-color settings)"
+msgstr ""
+
+#: admin_top.c:54 admin_top.c:59 admin_top.c:108 index_top.c:59
+msgid "project management"
+msgstr ""
+
+#: admin_top.c:58 index_project.c:2194 index_top.c:58
+msgid "project top"
+msgstr ""
+
+#: admin_top.c:128
+msgid "project information settings"
+msgstr ""
+
+#: admin_top.c:133
+msgid "project name"
+msgstr ""
+
+#: admin_top.c:136
+msgid "home link name"
+msgstr ""
+
+#: admin_top.c:140
+msgid "home link refference"
+msgstr ""
+
+#: admin_top.c:144
+msgid "locale"
+msgstr ""
+
+#: admin_top.c:153 index_top.c:108
+msgid "sub projects list"
+msgstr ""
+
+#: admin_top.c:162
+msgid "database path"
+msgstr ""
+
+#: admin_top.c:162 admin_top.c:201
+msgid "sub project id"
+msgstr ""
+
+#: admin_top.c:188
+msgid "[project settings description1]"
+msgstr ""
+
+#: admin_top.c:189
+msgid "[project settings description2]"
+msgstr ""
+
+#: admin_top.c:190
+msgid "[project settings description3]"
+msgstr ""
+
+#: admin_top.c:195
+msgid "add sub project"
+msgstr ""
+
+#: admin_top.c:207
+msgid "[sub project name description]"
+msgstr ""
+
+#: admin_top.c:293 admin_top.c:339
+msgid "[error] projectid top is reserved."
+msgstr ""
+
+#: admin_top.c:300 admin_top.c:346
+msgid "[error] projectid("
+msgstr ""
+
+#: admin_top.c:300 admin_top.c:346
+msgid ") is already exists."
+msgstr ""
+
+#: dbutil.c:95
+msgid "main project"
+msgstr ""
+
+#: dbutil.c:101 dbutil.c:166
+msgid "home"
+msgstr ""
+
+#: dbutil.c:142 dbutil.c:524 wiki.c:208
+msgid "[wiki syntax example]"
+msgstr ""
+
+#: dbutil.c:160
+msgid "bts"
+msgstr ""
+
+#: dbutil.c:185
+msgid "[style sheet default value]"
+msgstr ""
+
+#: dbutil.c:361
+msgid "title"
+msgstr ""
+
+#: dbutil.c:362
+msgid "please input title that means content correctly."
+msgstr ""
+
+#: dbutil.c:369 index_project.c:967 index_project.c:2320
+msgid "registerer"
+msgstr ""
+
+#: dbutil.c:370
+msgid "please input your name."
+msgstr ""
+
+#: dbutil.c:377
+msgid "status"
+msgstr ""
+
+#: dbutil.c:378
+msgid "please select status."
+msgstr ""
+
+#: dbutil.c:379 dbutil.c:434 index_project.c:465
+msgid "new"
+msgstr ""
+
+#: dbutil.c:386
+msgid "category"
+msgstr ""
+
+#: dbutil.c:387
+msgid "please select category."
+msgstr ""
+
+#: dbutil.c:394
+msgid "priority"
+msgstr ""
+
+#: dbutil.c:395
+msgid "please select priority."
+msgstr ""
+
+#: dbutil.c:402
+msgid "detail"
+msgstr ""
+
+#: dbutil.c:403
+msgid "please describe the detail."
+msgstr ""
+
+#: dbutil.c:410
+msgid "reproduction procedure"
+msgstr ""
+
+#: dbutil.c:411
+msgid ""
+"please describe the condition and the procedure to reproduce the problem."
+msgstr ""
+
+#: dbutil.c:418
+msgid "comment"
+msgstr ""
+
+#: dbutil.c:419
+msgid "please describe the comment."
+msgstr ""
+
+#: dbutil.c:437
+msgid "accepted"
+msgstr ""
+
+#: dbutil.c:440
+msgid "fixed"
+msgstr ""
+
+#: dbutil.c:443
+msgid "reservation"
+msgstr ""
+
+#: dbutil.c:446
+msgid "complete"
+msgstr ""
+
+#: dbutil.c:449
+msgid "wontfix"
+msgstr ""
+
+#: dbutil.c:452
+msgid "specification"
+msgstr ""
+
+#: dbutil.c:455
+msgid "page"
+msgstr ""
+
+#: dbutil.c:458
+msgid "batch process"
+msgstr ""
+
+#: dbutil.c:461
+msgid "document"
+msgstr ""
+
+#: dbutil.c:464
+msgid "emergency"
+msgstr ""
+
+#: dbutil.c:467
+msgid "high"
+msgstr ""
+
+#: dbutil.c:470
+msgid "middle"
+msgstr ""
+
+#: dbutil.c:473
+msgid "low"
+msgstr ""
+
+#: dbutil.c:529
+msgid "[help content]"
+msgstr ""
+
+#: dbutil.c:534
+msgid "[admin help content]"
+msgstr ""
+
+#: hook.c:143
+#, c-format
+msgid "[error] error occured in hook process(%s). failed to load plugin. %s"
+msgstr ""
+
+#: hook.c:159 hook.c:183
+#, c-format
+msgid "executed hook process(%s)"
+msgstr ""
+
+#: hook.c:162 hook.c:185
+#, c-format
+msgid "[error] error occured in hook process(%s). (return code: %d)"
+msgstr ""
+
+#: index_project.c:130
+msgid "starbug1"
+msgstr ""
+
+#: index_project.c:140
+msgid "move to top of sub project."
+msgstr ""
+
+#: index_project.c:140
+msgid "subproject top"
+msgstr ""
+
+#: index_project.c:141
+msgid "this is ticket list by status."
+msgstr ""
+
+#: index_project.c:141 index_project.c:412 index_project.c:432
+#: index_project.c:441
+msgid "ticket list by status"
+msgstr ""
+
+#: index_project.c:142
+msgid "register new ticket"
+msgstr ""
+
+#: index_project.c:142 index_project.c:1378 index_project.c:1380
+#: index_project.c:1389
+msgid "register ticket"
+msgstr ""
+
+#: index_project.c:143
+msgid "search tickets."
+msgstr ""
+
+#: index_project.c:143 index_project.c:741 index_project.c:743
+msgid "search tickets"
+msgstr ""
+
+#: index_project.c:144 index_project.c:2375
+msgid "display statictics."
+msgstr ""
+
+#: index_project.c:144 index_project.c:2366 index_project.c:2375
+msgid "statictics"
+msgstr ""
+
+#: index_project.c:145 index_project.c:1875 index_project.c:1877
+#: index_project.c:1893
+msgid "register tickets at once"
+msgstr ""
+
+#: index_project.c:146
+msgid "display help."
+msgstr ""
+
+#: index_project.c:147
+msgid "seveal settings."
+msgstr ""
+
+#: index_project.c:147
+msgid "management of sub project"
+msgstr ""
+
+#: index_project.c:280 index_project.c:299 index_project.c:764
+#: index_project.c:874 index_project.c:916 index_project.c:970
+#: index_project.c:2323
+msgid "register date"
+msgstr ""
+
+#: index_project.c:280 index_project.c:300 index_project.c:875
+#: index_project.c:918
+msgid "last update date"
+msgstr ""
+
+#: index_project.c:280 index_project.c:301 index_project.c:876
+#: index_project.c:920
+msgid "leaved days"
+msgstr ""
+
+#: index_project.c:290 index_project.c:294 index_project.c:299
+#: index_project.c:300 index_project.c:301
+msgid "asc or desc sorting."
+msgstr ""
+
+#: index_project.c:373
+msgid "search by status."
+msgstr ""
+
+#: index_project.c:381 index_project.c:2247
+msgid "display the ticket on inputed id."
+msgstr ""
+
+#: index_project.c:384 index_project.c:2246 index_project.c:2253
+msgid "id search"
+msgstr ""
+
+#: index_project.c:387 index_project.c:2257
+msgid "register new ticket."
+msgstr ""
+
+#: index_project.c:441
+msgid "display unclosed tickets."
+msgstr ""
+
+#: index_project.c:446
+msgid "link to part of this page"
+msgstr ""
+
+#: index_project.c:466
+msgid "tickets is desplayed."
+msgstr ""
+
+#: index_project.c:471 index_project.c:480
+msgid "display tickets that status is "
+msgstr ""
+
+#: index_project.c:471 index_project.c:480
+msgid ".(display status)"
+msgstr ""
+
+#: index_project.c:475
+msgid "see more..."
+msgstr ""
+
+#: index_project.c:752
+msgid "search condition"
+msgstr ""
+
+#: index_project.c:752
+msgid "input search conditions and push 'search'."
+msgstr ""
+
+#: index_project.c:758
+msgid "keyword search"
+msgstr ""
+
+#: index_project.c:764
+msgid "search for all columns includes history."
+msgstr ""
+
+#: index_project.c:775 index_project.c:781 index_project.c:1318
+msgid "input format: yyyy-mm-dd"
+msgstr ""
+
+#: index_project.c:775
+msgid "update date"
+msgstr ""
+
+#: index_project.c:782
+msgid "after(lastupdate)"
+msgstr ""
+
+#: index_project.c:782
+msgid "days before"
+msgstr ""
+
+#: index_project.c:783
+msgid "last updated in days."
+msgstr ""
+
+#: index_project.c:816 index_top.c:132 index_top.c:136
+msgid "search"
+msgstr ""
+
+#: index_project.c:817
+msgid "save conditions. (use cookie)"
+msgstr ""
+
+#: index_project.c:823 index_top.c:210
+msgid "search result"
+msgstr ""
+
+#: index_project.c:831
+#, c-format
+msgid "%d tickets hits."
+msgstr ""
+
+#: index_project.c:842
+msgid "[cvs format download description]"
+msgstr ""
+
+#: index_project.c:842
+msgid "csv format download"
+msgstr ""
+
+#: index_project.c:846
+msgid "[html format download description]"
+msgstr ""
+
+#: index_project.c:846
+msgid "html format download(exel)"
+msgstr ""
+
+#: index_project.c:850
+msgid "[rss format download description]"
+msgstr ""
+
+#: index_project.c:850
+msgid "rss format download"
+msgstr ""
+
+#: index_project.c:1309
+msgid "file size must below"
+msgstr ""
+
+#: index_project.c:1309
+msgid "kb(file size)"
+msgstr ""
+
+#: index_project.c:1328
+msgid "if you want to add selection item, input new item name."
+msgstr ""
+
+#: index_project.c:1390
+msgid "input below form and push register button."
+msgstr ""
+
+#: index_project.c:1391 index_project.c:1634 index_project.c:1955
+msgid "note: they are checked by only javascript."
+msgstr ""
+
+#: index_project.c:1440 index_project.c:2033
+msgid "register"
+msgstr ""
+
+#: index_project.c:1440 index_project.c:1685 index_project.c:2033
+msgid "save registerer.(use cookie)"
+msgstr ""
+
+#: index_project.c:1467 index_project.c:1474
+msgid "not exists id."
+msgstr ""
+
+#: index_project.c:1499 index_project.c:2201
+msgid "what's new"
+msgstr ""
+
+#: index_project.c:1499
+msgid "this is latest updated tickets."
+msgstr ""
+
+#: index_project.c:1534
+msgid "all attachments"
+msgstr ""
+
+#: index_project.c:1562
+msgid "go to reply"
+msgstr ""
+
+#: index_project.c:1562
+msgid "ticket history"
+msgstr ""
+
+#: index_project.c:1562
+msgid "this is ticket histories."
+msgstr ""
+
+#: index_project.c:1631
+msgid "reply ticket"
+msgstr ""
+
+#: index_project.c:1634
+msgid "input form and push reply."
+msgstr ""
+
+#: index_project.c:1637
+msgid "update ticket information"
+msgstr ""
+
+#: index_project.c:1637
+msgid "[update ticket description]"
+msgstr ""
+
+#: index_project.c:1660
+msgid "add reply information"
+msgstr ""
+
+#: index_project.c:1660
+msgid "input reply information."
+msgstr ""
+
+#: index_project.c:1685
+msgid "reply"
+msgstr ""
+
+#: index_project.c:1832
+msgid "registerd."
+msgstr ""
+
+#: index_project.c:1834
+msgid "replyed."
+msgstr ""
+
+#: index_project.c:1851
+msgid "error"
+msgstr ""
+
+#: index_project.c:1854
+msgid "error occured."
+msgstr ""
+
+#: index_project.c:1855
+msgid "file size is too large."
+msgstr ""
+
+#: index_project.c:1857
+msgid "kb. too large. back by browser's back button."
+msgstr ""
+
+#: index_project.c:1894
+msgid "[register ticket at once description1]"
+msgstr ""
+
+#: index_project.c:1895
+msgid "[register ticket at once description2]"
+msgstr ""
+
+#: index_project.c:1896
+msgid "[register ticket at once description3]"
+msgstr ""
+
+#: index_project.c:1897
+msgid "register finish."
+msgstr ""
+
+#: index_project.c:1912
+msgid "[register ticket at once description4]"
+msgstr ""
+
+#: index_project.c:1916
+msgid "analysis"
+msgstr ""
+
+#: index_project.c:1942 index_project.c:1944 index_project.c:1953
+msgid "register tickets at once confirm"
+msgstr ""
+
+#: index_project.c:1954
+msgid "[register ticket at once description5]"
+msgstr ""
+
+#: index_project.c:1990
+msgid "register<br />column"
+msgstr ""
+
+#: index_project.c:1994
+msgid "ignore"
+msgstr ""
+
+#: index_project.c:2040
+msgid "[register ticket at once description6]"
+msgstr ""
+
+#: index_project.c:2041
+msgid "[register ticket at once description7]"
+msgstr ""
+
+#: index_project.c:2171
+msgid " tickets registerd."
+msgstr ""
+
+#: index_project.c:2174
+msgid "no ticket registerd."
+msgstr ""
+
+#: index_project.c:2218
+msgid "no latest tickets."
+msgstr ""
+
+#: index_project.c:2226
+msgid "ticket counts"
+msgstr ""
+
+#: index_project.c:2238
+msgid "there are no ticket information."
+msgstr ""
+
+#: index_project.c:2258 index_top.c:158 index_top.c:164
+msgid "edit page"
+msgstr ""
+
+#: index_project.c:2400
+msgid "[graph description]"
+msgstr ""
+
+#: index_project.c:2461 index_project.c:2468 index_project.c:2469
+#: index_top.c:141
+msgid "edit top page"
+msgstr ""
+
+#: index_project.c:2470 index_top.c:164
+msgid "[wiki syntax description1]"
+msgstr ""
+
+#: index_project.c:2523 index_project.c:2550
+msgid "error: there is no file."
+msgstr ""
+
+#: index_top.c:105 index_top.c:206
+msgid "top page"
+msgstr ""
+
+#: index_top.c:133
+msgid "search by keyword for all sub projects."
+msgstr ""
+
+#: index_top.c:140
+msgid "description"
+msgstr ""
+
+#: index_top.c:220
+msgid "back to top"
+msgstr ""
+
+#: util.c:692
+msgid "[ticket form syntax description1]"
+msgstr ""
+
+#: util.c:693
+msgid "[ticket form syntax description2]"
+msgstr ""
+
+#: util.c:694
+msgid "[ticket form syntax description3]"
+msgstr ""
+
+#: wiki.c:191
+msgid "simple wiki syntax"
+msgstr ""
+
+#: wiki.c:192
+msgid "a line starts by * become big headline."
+msgstr ""
+
+#: wiki.c:193
+msgid "a line starts by ** become medium headline."
+msgstr ""
+
+#: wiki.c:194
+msgid "a line starts by *** become small headline."
+msgstr ""
+
+#: wiki.c:195
+msgid "a line starts by **** become super small headline."
+msgstr ""
+
+#: wiki.c:196
+msgid "a line starts by - become item."
+msgstr ""
+
+#: wiki.c:197
+msgid "a line starts by ---- become delimitation."
+msgstr ""
+
+#: wiki.c:198
+msgid "from line starts by &gt;| to line starts by |&lt;, become block."
+msgstr ""
+
+#: wiki.c:207
+msgid "example"
+msgstr ""
+
+#: wiki.c:209
+msgid "[wiki syntax example code]"
+msgstr ""
+
+#: js/calendar.js:19
+msgid "sun,mon,tue,wed,thu,fri,sat"
+msgstr ""
+
+#: js/calendar.js:23
+msgid "year"
+msgstr ""
+
+#: js/calendar.js:23
+msgid "month"
+msgstr ""
+
+#: js/delete_item.js:6
+msgid "it will deleted. are you ok?"
+msgstr ""
+
+#: js/edit_top.js:6 js/register.js:15 js/register_at_once_submit.js:23
+msgid "it will registered. are you ok?"
+msgstr ""
+
+#: js/management.js:9
+msgid "there are some required columns. please check."
+msgstr ""
+
+#: js/management.js:13
+msgid "it will updated. are you ok?"
+msgstr ""
+
+#: js/management.js:18 js/new_item.js:17 js/register.js:20
+#: js/register_at_once.js:30 js/register_at_once_submit.js:28 js/reply.js:27
+msgid "the error occurred."
+msgstr ""
+
+#: js/new_item.js:8 js/register.js:11 js/register_at_once.js:21
+#: js/register_at_once_submit.js:19 js/reply.js:18
+msgid "there are some required columns or invalid columns. please check."
+msgstr ""
+
+#: js/new_item.js:12
+msgid "it will added. are you ok?"
+msgstr ""
+
+#: js/new_item.js:25 js/register_at_once.js:13
+#: js/register_at_once_submit.js:11 js/validate.js:30
+msgid "it will reuqired. please describe."
+msgstr ""
+
+#: js/register_at_once.js:25
+msgid "it will analyzed. are you ok?"
+msgstr ""
+
+#: js/reply.js:11
+msgid "you not modify status, are you ok?"
+msgstr ""
+
+#: js/reply.js:22
+msgid "it will replied. are you ok?"
+msgstr ""
+
+#: js/validate.js:48
+msgid "it is date column. please describe by yyyy-mm-dd format."
+msgstr ""

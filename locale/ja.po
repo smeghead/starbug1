@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2009-07-25 18:57+0900\n"
+"POT-Creation-Date: 2009-07-25 22:05+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: smeghead <smeghead@users.sourceforge.jp>\n"
 "Language-Team: smeghead <smeghead@users.sourceforge.jp>\n"
@@ -441,15 +441,15 @@ msgstr "[ERROR] プロジェクトID"
 msgid ") is already exists."
 msgstr "は既に存在しています。"
 
-#: dbutil.c:93
+#: dbutil.c:95
 msgid "main project"
 msgstr "メインプロジェクト"
 
-#: dbutil.c:99 dbutil.c:164
+#: dbutil.c:101 dbutil.c:166
 msgid "home"
 msgstr "ホーム"
 
-#: dbutil.c:140 dbutil.c:522 wiki.c:208
+#: dbutil.c:142 dbutil.c:524 wiki.c:208
 msgid "[wiki syntax example]"
 msgstr ""
 "*編集可能領域\n"
@@ -458,11 +458,11 @@ msgstr ""
 "-お知らせ\n"
 "-Starbug1の使い方についての注意事項など"
 
-#: dbutil.c:158
+#: dbutil.c:160
 msgid "bts"
 msgstr "BTS"
 
-#: dbutil.c:183
+#: dbutil.c:185
 msgid "[style sheet default value]"
 msgstr ""
 "@charset \"utf-8\";\n"
@@ -522,128 +522,128 @@ msgstr ""
 "        /* background-color:    lightcyan; */\n"
 "}"
 
-#: dbutil.c:359
+#: dbutil.c:361
 msgid "title"
 msgstr "件名"
 
-#: dbutil.c:360
+#: dbutil.c:362
 msgid "please input title that means content correctly."
 msgstr "内容を簡潔に表すような件名を入力してください。"
 
-#: dbutil.c:367 index_project.c:967 index_project.c:2320
+#: dbutil.c:369 index_project.c:967 index_project.c:2320
 msgid "registerer"
 msgstr "投稿者"
 
-#: dbutil.c:368
+#: dbutil.c:370
 msgid "please input your name."
 msgstr "投稿者を入力してください。"
 
-#: dbutil.c:375
+#: dbutil.c:377
 msgid "status"
 msgstr "状態"
 
-#: dbutil.c:376
+#: dbutil.c:378
 msgid "please select status."
 msgstr "状態を選択してください。"
 
-#: dbutil.c:377 dbutil.c:432 index_project.c:465
+#: dbutil.c:379 dbutil.c:434 index_project.c:465
 msgid "new"
 msgstr "新規"
 
-#: dbutil.c:384
+#: dbutil.c:386
 msgid "category"
 msgstr "カテゴリ"
 
-#: dbutil.c:385
+#: dbutil.c:387
 msgid "please select category."
 msgstr "カテゴリを選択してください。"
 
-#: dbutil.c:392
+#: dbutil.c:394
 msgid "priority"
 msgstr "優先度"
 
-#: dbutil.c:393
+#: dbutil.c:395
 msgid "please select priority."
 msgstr "優先度を選択してください。"
 
-#: dbutil.c:400
+#: dbutil.c:402
 msgid "detail"
 msgstr "詳細"
 
-#: dbutil.c:401
+#: dbutil.c:403
 msgid "please describe the detail."
 msgstr "的確に記述してください。"
 
-#: dbutil.c:408
+#: dbutil.c:410
 msgid "reproduction procedure"
 msgstr "再現手順"
 
-#: dbutil.c:409
+#: dbutil.c:411
 msgid ""
 "please describe the condition and the procedure to reproduce the problem."
 msgstr "問題を再現させるための条件と手順を記述してください。"
 
-#: dbutil.c:416
+#: dbutil.c:418
 msgid "comment"
 msgstr "コメント"
 
-#: dbutil.c:417
+#: dbutil.c:419
 msgid "please describe the comment."
 msgstr "コメントを記述してください。"
 
-#: dbutil.c:435
+#: dbutil.c:437
 msgid "accepted"
 msgstr "受付済"
 
-#: dbutil.c:438
+#: dbutil.c:440
 msgid "fixed"
 msgstr "修正済"
 
-#: dbutil.c:441
+#: dbutil.c:443
 msgid "reservation"
 msgstr "保留"
 
-#: dbutil.c:444
+#: dbutil.c:446
 msgid "complete"
 msgstr "完了"
 
-#: dbutil.c:447
+#: dbutil.c:449
 msgid "wontfix"
 msgstr "対応せず"
 
-#: dbutil.c:450
+#: dbutil.c:452
 msgid "specification"
 msgstr "仕様通り"
 
-#: dbutil.c:453
+#: dbutil.c:455
 msgid "page"
 msgstr "画面"
 
-#: dbutil.c:456
+#: dbutil.c:458
 msgid "batch process"
 msgstr "バッチ処理"
 
-#: dbutil.c:459
+#: dbutil.c:461
 msgid "document"
 msgstr "ドキュメント"
 
-#: dbutil.c:462
+#: dbutil.c:464
 msgid "emergency"
 msgstr "緊急"
 
-#: dbutil.c:465
+#: dbutil.c:467
 msgid "high"
 msgstr "高"
 
-#: dbutil.c:468
+#: dbutil.c:470
 msgid "middle"
 msgstr "中"
 
-#: dbutil.c:471
+#: dbutil.c:473
 msgid "low"
 msgstr "低"
 
-#: dbutil.c:527
+#: dbutil.c:529
 msgid "[help content]"
 msgstr ""
 "*逆引きヘルプ\n"
@@ -738,7 +738,7 @@ msgstr ""
 "の方法については、以下のサイトのインストールのページを見てください。\n"
 "-http://starbug1.sourceforge.jp/"
 
-#: dbutil.c:532
+#: dbutil.c:534
 msgid "[admin help content]"
 msgstr ""
 "*管理ユーザ用説明\n"
@@ -970,8 +970,8 @@ msgid "search result"
 msgstr "検索結果"
 
 #: index_project.c:831
-msgid " tickets hits."
-msgstr "件ヒットしました。"
+msgid "%d tickets hits."
+msgstr "%d件ヒットしました。"
 
 #: index_project.c:842
 msgid "[cvs format download description]"
@@ -1089,7 +1089,7 @@ msgstr "返信情報を記入してください。"
 
 #: index_project.c:1685
 msgid "reply"
-msgstr "返信する"
+msgstr "返信"
 
 #: index_project.c:1832
 msgid "registerd."

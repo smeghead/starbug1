@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: starbug 1\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2009-07-25 18:57+0900\n"
+"POT-Creation-Date: 2009-07-25 22:05+0900\n"
 "PO-Revision-Date: 2009-07-02 22:23+0900\n"
 "Last-Translator: smeghead <smeghead@sourceforge.jp>\n"
 "Language-Team: English\n"
@@ -172,7 +172,7 @@ msgstr ""
 #: admin_project.c:358 admin_project.c:702
 msgid "[attribute of ticket description3]"
 msgstr ""
-"The item for which the ticket attribute is not specified is notdisplayed in "
+" The item for which the ticket attribute is not specified is notdisplayed in "
 "the ticket latest information.The item for which the ticket attribute is not "
 "specified will be referred to from the ticket history. "
 
@@ -408,7 +408,7 @@ msgstr "Sub Project Id"
 #: admin_top.c:188
 msgid "[project settings description1]"
 msgstr ""
-"Please set the subproject name from the management tool of the subproject "
+" Please set the subproject name from the management tool of the subproject "
 "each."
 
 #: admin_top.c:189
@@ -446,29 +446,29 @@ msgstr "[ERROR] projectid("
 msgid ") is already exists."
 msgstr ") is already exists."
 
-#: dbutil.c:93
+#: dbutil.c:95
 msgid "main project"
 msgstr "Main Project"
 
-#: dbutil.c:99 dbutil.c:164
+#: dbutil.c:101 dbutil.c:166
 msgid "home"
 msgstr "Home"
 
-#: dbutil.c:140 dbutil.c:522 wiki.c:208
+#: dbutil.c:142 dbutil.c:524 wiki.c:208
 msgid "[wiki syntax example]"
 msgstr ""
-"*Ediable Area \n"
+" *Ediable Area \n"
 "It is possible to edit it freely. Please edit it from the link of 'Edit' "
 "above. Please use it for various usages."
 
-#: dbutil.c:158
+#: dbutil.c:160
 msgid "bts"
 msgstr "BTS"
 
-#: dbutil.c:183
+#: dbutil.c:185
 msgid "[style sheet default value]"
 msgstr ""
-"@charset \"utf-8\";\n"
+" @charset \"utf-8\";\n"
 "/* ================================================= */\n"
 "/*  Background color setting in state of ticket list */\n"
 "/* ================================================= */\n"
@@ -525,129 +525,129 @@ msgstr ""
 "        /* background-color:    lightcyan; */\n"
 "}"
 
-#: dbutil.c:359
+#: dbutil.c:361
 msgid "title"
 msgstr "Title"
 
-#: dbutil.c:360
+#: dbutil.c:362
 msgid "please input title that means content correctly."
 msgstr "Please input title that means content correctly."
 
-#: dbutil.c:367 index_project.c:967 index_project.c:2320
+#: dbutil.c:369 index_project.c:967 index_project.c:2320
 msgid "registerer"
 msgstr "Registerer"
 
-#: dbutil.c:368
+#: dbutil.c:370
 msgid "please input your name."
 msgstr "Please input your name."
 
-#: dbutil.c:375
+#: dbutil.c:377
 msgid "status"
 msgstr "Status"
 
-#: dbutil.c:376
+#: dbutil.c:378
 msgid "please select status."
 msgstr "Please select status."
 
-#: dbutil.c:377 dbutil.c:432 index_project.c:465
+#: dbutil.c:379 dbutil.c:434 index_project.c:465
 msgid "new"
 msgstr "new"
 
-#: dbutil.c:384
+#: dbutil.c:386
 msgid "category"
 msgstr "Category"
 
-#: dbutil.c:385
+#: dbutil.c:387
 msgid "please select category."
 msgstr "Please select category."
 
-#: dbutil.c:392
+#: dbutil.c:394
 msgid "priority"
 msgstr "Priority"
 
-#: dbutil.c:393
+#: dbutil.c:395
 msgid "please select priority."
 msgstr "Please select priority."
 
-#: dbutil.c:400
+#: dbutil.c:402
 msgid "detail"
 msgstr "Detail"
 
-#: dbutil.c:401
+#: dbutil.c:403
 msgid "please describe the detail."
 msgstr "Please describe the detail."
 
-#: dbutil.c:408
+#: dbutil.c:410
 msgid "reproduction procedure"
 msgstr "Reproduction procedure"
 
-#: dbutil.c:409
+#: dbutil.c:411
 msgid ""
 "please describe the condition and the procedure to reproduce the problem."
 msgstr ""
 "Please describe the condition and the procedure to reproduce the problem."
 
-#: dbutil.c:416
+#: dbutil.c:418
 msgid "comment"
 msgstr "Comment"
 
-#: dbutil.c:417
+#: dbutil.c:419
 msgid "please describe the comment."
 msgstr "Please describe the comment."
 
-#: dbutil.c:435
+#: dbutil.c:437
 msgid "accepted"
 msgstr "accepted"
 
-#: dbutil.c:438
+#: dbutil.c:440
 msgid "fixed"
 msgstr "fixed"
 
-#: dbutil.c:441
+#: dbutil.c:443
 msgid "reservation"
 msgstr "reservation"
 
-#: dbutil.c:444
+#: dbutil.c:446
 msgid "complete"
 msgstr "complete"
 
-#: dbutil.c:447
+#: dbutil.c:449
 msgid "wontfix"
 msgstr "wontfix"
 
-#: dbutil.c:450
+#: dbutil.c:452
 msgid "specification"
 msgstr "specification"
 
-#: dbutil.c:453
+#: dbutil.c:455
 msgid "page"
 msgstr "page"
 
-#: dbutil.c:456
+#: dbutil.c:458
 msgid "batch process"
 msgstr "batch process"
 
-#: dbutil.c:459
+#: dbutil.c:461
 msgid "document"
 msgstr "document"
 
-#: dbutil.c:462
+#: dbutil.c:464
 msgid "emergency"
 msgstr "emergency"
 
-#: dbutil.c:465
+#: dbutil.c:467
 msgid "high"
 msgstr "high"
 
-#: dbutil.c:468
+#: dbutil.c:470
 msgid "middle"
 msgstr "middle"
 
-#: dbutil.c:471
+#: dbutil.c:473
 msgid "low"
 msgstr "low"
 
-#: dbutil.c:527
+#: dbutil.c:529
 msgid "[help content]"
 msgstr ""
 "*A reversely discounted help\n"
@@ -778,7 +778,7 @@ msgstr ""
 "\n"
 "    * http://starbug1.sourceforge.jp/"
 
-#: dbutil.c:532
+#: dbutil.c:534
 msgid "[admin help content]"
 msgstr ""
 "*Explanation for management users\n"
@@ -1016,8 +1016,8 @@ msgid "search result"
 msgstr "Search Result"
 
 #: index_project.c:831
-msgid " tickets hits."
-msgstr " tickets hits."
+msgid "%d tickets hits."
+msgstr "%d tickets hits."
 
 #: index_project.c:842
 msgid "[cvs format download description]"
@@ -1259,7 +1259,7 @@ msgstr "Edit top page"
 #: index_project.c:2470 index_top.c:164
 msgid "[wiki syntax description1]"
 msgstr ""
-"Please edit contents on the page by the grammar of simple wiki, and push "
+" Please edit contents on the page by the grammar of simple wiki, and push "
 "the update button."
 
 #: index_project.c:2523 index_project.c:2550

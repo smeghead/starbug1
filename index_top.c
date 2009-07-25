@@ -244,7 +244,7 @@ void top_gettext_js_action()
     o("                if (http.responseText == 0) {\n");
     o("                    throw new Exception();\n");
     o("                } else {\n");
-    o("                    message = http.responseText;\n");
+    o("                    message = http.responseText.strip();\n");
     o("                    _memo[key] = message;\n");
     o("                }\n");
     o("            }\n");
