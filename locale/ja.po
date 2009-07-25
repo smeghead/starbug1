@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2009-07-22 20:05+0900\n"
+"POT-Creation-Date: 2009-07-25 17:06+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: smeghead <smeghead@users.sourceforge.jp>\n"
 "Language-Team: smeghead <smeghead@users.sourceforge.jp>\n"
@@ -95,7 +95,7 @@ msgstr "ファイルアップロードの最大サイズ(Kb)"
 
 #: admin_project.c:199 admin_project.c:306 admin_project.c:516
 #: admin_project.c:950 admin_top.c:148 admin_top.c:191 index_project.c:2477
-#: index_top.c:168
+#: index_top.c:170
 msgid "update"
 msgstr "更新"
 
@@ -362,11 +362,11 @@ msgstr "チケット一覧の"
 msgid ".(background-color settings)"
 msgstr "の背景色設定"
 
-#: admin_top.c:54 admin_top.c:59 admin_top.c:108 index_top.c:57
+#: admin_top.c:54 admin_top.c:59 admin_top.c:108 index_top.c:59
 msgid "project management"
 msgstr "プロジェクトの管理"
 
-#: admin_top.c:58 index_project.c:2194 index_top.c:56
+#: admin_top.c:58 index_project.c:2194 index_top.c:58
 msgid "project top"
 msgstr "プロジェクトトップ"
 
@@ -390,7 +390,7 @@ msgstr "ホームリンク先"
 msgid "locale"
 msgstr "ロケール"
 
-#: admin_top.c:153 index_top.c:106
+#: admin_top.c:153 index_top.c:108
 msgid "sub projects list"
 msgstr "サブプロジェクト一覧"
 
@@ -449,10 +449,6 @@ msgstr "メインプロジェクト"
 msgid "home"
 msgstr "ホーム"
 
-#: dbutil.c:109
-msgid "ja_JP"
-msgstr "ja_JP"
-
 #: dbutil.c:140 dbutil.c:522 wiki.c:208
 msgid "[wiki syntax example]"
 msgstr ""
@@ -492,10 +488,6 @@ msgstr ""
 "/* 完了 */\n"
 "#ticket_list td.field3-5 {\n"
 "        background-color: lightcyan !important;\n"
-"}\n"
-"/* 破棄 */\n"
-"#ticket_list td.field3-6 {\n"
-"        background-color: #ccc !important;\n"
 "}\n"
 "/* 対応せず */\n"
 "#ticket_list td.field3-7 {\n"
@@ -589,7 +581,7 @@ msgstr "再現手順"
 #: dbutil.c:409
 msgid ""
 "please describe the condition and the procedure to reproduce the problem."
-msgstr ""
+msgstr "問題を再現させるための条件と手順を記述してください。"
 
 #: dbutil.c:416
 msgid "comment"
@@ -965,7 +957,7 @@ msgstr "日以内"
 msgid "last updated in days."
 msgstr "過去何日間に更新されたチケットを検索するか。"
 
-#: index_project.c:816 index_top.c:130 index_top.c:134
+#: index_project.c:816 index_top.c:132 index_top.c:136
 msgid "search"
 msgstr "検索"
 
@@ -973,7 +965,7 @@ msgstr "検索"
 msgid "save conditions. (use cookie)"
 msgstr "検索条件を保存する。(cookie使用)"
 
-#: index_project.c:823 index_top.c:208
+#: index_project.c:823 index_top.c:210
 msgid "search result"
 msgstr "検索結果"
 
@@ -1206,7 +1198,7 @@ msgstr "状態別件数"
 msgid "there are no ticket information."
 msgstr "チケット情報がありません。"
 
-#: index_project.c:2258 index_top.c:156 index_top.c:162
+#: index_project.c:2258 index_top.c:158 index_top.c:164
 msgid "edit page"
 msgstr "ページの編集"
 
@@ -1217,39 +1209,33 @@ msgstr ""
 "い。"
 
 #: index_project.c:2461 index_project.c:2468 index_project.c:2469
-#: index_top.c:139
+#: index_top.c:141
 msgid "edit top page"
 msgstr "トップページの編集"
-
-#: index_project.c:2470
-msgid "[wiki description1]"
-msgstr ""
-"簡易wikiの文法でトップページのコンテンツの編集を行ない、更新ボタンを押してく"
-"ださい。"
 
 #: index_project.c:2523 index_project.c:2550
 msgid "error: there is no file."
 msgstr "error: ファイルがありません。"
 
-#: index_top.c:103 index_top.c:204
+#: index_top.c:105 index_top.c:206
 msgid "top page"
 msgstr "トップページ"
 
-#: index_top.c:131
+#: index_top.c:133
 msgid "search by keyword for all sub projects."
 msgstr "全てのサブプロジェクトからキーワード検索を行ないます。"
 
-#: index_top.c:138
+#: index_top.c:140
 msgid "description"
 msgstr "説明"
 
-#: index_top.c:162
+#: index_top.c:164
 msgid "[wiki syntax description1]"
 msgstr ""
 "簡易wikiの文法でページのコンテンツの編集を行ない、更新ボタンを押してくださ"
 "い。"
 
-#: index_top.c:218
+#: index_top.c:220
 msgid "back to top"
 msgstr "トップページに戻る"
 
@@ -1321,7 +1307,7 @@ msgstr ""
 "}\n"
 "|<"
 
-#: js/calendar.js:13
+#: js/calendar.js:19
 msgid "sun,mon,tue,wed,thu,fri,sat"
 msgstr "日,月,火,水,木,金,土"
 
@@ -1385,3 +1371,4 @@ msgstr "返信します。よろしいですか？"
 #: js/validate.js:48
 msgid "it is date column. please describe by yyyy-mm-dd format."
 msgstr "日付項目です。yyyy-mm-dd形式で入力してください。"
+

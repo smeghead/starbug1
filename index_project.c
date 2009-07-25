@@ -2467,7 +2467,7 @@ void edit_top_action()
             "<form id=\"edit_top_form\" action=\"%s/%s/edit_top_submit\" method=\"post\">\n",
             _("edit top page"),
             _("edit top page"),
-            _("[wiki description1]"),
+            _("[wiki syntax description1]"),
             cgiScriptName, g_project_code_4_url);
     o(      "<textarea name=\"edit_top\" id=\"edit_top\" rows=\"3\" cols=\"10\">");
     wiki_content_out(db_a, "top");
