@@ -828,7 +828,7 @@ void search_action()
 
         query_string_a = format_query_string_without_page(query_string_a);
         o(      "<div class=\"infomation\">");
-        o(      "%d%s\n", result_a->hit_count, _(" tickets hits."));
+        o(      _("%d tickets hits."), result_a->hit_count);
         o(      "[&nbsp;");
         foreach (it, result_a->states) {
             State* s = it->element;
@@ -1110,7 +1110,7 @@ void report_rss_download_action()
             "<rdf:RDF \n"
             "\t\txmlns=\"http://purl.org/rss/1.0/\"\n"
             "\t\txmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" \n"
-            "\t\txml:lang=\"ja\">\n"
+            "\t\t>\n"
             "\n"
             "\t<channel rdf:about=\"");h(string_rawstr(base_url_a));o("/%s/report_rss_download?%s\">\n", g_project_code_4_url, string_rawstr(query_string_a));
     o(      "\t\t<title>");h(string_rawstr(project_a->name)); o("</title>\n"
@@ -2286,7 +2286,7 @@ void rss_action()
             "<rdf:RDF \n"
             "\t\txmlns=\"http://purl.org/rss/1.0/\"\n"
             "\t\txmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" \n"
-            "\t\txml:lang=\"ja\">\n"
+            "\t\t>\n"
             "\n"
             "\t<channel rdf:about=\"");h(string_rawstr(base_url_a));o("/%s/rss\">\n", g_project_code_4_url);
     o(      "\t\t<title>");h(string_rawstr(project_a->name)); o("</title>\n"

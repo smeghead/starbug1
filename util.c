@@ -62,7 +62,7 @@ void print_error_page(char* file_name, int line_number, char* message)
     o("Status: 500 Starbug1 Internal Error.\r\n");
     o("Content-Type: text/html\r\n\r\n");
     o(  "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
-        "<html xml:lang=\"ja\" lang=\"ja\" xmlns=\"http://www.w3.org/1999/xhtml\">"
+        "<html xmlns=\"http://www.w3.org/1999/xhtml\">"
         "<head>"
             "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />"
         "</head>"
