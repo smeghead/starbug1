@@ -79,6 +79,8 @@ void db_commit(Database* db)
 void create_top_tables(Database* db)
 {
     d("create_top_tables\n");
+    /* 初期ロケールを設定する。 */
+    set_locale(INITIAL_LOCALE);
     db_begin(db);
     exec_query(
             db,
@@ -106,7 +108,7 @@ void create_top_tables(Database* db)
             db,
             "insert into setting(name, value)"
             "values ('locale', ?);", 
-            COLUMN_TYPE_TEXT, INITAIL_LOCALE, /* 初期ロケール */
+            COLUMN_TYPE_TEXT, INITIAL_LOCALE, /* 初期ロケール */
             COLUMN_TYPE_END);
     exec_query(
             db,

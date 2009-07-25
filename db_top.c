@@ -310,20 +310,13 @@ ERROR_LABEL(db->handle)
 void db_top_set_locale()
 {
     Project* top_project_a = project_new();
-    char locale[16];
     char buffer[DEFAULT_LENGTH];
     Database* db_a;
 
     db_a = db_init(db_top_get_project_db_name("top", buffer));
     top_project_a = db_get_project(db_a, top_project_a);
     db_finish(db_a);
-    sprintf(locale, "%s.UTF-8", string_rawstr(top_project_a->locale));
-    d("locale: %s\n", locale);
-    setenv("LANG", locale, 1); /* FreeBSD(さくらインターネット)でsetlocaleが動作しない場合があったため、環境変数を書き換える。 */
-    d("setlocale: %s\n", setlocale(LC_ALL, locale));
-    d("bindtextdomain: %s\n", bindtextdomain("starbug1", "locale"));
-    d("textdomain: %s\n", textdomain("starbug1"));
-
+    set_locale(string_rawstr(top_project_a->locale));
 
     project_free(top_project_a);
 }

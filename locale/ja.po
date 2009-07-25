@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2009-07-25 17:06+0900\n"
+"POT-Creation-Date: 2009-07-25 18:57+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: smeghead <smeghead@users.sourceforge.jp>\n"
 "Language-Team: smeghead <smeghead@users.sourceforge.jp>\n"
@@ -1213,6 +1213,12 @@ msgstr ""
 msgid "edit top page"
 msgstr "トップページの編集"
 
+#: index_project.c:2470 index_top.c:164
+msgid "[wiki syntax description1]"
+msgstr ""
+"簡易wikiの文法でページのコンテンツの編集を行ない、更新ボタンを押してくださ"
+"い。"
+
 #: index_project.c:2523 index_project.c:2550
 msgid "error: there is no file."
 msgstr "error: ファイルがありません。"
@@ -1228,12 +1234,6 @@ msgstr "全てのサブプロジェクトからキーワード検索を行ない
 #: index_top.c:140
 msgid "description"
 msgstr "説明"
-
-#: index_top.c:164
-msgid "[wiki syntax description1]"
-msgstr ""
-"簡易wikiの文法でページのコンテンツの編集を行ない、更新ボタンを押してくださ"
-"い。"
 
 #: index_top.c:220
 msgid "back to top"
@@ -1371,4 +1371,3 @@ msgstr "返信します。よろしいですか？"
 #: js/validate.js:48
 msgid "it is date column. please describe by yyyy-mm-dd format."
 msgstr "日付項目です。yyyy-mm-dd形式で入力してください。"
-

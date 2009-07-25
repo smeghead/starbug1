@@ -1,11 +1,11 @@
-VERSION = 1.2.10-beta
+VERSION = 1.3.01
 COPYRIGHT = Copyright\ smeghead\ 2007\ -\ 2009
 CC = gcc
 CC_VERSION = ${shell gcc --version | grep 'gcc.*[0-9]\.' | sed -e 's/gcc[^0-9]*\([0-9]\).*/\1/g'}
-ifndef INITAIL_LOCALE
-	INITAIL_LOCALE = ja_JP
+ifndef INITIAL_LOCALE
+	INITIAL_LOCALE = ja_JP
 endif
-CFLAGS = -I/usr/include -I/usr/local/include -I${HOME}/include -I. -DVERSION=\"${VERSION}\" -DCOPYRIGHT=\"${COPYRIGHT}\" -DINITAIL_LOCALE=\"${INITAIL_LOCALE}\" -O3 -Wall
+CFLAGS = -I/usr/include -I/usr/local/include -I${HOME}/include -I. -DVERSION=\"${VERSION}\" -DCOPYRIGHT=\"${COPYRIGHT}\" -DINITIAL_LOCALE=\"${INITIAL_LOCALE}\" -O3 -Wall
 LFLAGS = -L/usr/lib -L/usr/local/lib -I${HOME}/include -lsqlite3 -lcgic
 ifeq ($(CC_VERSION), 3)
 	CFLAGS += -W
@@ -29,7 +29,7 @@ endif
 CFLAGS += -DDEBUG
 #CFLAGS += -DMEMORYDEBUG
 
-default: index.cgi admin.cgi
+default: index.cgi admin.cgi compileresource
 
 
 admin.o: admin.c alloc.h util.h list.h data.h simple_string.h dbutil.h \
@@ -102,7 +102,7 @@ cvsreleasetag:
 	@echo " " cvs tag starbug1-`echo ${VERSION} | sed 's/\./-/g'`
 
 displayinstalldoc:
-	w3m -dump http://starbug1.sourceforge.jp/install.php
+	w3m -dump http://starbug1.sourceforge.jp/install
 
 mergeresource:
 	xgettext --from-code=utf-8 -k_ --msgid-bugs-address=smeghead@users.sourceforge.jp -L C -p locale  *.c js/*.js

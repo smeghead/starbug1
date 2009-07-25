@@ -86,5 +86,6 @@ extern char g_action_name[DEFAULT_LENGTH];
 extern char g_path_info[DEFAULT_LENGTH];
 void cgi_escape(char*);
 void print_field_help();
+void set_locale(char*);
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
