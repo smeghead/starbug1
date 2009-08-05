@@ -2,11 +2,15 @@ VERSION = 1.3.01
 COPYRIGHT = Copyright\ smeghead\ 2007\ -\ 2009
 CC = gcc
 CC_VERSION = ${shell gcc --version | grep 'gcc.*[0-9]\.' | sed -e 's/gcc[^0-9]*\([0-9]\).*/\1/g'}
+
+ALT_LIB_PATH = ${HOME}/usr
+#ALT_LIB_PATH = /s/usr/MinGW
+
 ifndef INITIAL_LOCALE
 	INITIAL_LOCALE = ja_JP
 endif
-CFLAGS = -I/usr/include -I/usr/local/include -I${HOME}/include -I. -DVERSION=\"${VERSION}\" -DCOPYRIGHT=\"${COPYRIGHT}\" -DINITIAL_LOCALE=\"${INITIAL_LOCALE}\" -O3 -Wall
-LFLAGS = -L/usr/lib -L/usr/local/lib -I${HOME}/include -lsqlite3 -lcgic
+CFLAGS = -I${ALT_LIB_PATH}/include -I/usr/include -I/usr/local/include -I. -DVERSION=\"${VERSION}\" -DCOPYRIGHT=\"${COPYRIGHT}\" -DINITIAL_LOCALE=\"${INITIAL_LOCALE}\" -O3 -Wall
+LFLAGS = -L${ALT_LIB_PATH}/lib -L/usr/lib -L/usr/local/lib -lsqlite3 -lcgic
 ifeq ($(CC_VERSION), 3)
 	CFLAGS += -W
 endif
@@ -17,12 +21,8 @@ OS = ${shell uname}
 ifeq ($(OS), Linux)
 	LFLAGS += -ldl
 endif
-ifeq ($(OS), FreeBSD)
-	LFLAGS += -lintl
-endif
-
-ifeq ($(OS), CYGWIN_NT-5.1)
-	LFLAGS += -static
+ifneq ($(OS), Linux)
+	LFLAGS += -lintl -liconv
 endif
 
 #debug
