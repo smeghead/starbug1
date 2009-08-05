@@ -4,13 +4,35 @@
 #include <cgic.h>
 #include <dirent.h>
 #include <sys/stat.h>
+#ifndef _WIN32
 #include <dlfcn.h>
+#else
+#include <windows.h>
+#endif
 #include "data.h"
 #include "alloc.h"
 #include "util.h"
 #include "hook.h"
 #include "hook_data.h"
 #include "simple_string.h"
+
+#ifdef _WIN32
+#define dlopen(x,y) (void*)LoadLibrary(x)
+#define dlsym(x,y) (void*)GetProcAddress((HMODULE)x,y)
+#define dlclose(x) FreeLibrary((HMODULE)x)
+const char* dlerror() {
+    static char szMsgBuf[256];
+    FormatMessage(
+            FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+            NULL,
+            GetLastError(),
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+            szMsgBuf,
+            sizeof szMsgBuf,
+            NULL);
+    return szMsgBuf;
+}
+#endif
 
 static void put_env_a(char* name, char* value, char* buf)
 {
