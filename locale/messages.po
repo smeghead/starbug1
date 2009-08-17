@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2009-07-25 22:05+0900\n"
+"POT-Creation-Date: 2009-08-17 15:05+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -84,7 +84,7 @@ msgstr ""
 msgid "[mail notify messages]"
 msgstr ""
 
-#: admin_project.c:187 admin_top.c:162
+#: admin_project.c:187 admin_top.c:161
 msgid "sub project name"
 msgstr ""
 
@@ -97,13 +97,13 @@ msgid "file upload max size(kb)"
 msgstr ""
 
 #: admin_project.c:199 admin_project.c:306 admin_project.c:516
-#: admin_project.c:950 admin_top.c:148 admin_top.c:191 index_project.c:2477
-#: index_top.c:170
+#: admin_project.c:950 admin_top.c:147 admin_top.c:190 index_project.c:2477
+#: index_top.c:169
 msgid "update"
 msgstr ""
 
 #: admin_project.c:267 admin_project.c:538 admin_project.c:1002
-#: admin_top.c:241 admin_top.c:321
+#: admin_top.c:240 admin_top.c:320
 msgid "updated."
 msgstr ""
 
@@ -230,11 +230,11 @@ msgid "means closed"
 msgstr ""
 
 #: admin_project.c:416 admin_project.c:486 admin_project.c:758
-#: admin_project.c:790 admin_top.c:162 admin_top.c:201
+#: admin_project.c:790 admin_top.c:161 admin_top.c:200
 msgid "sort"
 msgstr ""
 
-#: admin_project.c:416 admin_project.c:895 admin_top.c:162
+#: admin_project.c:416 admin_project.c:895 admin_top.c:161
 msgid "delete"
 msgstr ""
 
@@ -294,11 +294,11 @@ msgstr ""
 msgid "[ticket add column type description]"
 msgstr ""
 
-#: admin_project.c:797 admin_top.c:208
+#: admin_project.c:797 admin_top.c:207
 msgid "add"
 msgstr ""
 
-#: admin_project.c:862 admin_top.c:358
+#: admin_project.c:862 admin_top.c:357
 msgid "added."
 msgstr ""
 
@@ -346,75 +346,75 @@ msgstr ""
 msgid ".(background-color settings)"
 msgstr ""
 
-#: admin_top.c:54 admin_top.c:59 admin_top.c:108 index_top.c:59
+#: admin_top.c:53 admin_top.c:58 admin_top.c:107 index_top.c:58
 msgid "project management"
 msgstr ""
 
-#: admin_top.c:58 index_project.c:2194 index_top.c:58
+#: admin_top.c:57 index_project.c:2194 index_top.c:57
 msgid "project top"
 msgstr ""
 
-#: admin_top.c:128
+#: admin_top.c:127
 msgid "project information settings"
 msgstr ""
 
-#: admin_top.c:133
+#: admin_top.c:132
 msgid "project name"
 msgstr ""
 
-#: admin_top.c:136
+#: admin_top.c:135
 msgid "home link name"
 msgstr ""
 
-#: admin_top.c:140
+#: admin_top.c:139
 msgid "home link refference"
 msgstr ""
 
-#: admin_top.c:144
+#: admin_top.c:143
 msgid "locale"
 msgstr ""
 
-#: admin_top.c:153 index_top.c:108
+#: admin_top.c:152 index_top.c:107
 msgid "sub projects list"
 msgstr ""
 
-#: admin_top.c:162
+#: admin_top.c:161
 msgid "database path"
 msgstr ""
 
-#: admin_top.c:162 admin_top.c:201
+#: admin_top.c:161 admin_top.c:200
 msgid "sub project id"
 msgstr ""
 
-#: admin_top.c:188
+#: admin_top.c:187
 msgid "[project settings description1]"
 msgstr ""
 
-#: admin_top.c:189
+#: admin_top.c:188
 msgid "[project settings description2]"
 msgstr ""
 
-#: admin_top.c:190
+#: admin_top.c:189
 msgid "[project settings description3]"
 msgstr ""
 
-#: admin_top.c:195
+#: admin_top.c:194
 msgid "add sub project"
 msgstr ""
 
-#: admin_top.c:207
+#: admin_top.c:206
 msgid "[sub project name description]"
 msgstr ""
 
-#: admin_top.c:293 admin_top.c:339
+#: admin_top.c:292 admin_top.c:338
 msgid "[error] projectid top is reserved."
 msgstr ""
 
-#: admin_top.c:300 admin_top.c:346
+#: admin_top.c:299 admin_top.c:345
 msgid "[error] projectid("
 msgstr ""
 
-#: admin_top.c:300 admin_top.c:346
+#: admin_top.c:299 admin_top.c:345
 msgid ") is already exists."
 msgstr ""
 
@@ -567,17 +567,17 @@ msgstr ""
 msgid "[admin help content]"
 msgstr ""
 
-#: hook.c:143
+#: hook.c:165
 #, c-format
 msgid "[error] error occured in hook process(%s). failed to load plugin. %s"
 msgstr ""
 
-#: hook.c:159 hook.c:183
+#: hook.c:181 hook.c:205
 #, c-format
 msgid "executed hook process(%s)"
 msgstr ""
 
-#: hook.c:162 hook.c:185
+#: hook.c:184 hook.c:207
 #, c-format
 msgid "[error] error occured in hook process(%s). (return code: %d)"
 msgstr ""
@@ -742,7 +742,7 @@ msgstr ""
 msgid "last updated in days."
 msgstr ""
 
-#: index_project.c:816 index_top.c:132 index_top.c:136
+#: index_project.c:816 index_top.c:131 index_top.c:135
 msgid "search"
 msgstr ""
 
@@ -750,7 +750,7 @@ msgstr ""
 msgid "save conditions. (use cookie)"
 msgstr ""
 
-#: index_project.c:823 index_top.c:210
+#: index_project.c:823 index_top.c:209
 msgid "search result"
 msgstr ""
 
@@ -959,7 +959,7 @@ msgstr ""
 msgid "there are no ticket information."
 msgstr ""
 
-#: index_project.c:2258 index_top.c:158 index_top.c:164
+#: index_project.c:2258 index_top.c:157 index_top.c:163
 msgid "edit page"
 msgstr ""
 
@@ -968,11 +968,11 @@ msgid "[graph description]"
 msgstr ""
 
 #: index_project.c:2461 index_project.c:2468 index_project.c:2469
-#: index_top.c:141
+#: index_top.c:140
 msgid "edit top page"
 msgstr ""
 
-#: index_project.c:2470 index_top.c:164
+#: index_project.c:2470 index_top.c:163
 msgid "[wiki syntax description1]"
 msgstr ""
 
@@ -980,19 +980,19 @@ msgstr ""
 msgid "error: there is no file."
 msgstr ""
 
-#: index_top.c:105 index_top.c:206
+#: index_top.c:104 index_top.c:205
 msgid "top page"
 msgstr ""
 
-#: index_top.c:133
+#: index_top.c:132
 msgid "search by keyword for all sub projects."
 msgstr ""
 
-#: index_top.c:140
+#: index_top.c:139
 msgid "description"
 msgstr ""
 
-#: index_top.c:220
+#: index_top.c:219
 msgid "back to top"
 msgstr ""
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: starbug 1\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2009-07-25 22:05+0900\n"
+"POT-Creation-Date: 2009-08-17 15:05+0900\n"
 "PO-Revision-Date: 2009-07-02 22:23+0900\n"
 "Last-Translator: smeghead <smeghead@sourceforge.jp>\n"
 "Language-Team: English\n"
@@ -79,7 +79,7 @@ msgstr "About mail notify features"
 msgid "[mail notify messages]"
 msgstr " "
 
-#: admin_project.c:187 admin_top.c:162
+#: admin_project.c:187 admin_top.c:161
 msgid "sub project name"
 msgstr "Sub Project Name"
 
@@ -92,13 +92,13 @@ msgid "file upload max size(kb)"
 msgstr "File upload max size(Kb)"
 
 #: admin_project.c:199 admin_project.c:306 admin_project.c:516
-#: admin_project.c:950 admin_top.c:148 admin_top.c:191 index_project.c:2477
-#: index_top.c:170
+#: admin_project.c:950 admin_top.c:147 admin_top.c:190 index_project.c:2477
+#: index_top.c:169
 msgid "update"
 msgstr "Update"
 
 #: admin_project.c:267 admin_project.c:538 admin_project.c:1002
-#: admin_top.c:241 admin_top.c:321
+#: admin_top.c:240 admin_top.c:320
 msgid "updated."
 msgstr "Updated."
 
@@ -243,11 +243,11 @@ msgid "means closed"
 msgstr "Means closed"
 
 #: admin_project.c:416 admin_project.c:486 admin_project.c:758
-#: admin_project.c:790 admin_top.c:162 admin_top.c:201
+#: admin_project.c:790 admin_top.c:161 admin_top.c:200
 msgid "sort"
 msgstr "Sort"
 
-#: admin_project.c:416 admin_project.c:895 admin_top.c:162
+#: admin_project.c:416 admin_project.c:895 admin_top.c:161
 msgid "delete"
 msgstr "Delete"
 
@@ -313,11 +313,11 @@ msgstr ""
 "It is an input form when the item is input. After it adds it, the item type "
 "cannot be changed. "
 
-#: admin_project.c:797 admin_top.c:208
+#: admin_project.c:797 admin_top.c:207
 msgid "add"
 msgstr "Add"
 
-#: admin_project.c:862 admin_top.c:358
+#: admin_project.c:862 admin_top.c:357
 msgid "added."
 msgstr "Added."
 
@@ -365,84 +365,84 @@ msgstr "Background-color settings of "
 msgid ".(background-color settings)"
 msgstr "."
 
-#: admin_top.c:54 admin_top.c:59 admin_top.c:108 index_top.c:59
+#: admin_top.c:53 admin_top.c:58 admin_top.c:107 index_top.c:58
 msgid "project management"
 msgstr "Project Management"
 
-#: admin_top.c:58 index_project.c:2194 index_top.c:58
+#: admin_top.c:57 index_project.c:2194 index_top.c:57
 msgid "project top"
 msgstr "Project Top"
 
-#: admin_top.c:128
+#: admin_top.c:127
 msgid "project information settings"
 msgstr "Project Information Settings"
 
-#: admin_top.c:133
+#: admin_top.c:132
 msgid "project name"
 msgstr "Project Name"
 
-#: admin_top.c:136
+#: admin_top.c:135
 msgid "home link name"
 msgstr "Home Link Name"
 
-#: admin_top.c:140
+#: admin_top.c:139
 msgid "home link refference"
 msgstr "Home Link Refference"
 
-#: admin_top.c:144
+#: admin_top.c:143
 msgid "locale"
 msgstr "Locale"
 
-#: admin_top.c:153 index_top.c:108
+#: admin_top.c:152 index_top.c:107
 msgid "sub projects list"
 msgstr "Sub Projects List"
 
-#: admin_top.c:162
+#: admin_top.c:161
 msgid "database path"
 msgstr "Database Path"
 
-#: admin_top.c:162 admin_top.c:201
+#: admin_top.c:161 admin_top.c:200
 msgid "sub project id"
 msgstr "Sub Project Id"
 
-#: admin_top.c:188
+#: admin_top.c:187
 msgid "[project settings description1]"
 msgstr ""
 " Please set the subproject name from the management tool of the subproject "
 "each."
 
-#: admin_top.c:189
+#: admin_top.c:188
 msgid "[project settings description2]"
 msgstr ""
 "Please note that URL of the subproject changes when existing subproject ID "
 "is changed. "
 
-#: admin_top.c:190
+#: admin_top.c:189
 msgid "[project settings description3]"
 msgstr ""
 "It is not displayed that it deletes it from the list of top page. Data is "
 "not deleted. It comes to be able to refer again again by removing the check "
 "on the deletion check box. "
 
-#: admin_top.c:195
+#: admin_top.c:194
 msgid "add sub project"
 msgstr "Add Sub Project"
 
-#: admin_top.c:207
+#: admin_top.c:206
 msgid "[sub project name description]"
 msgstr ""
 "Please set the subproject name from the management tool of the subproject "
 "each."
 
-#: admin_top.c:293 admin_top.c:339
+#: admin_top.c:292 admin_top.c:338
 msgid "[error] projectid top is reserved."
 msgstr "[ERROR] projectid top is reserved."
 
-#: admin_top.c:300 admin_top.c:346
+#: admin_top.c:299 admin_top.c:345
 msgid "[error] projectid("
 msgstr "[ERROR] projectid("
 
-#: admin_top.c:300 admin_top.c:346
+#: admin_top.c:299 admin_top.c:345
 msgid ") is already exists."
 msgstr ") is already exists."
 
@@ -828,17 +828,17 @@ msgstr ""
 "refer to it on this occasion because a sample for the background setting of "
 "the list of tickets is displayed by the lower part of the page."
 
-#: hook.c:143
+#: hook.c:165
 #, c-format
 msgid "[error] error occured in hook process(%s). failed to load plugin. %s"
 msgstr "[ERROR] error occured in hook process(%s). failed to load plugin. %s"
 
-#: hook.c:159 hook.c:183
+#: hook.c:181 hook.c:205
 #, c-format
 msgid "executed hook process(%s)"
 msgstr "Executed hook process(%s)"
 
-#: hook.c:162 hook.c:185
+#: hook.c:184 hook.c:207
 #, c-format
 msgid "[error] error occured in hook process(%s). (return code: %d)"
 msgstr "[ERROR] error occured in hook process(%s). (return code: %d)"
@@ -1003,7 +1003,7 @@ msgstr ""
 msgid "last updated in days."
 msgstr "Last Update Date"
 
-#: index_project.c:816 index_top.c:132 index_top.c:136
+#: index_project.c:816 index_top.c:131 index_top.c:135
 msgid "search"
 msgstr "Search"
 
@@ -1011,11 +1011,12 @@ msgstr "Search"
 msgid "save conditions. (use cookie)"
 msgstr "Save conditions. (use cookie)"
 
-#: index_project.c:823 index_top.c:210
+#: index_project.c:823 index_top.c:209
 msgid "search result"
 msgstr "Search Result"
 
 #: index_project.c:831
+#, c-format
 msgid "%d tickets hits."
 msgstr "%d tickets hits."
 
@@ -1239,7 +1240,7 @@ msgstr "Ticket counts"
 msgid "there are no ticket information."
 msgstr "There are no ticket information."
 
-#: index_project.c:2258 index_top.c:158 index_top.c:164
+#: index_project.c:2258 index_top.c:157 index_top.c:163
 msgid "edit page"
 msgstr "Edit page"
 
@@ -1252,11 +1253,11 @@ msgstr ""
 "JavaScript is effective."
 
 #: index_project.c:2461 index_project.c:2468 index_project.c:2469
-#: index_top.c:141
+#: index_top.c:140
 msgid "edit top page"
 msgstr "Edit top page"
 
-#: index_project.c:2470 index_top.c:164
+#: index_project.c:2470 index_top.c:163
 msgid "[wiki syntax description1]"
 msgstr ""
 " Please edit contents on the page by the grammar of simple wiki, and push "
@@ -1266,19 +1267,19 @@ msgstr ""
 msgid "error: there is no file."
 msgstr "ERROR: There is no file."
 
-#: index_top.c:105 index_top.c:206
+#: index_top.c:104 index_top.c:205
 msgid "top page"
 msgstr "Top Page"
 
-#: index_top.c:133
+#: index_top.c:132
 msgid "search by keyword for all sub projects."
 msgstr "Search by keyword for all sub projects."
 
-#: index_top.c:140
+#: index_top.c:139
 msgid "description"
 msgstr "Description"
 
-#: index_top.c:220
+#: index_top.c:219
 msgid "back to top"
 msgstr "Back to top"
 

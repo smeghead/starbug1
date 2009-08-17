@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2009-07-25 22:05+0900\n"
+"POT-Creation-Date: 2009-08-17 15:05+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: smeghead <smeghead@users.sourceforge.jp>\n"
 "Language-Team: smeghead <smeghead@users.sourceforge.jp>\n"
@@ -81,7 +81,7 @@ msgstr ""
 "での設定が必要になります。hook機能の設定方法については、以下のサイトのインス"
 "トールのページを見てください。"
 
-#: admin_project.c:187 admin_top.c:162
+#: admin_project.c:187 admin_top.c:161
 msgid "sub project name"
 msgstr "サブプロジェクト名"
 
@@ -94,13 +94,13 @@ msgid "file upload max size(kb)"
 msgstr "ファイルアップロードの最大サイズ(Kb)"
 
 #: admin_project.c:199 admin_project.c:306 admin_project.c:516
-#: admin_project.c:950 admin_top.c:148 admin_top.c:191 index_project.c:2477
-#: index_top.c:170
+#: admin_project.c:950 admin_top.c:147 admin_top.c:190 index_project.c:2477
+#: index_top.c:169
 msgid "update"
 msgstr "更新"
 
 #: admin_project.c:267 admin_project.c:538 admin_project.c:1002
-#: admin_top.c:241 admin_top.c:321
+#: admin_top.c:240 admin_top.c:320
 msgid "updated."
 msgstr "更新しました"
 
@@ -240,11 +240,11 @@ msgid "means closed"
 msgstr "クローズを意味する"
 
 #: admin_project.c:416 admin_project.c:486 admin_project.c:758
-#: admin_project.c:790 admin_top.c:162 admin_top.c:201
+#: admin_project.c:790 admin_top.c:161 admin_top.c:200
 msgid "sort"
 msgstr "並び順"
 
-#: admin_project.c:416 admin_project.c:895 admin_top.c:162
+#: admin_project.c:416 admin_project.c:895 admin_top.c:161
 msgid "delete"
 msgstr "削除"
 
@@ -310,11 +310,11 @@ msgstr ""
 "項目を入力する時の入力形式です。項目種別は、追加後に変更することができませ"
 "ん。"
 
-#: admin_project.c:797 admin_top.c:208
+#: admin_project.c:797 admin_top.c:207
 msgid "add"
 msgstr "追加"
 
-#: admin_project.c:862 admin_top.c:358
+#: admin_project.c:862 admin_top.c:357
 msgid "added."
 msgstr "追加しました"
 
@@ -362,82 +362,82 @@ msgstr "チケット一覧の"
 msgid ".(background-color settings)"
 msgstr "の背景色設定"
 
-#: admin_top.c:54 admin_top.c:59 admin_top.c:108 index_top.c:59
+#: admin_top.c:53 admin_top.c:58 admin_top.c:107 index_top.c:58
 msgid "project management"
 msgstr "プロジェクトの管理"
 
-#: admin_top.c:58 index_project.c:2194 index_top.c:58
+#: admin_top.c:57 index_project.c:2194 index_top.c:57
 msgid "project top"
 msgstr "プロジェクトトップ"
 
-#: admin_top.c:128
+#: admin_top.c:127
 msgid "project information settings"
 msgstr "プロジェクト情報の設定"
 
-#: admin_top.c:133
+#: admin_top.c:132
 msgid "project name"
 msgstr "プロジェクト名"
 
-#: admin_top.c:136
+#: admin_top.c:135
 msgid "home link name"
 msgstr "ホームリンク名"
 
-#: admin_top.c:140
+#: admin_top.c:139
 msgid "home link refference"
 msgstr "ホームリンク先"
 
-#: admin_top.c:144
+#: admin_top.c:143
 msgid "locale"
 msgstr "ロケール"
 
-#: admin_top.c:153 index_top.c:108
+#: admin_top.c:152 index_top.c:107
 msgid "sub projects list"
 msgstr "サブプロジェクト一覧"
 
-#: admin_top.c:162
+#: admin_top.c:161
 msgid "database path"
 msgstr "データベースパス"
 
-#: admin_top.c:162 admin_top.c:201
+#: admin_top.c:161 admin_top.c:200
 msgid "sub project id"
 msgstr "サブプロジェクトID"
 
-#: admin_top.c:188
+#: admin_top.c:187
 msgid "[project settings description1]"
 msgstr ""
 "サブプロジェクト名は各サブプロジェクトの管理ツールから設定してください。"
 
-#: admin_top.c:189
+#: admin_top.c:188
 msgid "[project settings description2]"
 msgstr ""
 "既存のサブプロジェクトIDを変更すると、サブプロジェクトのURLが変わってしまうの"
 "で注意してください。"
 
-#: admin_top.c:190
+#: admin_top.c:189
 msgid "[project settings description3]"
 msgstr ""
 "削除すると、トップページの一覧から表示されなくなります。データは消去されませ"
 "ん。再度削除チェックボックスのチェックを外すことで、再び参照することができる"
 "ようになります。"
 
-#: admin_top.c:195
+#: admin_top.c:194
 msgid "add sub project"
 msgstr "サブプロジェクトの追加"
 
-#: admin_top.c:207
+#: admin_top.c:206
 msgid "[sub project name description]"
 msgstr ""
 "サブプロジェクト名は各サブプロジェクトの管理ツールから設定してください。"
 
-#: admin_top.c:293 admin_top.c:339
+#: admin_top.c:292 admin_top.c:338
 msgid "[error] projectid top is reserved."
 msgstr "[ERROR] プロジェクトID topは予約されています。"
 
-#: admin_top.c:300 admin_top.c:346
+#: admin_top.c:299 admin_top.c:345
 msgid "[error] projectid("
 msgstr "[ERROR] プロジェクトID"
 
-#: admin_top.c:300 admin_top.c:346
+#: admin_top.c:299 admin_top.c:345
 msgid ") is already exists."
 msgstr "は既に存在しています。"
 
@@ -780,19 +780,19 @@ msgstr ""
 "その際、ページの下部に、チケット一覧の背景設定用のサンプルが表示されますので"
 "参考にしてください。"
 
-#: hook.c:143
+#: hook.c:165
 #, c-format
 msgid "[error] error occured in hook process(%s). failed to load plugin. %s"
 msgstr ""
 "[ERROR] hook処理(%s)でエラーが発生しました。(プラグインの読み込みに失敗しまし"
 "た。%s)"
 
-#: hook.c:159 hook.c:183
+#: hook.c:181 hook.c:205
 #, c-format
 msgid "executed hook process(%s)"
 msgstr "hook処理(%s)を実行しました。"
 
-#: hook.c:162 hook.c:185
+#: hook.c:184 hook.c:207
 #, c-format
 msgid "[error] error occured in hook process(%s). (return code: %d)"
 msgstr "[ERROR] hook処理(%s)でエラーが発生しました。(return code: %d)"
@@ -957,7 +957,7 @@ msgstr "日以内"
 msgid "last updated in days."
 msgstr "過去何日間に更新されたチケットを検索するか。"
 
-#: index_project.c:816 index_top.c:132 index_top.c:136
+#: index_project.c:816 index_top.c:131 index_top.c:135
 msgid "search"
 msgstr "検索"
 
@@ -965,11 +965,12 @@ msgstr "検索"
 msgid "save conditions. (use cookie)"
 msgstr "検索条件を保存する。(cookie使用)"
 
-#: index_project.c:823 index_top.c:210
+#: index_project.c:823 index_top.c:209
 msgid "search result"
 msgstr "検索結果"
 
 #: index_project.c:831
+#, c-format
 msgid "%d tickets hits."
 msgstr "%d件ヒットしました。"
 
@@ -1198,7 +1199,7 @@ msgstr "状態別件数"
 msgid "there are no ticket information."
 msgstr "チケット情報がありません。"
 
-#: index_project.c:2258 index_top.c:158 index_top.c:164
+#: index_project.c:2258 index_top.c:157 index_top.c:163
 msgid "edit page"
 msgstr "ページの編集"
 
@@ -1209,11 +1210,11 @@ msgstr ""
 "い。"
 
 #: index_project.c:2461 index_project.c:2468 index_project.c:2469
-#: index_top.c:141
+#: index_top.c:140
 msgid "edit top page"
 msgstr "トップページの編集"
 
-#: index_project.c:2470 index_top.c:164
+#: index_project.c:2470 index_top.c:163
 msgid "[wiki syntax description1]"
 msgstr ""
 "簡易wikiの文法でページのコンテンツの編集を行ない、更新ボタンを押してくださ"
@@ -1223,19 +1224,19 @@ msgstr ""
 msgid "error: there is no file."
 msgstr "error: ファイルがありません。"
 
-#: index_top.c:105 index_top.c:206
+#: index_top.c:104 index_top.c:205
 msgid "top page"
 msgstr "トップページ"
 
-#: index_top.c:133
+#: index_top.c:132
 msgid "search by keyword for all sub projects."
 msgstr "全てのサブプロジェクトからキーワード検索を行ないます。"
 
-#: index_top.c:140
+#: index_top.c:139
 msgid "description"
 msgstr "説明"
 
-#: index_top.c:220
+#: index_top.c:219
 msgid "back to top"
 msgstr "トップページに戻る"
 

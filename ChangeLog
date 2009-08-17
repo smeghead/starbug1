@@ -1,6 +1,10 @@
+2009-08-17  smeghead <smeghead@users.sourceforge.jp>
+
+    * メッセージカタログを生成するMakefileを修正した。
+
 2009-08-06  smeghead  <smeghead@smeghead-laptop>
 
-	* mattnさんから、Windowsポーティングパッチを頂きました。ありがとうございま
+    * mattnさんから、Windowsポーティングパッチを頂きました。ありがとうございま
     す。
 
 2009-07-25  smeghead  <smeghead@smeghead-laptop>
@@ -123,7 +127,7 @@
 
 2009-06-14  smeghead  <smeghead@smeghead-laptop>
 
-	* 管理ツール側でユーザ定義のスタイルシートを読み込めないバグを修正した。
+    * 管理ツール側でユーザ定義のスタイルシートを読み込めないバグを修正した。
     * 管理ツールで新しい項目の追加時に、初期に指定できる選択肢の項目数を5から
     10に増やした。
     * 管理ツールの項目の編集時に、javascriptで項目を動的に増やすことができるよ
@@ -131,15 +135,15 @@
 
 2009-06-13  smeghead  <smeghead@smeghead-laptop>
 
-	* 基本的なデータ構造に、simple_stringを使うように修正開始。
+    * 基本的なデータ構造に、simple_stringを使うように修正開始。
 
 2009-06-10  smeghead  <smeghead@smeghead-laptop>
 
-	* 日本語によるメール送信処理の作成中
+    * 日本語によるメール送信処理の作成中
 
 2009-05-31  smeghead  <smeghead@smeghead-laptop>
 
-	* リクエストされたURLを求める処理に問題があったのを修正した。環境変数の
+    * リクエストされたURLを求める処理に問題があったのを修正した。環境変数の
     HTTPSを判定して、nullポインタを示していない場合、SSLとして判定するようにし
     た。
 
@@ -432,8 +436,8 @@
 
 2008-09-07  smeghead  <smeghead@debian>
 
-	* .htaccessの問題のため、internal server errorの場合に、error.htmlが表示できなかったのを修正。
-	* cgiの拡張子を動的に取得してリンクのファイル名を決定するように修正。Windows対応。
+    * .htaccessの問題のため、internal server errorの場合に、error.htmlが表示できなかったのを修正。
+    * cgiの拡張子を動的に取得してリンクのファイル名を決定するように修正。Windows対応。
     * プロジェクトの設定内容を格納するテーブルをprojectからsetting(新規テーブル)に変更。projectテーブルは廃止。
     * user.cssをsetting_file(新規テーブル)に格納するように修正。
     * トップ画像をseting_fileに格納するように修正。

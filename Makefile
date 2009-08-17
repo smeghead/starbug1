@@ -76,6 +76,9 @@ admin.cgi: list.o simple_string.o data.o dbutil.o db_project.o db_top.o alloc.o 
 clean:
 	rm -f *.o index.cgi admin.cgi
 	rm -rf ./dist
+	rm -rf ./locale/ja
+	rm -rf ./locale/en
+	rm -rf ./locale/zh
 
 webapp: default
 	@echo "Creating webapp..."
@@ -110,10 +113,17 @@ mergeresource:
 	msgmerge -U locale/en.po locale/messages.po
 	msgmerge -U locale/zh.po locale/messages.po
 
-compileresource:
+compileresource: locale/ja/LC_MESSAGES/starbug1.mo locale/en/LC_MESSAGES/starbug1.mo locale/zh/LC_MESSAGES/starbug1.mo 
+
+locale/ja/LC_MESSAGES/starbug1.mo: locale/ja.po 
 	mkdir -p locale/ja/LC_MESSAGES
 	msgfmt -o locale/ja/LC_MESSAGES/starbug1.mo locale/ja.po 
+
+locale/en/LC_MESSAGES/starbug1.mo: locale/en.po 
 	mkdir -p locale/en/LC_MESSAGES
 	msgfmt -o locale/en/LC_MESSAGES/starbug1.mo locale/en.po 
+
+locale/zh/LC_MESSAGES/starbug1.mo: locale/zh.po 
 	mkdir -p locale/zh/LC_MESSAGES
 	msgfmt -o locale/zh/LC_MESSAGES/starbug1.mo locale/zh.po 
+
