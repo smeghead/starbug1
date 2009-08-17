@@ -122,7 +122,7 @@ String* get_search_sql_string_per_project(Database* db, DbInfo* db_info, List* k
 {
     string_appendf(sql_string,
             "select "
-            " %d as project_id, t.id as id "
+            " %d as project_id, t.id as id, max(t.registerdate) as registerdate "
             "from db%d.ticket as t \n", db_info->id, db_info->id);
     
     if (keywords->size > 0)
@@ -213,7 +213,7 @@ List* db_top_search(Database* db, char* q, List* tickets)
         if (iterator_next(it))
             string_append(sql_search_a, "\n union \n");
     }
-    string_append(sql_search_a, "\n) order by project_id, id\n");
+    string_append(sql_search_a, "\n) order by registerdate desc, project_id, id\n");
     d("%s\n", string_rawstr(sql_search_a));
     if (sqlite3_prepare(db->handle, string_rawstr(sql_search_a), string_len(sql_search_a), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);

@@ -1,6 +1,7 @@
 2009-08-17  smeghead <smeghead@users.sourceforge.jp>
 
     * メッセージカタログを生成するMakefileを修正した。
+    * 複数サブプロジェクトの検索の検索結果をチケットの投稿日時の降順で表示するように修正した。
 
 2009-08-06  smeghead  <smeghead@smeghead-laptop>
 
