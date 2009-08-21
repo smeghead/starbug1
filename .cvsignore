@@ -3,5 +3,6 @@ zzz.cgi
 session
 index.cgi
 html
-db
+db*
 admin.cgi
+dump*
