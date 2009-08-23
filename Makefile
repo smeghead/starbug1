@@ -95,6 +95,7 @@ webappwin32: default
 	mkdir -p dist/starbug1-${VERSION}-win32-bin/starbug1
 	cp -r js css img script locale *.html *.cgi COPYING_cgic deps/*.dll dist/starbug1-${VERSION}-win32-bin/starbug1/
 	cp .htaccess dist/starbug1-${VERSION}-win32-bin/starbug1/dot.htaccess
+	cp README dist/starbug1-${VERSION}-win32-bin/
 	@echo "Creating webapp win32... done."
 	@echo "    webapp may be dist/starbug1-${VERSION}-win32-bin/starbug1 directory."
 
