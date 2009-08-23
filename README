@@ -17,6 +17,10 @@ http://starbug1.sourceforge.jp/
    http://www.sqlite.org/
   - cgic CGIライブラリ
    http://www.boutell.com/cgic/
+  - gettext
+   http://www.gnu.org/software/gettext/gettext.html
+  - iconv
+   http://www.gnu.org/software/libiconv/
   - html5jp(JavaScriptライブラリ) グラフ描画ライブラリ
    http://www.html5.jp/
 

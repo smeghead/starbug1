@@ -90,6 +90,14 @@ webapp: default
 	@echo "Creating webapp... done."
 	@echo "    webapp may be dist/starbug1 directory."
 
+webappwin32: default
+	@echo "Creating webapp win32..."
+	mkdir -p dist/starbug1-${VERSION}-win32-bin/starbug1
+	cp -r js css img script locale *.html *.cgi COPYING_cgic deps/*.dll dist/starbug1-${VERSION}-win32-bin/starbug1/
+	cp .htaccess dist/starbug1-${VERSION}-win32-bin/starbug1/dot.htaccess
+	@echo "Creating webapp win32... done."
+	@echo "    webapp may be dist/starbug1-${VERSION}-win32-bin/starbug1 directory."
+
 dist:
 	mkdir -p dist
 	cd dist && \
