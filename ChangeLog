@@ -1,3 +1,7 @@
+2009-08-24  smeghead <smeghead@users.sourceforge.jp>
+
+    * 検索結果のRSS形式のダウンロードでメモリの開放忘れがあったのを修正した。
+
 2009-08-23  smeghead  <smeghead@smeghead-laptop>
 
     * 1.3.02リリース

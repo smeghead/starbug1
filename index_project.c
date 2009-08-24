@@ -1113,6 +1113,7 @@ void report_rss_download_action()
             "\t\t>\n"
             "\n"
             "\t<channel rdf:about=\"");h(string_rawstr(base_url_a));o("/%s/report_rss_download?%s\">\n", g_project_code_4_url, string_rawstr(query_string_a));
+    string_free(query_string_a);
     o(      "\t\t<title>");h(string_rawstr(project_a->name)); o("</title>\n"
             "\t\t<link>");h(string_rawstr(project_a->home_url));o("/bt/</link>\n");
     o(      "\t\t<description>");h(string_rawstr(project_a->name));o("</description>\n"
