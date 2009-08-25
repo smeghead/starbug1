@@ -131,7 +131,7 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
     o("<div id='pankuzu'>\n"
       "<ul>\n");
     o("\t<li><a href='%s/top/' title=\"%s\">%s</a> &gt; </li>\n", cgiScriptName, _("display sub projects list at top page."), _("top page"));
-    o("\t<li><a href='%s/%s/index.%s'>", cgiScriptName, g_project_code_4_url, get_ext(cgiScriptName)); h(string_rawstr(project->name)); o("</a></li>\n"); 
+    o("\t<li><a href='%s/../index.%s/%s'>", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url); h(string_rawstr(project->name)); o("</a></li>\n"); 
     o("</ul>\n"
       "<br clear='all' />\n"
       "</div>\n");

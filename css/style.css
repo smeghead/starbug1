@@ -666,11 +666,15 @@ table#register_at_once_confirm th {
 }
 a#new_ticket_link {
     font-size: 100%;
-    color: #EF5110;
+    color: white;
+    background-color: #FF5110;
+    border: 1px white solid;
     font-weight: bold;
+    padding: 3px 10px;
 }
 a#new_ticket_link:hover {
-    background-color: #EFEFEF;
+    border: 1px #FF5110 solid;
+    color: #EFEFEF;
 }
 td.center {
     text-align: center;

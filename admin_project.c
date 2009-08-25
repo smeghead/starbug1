@@ -79,6 +79,13 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
             "<body>\n"
             "<a name=\"top\"></a>\n"
             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/../index.%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url);
+    o(      "<div id='pankuzu'>\n"
+            "<ul>\n");
+    o(      "\t<li><a href='%s/top/' title=\"%s\">%s</a> &gt; </li>\n", cgiScriptName, _("display sub projects list at top page."), _("top page"));
+    o(      "\t<li><a href='%s/../index.%s/%s'>", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url); h(string_rawstr(project->name)); o("</a></li>\n"); 
+    o(      "</ul>\n"
+            "<br clear='all' />\n"
+            "</div>\n");
     o(      "<div id='menu'>\n"
             "<ul>\n");
     o(      "\t<li><a href=\"%s/../index.%s/top/\" title=\"%s\">%s</a></li>\n",
