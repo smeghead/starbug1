@@ -128,6 +128,13 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
             "<body>\n"
             "<a name=\"top\"></a>\n"
             "<h1 id=\"toptitle\" title=\"%s\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n", _("starbug1"), cgiScriptName, g_project_code_4_url);
+    o("<div id='pankuzu'>\n"
+      "<ul>\n");
+    o("\t<li><a href='%s/top/' title=\"%s\">%s</a> &gt; </li>\n", cgiScriptName, _("display sub projects list at top page."), _("top page"));
+    o("\t<li><a href='%s/%s/index.%s'>", cgiScriptName, g_project_code_4_url, get_ext(cgiScriptName)); h(string_rawstr(project->name)); o("</a></li>\n"); 
+    o("</ul>\n"
+      "<br clear='all' />\n"
+      "</div>\n");
     o("<div id='menu'>\n"
       "<ul>\n");
     o("\t<li><a href='%s/%s/rss' title=\"RSS Feed\"><img src=\"%s/../img/rss.png\" alt=\"rss\" /></a></li>\n", cgiScriptName, g_project_code_4_url, cgiScriptName);
@@ -2442,7 +2449,7 @@ void help_action()
 
     db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
     project_a = db_get_project(db_a, project_a);
-    output_header(project_a, "ヘルプ", NULL, NAVI_HELP);
+    output_header(project_a, _("help"), NULL, NAVI_HELP);
     o(      "<h2>");h(string_rawstr(project_a->name));o("</h2>\n"
             "<div id=\"top\">\n");
     wiki_out(db_a, "help");

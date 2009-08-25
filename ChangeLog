@@ -1,3 +1,7 @@
+2009-08-25  smeghead <smeghead@users.sourceforge.jp>
+
+    * サブプロジェクトのページの左上にパンクズを表示するようにした。
+
 2009-08-24  smeghead <smeghead@users.sourceforge.jp>
 
     * 検索結果のRSS形式のダウンロードでメモリの開放忘れがあったのを修正した。

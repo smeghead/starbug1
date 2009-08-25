@@ -502,6 +502,50 @@ table.item_table textarea {
     color: #ffffff;
     padding-bottom: 0px;    
 }
+
+
+
+
+
+
+#pankuzu {
+    margin-bottom: 2px;
+    position:    absolute;
+    top:         3px; 
+    left:        0px; 
+/*     right:       0px; */
+}
+#pankuzu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+#pankuzu li {
+    float: left;
+    font-size: 85%;
+    margin: 0;
+    padding: 0;
+/*     border-left: solid #003F00 1px; */
+}
+#pankuzu a {
+/*     background: #eee bottom right no-repeat; */
+    color: #000000;
+    display: block;
+    float: left;
+    margin: 0;
+    padding: 0px 5px;
+/*     text-decoration: none; */
+}
+#pankuzu a.current {
+/*     background: #666 bottom center no-repeat; */
+/*     color: #ffffff; */
+}
+#pankuzu a:hover {
+    background: #999 bottom center no-repeat;
+    color: #ffffff;
+    padding-bottom: 0px;    
+}
+
 #projectmenu {
     background: #ccc;
     float: left;
