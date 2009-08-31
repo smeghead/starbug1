@@ -572,7 +572,7 @@ msgstr "詳細"
 
 #: dbutil.c:403
 msgid "please describe the detail."
-msgstr "的確に記述してください。"
+msgstr "詳細を記述してください。"
 
 #: dbutil.c:410
 msgid "reproduction procedure"
