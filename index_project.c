@@ -168,7 +168,7 @@ void output_footer()
             "\t</a>\n"
             "</p>\n"
             "<div><address>Powered by cgic &amp; SQLite3.</address></div>\n"
-            "<div><address>Starbug1 version: %s. %s.</address></div>\n"
+            "<div><address><a href=\"http://starbug1.sourceforge.jp/\">Starbug1</a> version: %s. %s.</address></div>\n"
             "</div>\n"
             "</div>\n"
             "</body>\n</html>\n", cgiScriptName, VERSION, COPYRIGHT);
