@@ -2223,7 +2223,7 @@ void top_action()
             list_free(elements_a);
         }
     } else {
-        o("<li>%s</li>\n", _("no latest tickets."));
+        o("<li>%s</li>\n", _("there are no latest tickets."));
     }
     list_free(tickets_a);
     o(      "\t</ul>\n"
@@ -2243,7 +2243,7 @@ void top_action()
             o("\t\t</li>\n");
         }
     } else {
-        o("<li>%s</li>\n", _("there are no ticket information."));
+        o("<li>%s</li>\n", _("there are no ticket informations."));
     }
     list_free(states_a);
     o(      "\t</ul>\n"
