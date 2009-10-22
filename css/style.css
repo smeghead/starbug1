@@ -682,4 +682,8 @@ td.center {
 input.add_new_row {
     width: 50px;
 }
+form#register_form table.selection,
+form#reply_form table.selection {
+    width: 200px;
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

@@ -373,7 +373,7 @@ void create_project_tables(Database* db)
             db,
             "insert into element_type(id, type, ticket_property, reply_property, required, name, description, auto_add_item, default_value, display_in_list, sort) "
             "values (3, ?, 1, 0, 1, ?, ?, 0, ?, 1, 3);", 
-            COLUMN_TYPE_INT, ELEM_TYPE_LIST_SINGLE,
+            COLUMN_TYPE_INT, ELEM_TYPE_LIST_SINGLE_RADIO,
             COLUMN_TYPE_TEXT, _("status"),
             COLUMN_TYPE_TEXT, _("please select status."),
             COLUMN_TYPE_TEXT, _("new"),

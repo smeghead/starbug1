@@ -397,7 +397,7 @@ void items_action()
                 o(_("selection list(select)"));
                 break;
             case ELEM_TYPE_LIST_SINGLE_RADIO:
-                o(_("selection list(select radio)"));
+                o(_("selection list(input[type=radio])"));
                 break;
             case ELEM_TYPE_LIST_MULTI:
                 o(_("multi selection list(select[multiple=multiple])"));
@@ -748,7 +748,7 @@ void new_item_action()
     o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" "
             "type=\"radio\" name=\"field.type\" ", ELEM_TYPE_LIST_SINGLE_RADIO);
     o(                  "value=\"%d\" />\n", ELEM_TYPE_LIST_SINGLE_RADIO);
-    o("\t\t\t\t\t<label for=\"field.type%d\">%s</label><br />\n", ELEM_TYPE_LIST_SINGLE_RADIO, _("selection list(select raido)"));
+    o("\t\t\t\t\t<label for=\"field.type%d\">%s</label><br />\n", ELEM_TYPE_LIST_SINGLE_RADIO, _("selection list(input[type=radio])"));
     o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" "
             "type=\"radio\" name=\"field.type\" ", ELEM_TYPE_LIST_MULTI);
     o(                  "value=\"%d\" />\n", ELEM_TYPE_LIST_MULTI);

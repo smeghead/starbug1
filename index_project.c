@@ -1293,8 +1293,11 @@ void output_form_element(Database* db, List* elements, ElementType* et, Project*
         case ELEM_TYPE_LIST_SINGLE_RADIO:
             list_alloc(items_a, ListItem, list_item_new, list_item_free);
             items_a = db_get_list_item(db, et->id, items_a);
+            o("<table id=\"ticket_list\" class=\"selection\">\n");
             foreach (it, items_a) {
                 ListItem* item = it->element;
+                o("<tr>\n");
+                o("<td class=\"field%d-%d\">\n", et->id, item->id);
                 o("<input type=\"radio\" id=\"field%d-%d\" name=\"field%d\" value=\"", et->id, item->id, et->id);
                 vs(item->name);
                 if (!strcmp(value, string_rawstr(item->name)))
@@ -1302,10 +1305,41 @@ void output_form_element(Database* db, List* elements, ElementType* et, Project*
                 else
                     o("\" />");
                 o("<label for=\"field%d-%d\">\n", et->id, item->id);
+                if (!strcmp(value, string_rawstr(item->name))) 
+                    o("<strong>");
                 hs(item->name);
-                o("</label><br />\n");
+                if (!strcmp(value, string_rawstr(item->name))) 
+                    o("</strong>");
+                o("</label>\n");
+                o("</td>\n");
+                o("</tr>\n");
+            }
+            o("</table>\n");
+            o("<input type=\"hidden\" id=\"field%d\" name=\"field%d-hidden\" value=\"", et->id, et->id);
+            foreach (it, items_a) {
+                ListItem* item = it->element;
+                if (!strcmp(value, string_rawstr(item->name))) 
+                    hs(item->name);
+            }
+            o("\" />\n");
+            o("<script type=\"text/javascript\">\n"
+                    "\t<!--\n"
+                    "Event.observe(window, 'load', function(){\n");
+            foreach (it, items_a) {
+                ListItem* item = it->element;
+                o("\tif ($('field%d-%d').checked) $('field%d').value = $F('field%d-%d');\n", et->id, item->id, et->id, et->id, item->id);
+            }
+            o(      "\t"
+                    "});\n");
+            foreach (it, items_a) {
+                ListItem* item = it->element;
+                o("Event.observe($('field%d-%d'), 'change', function() {\n", et->id, item->id);
+                o("\tif ($('field%d-%d').checked) $('field%d').value = $F('field%d-%d');\n", et->id, item->id, et->id, et->id, item->id);
+                o("});\n");
             }
             list_free(items_a);
+            o(      "//-->\n"
+                    "</script>\n");
 
             break;
         case ELEM_TYPE_LIST_MULTI:

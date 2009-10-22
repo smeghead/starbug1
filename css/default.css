@@ -151,7 +151,7 @@ em {
 }
 
 strong {
-    color: #ff4500;
+    font-weight: bold;
 }
 
 code {
