@@ -331,7 +331,7 @@ void output_ticket_table_body(Database* db, SearchResult* result, List* element_
             char* val = get_element_value_by_id(elements_a, et->id);
 
             o("\t\t<td class=\"field%d", et->id); 
-            if (et->type == ELEM_TYPE_LIST_SINGLE) {
+            if (et->type == ELEM_TYPE_LIST_SINGLE || et->type == ELEM_TYPE_LIST_SINGLE_RADIO) {
                 o(" field%d-%d", et->id, db_get_list_item_id(db, et->id, val)); /* 毎回DBアクセスしているので無駄がある。 */
             }
             o("\">");
@@ -1176,6 +1176,7 @@ void output_form_element_4_condition(Database* db, ElementType* et, List* condit
             o("\" maxlength=\"%d\" />\n", DEFAULT_LENGTH - 1);
             break;
         case ELEM_TYPE_LIST_SINGLE:
+        case ELEM_TYPE_LIST_SINGLE_RADIO:
         case ELEM_TYPE_LIST_MULTI:
             o("<select class=\"element\" id=\"field");
             h(id);
@@ -1289,6 +1290,24 @@ void output_form_element(Database* db, List* elements, ElementType* et, Project*
             o("</select>\n");
 
             break;
+        case ELEM_TYPE_LIST_SINGLE_RADIO:
+            list_alloc(items_a, ListItem, list_item_new, list_item_free);
+            items_a = db_get_list_item(db, et->id, items_a);
+            foreach (it, items_a) {
+                ListItem* item = it->element;
+                o("<input type=\"radio\" id=\"field%d-%d\" name=\"field%d\" value=\"", et->id, item->id, et->id);
+                vs(item->name);
+                if (!strcmp(value, string_rawstr(item->name)))
+                    o("\" checked=\"checked\" />");
+                else
+                    o("\" />");
+                o("<label for=\"field%d-%d\">\n", et->id, item->id);
+                hs(item->name);
+                o("</label><br />\n");
+            }
+            list_free(items_a);
+
+            break;
         case ELEM_TYPE_LIST_MULTI:
             list_alloc(items_a, ListItem, list_item_new, list_item_free);
             items_a = db_get_list_item(db, et->id, items_a);
@@ -1328,6 +1347,7 @@ void output_form_element(Database* db, List* elements, ElementType* et, Project*
     }
     switch (et->type) {
         case ELEM_TYPE_LIST_SINGLE:
+        case ELEM_TYPE_LIST_SINGLE_RADIO:
         case ELEM_TYPE_LIST_MULTI:
             if (et->auto_add_item) {
                 /* 新規項目を設定可能である場合、テキストボックスを表示する。 */
@@ -1768,6 +1788,7 @@ void register_submit_action()
                     set_element_value(e, value_a);
                     break;
                 case ELEM_TYPE_LIST_SINGLE:
+                case ELEM_TYPE_LIST_SINGLE_RADIO:
                     /* 新規選択肢 */
                     cgiFormString(name_new_item, value_a, VALUE_LENGTH);
                     if (strlen(value_a)) {
@@ -2394,6 +2415,7 @@ void statistics_action()
         list_alloc(all_items_a, ListItem, list_item_new, list_item_free);
         switch (et->type) {
             case ELEM_TYPE_LIST_SINGLE:
+            case ELEM_TYPE_LIST_SINGLE_RADIO:
                 items_a = db_get_statictics(db_a, items_a, et->id);
                 goto got_item;
             case ELEM_TYPE_LIST_MULTI:

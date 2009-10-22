@@ -396,6 +396,9 @@ void items_action()
             case ELEM_TYPE_LIST_SINGLE:
                 o(_("selection list(select)"));
                 break;
+            case ELEM_TYPE_LIST_SINGLE_RADIO:
+                o(_("selection list(select radio)"));
+                break;
             case ELEM_TYPE_LIST_MULTI:
                 o(_("multi selection list(select[multiple=multiple])"));
                 break;
@@ -410,6 +413,7 @@ void items_action()
         o("\t\t\t</tr>\n");
         switch (et->type) {
             case ELEM_TYPE_LIST_SINGLE:
+            case ELEM_TYPE_LIST_SINGLE_RADIO:
             case ELEM_TYPE_LIST_MULTI:
                 o("\t\t\t<tr>\n"
                   "\t\t\t\t<th>%s</th>\n"
@@ -605,6 +609,7 @@ void update_elements(Database* db)
         /* list_item */
         switch (et_a->type) {
             case ELEM_TYPE_LIST_SINGLE:
+            case ELEM_TYPE_LIST_SINGLE_RADIO:
             case ELEM_TYPE_LIST_MULTI:
                 /* 選択要素のあるelementだけ、list_itemの更新を行なう。 */
                 list_alloc(items_a, ListItem, list_item_new, list_item_free);
@@ -741,6 +746,10 @@ void new_item_action()
     o(                  "value=\"%d\" />\n", ELEM_TYPE_LIST_SINGLE);
     o("\t\t\t\t\t<label for=\"field.type%d\">%s</label><br />\n", ELEM_TYPE_LIST_SINGLE, _("selection list(select)"));
     o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" "
+            "type=\"radio\" name=\"field.type\" ", ELEM_TYPE_LIST_SINGLE_RADIO);
+    o(                  "value=\"%d\" />\n", ELEM_TYPE_LIST_SINGLE_RADIO);
+    o("\t\t\t\t\t<label for=\"field.type%d\">%s</label><br />\n", ELEM_TYPE_LIST_SINGLE_RADIO, _("selection list(select raido)"));
+    o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" "
             "type=\"radio\" name=\"field.type\" ", ELEM_TYPE_LIST_MULTI);
     o(                  "value=\"%d\" />\n", ELEM_TYPE_LIST_MULTI);
     o("\t\t\t\t\t<label for=\"field.type%d\">%s</label><br />\n", ELEM_TYPE_LIST_MULTI, _("multi selection list(select[multiple=multiple])"));
@@ -842,6 +851,7 @@ void new_item_submit_action()
     e_type_id = db_register_element_type(db_a, et_a);
     switch (et_a->type) {
         case ELEM_TYPE_LIST_SINGLE:
+        case ELEM_TYPE_LIST_SINGLE_RADIO:
         case ELEM_TYPE_LIST_MULTI:
             for (i = 0; i < ADD_ITEM_COUNT; i++) {
                 char name[DEFAULT_LENGTH];
@@ -964,7 +974,7 @@ void style_action()
         element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
         foreach (it, element_types_a) {
             ElementType* et = it->element;
-            if (et->type == ELEM_TYPE_LIST_SINGLE && et->display_in_list) {
+            if ((et->type == ELEM_TYPE_LIST_SINGLE || et->type == ELEM_TYPE_LIST_SINGLE_RADIO) && et->display_in_list) {
                 List* items_a;
                 Iterator* it_item;
                 list_alloc(items_a, ListItem, list_item_new, list_item_free);

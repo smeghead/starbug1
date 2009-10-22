@@ -1,6 +1,7 @@
 2009-10-22  smeghead <smeghead@users.sourceforge.jp>
 
     * Makefileのdistターゲットの修正。tar玉からはWindowsの依存バイナリを省くようにした。
+    * ラジオボタンで選択できる単一選択肢の項目を追加できるようにした。
 
 2009-09-10  smeghead <smeghead@users.sourceforge.jp>
 
