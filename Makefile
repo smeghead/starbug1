@@ -103,6 +103,7 @@ dist:
 	mkdir -p dist
 	cd dist && \
 		cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/starbug1 export -r HEAD starbug1 && \
+		rm -rf starbug1/deps && \
 		mv starbug1 starbug1-${VERSION} && \
 		tar zcf starbug1-${VERSION}.tar.gz starbug1-${VERSION} && \
 		rm -rf starbug1-${VERSION} && \
