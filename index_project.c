@@ -1293,6 +1293,17 @@ void output_form_element(Database* db, List* elements, ElementType* et, Project*
         case ELEM_TYPE_LIST_SINGLE_RADIO:
             list_alloc(items_a, ListItem, list_item_new, list_item_free);
             items_a = db_get_list_item(db, et->id, items_a);
+            /*
+             * IEのgetElementByIdが、idとnameの属性の両方を検索し、最初に見付けた方を返してしまうので、
+             * radio buttonより先に、hiddenを定義する必要がある。
+             */
+            o("<input type=\"hidden\" id=\"field%d\" name=\"field%d-hidden\" value=\"", et->id, et->id);
+            foreach (it, items_a) {
+                ListItem* item = it->element;
+                if (!strcmp(value, string_rawstr(item->name))) 
+                    hs(item->name);
+            }
+            o("\" />\n");
             o("<table id=\"ticket_list\" class=\"selection\">\n");
             foreach (it, items_a) {
                 ListItem* item = it->element;
@@ -1315,13 +1326,6 @@ void output_form_element(Database* db, List* elements, ElementType* et, Project*
                 o("</tr>\n");
             }
             o("</table>\n");
-            o("<input type=\"hidden\" id=\"field%d\" name=\"field%d-hidden\" value=\"", et->id, et->id);
-            foreach (it, items_a) {
-                ListItem* item = it->element;
-                if (!strcmp(value, string_rawstr(item->name))) 
-                    hs(item->name);
-            }
-            o("\" />\n");
             o("<script type=\"text/javascript\">\n"
                     "\t<!--\n"
                     "Event.observe(window, 'load', function(){\n");
