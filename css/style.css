@@ -686,4 +686,13 @@ form#register_form table.selection,
 form#reply_form table.selection {
     width: 200px;
 }
+form#register_form table.selection label,
+form#reply_form table.selection label {
+    display: block;
+}
+form#register_form table.selection td.checkbox,
+form#reply_form table.selection td.checkbox {
+    width: 20px;
+    text-align: center;
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

@@ -1308,13 +1308,15 @@ void output_form_element(Database* db, List* elements, ElementType* et, Project*
             foreach (it, items_a) {
                 ListItem* item = it->element;
                 o("<tr>\n");
-                o("<td class=\"field%d-%d\">\n", et->id, item->id);
+                o("<td class=\"field%d-%d checkbox\">\n", et->id, item->id);
                 o("<input type=\"radio\" id=\"field%d-%d\" name=\"field%d\" value=\"", et->id, item->id, et->id);
                 vs(item->name);
                 if (!strcmp(value, string_rawstr(item->name)))
                     o("\" checked=\"checked\" />");
                 else
                     o("\" />");
+                o("</td>\n");
+                o("<td class=\"field%d-%d\">\n", et->id, item->id);
                 o("<label for=\"field%d-%d\">\n", et->id, item->id);
                 if (!strcmp(value, string_rawstr(item->name))) 
                     o("<strong>");
