@@ -174,6 +174,63 @@ void exec_action()
     } 
 static const char PROJECT_SPLITTER = ':';
 
+int get_link_syntax_len(char* data, size_t len, char* link)
+{
+    char string[1024];
+    int index = 0;
+    char* block_p;
+    char* line_p;
+
+    memset(string, '\0', 1024);
+    strncpy(string, data, MIN(len, 1024 - 1));
+    if (len == 0) return index; /* 最後の文字だった */
+
+    block_p = strchr(string, ' ');
+    line_p = strchr(string, '\n');
+    if (!block_p)
+        block_p = string + strlen(string);
+    if (!line_p)
+        line_p = string + strlen(string);
+
+    /* 解析対象の文字列を特定 */
+    string[MIN(block_p - string, line_p - string)] = '\0';
+    if (strstr(string, "http://") == NULL && strstr(string, "https://") == NULL) {
+        /* http://かhttps://で始まっていない場合は、linkではない。 */
+        return 0;
+    }
+    if (strchr(string, '<') != NULL || strchr(string, '>') != NULL) {
+        /* XSS対策のため、<>があったらリンクにしない。 */
+        return 0;
+    }
+
+    {
+        char* link_p = string + 1;
+
+        while (index++, 1) { /* each char */
+            /* 
+             * 一文字つづ進めていく。
+             * 途中でリンクでないと判定された場合は、index を 0 にして、breakする。
+             * リンクが終了したら、breakする。
+             */
+            if (string[index] == '\0') {
+                break;
+            } else {
+                if (string[index] >= ' ' && string[index] <= '~') {
+                    /* 文字を検出した場合 (正常) */
+                } else {
+                    /* reached to end. */
+                    string[index] = '\0'; break; /* 一つ前までがリンクとなる。 */
+                }
+            }
+        }
+        if (index < 2) {
+            /* リンクではない。 */
+            return 0;
+        }
+        strcpy(link, link_p);
+    }
+    return index;
+}
 int get_ticket_syntax_len(char* data, size_t len, char* project_id, char* ticket_id)
 {
     char string[1024];
@@ -252,7 +309,25 @@ static cgiFormResultType cgiHtmlEscapeDataMultiLine(char *data, int len)
 {
     bool printing_pre = false;
     while (len--) {
-        if (*data == '#') {
+        if (*data == 'h') {
+            int link_syntax_len;
+            char project_id[DEFAULT_LENGTH];
+            char link[DEFAULT_LENGTH];
+            memset(project_id, '\0', DEFAULT_LENGTH);
+            memset(link, '\0', DEFAULT_LENGTH);
+            /* ループの最初でlenが減っているので、get_ticket_syntax_lenに渡すときは戻して呼び出す。 */
+            link_syntax_len = get_link_syntax_len(data, len + 1, link);
+            d("link_syntax_len: %d \n", link_syntax_len);
+            if (link_syntax_len == 0) {
+                TRYPUTC(*data);
+            } else {
+                o("<a href=\"h%s\">h%s</a>",
+                        link, 
+                        link);
+                data += link_syntax_len - 1;
+                len -= link_syntax_len - 1;
+            }
+        } else if (*data == '#') {
             int ticket_syntax_len;
             char project_id[DEFAULT_LENGTH];
             char ticket_id[DEFAULT_LENGTH];

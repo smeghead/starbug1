@@ -1,7 +1,11 @@
+2009-10-25  smeghead <smeghead@users.sourceforge.jp>
+
+    * 複数行テキストの中に、http://かhttps://が存在したらリンクにするようにした。
+
 2009-10-23  smeghead <smeghead@users.sourceforge.jp>
 
     * ラジオボタンの項目のJavaScript部分がIEで動作しないのを修正した。
-	* Seleniumテストの更新
+    * Seleniumテストの更新
 
 2009-10-22  smeghead <smeghead@users.sourceforge.jp>
 
