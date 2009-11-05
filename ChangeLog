@@ -1,3 +1,7 @@
+2009-11-05  smeghead <smeghead@users.sourceforge.jp>
+
+    * 数値の項目を追加する。
+
 2009-10-25  smeghead <smeghead@users.sourceforge.jp>
 
     * 複数行テキストの中に、http://かhttps://が存在したらリンクにするようにした。

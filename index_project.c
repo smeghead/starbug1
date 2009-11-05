@@ -1167,6 +1167,7 @@ void output_form_element_4_condition(Database* db, ElementType* et, List* condit
         case ELEM_TYPE_TEXT:
         case ELEM_TYPE_TEXTAREA:
         case ELEM_TYPE_CHECKBOX:
+        case ELEM_TYPE_NUM:
             o("<input type=\"text\" class=\"conditionelement\" id=\"field");
             h(id);
             o("\" name=\"field");
@@ -1260,6 +1261,12 @@ void output_form_element(Database* db, List* elements, ElementType* et, Project*
                     et->id, et->id);
             h(value);
             o("</textarea>\n");
+            break;
+        case ELEM_TYPE_NUM:
+            o("<input type=\"text\" class=\"number element\" id=\"field%d\" name=\"field%d\" value=\"",
+                    et->id, et->id);
+            v(value);
+            o("\" maxlength=\"%d\" />\n", DEFAULT_LENGTH - 1);
             break;
         case ELEM_TYPE_CHECKBOX:
             o("<input type=\"checkbox\" id=\"field%d\" class=\"checkbox\" name=\"field%d\" value=\"",
@@ -1815,6 +1822,7 @@ void register_submit_action()
             e->is_file = 0;
             switch (et->type) {
                 case ELEM_TYPE_TEXT:
+                case ELEM_TYPE_NUM:
                 case ELEM_TYPE_DATE:
                     cgiFormStringNoNewlines(name, value_a, VALUE_LENGTH);
                     set_element_value(e, value_a);

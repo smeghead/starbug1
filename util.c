@@ -174,6 +174,11 @@ void exec_action()
     } 
 static const char PROJECT_SPLITTER = ':';
 
+/**
+ * リンクかどうかの判定を行なう。
+ * @return リンクと判定された文字列の長さ。
+ *         リンクではないと判定された場合は、0
+ */
 int get_link_syntax_len(char* data, size_t len, char* link)
 {
     char string[1024];
@@ -185,7 +190,7 @@ int get_link_syntax_len(char* data, size_t len, char* link)
     strncpy(string, data, MIN(len, 1024 - 1));
     if (len == 0) return index; /* 最後の文字だった */
 
-    block_p = strchr(string, ' ');
+    block_p = MIN(strchr(string, ' '), strchr(string, '\t'));
     line_p = strchr(string, '\n');
     if (!block_p)
         block_p = string + strlen(string);
@@ -231,6 +236,11 @@ int get_link_syntax_len(char* data, size_t len, char* link)
     }
     return index;
 }
+/**
+ * チケットリンクかどうかの判定を行なう。
+ * @return チケットリンクと判定された文字列の長さ。
+ *         チケットリンクではないと判定された場合は、0
+ */
 int get_ticket_syntax_len(char* data, size_t len, char* project_id, char* ticket_id)
 {
     char string[1024];

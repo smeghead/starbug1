@@ -172,13 +172,11 @@ static char* build_body(char* buf, HookMessage* message)
     int size;
     int id_size = 10; /* ID用に確保する文字列のサイズ */
 
-    d("0 \n");
     template =
         "%sのチケットが更新されました。\r\n"
         " %s\r\n"
         " #%s:%d %s\r\n";
 
-    d("1 \n");
     size =
         strlen(template) +
         strlen(message->project_name) +
@@ -206,11 +204,8 @@ static char* build_body(char* buf, HookMessage* message)
     d("8 \n");
     buf = realloc_p;
     strcat(buf, content_b64_a);
-    d("9 \n");
     strcat(buf, "\r\n.\r\n"); /* 終端を追加する。 */
-    d("10 \n");
     xfree(content_b64_a);
-    d("11 \n");
     return buf;
 }
 int execute(HookMessage* message)

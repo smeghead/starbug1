@@ -108,7 +108,8 @@ enum ELEM_TYPE {
     ELEM_TYPE_LIST_MULTI,
     ELEM_TYPE_UPLOADFILE,
     ELEM_TYPE_DATE,
-    ELEM_TYPE_LIST_SINGLE_RADIO
+    ELEM_TYPE_LIST_SINGLE_RADIO,
+    ELEM_TYPE_NUM
     /* DBの値と連動しているので、追加する場合は、後に追加する必要がある。*/
 };
 enum ELEM_ID {

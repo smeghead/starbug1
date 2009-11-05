@@ -390,6 +390,9 @@ void items_action()
             case ELEM_TYPE_TEXTAREA:
                 o(_("multi line text(textarea)"));
                 break;
+            case ELEM_TYPE_NUM:
+                o(_("number(input[type=text])"));
+                break;
             case ELEM_TYPE_CHECKBOX:
                 o(_("boolean(input[type=checkbox])"));
                 break;
@@ -761,6 +764,9 @@ void new_item_action()
             "type=\"radio\" name=\"field.type\" ", ELEM_TYPE_DATE);
     o(                  "value=\"%d\" />\n", ELEM_TYPE_DATE);
     o("\t\t\t\t\t<label for=\"field.type%d\">%s</label><br />\n", ELEM_TYPE_DATE, _("date(input[type=text])"));
+    o("\t\t\t\t\t<input id=\"field.type%d\" class=\"radio\" type=\"radio\" name=\"field.type\" ", ELEM_TYPE_NUM);
+    o(                  "value=\"%d\" />\n", ELEM_TYPE_NUM);
+    o("\t\t\t\t\t<label for=\"field.type%d\">%s</label><br />\n", ELEM_TYPE_NUM, _("number(input[type=text])"));
     o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("[ticket add column type description]"));
     o("\t\t\t\t</td>\n");
     o("\t\t\t</tr>\n");
