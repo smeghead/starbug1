@@ -16,5 +16,6 @@ List* db_top_search(Database*, char*, List*);
 String* db_top_get_project_name(Database*, Ticket*, String*);
 String* db_top_get_title(Database*, Ticket*, String*);
 void db_top_set_locale();
+String* db_top_get_top_project_name(String*);
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

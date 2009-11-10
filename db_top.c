@@ -260,6 +260,31 @@ List* db_top_search(Database* db, char* q, List* tickets)
 
 ERROR_LABEL(db->handle)
 }
+String* db_top_get_top_project_name(String* project_name)
+{
+    Database* top_db_a = db_init("db/1.db");
+    String* sql_a = string_new();
+    sqlite3_stmt *stmt = NULL;
+
+    string_append(sql_a,
+            "select value "
+            "from setting "
+            "where name = 'project_name'");
+    if (sqlite3_prepare(top_db_a->handle, string_rawstr(sql_a), string_len(sql_a), &stmt, NULL) == SQLITE_ERROR) goto error;
+    sqlite3_reset(stmt);
+
+    if (SQLITE_ROW == sqlite3_step(stmt)) {
+        string_set(project_name, (char*)sqlite3_column_text(stmt, 0));
+    }
+    string_free(sql_a);
+
+    sqlite3_finalize(stmt);
+
+    db_finish(top_db_a);
+    return project_name;
+
+ERROR_LABEL(top_db_a->handle)
+}
 String* db_top_get_project_name(Database* db, Ticket* t, String* project_name)
 {
     String* sql_a = string_new();
