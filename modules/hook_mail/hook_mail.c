@@ -12,6 +12,10 @@
     fprintf(fp, __VA_ARGS__);\
     fclose(fp);\
 }
+#define die(msg)    { \
+    d("ERROR: %s(%d) %s %s\n", __FILE__, __LINE__, __FUNCTION__, msg);\
+    exit(1);\
+}
 #define SEND_DATA(soc, command) { \
     int ret; \
     ret = wait(soc, &target, 5000); \
@@ -106,23 +110,6 @@ static int send_data(int soc, char* buf)
     d("sended \n");
     return 0;
 }
-/* static char* hook_get_element_value_by_id(List* elements, const int type) */
-/* { */
-/*     Iterator* it; */
-/*     d("hook_get_element_value_by_id 0 %d\n", type); */
-/*     if (elements == NULL) return ""; */
-/*     d("hook_get_element_value_by_id 1\n"); */
-/*     d("hook_get_element_value_by_id 1 %d \n", elements->size); */
-/*     foreach (it, elements) { */
-/*         Element* e = it->element; */
-/*     d("hook_get_element_value_by_id 2 \n"); */
-/*     d("hook_get_element_value_by_id 2 %s\n", string_rawstr(e->str_val)); */
-/*         if (type == e->element_type_id && string_rawstr(e->str_val) != NULL) */
-/*             return string_rawstr(e->str_val); */
-/*     } */
-/*     d("hook_get_element_value_by_id 3\n"); */
-/*     return ""; */
-/* } */
 static char* build_header(char* buf, HookMessage* message)
 {
     char* realloc_p;
@@ -171,11 +158,12 @@ static char* build_body(char* buf, HookMessage* message)
     char* content_b64_a;
     int size;
     int id_size = 10; /* ID用に確保する文字列のサイズ */
+    int i;
 
     template =
         "%sのチケットが更新されました。\r\n"
         " %s\r\n"
-        " #%s:%d %s\r\n";
+        " #%s:%d %s\r\n\r\n";
 
     size =
         strlen(template) +
@@ -183,25 +171,25 @@ static char* build_body(char* buf, HookMessage* message)
         strlen(message->url) +
         id_size +
         strlen(message->subject) + 1;
-    d("2 size: %d\n", size);
     content_a = xalloc(sizeof(char) * size);
-    d("3 %p\n", content_a);
     sprintf(content_a, template, message->project_name, message->url, message->project_id, message->id, message->subject);
-    d("4 %s\n", buf);
+    for (i = 0; i < message->elements_count; i++) {
+        HookElement* e = &message->elements[i];
+        char* element_template = "%s---\r\n%s\r\n%s\r\n";
+        size_t realloc_size = strlen(content_a) + strlen(element_template) + strlen(e->name) + strlen(e->value);
+        content_a = realloc(content_a, realloc_size);
+        if (content_a == NULL)
+            die("memory error!");
+        sprintf(content_a, element_template, content_a, e->name, e->value);
+    }
     content_b64_a = xalloc(sizeof(char) * strlen(content_a) * 2); /* base64での増加分を考慮 */
-    d("5 \n");
     base64_enc((unsigned char*)content_a, (unsigned char*)content_b64_a);
-    d("6 %s\n", content_b64_a);
-    d("6.1 %d\n", sizeof(char) * strlen(content_b64_a) + 1);
-    d("6.2 %p\n", buf);
+    xfree(content_a);
     realloc_p = realloc(buf, sizeof(char) * (strlen(buf) + strlen(content_b64_a) + strlen("\r\n.\r\n") + 1));
-    d("7 \n");
-    d("7.5 \n");
     if (realloc_p == NULL) {
         d("memory error.");
         exit(-1);
     }
-    d("8 \n");
     buf = realloc_p;
     strcat(buf, content_b64_a);
     strcat(buf, "\r\n.\r\n"); /* 終端を追加する。 */

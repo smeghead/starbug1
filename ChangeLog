@@ -1,3 +1,8 @@
+2009-11-11  smeghead <smeghead@users.sourceforge.jp>
+
+    * Cでのメール送信で本文にチケットの内容を表示できるようにした。
+      (ただし、BASE64の改行を挿入する処理は未実装のため、送信するメールの内容は、RFC的に行儀が良くない。)
+
 2009-11-10  smeghead <smeghead@users.sourceforge.jp>
 
     * パンクズのトップは、トップのプロジェクト名を表示するように修正した。
