@@ -61,7 +61,7 @@ void buf_flush()
         if (strcmp(text[i], "") == 0) break;
         if (buf_type == TYPE_LI)
             printf("<li>");
-        h(text[i]);
+        hm(text[i]);
         o("\n");
         if (buf_type == TYPE_LI)
             printf("</li>");

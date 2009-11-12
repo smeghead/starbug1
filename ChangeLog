@@ -1,3 +1,7 @@
+2009-11-13  smeghead  <smeghead@smeghead-laptop>
+
+    * 簡易wikiでもurlがあったらリンクで表示するように修正した。
+
 2009-11-11  smeghead <smeghead@users.sourceforge.jp>
 
     * Cでのメール送信で本文にチケットの内容を表示できるようにした。
