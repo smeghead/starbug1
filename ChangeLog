@@ -1,5 +1,9 @@
 2009-11-13  smeghead  <smeghead@smeghead-laptop>
 
+    * 1.3.04リリース
+
+2009-11-13  smeghead  <smeghead@smeghead-laptop>
+
     * 簡易wikiでもurlがあったらリンクで表示するように修正した。
 
 2009-11-11  smeghead <smeghead@users.sourceforge.jp>
@@ -18,6 +22,10 @@
 2009-10-25  smeghead <smeghead@users.sourceforge.jp>
 
     * 複数行テキストの中に、http://かhttps://が存在したらリンクにするようにした。
+
+2009-10-23  smeghead  <smeghead@smeghead-laptop>
+
+    * 1.3.03リリース
 
 2009-10-23  smeghead <smeghead@users.sourceforge.jp>
 
