@@ -59,7 +59,10 @@ void register_actions()
 
 void output_header(Project* project, char* title, char* script_name, NaviType navi)
 {
+    String* top_project_name = string_new();
+
     cgiHeaderContentType("text/html; charset=utf-8;");
+    top_project_name = db_top_get_top_project_name(top_project_name);
     /* Top of the page */
     o(      "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"
             "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
@@ -81,7 +84,8 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/../index.%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url);
     o(      "<div id='pankuzu'>\n"
             "<ul>\n");
-    o(      "\t<li><a href='%s/top/' title=\"%s\">%s</a> &gt; </li>\n", cgiScriptName, _("display sub projects list at top page."), _("top page"));
+    o(      "\t<li><a href='%s/top/' title=\"%s\">", cgiScriptName, _("display sub projects list at top page.")); h(string_rawstr(top_project_name)); o("</a> &gt; </li>\n");
+    string_free(top_project_name);
     o(      "\t<li><a href='%s/../index.%s/%s'>", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url); h(string_rawstr(project->name)); o("</a></li>\n"); 
     o(      "</ul>\n"
             "<br clear='all' />\n"
