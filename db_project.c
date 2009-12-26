@@ -478,6 +478,47 @@ int set_conditions(Database* db, sqlite3_stmt* stmt, List* conditions, List* key
     }
     return n;
 }
+static void set_tickets_number_sum(Database* db, List* conditions, Condition* sorts, List* keywords, sqlite3_stmt* stmt, SearchResult* result)
+{
+    String* s_a = string_new();
+    List* element_types_a = NULL;
+    list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
+    element_types_a = db_get_num_element_types(db, NULL, element_types_a);
+    if (element_types_a->size) {
+        int n, r;
+        string_append(s_a, "select ");
+        /* 数値項目の合計値を取得するためのカラムリストを付加する。 */
+        Iterator* it;
+        foreach (it, element_types_a) {
+            ElementType* et = it->element;
+            string_appendf(s_a,
+                    " sum(field%d) as sum%d ", et->id, et->id);
+            if (iterator_next(it)) string_append(s_a, ",");
+        }
+        string_append(s_a, " from (");
+        s_a = get_search_sql_string(db, conditions, sorts, keywords, s_a);
+        string_append(s_a,
+                ") as res ");
+        d("sql : %s\n", string_rawstr(s_a));
+        sqlite3_finalize(stmt);
+        if (sqlite3_prepare(db->handle, string_rawstr(s_a), string_len(s_a), &stmt, NULL) == SQLITE_ERROR) goto error;
+        sqlite3_reset(stmt);
+        n = set_conditions(db, stmt, conditions, keywords);
+        if (SQLITE_ROW == (r = sqlite3_step(stmt))) {
+            foreach (it, element_types_a) {
+                ElementType* et = it->element;
+                Element* e = list_new_element(result->sums);
+                e->element_type_id = et->id;
+                string_appendf(e->str_val, "%f", sqlite3_column_double(stmt, 0));
+                list_add(result->sums, e);
+            }
+        }
+    }
+    string_free(s_a);
+    return;
+
+ERROR_LABEL(db->handle)
+}
 SearchResult* db_get_tickets_by_status(Database* db, const char* status, SearchResult* result)
 {
     int r, n, hit_count = 0;
@@ -513,6 +554,8 @@ SearchResult* db_get_tickets_by_status(Database* db, const char* status, SearchR
     if (SQLITE_DONE != r)
         goto error;
 
+    /* 数値項目の合計値を取得する。 */
+    set_tickets_number_sum(db, conditions, NULL, keywords_a, stmt, result);
     sqlite3_finalize(stmt);
     string_free(sql_a);
     list_free(keywords_a);
@@ -575,42 +618,7 @@ SearchResult* db_search_tickets(Database* db, List* conditions, char* q, Conditi
             goto error;
     }
     /* 数値項目の合計値を取得する。 */
-    {
-        String* s_a = string_new();
-        List* element_types_a = NULL;
-        list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
-        element_types_a = db_get_num_element_types(db, NULL, element_types_a);
-        if (element_types_a->size) {
-            string_append(s_a, "select ");
-            /* 数値項目の合計値を取得するためのカラムリストを付加する。 */
-            Iterator* it;
-            foreach (it, element_types_a) {
-                ElementType* et = it->element;
-                string_appendf(s_a,
-                        " sum(field%d) as sum%d ", et->id, et->id);
-                if (iterator_next(it)) string_append(s_a, ",");
-            }
-            string_append(s_a, " from (");
-            s_a = get_search_sql_string(db, conditions, sorts, keywords_a, s_a);
-            string_append(s_a,
-                    ") as res ");
-            d("sql : %s\n", string_rawstr(s_a));
-            sqlite3_finalize(stmt);
-            if (sqlite3_prepare(db->handle, string_rawstr(s_a), string_len(s_a), &stmt, NULL) == SQLITE_ERROR) goto error;
-            sqlite3_reset(stmt);
-            n = set_conditions(db, stmt, conditions, keywords_a);
-            if (SQLITE_ROW == (r = sqlite3_step(stmt))) {
-                foreach (it, element_types_a) {
-                    ElementType* et = it->element;
-                    Element* e = list_new_element(result->sums);
-                    e->element_type_id = et->id;
-                    string_appendf(e->str_val, "%f", sqlite3_column_double(stmt, 0));
-                    list_add(result->sums, e);
-                }
-            }
-            string_free(s_a);
-        }
-    }
+    set_tickets_number_sum(db, conditions, sorts, keywords_a, stmt, result);
 
     sqlite3_finalize(stmt);
     list_free(keywords_a);
@@ -619,6 +627,7 @@ SearchResult* db_search_tickets(Database* db, List* conditions, char* q, Conditi
     return result;
 ERROR_LABEL(db->handle)
 }
+
 SearchResult* db_search_tickets_4_report(Database* db, List* conditions, char* q, Condition* sorts, SearchResult* result)
 {
     int r, n;

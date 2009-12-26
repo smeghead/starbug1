@@ -359,7 +359,6 @@ void output_ticket_table_footer(SearchResult* result, List* element_types)
     Iterator* it;
 
     if (result && result->sums->size > 0) {
-        output_ticket_table_header(element_types);
         o("\t<tr>\n"
           "\t\t<th class=\"sum\">合計</th>\n");
         foreach (it, element_types) {
@@ -385,6 +384,7 @@ void output_ticket_table_status_index(Database* db, SearchResult* result, List* 
     o("<table summary=\"ticket list\">\n");
     output_ticket_table_header_no_link(element_types);
     output_ticket_table_body(db, result, element_types);
+    output_ticket_table_footer(result, element_types);
     o("</table>\n");
 }
 void output_ticket_table(Database* db, SearchResult* result, List* element_types)
@@ -392,6 +392,7 @@ void output_ticket_table(Database* db, SearchResult* result, List* element_types
     o("<table summary=\"ticket list\">\n");
     output_ticket_table_header(element_types);
     output_ticket_table_body(db, result, element_types);
+    output_ticket_table_header(element_types);
     output_ticket_table_footer(result, element_types);
     o("</table>\n");
 }
