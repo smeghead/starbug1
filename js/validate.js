@@ -16,6 +16,15 @@ function register_date_fields(array, ids) {
         }
     );
 }
+function register_number_fields(array, ids) {
+    $A(ids).each(
+        function(i) {
+            var e = $('field' + i);
+            if (e)
+                array.push(e);
+        }
+    );
+}
 
 function check_input_value(fields) {
     var ret = $A(fields).findAll(
@@ -46,6 +55,24 @@ function validate_datefield(fields) {
             var message = $(f.id + '.datefield');
             if (not_valid) {
                 message.innerHTML = _("it is date column. please describe by yyyy-mm-dd format.");
+                message.style.display = "block";
+                f.focus();
+            } else {
+                message.innerHTML = "";
+                message.style.display = "none";
+            }
+            return not_valid;
+        }
+    );
+    return (ret.length == 0);
+}
+function validate_numberfield(fields) {
+    var ret = $A(fields).findAll(
+        function(f) {
+            var not_valid = $F(f).length != 0 && $F(f).match(/^[+-]?[0-9.]+$/) != $F(f);
+            var message = $(f.id + '.numberfield');
+            if (not_valid) {
+                message.innerHTML = _("it is number column. please describe number.");
                 message.style.display = "block";
                 f.focus();
             } else {

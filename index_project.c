@@ -1461,6 +1461,14 @@ void output_field_information_js(List* element_types) {
         }
     }
     o("\t-1];\n");
+    o("\tvar number_field_indexs = [\n");
+    foreach (it, element_types) {
+        ElementType* et = it->element;
+        if (et->type == ELEM_TYPE_NUM) {
+            o("\t%d,\n", et->id);
+        }
+    }
+    o("\t-1];\n");
     o("\t// -->\n");
     o("</script>\n");
 }
@@ -1525,6 +1533,8 @@ void register_action()
                 o("\t\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
             if (et->type == ELEM_TYPE_DATE)
                 o("\t\t<div id=\"field%d.datefield\" class=\"error\"></div>\n", et->id);
+            if (et->type == ELEM_TYPE_NUM)
+                o("\t\t<div id=\"field%d.numberfield\" class=\"error\"></div>\n", et->id);
             output_form_element(db_a, NULL, et, project_a);
             o("\t\t\t<div class=\"description\">");hs(et->description);o("&nbsp;</div>\n");
             o("\t\t</td>\n");
@@ -1751,6 +1761,8 @@ void ticket_action()
             o("\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
         if (et->type == ELEM_TYPE_DATE)
             o("\t\t<div id=\"field%d.datefield\" class=\"error\"></div>\n", et->id);
+        if (et->type == ELEM_TYPE_NUM)
+            o("\t\t<div id=\"field%d.numberfield\" class=\"error\"></div>\n", et->id);
         output_form_element(db_a, last_elements, et, project_a);
         o("\t\t<div class=\"description\">");hs(et->description);o("&nbsp;</div>\n");
         o("\t</td>\n");

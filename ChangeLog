@@ -1,6 +1,8 @@
 2009-12-27  smeghead  <smeghead@smeghead-laptop>
 
     * チケット検索ページで、数値項目の合計を表示するようにした。
+    * 数値項目の入力チェックを作成した。
+    * 数値項目関連のメッセージリソースを更新した。
 
 2009-12-12  smeghead  <smeghead@smeghead-laptop>
 
