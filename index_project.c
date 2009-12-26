@@ -359,6 +359,7 @@ void output_ticket_table_footer(SearchResult* result, List* element_types)
     Iterator* it;
 
     if (result && result->sums->size > 0) {
+        output_ticket_table_header(element_types);
         o("\t<tr>\n"
           "\t\t<th class=\"sum\">合計</th>\n");
         foreach (it, element_types) {
