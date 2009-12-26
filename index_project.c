@@ -354,6 +354,31 @@ void output_ticket_table_body(Database* db, SearchResult* result, List* element_
         list_free(elements_a);
     }
 }
+void output_ticket_table_footer(SearchResult* result, List* element_types)
+{
+    Iterator* it;
+
+    if (result && result->sums->size > 0) {
+        o("\t<tr>\n"
+          "\t\t<th class=\"sum\">合計</th>\n");
+        foreach (it, element_types) {
+            ElementType* et = it->element;
+            char* val = get_element_value_by_id(result->sums, et->id);
+
+            if (strlen(val) > 0) {
+                o("\t\t<td class=\"sum\">");
+                h(val);
+                o("&nbsp;</td>\n");
+            } else {
+                o("\t\t<th class=\"sum\">&nbsp;</th>");
+            }
+        }
+        o("\t\t<th class=\"sum\">&nbsp;</th>\n");
+        o("\t\t<th class=\"sum\">&nbsp;</th>\n");
+        o("\t\t<th class=\"sum\">&nbsp;</th>\n");
+        o("\t</tr>\n");
+    }
+}
 void output_ticket_table_status_index(Database* db, SearchResult* result, List* element_types)
 {
     o("<table summary=\"ticket list\">\n");
@@ -366,6 +391,7 @@ void output_ticket_table(Database* db, SearchResult* result, List* element_types
     o("<table summary=\"ticket list\">\n");
     output_ticket_table_header(element_types);
     output_ticket_table_body(db, result, element_types);
+    output_ticket_table_footer(result, element_types);
     o("</table>\n");
 }
 void output_states(List* states, bool with_new_ticket_link)

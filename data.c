@@ -116,6 +116,7 @@ SearchResult* search_result_new()
     SearchResult* result =  xalloc(sizeof(SearchResult));
     list_alloc(result->messages, Message, message_new, message_free);
     list_alloc(result->states, State, state_new, state_free);
+    list_alloc(result->sums, Element, element_new, element_free);
     return result;
 }
 void search_result_free(SearchResult* sr)
@@ -125,6 +126,9 @@ void search_result_free(SearchResult* sr)
     }
     if (sr->states) {
         list_free(sr->states);
+    }
+    if (sr->sums) {
+        list_free(sr->sums);
     }
     xfree(sr);
 }
@@ -183,7 +187,23 @@ void element_type_free(ElementType* e)
     string_free(e->default_value);
     xfree(e);
 }
-
+void element_type_copy(ElementType* src, ElementType* dest)
+{
+    dest->id = src->id;
+    dest->type = src->type;
+    dest->ticket_property = src->ticket_property;
+    dest->reply_property = src->reply_property;
+    dest->required = src->required;
+    dest->name = string_new();
+    string_set(dest->name, string_rawstr(src->name));
+    dest->description = string_new();
+    string_set(dest->description, string_rawstr(src->description));
+    dest->auto_add_item = src->auto_add_item;
+    dest->default_value = string_new();
+    string_set(dest->default_value, string_rawstr(src->default_value));
+    dest->display_in_list = src->display_in_list;
+    dest->sort = src->sort;
+}
 ElementFile* element_file_new()
 {
     ElementFile* ef = xalloc(sizeof(ElementFile));

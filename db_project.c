@@ -84,6 +84,23 @@ List* db_get_element_types_all(Database* db, DbInfo* db_info, List* elements)
 {
     return db_get_element_types(db, db_info, true, elements);
 }
+static List* db_get_num_element_types(Database* db, DbInfo* db_info, List* elements)
+{
+    List* es_a;
+    Iterator* it;
+    list_alloc(es_a, ElementType, element_type_new, element_type_free);
+    es_a = db_get_element_types(db, db_info, false, es_a);
+    foreach (it, es_a) {
+        ElementType* et = it->element;
+        if (et->type == ELEM_TYPE_NUM) {
+            ElementType* et_copy = element_type_new();
+            element_type_copy(et, et_copy);
+            list_add(elements, et_copy);
+        }
+    }
+    list_free(es_a);
+    return elements;
+}
 ElementType* db_get_element_type(Database* db, int id, ElementType* e)
 {
     int r;
@@ -313,14 +330,25 @@ static String* get_search_sql_string(Database* db, List* conditions, Condition* 
 {
     int i = 0;
     Iterator* it;
+    List* element_types_a = NULL;
 
+    list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
+    element_types_a = db_get_element_types(db, NULL, false, element_types_a);
     string_appendf(sql_string,
             "select "
-            " t.id as id, m.field%d as state "
+            " t.id as id, m.field%d as state, ", ELEM_ID_STATUS);
+    foreach (it, element_types_a) {
+        ElementType* et = it->element;
+        string_appendf(sql_string,
+                " m.field%d as field%d ", et->id, et->id);
+        if (iterator_next(it)) string_append(sql_string, ",");
+    }
+    list_free(element_types_a);
+    string_append(sql_string,
             "from ticket as t "
             "inner join message as m on m.id = t.last_message_id "
-            "inner join message as org_m on org_m.id = t.original_message_id ", ELEM_ID_STATUS);
-
+            "inner join message as org_m on org_m.id = t.original_message_id ");
+    d("sql: %s\n", string_rawstr(sql_string));
     
     if (keywords->size > 0)
         string_append(sql_string, "inner join message as m_all on m_all.ticket_id = t.id ");
@@ -420,7 +448,6 @@ static String* get_search_sql_string(Database* db, List* conditions, Condition* 
     }
     string_append(sql_string, "t.registerdate desc, t.id desc ");
 
-    d("sql: %s\n", string_rawstr(sql_string));
     return sql_string;
 }
 int set_conditions(Database* db, sqlite3_stmt* stmt, List* conditions, List* keywords)
@@ -466,6 +493,7 @@ SearchResult* db_get_tickets_by_status(Database* db, const char* status, SearchR
     cond_status->element_type_id = ELEM_ID_STATUS;
     string_set(cond_status->value, status);
     list_add(conditions, cond_status);
+
     sql_a = get_search_sql_string(db, conditions, NULL, keywords_a, sql_a);
     string_append(sql_a, " limit ? ");
     d("sql_a: %s\n", string_rawstr(sql_a));
@@ -522,28 +550,66 @@ SearchResult* db_search_tickets(Database* db, List* conditions, char* q, Conditi
         goto error;
 
     string_free(sql_a);
+    sqlite3_finalize(stmt);
     /* hit件数を取得する。 */
     {
-        String* s = string_new();
-        string_append(s, "select count(res.id), res.state from (");
-        s = get_search_sql_string(db, conditions, sorts, keywords_a, s);
-        string_appendf(s,
+        String* s_a = string_new();
+        string_append(s_a, "select count(res.id), res.state from (");
+        s_a = get_search_sql_string(db, conditions, sorts, keywords_a, s_a);
+        string_appendf(s_a,
                 ") as res "
                 "inner join list_item as l on l.element_type_id = %d and l.name = res.state "
                 "group by res.state "
                 "order by l.sort", ELEM_ID_STATUS);
-        if (sqlite3_prepare(db->handle, string_rawstr(s), string_len(s), &stmt, NULL) == SQLITE_ERROR) goto error;
+        if (sqlite3_prepare(db->handle, string_rawstr(s_a), string_len(s_a), &stmt, NULL) == SQLITE_ERROR) goto error;
         sqlite3_reset(stmt);
         n = set_conditions(db, stmt, conditions, keywords_a);
-        while (SQLITE_ROW == (r = sqlite3_step(stmt))){
+        while (SQLITE_ROW == (r = sqlite3_step(stmt))) {
             State* s = list_new_element(result->states);
             result->hit_count += s->count = sqlite3_column_int(stmt, 0);
             string_set(s->name, (char*)sqlite3_column_text(stmt, 1));
             list_add(result->states, s);
         }
-        string_free(s);
+        string_free(s_a);
         if (SQLITE_DONE != r)
             goto error;
+    }
+    /* 数値項目の合計値を取得する。 */
+    {
+        String* s_a = string_new();
+        List* element_types_a = NULL;
+        list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
+        element_types_a = db_get_num_element_types(db, NULL, element_types_a);
+        if (element_types_a->size) {
+            string_append(s_a, "select ");
+            /* 数値項目の合計値を取得するためのカラムリストを付加する。 */
+            Iterator* it;
+            foreach (it, element_types_a) {
+                ElementType* et = it->element;
+                string_appendf(s_a,
+                        " sum(field%d) as sum%d ", et->id, et->id);
+                if (iterator_next(it)) string_append(s_a, ",");
+            }
+            string_append(s_a, " from (");
+            s_a = get_search_sql_string(db, conditions, sorts, keywords_a, s_a);
+            string_append(s_a,
+                    ") as res ");
+            d("sql : %s\n", string_rawstr(s_a));
+            sqlite3_finalize(stmt);
+            if (sqlite3_prepare(db->handle, string_rawstr(s_a), string_len(s_a), &stmt, NULL) == SQLITE_ERROR) goto error;
+            sqlite3_reset(stmt);
+            n = set_conditions(db, stmt, conditions, keywords_a);
+            if (SQLITE_ROW == (r = sqlite3_step(stmt))) {
+                foreach (it, element_types_a) {
+                    ElementType* et = it->element;
+                    Element* e = list_new_element(result->sums);
+                    e->element_type_id = et->id;
+                    string_appendf(e->str_val, "%f", sqlite3_column_double(stmt, 0));
+                    list_add(result->sums, e);
+                }
+            }
+            string_free(s_a);
+        }
     }
 
     sqlite3_finalize(stmt);

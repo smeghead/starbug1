@@ -97,6 +97,7 @@ void string_appendf(String* str, char* fmt, ...)
 {
     va_list ap;
     int i;
+    double f;
     char cs[DEFAULT_LENGTH];
     char* s;
     char c;
@@ -118,6 +119,12 @@ void string_appendf(String* str, char* fmt, ...)
                 case 'c':              /* char */
                     c = (char) va_arg(ap, int);
                     sprintf(cs, "%c", c);
+                    string_append(str, cs);
+                    break;
+                case 'f':              /* float */
+                    f = va_arg(ap, double);
+                    /* 簡易的にするため、ここでは小数点2桁固定で表示するようにする。 */
+                    sprintf(cs, "%.2f", f);
                     string_append(str, cs);
                     break;
                 default:

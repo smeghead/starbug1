@@ -88,6 +88,7 @@ typedef struct {
 } ElementType;
 ElementType* element_type_new();
 void element_type_free(ElementType*);
+void element_type_copy(ElementType*, ElementType*);
 
 typedef struct {
     int id;
@@ -157,6 +158,7 @@ typedef struct {
     int page;
     List* messages;
     List* states;
+    List* sums;
 } SearchResult;
 SearchResult* search_result_new();
 void search_result_free(SearchResult*);
