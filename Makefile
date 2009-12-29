@@ -37,7 +37,7 @@ admin.o: admin.c alloc.h util.h list.h data.h simple_string.h dbutil.h \
 admin_project.o: admin_project.c data.h list.h simple_string.h \
   db_project.h dbutil.h util.h db_top.h alloc.h wiki.h
 admin_top.o: admin_top.c data.h list.h simple_string.h db_top.h dbutil.h \
-  util.h db_project.h alloc.h wiki.h hook.h csv.h
+  util.h db_project.h alloc.h wiki.h hook.h csv.h template.h
 alloc.o: alloc.c util.h list.h data.h simple_string.h dbutil.h
 conv.o: conv.c simple_string.h
 csv.o: csv.c csv.h list.h simple_string.h alloc.h util.h data.h dbutil.h
@@ -68,7 +68,7 @@ index.cgi: list.o simple_string.o data.o dbutil.o db_project.o db_top.o hook.o a
 	$(CC) -o $@ $^ $(LFLAGS)
 	strip $@
 
-admin.cgi: list.o simple_string.o data.o dbutil.o db_project.o db_top.o alloc.o conv.o util.o wiki.o admin_project.o admin_top.o admin.o
+admin.cgi: list.o simple_string.o data.o dbutil.o db_project.o db_top.o alloc.o conv.o util.o wiki.o admin_project.o admin_top.o admin.o template.o
 	$(CC) -o $@ $^ $(LFLAGS)
 	strip $@
 

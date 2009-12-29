@@ -95,13 +95,14 @@ void db_top_update_project_infos(Database* db, List* project_infos)
     }
     return;
 }
-void db_top_register_project_info(Database* db, ProjectInfo* project_info)
+int db_top_register_project_info(Database* db, ProjectInfo* project_info)
 {
     exec_query(db, "insert into project_info(id, name, sort) values (NULL, ?, ?)",
             COLUMN_TYPE_TEXT, string_rawstr(project_info->code),
             COLUMN_TYPE_INT, project_info->sort,
             COLUMN_TYPE_END);
-    return;
+    
+    return sqlite3_last_insert_rowid(db->handle);
 }
 char* db_top_get_project_db_name(char* project_name, char* buffer)
 {
@@ -332,7 +333,7 @@ String* db_top_get_title(Database* db, Ticket* t, String* title)
 
 ERROR_LABEL(db->handle)
 }
-void db_top_set_locale()
+String* db_top_get_locale(String* locale)
 {
     Project* top_project_a = project_new();
     char buffer[DEFAULT_LENGTH];
@@ -341,8 +342,16 @@ void db_top_set_locale()
     db_a = db_init(db_top_get_project_db_name("top", buffer));
     top_project_a = db_get_project(db_a, top_project_a);
     db_finish(db_a);
-    set_locale(string_rawstr(top_project_a->locale));
+    string_set(locale, string_rawstr(top_project_a->locale));
 
     project_free(top_project_a);
+    return locale;
+}
+void db_top_set_locale()
+{
+    String* locale = string_new();
+    locale = db_top_get_locale(locale);
+    set_locale(string_rawstr(locale));
+    string_free(locale);
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

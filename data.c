@@ -76,11 +76,13 @@ ProjectInfo* project_info_new()
 {
     ProjectInfo* pi =  xalloc(sizeof(ProjectInfo));
     pi->code = string_new();
+    pi->project_type = string_new();
     return pi;
 }
 void project_info_free(ProjectInfo* pi)
 {
     string_free(pi->code);
+    string_free(pi->project_type);
     xfree(pi);
 }
 Project* project_new()

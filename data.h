@@ -23,6 +23,7 @@ typedef struct {
     int id;
     String* code;
     int sort;
+    String* project_type;
     int deleted;
 } ProjectInfo;
 ProjectInfo* project_info_new();

@@ -13,6 +13,7 @@
 #include "hook.h"
 #include "csv.h"
 #include "simple_string.h"
+#include "template.h"
 
 void top_top_action();
 void top_update_project_submit_action();
@@ -197,10 +198,32 @@ void top_top_action()
             "\t\t\t\t<tr>\n"
             "\t\t\t\t\t<th>%s</th>\n"
             "\t\t\t\t\t<th>%s</th>\n"
-            "\t\t\t\t</tr>\n", _("sub project id"), _("sort"));
+            "\t\t\t\t\t<th>%s</th>\n"
+            "\t\t\t\t</tr>\n", _("sub project id"), _("sort"), _("project type"));
     o(      "\t\t\t\t<tr>\n"
             "\t\t\t\t\t<td><input type=\"text\" name=\"project_new.code\" class=\"project_id\" value=\"\" /></td>\n"
-            "\t\t\t\t\t<td><input type=\"text\" name=\"project_new.sort\" class=\"number\" value=\"\" /></td>\n");
+            "\t\t\t\t\t<td><input type=\"text\" name=\"project_new.sort\" class=\"number\" value=\"\" /></td>\n"
+            "\t\t\t\t\t<td>\n"
+            "\t\t\t\t\t\t<select name=\"project_new.project_type\">\n"
+            "\t\t\t\t\t\t\t<option value=\"\">%s</option>\n", _("default"));
+    {
+        String* locale = string_new();
+        Iterator* it;
+        List* templates;
+        list_alloc(templates, Template, template_new, template_free);
+        locale = db_top_get_locale(locale);
+        templates = get_templates(templates, locale);
+        string_free(locale);
+        foreach (it, templates) {
+            Template* template = it->element;
+            o("\t\t\t\t\t\t<option name=\""); h(string_rawstr(template->name)); o("\">");
+            h(string_rawstr(template->name));
+            o("</option>\n");
+        }
+        list_free(templates);
+    }
+    o(      "\t\t\t\t\t\t</select>\n");
+    o(      "\t\t\t\t\t</td>\n");
     o(      "\t\t\t\t</tr>\n");
     o(      "\t\t\t</table>\n");
     o(      "\t\t\t<p>%s</p>\n", _("[sub project name description]"));
@@ -328,7 +351,9 @@ void top_add_project_submit_action()
     {
         char code[DEFAULT_LENGTH];
         char sort[DEFAULT_LENGTH];
+        char project_type[DEFAULT_LENGTH];
         ProjectInfo* pi_a = project_info_new();
+        int project_id;
 
         d("db->name: %s\n", db_a->name);
         cgiFormString("project_new.code", code, DEFAULT_LENGTH);
@@ -349,7 +374,14 @@ void top_add_project_submit_action()
         string_set(pi_a->code, code);
         cgiFormString("project_new.sort", sort, DEFAULT_LENGTH);
         pi_a->sort = atoi(sort);
-        db_top_register_project_info(db_a, pi_a);
+        cgiFormString("project_new.project_type", project_type, DEFAULT_LENGTH);
+        string_set(pi_a->project_type, project_type);
+        project_id = db_top_register_project_info(db_a, pi_a);
+        if (strlen(project_type)) {
+            /* プロジェクトタイプが指定されている場合は、DBを作成する。 */
+            d("create_db_from_template %d %s\n", project_id, project_type);
+            create_db_from_template(project_id, project_type);
+        }
         project_info_free(pi_a);
     }
     db_finish(db_a);

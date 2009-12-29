@@ -1,3 +1,8 @@
+2009-12-30  kato  <kato@katopc3>
+
+    * 新規プロジェクト追加時に、プロジェクトテンプレートを選択して追加できるよ
+    うにする修正中。
+
 2009-12-29  smeghead  <smeghead@smeghead-laptop>
 
     * 1.3.06リリース
