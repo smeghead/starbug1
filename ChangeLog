@@ -1,10 +1,14 @@
-2009-12-29  kato  <kato@katopc3>
+2009-12-29  smeghead  <smeghead@smeghead-laptop>
+
+    * 1.3.06リリース
+
+2009-12-29  smeghead  <smeghead@smeghead-laptop>
 
     * sqlite3_finalizeを重複して実行してしまう場合があるバグを修正した。
 
 2009-12-27  smeghead  <smeghead@smeghead-laptop>
 
-    * 1.3.04リリース
+    * 1.3.05リリース
 
 2009-12-27  smeghead  <smeghead@smeghead-laptop>
 
