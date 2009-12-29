@@ -478,8 +478,9 @@ int set_conditions(Database* db, sqlite3_stmt* stmt, List* conditions, List* key
     }
     return n;
 }
-static void set_tickets_number_sum(Database* db, List* conditions, Condition* sorts, List* keywords, sqlite3_stmt* stmt, SearchResult* result)
+static void set_tickets_number_sum(Database* db, List* conditions, Condition* sorts, List* keywords, SearchResult* result)
 {
+    sqlite3_stmt* stmt = NULL;
     String* s_a = string_new();
     List* element_types_a = NULL;
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
@@ -515,6 +516,7 @@ static void set_tickets_number_sum(Database* db, List* conditions, Condition* so
         }
     }
     string_free(s_a);
+    sqlite3_finalize(stmt);
     return;
 
 ERROR_LABEL(db->handle)
@@ -554,9 +556,9 @@ SearchResult* db_get_tickets_by_status(Database* db, const char* status, SearchR
     if (SQLITE_DONE != r)
         goto error;
 
-    /* 数値項目の合計値を取得する。 */
-    set_tickets_number_sum(db, conditions, NULL, keywords_a, stmt, result);
     sqlite3_finalize(stmt);
+    /* 数値項目の合計値を取得する。 */
+    set_tickets_number_sum(db, conditions, NULL, keywords_a, result);
     string_free(sql_a);
     list_free(keywords_a);
 
@@ -617,10 +619,10 @@ SearchResult* db_search_tickets(Database* db, List* conditions, char* q, Conditi
         if (SQLITE_DONE != r)
             goto error;
     }
-    /* 数値項目の合計値を取得する。 */
-    set_tickets_number_sum(db, conditions, sorts, keywords_a, stmt, result);
-
     sqlite3_finalize(stmt);
+    /* 数値項目の合計値を取得する。 */
+    set_tickets_number_sum(db, conditions, sorts, keywords_a, result);
+
     list_free(keywords_a);
 
     result->page = page;
