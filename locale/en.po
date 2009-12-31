@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: starbug 1\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2010-01-01 03:05+0900\n"
+"POT-Creation-Date: 2010-01-01 04:24+0900\n"
 "PO-Revision-Date: 2009-07-02 22:23+0900\n"
 "Last-Translator: smeghead <smeghead@sourceforge.jp>\n"
 "Language-Team: English\n"
@@ -11,123 +11,133 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: admin_project.c:73 admin_project.c:156 admin_project.c:192
-#: admin_project.c:295 admin_project.c:687 admin_project.c:909
-#: admin_project.c:960
+#: admin_project.c:78 admin_project.c:162 admin_project.c:199
+#: admin_project.c:302 admin_project.c:694 admin_project.c:916
+#: admin_project.c:967 admin_project.c:1065
 msgid "management tool"
 msgstr "Management Tool"
 
-#: admin_project.c:87 admin_project.c:97 index_project.c:134
+#: admin_project.c:92 admin_project.c:102 index_project.c:134
 #: index_project.c:143
 msgid "display sub projects list at top page."
 msgstr "Display sub projects list at top page."
 
-#: admin_project.c:98 index_project.c:143
+#: admin_project.c:103 index_project.c:143
 msgid "top page(sub projects list)"
 msgstr "Top Page(Sub Projects List)"
 
-#: admin_project.c:103 admin_project.c:159
+#: admin_project.c:108 admin_project.c:165
 msgid "management tool menu"
 msgstr "Management Tool Menu"
 
-#: admin_project.c:104 admin_project.c:162 admin_project.c:190
-#: admin_project.c:195
+#: admin_project.c:109 admin_project.c:168 admin_project.c:197
+#: admin_project.c:202 admin_project.c:1063
 msgid "sub project settings"
 msgstr "Sub Project Settings"
 
-#: admin_project.c:105 admin_project.c:163 admin_project.c:293
-#: admin_project.c:303
+#: admin_project.c:110 admin_project.c:169 admin_project.c:300
+#: admin_project.c:310
 msgid "columns settings"
 msgstr "Columns Settings"
 
-#: admin_project.c:106 admin_project.c:164 admin_project.c:959
+#: admin_project.c:111 admin_project.c:170 admin_project.c:966
 msgid "style settings"
 msgstr "Style Settings"
 
-#: admin_project.c:107 index_project.c:155 index_project.c:2564
+#: admin_project.c:112 admin_project.c:171 admin_project.c:1068
+#, fuzzy
+msgid "export settings"
+msgstr "Style Settings"
+
+#: admin_project.c:113 index_project.c:155 index_project.c:2564
 msgid "help"
 msgstr "Help"
 
-#: admin_project.c:108
+#: admin_project.c:114
 msgid "to"
 msgstr "To "
 
-#: admin_project.c:108
+#: admin_project.c:114
 msgid "to(suffix)"
 msgstr " "
 
-#: admin_project.c:150
+#: admin_project.c:156
 msgid "menu"
 msgstr "Menu"
 
-#: admin_project.c:162
+#: admin_project.c:168
 msgid "this is basic sub projects settings."
 msgstr "This is basic sub projects settings."
 
-#: admin_project.c:163
+#: admin_project.c:169
 msgid "this is columns settings of tickets."
 msgstr "This is columns settings of tickets."
 
-#: admin_project.c:164
+#: admin_project.c:170
 msgid "this is stylesheet settings."
 msgstr "This is stylesheet settings."
 
-#: admin_project.c:167
+#: admin_project.c:171
+#, fuzzy
+msgid "this is export settings."
+msgstr "This is stylesheet settings."
+
+#: admin_project.c:174
 msgid "about mail notify features"
 msgstr "About mail notify features"
 
-#: admin_project.c:169
+#: admin_project.c:176
 msgid "[mail notify messages]"
 msgstr " "
 
-#: admin_project.c:198 admin_top.c:162
+#: admin_project.c:205 admin_top.c:162
 msgid "sub project name"
 msgstr "Sub Project Name"
 
-#: admin_project.c:202
+#: admin_project.c:209
 msgid "icon"
 msgstr "Icon"
 
-#: admin_project.c:206
+#: admin_project.c:213
 msgid "file upload max size(kb)"
 msgstr "File upload max size(Kb)"
 
-#: admin_project.c:210 admin_project.c:317 admin_project.c:534
-#: admin_project.c:977 admin_top.c:148 admin_top.c:191 index_project.c:2597
+#: admin_project.c:217 admin_project.c:324 admin_project.c:541
+#: admin_project.c:984 admin_top.c:148 admin_top.c:191 index_project.c:2597
 #: index_top.c:169
 msgid "update"
 msgstr "Update"
 
-#: admin_project.c:278 admin_project.c:556 admin_project.c:1029
-#: admin_top.c:263 admin_top.c:343
+#: admin_project.c:285 admin_project.c:563 admin_project.c:1036
+#: admin_project.c:1116 admin_top.c:263 admin_top.c:343
 msgid "updated."
 msgstr "Updated."
 
-#: admin_project.c:304
+#: admin_project.c:311
 msgid "[columns setting description]"
 msgstr " "
 
-#: admin_project.c:306 admin_project.c:685 admin_project.c:694
+#: admin_project.c:313 admin_project.c:692 admin_project.c:701
 msgid "add new column"
 msgstr "Add new column"
 
-#: admin_project.c:331 admin_project.c:698
+#: admin_project.c:338 admin_project.c:705
 msgid "column name"
 msgstr "Column Name"
 
-#: admin_project.c:331 index_project.c:1531 index_project.c:1785
+#: admin_project.c:338 index_project.c:1531 index_project.c:1785
 msgid "*"
 msgstr "*"
 
-#: admin_project.c:334 admin_project.c:701
+#: admin_project.c:341 admin_project.c:708
 msgid "this is name of ticket column."
 msgstr "This is name of ticket column."
 
-#: admin_project.c:340 admin_project.c:706
+#: admin_project.c:347 admin_project.c:713
 msgid "column description"
 msgstr "Column Description"
 
-#: admin_project.c:347 admin_project.c:709
+#: admin_project.c:354 admin_project.c:716
 msgid ""
 "this is description of ticket column. when register or replay, it is "
 "displayed."
@@ -135,63 +145,63 @@ msgstr ""
 "This is description of ticket column. when register or replay, it is "
 "displayed."
 
-#: admin_project.c:347
+#: admin_project.c:354
 msgid "required"
 msgstr "Required"
 
-#: admin_project.c:350
+#: admin_project.c:357
 msgid "this column must not be empty."
 msgstr "This column must not be empty."
 
-#: admin_project.c:358
+#: admin_project.c:365
 msgid "[require description]"
 msgstr ""
 "Whether it is assumed the attribute that cannot be contributed if it doesn't "
 "input it or not? However, it only checks it with JavaScript."
 
-#: admin_project.c:359 admin_project.c:713
+#: admin_project.c:366 admin_project.c:720
 msgid "attribute of ticket"
 msgstr "Attribute of Ticket"
 
-#: admin_project.c:361 admin_project.c:717
+#: admin_project.c:368 admin_project.c:724
 msgid "this column will be attribute of ticket."
 msgstr "This column will be attribute of ticket."
 
-#: admin_project.c:367 admin_project.c:719
+#: admin_project.c:374 admin_project.c:726
 msgid "[attribute of ticket description1]"
 msgstr ""
 "Whether it is assumed the attribute that cannot be contributed if it doesn't "
 "input it or not?However, it only checks it with JavaScript."
 
-#: admin_project.c:368 admin_project.c:720
+#: admin_project.c:375 admin_project.c:727
 msgid "[attribute of ticket description2]"
 msgstr ""
 "When the item that specified the ticket attribute when replying is "
 "rewritten, the rewritten content comes to be displayed in the ticket latest "
 "information."
 
-#: admin_project.c:369 admin_project.c:721
+#: admin_project.c:376 admin_project.c:728
 msgid "[attribute of ticket description3]"
 msgstr ""
 " The item for which the ticket attribute is not specified is notdisplayed in "
 "the ticket latest information.The item for which the ticket attribute is not "
 "specified will be referred to from the ticket history. "
 
-#: admin_project.c:373 admin_project.c:726
+#: admin_project.c:380 admin_project.c:733
 msgid "reply only"
 msgstr "Reply Only"
 
-#: admin_project.c:377 admin_project.c:730
+#: admin_project.c:384 admin_project.c:737
 msgid "this column will be reply only."
 msgstr "This column will be reply only."
 
-#: admin_project.c:382 admin_project.c:732
+#: admin_project.c:389 admin_project.c:739
 msgid "[reply only description1]"
 msgstr ""
 "Whether it is assumed the input item at new registration or not?It doesn't "
 "become an input item at new registration when checking it."
 
-#: admin_project.c:383 admin_project.c:733
+#: admin_project.c:390 admin_project.c:740
 msgid "[reply only description2]"
 msgstr ""
 "It becomes an item that can be input only at the reply. If it is not a "
@@ -199,180 +209,198 @@ msgstr ""
 "that doesn't understand can decrease the time of an unnecessary input when "
 "newly registering by assuming the attribute only for the reply. "
 
-#: admin_project.c:387 admin_project.c:738
+#: admin_project.c:394 admin_project.c:745
 msgid "column type"
 msgstr "Column Type"
 
-#: admin_project.c:392 admin_project.c:742
+#: admin_project.c:399 admin_project.c:749
 msgid "one line text(input[type=text])"
 msgstr "One line text(input[type=text])"
 
-#: admin_project.c:395 admin_project.c:746
+#: admin_project.c:402 admin_project.c:753
 msgid "multi line text(textarea)"
 msgstr "Multi line text(textarea)"
 
-#: admin_project.c:398 admin_project.c:773
+#: admin_project.c:405 admin_project.c:780
 msgid "number(input[type=text])"
 msgstr "Number(input[type=text])"
 
-#: admin_project.c:401 admin_project.c:750
+#: admin_project.c:408 admin_project.c:757
 msgid "boolean(input[type=checkbox])"
 msgstr "Boolean(input[type=checkbox])"
 
-#: admin_project.c:404 admin_project.c:754
+#: admin_project.c:411 admin_project.c:761
 msgid "selection list(select)"
 msgstr "Selection list(select)selection list(select)"
 
-#: admin_project.c:407 admin_project.c:758
+#: admin_project.c:414 admin_project.c:765
 msgid "selection list(input[type=radio])"
 msgstr "Selection list(input[type=radio])"
 
-#: admin_project.c:410 admin_project.c:762
+#: admin_project.c:417 admin_project.c:769
 msgid "multi selection list(select[multiple=multiple])"
 msgstr "Multi selection list(select[multiple=multiple])"
 
-#: admin_project.c:413 admin_project.c:766
+#: admin_project.c:420 admin_project.c:773
 msgid "file(input[type=file])"
 msgstr "File(input[type=file])"
 
-#: admin_project.c:416 admin_project.c:770
+#: admin_project.c:423 admin_project.c:777
 msgid "date(input[type=text])"
 msgstr "Date(input[type=text])"
 
-#: admin_project.c:434 admin_project.c:778
+#: admin_project.c:441 admin_project.c:785
 msgid "selection element"
 msgstr "Selection element"
 
-#: admin_project.c:434 admin_project.c:782
+#: admin_project.c:441 admin_project.c:789
 msgid "element name"
 msgstr "Element Name"
 
-#: admin_project.c:434 admin_project.c:783
+#: admin_project.c:441 admin_project.c:790
 msgid "means closed"
 msgstr "Means closed"
 
-#: admin_project.c:434 admin_project.c:504 admin_project.c:784
-#: admin_project.c:816 admin_top.c:162 admin_top.c:202
+#: admin_project.c:441 admin_project.c:511 admin_project.c:791
+#: admin_project.c:823 admin_top.c:162 admin_top.c:202
 msgid "sort"
 msgstr "Sort"
 
-#: admin_project.c:434 admin_project.c:922 admin_top.c:162
+#: admin_project.c:441 admin_project.c:929 admin_top.c:162
 msgid "delete"
 msgstr "Delete"
 
-#: admin_project.c:468
+#: admin_project.c:475
 msgid "add line"
 msgstr "Add Line"
 
-#: admin_project.c:474 admin_project.c:800
+#: admin_project.c:481 admin_project.c:807
 msgid "selection element when this column is selection list."
 msgstr "Selection element when this column is selection list."
 
-#: admin_project.c:477 admin_project.c:803
+#: admin_project.c:484 admin_project.c:810
 msgid "when register, you can input new selection element."
 msgstr "When register, you can input new selection element."
 
-#: admin_project.c:480 admin_project.c:804
+#: admin_project.c:487 admin_project.c:811
 msgid "[add line description]"
 msgstr ""
 "Whether the function to add the item to choices is added when the text box "
 "is displayed when contributing, and it is input to the text box or not?"
 
-#: admin_project.c:485
+#: admin_project.c:492
 msgid "default value"
 msgstr "Default Value"
 
-#: admin_project.c:491
+#: admin_project.c:498
 msgid "this is default value."
 msgstr "This is default value."
 
-#: admin_project.c:495 admin_project.c:808
+#: admin_project.c:502 admin_project.c:815
 msgid "display in ticket list"
 msgstr "Display in ticket list"
 
-#: admin_project.c:499 admin_project.c:812
+#: admin_project.c:506 admin_project.c:819
 msgid "display this column in ticket list."
 msgstr "Display this column in ticket list."
 
-#: admin_project.c:500
+#: admin_project.c:507
 msgid "[display in ticket list description]"
 msgstr "Whether the item is displayed by the ticket list or not?"
 
-#: admin_project.c:510 admin_project.c:819
+#: admin_project.c:517 admin_project.c:826
 msgid "sort no in ticket lists."
 msgstr "Sort no in ticket lists."
 
-#: admin_project.c:531 admin_project.c:912
+#: admin_project.c:538 admin_project.c:919
 msgid "delete this column("
 msgstr "Delete this column("
 
-#: admin_project.c:531 admin_project.c:912
+#: admin_project.c:538 admin_project.c:919
 msgid ")(delete this column)"
 msgstr ")"
 
-#: admin_project.c:695
+#: admin_project.c:702
 msgid "[ticket add description]"
 msgstr ""
 "A new item is added to the ticket. Please input information on the added "
 "item, and push the add button."
 
-#: admin_project.c:774
+#: admin_project.c:781
 msgid "[ticket add column type description]"
 msgstr ""
 "It is an input form when the item is input. After it adds it, the item type "
 "cannot be changed. "
 
-#: admin_project.c:823 admin_top.c:230
+#: admin_project.c:830 admin_top.c:230
 msgid "add"
 msgstr "Add"
 
-#: admin_project.c:889 admin_top.c:389
+#: admin_project.c:896 admin_top.c:389
 msgid "added."
 msgstr "Added."
 
-#: admin_project.c:906
+#: admin_project.c:913
 msgid "column delete"
 msgstr "Column Delete"
 
-#: admin_project.c:919
+#: admin_project.c:926
 msgid "if column has deleted, it's forever gone."
 msgstr "If column has deleted, it's forever gone."
 
-#: admin_project.c:920
+#: admin_project.c:927
 msgid "this will disappear column of exists ticket."
 msgstr "This will disappear column of exists ticket."
 
-#: admin_project.c:921
+#: admin_project.c:928
 msgid "if you really want to delete, push delete button."
 msgstr "If you really want to delete, push delete button."
 
-#: admin_project.c:938
+#: admin_project.c:945
 msgid "it is a invalid request."
 msgstr "It is a invalid request."
 
-#: admin_project.c:948
+#: admin_project.c:955
 msgid "deleted."
 msgstr "Deleted."
 
-#: admin_project.c:964
+#: admin_project.c:971
 msgid "edit style sheet"
 msgstr "Edit Style Sheet"
 
-#: admin_project.c:964
+#: admin_project.c:971
 msgid "edit style sheet setting and push update button."
 msgstr "Edit style sheet setting and push update button."
 
-#: admin_project.c:981
+#: admin_project.c:988
 msgid "below block is sample setting of ticket list table column."
 msgstr "Below block is sample setting of ticket list table column."
 
-#: admin_project.c:993
+#: admin_project.c:1000
 msgid "background-color settings of "
 msgstr "Background-color settings of "
 
-#: admin_project.c:993
+#: admin_project.c:1000
 msgid ".(background-color settings)"
 msgstr "."
+
+#: admin_project.c:1070
+#, fuzzy
+msgid "this sub project columns settings are able to exported."
+msgstr "This is columns settings of tickets."
+
+#: admin_project.c:1071
+msgid "when you create sub project, you can select exported sub project types."
+msgstr ""
+
+#: admin_project.c:1075
+#, fuzzy
+msgid "export sub project type name"
+msgstr "Sub Project Name"
+
+#: admin_project.c:1079 index_project.c:1555 index_project.c:2152
+msgid "register"
+msgstr "Register"
 
 #: admin_top.c:54 admin_top.c:59 admin_top.c:108 index_top.c:58
 msgid "project management"
@@ -1082,10 +1110,6 @@ msgstr "Input below form and push register button."
 #: index_project.c:1504 index_project.c:1749 index_project.c:2074
 msgid "note: they are checked by only javascript."
 msgstr "NOTE: they are checked by only javascript."
-
-#: index_project.c:1555 index_project.c:2152
-msgid "register"
-msgstr "Register"
 
 #: index_project.c:1555 index_project.c:1802 index_project.c:2152
 msgid "save registerer.(use cookie)"

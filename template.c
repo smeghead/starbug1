@@ -9,6 +9,12 @@
 #include "template.h"
 #include "alloc.h"
 
+#ifndef _WIN32
+  #define CAT "type"
+#else
+  #define CAT "cat"
+#endif
+
 Template* template_new()
 {
     Template* template =  xalloc(sizeof(Template));
@@ -109,7 +115,7 @@ void create_db_from_template(int project_id, char* project_type)
         d("template project_type: [%s]\n", string_rawstr(template->name));
         if (strncmp(project_type, string_rawstr(template->name), DEFAULT_LENGTH) == 0) {
             String* command = string_new();
-            string_appendf(command, "cat %s | sqlite3 db/%d.db", string_rawstr(template->path), project_id);
+            string_appendf(command, "%s %s | sqlite3 db/%d.db", CAT, string_rawstr(template->path), project_id);
             if (system(string_rawstr(command)) != 0) {
                 die("外部プログラムの実行に失敗しました。");
             }

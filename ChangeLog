@@ -1,3 +1,7 @@
+2010-01-01  smeghead  <smeghead@smeghead-laptop>
+
+    * WebUIからサブプロジェクトの項目設定情報をエクスポートする機能の作成中。
+
 2009-12-31  kato  <kato@katopc3>
 
     * TODO用のテンプレートを追加した。

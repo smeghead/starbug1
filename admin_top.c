@@ -199,13 +199,13 @@ void top_top_action()
             "\t\t\t\t\t<th>%s</th>\n"
             "\t\t\t\t\t<th>%s</th>\n"
             "\t\t\t\t\t<th>%s</th>\n"
-            "\t\t\t\t</tr>\n", _("sub project id"), _("sort"), _("project type"));
+            "\t\t\t\t</tr>\n", _("sub project id"), _("sort"), _("sub project type"));
     o(      "\t\t\t\t<tr>\n"
             "\t\t\t\t\t<td><input type=\"text\" name=\"project_new.code\" class=\"project_id\" value=\"\" /></td>\n"
             "\t\t\t\t\t<td><input type=\"text\" name=\"project_new.sort\" class=\"number\" value=\"\" /></td>\n"
             "\t\t\t\t\t<td>\n"
             "\t\t\t\t\t\t<select name=\"project_new.project_type\">\n"
-            "\t\t\t\t\t\t\t<option value=\"\">%s</option>\n", _("default"));
+            "\t\t\t\t\t\t\t<option value=\"\">%s</option>\n", _("default bts"));
     {
         String* locale = string_new();
         Iterator* it;

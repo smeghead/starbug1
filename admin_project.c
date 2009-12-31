@@ -18,6 +18,7 @@ typedef enum _NAVI {
     NAVI_PROJECT,
     NAVI_ITEM,
     NAVI_STYLE,
+    NAVI_EXPORT,
     NAVI_ADMIN_HELP
 } NaviType;
 
@@ -30,6 +31,8 @@ void items_action();
 void items_submit_action();
 void style_action();
 void style_submit_action();
+void export_action();
+void export_submit_action();
 void display_action();
 void new_item_action();
 void new_item_submit_action();
@@ -50,6 +53,8 @@ void register_actions()
     REG_ACTION(items_submit);
     REG_ACTION(style);
     REG_ACTION(style_submit);
+    REG_ACTION(export);
+    REG_ACTION(export_submit);
     REG_ACTION(new_item);
     REG_ACTION(new_item_submit);
     REG_ACTION(delete_item);
@@ -104,6 +109,7 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
     o(      "\t\t<li><a %s href=\"%s/%s/project\">%s</a></li>\n", navi == NAVI_PROJECT ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("sub project settings"));
     o(      "\t\t<li><a %s href=\"%s/%s/items\">%s</a></li>\n", navi == NAVI_ITEM ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("columns settings"));
     o(      "\t\t<li><a %s href=\"%s/%s/style\">%s</a></li>\n", navi == NAVI_STYLE ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("style settings"));
+    o(      "\t\t<li><a %s href=\"%s/%s/export\">%s</a></li>\n", navi == NAVI_EXPORT ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("export settings"));
     o(      "\t\t<li><a %s href=\"%s/%s/admin_help\">%s</a></li>\n", navi == NAVI_ADMIN_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("help"));
     o(      "\t<li><a href=\"%s/../index.%s/%s/\">%s", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url, _("to"));h(string_rawstr(project->name)); o("%s</a></li>\n", _("to(suffix)"));
     o(      "</ul>\n"
@@ -162,6 +168,7 @@ void top_action()
     o("\t\t<dt><a href=\"%s/%s/project\">%s</a></dt><dd>%s</dd>\n", cgiScriptName, g_project_code_4_url, _("sub project settings"), _("this is basic sub projects settings."));
     o("\t\t<dt><a href=\"%s/%s/items\">%s</a></dt><dd>%s</dd>\n", cgiScriptName, g_project_code_4_url, _("columns settings"), _("this is columns settings of tickets."));
     o("\t\t<dt><a href=\"%s/%s/style\">%s</a></dt><dd>%s</dd>\n", cgiScriptName, g_project_code_4_url, _("style settings"), _("this is stylesheet settings."));
+    o("\t\t<dt><a href=\"%s/%s/export\">%s</a></dt><dd>%s</dd>\n", cgiScriptName, g_project_code_4_url, _("export settings"), _("this is export settings."));
     o("\t</dl>\n");
     o("</div>\n");
     o("<h3>%s</h3>\n", _("about mail notify features"));
@@ -1044,5 +1051,68 @@ void admin_help_action()
     project_free(project_a);
     db_finish(db_a);
     output_footer();
+}
+void export_action()
+{
+    Project* project_a = project_new();
+    Database* db_a;
+    char buffer[DEFAULT_LENGTH];
+
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    project_a = db_get_project(db_a, project_a);
+    output_header(project_a, _("sub project settings"), "management.js", NAVI_PROJECT);
+
+    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("management tool"));
+    o("<div id=\"setting_form\">\n");
+    o("\t<form id=\"management_form\" action=\"%s/%s/export_submit\" method=\"post\">\n", cgiScriptName, g_project_code_4_url);
+    o("\t\t<h3>%s</h3>\n", _("export settings"));
+    o("\t\t<div class=\"description\">\n");
+    o("\t\t\t%s\n", _("this sub project columns settings are able to exported."));
+    o("\t\t\t%s\n", _("when you create sub project, you can select exported sub project types."));
+    o("\t\t</div>\n");
+    o("\t\t<table summary=\"project table\">\n");
+    o("\t\t\t<tr>\n");
+    o("\t\t\t\t<th>%s</th>\n", _("export sub project type name"));
+    o("\t\t\t\t<td><input type=\"text\" name=\"export_sub_project_type_name\" value=\"\" maxlength=\"1000\" /></td>\n");
+    o("\t\t\t</tr>\n");
+    o("\t\t</table>\n");
+    o("\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("register"));
+    o("\t</form>\n");
+    o("</div>\n");
+    project_free(project_a);
+    output_footer();
+    db_finish(db_a);
+}
+void export_submit_action()
+{
+    Project* project_a = project_new();
+    SettingFile* sf_a = setting_file_new();
+    Database* db_a;
+    char name[DEFAULT_LENGTH];
+    char upload_max_size_str[DEFAULT_LENGTH];
+    char buffer[DEFAULT_LENGTH];
+
+    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_begin(db_a);
+    project_a = db_get_project(db_a, project_a);
+    cgiFormStringNoNewlines("project.name", name, DEFAULT_LENGTH);
+    string_set(project_a->name, name);
+    cgiFormStringNoNewlines("project.upload_max_size", upload_max_size_str, DEFAULT_LENGTH);
+    project_a->upload_max_size = atoi(upload_max_size_str);
+    db_update_project(db_a, project_a);
+    project_free(project_a);
+
+    /* 画像の更新 */
+    cgiFormFileSize("project.file", &(sf_a->size));
+    d("image size %d.\n", sf_a->size);
+    if (sf_a->size > 0) {
+        d("try to save top image.\n");
+        fill_upload_content_setting_file(sf_a);
+        db_update_top_image(db_a, sf_a);
+    }
+    setting_file_free(sf_a);
+    db_commit(db_a);
+    db_finish(db_a);
+    redirect("", _("updated."));
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

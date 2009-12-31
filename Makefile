@@ -83,7 +83,7 @@ clean:
 webapp: default
 	@echo "Creating webapp..."
 	mkdir -p dist/starbug1
-	rsync -a --exclude=*.po --exclude=CVS js css img script locale *.html *.cgi COPYING_cgic dist/starbug1/
+	rsync -a --exclude=*.po --exclude=CVS js css img script locale template *.html *.cgi COPYING_cgic dist/starbug1/
 	cp .htaccess dist/starbug1/dot.htaccess
 	find dist/starbug1 -name '*.cgi' -exec chmod +x {} \;
 	find dist/starbug1 -name '*.pl' -exec chmod +x {} \;
