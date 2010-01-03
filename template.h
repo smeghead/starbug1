@@ -13,5 +13,6 @@ void template_free(Template*);
 
 List* get_templates(List*, String*);
 void create_db_from_template(int, char*);
+void save_template(char*, String*);
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

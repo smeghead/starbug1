@@ -105,7 +105,7 @@ void create_db_from_template(int project_id, char* project_type)
     List* templates;
     String* locale = string_new();
     locale = db_top_get_locale(locale);
-    string_appendf(db_path, "db/%d.db", project_id);
+    string_appendf(db_path, "%s", project_id);
     list_alloc(templates, Template, template_new, template_free);
     templates = get_templates(templates, locale);
     string_free(locale);
@@ -115,7 +115,7 @@ void create_db_from_template(int project_id, char* project_type)
         d("template project_type: [%s]\n", string_rawstr(template->name));
         if (strncmp(project_type, string_rawstr(template->name), DEFAULT_LENGTH) == 0) {
             String* command = string_new();
-            string_appendf(command, "%s %s | sqlite3 db/%d.db", CAT, string_rawstr(template->path), project_id);
+            string_appendf(command, "%s %s | sqlite3 %s", CAT, string_rawstr(template->path), project_id);
             if (system(string_rawstr(command)) != 0) {
                 die("外部プログラムの実行に失敗しました。");
             }
@@ -124,5 +124,57 @@ void create_db_from_template(int project_id, char* project_type)
         }
     }
     die("テンプレートの取得に失敗しました。");
+}
+void pipe_to_file(char* command_str, char* db_name, FILE* out)
+{
+    FILE* fp;
+    String* command = string_new();
+    string_appendf(command, "echo '%s' | sqlite3 %s", command_str, db_name);
+
+    if ((fp = popen(string_rawstr(command), "r")) == NULL) {
+        die("外部プログラム実行に失敗しました。");
+    }
+    while (1) {
+        char* ptr;
+        char str[DEFAULT_LENGTH];
+        fgets(str, DEFAULT_LENGTH, fp);
+        if(feof(fp)){
+            break;
+        }
+        ptr = strchr(str, '\n');
+        if (ptr != NULL) {
+            *ptr = '\0';
+        }
+        fprintf(out, "%s\n", str);
+    }
+    pclose(fp);
+}
+void save_template(char* project_type, String* locale)
+{
+    String* template_filename = string_new();
+    FILE* out;
+    char timestamp[DEFAULT_LENGTH];
+    char db_name[DEFAULT_LENGTH];
+    char template_dir[DEFAULT_LENGTH] = "template/";
+    strcat(template_dir, string_rawstr(locale));
+    set_timestamp_string(timestamp);
+    /* テンプレートファイル名 */
+    string_appendf(template_filename, "%s/%s.template", template_dir, timestamp);
+    if (!(out = fopen(string_rawstr(template_filename), "w"))) {
+        die("テンプレートファイルのオープンに失敗しました。");
+    }
+    string_free(template_filename);
+    db_top_get_project_db_name(g_project_code, db_name);
+    fprintf(out, "-- name: %s\n", project_type);
+    pipe_to_file(".dump project_info", db_name, out);
+    pipe_to_file(".dump setting", db_name, out);
+    pipe_to_file(".dump setting_file", db_name, out);
+    pipe_to_file(".dump element_type", db_name, out);
+    pipe_to_file(".dump list_item", db_name, out);
+    pipe_to_file(".schema ticket", db_name, out);
+    pipe_to_file(".schema message", db_name, out);
+    pipe_to_file(".schema element_file", db_name, out);
+    pipe_to_file(".dump wiki", db_name, out);
+    fclose(out);
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

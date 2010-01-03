@@ -74,6 +74,7 @@ bool contains(char* const, const char*);
 void set_cookie(char*, char*);
 void clear_cookie(char*);
 void get_cookie_string(char*, char*);
+void set_timestamp_string(char*);
 void set_date_string(char*);
 char* get_ext(char*);
 void page_not_found();

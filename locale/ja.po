@@ -44,9 +44,8 @@ msgid "style settings"
 msgstr "スタイル設定"
 
 #: admin_project.c:112 admin_project.c:171 admin_project.c:1068
-#, fuzzy
 msgid "export settings"
-msgstr "スタイル設定"
+msgstr "エクスポート設定"
 
 #: admin_project.c:113 index_project.c:155 index_project.c:2564
 msgid "help"
@@ -77,9 +76,8 @@ msgid "this is stylesheet settings."
 msgstr "スタイルシートの設定です。"
 
 #: admin_project.c:171
-#, fuzzy
 msgid "this is export settings."
-msgstr "スタイルシートの設定です。"
+msgstr "エクスポートの設定です。"
 
 #: admin_project.c:174
 msgid "about mail notify features"

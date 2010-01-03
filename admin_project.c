@@ -9,6 +9,7 @@
 #include "alloc.h"
 #include "util.h"
 #include "wiki.h"
+#include "template.h"
 
 #define ADD_ITEM_COUNT 10
 
@@ -1085,34 +1086,14 @@ void export_action()
 }
 void export_submit_action()
 {
-    Project* project_a = project_new();
-    SettingFile* sf_a = setting_file_new();
-    Database* db_a;
-    char name[DEFAULT_LENGTH];
-    char upload_max_size_str[DEFAULT_LENGTH];
-    char buffer[DEFAULT_LENGTH];
+    char project_type_name[DEFAULT_LENGTH];
+    String* locale = string_new();
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
-    db_begin(db_a);
-    project_a = db_get_project(db_a, project_a);
-    cgiFormStringNoNewlines("project.name", name, DEFAULT_LENGTH);
-    string_set(project_a->name, name);
-    cgiFormStringNoNewlines("project.upload_max_size", upload_max_size_str, DEFAULT_LENGTH);
-    project_a->upload_max_size = atoi(upload_max_size_str);
-    db_update_project(db_a, project_a);
-    project_free(project_a);
+    cgiFormStringNoNewlines("export_sub_project_type_name", project_type_name, DEFAULT_LENGTH);
+    locale = db_top_get_locale(locale);
+    save_template(project_type_name, locale);
+    string_free(locale);
 
-    /* 画像の更新 */
-    cgiFormFileSize("project.file", &(sf_a->size));
-    d("image size %d.\n", sf_a->size);
-    if (sf_a->size > 0) {
-        d("try to save top image.\n");
-        fill_upload_content_setting_file(sf_a);
-        db_update_top_image(db_a, sf_a);
-    }
-    setting_file_free(sf_a);
-    db_commit(db_a);
-    db_finish(db_a);
     redirect("", _("updated."));
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
