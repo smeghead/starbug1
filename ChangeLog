@@ -1,40 +1,40 @@
-2010-01-04  smeghead  <smeghead@smeghead-laptop>
+2010-01-04  smeghead  <smeghead@users.sourceforge.jp>
 
     * SeleniumのテストもSand Boxに対してテストを行なうように修正した。
     * Q&A管理のテンプレートを追加した。
 
-2010-01-04  smeghead  <smeghead@smeghead-laptop>
+2010-01-04  smeghead  <smeghead@users.sourceforge.jp>
 
     * サブプロジェクトの項目設定情報をエクスポートする機能を作成した。
     * 初期に作成するサブプロジェクトの名称をSand Boxになるようにした。
 
-2010-01-01  smeghead  <smeghead@smeghead-laptop>
+2010-01-01  smeghead  <smeghead@users.sourceforge.jp>
 
     * WebUIからサブプロジェクトの項目設定情報をエクスポートする機能の作成中。
 
-2009-12-31  kato  <kato@katopc3>
+2009-12-31  smeghead  <smeghead@users.sourceforge.jp>
 
     * TODO用のテンプレートを追加した。
     * copyrightの年号を2010に変更した。
 
-2009-12-30  kato  <kato@katopc3>
+2009-12-30  smeghead  <smeghead@users.sourceforge.jp>
 
     * 新規プロジェクト追加時に、プロジェクトテンプレートを選択して追加できるよ
     うにする修正中。
 
-2009-12-29  smeghead  <smeghead@smeghead-laptop>
+2009-12-29  smeghead  <smeghead@users.sourceforge.jp>
 
     * 1.3.06リリース
 
-2009-12-29  smeghead  <smeghead@smeghead-laptop>
+2009-12-29  smeghead  <smeghead@users.sourceforge.jp>
 
     * sqlite3_finalizeを重複して実行してしまう場合があるバグを修正した。
 
-2009-12-27  smeghead  <smeghead@smeghead-laptop>
+2009-12-27  smeghead  <smeghead@users.sourceforge.jp>
 
     * 1.3.05リリース
 
-2009-12-27  smeghead  <smeghead@smeghead-laptop>
+2009-12-27  smeghead  <smeghead@users.sourceforge.jp>
 
     * チケット検索ページで、数値項目の合計を表示するようにした。
     * 数値項目の入力チェックを作成した。
@@ -42,16 +42,16 @@
     * 状態別チケット一覧にも合計の行を追加した。
     * リリースの準備
 
-2009-12-12  smeghead  <smeghead@smeghead-laptop>
+2009-12-12  smeghead  <smeghead@users.sourceforge.jp>
 
     * サブプロジェクトの管理ページでトップへのリンクがプロジェクト名になってい
     なかったのを修正した。
 
-2009-11-13  smeghead  <smeghead@smeghead-laptop>
+2009-11-13  smeghead  <smeghead@users.sourceforge.jp>
 
     * 1.3.04リリース
 
-2009-11-13  smeghead  <smeghead@smeghead-laptop>
+2009-11-13  smeghead  <smeghead@users.sourceforge.jp>
 
     * 簡易wikiでもurlがあったらリンクで表示するように修正した。
 
@@ -72,7 +72,7 @@
 
     * 複数行テキストの中に、http://かhttps://が存在したらリンクにするようにした。
 
-2009-10-23  smeghead  <smeghead@smeghead-laptop>
+2009-10-23  smeghead  <smeghead@users.sourceforge.jp>
 
     * 1.3.03リリース
 
@@ -104,7 +104,7 @@
 
     * 検索結果のRSS形式のダウンロードでメモリの開放忘れがあったのを修正した。
 
-2009-08-23  smeghead  <smeghead@smeghead-laptop>
+2009-08-23  smeghead  <smeghead@users.sourceforge.jp>
 
     * 1.3.02リリース
 
@@ -114,16 +114,16 @@
     * 複数サブプロジェクトの検索の検索結果をチケットの投稿日時の降順で表示するように修正した。
     * qiuさんに中国語のリソース翻訳の修正版を提供してもらいました。
 
-2009-08-06  smeghead  <smeghead@smeghead-laptop>
+2009-08-06  smeghead  <smeghead@users.sourceforge.jp>
 
     * mattnさんから、Windowsポーティングパッチを頂きました。ありがとうございま
     す。
 
-2009-07-25  smeghead  <smeghead@smeghead-laptop>
+2009-07-25  smeghead  <smeghead@users.sourceforge.jp>
 
     * 1.3.01リリース
 
-2009-07-25  smeghead  <smeghead@smeghead-laptop>
+2009-07-25  smeghead  <smeghead@users.sourceforge.jp>
 
     * 英語のリソースの翻訳を追加。
     * タイポの修正。
@@ -151,7 +151,7 @@
 
     * Makefileで、FreeBSDの場合、LFLAGSに-lintlを追加するように修正した。
 
-2009-07-16  smeghead  <smeghead@smeghead-laptop>
+2009-07-16  smeghead  <smeghead@users.sourceforge.jp>
 
     * 1.2.10-bataリリース
 
@@ -237,7 +237,7 @@
     ※2.db 以外にもサブプロジェクト用DBが存在している場合(3.db,
     4.dbなど)は、それぞれのDBに対して同じSQLを実行してください。
 
-2009-06-14  smeghead  <smeghead@smeghead-laptop>
+2009-06-14  smeghead  <smeghead@users.sourceforge.jp>
 
     * 管理ツール側でユーザ定義のスタイルシートを読み込めないバグを修正した。
     * 管理ツールで新しい項目の追加時に、初期に指定できる選択肢の項目数を5から
@@ -245,15 +245,15 @@
     * 管理ツールの項目の編集時に、javascriptで項目を動的に増やすことができるよ
     うにした。
 
-2009-06-13  smeghead  <smeghead@smeghead-laptop>
+2009-06-13  smeghead  <smeghead@users.sourceforge.jp>
 
     * 基本的なデータ構造に、simple_stringを使うように修正開始。
 
-2009-06-10  smeghead  <smeghead@smeghead-laptop>
+2009-06-10  smeghead  <smeghead@users.sourceforge.jp>
 
     * 日本語によるメール送信処理の作成中
 
-2009-05-31  smeghead  <smeghead@smeghead-laptop>
+2009-05-31  smeghead  <smeghead@users.sourceforge.jp>
 
     * リクエストされたURLを求める処理に問題があったのを修正した。環境変数の
     HTTPSを判定して、nullポインタを示していない場合、SSLとして判定するようにし
