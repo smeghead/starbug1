@@ -3,7 +3,7 @@ BEGIN TRANSACTION;
 COMMIT;
 BEGIN TRANSACTION;
 CREATE TABLE setting(  name text primary key,  value text );
-INSERT INTO "setting" VALUES('project_name','テストサンプル プロジェクト');
+INSERT INTO "setting" VALUES('project_name','Q&A管理');
 INSERT INTO "setting" VALUES('home_description','ホーム');
 INSERT INTO "setting" VALUES('home_url','');
 INSERT INTO "setting" VALUES('upload_max_size','512');

@@ -9,7 +9,7 @@
 #include "template.h"
 #include "alloc.h"
 
-#ifndef _WIN32
+#ifdef _WIN32
   #define CAT "type"
 #else
   #define CAT "cat"
@@ -104,9 +104,13 @@ void create_db_from_template(int project_id, char* project_type)
     Iterator* it;
     List* templates;
     String* locale = string_new();
+    d("1\n");
     locale = db_top_get_locale(locale);
-    string_appendf(db_path, "%s", project_id);
+    d("2 project_id:%d\n", project_id);
+    string_appendf(db_path, "db/%d.db", project_id);
+    d("3\n");
     list_alloc(templates, Template, template_new, template_free);
+    d("4\n");
     templates = get_templates(templates, locale);
     string_free(locale);
     d("project_type: [%s]\n", project_type);
@@ -115,8 +119,11 @@ void create_db_from_template(int project_id, char* project_type)
         d("template project_type: [%s]\n", string_rawstr(template->name));
         if (strncmp(project_type, string_rawstr(template->name), DEFAULT_LENGTH) == 0) {
             String* command = string_new();
-            string_appendf(command, "%s %s | sqlite3 %s", CAT, string_rawstr(template->path), project_id);
-            if (system(string_rawstr(command)) != 0) {
+            int ret;
+            string_appendf(command, "%s %s | sqlite3 %s", CAT, string_rawstr(template->path), string_rawstr(db_path));
+            d("command: %s\n", string_rawstr(command));
+            if ((ret = system(string_rawstr(command))) != 0) {
+                d("return code: %d\n", ret);
                 die("外部プログラムの実行に失敗しました。");
             }
             string_free(command);
@@ -135,17 +142,12 @@ void pipe_to_file(char* command_str, char* db_name, FILE* out)
         die("外部プログラム実行に失敗しました。");
     }
     while (1) {
-        char* ptr;
         char str[DEFAULT_LENGTH];
         fgets(str, DEFAULT_LENGTH, fp);
         if(feof(fp)){
             break;
         }
-        ptr = strchr(str, '\n');
-        if (ptr != NULL) {
-            *ptr = '\0';
-        }
-        fprintf(out, "%s\n", str);
+        fprintf(out, "%s", str);
     }
     pclose(fp);
 }

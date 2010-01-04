@@ -92,7 +92,6 @@ int admin_top_main() {
 void top_top_action()
 {
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
     List* project_infos_a;
     Iterator* it;
     char** multi;
@@ -101,7 +100,7 @@ void top_top_action()
     d("top_top_action\n");
     list_alloc(project_infos_a, ProjectInfo, project_info_new, project_info_free);
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     project_infos_a = db_top_get_all_project_infos(db_a, project_infos_a);
     project_a = db_get_project(db_a, project_a);
     d("top_top_action\n");
@@ -171,7 +170,7 @@ void top_top_action()
         }
         project_a = project_new();
         sprintf(db_name, "db/%d.db", p->id);
-        db_project_a = db_init(db_name);
+        db_project_a = db_init(string_rawstr(p->code));
         project_a = db_get_project(db_project_a, project_a);
         o(      "\t\t\t<tr>\n");
         o(      "\t\t\t\t<td>"); h(string_rawstr(project_a->name)); o("</td>\n");
@@ -236,9 +235,8 @@ void top_top_action()
 void top_update_project_info_submit_action()
 {
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     {
         char name[DEFAULT_LENGTH];
         char home_description[DEFAULT_LENGTH];
@@ -290,9 +288,8 @@ static bool validate_project_code(char* name)
 void top_update_project_submit_action()
 {
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     {
         List* project_infos_a;
         Iterator* it;
@@ -345,9 +342,8 @@ void top_update_project_submit_action()
 void top_add_project_submit_action()
 {
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     {
         char code[DEFAULT_LENGTH];
         char sort[DEFAULT_LENGTH];

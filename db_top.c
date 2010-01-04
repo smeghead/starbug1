@@ -106,7 +106,7 @@ int db_top_register_project_info(Database* db, ProjectInfo* project_info)
 }
 char* db_top_get_project_db_name(char* project_name, char* buffer)
 {
-    Database* top_db_a = db_init("db/1.db");
+    Database* top_db_a = db_init("top");
     ProjectInfo* project_info_a = project_info_new();
 
     d("project_name: %s\n", project_name);
@@ -263,7 +263,7 @@ ERROR_LABEL(db->handle)
 }
 String* db_top_get_top_project_name(String* project_name)
 {
-    Database* top_db_a = db_init("db/1.db");
+    Database* top_db_a = db_init("top");
     String* sql_a = string_new();
     sqlite3_stmt *stmt = NULL;
 
@@ -336,10 +336,9 @@ ERROR_LABEL(db->handle)
 String* db_top_get_locale(String* locale)
 {
     Project* top_project_a = project_new();
-    char buffer[DEFAULT_LENGTH];
     Database* db_a;
 
-    db_a = db_init(db_top_get_project_db_name("top", buffer));
+    db_a = db_init("top");
     top_project_a = db_get_project(db_a, top_project_a);
     db_finish(db_a);
     string_set(locale, string_rawstr(top_project_a->locale));

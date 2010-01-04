@@ -1,6 +1,12 @@
 2010-01-04  smeghead  <smeghead@smeghead-laptop>
 
+    * SeleniumのテストもSand Boxに対してテストを行なうように修正した。
+    * Q&A管理のテンプレートを追加した。
+
+2010-01-04  smeghead  <smeghead@smeghead-laptop>
+
     * サブプロジェクトの項目設定情報をエクスポートする機能を作成した。
+    * 初期に作成するサブプロジェクトの名称をSand Boxになるようにした。
 
 2010-01-01  smeghead  <smeghead@smeghead-laptop>
 

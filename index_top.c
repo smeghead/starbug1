@@ -91,14 +91,13 @@ int index_top_main() {
 void top_top_action()
 {
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
     List* project_infos_a;
     Iterator* it;
     Project* top_project_a = project_new();
 
     list_alloc(project_infos_a, ProjectInfo, project_info_new, project_info_free);
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     project_infos_a = db_top_get_all_project_infos(db_a, project_infos_a);
     top_project_a = db_get_project(db_a, top_project_a);
     top_output_header(_("top page"), top_project_a);
@@ -109,7 +108,6 @@ void top_top_action()
         ProjectInfo* p = it->element;
         Database* db_project_a;
         Project* project_a;
-        char db_name[DEFAULT_LENGTH];
         if (p->id == 1) {
             /* idが1のプロジェクトはトップなので、表示しない。 */
             continue;
@@ -118,8 +116,7 @@ void top_top_action()
             continue;
         }
         project_a = project_new();
-        sprintf(db_name, "db/%d.db", p->id);
-        db_project_a = db_init(db_name);
+        db_project_a = db_init(string_rawstr(p->code));
         project_a = db_get_project(db_project_a, project_a);
         o(      "\t\t\t\t<li><a href=\"%s/", cgiScriptName); u(string_rawstr(p->code)); o("\">"); h(string_rawstr(project_a->name)); o("</a></li>\n");
         project_free(project_a);
@@ -149,10 +146,9 @@ void top_top_action()
 void top_edit_top_action()
 {
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
     Project* project_a = project_new();
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     project_a = db_get_project(db_a, project_a);
     top_output_header(_("edit page"), project_a);
     project_free(project_a);
@@ -176,11 +172,10 @@ void top_edit_top_action()
 void top_edit_top_submit_action()
 {
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
     char* value_a = xalloc(sizeof(char) * VALUE_LENGTH);
 
     cgiFormString("edit_top", value_a, VALUE_LENGTH);
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     wiki_save(db_a, "top", value_a);
     db_finish(db_a);
     xfree(value_a);
@@ -190,7 +185,6 @@ void top_edit_top_submit_action()
 void top_search_action()
 {
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
     List* tickets_a;
     Iterator* it;
     char q[DEFAULT_LENGTH];
@@ -199,7 +193,7 @@ void top_search_action()
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
     list_alloc(tickets_a, Ticket, ticket_new, ticket_free);
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     tickets_a = db_top_search(db_a, q, tickets_a);
     top_project_a = db_get_project(db_a, top_project_a);
     top_output_header(_("top page"), top_project_a);

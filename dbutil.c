@@ -4,12 +4,12 @@
 #include "alloc.h"
 #include "util.h"
 #include "dbutil.h"
+#include "db_top.h"
 
-const char* db_name = "db/starbug1.db";
 sqlite3* db = NULL;
 
-void create_project_tables();
-void create_top_tables();
+void create_project_tables(Database*, char*);
+void create_top_tables(Database*);
 
 int exec_and_wait_4_done(sqlite3_stmt* stmt)
 {
@@ -32,10 +32,18 @@ static int fexist(const char *filename)
     fclose(fp); return 1;
 }
 
-Database* db_init(char* db_name)
+Database* db_init(char* sub_project_name)
 {
-    bool exists_db_file = (fexist(db_name) == 1);
+    char db_name[DEFAULT_LENGTH];
+    bool exists_db_file;
     Database* db;
+
+    if (strcmp(sub_project_name, "top") == 0) {
+        strcpy(db_name, "db/1.db");
+    } else {
+        db_top_get_project_db_name(sub_project_name, db_name);
+    }
+    exists_db_file = (fexist(db_name) == 1);
 
     db = xalloc(sizeof(Database));
     strcpy(db->name, db_name);
@@ -51,7 +59,7 @@ Database* db_init(char* db_name)
             create_top_tables(db);
         } else {
             /* 各プロジェクトの情報を格納するデータベース */
-            create_project_tables(db);
+            create_project_tables(db, sub_project_name);
         }
     }
     return db;
@@ -126,7 +134,7 @@ void create_top_tables(Database* db)
     exec_query(
             db,
             "insert into project_info(id, name, deleted, sort) "
-            "values (2, 'bts', 0, 1);", 
+            "values (2, 'Sand Box', 0, 1);", 
             COLUMN_TYPE_END);
     exec_query(
             db,
@@ -143,7 +151,7 @@ void create_top_tables(Database* db)
             COLUMN_TYPE_END);
     db_commit(db);
 }
-void create_project_tables(Database* db)
+void create_project_tables(Database* db, char* sub_project_name)
 {
     String* text_content = string_new();
     db_begin(db);
@@ -157,7 +165,7 @@ void create_project_tables(Database* db)
             db,
             "insert into setting(name, value)"
             "values ('project_name', ?);",
-            COLUMN_TYPE_TEXT, _("bts"),
+            COLUMN_TYPE_TEXT, sub_project_name,
             COLUMN_TYPE_END);
     exec_query(
             db,

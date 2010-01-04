@@ -180,7 +180,7 @@ bool is_enabled_project(char* project_name)
     Database* db_a;
     ProjectInfo* project_info_a = project_info_new();
     int id = 0;
-    db_a = db_init("db/1.db");
+    db_a = db_init("top");
     project_info_a = db_top_get_project_info(db_a, project_info_a, project_name);
     id = project_info_a->id;
     project_info_free(project_info_a);
@@ -442,9 +442,8 @@ void list_action()
     Iterator* it;
     char** multi;
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("ticket list by status"), NULL, NAVI_LIST);
     /* メッセージの取得 */
@@ -735,7 +734,6 @@ void search_action()
     bool condition_will_save, condition_restore;
     char search_button[DEFAULT_LENGTH];
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
     char cookie_key_save_condition[DEFAULT_LENGTH];
 
     cgiFormStringNoNewlines("id", id, NUM_LENGTH);
@@ -755,7 +753,7 @@ void search_action()
         ? true : false;
     condition_restore = (strlen(search_button) == 0 && strcmp(cookie_save_condition, "1") == 0)
         ? true : false;
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_element_types_4_list(db_a, NULL, element_types_a);
     /* 検索 */
@@ -1031,9 +1029,8 @@ void report_csv_download_action()
     Project* project_a = project_new();
     char q[DEFAULT_LENGTH];
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     project_a = db_get_project(db_a, project_a);
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
 
@@ -1071,9 +1068,8 @@ void report_html_download_action()
     Project* project_a = project_new();
     char q[DEFAULT_LENGTH];
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     project_a = db_get_project(db_a, project_a);
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
 
@@ -1117,7 +1113,6 @@ void report_rss_download_action()
     Project* project_a = project_new();
     char q[DEFAULT_LENGTH];
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
     Iterator* it;
     String* base_url_a = string_new();
     String* query_string_a = string_new();
@@ -1125,7 +1120,7 @@ void report_rss_download_action()
 
     base_url_a = get_base_url(base_url_a);
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     project_a = db_get_project(db_a, project_a);
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
 
@@ -1482,11 +1477,10 @@ void register_action()
     Project* project_a = project_new();
     List* states_a;
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
     char sender[DEFAULT_LENGTH];
     get_cookie_string(COOKIE_SENDER, sender);
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("register ticket"), "register.js", NAVI_REGISTER);
     output_calendar_js();
@@ -1572,7 +1566,6 @@ void ticket_action()
     Project* project_a = project_new();
     Database* db_a;
     char sender[DEFAULT_LENGTH];
-    char buffer[DEFAULT_LENGTH];
     get_cookie_string(COOKIE_SENDER, sender);
     List* states_a;
 
@@ -1582,7 +1575,7 @@ void ticket_action()
         redirect("/list", _("not exists id."));
             return;
     }
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     list_alloc(elements_a, Element, element_new, element_free);
     elements_a = db_get_last_elements(db_a, iid, elements_a);
     if (elements_a->size == 0) {
@@ -1833,13 +1826,12 @@ void register_submit_action()
     char* complete_message = NULL;
     HOOK* hook = NULL;
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
 
     cgiFormStringNoNewlines("save2cookie", save2cookie, 2);
     if (mode == MODE_INVALID)
         die("requested invalid mode.");
     ticket_a = message_new();
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     project_a = db_get_project(db_a, project_a);
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
@@ -1985,11 +1977,10 @@ void register_at_once_action()
     Project* project_a = project_new();
     List* states_a;
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
     char sender[DEFAULT_LENGTH];
     get_cookie_string(COOKIE_SENDER, sender);
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("register tickets at once"), "register_at_once.js", NAVI_REGISTER_AT_ONCE);
     output_calendar_js();
@@ -2047,12 +2038,11 @@ void register_at_once_confirm_action()
     List* states_a;
     Csv* csv_a;
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
     char sender[DEFAULT_LENGTH];
     char* content_a = xalloc(sizeof(char) * VALUE_LENGTH);
     get_cookie_string(COOKIE_SENDER, sender);
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     cgiFormString("csvdata", content_a, VALUE_LENGTH);
     csv_a = csv_new(content_a);
     xfree(content_a);
@@ -2178,7 +2168,6 @@ void register_at_once_submit_action()
     List* element_types_a; 
     Iterator* it_et;
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
 
     cgiFormStringNoNewlines("save2cookie", save2cookie, 2);
     sprintf(senderfield, "field%d", ELEM_ID_SENDER);
@@ -2208,7 +2197,7 @@ void register_at_once_submit_action()
         }
         list_add(field_ids_a, field_id);
     }
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     db_begin(db_a);
     while (1) {
         Message* ticket_a = message_new();
@@ -2306,9 +2295,8 @@ void top_action()
     List* states_a;
     Iterator* it;
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("project top"), NULL, NAVI_TOP);
     list_alloc(states_a, State, state_new, state_free);
@@ -2389,13 +2377,12 @@ void rss_action()
     Iterator* it;
     Project* project_a = project_new();
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
     List* element_types_a;
     String* base_url_a = string_new();
 
     base_url_a = get_base_url(base_url_a);
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     project_a = db_get_project(db_a, project_a);
     list_alloc(tickets_a, Message, message_new, message_free);
     tickets_a = db_get_newest_information(db_a, 10, tickets_a);
@@ -2478,9 +2465,8 @@ void statistics_action()
     Iterator* it;
     List* states_a;
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("statictics"), "graph.js", NAVI_STATISTICS);
     output_graph_js();
@@ -2557,9 +2543,8 @@ void help_action()
 {
     Project* project_a = project_new();
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("help"), NULL, NAVI_HELP);
     o(      "<h2>");h(string_rawstr(project_a->name));o("</h2>\n"
@@ -2574,9 +2559,8 @@ void edit_top_action()
 {
     Project* project_a = project_new();
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("edit top page"), "edit_top.js", NAVI_OTHER);
     project_free(project_a);
@@ -2604,10 +2588,9 @@ void edit_top_submit_action()
 {
     char* value_a = xalloc(sizeof(char) * VALUE_LENGTH);
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
 
     cgiFormString("edit_top", value_a, VALUE_LENGTH);
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     wiki_save(db_a, "top", value_a);
     db_finish(db_a);
     xfree(value_a);
@@ -2620,12 +2603,11 @@ void download_action()
     char element_id_str[DEFAULT_LENGTH];
     int element_file_id;
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
 
     strcpy(element_id_str, g_path_info);
     element_file_id = atoi(element_id_str);
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     file_a = db_get_element_file(db_a, element_file_id, file_a);
     if (!file_a) goto error;
     o("Content-Type: %s\r\n", string_rawstr(file_a->mime_type));
@@ -2647,12 +2629,11 @@ void setting_file_action()
     SettingFile* file_a = setting_file_new();
     char name[DEFAULT_LENGTH];
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
 
     d("start\n");
     strcpy(name, g_path_info);
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     file_a = db_get_setting_file(db_a, name, file_a);
     if (!file_a) goto error;
     o("Content-Type: %s\r\n", string_rawstr(file_a->mime_type));

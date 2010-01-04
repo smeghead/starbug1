@@ -150,9 +150,8 @@ void top_action()
     Project* project_a = project_new();
     char message[DEFAULT_LENGTH];
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("menu"), NULL, NAVI_MENU);
 
@@ -191,9 +190,8 @@ void project_action()
 {
     Project* project_a = project_new();
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("sub project settings"), "management.js", NAVI_PROJECT);
 
@@ -260,9 +258,8 @@ void project_submit_action()
     Database* db_a;
     char name[DEFAULT_LENGTH];
     char upload_max_size_str[DEFAULT_LENGTH];
-    char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     db_begin(db_a);
     project_a = db_get_project(db_a, project_a);
     cgiFormStringNoNewlines("project.name", name, DEFAULT_LENGTH);
@@ -294,9 +291,8 @@ void items_action()
     List* element_types_a;
     Iterator* it;
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("columns settings"), "management.js", NAVI_ITEM);
 
@@ -555,8 +551,7 @@ void items_action()
 void items_submit_action()
 {
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     db_begin(db_a);
     update_elements();
     db_commit(db_a);
@@ -686,9 +681,8 @@ void new_item_action()
     Project* project_a = project_new();
     int i;
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("add new column"), "new_item.js", NAVI_OTHER);
 
@@ -840,9 +834,8 @@ void new_item_submit_action()
     char value[DEFAULT_LENGTH];
     int i, e_type_id;
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     db_begin(db_a);
 
     cgiFormStringNoNewlines("field.name", value, DEFAULT_LENGTH);
@@ -903,13 +896,12 @@ void delete_item_action()
     Project* project_a = project_new();
     ElementType* et_a = element_type_new();
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
 
     d("g_path_info: %s\n", g_path_info);
     e_type_id = g_path_info;
     iid = atoi(e_type_id);
     d("iid: %d\n", iid);
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("column delete"), "delete_item.js", NAVI_OTHER);
 
@@ -939,7 +931,6 @@ void delete_item_submit_action()
     char* e_type_id;
     int iid;
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
 
     /* postの時以外は処理しない。 */
     if (strcmp(cgiRequestMethod, "POST") != 0) {
@@ -948,7 +939,7 @@ void delete_item_submit_action()
     d("g_path_info: %s\n", g_path_info);
     e_type_id = g_path_info;
     iid = atoi(e_type_id);
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     db_begin(db_a);
 
     db_delete_element_type(db_a, iid);
@@ -960,9 +951,8 @@ void delete_item_submit_action()
 void style_action()
 {
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
     Project* project_a = project_new();
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("style settings"), "style.js", NAVI_STYLE);
     o(      "<h2>%s %s</h2>", string_rawstr(project_a->name), _("management tool"));
@@ -1022,7 +1012,6 @@ void style_submit_action()
 {
     SettingFile* sf_a = setting_file_new();
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
     string_set(sf_a->name, "user.css");
     string_set(sf_a->file_name, "");
     sf_a->content = xalloc(sizeof(char) * VALUE_LENGTH);
@@ -1030,7 +1019,7 @@ void style_submit_action()
     cgiFormString("edit_css", sf_a->content, VALUE_LENGTH);
     sf_a->size = strlen(sf_a->content);
     string_set(sf_a->mime_type, "text/css");
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     db_setting_file_save(db_a, sf_a);
     db_finish(db_a);
 
@@ -1041,8 +1030,7 @@ void admin_help_action()
 {
     Project* project_a = project_new();
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, "ヘルプ", NULL, NAVI_ADMIN_HELP);
     o(      "<h2>");h(string_rawstr(project_a->name));o("</h2>\n"
@@ -1057,9 +1045,8 @@ void export_action()
 {
     Project* project_a = project_new();
     Database* db_a;
-    char buffer[DEFAULT_LENGTH];
 
-    db_a = db_init(db_top_get_project_db_name(g_project_code, buffer));
+    db_a = db_init(g_project_code);
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("sub project settings"), "management.js", NAVI_PROJECT);
 
