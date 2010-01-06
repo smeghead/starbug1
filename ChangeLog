@@ -2,6 +2,13 @@
 
     * サブプロジェクトのsqlite3の実行時のパスの区切り文字をOSによって使いわけ
     るように修正した。Windowsでも動作させるため。
+    * 削除したサブプロジェクトが存在する場合、トップのプロジェクト管理ページを
+    開いた時にエラーが発生するのを修正した。
+      http://sourceforge.jp/ticket/browse.php?group_id=3135&tid=20147
+      http://groups.google.com/group/starbug1-users/browse_thread/thread/3ca6be6005ddf22e
+    db_initの引数を変更した際に、削除フラグが立っているプロジェクトの情報を取
+    得できないようになっていたため、削除されたサブプロジェクトが存在すると、
+    エラーが発生していた。
 
 2010-01-04  smeghead  <smeghead@users.sourceforge.jp>
 

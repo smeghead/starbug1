@@ -168,10 +168,14 @@ void top_top_action()
             /* idが1のプロジェクトはトップなので、表示しない。 */
             continue;
         }
+        d("1 db id: %d\n", p->id);
         project_a = project_new();
         sprintf(db_name, "db/%d.db", p->id);
+        d("2 db code: %s\n", string_rawstr(p->code));
         db_project_a = db_init(string_rawstr(p->code));
+        d("3 db id: %d\n", p->id);
         project_a = db_get_project(db_project_a, project_a);
+        d("4 db id: %d\n", p->id);
         o(      "\t\t\t<tr>\n");
         o(      "\t\t\t\t<td>"); h(string_rawstr(project_a->name)); o("</td>\n");
         o(      "\t\t\t\t<td>"); h(db_name); o("</td>\n");

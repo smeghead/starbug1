@@ -10,7 +10,7 @@ int db_top_register_project_info(Database*, ProjectInfo*);
 void db_top_update_project_infos(Database*, List*);
 void db_top_delete_project_info(Database*, ProjectInfo*);
 char* db_top_get_project_db_name(char*, char*);
-ProjectInfo* db_top_get_project_info(Database*, ProjectInfo*, char*);
+ProjectInfo* db_top_get_project_info(Database*, ProjectInfo*, char*, bool);
 void db_top_update_project(Database*, Project*);
 List* db_top_search(Database*, char*, List*);
 String* db_top_get_project_name(Database*, Ticket*, String*);

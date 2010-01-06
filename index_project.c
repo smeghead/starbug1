@@ -181,7 +181,7 @@ bool is_enabled_project(char* project_name)
     ProjectInfo* project_info_a = project_info_new();
     int id = 0;
     db_a = db_init("top");
-    project_info_a = db_top_get_project_info(db_a, project_info_a, project_name);
+    project_info_a = db_top_get_project_info(db_a, project_info_a, project_name, false);
     id = project_info_a->id;
     project_info_free(project_info_a);
     db_finish(db_a);

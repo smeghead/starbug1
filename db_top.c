@@ -42,13 +42,15 @@ List* db_top_get_all_project_infos(Database* db, List* project_infos)
 
 ERROR_LABEL(db->handle)
 }
-ProjectInfo* db_top_get_project_info(Database* db, ProjectInfo* project_info, char* project_name)
+ProjectInfo* db_top_get_project_info(Database* db, ProjectInfo* project_info, char* project_name, bool all)
 {
-    const char *sql;
+    String* sql = string_new();
     sqlite3_stmt *stmt = NULL;
 
-    sql = "select id, name, sort, deleted from project_info where deleted = 0 and name = ?";
-    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    string_appendf(sql,
+            "select id, name, sort, deleted from project_info where name = ? %s",
+            all ? "" : "and deleted = 0");
+    if (sqlite3_prepare(db->handle, string_rawstr(sql), string_len(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     sqlite3_bind_text(stmt, 1, project_name, strlen(project_name), NULL);
 
@@ -110,7 +112,7 @@ char* db_top_get_project_db_name(char* project_name, char* buffer)
     ProjectInfo* project_info_a = project_info_new();
 
     d("project_name: %s\n", project_name);
-    project_info_a = db_top_get_project_info(top_db_a, project_info_a, project_name);
+    project_info_a = db_top_get_project_info(top_db_a, project_info_a, project_name, true);
     if (!project_info_a->id) {
         die("ERROR: no such project found.");
     }
