@@ -52,12 +52,12 @@ static char* trim(char* src)
 }
 List* get_templates(List* templates, String* locale)
 {
-    char template_dir[DEFAULT_LENGTH] = "template/";
+    char template_dir[DEFAULT_LENGTH];
     DIR* dir;
     struct dirent *dp;
     struct stat fi;
 
-    strcat(template_dir, string_rawstr(locale));
+    sprintf(template_dir, "template%s%s", PATH_SEPERATOR, string_rawstr(locale));
     if ((dir = opendir(template_dir)) == NULL) {
         return templates;
     }
@@ -65,7 +65,7 @@ List* get_templates(List* templates, String* locale)
         char template_filename[DEFAULT_LENGTH];
         char filename[DEFAULT_LENGTH];
         strcpy(filename, dp->d_name);
-        sprintf(template_filename, "%s/%s", template_dir, filename);
+        sprintf(template_filename, "%s%s%s", template_dir, PATH_SEPERATOR, filename);
         stat(template_filename, &fi);
         if (!S_ISDIR(fi.st_mode)) {  /*ファイルの場合 */
             /* テンプレート情報の取得 */
@@ -104,13 +104,9 @@ void create_db_from_template(int project_id, char* project_type)
     Iterator* it;
     List* templates;
     String* locale = string_new();
-    d("1\n");
     locale = db_top_get_locale(locale);
-    d("2 project_id:%d\n", project_id);
     string_appendf(db_path, "db/%d.db", project_id);
-    d("3\n");
     list_alloc(templates, Template, template_new, template_free);
-    d("4\n");
     templates = get_templates(templates, locale);
     string_free(locale);
     d("project_type: [%s]\n", project_type);

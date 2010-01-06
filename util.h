@@ -10,6 +10,12 @@
 
 #define _(s) gettext(s)
 
+#ifdef _WIN32
+  #define PATH_SEPERATOR "\\"
+#else
+  #define PATH_SEPERATOR "/"
+#endif
+
 #define REG_ACTION(action) register_action_actions(#action, action ## _action)
 #define o(...) fprintf(cgiOut, __VA_ARGS__)
 #ifdef DEBUG

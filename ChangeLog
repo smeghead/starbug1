@@ -1,3 +1,8 @@
+2010-01-06  smeghead  <smeghead@users.sourceforge.jp>
+
+    * サブプロジェクトのsqlite3の実行時のパスの区切り文字をOSによって使いわけ
+    るように修正した。Windowsでも動作させるため。
+
 2010-01-04  smeghead  <smeghead@users.sourceforge.jp>
 
     * SeleniumのテストもSand Boxに対してテストを行なうように修正した。
