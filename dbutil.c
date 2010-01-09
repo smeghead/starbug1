@@ -153,7 +153,7 @@ void create_top_tables(Database* db)
 }
 void create_project_tables(Database* db, char* sub_project_name)
 {
-    String* text_content = string_new();
+    String* text_content_a = string_new();
     db_begin(db);
     exec_query(
             db,
@@ -190,14 +190,15 @@ void create_project_tables(Database* db, char* sub_project_name)
             " mime_type text, "
             " content blob "
             ");", COLUMN_TYPE_END);
-    string_set(text_content, _("[style sheet default value]"));
+    string_set(text_content_a, _("[style sheet default value]"));
     exec_query(
             db,
             "insert into setting_file(name, file_name, size, mime_type, content)"
             "values ('user.css', 'user.css', ?, 'text/css', ?);",
-            COLUMN_TYPE_INT, string_len(text_content),
-            COLUMN_TYPE_TEXT, string_rawstr(text_content),
+            COLUMN_TYPE_INT, string_len(text_content_a),
+            COLUMN_TYPE_TEXT, string_rawstr(text_content_a),
         COLUMN_TYPE_END);
+    string_free(text_content_a);
     exec_query(
             db,
             "insert into setting_file "

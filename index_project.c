@@ -101,10 +101,10 @@ void register_actions()
 
 void output_header(Project* project, char* title, char* script_name, const NaviType navi)
 {
-    String* top_project_name = string_new();
+    String* top_project_name_a = string_new();
     String* base_url_a = string_new();
     base_url_a = get_base_url(base_url_a);
-    top_project_name = db_top_get_top_project_name(top_project_name);
+    top_project_name_a = db_top_get_top_project_name(top_project_name_a);
     o("Pragma: no-cache\r\n");
     o("Cache-Control: no-cache\t\n");
     cgiHeaderContentType("text/html; charset=utf-8;");
@@ -131,8 +131,8 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
             "<h1 id=\"toptitle\" title=\"%s\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n", _("starbug1"), cgiScriptName, g_project_code_4_url);
     o("<div id='pankuzu'>\n"
       "<ul>\n");
-    o("\t<li><a href='%s/top/' title=\"%s\">", cgiScriptName, _("display sub projects list at top page.")); h(string_rawstr(top_project_name)); o("</a> &gt; </li>\n");
-    string_free(top_project_name);
+    o("\t<li><a href='%s/top/' title=\"%s\">", cgiScriptName, _("display sub projects list at top page.")); h(string_rawstr(top_project_name_a)); o("</a> &gt; </li>\n");
+    string_free(top_project_name_a);
     o("\t<li><a href='%s/../index.%s/%s'>", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url); h(string_rawstr(project->name)); o("</a></li>\n"); 
     o("</ul>\n"
       "<br clear='all' />\n"

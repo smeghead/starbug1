@@ -100,29 +100,30 @@ List* get_templates(List* templates, String* locale)
 
 void create_db_from_template(int project_id, char* project_type)
 {
-    String* db_path = string_new();
+    String* db_path_a = string_new();
     Iterator* it;
     List* templates;
-    String* locale = string_new();
-    locale = db_top_get_locale(locale);
-    string_appendf(db_path, "db/%d.db", project_id);
+    String* locale_a = string_new();
+    locale_a = db_top_get_locale(locale_a);
+    string_appendf(db_path_a, "db/%d.db", project_id);
     list_alloc(templates, Template, template_new, template_free);
-    templates = get_templates(templates, locale);
-    string_free(locale);
+    templates = get_templates(templates, locale_a);
+    string_free(locale_a);
     d("project_type: [%s]\n", project_type);
     foreach (it, templates) {
         Template* template = it->element;
         d("template project_type: [%s]\n", string_rawstr(template->name));
         if (strncmp(project_type, string_rawstr(template->name), DEFAULT_LENGTH) == 0) {
-            String* command = string_new();
+            String* command_a = string_new();
             int ret;
-            string_appendf(command, "%s %s | sqlite3 %s", CAT, string_rawstr(template->path), string_rawstr(db_path));
-            d("command: %s\n", string_rawstr(command));
-            if ((ret = system(string_rawstr(command))) != 0) {
+            string_appendf(command_a, "%s %s | sqlite3 %s", CAT, string_rawstr(template->path), string_rawstr(db_path_a));
+            string_free(db_path_a);
+            d("command_a: %s\n", string_rawstr(command_a));
+            if ((ret = system(string_rawstr(command_a))) != 0) {
                 d("return code: %d\n", ret);
                 die("外部プログラムの実行に失敗しました。");
             }
-            string_free(command);
+            string_free(command_a);
             return;
         }
     }
@@ -131,12 +132,13 @@ void create_db_from_template(int project_id, char* project_type)
 void pipe_to_file(char* command_str, char* db_name, FILE* out)
 {
     FILE* fp;
-    String* command = string_new();
-    string_appendf(command, "echo '%s' | sqlite3 %s", command_str, db_name);
+    String* command_a = string_new();
+    string_appendf(command_a, "echo '%s' | sqlite3 %s", command_str, db_name);
 
-    if ((fp = popen(string_rawstr(command), "r")) == NULL) {
+    if ((fp = popen(string_rawstr(command_a), "r")) == NULL) {
         die("外部プログラム実行に失敗しました。");
     }
+    string_free(command_a);
     while (1) {
         char str[DEFAULT_LENGTH];
         fgets(str, DEFAULT_LENGTH, fp);
@@ -149,7 +151,7 @@ void pipe_to_file(char* command_str, char* db_name, FILE* out)
 }
 void save_template(char* project_type, String* locale)
 {
-    String* template_filename = string_new();
+    String* template_filename_a = string_new();
     FILE* out;
     char timestamp[DEFAULT_LENGTH];
     char db_name[DEFAULT_LENGTH];
@@ -157,11 +159,11 @@ void save_template(char* project_type, String* locale)
     strcat(template_dir, string_rawstr(locale));
     set_timestamp_string(timestamp);
     /* テンプレートファイル名 */
-    string_appendf(template_filename, "%s/%s.template", template_dir, timestamp);
-    if (!(out = fopen(string_rawstr(template_filename), "w"))) {
+    string_appendf(template_filename_a, "%s/%s.template", template_dir, timestamp);
+    if (!(out = fopen(string_rawstr(template_filename_a), "w"))) {
         die("テンプレートファイルのオープンに失敗しました。");
     }
-    string_free(template_filename);
+    string_free(template_filename_a);
     db_top_get_project_db_name(g_project_code, db_name);
     fprintf(out, "-- name: %s\n", project_type);
     pipe_to_file(".dump project_info", db_name, out);

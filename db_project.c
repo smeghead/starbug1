@@ -515,6 +515,7 @@ static void set_tickets_number_sum(Database* db, List* conditions, Condition* so
             }
         }
     }
+    list_free(element_types_a);
     string_free(s_a);
     sqlite3_finalize(stmt);
     return;

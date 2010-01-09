@@ -44,17 +44,19 @@ ERROR_LABEL(db->handle)
 }
 ProjectInfo* db_top_get_project_info(Database* db, ProjectInfo* project_info, char* project_name, bool all)
 {
-    String* sql = string_new();
+    String* sql_a = string_new();
     sqlite3_stmt *stmt = NULL;
 
-    string_appendf(sql,
+    string_appendf(sql_a,
             "select id, name, sort, deleted from project_info where name = ? %s",
             all ? "" : "and deleted = 0");
-    if (sqlite3_prepare(db->handle, string_rawstr(sql), string_len(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    if (sqlite3_prepare(db->handle, string_rawstr(sql_a), string_len(sql_a), &stmt, NULL) == SQLITE_ERROR) goto error;
+    string_free(sql_a);
     sqlite3_reset(stmt);
     sqlite3_bind_text(stmt, 1, project_name, strlen(project_name), NULL);
 
     while (SQLITE_ROW == sqlite3_step(stmt)) {
+    d("5\n");
         project_info->id = sqlite3_column_int(stmt, 0);
         string_set(project_info->code, (char*)sqlite3_column_text(stmt, 1));
         project_info->sort = sqlite3_column_int(stmt, 2);
@@ -350,9 +352,9 @@ String* db_top_get_locale(String* locale)
 }
 void db_top_set_locale()
 {
-    String* locale = string_new();
-    locale = db_top_get_locale(locale);
-    set_locale(string_rawstr(locale));
-    string_free(locale);
+    String* locale_a = string_new();
+    locale_a = db_top_get_locale(locale_a);
+    set_locale(string_rawstr(locale_a));
+    string_free(locale_a);
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
