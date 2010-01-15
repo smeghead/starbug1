@@ -127,9 +127,9 @@ static char* build_header(char* buf, HookMessage* message)
         "Content-Transfer-Encoding: base64\r\n"
         "\r\n";
     d("subject: %s\n", message->subject);
-    subject_org_a = xalloc(sizeof(char) * (1024 + strlen(message->subject)) * 2); /* base64での増加分を考慮 */
-    subject_a = xalloc(sizeof(char) * (1024 + strlen(message->subject)) * 2); /* base64での増加分を考慮 */
-    sprintf(subject_org_a, "[%s:%d]Starbug1 notify. ", message->project_id, message->id);
+    subject_org_a = xalloc(sizeof(char) * (1024 + strlen(message->status) + strlen(message->subject)) * 2); /* base64での増加分を考慮 */
+    subject_a = xalloc(sizeof(char) * (1024 + strlen(message->status) + strlen(message->subject)) * 2); /* base64での増加分を考慮 */
+    sprintf(subject_org_a, "[%s:%d]Starbug1 notify. {%s} ", message->project_id, message->id, message->status);
     strcat(subject_org_a, message->subject);
     base64_enc((unsigned char*)subject_org_a, (unsigned char*)subject_a);
     xfree(subject_org_a);

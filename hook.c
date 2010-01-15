@@ -102,6 +102,7 @@ static HookMessage* create_hook_project(Project* project, Message* message, List
     string_appendf(url_a, "/%s/ticket/%d", g_project_code, message->id);
     strncpy(hook_message->url, string_rawstr(url_a), DEFAULT_LENGTH - 1);
     string_free(url_a);
+    strncpy(hook_message->status, get_element_value_by_id(elements, ELEM_ID_STATUS), DEFAULT_LENGTH - 1);
     strncpy(hook_message->subject, get_element_value_by_id(elements, ELEM_ID_TITLE), DEFAULT_LENGTH - 1);
     d("create_hook_project 2\n");
     hook_message->elements_count = elements->size;

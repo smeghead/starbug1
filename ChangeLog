@@ -1,3 +1,7 @@
+2010-01-15  smeghead  <smeghead@users.sourceforge.jp>
+
+    * メール送信モジュールで、メールの件名に状態を含めるように修正した。
+
 2010-01-10  smeghead  <smeghead@users.sourceforge.jp>
 
     * メモリリークしていた箇所を修正した。
