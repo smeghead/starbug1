@@ -133,7 +133,19 @@ void pipe_to_file(char* command_str, char* db_name, FILE* out)
 {
     FILE* fp;
     String* command_a = string_new();
+#ifdef _WIN32
+    /* windowsの場合は、db_nameのパス区切り文字を変更する。 */
+    char* p = db_name;
+    while (*p) {
+        if (*p == '/')
+            *p = '\\';
+        p++;
+    }
+    /* Windowsではechoの引数をクオートしない。 */
+    string_appendf(command_a, "echo %s | cmd.exe /c sqlite3 %s", db_name);
+#else
     string_appendf(command_a, "echo '%s' | sqlite3 %s", command_str, db_name);
+#endif
 
     if ((fp = popen(string_rawstr(command_a), "r")) == NULL) {
         die("外部プログラム実行に失敗しました。");
@@ -155,11 +167,11 @@ void save_template(char* project_type, String* locale)
     FILE* out;
     char timestamp[DEFAULT_LENGTH];
     char db_name[DEFAULT_LENGTH];
-    char template_dir[DEFAULT_LENGTH] = "template/";
-    strcat(template_dir, string_rawstr(locale));
+    char template_dir[DEFAULT_LENGTH];
+    sprintf(template_dir, "template%s%s", PATH_SEPERATOR, string_rawstr(locale));
     set_timestamp_string(timestamp);
     /* テンプレートファイル名 */
-    string_appendf(template_filename_a, "%s/%s.template", template_dir, timestamp);
+    string_appendf(template_filename_a, "%s%s%s.template", template_dir, PATH_SEPERATOR, timestamp);
     if (!(out = fopen(string_rawstr(template_filename_a), "w"))) {
         die("テンプレートファイルのオープンに失敗しました。");
     }
