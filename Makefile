@@ -83,7 +83,7 @@ clean:
 webapp: default
 	@echo "Creating webapp..."
 	mkdir -p dist/starbug1
-	rsync -a --exclude=*.po --exclude=CVS js css img script locale template *.html *.cgi COPYING_cgic dist/starbug1/
+	rsync -a --exclude=*.po --exclude=CVS js css img script locale template *.html *.cgi COPYING_cgic favicon.ico dist/starbug1/
 	cp .htaccess dist/starbug1/dot.htaccess
 	find dist/starbug1 -name '*.cgi' -exec chmod +x {} \;
 	find dist/starbug1 -name '*.pl' -exec chmod +x {} \;
@@ -93,7 +93,7 @@ webapp: default
 webappwin32: default
 	@echo "Creating webapp win32..."
 	mkdir -p dist/starbug1-${VERSION}-win32-bin/starbug1
-	cp -r js css img script locale *.html *.cgi COPYING_cgic deps/*.dll dist/starbug1-${VERSION}-win32-bin/starbug1/
+	cp -r js css img script locale *.html *.cgi COPYING_cgic deps/*.dll favicon.ico dist/starbug1-${VERSION}-win32-bin/starbug1/
 	cp .htaccess dist/starbug1-${VERSION}-win32-bin/starbug1/.htaccess
 	cp README INSTALL dist/starbug1-${VERSION}-win32-bin/
 	@echo "Creating webapp win32... done."

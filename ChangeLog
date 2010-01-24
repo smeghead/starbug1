@@ -1,3 +1,7 @@
+2010-01-25  smeghead  <smeghead@users.sourceforge.jp>
+
+    * Makefileでfaviconを処理するように修正した。
+
 2010-01-24  smeghead  <smeghead@users.sourceforge.jp>
 
     * faviconを追加した。
