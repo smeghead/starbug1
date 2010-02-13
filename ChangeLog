@@ -1,5 +1,9 @@
 2010-02-13  smeghead  <smeghead@users.sourceforge.jp>
 
+    * 1.3.08-win32リリース
+
+2010-02-13  smeghead  <smeghead@users.sourceforge.jp>
+
     * Makefileのwin32用のwebappwin32でテンプレートディレクトリをコピーするよう
     にした。
     * Windows用のテンプレートの出力方法を修正した。
