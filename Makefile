@@ -93,7 +93,7 @@ webapp: default
 webappwin32: default
 	@echo "Creating webapp win32..."
 	mkdir -p dist/starbug1-${VERSION}-win32-bin/starbug1
-	cp -r js css img script locale *.html *.cgi COPYING_cgic deps/*.dll favicon.ico dist/starbug1-${VERSION}-win32-bin/starbug1/
+	cp -r js css img script locale template *.html *.cgi COPYING_cgic deps/*.dll favicon.ico dist/starbug1-${VERSION}-win32-bin/starbug1/
 	cp .htaccess dist/starbug1-${VERSION}-win32-bin/starbug1/.htaccess
 	cp README INSTALL dist/starbug1-${VERSION}-win32-bin/
 	@echo "Creating webapp win32... done."

@@ -142,7 +142,7 @@ void pipe_to_file(char* command_str, char* db_name, FILE* out)
         p++;
     }
     /* Windowsではechoの引数をクオートしない。 */
-    string_appendf(command_a, "echo %s | cmd.exe /c sqlite3 %s", db_name);
+    string_appendf(command_a, "echo %s | cmd.exe /c sqlite3 %s", command_str, db_name);
 #else
     string_appendf(command_a, "echo '%s' | sqlite3 %s", command_str, db_name);
 #endif

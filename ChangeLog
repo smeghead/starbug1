@@ -1,3 +1,9 @@
+2010-02-13  smeghead  <smeghead@users.sourceforge.jp>
+
+    * Makefileのwin32用のwebappwin32でテンプレートディレクトリをコピーするよう
+    にした。
+    * Windows用のテンプレートの出力方法を修正した。
+
 2010-01-25  smeghead  <smeghead@users.sourceforge.jp>
 
     * Makefileでfaviconを処理するように修正した。
