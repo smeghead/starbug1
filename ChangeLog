@@ -1,3 +1,9 @@
+2010-02-21  smeghead  <smeghead@smeghead-laptop>
+
+    * 簡易wikiのコード例で説明とコードの間に改行が無かったので、
+    正しく表示されていなかったのを修正した。
+    * バーンダウンチャート用ライブラリを追加。
+
 2010-02-13  smeghead  <smeghead@users.sourceforge.jp>
 
     * 1.3.08-win32リリース

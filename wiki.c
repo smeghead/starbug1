@@ -199,7 +199,7 @@ void print_wiki_help()
     o(      "</ul>\n"
             "<h5>%s</h5>\n"
             "<pre>\n"
-            "%s"
+            "%s\n"
             "%s"
             "</pre>\n"
             "</div>\n"

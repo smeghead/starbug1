@@ -1435,6 +1435,7 @@ void output_calendar_js() {
     o("<script type=\"text/javascript\" src=\"%s/../js/calendar.js\"></script>\n", cgiScriptName); 
 }
 void output_graph_js() {
+    o("<script type=\"text/javascript\" src=\"%s/../js/line.js\"></script>\n", cgiScriptName);
     o("<!--[if IE]><script type=\"text/javascript\" src=\"%s/../js/excanvas-compressed.js\"></script><![endif]-->\n", cgiScriptName);
     o("<script type=\"text/javascript\" src=\"%s/../js/circle.js\"></script>\n", cgiScriptName); 
 }
@@ -2480,6 +2481,8 @@ void statistics_action()
             "<h3>%s</h3>\n"
             "\t<div class=\"description\">%s</div>\n", _("statictics"), _("display statictics."));
     project_free(project_a);
+    /* バーンダウンチャート */
+    o(      "<div><canvas class=\"line\" width=\"800\" height=\"300\" id=\"line-graph\"></canvas></div>\n");
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
     foreach (it, element_types_a) {
@@ -2526,7 +2529,7 @@ got_item:
                     o("\n");
                 }
                 o(      "\t\t];\n"
-                        "\t\tdocument.write('<canvas width=\"400\" height=\"250\" id=\"graph_%d\"></canvas>');\n"
+                        "\t\tdocument.write('<canvas class=\"circle\" width=\"400\" height=\"250\" id=\"graph_%d\"></canvas>');\n"
                         "\t\t// -->\n"
                         "\t\t</script>\n", et->id);
                 o("</div>\n");
