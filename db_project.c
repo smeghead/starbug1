@@ -1444,20 +1444,21 @@ List* db_get_burndownchart(Database* db, List* burndowns)
     char date_string[24];
     sprintf(sql, 
             "select sum(1), sum(li.close) "
-            "from ticket as t "
-            "inner join message as m on m.id = t.last_message_id "
+            "from message as m "
             "inner join list_item as li on li.name = m.field%d "
-            "where t.registerdate < ?", ELEM_ID_STATUS);
+            "where m.id in "
+            "  (select max(m.id) from message as m  where m.registerdate < ? group by m.ticket_id)",
+            ELEM_ID_STATUS);
+    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
 
     time(&timer);
     now = timer;
     ; /* 30日前 */
-    for (timer -= 60 * 60 * 24 * 30; timer <= now; timer += 60 * 60 * 24) {
+    for (timer -= 60 * 60 * 24 * 30; timer <= now + 60 * 60 * 24; timer += 60 * 60 * 24) {
         date = localtime(&timer);
         sprintf(date_string, "%04d-%02d-%02d 00:00:00", date->tm_year + 1900, date->tm_mon + 1, date->tm_mday);
         d("time: %s\n", date_string);
 
-        if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
         sqlite3_reset(stmt);
         sqlite3_bind_text(stmt, 1, date_string, strlen(date_string), NULL);
 
