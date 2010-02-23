@@ -40,5 +40,6 @@ Wiki* db_get_newest_wiki(Database*, char*, Wiki*);
 void db_setting_file_save(Database*, SettingFile*);
 SettingFile* db_get_setting_file(Database*, char*, SettingFile*);
 void db_update_top_image(Database*, SettingFile*);
+List* db_get_burndownchart(Database*, List*);
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

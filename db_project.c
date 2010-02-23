@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sqlite3.h>
+#include <time.h>
 #include "data.h"
 #include "db_project.h"
 #include "alloc.h"
@@ -1432,5 +1433,47 @@ void db_update_top_image(Database* db, SettingFile* sf)
                 COLUMN_TYPE_BLOB_SETTING_FILE, sf,
                 COLUMN_TYPE_END) != 1)
         die("update failed.");
+}
+List* db_get_burndownchart(Database* db, List* burndowns)
+{
+    int r;
+    char sql[DEFAULT_LENGTH];
+    sqlite3_stmt *stmt = NULL;
+    time_t timer, now;
+    struct tm *date;
+    char date_string[24];
+    sprintf(sql, 
+            "select sum(1), sum(li.close) "
+            "from ticket as t "
+            "inner join message as m on m.id = t.last_message_id "
+            "inner join list_item as li on li.name = m.field%d "
+            "where t.registerdate < ?", ELEM_ID_STATUS);
+
+    time(&timer);
+    now = timer;
+    ; /* 30日前 */
+    for (timer -= 60 * 60 * 24 * 30; timer <= now; timer += 60 * 60 * 24) {
+        date = localtime(&timer);
+        sprintf(date_string, "%04d-%02d-%02d 00:00:00", date->tm_year + 1900, date->tm_mon + 1, date->tm_mday);
+        d("time: %s\n", date_string);
+
+        if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+        sqlite3_reset(stmt);
+        sqlite3_bind_text(stmt, 1, date_string, strlen(date_string), NULL);
+
+        while (SQLITE_ROW == (r = sqlite3_step(stmt))){
+            BurndownChartPoint* b = list_new_element(burndowns);
+            b->all = sqlite3_column_int(stmt, 0);
+            b->not_closed = b->all - sqlite3_column_int(stmt, 1);
+            list_add(burndowns, b);
+        }
+        if (SQLITE_DONE != r)
+            goto error;
+    }
+
+    sqlite3_finalize(stmt);
+    return burndowns;
+
+ERROR_LABEL(db->handle)
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

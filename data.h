@@ -192,5 +192,12 @@ typedef struct {
     int field_count;
 } DbInfo;
 
+typedef struct {
+    int all;
+    int not_closed;
+} BurndownChartPoint;
+BurndownChartPoint* burndown_chart_point_new();
+void burndown_chart_point_free(BurndownChartPoint*);
+
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

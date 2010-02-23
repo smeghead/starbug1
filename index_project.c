@@ -2467,6 +2467,7 @@ void statistics_action()
     Iterator* it;
     List* states_a;
     Database* db_a;
+    List* burndowns_a;
 
     db_a = db_init(g_project_code);
     project_a = db_get_project(db_a, project_a);
@@ -2482,7 +2483,30 @@ void statistics_action()
             "\t<div class=\"description\">%s</div>\n", _("statictics"), _("display statictics."));
     project_free(project_a);
     /* バーンダウンチャート */
-    o(      "<div><canvas class=\"line\" width=\"800\" height=\"300\" id=\"line-graph\"></canvas></div>\n");
+    list_alloc(burndowns_a, BurndownChartPoint, burndown_chart_point_new, burndown_chart_point_free);
+    burndowns_a = db_get_burndownchart(db_a, burndowns_a);
+    o(      "\t\t<script type=\"text/javascript\">\n"
+            "\t\t<!--\n"
+            "\t\tvar line_items = [\n"
+            "\t\t\t[\"%s\", ", _("all tickets count"));
+    foreach (it, burndowns_a) {
+        BurndownChartPoint* b = it->element;
+        o("%d", b->all);
+        if (iterator_next(it)) o(",");
+    }
+    o(      "],\n");
+    o(      "\t\t\t[\"%s\", ", _("not yet closed ticket count"));
+    foreach (it, burndowns_a) {
+        BurndownChartPoint* b = it->element;
+        o("%d", b->not_closed);
+        if (iterator_next(it)) o(",");
+    }
+    list_free(burndowns_a);
+    o(      "]\n");
+    o(      "\t\t];\n"
+            "\t\tdocument.write('<div><canvas class=\"line\" width=\"800\" height=\"300\" id=\"line-graph\"></canvas></div>');\n"
+            "\t\t// -->\n"
+            "\t\t</script>\n");
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
     foreach (it, element_types_a) {

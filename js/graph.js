@@ -1,11 +1,7 @@
 Event.observe(window, "load", function() {
     var lg = new html5jp.graph.line("line-graph");
     if(!lg) { return; }
-    var items = [
-        ["チケット数", 20, 58, 40, 14, 38, 20, 40, 20, 58, 40, 14, 38, 20, 40, 20, 58, 40, 14, 38, 20, 40],
-        ["残チケット数", 10, 14, 58, 80, 70, 90, 20, 10, 14, 58, 80, 70, 90, 20, 10, 14, 58, 80, 70, 90, 20]
-    ];
-    lg.draw(items);
+    lg.draw(line_items);
     var selector = new Selector('canvas.circle');
     selector.findElements().each(
         function(elem) {

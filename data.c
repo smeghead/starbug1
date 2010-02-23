@@ -285,4 +285,13 @@ void ticket_free(Ticket* t)
     string_free(t->title);
     xfree(t);
 }
+BurndownChartPoint* burndown_chart_point_new()
+{
+    BurndownChartPoint* b = xalloc(sizeof(BurndownChartPoint));
+    return b;
+}
+void burndown_chart_point_free(BurndownChartPoint* t)
+{
+    xfree(t);
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

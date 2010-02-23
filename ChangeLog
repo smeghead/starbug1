@@ -1,3 +1,7 @@
+2010-02-23  smeghead  <smeghead@smeghead-laptop>
+
+    * バーンダウンチャート用を作成中。sqlにバグがある。
+
 2010-02-21  smeghead  <smeghead@smeghead-laptop>
 
     * 簡易wikiのコード例で説明とコードの間に改行が無かったので、
