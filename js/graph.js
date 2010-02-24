@@ -1,7 +1,7 @@
 Event.observe(window, "load", function() {
     var lg = new html5jp.graph.line("line-graph");
     if(!lg) { return; }
-    lg.draw(line_items);
+    lg.draw(line_items, line_params);
     var selector = new Selector('canvas.circle');
     selector.findElements().each(
         function(elem) {

@@ -195,6 +195,7 @@ typedef struct {
 typedef struct {
     int all;
     int not_closed;
+    String* day;
 } BurndownChartPoint;
 BurndownChartPoint* burndown_chart_point_new();
 void burndown_chart_point_free(BurndownChartPoint*);

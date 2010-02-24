@@ -1,9 +1,13 @@
-2010-02-23  smeghead  <smeghead@smeghead-laptop>
+2010-02-25  smeghead  <smeghead@users.sourceforge.jp>
+
+    * バーンダウンチャートの日付を表示するように修正した。
+
+2010-02-23  smeghead  <smeghead@users.sourceforge.jp>
 
     * バーンダウンチャート用を作成中。sqlにバグがある。
     * バーンダウンチャートのSQLのバグを修正した。
 
-2010-02-21  smeghead  <smeghead@smeghead-laptop>
+2010-02-21  smeghead  <smeghead@users.sourceforge.jp>
 
     * 簡易wikiのコード例で説明とコードの間に改行が無かったので、
     正しく表示されていなかったのを修正した。

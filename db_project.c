@@ -1464,8 +1464,11 @@ List* db_get_burndownchart(Database* db, List* burndowns)
 
         while (SQLITE_ROW == (r = sqlite3_step(stmt))){
             BurndownChartPoint* b = list_new_element(burndowns);
+            char d[10];
             b->all = sqlite3_column_int(stmt, 0);
             b->not_closed = b->all - sqlite3_column_int(stmt, 1);
+            sprintf(d, "%d", date->tm_mday);
+            string_set(b->day, d);
             list_add(burndowns, b);
         }
         if (SQLITE_DONE != r)
