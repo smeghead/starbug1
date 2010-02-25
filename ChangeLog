@@ -1,6 +1,7 @@
 2010-02-25  smeghead  <smeghead@users.sourceforge.jp>
 
     * バーンダウンチャートの日付を表示するように修正した。
+    * 当日の23:59:59までを集計するように修正した。
 
 2010-02-23  smeghead  <smeghead@users.sourceforge.jp>
 

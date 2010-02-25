@@ -84,4 +84,10 @@ function validate_numberfield(fields) {
     );
     return (ret.length == 0);
 }
+//最初にフォーカスを当てる。チケット詳細ページで件名にフォーカスが当たると画面がスクロールしてしまうのでコメントアウト。
+//Event.observe(window, 'load', function(){
+//    var firstControl = $('field1');
+//    alert(firstControl);
+//    if (firstControl) {firstControl.focus();}
+//});
 //  vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8:

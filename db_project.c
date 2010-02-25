@@ -1454,9 +1454,9 @@ List* db_get_burndownchart(Database* db, List* burndowns)
     time(&timer);
     now = timer;
     ; /* 30日前 */
-    for (timer -= 60 * 60 * 24 * 30; timer <= now + 60 * 60 * 24; timer += 60 * 60 * 24) {
+    for (timer -= 60 * 60 * 24 * 30; timer <= now; timer += 60 * 60 * 24) {
         date = localtime(&timer);
-        sprintf(date_string, "%04d-%02d-%02d 00:00:00", date->tm_year + 1900, date->tm_mon + 1, date->tm_mday);
+        sprintf(date_string, "%04d-%02d-%02d 23:59:59", date->tm_year + 1900, date->tm_mon + 1, date->tm_mday);
         d("time: %s\n", date_string);
 
         sqlite3_reset(stmt);
