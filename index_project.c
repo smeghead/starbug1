@@ -2486,6 +2486,28 @@ void statistics_action()
     o(      "\t<h4 class=\"item\">%s</h4>", _("ticket count"));
     list_alloc(burndowns_a, BurndownChartPoint, burndown_chart_point_new, burndown_chart_point_free);
     burndowns_a = db_get_burndownchart(db_a, burndowns_a);
+    o(      "<noscript>%s\n"
+            "\t<table>\n"
+            "\t\t<tr>\n"
+            "\t\t\t<th>%s</th>\n"
+            "\t\t\t<th>%s</th>\n"
+            "\t\t\t<th>%s</th>\n"
+            "\t\t<tr>\n",
+            _("[graph description]"),
+            _("days"),
+            _("all tickets count"),
+            _("not yet closed tickets count"));
+    foreach (it, burndowns_a) {
+        BurndownChartPoint* b = it->element;
+        o(      "\t\t\t<tr>\n"
+                "\t\t\t\t<th>%s</th>\n"
+                "\t\t\t\t<td>%d</td>\n"
+                "\t\t\t\t<td>%d</td>\n"
+                "\t\t\t</tr>\n",
+                string_rawstr(b->day), b->all, b->not_closed);
+    }
+    o(      "\t</table>\n"
+            "</noscript>\n");
     o(      "\t\t<script type=\"text/javascript\">\n"
             "\t\t<!--\n"
             "\t\tvar line_items = [\n"
@@ -2496,7 +2518,7 @@ void statistics_action()
         if (iterator_next(it)) o(",");
     }
     o(      "],\n");
-    o(      "\t\t\t[\"%s\", ", _("not yet closed ticket count"));
+    o(      "\t\t\t[\"%s\", ", _("not yet closed tickets count"));
     foreach (it, burndowns_a) {
         BurndownChartPoint* b = it->element;
         o("%d", b->not_closed);
