@@ -2483,7 +2483,7 @@ void statistics_action()
             "\t<div class=\"description\">%s</div>\n", _("statictics"), _("display statictics."));
     project_free(project_a);
     /* バーンダウンチャート */
-    o(      "\t<h4 class=\"item\">%s</h4>", _("ticket count"));
+    o(      "\t<h4 class=\"item\">%s</h4>", _("ticket count chart"));
     list_alloc(burndowns_a, BurndownChartPoint, burndown_chart_point_new, burndown_chart_point_free);
     burndowns_a = db_get_burndownchart(db_a, burndowns_a);
     o(      "<noscript>%s\n"

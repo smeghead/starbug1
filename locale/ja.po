@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2010-02-25 23:17+0900\n"
+"POT-Creation-Date: 2010-02-25 23:33+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: smeghead <smeghead@users.sourceforge.jp>\n"
 "Language-Team: smeghead <smeghead@users.sourceforge.jp>\n"
@@ -1238,15 +1238,19 @@ msgstr "チケット情報がありません。"
 msgid "edit page"
 msgstr "ページの編集"
 
-#: index_project.c:2486 index_project.c:2540
-msgid "ticket count"
-msgstr "状態別件数"
+#: index_project.c:2486
+msgid "ticket count chart"
+msgstr "チケット数"
 
 #: index_project.c:2496 index_project.c:2568
 msgid "[graph description]"
 msgstr ""
 "JavaScriptでグラフを表示しています。JavaScriptが有効なブラウザで見てくださ"
 "い。"
+
+#: index_project.c:2497 index_project.c:2531
+msgid "days"
+msgstr "日付"
 
 #: index_project.c:2498 index_project.c:2514
 msgid "all tickets count"
@@ -1256,9 +1260,9 @@ msgstr "全チケット数"
 msgid "not yet closed tickets count"
 msgstr "未クローズチケット数"
 
-#: index_project.c:2531
-msgid "days"
-msgstr "日付"
+#: index_project.c:2540
+msgid "ticket count"
+msgstr "状態別件数"
 
 #: index_project.c:2627 index_project.c:2634 index_project.c:2635
 #: index_top.c:138

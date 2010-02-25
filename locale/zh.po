@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2010-02-25 23:17+0900\n"
+"POT-Creation-Date: 2010-02-25 23:33+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: smeghead <smeghead@users.sourceforge.jp>\n"
 "Language-Team: smeghead <smeghead@users.sourceforge.jp>\n"
@@ -1180,17 +1180,17 @@ msgstr "没有票信息。"
 msgid "edit page"
 msgstr "页面的编辑"
 
-#: index_project.c:2486 index_project.c:2540
+#: index_project.c:2486
 #, fuzzy
-msgid "ticket count"
+msgid "ticket count chart"
 msgstr "按状态分类的件数"
 
 #: index_project.c:2496 index_project.c:2568
 msgid "[graph description]"
 msgstr "通过JavaScript显示图表。请用JavaScript有效的浏览器查看。"
 
-#: index_project.c:2497
-msgid "day"
+#: index_project.c:2497 index_project.c:2531
+msgid "days"
 msgstr ""
 
 #: index_project.c:2498 index_project.c:2514
@@ -1203,9 +1203,10 @@ msgstr "按状态分类的件数"
 msgid "not yet closed tickets count"
 msgstr "显示未关闭的票。"
 
-#: index_project.c:2531
-msgid "days"
-msgstr ""
+#: index_project.c:2540
+#, fuzzy
+msgid "ticket count"
+msgstr "按状态分类的件数"
 
 #: index_project.c:2627 index_project.c:2634 index_project.c:2635
 #: index_top.c:138

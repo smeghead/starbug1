@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2010-02-25 23:17+0900\n"
+"POT-Creation-Date: 2010-02-25 23:33+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -996,16 +996,16 @@ msgstr ""
 msgid "edit page"
 msgstr ""
 
-#: index_project.c:2486 index_project.c:2540
-msgid "ticket count"
+#: index_project.c:2486
+msgid "ticket count chart"
 msgstr ""
 
 #: index_project.c:2496 index_project.c:2568
 msgid "[graph description]"
 msgstr ""
 
-#: index_project.c:2497
-msgid "day"
+#: index_project.c:2497 index_project.c:2531
+msgid "days"
 msgstr ""
 
 #: index_project.c:2498 index_project.c:2514
@@ -1016,8 +1016,8 @@ msgstr ""
 msgid "not yet closed tickets count"
 msgstr ""
 
-#: index_project.c:2531
-msgid "days"
+#: index_project.c:2540
+msgid "ticket count"
 msgstr ""
 
 #: index_project.c:2627 index_project.c:2634 index_project.c:2635

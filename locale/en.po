@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: starbug 1\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2010-02-25 23:17+0900\n"
+"POT-Creation-Date: 2010-02-25 23:33+0900\n"
 "PO-Revision-Date: 2009-07-02 22:23+0900\n"
 "Last-Translator: smeghead <smeghead@sourceforge.jp>\n"
 "Language-Team: English\n"
@@ -1281,9 +1281,9 @@ msgstr "There are no ticket informations."
 msgid "edit page"
 msgstr "Edit page"
 
-#: index_project.c:2486 index_project.c:2540
+#: index_project.c:2486
 #, fuzzy
-msgid "ticket count"
+msgid "ticket count chart"
 msgstr "Ticket counts"
 
 #: index_project.c:2496 index_project.c:2568
@@ -1294,8 +1294,8 @@ msgstr ""
 "The graph is displayed with JavaScript. Please look in a browser that "
 "JavaScript is effective."
 
-#: index_project.c:2497
-msgid "day"
+#: index_project.c:2497 index_project.c:2531
+msgid "days"
 msgstr ""
 
 #: index_project.c:2498 index_project.c:2514
@@ -1308,9 +1308,10 @@ msgstr "Ticket counts"
 msgid "not yet closed tickets count"
 msgstr "Display unclosed tickets."
 
-#: index_project.c:2531
-msgid "days"
-msgstr ""
+#: index_project.c:2540
+#, fuzzy
+msgid "ticket count"
+msgstr "Ticket counts"
 
 #: index_project.c:2627 index_project.c:2634 index_project.c:2635
 #: index_top.c:138
