@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2010-02-25 23:33+0900\n"
+"POT-Creation-Date: 2010-02-27 20:48+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1017,7 +1017,7 @@ msgid "not yet closed tickets count"
 msgstr ""
 
 #: index_project.c:2540
-msgid "ticket count"
+msgid "tickets count"
 msgstr ""
 
 #: index_project.c:2627 index_project.c:2634 index_project.c:2635

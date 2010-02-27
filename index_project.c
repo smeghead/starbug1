@@ -2537,7 +2537,7 @@ void statistics_action()
     list_free(burndowns_a);
     o(      "],\n"
             "\t\t\ty: [\"%s\"],\n"
-            "\t\t\tdotType: [\"disc\", \"square\"],\n", _("ticket count"));
+            "\t\t\tdotType: [\"disc\", \"square\"],\n", _("tickets count"));
     o(      "\t\t};\n"
             "\t\t// -->\n"
             "\t\t</script>\n");
