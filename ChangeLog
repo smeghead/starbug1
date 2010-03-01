@@ -1,3 +1,8 @@
+2010-03-01 smeghead  <smeghead@users.sourceforge.jp>
+
+    * バーンダウンチャート用のJavaScriptでIEの場合のみエラーが発生するのを修正
+    した。
+
 2010-02-27 smeghead  <smeghead@users.sourceforge.jp>
 
     * 英語、中国語のリソースを修正した。 
