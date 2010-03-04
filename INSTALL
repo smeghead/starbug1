@@ -36,7 +36,7 @@ $ wget http://www.boutell.com/cgic/cgic205.tar.gz
 <code>
 $ tar zxf cgic205.tar.gz
 $ cd cgic205
-$ make
+$ make  INITIAL_LOCALE=ja_JP
 $ su
 # make install
 </code>

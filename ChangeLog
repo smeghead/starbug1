@@ -1,1301 +1,1305 @@
-2010-03-01  smeghead  <smeghead@users.sourceforge.jp>
+2010-03-04	smeghead  <smeghead@users.sourceforge.jp>
 
-    * 1.3.10リリース
+	* INSTALLのコンパイルの言語指定オプション(INITIAL_LOCALE)を追加した。
+
+2010-03-01	smeghead  <smeghead@users.sourceforge.jp>
+
+	* 1.3.10リリース
 
 2010-03-01 smeghead  <smeghead@users.sourceforge.jp>
 
-    * バーンダウンチャート用のJavaScriptでIEの場合のみエラーが発生するのを修正
-    した。
+	* バーンダウンチャート用のJavaScriptでIEの場合のみエラーが発生するのを修正
+	した。
 
-2010-02-27  smeghead  <smeghead@users.sourceforge.jp>
+2010-02-27	smeghead  <smeghead@users.sourceforge.jp>
 
-    * 1.3.09リリース
+	* 1.3.09リリース
 
 2010-02-27 smeghead  <smeghead@users.sourceforge.jp>
 
-    * 英語、中国語のリソースを修正した。 
+	* 英語、中国語のリソースを修正した。 
 
-2010-02-25  smeghead  <smeghead@users.sourceforge.jp>
+2010-02-25	smeghead  <smeghead@users.sourceforge.jp>
 
-    * バーンダウンチャートの日付を表示するように修正した。
-    * 当日の23:59:59までを集計するように修正した。
-    * バーンダウンチャートで、JavaScriptが有効でない場合に、テーブルを表示する
-    ようにした。
-    * バーンダウンチャート用の日本語リソースを作成した。
+	* バーンダウンチャートの日付を表示するように修正した。
+	* 当日の23:59:59までを集計するように修正した。
+	* バーンダウンチャートで、JavaScriptが有効でない場合に、テーブルを表示する
+	ようにした。
+	* バーンダウンチャート用の日本語リソースを作成した。
 
-2010-02-23  smeghead  <smeghead@users.sourceforge.jp>
+2010-02-23	smeghead  <smeghead@users.sourceforge.jp>
 
-    * バーンダウンチャート用を作成中。sqlにバグがある。
-    * バーンダウンチャートのSQLのバグを修正した。
+	* バーンダウンチャート用を作成中。sqlにバグがある。
+	* バーンダウンチャートのSQLのバグを修正した。
 
-2010-02-21  smeghead  <smeghead@users.sourceforge.jp>
+2010-02-21	smeghead  <smeghead@users.sourceforge.jp>
 
-    * 簡易wikiのコード例で説明とコードの間に改行が無かったので、
-    正しく表示されていなかったのを修正した。
-    * バーンダウンチャート用ライブラリを追加。
+	* 簡易wikiのコード例で説明とコードの間に改行が無かったので、
+	正しく表示されていなかったのを修正した。
+	* バーンダウンチャート用ライブラリを追加。
 
-2010-02-13  smeghead  <smeghead@users.sourceforge.jp>
+2010-02-13	smeghead  <smeghead@users.sourceforge.jp>
 
-    * 1.3.08-win32リリース
+	* 1.3.08-win32リリース
 
-2010-02-13  smeghead  <smeghead@users.sourceforge.jp>
+2010-02-13	smeghead  <smeghead@users.sourceforge.jp>
 
-    * Makefileのwin32用のwebappwin32でテンプレートディレクトリをコピーするよう
-    にした。
-    * Windows用のテンプレートの出力方法を修正した。
+	* Makefileのwin32用のwebappwin32でテンプレートディレクトリをコピーするよう
+	にした。
+	* Windows用のテンプレートの出力方法を修正した。
 
-2010-01-25  smeghead  <smeghead@users.sourceforge.jp>
+2010-01-25	smeghead  <smeghead@users.sourceforge.jp>
 
-    * Makefileでfaviconを処理するように修正した。
+	* Makefileでfaviconを処理するように修正した。
 
-2010-01-24  smeghead  <smeghead@users.sourceforge.jp>
+2010-01-24	smeghead  <smeghead@users.sourceforge.jp>
 
-    * faviconを追加した。
+	* faviconを追加した。
 
-2010-01-15  smeghead  <smeghead@users.sourceforge.jp>
+2010-01-15	smeghead  <smeghead@users.sourceforge.jp>
 
-    * メール送信モジュールで、メールの件名に状態を含めるように修正した。
+	* メール送信モジュールで、メールの件名に状態を含めるように修正した。
 
-2010-01-10  smeghead  <smeghead@users.sourceforge.jp>
+2010-01-10	smeghead  <smeghead@users.sourceforge.jp>
 
-    * メモリリークしていた箇所を修正した。
+	* メモリリークしていた箇所を修正した。
 
-2010-01-06  smeghead  <smeghead@users.sourceforge.jp>
+2010-01-06	smeghead  <smeghead@users.sourceforge.jp>
 
-    * 1.3.08リリース
+	* 1.3.08リリース
 
-2010-01-06  smeghead  <smeghead@users.sourceforge.jp>
+2010-01-06	smeghead  <smeghead@users.sourceforge.jp>
 
-    * サブプロジェクトのsqlite3の実行時のパスの区切り文字をOSによって使いわけ
-    るように修正した。Windowsでも動作させるため。
-    * 削除したサブプロジェクトが存在する場合、トップのプロジェクト管理ページを
-    開いた時にエラーが発生するのを修正した。
-      http://sourceforge.jp/ticket/browse.php?group_id=3135&tid=20147
-      http://groups.google.com/group/starbug1-users/browse_thread/thread/3ca6be6005ddf22e
-    db_initの引数を変更した際に、削除フラグが立っているプロジェクトの情報を取
-    得できないようになっていたため、削除されたサブプロジェクトが存在すると、
-    エラーが発生していた。
-    * リリースの準備
+	* サブプロジェクトのsqlite3の実行時のパスの区切り文字をOSによって使いわけ
+	るように修正した。Windowsでも動作させるため。
+	* 削除したサブプロジェクトが存在する場合、トップのプロジェクト管理ページを
+	開いた時にエラーが発生するのを修正した。
+	  http://sourceforge.jp/ticket/browse.php?group_id=3135&tid=20147
+	  http://groups.google.com/group/starbug1-users/browse_thread/thread/3ca6be6005ddf22e
+	db_initの引数を変更した際に、削除フラグが立っているプロジェクトの情報を取
+	得できないようになっていたため、削除されたサブプロジェクトが存在すると、
+	エラーが発生していた。
+	* リリースの準備
 
-2010-01-04  smeghead  <smeghead@users.sourceforge.jp>
+2010-01-04	smeghead  <smeghead@users.sourceforge.jp>
 
-    * 1.3.07リリース
+	* 1.3.07リリース
 
-2010-01-04  smeghead  <smeghead@users.sourceforge.jp>
+2010-01-04	smeghead  <smeghead@users.sourceforge.jp>
 
-    * SeleniumのテストもSand Boxに対してテストを行なうように修正した。
-    * Q&A管理のテンプレートを追加した。
+	* SeleniumのテストもSand Boxに対してテストを行なうように修正した。
+	* Q&A管理のテンプレートを追加した。
 
-2010-01-04  smeghead  <smeghead@users.sourceforge.jp>
+2010-01-04	smeghead  <smeghead@users.sourceforge.jp>
 
-    * サブプロジェクトの項目設定情報をエクスポートする機能を作成した。
-    * 初期に作成するサブプロジェクトの名称をSand Boxになるようにした。
+	* サブプロジェクトの項目設定情報をエクスポートする機能を作成した。
+	* 初期に作成するサブプロジェクトの名称をSand Boxになるようにした。
 
-2010-01-01  smeghead  <smeghead@users.sourceforge.jp>
+2010-01-01	smeghead  <smeghead@users.sourceforge.jp>
 
-    * WebUIからサブプロジェクトの項目設定情報をエクスポートする機能の作成中。
+	* WebUIからサブプロジェクトの項目設定情報をエクスポートする機能の作成中。
 
-2009-12-31  smeghead  <smeghead@users.sourceforge.jp>
+2009-12-31	smeghead  <smeghead@users.sourceforge.jp>
 
-    * TODO用のテンプレートを追加した。
-    * copyrightの年号を2010に変更した。
+	* TODO用のテンプレートを追加した。
+	* copyrightの年号を2010に変更した。
 
-2009-12-30  smeghead  <smeghead@users.sourceforge.jp>
+2009-12-30	smeghead  <smeghead@users.sourceforge.jp>
 
-    * 新規プロジェクト追加時に、プロジェクトテンプレートを選択して追加できるよ
-    うにする修正中。
+	* 新規プロジェクト追加時に、プロジェクトテンプレートを選択して追加できるよ
+	うにする修正中。
 
-2009-12-29  smeghead  <smeghead@users.sourceforge.jp>
+2009-12-29	smeghead  <smeghead@users.sourceforge.jp>
 
-    * 1.3.06リリース
+	* 1.3.06リリース
 
-2009-12-29  smeghead  <smeghead@users.sourceforge.jp>
+2009-12-29	smeghead  <smeghead@users.sourceforge.jp>
 
-    * sqlite3_finalizeを重複して実行してしまう場合があるバグを修正した。
+	* sqlite3_finalizeを重複して実行してしまう場合があるバグを修正した。
 
-2009-12-27  smeghead  <smeghead@users.sourceforge.jp>
+2009-12-27	smeghead  <smeghead@users.sourceforge.jp>
 
-    * 1.3.05リリース
+	* 1.3.05リリース
 
-2009-12-27  smeghead  <smeghead@users.sourceforge.jp>
+2009-12-27	smeghead  <smeghead@users.sourceforge.jp>
 
-    * チケット検索ページで、数値項目の合計を表示するようにした。
-    * 数値項目の入力チェックを作成した。
-    * 数値項目関連のメッセージリソースを更新した。
-    * 状態別チケット一覧にも合計の行を追加した。
-    * リリースの準備
+	* チケット検索ページで、数値項目の合計を表示するようにした。
+	* 数値項目の入力チェックを作成した。
+	* 数値項目関連のメッセージリソースを更新した。
+	* 状態別チケット一覧にも合計の行を追加した。
+	* リリースの準備
 
-2009-12-12  smeghead  <smeghead@users.sourceforge.jp>
+2009-12-12	smeghead  <smeghead@users.sourceforge.jp>
 
-    * サブプロジェクトの管理ページでトップへのリンクがプロジェクト名になってい
-    なかったのを修正した。
+	* サブプロジェクトの管理ページでトップへのリンクがプロジェクト名になってい
+	なかったのを修正した。
 
-2009-11-13  smeghead  <smeghead@users.sourceforge.jp>
+2009-11-13	smeghead  <smeghead@users.sourceforge.jp>
 
-    * 1.3.04リリース
+	* 1.3.04リリース
 
-2009-11-13  smeghead  <smeghead@users.sourceforge.jp>
+2009-11-13	smeghead  <smeghead@users.sourceforge.jp>
 
-    * 簡易wikiでもurlがあったらリンクで表示するように修正した。
+	* 簡易wikiでもurlがあったらリンクで表示するように修正した。
 
-2009-11-11  smeghead <smeghead@users.sourceforge.jp>
+2009-11-11	smeghead <smeghead@users.sourceforge.jp>
 
-    * Cでのメール送信で本文にチケットの内容を表示できるようにした。
-      (ただし、BASE64の改行を挿入する処理は未実装のため、送信するメールの内容は、RFC的に行儀が良くない。)
+	* Cでのメール送信で本文にチケットの内容を表示できるようにした。
+	  (ただし、BASE64の改行を挿入する処理は未実装のため、送信するメールの内容は、RFC的に行儀が良くない。)
 
-2009-11-10  smeghead <smeghead@users.sourceforge.jp>
+2009-11-10	smeghead <smeghead@users.sourceforge.jp>
 
-    * パンクズのトップは、トップのプロジェクト名を表示するように修正した。
+	* パンクズのトップは、トップのプロジェクト名を表示するように修正した。
 
-2009-11-05  smeghead <smeghead@users.sourceforge.jp>
+2009-11-05	smeghead <smeghead@users.sourceforge.jp>
 
-    * 数値の項目を追加する。
+	* 数値の項目を追加する。
 
-2009-10-25  smeghead <smeghead@users.sourceforge.jp>
+2009-10-25	smeghead <smeghead@users.sourceforge.jp>
 
-    * 複数行テキストの中に、http://かhttps://が存在したらリンクにするようにした。
+	* 複数行テキストの中に、http://かhttps://が存在したらリンクにするようにした。
 
-2009-10-23  smeghead  <smeghead@users.sourceforge.jp>
+2009-10-23	smeghead  <smeghead@users.sourceforge.jp>
 
-    * 1.3.03リリース
+	* 1.3.03リリース
 
-2009-10-23  smeghead <smeghead@users.sourceforge.jp>
+2009-10-23	smeghead <smeghead@users.sourceforge.jp>
 
-    * ラジオボタンの項目のJavaScript部分がIEで動作しないのを修正した。
-    * Seleniumテストの更新
+	* ラジオボタンの項目のJavaScript部分がIEで動作しないのを修正した。
+	* Seleniumテストの更新
 
-2009-10-22  smeghead <smeghead@users.sourceforge.jp>
+2009-10-22	smeghead <smeghead@users.sourceforge.jp>
 
-    * Makefileのdistターゲットの修正。tar玉からはWindowsの依存バイナリを省くようにした。
-    * ラジオボタンで選択できる単一選択肢の項目を追加できるようにした。
+	* Makefileのdistターゲットの修正。tar玉からはWindowsの依存バイナリを省くようにした。
+	* ラジオボタンで選択できる単一選択肢の項目を追加できるようにした。
 
-2009-09-10  smeghead <smeghead@users.sourceforge.jp>
+2009-09-10	smeghead <smeghead@users.sourceforge.jp>
 
-    * HTMLのcssファイルの読み込み位置を修正した。
+	* HTMLのcssファイルの読み込み位置を修正した。
 
-2009-08-31  smeghead <smeghead@users.sourceforge.jp>
+2009-08-31	smeghead <smeghead@users.sourceforge.jp>
 
-    * 詳細の説明メッセージを変更した。
-    * フッタのstarbug1の文字を公式サイトへのリンクに変更した。
+	* 詳細の説明メッセージを変更した。
+	* フッタのstarbug1の文字を公式サイトへのリンクに変更した。
 
-2009-08-25  smeghead <smeghead@users.sourceforge.jp>
+2009-08-25	smeghead <smeghead@users.sourceforge.jp>
 
-    * サブプロジェクトのページの左上にパンクズを表示するようにした。
-    * 「新しいチケットを登録する」のリンクを目立つようにした。
+	* サブプロジェクトのページの左上にパンクズを表示するようにした。
+	* 「新しいチケットを登録する」のリンクを目立つようにした。
 
-2009-08-24  smeghead <smeghead@users.sourceforge.jp>
+2009-08-24	smeghead <smeghead@users.sourceforge.jp>
 
-    * 検索結果のRSS形式のダウンロードでメモリの開放忘れがあったのを修正した。
+	* 検索結果のRSS形式のダウンロードでメモリの開放忘れがあったのを修正した。
 
-2009-08-23  smeghead  <smeghead@users.sourceforge.jp>
+2009-08-23	smeghead  <smeghead@users.sourceforge.jp>
 
-    * 1.3.02リリース
+	* 1.3.02リリース
 
-2009-08-17  smeghead <smeghead@users.sourceforge.jp>
+2009-08-17	smeghead <smeghead@users.sourceforge.jp>
 
-    * メッセージカタログを生成するMakefileを修正した。
-    * 複数サブプロジェクトの検索の検索結果をチケットの投稿日時の降順で表示するように修正した。
-    * qiuさんに中国語のリソース翻訳の修正版を提供してもらいました。
+	* メッセージカタログを生成するMakefileを修正した。
+	* 複数サブプロジェクトの検索の検索結果をチケットの投稿日時の降順で表示するように修正した。
+	* qiuさんに中国語のリソース翻訳の修正版を提供してもらいました。
 
-2009-08-06  smeghead  <smeghead@users.sourceforge.jp>
+2009-08-06	smeghead  <smeghead@users.sourceforge.jp>
 
-    * mattnさんから、Windowsポーティングパッチを頂きました。ありがとうございま
-    す。
+	* mattnさんから、Windowsポーティングパッチを頂きました。ありがとうございま
+	す。
 
-2009-07-25  smeghead  <smeghead@users.sourceforge.jp>
+2009-07-25	smeghead  <smeghead@users.sourceforge.jp>
 
-    * 1.3.01リリース
+	* 1.3.01リリース
 
-2009-07-25  smeghead  <smeghead@users.sourceforge.jp>
+2009-07-25	smeghead  <smeghead@users.sourceforge.jp>
 
-    * 英語のリソースの翻訳を追加。
-    * タイポの修正。
-    * 中国語のリソースを追加した。qiuさんに翻訳してもらいました。ありがとうご
-    ざいます。
+	* 英語のリソースの翻訳を追加。
+	* タイポの修正。
+	* 中国語のリソースを追加した。qiuさんに翻訳してもらいました。ありがとうご
+	ざいます。
 
-2009-07-24  smeghead <smeghead@users.sourceforge.jp>
+2009-07-24	smeghead <smeghead@users.sourceforge.jp>
 
-    * ライセンスをGPLに変更する準備
-    * トップの検索結果の表示用CSSの変更。
+	* ライセンスをGPLに変更する準備
+	* トップの検索結果の表示用CSSの変更。
 
-2009-07-22  smeghead <smeghead@users.sourceforge.jp>
+2009-07-22	smeghead <smeghead@users.sourceforge.jp>
 
-    * javascriptのリソースを国際化した。
+	* javascriptのリソースを国際化した。
 
-2009-07-18  smeghead <smeghead@users.sourceforge.jp>
+2009-07-18	smeghead <smeghead@users.sourceforge.jp>
 
-    * 中国語のリソースを修正した。
+	* 中国語のリソースを修正した。
 
-2009-07-18  smeghead <smeghead@users.sourceforge.jp>
+2009-07-18	smeghead <smeghead@users.sourceforge.jp>
 
-    * FreeBSD(さくらインターネット)でsetlocaleが機能しなかったため、setenvにて環境変数を更新するように修正した。
+	* FreeBSD(さくらインターネット)でsetlocaleが機能しなかったため、setenvにて環境変数を更新するように修正した。
 
-2009-07-17  smeghead <smeghead@users.sourceforge.jp>
+2009-07-17	smeghead <smeghead@users.sourceforge.jp>
 
-    * Makefileで、FreeBSDの場合、LFLAGSに-lintlを追加するように修正した。
+	* Makefileで、FreeBSDの場合、LFLAGSに-lintlを追加するように修正した。
 
-2009-07-16  smeghead  <smeghead@users.sourceforge.jp>
+2009-07-16	smeghead  <smeghead@users.sourceforge.jp>
 
-    * 1.2.10-bataリリース
+	* 1.2.10-bataリリース
 
-2009-07-16  smeghead <smeghead@users.sourceforge.jp>
+2009-07-16	smeghead <smeghead@users.sourceforge.jp>
 
-    * 検索条件に更新日時の日数指定を追加した。
+	* 検索条件に更新日時の日数指定を追加した。
 
-2009-07-15  smeghead <smeghead@users.sourceforge.jp>
+2009-07-15	smeghead <smeghead@users.sourceforge.jp>
 
-    * トップのスタイルシートの調整をした。
-    * 国際化の対応のためlocaleディレクトリの考慮をMakefileに追加した。
-    * 日本語メッセージの修正
-    * サブプロジェクト用のプロジェクト設定でlocaleを更新しようとしていた不具合
-    を修正。サブプロジェクトにはlocaleレコードは無いため。
+	* トップのスタイルシートの調整をした。
+	* 国際化の対応のためlocaleディレクトリの考慮をMakefileに追加した。
+	* 日本語メッセージの修正
+	* サブプロジェクト用のプロジェクト設定でlocaleを更新しようとしていた不具合
+	を修正。サブプロジェクトにはlocaleレコードは無いため。
 
-2009-07-14  smeghead <smeghead@users.sourceforge.jp>
+2009-07-14	smeghead <smeghead@users.sourceforge.jp>
 
-    * 検索結果のRSSダウンロードを実装した。
+	* 検索結果のRSSダウンロードを実装した。
 
-2009-07-11  smeghead <smeghead@users.sourceforge.jp>
+2009-07-11	smeghead <smeghead@users.sourceforge.jp>
 
-    * 複数サブプロジェクトの検索処理の実装中
-    * 変数名g_project_name,g_project_name_4_urlをg_project_code,g_project_code_4_urlに変更した。
-    padding:0px 10px;
-    * メモリリークを探す時のためのオプションMEMORYDEBUGを追加した。
-    * プロジェクト用のdbのsettingテーブルにロケール用のレコードを追加した。
-      $ su
-      # echo "insert into setting(name, value) values ('locale', 'ja_JP');" | sqlite3 1.db
+	* 複数サブプロジェクトの検索処理の実装中
+	* 変数名g_project_name,g_project_name_4_urlをg_project_code,g_project_code_4_urlに変更した。
+	padding:0px 10px;
+	* メモリリークを探す時のためのオプションMEMORYDEBUGを追加した。
+	* プロジェクト用のdbのsettingテーブルにロケール用のレコードを追加した。
+	  $ su
+	  # echo "insert into setting(name, value) values ('locale', 'ja_JP');" | sqlite3 1.db
 
-2009-07-10  smeghead <smeghead@users.sourceforge.jp>
+2009-07-10	smeghead <smeghead@users.sourceforge.jp>
 
-    * 複数サブプロジェクトの検索処理の実装中
+	* 複数サブプロジェクトの検索処理の実装中
 
-2009-07-09  smeghead <smeghead@users.sourceforge.jp>
+2009-07-09	smeghead <smeghead@users.sourceforge.jp>
 
-    * 複数サブプロジェクトの検索処理の実装中
+	* 複数サブプロジェクトの検索処理の実装中
 
-2009-07-05  smeghead <smeghead@users.sourceforge.jp>
+2009-07-05	smeghead <smeghead@users.sourceforge.jp>
 
-    * 国際化対応中
+	* 国際化対応中
 
-2009-07-02  smeghead <smeghead@users.sourceforge.jp>
+2009-07-02	smeghead <smeghead@users.sourceforge.jp>
 
-    * 国際化対応を開始した。
+	* 国際化対応を開始した。
 
-2009-06-29  smeghead <smeghead@users.sourceforge.jp>
+2009-06-29	smeghead <smeghead@users.sourceforge.jp>
 
-    * サブプロジェクトの横断検索処理作成。
+	* サブプロジェクトの横断検索処理作成。
 
-2009-06-28  smeghead <smeghead@users.sourceforge.jp>
+2009-06-28	smeghead <smeghead@users.sourceforge.jp>
 
-    * チケットページにも状態別の検索リンクとID検索と新規チケットリンクを追加。
+	* チケットページにも状態別の検索リンクとID検索と新規チケットリンクを追加。
 
-2009-06-23  smeghead <smeghead@users.sourceforge.jp>
+2009-06-23	smeghead <smeghead@users.sourceforge.jp>
 
-    * チケット一覧などで状態などの背景に色を付けるためのスタイルシートの指定方法を変更した。
-      今までは、base64を元に独自の変換をした文字列をcssのクラス名としていたが、IDを示す数字にした。field3-1など。
+	* チケット一覧などで状態などの背景に色を付けるためのスタイルシートの指定方法を変更した。
+	  今までは、base64を元に独自の変換をした文字列をcssのクラス名としていたが、IDを示す数字にした。field3-1など。
 
-2009-06-22  smeghead <smeghead@users.sourceforge.jp>
+2009-06-22	smeghead <smeghead@users.sourceforge.jp>
 
-    * CSV形式でのダウンロードでは、文字コード変換しないように修正した。(今までは、UTF-8からCP932に変換していた)
+	* CSV形式でのダウンロードでは、文字コード変換しないように修正した。(今までは、UTF-8からCP932に変換していた)
 
-2009-06-20  smeghead <smeghead@users.sourceforge.jp>
+2009-06-20	smeghead <smeghead@users.sourceforge.jp>
 
-    * 共有ライブラリのhookのインターフェースの変更。インターフェース用の構造体を本体に依存しない形で再定義した。
+	* 共有ライブラリのhookのインターフェースの変更。インターフェース用の構造体を本体に依存しない形で再定義した。
 
-2009-06-19  smeghead <smeghead@users.sourceforge.jp>
+2009-06-19	smeghead <smeghead@users.sourceforge.jp>
 
-    * 1.2.9-bataリリース
+	* 1.2.9-bataリリース
 
-2009-06-19  smeghead <smeghead@users.sourceforge.jp>
+2009-06-19	smeghead <smeghead@users.sourceforge.jp>
 
-    * プロジェクト用のデータベース作成時に、ファイルアップロードの最大サイズの
-      レコードを追加するようにした。
+	* プロジェクト用のデータベース作成時に、ファイルアップロードの最大サイズの
+	  レコードを追加するようにした。
 
-2009-06-17  smeghead <smeghead@users.sourceforge.jp>
+2009-06-17	smeghead <smeghead@users.sourceforge.jp>
 
-    * アップロードできるファイルの最大サイズを変更可能にした。以前のバージョン
-      からの移行の場合は、以下のSQLを各サブプロジェクトのデータベースファイル
-      に対して実行する必要があります。
-    $ cd db
-    $ echo "insert into setting(name, value) values ('upload_max_size', 512);" | sqlite3 2.db
-    ※2.db 以外にもサブプロジェクト用DBが存在している場合(3.db,
-    4.dbなど)は、それぞれのDBに対して同じSQLを実行してください。
+	* アップロードできるファイルの最大サイズを変更可能にした。以前のバージョン
+	  からの移行の場合は、以下のSQLを各サブプロジェクトのデータベースファイル
+	  に対して実行する必要があります。
+	$ cd db
+	$ echo "insert into setting(name, value) values ('upload_max_size', 512);" | sqlite3 2.db
+	※2.db 以外にもサブプロジェクト用DBが存在している場合(3.db,
+	4.dbなど)は、それぞれのDBに対して同じSQLを実行してください。
 
-2009-06-14  smeghead  <smeghead@users.sourceforge.jp>
+2009-06-14	smeghead  <smeghead@users.sourceforge.jp>
 
-    * 管理ツール側でユーザ定義のスタイルシートを読み込めないバグを修正した。
-    * 管理ツールで新しい項目の追加時に、初期に指定できる選択肢の項目数を5から
-    10に増やした。
-    * 管理ツールの項目の編集時に、javascriptで項目を動的に増やすことができるよ
-    うにした。
+	* 管理ツール側でユーザ定義のスタイルシートを読み込めないバグを修正した。
+	* 管理ツールで新しい項目の追加時に、初期に指定できる選択肢の項目数を5から
+	10に増やした。
+	* 管理ツールの項目の編集時に、javascriptで項目を動的に増やすことができるよ
+	うにした。
 
-2009-06-13  smeghead  <smeghead@users.sourceforge.jp>
+2009-06-13	smeghead  <smeghead@users.sourceforge.jp>
 
-    * 基本的なデータ構造に、simple_stringを使うように修正開始。
+	* 基本的なデータ構造に、simple_stringを使うように修正開始。
 
-2009-06-10  smeghead  <smeghead@users.sourceforge.jp>
+2009-06-10	smeghead  <smeghead@users.sourceforge.jp>
 
-    * 日本語によるメール送信処理の作成中
+	* 日本語によるメール送信処理の作成中
 
-2009-05-31  smeghead  <smeghead@users.sourceforge.jp>
+2009-05-31	smeghead  <smeghead@users.sourceforge.jp>
 
-    * リクエストされたURLを求める処理に問題があったのを修正した。環境変数の
-    HTTPSを判定して、nullポインタを示していない場合、SSLとして判定するようにし
-    た。
+	* リクエストされたURLを求める処理に問題があったのを修正した。環境変数の
+	HTTPSを判定して、nullポインタを示していない場合、SSLとして判定するようにし
+	た。
 
-2009-05-18  smeghead <smeghead@users.sourceforge.jp>
+2009-05-18	smeghead <smeghead@users.sourceforge.jp>
 
-    * FreeBSDの場合にも LFLAGS に、-ldl が付いていたため FreeBSD でコンパイル
-      に失敗していた。Linuxの場合に、 -ldl を付加するようにMakefileを修正した。
+	* FreeBSDの場合にも LFLAGS に、-ldl が付いていたため FreeBSD でコンパイル
+	  に失敗していた。Linuxの場合に、 -ldl を付加するようにMakefileを修正した。
 
-2009-04-24  smeghead <smeghead@users.sourceforge.jp>
+2009-04-24	smeghead <smeghead@users.sourceforge.jp>
 
-    * SSL接続時に、hookスクリプトに渡すホスト名を正しく作れない問題を修正した。
+	* SSL接続時に、hookスクリプトに渡すホスト名を正しく作れない問題を修正した。
 
-2009-04-18  smeghead <smeghead@users.sourceforge.jp>
+2009-04-18	smeghead <smeghead@users.sourceforge.jp>
 
-    * 利便性のためにトップページのリンクを追加した。
+	* 利便性のためにトップページのリンクを追加した。
 
-2009-03-20  smeghead <smeghead@users.sourceforge.jp>
+2009-03-20	smeghead <smeghead@users.sourceforge.jp>
 
-    * 設定情報のエクスポートのスクリプトを更新した。
-    * トップの管理ツールで、サブプロジェクトのデータベースパスを表示するようにした。
+	* 設定情報のエクスポートのスクリプトを更新した。
+	* トップの管理ツールで、サブプロジェクトのデータベースパスを表示するようにした。
 
-2009-03-19  smeghead <smeghead@users.sourceforge.jp>
+2009-03-19	smeghead <smeghead@users.sourceforge.jp>
 
-    * 1.2.8-bataリリース
+	* 1.2.8-bataリリース
 
-2009-03-19  smeghead <smeghead@users.sourceforge.jp>
+2009-03-19	smeghead <smeghead@users.sourceforge.jp>
 
-    * 検索結果のCSV形式でのダウンロードに加えて、HTML形式でダウンロードして
-      エクセルで開くリンクを追加した。
+	* 検索結果のCSV形式でのダウンロードに加えて、HTML形式でダウンロードして
+	  エクセルで開くリンクを追加した。
 
-2009-03-17  smeghead <smeghead@users.sourceforge.jp>
+2009-03-17	smeghead <smeghead@users.sourceforge.jp>
 
-    * copyrightの表記を2009に更新した。
+	* copyrightの表記を2009に更新した。
 
-2009-03-16  smeghead <smeghead@users.sourceforge.jp>
+2009-03-16	smeghead <smeghead@users.sourceforge.jp>
 
-    * 統計情報グラフのサイズ指定をStarbug1 1.1系のサイズ指定にした。
+	* 統計情報グラフのサイズ指定をStarbug1 1.1系のサイズ指定にした。
 
-2009-03-11  smeghead <smeghead@users.sourceforge.jp>
+2009-03-11	smeghead <smeghead@users.sourceforge.jp>
 
-    * 1.2.7-bataリリース
+	* 1.2.7-bataリリース
 
-2009-03-11  smeghead <smeghead@users.sourceforge.jp>
+2009-03-11	smeghead <smeghead@users.sourceforge.jp>
 
-    * "のHTMLエスケープの処理が間違っていたのを修正した。スペルミス
-    * リリース準備
+	* "のHTMLエスケープの処理が間違っていたのを修正した。スペルミス
+	* リリース準備
 
-2009-03-09  smeghead <smeghead@users.sourceforge.jp>
+2009-03-09	smeghead <smeghead@users.sourceforge.jp>
 
-    * 日付のフィールドに保存した値が返信時に、テキストフィールに表示されない問題を修正した。
+	* 日付のフィールドに保存した値が返信時に、テキストフィールに表示されない問題を修正した。
 
-2009-02-19  smeghead <smeghead@users.sourceforge.jp>
+2009-02-19	smeghead <smeghead@users.sourceforge.jp>
 
-    * Firefox3でグラフの凡例の文字が、ずれていたのを修正した。
-      CSSの定義を削除した。
+	* Firefox3でグラフの凡例の文字が、ずれていたのを修正した。
+	  CSSの定義を削除した。
 
-2009-01-20  smeghead <smeghead@users.sourceforge.jp>
+2009-01-20	smeghead <smeghead@users.sourceforge.jp>
 
-    * チケット一括登録で改行を含む項目を正しくパースできなかったのを修正した。
+	* チケット一括登録で改行を含む項目を正しくパースできなかったのを修正した。
 
-2009-01-11  smeghead <smeghead@users.sourceforge.jp>
+2009-01-11	smeghead <smeghead@users.sourceforge.jp>
 
-    * 1.2.6-bataリリース
+	* 1.2.6-bataリリース
 
-2009-01-11  smeghead <smeghead@users.sourceforge.jp>
+2009-01-11	smeghead <smeghead@users.sourceforge.jp>
 
-    * メール送信のモジュールの作成中。現在、マルチバイトを含まないメールを送信できる状態。
+	* メール送信のモジュールの作成中。現在、マルチバイトを含まないメールを送信できる状態。
 
-2009-01-08  smeghead <smeghead@users.sourceforge.jp>
+2009-01-08	smeghead <smeghead@users.sourceforge.jp>
 
-    * メール送信のモジュールの作成中。
-    * インストールの説明を更新した。Starbug1のコンパイルには、gnuのmakeが必要であることを追記した。
+	* メール送信のモジュールの作成中。
+	* インストールの説明を更新した。Starbug1のコンパイルには、gnuのmakeが必要であることを追記した。
 
-2009-01-07  smeghead <smeghead@users.sourceforge.jp>
+2009-01-07	smeghead <smeghead@users.sourceforge.jp>
 
-    * メール送信のモジュールの作成中。現在存在するフックの仕組みをC言語の動的ライブラリに拡張する作業中。
+	* メール送信のモジュールの作成中。現在存在するフックの仕組みをC言語の動的ライブラリに拡張する作業中。
 
-2009-01-05  smeghead <smeghead@users.sourceforge.jp>
+2009-01-05	smeghead <smeghead@users.sourceforge.jp>
 
-    * 存在しないURLが指定された時リダイレクト後に、dieを呼び出すのをやめた。500エラーが帰らないようにするため。
-    * ブラウザの幅が狭い場合に、状態別チケット一覧とチケット検索でレイアウトが崩れる問題を修正。cssの修正
-    * Cによるメール送信モジュールの追加。未完成。
+	* 存在しないURLが指定された時リダイレクト後に、dieを呼び出すのをやめた。500エラーが帰らないようにするため。
+	* ブラウザの幅が狭い場合に、状態別チケット一覧とチケット検索でレイアウトが崩れる問題を修正。cssの修正
+	* Cによるメール送信モジュールの追加。未完成。
 
-2008-12-26  smeghead <smeghead@users.sourceforge.jp>
+2008-12-26	smeghead <smeghead@users.sourceforge.jp>
 
-    * htmlタグから xml:lang lang 属性を削除した。これらがあると中国語がIE6で文字化けするため。
+	* htmlタグから xml:lang lang 属性を削除した。これらがあると中国語がIE6で文字化けするため。
 
-2008-12-26  smeghead <smeghead@users.sourceforge.jp>
+2008-12-26	smeghead <smeghead@users.sourceforge.jp>
 
-    * チケット詳細ページの文言の修正
+	* チケット詳細ページの文言の修正
 
-2008-12-23  smeghead <smeghead@users.sourceforge.jp>
+2008-12-23	smeghead <smeghead@users.sourceforge.jp>
 
-    * 1.2.5-bataリリース
+	* 1.2.5-bataリリース
 
-2008-12-23  smeghead <smeghead@users.sourceforge.jp>
+2008-12-23	smeghead <smeghead@users.sourceforge.jp>
 
-    * IEで統計情報のグラフがエラーになることがあったのを修正した。CSSでの幅指定をピクセル指定に戻した。
-    * グラフの項目の名称は、HTML5ライブラリでHTMLエスケープしてるので、エスケープせずにjavascriptに渡すようにした。
-    * サブプロジェクトのホームリンクを削除した。トップにホームリンクを作成できるので、機能として冗長でわかりにくくなるため。
-    * inputタグのvalue値のエスケープが不完全だったのを修正した。
-    * タイトルタグのhtmlエスケープが行なわれていなかったのを修正した。
+	* IEで統計情報のグラフがエラーになることがあったのを修正した。CSSでの幅指定をピクセル指定に戻した。
+	* グラフの項目の名称は、HTML5ライブラリでHTMLエスケープしてるので、エスケープせずにjavascriptに渡すようにした。
+	* サブプロジェクトのホームリンクを削除した。トップにホームリンクを作成できるので、機能として冗長でわかりにくくなるため。
+	* inputタグのvalue値のエスケープが不完全だったのを修正した。
+	* タイトルタグのhtmlエスケープが行なわれていなかったのを修正した。
 
-2008-12-23  smeghead <smeghead@users.sourceforge.jp>
+2008-12-23	smeghead <smeghead@users.sourceforge.jp>
 
-    * トップページのHTMLのタイトルにプロジェクト名を表示するようにした。
-    * サブプロジェクトの管理ツールのホームリンクの表示名も動的に変更するようにした。
+	* トップページのHTMLのタイトルにプロジェクト名を表示するようにした。
+	* サブプロジェクトの管理ツールのホームリンクの表示名も動的に変更するようにした。
 
-2008-12-16  smeghead <smeghead@users.sourceforge.jp>
+2008-12-16	smeghead <smeghead@users.sourceforge.jp>
 
-    * .htaccessファイルにAddHandlerの定義を追加した。
+	* .htaccessファイルにAddHandlerの定義を追加した。
 
-2008-12-12  smeghead <smeghead@users.sourceforge.jp>
+2008-12-12	smeghead <smeghead@users.sourceforge.jp>
 
-    * 1.2.4-bataリリース
+	* 1.2.4-bataリリース
 
-2008-12-12  smeghead <smeghead@users.sourceforge.jp>
+2008-12-12	smeghead <smeghead@users.sourceforge.jp>
 
-    * トップページのデザインを修正した。
-    * wikiの出力でエラーが発生することがあったのを修正した。
-    * アンカータグのid name属性に%が含まれないように修正した。
-    * textareaにmaxlength属性が指定されていた部分があったので削除した。
+	* トップページのデザインを修正した。
+	* wikiの出力でエラーが発生することがあったのを修正した。
+	* アンカータグのid name属性に%が含まれないように修正した。
+	* textareaにmaxlength属性が指定されていた部分があったので削除した。
 
-2008-12-10  smeghead <smeghead@users.sourceforge.jp>
+2008-12-10	smeghead <smeghead@users.sourceforge.jp>
 
-    * 全体のトップをトップページ、追加するBTSをサブプロジェクトと呼ぶように修正。
-    * ホームというリンクのリンク先を変更する機能は存在したが、ホームというリンク名も修正できる機能を追加した
-    * トップをプロジェクトと呼ぶことにしたので、トップに名前を付けられるように修正。
-      それに伴ない、以前のバージョン(1.2.1-alpha から
-      1.2.3-alpha)から移行する場合、下のSQLを、<Starbug1>/db/1.db
-      に対して実行する必要がある。
-      $ cd <Starbug1>/db/
-      $ sqlite3 1.db
-      sqlite> create table setting(name text primary key, value text );
-      sqlite> insert into setting(name, value) values ('project_name', 'メインプロジェクト');
-      sqlite> insert into setting(name, value) values ('home_description', 'ホーム');
-      sqlite> insert into setting(name, value) values ('home_url', '');
-      sqlite> .quit
-      また、2.db 3.db
-      など2以降のが存在する場合、それぞれに対して以下のSQLを実行する必要がある。
-      $ cd <Starbug1>/db/
-      $ sqlite3 2.db
-      sqlite> insert into setting(name, value) values ('home_description', 'ホーム');
-      sqlite> .quit
-    * Seleniumのテストコード修正。
-    * トップページのサブプロジェクト一覧のリンクの閉じタグが抜けていたのを追加した。
-    * トップページ用のcssファイルを別に追加した。
+	* 全体のトップをトップページ、追加するBTSをサブプロジェクトと呼ぶように修正。
+	* ホームというリンクのリンク先を変更する機能は存在したが、ホームというリンク名も修正できる機能を追加した
+	* トップをプロジェクトと呼ぶことにしたので、トップに名前を付けられるように修正。
+	  それに伴ない、以前のバージョン(1.2.1-alpha から
+	  1.2.3-alpha)から移行する場合、下のSQLを、<Starbug1>/db/1.db
+	  に対して実行する必要がある。
+	  $ cd <Starbug1>/db/
+	  $ sqlite3 1.db
+	  sqlite> create table setting(name text primary key, value text );
+	  sqlite> insert into setting(name, value) values ('project_name', 'メインプロジェクト');
+	  sqlite> insert into setting(name, value) values ('home_description', 'ホーム');
+	  sqlite> insert into setting(name, value) values ('home_url', '');
+	  sqlite> .quit
+	  また、2.db 3.db
+	  など2以降のが存在する場合、それぞれに対して以下のSQLを実行する必要がある。
+	  $ cd <Starbug1>/db/
+	  $ sqlite3 2.db
+	  sqlite> insert into setting(name, value) values ('home_description', 'ホーム');
+	  sqlite> .quit
+	* Seleniumのテストコード修正。
+	* トップページのサブプロジェクト一覧のリンクの閉じタグが抜けていたのを追加した。
+	* トップページ用のcssファイルを別に追加した。
 
-2008-12-08  smeghead <smeghead@users.sourceforge.jp>
+2008-12-08	smeghead <smeghead@users.sourceforge.jp>
 
-    * トップページのリンクの出力方法でHTMLエンコードが行なわれていなかったのを修正した。
-    * 状態別チケット一覧のアンカーリンクの名前をurlエンコードするようにした。
-    * チケットリンクの処理で、#が存在するがリンクで無かった場合にゴミが表示されるのを修正した。
-    * 状態別チケット一覧のアンカータグをname属性と合わせてid属性も指定するようにした。
-      id属性だけを指定した場合、linuxのfirefoxで動作がおかしかったため。
-    * リリース準備
-    * 統計情報のグラフの表示を調整
+	* トップページのリンクの出力方法でHTMLエンコードが行なわれていなかったのを修正した。
+	* 状態別チケット一覧のアンカーリンクの名前をurlエンコードするようにした。
+	* チケットリンクの処理で、#が存在するがリンクで無かった場合にゴミが表示されるのを修正した。
+	* 状態別チケット一覧のアンカータグをname属性と合わせてid属性も指定するようにした。
+	  id属性だけを指定した場合、linuxのfirefoxで動作がおかしかったため。
+	* リリース準備
+	* 統計情報のグラフの表示を調整
 
-2008-12-07  smeghead <smeghead@users.sourceforge.jp>
+2008-12-07	smeghead <smeghead@users.sourceforge.jp>
 
-    * 1.2.3-alphaリリース
+	* 1.2.3-alphaリリース
 
-2008-12-07  smeghead <smeghead@users.sourceforge.jp>
+2008-12-07	smeghead <smeghead@users.sourceforge.jp>
 
-    * 管理ツールのプロジェクト一覧へのリンクが全体の管理へのリンクになっていた
-      ので、全体のトップへのリンクに修正した。
-    * rssのリンクをアイコンに変更した。
+	* 管理ツールのプロジェクト一覧へのリンクが全体の管理へのリンクになっていた
+	  ので、全体のトップへのリンクに修正した。
+	* rssのリンクをアイコンに変更した。
 
-2008-12-03  smeghead <smeghead@users.sourceforge.jp>
+2008-12-03	smeghead <smeghead@users.sourceforge.jp>
 
-    * プロジェクトの削除機能を追加した。
-    * プロジェクト情報の更新ができないバグを修正した。入力チェックの不備があった。
-    * プロジェクトの削除について注意書きを追加した。
+	* プロジェクトの削除機能を追加した。
+	* プロジェクト情報の更新ができないバグを修正した。入力チェックの不備があった。
+	* プロジェクトの削除について注意書きを追加した。
 
-2008-12-02  smeghead <smeghead@users.sourceforge.jp>
+2008-12-02	smeghead <smeghead@users.sourceforge.jp>
 
-    * チケットリンクのバグを修正した。
-    * チケットリンクのテストコードを追加。
-    * リリース準備
+	* チケットリンクのバグを修正した。
+	* チケットリンクのテストコードを追加。
+	* リリース準備
 
-2008-12-01  smeghead <smeghead@users.sourceforge.jp>
+2008-12-01	smeghead <smeghead@users.sourceforge.jp>
 
-    * 1.2.2-alphaリリース
+	* 1.2.2-alphaリリース
 
-2008-12-01  smeghead <smeghead@users.sourceforge.jp>
+2008-12-01	smeghead <smeghead@users.sourceforge.jp>
 
-    * プロジェクトの管理ツールで、既に存在するプロジェクトを追加できないようにした。
-    * トップにもスタイルを適応されるようにした。(しかしデザインとしては検討が必要)
-    * リリース準備
+	* プロジェクトの管理ツールで、既に存在するプロジェクトを追加できないようにした。
+	* トップにもスタイルを適応されるようにした。(しかしデザインとしては検討が必要)
+	* リリース準備
 
-2008-11-30  smeghead <smeghead@users.sourceforge.jp>
+2008-11-30	smeghead <smeghead@users.sourceforge.jp>
 
-    * 複数行テキストの項目でのチケットリンクを複数プロジェクトに対応した。
-      他のプロジェクトへのリンクも記述できるようにした。(#project:102 の形式)
+	* 複数行テキストの項目でのチケットリンクを複数プロジェクトに対応した。
+	  他のプロジェクトへのリンクも記述できるようにした。(#project:102 の形式)
 
-2008-11-30  smeghead <smeghead@users.sourceforge.jp>
+2008-11-30	smeghead <smeghead@users.sourceforge.jp>
 
-    * 新規にプロジェクトを作成したときに管理ツールのスタイル設定で、スタイルシートの内容が全て表示されないのを修正。
-      初期に作成する時に、sizeが不適切だったため。
+	* 新規にプロジェクトを作成したときに管理ツールのスタイル設定で、スタイルシートの内容が全て表示されないのを修正。
+	  初期に作成する時に、sizeが不適切だったため。
 
-2008-11-26  smeghead <smeghead@users.sourceforge.jp>
+2008-11-26	smeghead <smeghead@users.sourceforge.jp>
 
-    * 複数行テキスト項目で使用できるチケットへのリンクを複数プロジェクト対応した。他のプロジェクトへのリンクは未対応。
+	* 複数行テキスト項目で使用できるチケットへのリンクを複数プロジェクト対応した。他のプロジェクトへのリンクは未対応。
 
-2008-11-24  smeghead <smeghead@users.sourceforge.jp>
+2008-11-24	smeghead <smeghead@users.sourceforge.jp>
 
-    * 管理ツールの項目の削除が、機能しないバグを修正した。
-      cgiPathInfoの参照の方法が、複数プロジェクト前の方法だったのが原因だった。
+	* 管理ツールの項目の削除が、機能しないバグを修正した。
+	  cgiPathInfoの参照の方法が、複数プロジェクト前の方法だったのが原因だった。
 
-2008-11-23  smeghead <smeghead@users.sourceforge.jp>
+2008-11-23	smeghead <smeghead@users.sourceforge.jp>
 
-    * 予約されているtopというプロジェクトIDを追加できないようにした。 
-    * プロジェクトIDにURLで使用できない文字が指定された場合に対応した。
-      プロジェクトIDをURLとして使用する場合は、urlエンコードするようにした。
+	* 予約されているtopというプロジェクトIDを追加できないようにした。 
+	* プロジェクトIDにURLで使用できない文字が指定された場合に対応した。
+	  プロジェクトIDをURLとして使用する場合は、urlエンコードするようにした。
 
-2008-11-23  smeghead <smeghead@users.sourceforge.jp>
+2008-11-23	smeghead <smeghead@users.sourceforge.jp>
 
-    * 1.2.1-alpha リリース
+	* 1.2.1-alpha リリース
 
-2008-11-23  smeghead <smeghead@users.sourceforge.jp>
+2008-11-23	smeghead <smeghead@users.sourceforge.jp>
 
-    * プロジェクトの画面から、プロジェクト一覧へのリンクを追加。
-    * 
+	* プロジェクトの画面から、プロジェクト一覧へのリンクを追加。
+	* 
 
-2008-11-23  smeghead <smeghead@users.sourceforge.jp>
+2008-11-23	smeghead <smeghead@users.sourceforge.jp>
 
-    * 全体の管理ページの作成途中。
+	* 全体の管理ページの作成途中。
 
-2008-11-10  smeghead <smeghead@users.sourceforge.jp>
+2008-11-10	smeghead <smeghead@users.sourceforge.jp>
 
-    * 全体のトップページの作成。
-    * トップの編集機能作成。
+	* 全体のトップページの作成。
+	* トップの編集機能作成。
 
-2008-11-09  smeghead <smeghead@users.sourceforge.jp>
+2008-11-09	smeghead <smeghead@users.sourceforge.jp>
 
-    * 複数プロジェクト対応の開始。
-    * ファイルの分割。プロジェクト毎のアクション処理とトップのアクション処理を別のファイルに記述するようにする。
-    * プロジェクト部分のアクションが新しいURLで動作するようになった。
-     - 旧URL http://www.example.com/starbug1/index.cgi/ticket/10
-     - 新URL http://www.example.com/starbug1/index.cgi/project_name/ticket/10
-    * 不要なファイルが存在したので削除した。
-    * 複数プロジェクト対応用のデータベース追加
+	* 複数プロジェクト対応の開始。
+	* ファイルの分割。プロジェクト毎のアクション処理とトップのアクション処理を別のファイルに記述するようにする。
+	* プロジェクト部分のアクションが新しいURLで動作するようになった。
+	 - 旧URL http://www.example.com/starbug1/index.cgi/ticket/10
+	 - 新URL http://www.example.com/starbug1/index.cgi/project_name/ticket/10
+	* 不要なファイルが存在したので削除した。
+	* 複数プロジェクト対応用のデータベース追加
 
-2008-11-03  smeghead <smeghead@users.sourceforge.jp>
+2008-11-03	smeghead <smeghead@users.sourceforge.jp>
 
-    * エラーが発生してdie関数を呼び出した時、ブラウザにもエラーの内容を表示するようにした。
-      セキュリティの問題よりも、Starbug1の問題を解決できた方がいいので、ファイ
-      ル名、行数、エラーメッセージも表示するようにした。
+	* エラーが発生してdie関数を呼び出した時、ブラウザにもエラーの内容を表示するようにした。
+	  セキュリティの問題よりも、Starbug1の問題を解決できた方がいいので、ファイ
+	  ル名、行数、エラーメッセージも表示するようにした。
 
-2008-10-26  smeghead <smeghead@users.sourceforge.jp>
+2008-10-26	smeghead <smeghead@users.sourceforge.jp>
 
-    * 1.1.4 リリース
+	* 1.1.4 リリース
 
-2008-10-26  smeghead <smeghead@users.sourceforge.jp>
+2008-10-26	smeghead <smeghead@users.sourceforge.jp>
 
-    * リリース準備
+	* リリース準備
 
-2008-10-23  smeghead <smeghead@users.sourceforge.jp>
+2008-10-23	smeghead <smeghead@users.sourceforge.jp>
 
-    * TAKAHASHI hideakiさんから頂いたパッチを取り込んだ。
-    * バッファオーバーフローの対策
-    * コンパイル時の警告の回避
+	* TAKAHASHI hideakiさんから頂いたパッチを取り込んだ。
+	* バッファオーバーフローの対策
+	* コンパイル時の警告の回避
 
-2008-10-11  smeghead <smeghead@users.sourceforge.jp>
+2008-10-11	smeghead <smeghead@users.sourceforge.jp>
 
-    * 1.1.3 リリース
+	* 1.1.3 リリース
 
-2008-10-04  smeghead <smeghead@users.sourceforge.jp>
+2008-10-04	smeghead <smeghead@users.sourceforge.jp>
 
-    * 管理ツールのスタイル設定で、正しく値を取得できていないために、スタイル設定が上書きされてしまう問題を修正。
-    * h4のスタイルシート設定を追加。トップページの編集部分のスタイル調整のため。
-    * リリース準備
+	* 管理ツールのスタイル設定で、正しく値を取得できていないために、スタイル設定が上書きされてしまう問題を修正。
+	* h4のスタイルシート設定を追加。トップページの編集部分のスタイル調整のため。
+	* リリース準備
 
-2008-09-07  smeghead <smeghead@users.sourceforge.jp>
+2008-09-07	smeghead <smeghead@users.sourceforge.jp>
 
-    * 1.1.2 リリース
+	* 1.1.2 リリース
 
-2008-09-07  smeghead <smeghead@users.sourceforge.jp>
+2008-09-07	smeghead <smeghead@users.sourceforge.jp>
 
-    * トップ画像のキャッシュ指定が正しくなかったために、トップ画像が表示されない問題を修正。
-      Expiresではなく、Cache-Control: max-arg で指定するように修正した。
+	* トップ画像のキャッシュ指定が正しくなかったために、トップ画像が表示されない問題を修正。
+	  Expiresではなく、Cache-Control: max-arg で指定するように修正した。
 
-2008-09-07  smeghead <smeghead@users.sourceforge.jp>
+2008-09-07	smeghead <smeghead@users.sourceforge.jp>
 
-    * 1.1.1 リリース
+	* 1.1.1 リリース
 
-2008-09-07  smeghead <smeghead@users.sourceforge.jp>
+2008-09-07	smeghead <smeghead@users.sourceforge.jp>
 
-    * top_imageの返却に有効期限を追加した。キャッシュしてもらうため。
+	* top_imageの返却に有効期限を追加した。キャッシュしてもらうため。
 
-2008-09-07  smeghead  <smeghead@debian>
+2008-09-07	smeghead  <smeghead@debian>
 
-    * .htaccessの問題のため、internal server errorの場合に、error.htmlが表示できなかったのを修正。
-    * cgiの拡張子を動的に取得してリンクのファイル名を決定するように修正。Windows対応。
-    * プロジェクトの設定内容を格納するテーブルをprojectからsetting(新規テーブル)に変更。projectテーブルは廃止。
-    * user.cssをsetting_file(新規テーブル)に格納するように修正。
-    * トップ画像をseting_fileに格納するように修正。
+	* .htaccessの問題のため、internal server errorの場合に、error.htmlが表示できなかったのを修正。
+	* cgiの拡張子を動的に取得してリンクのファイル名を決定するように修正。Windows対応。
+	* プロジェクトの設定内容を格納するテーブルをprojectからsetting(新規テーブル)に変更。projectテーブルは廃止。
+	* user.cssをsetting_file(新規テーブル)に格納するように修正。
+	* トップ画像をseting_fileに格納するように修正。
 
-    以前のバージョンからの移行手順
-    (1) 以前のStarbug1のディレクトリをバックアップする。
-      任意のディレクトリにコピーしておいてください。
+	以前のバージョンからの移行手順
+	(1) 以前のStarbug1のディレクトリをバックアップする。
+	  任意のディレクトリにコピーしておいてください。
 
-    (2) 通常のインストール手順によりインストールする。
+	(2) 通常のインストール手順によりインストールする。
 
-    (3) データベースの存在するディレクトリに移動する。
-    # cd <Starbug1のディレクトリ>/db
+	(3) データベースの存在するディレクトリに移動する。
+	# cd <Starbug1のディレクトリ>/db
 
-    (4) 以前のStarbug1のデータベースをコピーする。
-    # cp <以前のStarbug1のバックアップ先>/db/starbug1.db <Starbug1のディレクトリ>/db/
+	(4) 以前のStarbug1のデータベースをコピーする。
+	# cp <以前のStarbug1のバックアップ先>/db/starbug1.db <Starbug1のディレクトリ>/db/
 
-    (5) projectテーブルに格納されていた、以前の設定をsettingテーブル(新規)に移行する。
-    # cat | sqlite3 starbug1.db
-    create table setting(name text primary key, value text);
-    insert into setting(name, value) select 'project_name', name from project;
-    insert into setting(name, value) select 'home_url', home_url from project;
-    create table setting_file(name text primary key, file_name text, size
-    integer, mime_type text, content blob);
-    insert into setting_file(name, content) values ('user.css', '');
-    insert into setting_file(name, content) values ('top_image', '');
-    <CTRL-D>
-    ※ cat | sqlite3 starbug1.db のコマンドを打ってから、下に続くSQL文を貼り付
-       けてください。最後に、<CTRL-D>を入力してください。
+	(5) projectテーブルに格納されていた、以前の設定をsettingテーブル(新規)に移行する。
+	# cat | sqlite3 starbug1.db
+	create table setting(name text primary key, value text);
+	insert into setting(name, value) select 'project_name', name from project;
+	insert into setting(name, value) select 'home_url', home_url from project;
+	create table setting_file(name text primary key, file_name text, size
+	integer, mime_type text, content blob);
+	insert into setting_file(name, content) values ('user.css', '');
+	insert into setting_file(name, content) values ('top_image', '');
+	<CTRL-D>
+	※ cat | sqlite3 starbug1.db のコマンドを打ってから、下に続くSQL文を貼り付
+	   けてください。最後に、<CTRL-D>を入力してください。
 
-    (6) ブラウザで Starbug1 の管理ツールを開く。
-      (例) http://example.com/starbug1/admin.cgi
+	(6) ブラウザで Starbug1 の管理ツールを開く。
+	  (例) http://example.com/starbug1/admin.cgi
 
-    (7) バックアップしたユーザ定義のcssを移行する。
-      <以前のStarbug1のバックアップ先>/css/user.css の内容を管理ツールの
-      スタイル設定のテキストエリアに貼り付けて更新ボタンをクリックする。
+	(7) バックアップしたユーザ定義のcssを移行する。
+	  <以前のStarbug1のバックアップ先>/css/user.css の内容を管理ツールの
+	  スタイル設定のテキストエリアに貼り付けて更新ボタンをクリックする。
 
-    (8) 管理ツールのプロジェクト設定から、画像をアップロードする。
-      常に画面上部に表示されている画像です。
+	(8) 管理ツールのプロジェクト設定から、画像をアップロードする。
+	  常に画面上部に表示されている画像です。
 
-2008-07-17  smeghead <smeghead@users.sourceforge.jp>
+2008-07-17	smeghead <smeghead@users.sourceforge.jp>
 
-    * 1.0.4 リリース
+	* 1.0.4 リリース
 
-2008-07-17  smeghead <smeghead@users.sourceforge.jp>
+2008-07-17	smeghead <smeghead@users.sourceforge.jp>
 
-    * 複数選択可能リスト」を設定した場合、統計情報が正しく表示されない問題を修
-      正した。複数選択可能リストの統計を取得するSQLに問題があった。
-      http://sourceforge.jp/tracker/index.php?func=detail&aid=13055&group_id=3135&atid=11637
-    * apache用.htaccessのアクセス禁止の設定を、ブラックリスト式からホワイトリ
-      スト式に変更した。
-    * .htaccessの修正に合わせてINSTALLを修正した。
+	* 複数選択可能リスト」を設定した場合、統計情報が正しく表示されない問題を修
+	  正した。複数選択可能リストの統計を取得するSQLに問題があった。
+	  http://sourceforge.jp/tracker/index.php?func=detail&aid=13055&group_id=3135&atid=11637
+	* apache用.htaccessのアクセス禁止の設定を、ブラックリスト式からホワイトリ
+	  スト式に変更した。
+	* .htaccessの修正に合わせてINSTALLを修正した。
 
-2008-07-09  smeghead <smeghead@users.sourceforge.jp>
+2008-07-09	smeghead <smeghead@users.sourceforge.jp>
 
-    * 1.0.3 リリース
+	* 1.0.3 リリース
 
-2008-07-09  smeghead <smeghead@users.sourceforge.jp>
+2008-07-09	smeghead <smeghead@users.sourceforge.jp>
 
-    * DEBUGが定義されている場合、debug.logの出力に時間を出力するように修正した。
-    * hook機能に渡すjsonの領域を必要な分だけallocするように修正した。
+	* DEBUGが定義されている場合、debug.logの出力に時間を出力するように修正した。
+	* hook機能に渡すjsonの領域を必要な分だけallocするように修正した。
 
-2008-07-08  smeghead <smeghead@users.sourceforge.jp>
+2008-07-08	smeghead <smeghead@users.sourceforge.jp>
 
-    * filesizeエラーが発生したときエラー処理でrollbackしていたが、beginする前
-      だったために予期せぬエラーが発生していたのを修正した。
+	* filesizeエラーが発生したときエラー処理でrollbackしていたが、beginする前
+	  だったために予期せぬエラーが発生していたのを修正した。
 
-2008-07-03  smeghead <smeghead@users.sourceforge.jp>
+2008-07-03	smeghead <smeghead@users.sourceforge.jp>
 
-    * 複数行テキストの項目のデフォルト値を、複数行で指定できるようにした。
+	* 複数行テキストの項目のデフォルト値を、複数行で指定できるようにした。
 
-2008-06-25  smeghead <smeghead@users.sourceforge.jp>
+2008-06-25	smeghead <smeghead@users.sourceforge.jp>
 
-    * スタイルシートの調整をした。トップページのinfoを少し大きい文字に変更した。
-    * スタイルシートの調整をした。pre記法のfont指定に、ＭＳゴシックを追加した。
+	* スタイルシートの調整をした。トップページのinfoを少し大きい文字に変更した。
+	* スタイルシートの調整をした。pre記法のfont指定に、ＭＳゴシックを追加した。
 
-2008-06-24  smeghead <smeghead@users.sourceforge.jp>
+2008-06-24	smeghead <smeghead@users.sourceforge.jp>
 
-    * サンプルのメール送信用hookスクリプトで、メール本文の内容を見易い形式に変更した。
+	* サンプルのメール送信用hookスクリプトで、メール本文の内容を見易い形式に変更した。
 
-2008-06-23  smeghead <smeghead@users.sourceforge.jp>
+2008-06-23	smeghead <smeghead@users.sourceforge.jp>
 
-    * フリーし忘れを1箇所修正した。
+	* フリーし忘れを1箇所修正した。
 
-2008-06-20  smeghead <smeghead@users.sourceforge.jp>
+2008-06-20	smeghead <smeghead@users.sourceforge.jp>
 
-    * 1.0.2 リリース
+	* 1.0.2 リリース
 
-2008-06-20  smeghead <smeghead@users.sourceforge.jp>
+2008-06-20	smeghead <smeghead@users.sourceforge.jp>
 
-    * 項目種別が複数選択リストの項目を必須に設定した場合、必須入力チェックで
-      JavaScriptエラーが発生する問題を修正した。
-    * 複数選択項目で、項目を選択しているときに、新規追加の選択肢のテキストボッ
-      クスにも入力して登録をしたときに、新規の項目とコンボの最初の値が結合され
-      た文字列が登録されていまう問題を修正した。
-    * テストを更新した。
-    * リリースの準備
+	* 項目種別が複数選択リストの項目を必須に設定した場合、必須入力チェックで
+	  JavaScriptエラーが発生する問題を修正した。
+	* 複数選択項目で、項目を選択しているときに、新規追加の選択肢のテキストボッ
+	  クスにも入力して登録をしたときに、新規の項目とコンボの最初の値が結合され
+	  た文字列が登録されていまう問題を修正した。
+	* テストを更新した。
+	* リリースの準備
 
-2008-06-05  smeghead <smeghead@users.sourceforge.jp>
+2008-06-05	smeghead <smeghead@users.sourceforge.jp>
 
-    * ヘルプを追加した。
+	* ヘルプを追加した。
 
-2008-06-04  smeghead <smeghead@users.sourceforge.jp>
+2008-06-04	smeghead <smeghead@users.sourceforge.jp>
 
-    * INSTALLから、CVSから取得する場合の説明を削除した。
+	* INSTALLから、CVSから取得する場合の説明を削除した。
 
-2008-06-03  smeghead <smeghead@users.sourceforge.jp>
+2008-06-03	smeghead <smeghead@users.sourceforge.jp>
 
-    * XHTML Validのアイコンを再度追加した。存在しないcanvasタグは、JavaScript
-      で出力するように修正した。
-    * ヘルプの追加。項目のカスタマイズと添付資料の項目の追加の記述を追加した。
+	* XHTML Validのアイコンを再度追加した。存在しないcanvasタグは、JavaScript
+	  で出力するように修正した。
+	* ヘルプの追加。項目のカスタマイズと添付資料の項目の追加の記述を追加した。
 
-2008-05-30  smeghead <smeghead@users.sourceforge.jp>
+2008-05-30	smeghead <smeghead@users.sourceforge.jp>
 
-    * 1.0.1 リリース
+	* 1.0.1 リリース
 
-2008-05-29  smeghead <smeghead@users.sourceforge.jp>
+2008-05-29	smeghead <smeghead@users.sourceforge.jp>
 
-    * XHTMLのエラーを修正した。
-    * XHTMLのValidアイコンを消した。canvasを使っているためvalidではなくなっていたため。
+	* XHTMLのエラーを修正した。
+	* XHTMLのValidアイコンを消した。canvasを使っているためvalidではなくなっていたため。
 
-2008-05-28  smeghead <smeghead@users.sourceforge.jp>
+2008-05-28	smeghead <smeghead@users.sourceforge.jp>
 
-    * 管理ツールのバックアップのリンクを削除した。
-    * ヘルプページに逆引きヘルプの項目を追加した。
-    * 管理ツールの項目設定の説明文を修正した。
-    * ホームのURLのデフォルトを空文字列に変更した。
+	* 管理ツールのバックアップのリンクを削除した。
+	* ヘルプページに逆引きヘルプの項目を追加した。
+	* 管理ツールの項目設定の説明文を修正した。
+	* ホームのURLのデフォルトを空文字列に変更した。
 
-2008-05-27  smeghead <smeghead@users.sourceforge.jp>
+2008-05-27	smeghead <smeghead@users.sourceforge.jp>
 
-    * カーソルを載せたときのボタンのスタイル指定を削除した。
-    * チケット検索でクッキーの値を復元する条件を修正した。
-    * h3タグの背景画像を削除した。
+	* カーソルを載せたときのボタンのスタイル指定を削除した。
+	* チケット検索でクッキーの値を復元する条件を修正した。
+	* h3タグの背景画像を削除した。
 
-2008-05-25  smeghead <smeghead@users.sourceforge.jp>
+2008-05-25	smeghead <smeghead@users.sourceforge.jp>
 
-    * csvダウンロード時のfree忘れに対応した。
-    * チケット一括登録の説明文を更新した。
-    * ヘルプの不要な部分を削除した。
-    * 管理ツールの項目設定の選択肢を表示するテーブルのCSSを変更した。
-    * INSTALLにバックアップ方法を追記した。
+	* csvダウンロード時のfree忘れに対応した。
+	* チケット一括登録の説明文を更新した。
+	* ヘルプの不要な部分を削除した。
+	* 管理ツールの項目設定の選択肢を表示するテーブルのCSSを変更した。
+	* INSTALLにバックアップ方法を追記した。
 
-2008-05-22  smeghead <smeghead@users.sourceforge.jp>
+2008-05-22	smeghead <smeghead@users.sourceforge.jp>
 
-    * 0.3.3-beta リリース
+	* 0.3.3-beta リリース
 
-2008-05-22  smeghead <smeghead@users.sourceforge.jp>
+2008-05-22	smeghead <smeghead@users.sourceforge.jp>
 
-    * cookie保存時のPathを / から、script_nameのパスを指定するように修正した。
-    * cookie保存時は、base64でエンコードしてから保存し、取得時は、base64デコードするようにした。
-    * リリースの準備。
+	* cookie保存時のPathを / から、script_nameのパスを指定するように修正した。
+	* cookie保存時は、base64でエンコードしてから保存し、取得時は、base64デコードするようにした。
+	* リリースの準備。
 
-2008-05-19  smeghead <smeghead@users.sourceforge.jp>
+2008-05-19	smeghead <smeghead@users.sourceforge.jp>
 
-    * 検索条件を保存している状態でページ上部の状態別のリンクをクリックした時に
-      検索結果が変化しないバグを修正した。状態別リンクをクリックした場合、選択
-      された条件と保存されている条件を合わせて検索する仕様とする。これは不自然
-      かもしれないので、この部分の動作を変更する可能性はある。
+	* 検索条件を保存している状態でページ上部の状態別のリンクをクリックした時に
+	  検索結果が変化しないバグを修正した。状態別リンクをクリックした場合、選択
+	  された条件と保存されている条件を合わせて検索する仕様とする。これは不自然
+	  かもしれないので、この部分の動作を変更する可能性はある。
 
-2008-05-17  smeghead <smeghead@users.sourceforge.jp>
+2008-05-17	smeghead <smeghead@users.sourceforge.jp>
 
-    * 検索条件の保存。キーワード検索の検索条件を保存する条件が間違ってる問題を修正した。
+	* 検索条件の保存。キーワード検索の検索条件を保存する条件が間違ってる問題を修正した。
 
-2008-05-17  smeghead <smeghead@users.sourceforge.jp>
+2008-05-17	smeghead <smeghead@users.sourceforge.jp>
 
-    * 0.3.2-beta リリース
+	* 0.3.2-beta リリース
 
-2008-05-17  smeghead <smeghead@users.sourceforge.jp>
+2008-05-17	smeghead <smeghead@users.sourceforge.jp>
 
-    * 検索結果でhit件数を表示している部分に、チケットの状態別の内訳を表示するようにした。
-    * 検索条件の保存処理の完成。
-    * リリースの準備。
-    * testの更新。
+	* 検索結果でhit件数を表示している部分に、チケットの状態別の内訳を表示するようにした。
+	* 検索条件の保存処理の完成。
+	* リリースの準備。
+	* testの更新。
 
-2008-05-15  smeghead <smeghead@users.sourceforge.jp>
+2008-05-15	smeghead <smeghead@users.sourceforge.jp>
 
-    * 検索条件の保存処理の作成中。cookieの読取。単一の条件の項目とキーワードに対応。
+	* 検索条件の保存処理の作成中。cookieの読取。単一の条件の項目とキーワードに対応。
 
-2008-05-14  smeghead <smeghead@users.sourceforge.jp>
+2008-05-14	smeghead <smeghead@users.sourceforge.jp>
 
-    * action構造体の型を他と合わせて大文字から始まるActionに変更した。
-    * 検索条件の保存処理の作成中。cookieの設定。
+	* action構造体の型を他と合わせて大文字から始まるActionに変更した。
+	* 検索条件の保存処理の作成中。cookieの設定。
 
-2008-05-12  smeghead <smeghead@users.sourceforge.jp>
+2008-05-12	smeghead <smeghead@users.sourceforge.jp>
 
-    * download時の書き込みをfwrite関数で行なうように修正した。
+	* download時の書き込みをfwrite関数で行なうように修正した。
 
-2008-05-09  smeghead <smeghead@users.sourceforge.jp>
+2008-05-09	smeghead <smeghead@users.sourceforge.jp>
 
-    * freeし忘れている部分を修正した。hook処理の部分とチケット一括登録の部分。
-    * 新しいチケットを登録するリンクを新しく追加した。
-    * bool型を導入した。
+	* freeし忘れている部分を修正した。hook処理の部分とチケット一括登録の部分。
+	* 新しいチケットを登録するリンクを新しく追加した。
+	* bool型を導入した。
 
-2008-05-07  smeghead <smeghead@users.sourceforge.jp>
+2008-05-07	smeghead <smeghead@users.sourceforge.jp>
 
-    * チケット詳細ページの履歴表示部分でのfreeタイミングによるバグの修正。
-      (0.3.1-betaリリース以降に発生したバグ)
-    * freeし忘れている部分を修正した。
+	* チケット詳細ページの履歴表示部分でのfreeタイミングによるバグの修正。
+	  (0.3.1-betaリリース以降に発生したバグ)
+	* freeし忘れている部分を修正した。
 
-2008-05-06  smeghead <smeghead@users.sourceforge.jp>
+2008-05-06	smeghead <smeghead@users.sourceforge.jp>
 
-    * freeし忘れている部分を修正した。
+	* freeし忘れている部分を修正した。
 
-2008-05-02  smeghead <smeghead@users.sourceforge.jp>
+2008-05-02	smeghead <smeghead@users.sourceforge.jp>
 
-    * 多くの関数の引数にconstを付けた。
+	* 多くの関数の引数にconstを付けた。
 
-2008-05-01  smeghead <smeghead@users.sourceforge.jp>
+2008-05-01	smeghead <smeghead@users.sourceforge.jp>
 
-    * チケット一括登録時に、入力されていない項目でデフォルト値がある場合はデ
-      フォルト値で登録するように修正。
+	* チケット一括登録時に、入力されていない項目でデフォルト値がある場合はデ
+	  フォルト値で登録するように修正。
 
-2008-04-29  smeghead <smeghead@users.sourceforge.jp>
+2008-04-29	smeghead <smeghead@users.sourceforge.jp>
 
-    * 文字列用char配列バッファの長さを適切な長さに変更。数値文字列用、日付用など。
-    * フォーム部品に適切なmaxlengthを指定した。
+	* 文字列用char配列バッファの長さを適切な長さに変更。数値文字列用、日付用など。
+	* フォーム部品に適切なmaxlengthを指定した。
 
-2008-04-28  smeghead <smeghead@users.sourceforge.jp>
+2008-04-28	smeghead <smeghead@users.sourceforge.jp>
 
-    * free忘れの部分を修正した。list_freeなど。
+	* free忘れの部分を修正した。list_freeなど。
 
-2008-04-26  smeghead <smeghead@users.sourceforge.jp>
+2008-04-26	smeghead <smeghead@users.sourceforge.jp>
 
-    * 0.3.1-beta リリース
+	* 0.3.1-beta リリース
 
-2008-04-26  smeghead <smeghead@users.sourceforge.jp>
+2008-04-26	smeghead <smeghead@users.sourceforge.jp>
 
-    * CSVのfreeを実装。
-    * チケット一括登録作成中。説明文を追加。
-    * チケット一括登録作成中。入力チェックjavascriptを追加。
-    * testを追加した。
-    * ヘルプを追加した。
-    * リリース準備
+	* CSVのfreeを実装。
+	* チケット一括登録作成中。説明文を追加。
+	* チケット一括登録作成中。入力チェックjavascriptを追加。
+	* testを追加した。
+	* ヘルプを追加した。
+	* リリース準備
 
-2008-04-25  smeghead <smeghead@users.sourceforge.jp>
+2008-04-25	smeghead <smeghead@users.sourceforge.jp>
 
-    * チケット詳細ページのHTMLタイトルを、「#id 件名」に変更した。
-    * チケット一括登録作成中。csvフィールドのデコード処理を追加。
+	* チケット詳細ページのHTMLタイトルを、「#id 件名」に変更した。
+	* チケット一括登録作成中。csvフィールドのデコード処理を追加。
 
-2008-04-24  smeghead <smeghead@users.sourceforge.jp>
+2008-04-24	smeghead <smeghead@users.sourceforge.jp>
 
-    * チケット一括登録作成中。
+	* チケット一括登録作成中。
 
-2008-04-20  smeghead <smeghead@users.sourceforge.jp>
+2008-04-20	smeghead <smeghead@users.sourceforge.jp>
 
-    * チケット一括登録作成中。
+	* チケット一括登録作成中。
 
-2008-04-18  smeghead <smeghead@users.sourceforge.jp>
+2008-04-18	smeghead <smeghead@users.sourceforge.jp>
 
-    * チケット一括登録作成中。
+	* チケット一括登録作成中。
 
-2008-04-17  smeghead <smeghead@users.sourceforge.jp>
+2008-04-17	smeghead <smeghead@users.sourceforge.jp>
 
-    * 正しいxhtmlでない部分を修正した。checked を checked="checked" に変更。
-    * チケット登録時に、返信専用属性のチェックを行なってしまう問題を修正した。
-    * チケット一括登録作成中。
+	* 正しいxhtmlでない部分を修正した。checked を checked="checked" に変更。
+	* チケット登録時に、返信専用属性のチェックを行なってしまう問題を修正した。
+	* チケット一括登録作成中。
 
-2008-04-11  smeghead <smeghead@users.sourceforge.jp>
+2008-04-11	smeghead <smeghead@users.sourceforge.jp>
 
-    * 出力されるHTMLを多少整形した。
-    * チケット登録と統計情報のページにも、状態検索リンクとID指定フォームを追加
-    した。
+	* 出力されるHTMLを多少整形した。
+	* チケット登録と統計情報のページにも、状態検索リンクとID指定フォームを追加
+	した。
 
-2008-04-09  smeghead <smeghead@users.sourceforge.jp>
+2008-04-09	smeghead <smeghead@users.sourceforge.jp>
 
-    * RSS用のlinkタグを追加した。
-    * httpsの場合の対応、サーバのポート番号がデフォルト以外の場合の対応をした。
+	* RSS用のlinkタグを追加した。
+	* httpsの場合の対応、サーバのポート番号がデフォルト以外の場合の対応をした。
 
-2008-04-04  smeghead <smeghead@users.sourceforge.jp>
+2008-04-04	smeghead <smeghead@users.sourceforge.jp>
 
-    * キーワード検索で、複数語を条件にして検索できるようにした。半角スペースで
-    区切って複数の単語を指定して検索する。
-    * チケット検索でキーワード検索が一番上にくるように検索条件の順番を変更した。
-    * ボタンのcssでhoverでの背景色指定をやめた。
+	* キーワード検索で、複数語を条件にして検索できるようにした。半角スペースで
+	区切って複数の単語を指定して検索する。
+	* チケット検索でキーワード検索が一番上にくるように検索条件の順番を変更した。
+	* ボタンのcssでhoverでの背景色指定をやめた。
 
-2008-04-03  smeghead <smeghead@users.sourceforge.jp>
+2008-04-03	smeghead <smeghead@users.sourceforge.jp>
 
-    * 0.2.3-beta リリース
+	* 0.2.3-beta リリース
 
-2008-04-03  smeghead <smeghead@users.sourceforge.jp>
+2008-04-03	smeghead <smeghead@users.sourceforge.jp>
 
-    * cygwinでコンパイルできるように、Makefileを修正。cygwinでの動作は未確認。
-    * テストを修正した。SeleniumIDEで「速く」で実行できるようにした。
+	* cygwinでコンパイルできるように、Makefileを修正。cygwinでの動作は未確認。
+	* テストを修正した。SeleniumIDEで「速く」で実行できるようにした。
 
-2008-03-31  smeghead <smeghead@users.sourceforge.jp>
+2008-03-31	smeghead <smeghead@users.sourceforge.jp>
 
-    * hook機能で外部プログラムに渡すjsonのエスケープ方法が間違っていたのを修正
-    した。" より、先に、\をエスケープする必要があったため。
+	* hook機能で外部プログラムに渡すjsonのエスケープ方法が間違っていたのを修正
+	した。" より、先に、\をエスケープする必要があったため。
 
-2008-03-30  smeghead <smeghead@users.sourceforge.jp>
+2008-03-30	smeghead <smeghead@users.sourceforge.jp>
 
-    * string_appendf(フォーマット指定文字列追加関数)を追加した。
+	* string_appendf(フォーマット指定文字列追加関数)を追加した。
 
-2008-03-30  smeghead <smeghead@users.sourceforge.jp>
+2008-03-30	smeghead <smeghead@users.sourceforge.jp>
 
-    * 0.2.2-beta リリース
+	* 0.2.2-beta リリース
 
-2008-02-28  smeghead <smeghead@users.sourceforge.jp>
+2008-02-28	smeghead <smeghead@users.sourceforge.jp>
 
-    * hook機能で外部プログラムに渡すjsonのエスケープ方法が間違っていたのを修正
-    した。" を "" にエスケープしてたのを、 \" に変更した。
+	* hook機能で外部プログラムに渡すjsonのエスケープ方法が間違っていたのを修正
+	した。" を "" にエスケープしてたのを、 \" に変更した。
 
-2008-03-26  smeghead <smeghead@users.sourceforge.jp>
+2008-03-26	smeghead <smeghead@users.sourceforge.jp>
 
-    * 複数行入力エリア(<textarea>)の値の出力に、値用のエスケープ処理を行なって
-    いたのを、HTML用のエスケープ処理に変更した。
+	* 複数行入力エリア(<textarea>)の値の出力に、値用のエスケープ処理を行なって
+	いたのを、HTML用のエスケープ処理に変更した。
 
-2008-03-26  smeghead <smeghead@users.sourceforge.jp>
+2008-03-26	smeghead <smeghead@users.sourceforge.jp>
 
-    * 0.2.1-beta リリース
+	* 0.2.1-beta リリース
 
-2008-03-26  smeghead <smeghead@users.sourceforge.jp>
+2008-03-26	smeghead <smeghead@users.sourceforge.jp>
 
-    * hook機能へjsonを送るときに改行コードを\nに変換するようにした。
+	* hook機能へjsonを送るときに改行コードを\nに変換するようにした。
 
-2008-03-24  smeghead <smeghead@users.sourceforge.jp>
+2008-03-24	smeghead <smeghead@users.sourceforge.jp>
 
-    * 一番後ろの項目を削除後、項目の追加を行なった場合にエラーが発生する問題を
-    修正した。
-    * テーブルレイアウトの変更。古いdbからの移行を行なうには、下のコマンドを実行し
-    てください。
-    $ cd db
-    $ echo 'alter table element_type add column deleted integer not null default 0;' | sqlite3 starbug1.db
+	* 一番後ろの項目を削除後、項目の追加を行なった場合にエラーが発生する問題を
+	修正した。
+	* テーブルレイアウトの変更。古いdbからの移行を行なうには、下のコマンドを実行し
+	てください。
+	$ cd db
+	$ echo 'alter table element_type add column deleted integer not null default 0;' | sqlite3 starbug1.db
 
-2008-03-21  smeghead <smeghead@users.sourceforge.jp>
+2008-03-21	smeghead <smeghead@users.sourceforge.jp>
 
-    * basic認証のユーザ名を投稿者にデフォルト表示するのをやめた。
+	* basic認証のユーザ名を投稿者にデフォルト表示するのをやめた。
 
-2008-03-21  smeghead <smeghead@users.sourceforge.jp>
+2008-03-21	smeghead <smeghead@users.sourceforge.jp>
 
-    * 0.1.6-beta リリース
+	* 0.1.6-beta リリース
 
-2008-03-21  smeghead <smeghead@users.sourceforge.jp>
+2008-03-21	smeghead <smeghead@users.sourceforge.jp>
 
-    * cssの調整。
+	* cssの調整。
 
-2008-03-19  smeghead <smeghead@users.sourceforge.jp>
+2008-03-19	smeghead <smeghead@users.sourceforge.jp>
 
-    * simple_string.cで、realloc時のサイズ指定を修正。
+	* simple_string.cで、realloc時のサイズ指定を修正。
 
-2008-03-18  smeghead <smeghead@users.sourceforge.jp>
+2008-03-18	smeghead <smeghead@users.sourceforge.jp>
 
-    * strcatを使用している部分を、simple_stringを使用するように修正した。
-    * stackに1Mのバッファを取っている部分を、ヒープに確保するように変更した。
+	* strcatを使用している部分を、simple_stringを使用するように修正した。
+	* stackに1Mのバッファを取っている部分を、ヒープに確保するように変更した。
 
-2008-03-14  smeghead <smeghead@users.sourceforge.jp>
+2008-03-14	smeghead <smeghead@users.sourceforge.jp>
 
-    * 入力フォームの下に、複数行テキスト項目での、他チケットリンクとpre記法に
-    ついての説明を追加した。ヘルプにも追記した。
-    * 日付項目の入力支援のcalendarのバグを修正した。
-    * ナビゲーションメニューの状態別チケットを状態別チケット一覧に変更した。
-    * チケットの最新情報の色を変更した。
+	* 入力フォームの下に、複数行テキスト項目での、他チケットリンクとpre記法に
+	ついての説明を追加した。ヘルプにも追記した。
+	* 日付項目の入力支援のcalendarのバグを修正した。
+	* ナビゲーションメニューの状態別チケットを状態別チケット一覧に変更した。
+	* チケットの最新情報の色を変更した。
 
-2008-03-13  smeghead <smeghead@users.sourceforge.jp>
+2008-03-13	smeghead <smeghead@users.sourceforge.jp>
 
-    * 入力フィールドにmaxlengthの指定を追加した。
-    * デザインをシンプルに変更した。
+	* 入力フィールドにmaxlengthの指定を追加した。
+	* デザインをシンプルに変更した。
 
-2008-03-07  smeghead <smeghead@users.sourceforge.jp>
+2008-03-07	smeghead <smeghead@users.sourceforge.jp>
 
-    * 簡易可変文字列ユーティリティを追加した。
+	* 簡易可変文字列ユーティリティを追加した。
 
-2008-03-06  smeghead <smeghead@users.sourceforge.jp>
+2008-03-06	smeghead <smeghead@users.sourceforge.jp>
 
-    * 0.1.5-beta リリース
+	* 0.1.5-beta リリース
 
-2008-03-06  smeghead <smeghead@users.sourceforge.jp>
+2008-03-06	smeghead <smeghead@users.sourceforge.jp>
 
-    * 日付項目の入力支援のJavaScriptカレンダーのwidthを200pxに指定するようにし
-    た。
+	* 日付項目の入力支援のJavaScriptカレンダーのwidthを200pxに指定するようにし
+	た。
 
 
-2008-03-05  smeghead <smeghead@users.sourceforge.jp>
+2008-03-05	smeghead <smeghead@users.sourceforge.jp>
 
-    * チケット検索での検索結果CSVダウンロードで内容が長い場合にエラーになる問
-    題を修正した。
-    * 各ファイルのvimの設定用の行を修正、追加した。
-    * CSVのダウンロード時のContent-Typeを、text/plainからtext/x-csvに変更した。
+	* チケット検索での検索結果CSVダウンロードで内容が長い場合にエラーになる問
+	題を修正した。
+	* 各ファイルのvimの設定用の行を修正、追加した。
+	* CSVのダウンロード時のContent-Typeを、text/plainからtext/x-csvに変更した。
 
-2008-03-03  smeghead <smeghead@users.sourceforge.jp>
+2008-03-03	smeghead <smeghead@users.sourceforge.jp>
 
-    * チケット一覧の日時の秒の表示をしないようにした。 
-    * チケット一覧のIDと放置日数のCSSを変更。IDは中央寄せ、放置日数は右寄せで
-    表示するようにした。
+	* チケット一覧の日時の秒の表示をしないようにした。 
+	* チケット一覧のIDと放置日数のCSSを変更。IDは中央寄せ、放置日数は右寄せで
+	表示するようにした。
 
-2008-03-02  smeghead <smeghead@users.sourceforge.jp>
+2008-03-02	smeghead <smeghead@users.sourceforge.jp>
 
-    * トップページの編集においての成形済ブロック(PRE)の記法を、チケットの複数
-    行テキストでの記法に変更した。'>|\n' で始まり、'|<'で終わる領域をpreタグで
-    出力するようにした。
-    * labelタグのスペル違いがあったのを修正した。
-    * チケット返信フォームをチケット属性が付いている項目と付いていない項目で別
-    のテーブルに分割した。動作がわかり易くするため。
-    * チケット履歴のレイアウトを修正した。
-    * チケットリンク機能の追加。複数行テキストの項目で、#123 のように、#の後に
-    数値が連続する場合に、数字をチケットIDと見做してリンクを付加するようにした
-    。
+	* トップページの編集においての成形済ブロック(PRE)の記法を、チケットの複数
+	行テキストでの記法に変更した。'>|\n' で始まり、'|<'で終わる領域をpreタグで
+	出力するようにした。
+	* labelタグのスペル違いがあったのを修正した。
+	* チケット返信フォームをチケット属性が付いている項目と付いていない項目で別
+	のテーブルに分割した。動作がわかり易くするため。
+	* チケット履歴のレイアウトを修正した。
+	* チケットリンク機能の追加。複数行テキストの項目で、#123 のように、#の後に
+	数値が連続する場合に、数字をチケットIDと見做してリンクを付加するようにした
+	。
 
-2008-02-28  smeghead <smeghead@users.sourceforge.jp>
+2008-02-28	smeghead <smeghead@users.sourceforge.jp>
 
-    * 管理ツールの項目設定の項目の追加時に、項目名が空のままで登録できていたバ
-    グを修正した。
-    * チケット履歴を見易くする修正をした。
+	* 管理ツールの項目設定の項目の追加時に、項目名が空のままで登録できていたバ
+	グを修正した。
+	* チケット履歴を見易くする修正をした。
 
-2008-02-25  smeghead <smeghead@users.sourceforge.jp>
+2008-02-25	smeghead <smeghead@users.sourceforge.jp>
 
-    * hook機能のメール送信サンプルスクリプトで、メール本文の項目の内容に改行が
-    出力されないのを修正した。
-    * pre記法の出力中には、改行をbrタグに変換しないように修正した。
+	* hook機能のメール送信サンプルスクリプトで、メール本文の項目の内容に改行が
+	出力されないのを修正した。
+	* pre記法の出力中には、改行をbrタグに変換しないように修正した。
 
-2008-02-24  smeghead <smeghead@users.sourceforge.jp>
+2008-02-24	smeghead <smeghead@users.sourceforge.jp>
 
-    * チケット項目(複数行テキスト)の値にpre記法を追加した。
-    '>|\n' で始まり、'|<'で終わる領域をpreタグで出力するようにした。
+	* チケット項目(複数行テキスト)の値にpre記法を追加した。
+	'>|\n' で始まり、'|<'で終わる領域をpreタグで出力するようにした。
 
-2008-02-24  smeghead <smeghead@users.sourceforge.jp>
+2008-02-24	smeghead <smeghead@users.sourceforge.jp>
 
-    * 0.1.4-beta リリース
+	* 0.1.4-beta リリース
 
-2008-02-24  smeghead <smeghead@users.sourceforge.jp>
+2008-02-24	smeghead <smeghead@users.sourceforge.jp>
 
-    * チケットの項目の内容のサイズが、1024以上ある場合にエラーになるのを再現す
-    るテストを追加した。
-    * wiki記法で出力する際に、末尾の改行を出力していないため、pre記法が正しく
-    動作していなかったのを修正した。
-    * wiki記法ヘルプにpre記法について追記
-    * チケット一覧のページャを10個までしか表示しないように修正した。
+	* チケットの項目の内容のサイズが、1024以上ある場合にエラーになるのを再現す
+	るテストを追加した。
+	* wiki記法で出力する際に、末尾の改行を出力していないため、pre記法が正しく
+	動作していなかったのを修正した。
+	* wiki記法ヘルプにpre記法について追記
+	* チケット一覧のページャを10個までしか表示しないように修正した。
 
-2008-02-19  smeghead <smeghead@users.sourceforge.jp>
+2008-02-19	smeghead <smeghead@users.sourceforge.jp>
 
-    * チケット一覧で各項目の幅を指定できるように、trタグにクラス指定をするよう
-    に修正した。
+	* チケット一覧で各項目の幅を指定できるように、trタグにクラス指定をするよう
+	に修正した。
 
-2008-02-18  smeghead <smeghead@users.sourceforge.jp>
+2008-02-18	smeghead <smeghead@users.sourceforge.jp>
 
-    * 投稿完了メッセージ部分のXSS対策を行なった。
-    * 状態名などのXSS対策を行なった。
-    * チケット履歴で、チケット属性でなくて、空白の項目は表示しないようにした。
+	* 投稿完了メッセージ部分のXSS対策を行なった。
+	* 状態名などのXSS対策を行なった。
+	* チケット履歴で、チケット属性でなくて、空白の項目は表示しないようにした。
 
-2008-02-17  smeghead <smeghead@users.sourceforge.jp>
+2008-02-17	smeghead <smeghead@users.sourceforge.jp>
 
-    * 添付ファイルが画像だった場合にインライン表示するようにした。
-    * 不要なログ出力を削除した。
+	* 添付ファイルが画像だった場合にインライン表示するようにした。
+	* 不要なログ出力を削除した。
 
-2008-02-15  smeghead <smeghead@users.sourceforge.jp>
+2008-02-15	smeghead <smeghead@users.sourceforge.jp>
 
-    * READMEに謝辞を追加した。
+	* READMEに謝辞を追加した。
 
-2008-02-12  smeghead <smeghead@users.sourceforge.jp>
+2008-02-12	smeghead <smeghead@users.sourceforge.jp>
 
-    * 管理ツールの環境設定でメールに関する注意書きが残っていたのを削除した 。
+	* 管理ツールの環境設定でメールに関する注意書きが残っていたのを削除した 。
 
-2008-02-11  smeghead <smeghead@users.sourceforge.jp>
+2008-02-11	smeghead <smeghead@users.sourceforge.jp>
 
-    * 0.1.3-beta リリース
+	* 0.1.3-beta リリース
 
-2008-02-11  smeghead <smeghead@users.sourceforge.jp>
+2008-02-11	smeghead <smeghead@users.sourceforge.jp>
 
-    * チケット検索で投稿日時、最終更新日時で検索できるようにした。
-    * プロジェクト更新時のSQL文が間違っていたためエラーが発生していたのを修正。
-    * 管理ツールの項目設定でfreeした領域を参照していたのを修正した。
+	* チケット検索で投稿日時、最終更新日時で検索できるようにした。
+	* プロジェクト更新時のSQL文が間違っていたためエラーが発生していたのを修正。
+	* 管理ツールの項目設定でfreeした領域を参照していたのを修正した。
 
-2008-02-09  smeghead <smeghead@users.sourceforge.jp>
+2008-02-09	smeghead <smeghead@users.sourceforge.jp>
 
-    * 簡易wikiの最終行に改行が無い場合に、最終行が表示されなかった問題を修正し
-    た。
-    * hook機能でメール送信を行なう場合のスクリプトサンプルを作成した。
-    * cssの間違いを修正した。tableタグの指定
-    * チケット検索の検索条件の表示方法を変更した。
+	* 簡易wikiの最終行に改行が無い場合に、最終行が表示されなかった問題を修正し
+	た。
+	* hook機能でメール送信を行なう場合のスクリプトサンプルを作成した。
+	* cssの間違いを修正した。tableタグの指定
+	* チケット検索の検索条件の表示方法を変更した。
 
-2008-02-06  smeghead <smeghead@users.sourceforge.jp>
+2008-02-06	smeghead <smeghead@users.sourceforge.jp>
 
-    * メール送信機能をhook機能の一部にする修正を行なっている。mail機能呼び出し
-    をhook機能呼び出しに変更した。実際にコマンド呼び出しとperlスクリプトは未実装。
-    * コマンド呼び出し部を実装した。
+	* メール送信機能をhook機能の一部にする修正を行なっている。mail機能呼び出し
+	をhook機能呼び出しに変更した。実際にコマンド呼び出しとperlスクリプトは未実装。
+	* コマンド呼び出し部を実装した。
 
-2008-02-03  smeghead <smeghead@users.sourceforge.jp>
+2008-02-03	smeghead <smeghead@users.sourceforge.jp>
 
-    * xfreeのし忘れを修正した。
-    * レポートのcsvダウンロード時に、"が含まれると、&quot;に変換される問題を修
-    正した。
-    * トップのロゴのリンク先を、sf.jpのプロジェクトページから、sf.jpのプロジェ
-    クトホームページに変更した。
+	* xfreeのし忘れを修正した。
+	* レポートのcsvダウンロード時に、"が含まれると、&quot;に変換される問題を修
+	正した。
+	* トップのロゴのリンク先を、sf.jpのプロジェクトページから、sf.jpのプロジェ
+	クトホームページに変更した。
 
-2008-01-31  smeghead <smeghead@users.sourceforge.jp>
+2008-01-31	smeghead <smeghead@users.sourceforge.jp>
 
-    * Makefileのwebappタスクで、.htaccessをdot.htaccessにコピーするようにした
-    。バージョンアップ時の考慮のため。
+	* Makefileのwebappタスクで、.htaccessをdot.htaccessにコピーするようにした
+	。バージョンアップ時の考慮のため。
 
-2008-01-30  smeghead <smeghead@users.sourceforge.jp>
+2008-01-30	smeghead <smeghead@users.sourceforge.jp>
 
-    * 管理ツールの項目設定で更新ボタンを増やした。各項目の間にも表示するように
-    した。
-    * 一度に出力できる部分は一度に出力するようにした。少しだけ最適化。
+	* 管理ツールの項目設定で更新ボタンを増やした。各項目の間にも表示するように
+	した。
+	* 一度に出力できる部分は一度に出力するようにした。少しだけ最適化。
 
-2008-01-29  smeghead <smeghead@users.sourceforge.jp>
+2008-01-29	smeghead <smeghead@users.sourceforge.jp>
 
-    * 状態名の「破棄」を「対応せず」に変更した。
-    * 状態「仕様通り」を追加した。
-    * チケット一覧でのソート時は一覧のところにスクロールした状態で表示するようにした。
-    * xallocまわりメモリリーク防止のための修正。
+	* 状態名の「破棄」を「対応せず」に変更した。
+	* 状態「仕様通り」を追加した。
+	* チケット一覧でのソート時は一覧のところにスクロールした状態で表示するようにした。
+	* xallocまわりメモリリーク防止のための修正。
 
-2008-01-28  smeghead <smeghead@users.sourceforge.jp>
+2008-01-28	smeghead <smeghead@users.sourceforge.jp>
 
-    * .htaccessに、初期ページの設定を追加した。
-      DirectoryIndex index.cgi
-    * 複数同時投稿のエラー対策を行なった。busy時の再試行回数を、100000回に増や
-    した。この数値は検討する必要があるかもしれない。
-    * 状態別チケットページでは、一つの状態で15件表示するようにした。(前は30件)
+	* .htaccessに、初期ページの設定を追加した。
+	  DirectoryIndex index.cgi
+	* 複数同時投稿のエラー対策を行なった。busy時の再試行回数を、100000回に増や
+	した。この数値は検討する必要があるかもしれない。
+	* 状態別チケットページでは、一つの状態で15件表示するようにした。(前は30件)
 
-2008-01-26  smeghead <smeghead@users.sourceforge.jp>
+2008-01-26	smeghead <smeghead@users.sourceforge.jp>
 
-    * cookieが保存されない環境がある問題に対して、path指定を、"/"に変更した。
-    * トップページの最新情報、状態別件数のticketが存在しない時に、存在しない旨
-    を表示するようにした。
-    * チケットが存在しないときにグラフ生成のJavaScriptがエラーになっていたのを
-    修正した。
-    * プロジェクトの説明(project.description)を削除した。トップページの編集が
-    可能なので不要と判断した。
-    * helpの更新
-    * 一般ユーザ用と管理ユーザ用のヘルプを分けた。管理ツールにもヘルプを追加し
-    た。
-    * 簡易wikiの文法を拡張した。
+	* cookieが保存されない環境がある問題に対して、path指定を、"/"に変更した。
+	* トップページの最新情報、状態別件数のticketが存在しない時に、存在しない旨
+	を表示するようにした。
+	* チケットが存在しないときにグラフ生成のJavaScriptがエラーになっていたのを
+	修正した。
+	* プロジェクトの説明(project.description)を削除した。トップページの編集が
+	可能なので不要と判断した。
+	* helpの更新
+	* 一般ユーザ用と管理ユーザ用のヘルプを分けた。管理ツールにもヘルプを追加し
+	た。
+	* 簡易wikiの文法を拡張した。
 
-2008-01-25  smeghead <smeghead@users.sourceforge.jp>
+2008-01-25	smeghead <smeghead@users.sourceforge.jp>
 
-    * Firefoxで日付入力支援用カレンダーの日付が間違っていたのを修正した。
-    date.getYear()ではなく、date.getFullYear()を使うように修正した。
-    * 日付入力支援用カレンダーのバグ修正。
-    * ナビゲーションにホームを追加。管理ツールでは設定可能だったが、実装されて
-    いなかった機能。
-    * トップページとヘルプ(簡易wiki)をファイルベースからDBに変更した。
-    そのため、以前のバージョンからのアップデート時には、以下のコマンドを入力し
-    てください。
-    # cd ${starbug1のwebアプリのディレクトリ}/db
-    # echo "create table wiki(id integer not null primary key, name text, content text, registerdate text);" | sqlite3 starbug1.db
-    # echo "insert into wiki(id, name, content, registerdate) values (NULL, 'top', 'top content', current_timestamp);" | sqlite3 starbug1.db
-    # echo "insert into wiki(id, name, content, registerdate) values (NULL, 'help', 'help content', current_timestamp);" | sqlite3 starbug1.db
-    # echo "insert into wiki(id, name, content, registerdate) values (NULL, 'adminhelp', 'adminhelp content', current_timestamp);" | sqlite3 starbug1.db
+	* Firefoxで日付入力支援用カレンダーの日付が間違っていたのを修正した。
+	date.getYear()ではなく、date.getFullYear()を使うように修正した。
+	* 日付入力支援用カレンダーのバグ修正。
+	* ナビゲーションにホームを追加。管理ツールでは設定可能だったが、実装されて
+	いなかった機能。
+	* トップページとヘルプ(簡易wiki)をファイルベースからDBに変更した。
+	そのため、以前のバージョンからのアップデート時には、以下のコマンドを入力し
+	てください。
+	# cd ${starbug1のwebアプリのディレクトリ}/db
+	# echo "create table wiki(id integer not null primary key, name text, content text, registerdate text);" | sqlite3 starbug1.db
+	# echo "insert into wiki(id, name, content, registerdate) values (NULL, 'top', 'top content', current_timestamp);" | sqlite3 starbug1.db
+	# echo "insert into wiki(id, name, content, registerdate) values (NULL, 'help', 'help content', current_timestamp);" | sqlite3 starbug1.db
+	# echo "insert into wiki(id, name, content, registerdate) values (NULL, 'adminhelp', 'adminhelp content', current_timestamp);" | sqlite3 starbug1.db
 
-2008-01-24  smeghead <smeghead@users.sourceforge.jp>
+2008-01-24	smeghead <smeghead@users.sourceforge.jp>
 
-    * iconvを使用するようになった際に、FreeBSDでは、リンク時に -liconvが必要だ
-    ったため、Makefileに条件分岐を追加した。
-    * グラフの要素の並び順を降順に変更した。
-    * 文字ベースの統計情報は、JavaScriptが有効でない場合のみ表示されるようにし
-    た。
-    * 管理ツールのスタイル設定で、一覧の背景色の指定方法のサンプルを表示するよ
-    うにした。
-    * Starbug1という表示がたくさんあったので、不要な場所は削除した。
+	* iconvを使用するようになった際に、FreeBSDでは、リンク時に -liconvが必要だ
+	ったため、Makefileに条件分岐を追加した。
+	* グラフの要素の並び順を降順に変更した。
+	* 文字ベースの統計情報は、JavaScriptが有効でない場合のみ表示されるようにし
+	た。
+	* 管理ツールのスタイル設定で、一覧の背景色の指定方法のサンプルを表示するよ
+	うにした。
+	* Starbug1という表示がたくさんあったので、不要な場所は削除した。
 
-2008-01-23  smeghead <smeghead@users.sourceforge.jp>
+2008-01-23	smeghead <smeghead@users.sourceforge.jp>
 
-    * 日付入力支援のJavaScriptカレンダーの改良。前月、次月への移動をできるよう
-    にした。
-    * 統計情報のページにグラフを追加した。
+	* 日付入力支援のJavaScriptカレンダーの改良。前月、次月への移動をできるよう
+	にした。
+	* 統計情報のページにグラフを追加した。
 
-2008-01-21  smeghead <smeghead@users.sourceforge.jp>
+2008-01-21	smeghead <smeghead@users.sourceforge.jp>
 
-    * チケット一覧での状態の背景の色を変えるために、list_itemテーブルと連結し
-    ていたが、別の方法で背景色を表示するようになった。不要になったので、
-    list_itemテーブルとの連結を行なわないように修正。
-    * レポート機能で、IDがチケットIDでなくmessage.idになっていたのをチケット
-    IDが出力されるように修正。
-    * レポート機能デ、投稿日時、最終更新日時、放置日数が表示されないのを修正し
-    た。
-    * calendar.jsで日付をyyyy-mm-ddからyyyy/mm/ddに変換する部分のバグを修正し
-    た。
+	* チケット一覧での状態の背景の色を変えるために、list_itemテーブルと連結し
+	ていたが、別の方法で背景色を表示するようになった。不要になったので、
+	list_itemテーブルとの連結を行なわないように修正。
+	* レポート機能で、IDがチケットIDでなくmessage.idになっていたのをチケット
+	IDが出力されるように修正。
+	* レポート機能デ、投稿日時、最終更新日時、放置日数が表示されないのを修正し
+	た。
+	* calendar.jsで日付をyyyy-mm-ddからyyyy/mm/ddに変換する部分のバグを修正し
+	た。
 
-2008-01-20  smeghead <smeghead@users.sourceforge.jp>
+2008-01-20	smeghead <smeghead@users.sourceforge.jp>
 
-    * 日付の項目のJavaScriptでの入力支援機能を作成中。前月、次月への移動はまだ
-    未実装。
+	* 日付の項目のJavaScriptでの入力支援機能を作成中。前月、次月への移動はまだ
+	未実装。
 
-2008-01-19  smeghead <smeghead@users.sourceforge.jp>
+2008-01-19	smeghead <smeghead@users.sourceforge.jp>
 
-    * レポート機能の追加。検索結果として表示している一覧の内容をCSVでダウンロ
-    ードできるようにした。
-    * 一覧での、状態の背景色を変える仕組みがあるが、同様のことを優先度や重要度
-    などの一般の項目でも行ないたい。そのための仕組みを追加した。
-    * 一覧での、状態、優先度の背景色の設定を、user.cssに移動した。
-    * sortができなくなっていたのを修正した。
+	* レポート機能の追加。検索結果として表示している一覧の内容をCSVでダウンロ
+	ードできるようにした。
+	* 一覧での、状態の背景色を変える仕組みがあるが、同様のことを優先度や重要度
+	などの一般の項目でも行ないたい。そのための仕組みを追加した。
+	* 一覧での、状態、優先度の背景色の設定を、user.cssに移動した。
+	* sortができなくなっていたのを修正した。
 
-2008-01-17  smeghead <smeghead@users.sourceforge.jp>
+2008-01-17	smeghead <smeghead@users.sourceforge.jp>
 
-    * 0.1.2-beta リリース
+	* 0.1.2-beta リリース
 
-2008-01-17  smeghead <smeghead@users.sourceforge.jp>
+2008-01-17	smeghead <smeghead@users.sourceforge.jp>
 
-    * 不要なファイルを削除した。missing
-    * .htaccessで一般ユーザと管理ユーザのBasic認証の設定を分割した。
-    * .htaccessで参照する必要の無いファイルやディレクトリを隠す設定を追加した。
-    * INSTALLの.htaccess周りの設定方法を更新した。
-    * ヘルプを更新した。
+	* 不要なファイルを削除した。missing
+	* .htaccessで一般ユーザと管理ユーザのBasic認証の設定を分割した。
+	* .htaccessで参照する必要の無いファイルやディレクトリを隠す設定を追加した。
+	* INSTALLの.htaccess周りの設定方法を更新した。
+	* ヘルプを更新した。
 
-2008-01-15  smeghead <smeghead@users.sourceforge.jp>
+2008-01-15	smeghead <smeghead@users.sourceforge.jp>
 
-    * INSTALLの更新。インストール時のFAQを追加。
+	* INSTALLの更新。インストール時のFAQを追加。
 
-2008-01-14  smeghead <smeghead@users.sourceforge.jp>
+2008-01-14	smeghead <smeghead@users.sourceforge.jp>
 
-    * READMEの文字コードをUTF-8に変更。
-    * INSTALLのネガティブな表記を変更した。
+	* READMEの文字コードをUTF-8に変更。
+	* INSTALLのネガティブな表記を変更した。
 
-2008-01-13  smeghead <smeghead@users.sourceforge.jp>
+2008-01-13	smeghead <smeghead@users.sourceforge.jp>
 
-    * 検索条件の日付フィールドのmaxlengthを10に指定した。
+	* 検索条件の日付フィールドのmaxlengthを10に指定した。
 
-2008-01-12  smeghead <smeghead@users.sourceforge.jp>
+2008-01-12	smeghead <smeghead@users.sourceforge.jp>
 
-    * 日付の項目を追加した。yyyy-mm-ddで入力してもらうという形にする。現在、管
-    理ツール、チケット登録画面、チケット返信画面での日付の項目の対応を行なった。
-    検索部分の対応は未。
-    * e_typeという変数名をetに統一した。
-    * 日付の項目の検索画面での対応を行なった。
-    * チケット詳細画面の最新情報に、IDの欄を追加した。
+	* 日付の項目を追加した。yyyy-mm-ddで入力してもらうという形にする。現在、管
+	理ツール、チケット登録画面、チケット返信画面での日付の項目の対応を行なった。
+	検索部分の対応は未。
+	* e_typeという変数名をetに統一した。
+	* 日付の項目の検索画面での対応を行なった。
+	* チケット詳細画面の最新情報に、IDの欄を追加した。
 
-2008-01-09  smeghead <smeghead@users.sourceforge.jp>
+2008-01-09	smeghead <smeghead@users.sourceforge.jp>
 
-    * ボタンを目立つようにcssを変更した。ボタンの色、カーソルなどを変更した。
+	* ボタンを目立つようにcssを変更した。ボタンの色、カーソルなどを変更した。
 
-2008-01-07  smeghead <smeghead@users.sourceforge.jp>
+2008-01-07	smeghead <smeghead@users.sourceforge.jp>
 
-    * JavaScriptでチェックしているというメッセージを、JavaScriptを使用できない
-    環境の時のみ出力するように変更した。
+	* JavaScriptでチェックしているというメッセージを、JavaScriptを使用できない
+	環境の時のみ出力するように変更した。
 
-2008-01-05  smeghead <smeghead@users.sourceforge.jp>
+2008-01-05	smeghead <smeghead@users.sourceforge.jp>
 
-    * 統計情報のページを追加した。チケット属性のうち、単一選択肢のものと複数選
-    択肢のものについて、何件づつ存在するかを表示するようにした。
-    * 状態別チケット一覧でlist.jsを読み込んでいたのを削除した。list.jsは削除済
+	* 統計情報のページを追加した。チケット属性のうち、単一選択肢のものと複数選
+	択肢のものについて、何件づつ存在するかを表示するようにした。
+	* 状態別チケット一覧でlist.jsを読み込んでいたのを削除した。list.jsは削除済
 
-2008-01-04  smeghead <smeghead@users.sourceforge.jp>
+2008-01-04	smeghead <smeghead@users.sourceforge.jp>
 
-    * 管理ツールでのJavaScriptのalertでの確認でキャンセルを押した場合に、その
-    ままsubmitされる場合があったのを修正。prototype.jsのEvent.stopメソッドでキ
-    ャンセルを行なうように統一した。
-    * 管理ツールで、新規項目の追加の際のチケット項目と返信専用属性の説明文が古
-    い状態だったのを修正した。
-    * クリックという言葉を廃止して押すという表現に統一した。
-    * メニューのリンクにtitle属性で簡単な説明を追加した。
-    * トップページにID検索フォームを追加した。
-    * トップページの最新情報状態別件数のリストにリストアイコンを指定した。
-    * ファイルサイズの制限についての文言を追加した。
+	* 管理ツールでのJavaScriptのalertでの確認でキャンセルを押した場合に、その
+	ままsubmitされる場合があったのを修正。prototype.jsのEvent.stopメソッドでキ
+	ャンセルを行なうように統一した。
+	* 管理ツールで、新規項目の追加の際のチケット項目と返信専用属性の説明文が古
+	い状態だったのを修正した。
+	* クリックという言葉を廃止して押すという表現に統一した。
+	* メニューのリンクにtitle属性で簡単な説明を追加した。
+	* トップページにID検索フォームを追加した。
+	* トップページの最新情報状態別件数のリストにリストアイコンを指定した。
+	* ファイルサイズの制限についての文言を追加した。
 
-2008-01-03  smeghead <smeghead@users.sourceforge.jp>
+2008-01-03	smeghead <smeghead@users.sourceforge.jp>
 
-    * β版のリリース
+	* β版のリリース
 
-2007-12-10  smeghead smeghead@users.sourceforge.jp
-    * 0.0.2-alphaのバグを修正。(キーワード検索以外に2つ以上の検索条件を指定す
-    るとエラーが発生する問題を修正。
-    * wikiの表示部分でタグ文字列がエスケープされないのを修正。 XSS対策
+2007-12-10	smeghead smeghead@users.sourceforge.jp
+	* 0.0.2-alphaのバグを修正。(キーワード検索以外に2つ以上の検索条件を指定す
+	るとエラーが発生する問題を修正。
+	* wikiの表示部分でタグ文字列がエスケープされないのを修正。 XSS対策
 
-2007-12-09  smeghead smeghead@users.sourceforge.jp
+2007-12-09	smeghead smeghead@users.sourceforge.jp
 
-    * チケットの件数が増加したときの、応答速度対策のために、
-    データベースのテーブル構成を変更した。
-    * 項目の種別にチェックボックスを選択できるようにした。
+	* チケットの件数が増加したときの、応答速度対策のために、
+	データベースのテーブル構成を変更した。
+	* 項目の種別にチェックボックスを選択できるようにした。
 
 
-2007-11-04  smeghead smeghead@users.sourceforge.jp
+2007-11-04	smeghead smeghead@users.sourceforge.jp
 
-    * 初期alpha版リリース
+	* 初期alpha版リリース
 
 
  vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8:
