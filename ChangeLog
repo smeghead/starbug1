@@ -1,3 +1,8 @@
+2010-03-07  smeghead <smeghead@users.sourceforge.jp>
+
+	* フォームの複数選択可能リストの項目のsizeは、最大6になるように修正した。
+    選択肢が多い場合にフォームが伸びすぎないように修正した。
+
 2010-03-04	smeghead  <smeghead@users.sourceforge.jp>
 
 	* INSTALLのコンパイルの言語指定オプション(INITIAL_LOCALE)を追加した。

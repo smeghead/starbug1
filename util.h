@@ -85,7 +85,7 @@ void set_date_string(char*);
 char* get_ext(char*);
 void page_not_found();
 #define MIN(a,b) (((a)<(b))?(a):(b)) 
-#define MAX(a,b) (((a )>(b))?(a):(b))
+#define MAX(a,b) (((a)>(b))?(a):(b))
 
 extern char g_project_code[DEFAULT_LENGTH];
 extern char g_project_code_4_url[DEFAULT_LENGTH];

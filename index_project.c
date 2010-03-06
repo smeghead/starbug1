@@ -1384,7 +1384,7 @@ void output_form_element(Database* db, List* elements, ElementType* et, Project*
         case ELEM_TYPE_LIST_MULTI:
             list_alloc(items_a, ListItem, list_item_new, list_item_free);
             items_a = db_get_list_item(db, et->id, items_a);
-            o("<select size=\"%d\" id=\"field%d", items_a->size + 1, et->id);
+            o("<select size=\"%d\" id=\"field%d", MIN(items_a->size, 5) + 1, et->id);
             o("\" name=\"field%d\" multiple=\"multiple\">\n", et->id);
 
             o("<option value=\"\">&nbsp;</option>\n");
