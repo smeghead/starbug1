@@ -1,3 +1,7 @@
+2010-03-15  smeghead <smeghead@users.sourceforge.jp>
+
+	* デザインの変更
+
 2010-03-07  smeghead <smeghead@users.sourceforge.jp>
 
 	* フォームの複数選択可能リストの項目のsizeは、最大6になるように修正した。

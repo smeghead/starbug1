@@ -1,4 +1,8 @@
 @charset "utf-8";
+/*
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+*/
 
 /* ---------------------- */
 /* initialize rule        */
@@ -35,20 +39,25 @@ h2 {
     background-color: #00108C;
     font-weight: bold;
     font-size: 150%;
-    margin: 3px 3px 3px 3px;
-    padding: 5px 3px 3px 30px;
+    margin: 3px 13px 3px 3px;
+    padding: 5px 3px 3px 15px;
     background-image: url("../img/h2.png");
     background-repeat: repeat-x;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
 }
 h3 {
     font-size: 120%;
     font-weight: bold;
-    background-color: #E7EFFF;
-    padding: 3px 3px 0px 10px;
+    color: white;
+    background-color: #003399;
+    padding: 5px 3px 5px 10px;
     margin: 5px 0px 5px 0px;
-    border-color: #00108C;
-    border-style: solid;
-    border-width: 0px 0px 2px 15px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+/*    border-color: #979F9F;*/
+/*    border-style: solid;*/
+/*    border-width: 1px;*/
 }
 div#main_body h4 {
     font-weight: bold;
@@ -58,8 +67,8 @@ div#main_body h4 {
 div#input_form h4,
 div#top h4,
 div#ticket_list h4.status  {
-    padding: 0px 2px 0px 10px;
-    margin: 8px 0px 3px 3px;
+    padding: 0px 2px 0px 3px;
+    margin: 8px 0px 3px 5px;
     border-color: #00108C;
     border-style: solid;
     border-width: 0px 0px 2px 0px;
@@ -81,6 +90,31 @@ div#ticket_list table th.id {
 /* チケット一覧 件名 */
 div#ticket_list table th.field1 {
     width: 30%;
+}
+div#main_body h4 {
+    font-weight: bold;
+    font-size: 100%;
+    margin: 2px 10px;
+    padding: 3px 10px;
+}
+div#main_body h5 {
+    font-weight: bold;
+    font-size: 95%;
+    margin: 0px 0px 3px 5px;
+    padding: 3px 20px;
+}
+div#main_body h6 {
+    color: #00108C;
+    font-size: 95%;
+    font-weight: bold;
+    margin: 0px 0px 3px 8px;
+    padding: 3px 20px;
+}
+div#main_body p {
+    padding:0px 10px 0px 20px;
+}
+div#main_body ul {
+    padding:0px 10px 0px 20px;
 }
 /* |+チケット一覧 投稿者+| */
 /* div#ticket_list table th.field2 { */
@@ -121,7 +155,7 @@ table {
 
 table tr th{
     padding:3px;
-    background:#EEE;
+    background:#CCC;
 /*     border-bottom:1px solid gray; */
 }
 
@@ -174,7 +208,8 @@ br.clear {
 #subject {
 }
 #ticket_list table {
-    width: 95%;
+    padding-left: 10px;
+    width: 98%;
 }
 #ticket_history table {
     width: 95%;
@@ -270,9 +305,11 @@ input.conditionelement {
 #top_newest,
 #top_state_index,
 #top_id_search {
-    margin: 10px;
+    margin: 10px 0px;
     padding: 0px;
     border: #ff5500 solid 1px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
 }
 #top_new_ticket_link h4,
 #top_newest h4,
@@ -569,7 +606,7 @@ table.item_table textarea {
     display: block;
     float: left;
     margin: 0;
-    padding: 0px 8px;
+    padding: 3px 8px;
     text-decoration: none;
 }
 #projectmenu a.current {
@@ -579,7 +616,6 @@ table.item_table textarea {
 #projectmenu a:hover {
     background: #999 bottom center no-repeat;
     color: #ffffff;
-    padding-bottom: 0px;    
 }
 #calendar {
     position:absolute;

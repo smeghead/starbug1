@@ -1,4 +1,8 @@
 @charset "utf-8";
+/*
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+*/
 
 /* ---------------------- */
 /* initialize rule        */
@@ -43,38 +47,48 @@ h1 {
 h2 {
     font-weight: bold;
     font-size: 130%;
-    margin: 20px 0px 20px 0px;
-    padding: 0px 0px 0px 10px;
-    border-color: #00108C;
-    border-style: solid;
-    border-width: 0px 0px 3px 0px;
+    background-color: #33309C;
+    color: white;
+    margin: 10px 0px 10px 0px;
+    padding: 3px 0px 3px 15px;
+/*    border-color: #00108C;*/
+/*    border-style: solid;*/
+/*    border-width: 0px 0px 3px 0px;*/
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
 }
 h3 {
     font-size: 120%;
     font-weight: bold;
+    color: #03006C;
     background-color: #E7EFFF;
     padding: 3px 3px 0px 10px;
     margin: 5px 0px 5px 10px;
-    border-color: #00108C;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-color: #979F9F;
     border-style: solid;
-    border-width: 0px 0px 2px 15px;
+    border-width: 1px;
+/*    border-width: 0px 0px 2px 15px;*/
 }
 h4 {
     font-weight: bold;
-    font-size: 95%;
+    font-size: 100%;
     margin: 2px 10px;
     padding: 3px 10px;
 }
 h5 {
     font-weight: bold;
+    font-size: 95%;
     margin: 0px 0px 3px 5px;
     padding: 3px 20px;
 }
 h6 {
     color: #00108C;
-    font-size: 90%;
+    font-size: 95%;
     font-weight: bold;
     margin: 0px 0px 3px 8px;
+    padding: 3px 20px;
 }
 hr {
     width: 100%;
@@ -193,7 +207,7 @@ div.complete_message {
     display: block;
     float: left;
     margin: 0;
-    padding: 0px 8px;
+    padding: 3px 8px;
     text-decoration: none;
 }
 #projectmenu a.current {
@@ -203,7 +217,6 @@ div.complete_message {
 #projectmenu a:hover {
     background: #999 bottom center no-repeat;
     color: #ffffff;
-    padding-bottom: 0px;    
 }
 
 #sub_project_list,
@@ -227,7 +240,6 @@ div.complete_message {
 }
 #project_list h2 {
     margin:0px 0px 10px 0px;
-    padding-left:5px;
 }
 #project_list ul {
     margin: 5px;
@@ -249,6 +261,12 @@ div.complete_message {
     padding:0px 10px 0px 390px;
 /*     width: 65%; */
 /*     float: left; */
+}
+#dashboard p {
+    padding:0px 10px 0px 20px;
+}
+#dashboard ul {
+    padding:0px 10px 0px 20px;
 }
 textarea {
     width: 400px;
