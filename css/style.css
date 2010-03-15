@@ -43,8 +43,8 @@ h2 {
     padding: 5px 3px 3px 15px;
 /*     background-image: url("../img/h2.png"); */
 /*     background-repeat: repeat-x; */
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
 }
 h3 {
     font-size: 120%;
