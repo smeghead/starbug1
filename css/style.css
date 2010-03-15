@@ -36,13 +36,13 @@ h1 {
 }
 h2 {
     color: #E7EFFF;
-    background-color: #00108C;
+    background-color: #00106C;
     font-weight: bold;
     font-size: 150%;
     margin: 3px 13px 3px 3px;
     padding: 5px 3px 3px 15px;
-    background-image: url("../img/h2.png");
-    background-repeat: repeat-x;
+/*     background-image: url("../img/h2.png"); */
+/*     background-repeat: repeat-x; */
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
 }
@@ -50,7 +50,7 @@ h3 {
     font-size: 120%;
     font-weight: bold;
     color: white;
-    background-color: #003399;
+    background-color: #000099;
     padding: 5px 3px 5px 10px;
     margin: 5px 0px 5px 0px;
     -moz-border-radius: 5px;
