@@ -334,7 +334,7 @@ td {
     padding: 0.1em 5px;
     border-width: 1px;
     border-style: solid;
-    border-color: #777;
+    border-color: #999;
 /*     border-color: #efefef #dce0e3 #dce0e3 #efefef; */
 }
 
@@ -345,7 +345,7 @@ th {
 
 td {
 /*     border: 1px solid #ddd; */
-    background-color: #fff;
+/*    background-color: #fff;*/
 }
 
 /*======================================
