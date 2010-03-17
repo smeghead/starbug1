@@ -316,14 +316,16 @@ void output_ticket_table_body(Database* db, SearchResult* result, List* element_
 {
     Iterator* it;
     Iterator* it_msg;
+    int n = 1;
 
     foreach (it_msg, result->messages) {
         Message* message = it_msg->element;
         List* elements_a;
         list_alloc(elements_a, Element, element_new, element_free);
         elements_a = db_get_last_elements_4_list(db, message->id, elements_a);
-        o("\t<tr>\n"
+        o("\t<tr class=\"%s\">\n"
           "\t\t<td class=\"id field%d-\"><a href=\"%s/%s/ticket/%s\">%s</a></td>\n", 
+                n++ % 2 == 0 ? "odd" : "even",
                 ELEM_ID_ID, 
                 cgiScriptName, 
                 g_project_code_4_url,
