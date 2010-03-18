@@ -136,14 +136,14 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
     string_free(top_project_name_a);
     o("\t<li><a href='%s/../index.%s/%s'>", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url); h(string_rawstr(project->name)); o("</a></li>\n"); 
     o("</ul>\n"
-      "<br clear='all' />\n"
+      "<br class=\"clear\" clear='all' />\n"
       "</div>\n");
     o("<div id='menu'>\n"
       "<ul>\n");
     o("\t<li><a href='%s/%s/rss' title=\"RSS Feed\"><img src=\"%s/../img/rss.png\" alt=\"rss\" /></a></li>\n", cgiScriptName, g_project_code_4_url, cgiScriptName);
     o("\t<li><a href='%s/top/' title=\"%s\">%s</a></li>\n", cgiScriptName, _("display sub projects list at top page."), _("top page(sub projects list)"));
     o("</ul>\n"
-      "<br clear='all' />\n"
+      "<br class=\"clear\" clear='all' />\n"
       "</div>\n");
     o("<div>\n"
       "<ul id='projectmenu'>\n");
@@ -156,7 +156,7 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
     o("\t<li><a %s href='%s/%s/help' title=\"%s\">%s</a></li>\n", navi == NAVI_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("display help."), _("help"));
     o("\t<li><a %s href='%s/../admin.%s/%s' title=\"%s\">%s</a></li>\n", navi == NAVI_MANAGEMENT ? "class=\"current\"" : "", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url, _("seveal settings."), _("management of sub project"));
     o("</ul>\n"
-      "<br clear='all' />\n"
+      "<br class=\"clear\" clear='all' />\n"
       "</div>\n");
 }
 void output_footer()
@@ -428,7 +428,7 @@ void output_states(List* states, bool with_new_ticket_link)
         o("\t\t</li>\n");
     }
     o("\t</ul>\n"
-      "\t<br clear=\"all\" />\n"
+      "\t<br class=\"clear\" clear=\"all\" />\n"
       "</div>\n");
 /*     o("<br class=\"clear\" clear=\"all\" />\n"); */
 }
@@ -486,8 +486,7 @@ void list_action()
         hs(s->name);
         o("</a>&nbsp;\n");
     }
-    o("</div>\n"
-      "<br clear=\"all\" />\n");
+    o("</div>\n");
     foreach (it, states_a) {
         State* s = it->element;
         SearchResult* result_a = search_result_new();
