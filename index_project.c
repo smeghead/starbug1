@@ -500,7 +500,7 @@ void list_action()
         o("<div>\n");
         o("<h4 class=\"status\">");hs(s->name);o("&nbsp;(%d件)&nbsp;<a href=\"#top\">↑</a></h4>\n", s->count);
         if (result_a->hit_count == LIST_COUNT_PER_LIST_PAGE) {
-            o("\t\t<div class=\"infomation\">%s%d%s<a href=\"%s/%s/search?field%d=", _("new"), 
+            o("\t\t<div class=\"information\">%s%d%s<a href=\"%s/%s/search?field%d=", _("new"), 
                     result_a->hit_count, _("tickets is desplayed."),
                     cgiScriptName,
                     g_project_code_4_url,
@@ -510,7 +510,7 @@ void list_action()
         }
         output_ticket_table_status_index(db_a, result_a, element_types_a);
         if (result_a->hit_count == LIST_COUNT_PER_LIST_PAGE) {
-            o("\t\t<div class=\"infomation\">%s<a href=\"%s/%s/search?field%d=", _("see more..."), 
+            o("\t\t<div class=\"information\">%s<a href=\"%s/%s/search?field%d=", _("see more..."), 
                     cgiScriptName,
                     g_project_code_4_url,
                     ELEM_ID_STATUS);
@@ -864,7 +864,7 @@ void search_action()
         Iterator* it;
 
         query_string_a = format_query_string_without_page(query_string_a);
-        o(      "<div class=\"infomation\">");
+        o(      "<div class=\"information\">");
         o(      _("%d tickets hits."), result_a->hit_count);
         o(      "[&nbsp;");
         foreach (it, result_a->states) {
@@ -1500,7 +1500,7 @@ void register_action()
             _("input below form and push register button."),
             _("note: they are checked by only javascript."));
     o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName, g_project_code_4_url);
-    o(      "<table summary=\"input infomation\">\n");
+    o(      "<table summary=\"input information\">\n");
     {
         List* element_types_a;
         Iterator* it;
@@ -1667,7 +1667,7 @@ void ticket_action()
       "\t</tr>\n"
             "</table>\n"
             "</div>"
-            "<div class=\"infomation\"><a href=\"#reply\">%s</a></div>\n"
+            "<div class=\"information\"><a href=\"#reply\">%s</a></div>\n"
             "<div id=\"ticket_history\">\n"
             "<h3>%s</h3>\n"
             "<div class=\"description\">%s</div>\n", _("go to reply"), _("ticket history"), _("this is ticket histories."));
@@ -2012,7 +2012,7 @@ void register_at_once_action()
     project_free(project_a);
     {
         /* 一括用、CSV形式フィールド */
-        o("<table summary=\"input infomation\">\n"
+        o("<table summary=\"input information\">\n"
           "\t<tr>\n"
           "\t\t<th class=\"required\">CSV"
           "<span class=\"required\">※</span>"
@@ -2066,7 +2066,7 @@ void register_at_once_confirm_action()
             _("[register ticket at once description5]"),
             _("note: they are checked by only javascript."));
     o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/%s/register_at_once_submit\" method=\"post\">\n", cgiScriptName, g_project_code_4_url);
-    o(      "<table summary=\"input infomation\">\n");
+    o(      "<table summary=\"input information\">\n");
     {
         int line_count = 0;
         List* element_types_a;
