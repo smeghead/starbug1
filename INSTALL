@@ -2,6 +2,15 @@
 
 Starbug1は、SQLite3、cgic、gettext、iconvを使用しています。 コンパイルするためには、gettext、sqlite3、cgicが必要です。(FreeBSDでコンパイルするには、それらに加えてlibiconvが必要になります。)
 
+===== 基本ソフトウェアのインストール =====
+
+gcc, gettext, rsyncをインストールして下さい。
+Ubuntuの場合は、以下のコマンドを実行して必要なソフトウェアをインストールできます。
+
+<code>
+  sudo apt-get install build-essential gettext rsync
+</code>
+
 ===== SQLite3のインストール =====
 
 OSに、SQLite3がインストールされている場合(libsqlite3.so, sqlite3.hが 存在する場合)は、SQLite3のインストールは不要です。
