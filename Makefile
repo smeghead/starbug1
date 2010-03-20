@@ -7,10 +7,15 @@ ALT_LIB_PATH = ${HOME}/usr
 #ALT_LIB_PATH = /s/usr/MinGW
 
 ifndef INITIAL_LOCALE
-	INITIAL_LOCALE = ja_JP
+	INITIAL_LOCALE = en_JP
 endif
 CFLAGS = -I${ALT_LIB_PATH}/include -I/usr/include -I/usr/local/include -I. -DVERSION=\"${VERSION}\" -DCOPYRIGHT=\"${COPYRIGHT}\" -DINITIAL_LOCALE=\"${INITIAL_LOCALE}\" -O3 -Wall
-LFLAGS = -L${ALT_LIB_PATH}/lib -L/usr/lib -L/usr/local/lib -lsqlite3 -lcgic
+ifdef STATIC_LFLAGS
+	LFLAGS = -L${ALT_LIB_PATH}/lib -L/usr/lib -L/usr/local/lib dist/cgic205/cgic.o dist/sqlite-3.6.23/sqlite3.o
+else
+	LFLAGS = -L${ALT_LIB_PATH}/lib -L/usr/lib -L/usr/local/lib -lsqlite3 -lcgic
+endif
+
 ifeq ($(CC_VERSION), 3)
 	CFLAGS += -W
 endif
@@ -19,17 +24,21 @@ ifeq ($(CC_VERSION), 4)
 endif
 OS = ${shell uname}
 ifeq ($(OS), Linux)
-	LFLAGS += -ldl
+	LFLAGS += -ldl -lpthread
 endif
 ifneq ($(OS), Linux)
 	LFLAGS += -lintl -liconv
 endif
 
+export INITIAL_LOCALE
 #debug
 #CFLAGS += -DDEBUG
 #CFLAGS += -DMEMORYDEBUG
 
 default: index.cgi admin.cgi compileresource
+
+static: compiledeps
+	$(MAKE) STATIC_LFLAGS=yes
 
 
 admin.o: admin.c alloc.h util.h list.h data.h simple_string.h dbutil.h \
@@ -72,7 +81,7 @@ admin.cgi: list.o simple_string.o data.o dbutil.o db_project.o db_top.o alloc.o 
 	$(CC) -o $@ $^ $(LFLAGS)
 	strip $@
 
-.PHONY: clean webapp dist cvsreleasetag displayinstalldoc mergeresource compileresource
+.PHONY: clean webapp dist cvsreleasetag displayinstalldoc mergeresource compileresource compiledeps static
 clean:
 	rm -f *.o index.cgi admin.cgi
 	rm -rf ./dist
@@ -136,4 +145,19 @@ locale/en/LC_MESSAGES/starbug1.mo: locale/en.po
 locale/zh/LC_MESSAGES/starbug1.mo: locale/zh.po 
 	mkdir -p locale/zh/LC_MESSAGES
 	msgfmt -o locale/zh/LC_MESSAGES/starbug1.mo locale/zh.po 
+
+compiledeps:
+	mkdir -p dist
+	cd dist && \
+		wget http://www.boutell.com/cgic/cgic205.tar.gz && \
+		tar zxf cgic205.tar.gz && \
+		cd cgic205 && \
+		make && \
+		cd - && \
+		wget http://www.sqlite.org/sqlite-amalgamation-3.6.23.tar.gz && \
+		tar zxf sqlite-amalgamation-3.6.23.tar.gz && \
+		cd sqlite-3.6.23 && \
+		./configure && \
+		make
+
 
