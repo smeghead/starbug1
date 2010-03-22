@@ -460,25 +460,28 @@ void create_project_tables(Database* db, char* sub_project_name)
     exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (7, 3, ?, 1, 7);",
             COLUMN_TYPE_TEXT, _("specification"),
             COLUMN_TYPE_END);
-    exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (8, 4, ?, 0, 1);",
+    exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (8, 3, ?, 1, 8);",
+            COLUMN_TYPE_TEXT, _("deleted"),
+            COLUMN_TYPE_END);
+    exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (9, 4, ?, 0, 1);",
             COLUMN_TYPE_TEXT, _("page"),
             COLUMN_TYPE_END);
-    exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (9, 4, ?, 0, 2);",
+    exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (10, 4, ?, 0, 2);",
             COLUMN_TYPE_TEXT, _("batch process"),
             COLUMN_TYPE_END);
-    exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (10, 4, ?, 0, 3);",
+    exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (11, 4, ?, 0, 3);",
             COLUMN_TYPE_TEXT, _("document"),
             COLUMN_TYPE_END);
-    exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (11, 5, ?, 0, 1);",
+    exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (12, 5, ?, 0, 1);",
             COLUMN_TYPE_TEXT, _("emergency"),
             COLUMN_TYPE_END);
-    exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (12, 5, ?, 0, 2);",
+    exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (13, 5, ?, 0, 2);",
             COLUMN_TYPE_TEXT, _("high"),
             COLUMN_TYPE_END);
-    exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (13, 5, ?, 0, 3);",
+    exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (14, 5, ?, 0, 3);",
             COLUMN_TYPE_TEXT, _("middle"),
             COLUMN_TYPE_END);
-    exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (14, 5, ?, 0, 4);",
+    exec_query(db, "insert into list_item(id, element_type_id, name, close, sort) values (15, 5, ?, 0, 4);",
             COLUMN_TYPE_TEXT, _("low"),
             COLUMN_TYPE_END);
     exec_query(
