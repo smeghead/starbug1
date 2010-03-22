@@ -7,7 +7,7 @@ ALT_LIB_PATH = ${HOME}/usr
 #ALT_LIB_PATH = /s/usr/MinGW
 
 ifndef INITIAL_LOCALE
-	INITIAL_LOCALE = en_JP
+	INITIAL_LOCALE = $(basename ${LANG})
 endif
 CFLAGS = -I${ALT_LIB_PATH}/include -I/usr/include -I/usr/local/include -I. -DVERSION=\"${VERSION}\" -DCOPYRIGHT=\"${COPYRIGHT}\" -DINITIAL_LOCALE=\"${INITIAL_LOCALE}\" -O3 -Wall
 ifdef STATIC_LFLAGS
