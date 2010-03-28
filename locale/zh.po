@@ -1358,7 +1358,7 @@ msgstr "解析，可以吗？"
 
 #: js/reply.js:12
 msgid "you not modify status, are you ok?"
-msgstr "状态没有被修改，没问题吗？"
+msgstr "「状态」没有被修改，没问题吗？"
 
 #: js/reply.js:24
 msgid "it will replied. are you ok?"

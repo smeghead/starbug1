@@ -1,9 +1,12 @@
+2010-03-28  smeghead <smeghead@users.sourceforge.jp>
+
+	* 「状態」を変更しないで返信を行なう場合のjavascriptのアラートメッセージが
+	   わかりにくかったのを修正した。
 
 2010-03-22  smeghead <smeghead@users.sourceforge.jp>
 
 	* makeファイル中で、INITIAL_LOCALEを自動判定するように変更した。
 	* デフォルトBTSに削除というステータスを追加した。
-
 
 2010-03-21  smeghead <smeghead@users.sourceforge.jp>
 

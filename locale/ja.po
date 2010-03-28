@@ -1427,7 +1427,7 @@ msgstr "解析します。よろしいですか？"
 
 #: js/reply.js:12
 msgid "you not modify status, are you ok?"
-msgstr "状態が変更されていませんが、間違いないですか？"
+msgstr "「状態」が変更されていませんが、間違いないですか？"
 
 #: js/reply.js:24
 msgid "it will replied. are you ok?"

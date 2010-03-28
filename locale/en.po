@@ -1466,7 +1466,7 @@ msgstr "It will analyzed. are you ok?"
 
 #: js/reply.js:12
 msgid "you not modify status, are you ok?"
-msgstr "You not modify status, are you ok?"
+msgstr "You not modify \"status\", are you ok?"
 
 #: js/reply.js:24
 msgid "it will replied. are you ok?"
