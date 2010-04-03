@@ -9,10 +9,11 @@ ALT_LIB_PATH = ${HOME}/usr
 ifndef INITIAL_LOCALE
 	INITIAL_LOCALE = $(basename ${LANG})
 endif
-CFLAGS = -I${ALT_LIB_PATH}/include -I/usr/include -I/usr/local/include -I. -DVERSION=\"${VERSION}\" -DCOPYRIGHT=\"${COPYRIGHT}\" -DINITIAL_LOCALE=\"${INITIAL_LOCALE}\" -O3 -Wall
 ifdef STATIC_LFLAGS
+	CFLAGS = -I${ALT_LIB_PATH}/include -I/usr/include -I/usr/local/include -I. -Idist/cgic205 -Idist/sqlite-3.6.23 -DVERSION=\"${VERSION}\" -DCOPYRIGHT=\"${COPYRIGHT}\" -DINITIAL_LOCALE=\"${INITIAL_LOCALE}\" -O3 -Wall
 	LFLAGS = -L${ALT_LIB_PATH}/lib -L/usr/lib -L/usr/local/lib dist/cgic205/cgic.o dist/sqlite-3.6.23/sqlite3.o
 else
+	CFLAGS = -I${ALT_LIB_PATH}/include -I/usr/include -I/usr/local/include -I. -DVERSION=\"${VERSION}\" -DCOPYRIGHT=\"${COPYRIGHT}\" -DINITIAL_LOCALE=\"${INITIAL_LOCALE}\" -O3 -Wall
 	LFLAGS = -L${ALT_LIB_PATH}/lib -L/usr/lib -L/usr/local/lib -lsqlite3 -lcgic
 endif
 
@@ -94,8 +95,9 @@ webapp: default
 	mkdir -p dist/starbug1
 	rsync -a --exclude=*.po --exclude=CVS js css img script locale template *.html *.cgi COPYING_cgic favicon.ico dist/starbug1/
 	cp .htaccess dist/starbug1/dot.htaccess
-	find dist/starbug1 -name '*.cgi' -exec chmod +x {} \;
-	find dist/starbug1 -name '*.pl' -exec chmod +x {} \;
+	find dist/starbug1 -name '*.cgi' -exec chmod ugo+x {} \;
+	for f in db debug.log; do chmod ugo+x $f \; done;
+	find dist/starbug1 -name '*.pl' -exec chmod ugo+x {} \;
 	@echo "Creating webapp... done."
 	@echo "    webapp may be dist/starbug1 directory."
 
