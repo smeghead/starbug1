@@ -1,6 +1,8 @@
-2010-04-04	smeghead  <smeghead@users.sourceforge.jp>
+2010-04-06  smeghead <smeghead@users.sourceforge.jp>
 
-	* 1.3.11リリース
+	* 64bitコンパイル時にsqlite3のsqlite3_prepare呼び出しで落ちる問題があった
+	ため、64bit環境でも32bitでコンパイルするように修正した。
+	* Seleniumlテストを修正した。
 
 2010-04-04  smeghead <smeghead@users.sourceforge.jp>
 

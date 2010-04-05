@@ -568,6 +568,7 @@ void update_elements(Database* db)
     if ((cgiFormStringMultiple("field_ids", &ids)) == cgiFormNotFound) {
         die("cannot find field_ids.");
     }
+    d("1");
     while (ids[++i]) {
         int j;
         char* id = ids[i];
@@ -577,6 +578,7 @@ void update_elements(Database* db)
         Iterator* it;
         ElementType* et_a = element_type_new();
 
+    d("2 id:%s\n", id);
         et_a = db_get_element_type(db, atoi(id), et_a);
 
         sprintf(name, "field%s.name", id);
@@ -676,6 +678,7 @@ void update_elements(Database* db)
         element_type_free(et_a);
     }
     cgiStringArrayFree(ids);
+    d("end");
 }
 void new_item_action()
 {

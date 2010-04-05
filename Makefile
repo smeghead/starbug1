@@ -10,11 +10,11 @@ ifndef INITIAL_LOCALE
 	INITIAL_LOCALE = $(basename ${LANG})
 endif
 ifdef STATIC_LFLAGS
-	CFLAGS = -I${ALT_LIB_PATH}/include -I/usr/include -I/usr/local/include -I. -Idist/cgic205 -Idist/sqlite-3.6.23 -DVERSION=\"${VERSION}\" -DCOPYRIGHT=\"${COPYRIGHT}\" -DINITIAL_LOCALE=\"${INITIAL_LOCALE}\" -O3 -Wall
-	LFLAGS = -L${ALT_LIB_PATH}/lib -L/usr/lib -L/usr/local/lib dist/cgic205/cgic.o dist/sqlite-3.6.23/sqlite3.o
+	CFLAGS = -m32 -I${ALT_LIB_PATH}/include -I/usr/include -I/usr/local/include -I. -Idist/cgic205 -Idist/sqlite-3.6.23 -DVERSION=\"${VERSION}\" -DCOPYRIGHT=\"${COPYRIGHT}\" -DINITIAL_LOCALE=\"${INITIAL_LOCALE}\" -O3 -Wall
+	LFLAGS = -m32 -L${ALT_LIB_PATH}/lib -L/usr/lib -L/usr/local/lib dist/cgic205/cgic.o dist/sqlite-3.6.23/sqlite3.o
 else
-	CFLAGS = -I${ALT_LIB_PATH}/include -I/usr/include -I/usr/local/include -I. -DVERSION=\"${VERSION}\" -DCOPYRIGHT=\"${COPYRIGHT}\" -DINITIAL_LOCALE=\"${INITIAL_LOCALE}\" -O3 -Wall
-	LFLAGS = -L${ALT_LIB_PATH}/lib -L/usr/lib -L/usr/local/lib -lsqlite3 -lcgic
+	CFLAGS = -m32 -I${ALT_LIB_PATH}/include -I/usr/include -I/usr/local/include -I. -DVERSION=\"${VERSION}\" -DCOPYRIGHT=\"${COPYRIGHT}\" -DINITIAL_LOCALE=\"${INITIAL_LOCALE}\" -O3 -Wall
+	LFLAGS = -m32 -L${ALT_LIB_PATH}/lib -L/usr/lib -L/usr/local/lib -lsqlite3 -lcgic
 endif
 
 ifeq ($(CC_VERSION), 3)
@@ -154,12 +154,12 @@ compiledeps:
 		wget http://www.boutell.com/cgic/cgic205.tar.gz && \
 		tar zxf cgic205.tar.gz && \
 		cd cgic205 && \
-		make && \
+		make CFLAGS=-m32 LFLAGS=-m32 cgic.o && \
 		cd - && \
 		wget http://www.sqlite.org/sqlite-amalgamation-3.6.23.tar.gz && \
 		tar zxf sqlite-amalgamation-3.6.23.tar.gz && \
 		cd sqlite-3.6.23 && \
 		./configure && \
-		make
+		make CFLAGS=-m32 LFLAGS=-m32 sqlite3.o
 
 
