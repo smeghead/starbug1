@@ -464,6 +464,7 @@ div.complete_message {
     background-color: #DDFFDD;
     width: 80%;
     -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
 }
 div.item_navigation {
     width: 95%;
