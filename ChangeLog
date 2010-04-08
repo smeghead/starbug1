@@ -1,3 +1,7 @@
+2010-04-08  smeghead <smeghead@users.sourceforge.jp>
+
+	* スタイルシートの調整
+
 2010-04-06  smeghead <smeghead@users.sourceforge.jp>
 
 	* 64bitコンパイル時にsqlite3のsqlite3_prepare呼び出しで落ちる問題があった

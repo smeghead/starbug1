@@ -12,10 +12,11 @@
 /* end of initialize rule */
 /* ---------------------- */
 body {
+    margin: 0px 0px 0px 0px;
     background-image: url("../img/starbug1.jpg");
     background-repeat: no-repeat;
     background-position: right top;
-    width: 99%;
+    width: 100%;
 }
 
 a:link {
@@ -38,24 +39,18 @@ h1 {
     margin: 0px 0px 0px 0px;
     padding: 0px 0px 0px 0px;
     font-weight: bold;
-    font-size: 250%;
-/*     text-align: center; */
-/*     color: white; */
-/*     background-color: #00108C; */
-/*     border-bottom: solid #00108C 5px; */
+    font-size: 305%;
+    color: #003366; 
 }
 h2 {
     font-weight: bold;
     font-size: 130%;
-    background-color: #33309C;
+    background-color: #333366;
     color: white;
     margin: 10px 0px 10px 0px;
-    padding: 3px 0px 3px 15px;
-/*    border-color: #00108C;*/
-/*    border-style: solid;*/
-/*    border-width: 0px 0px 3px 0px;*/
-    -moz-border-radius: 8px;
-    -webkit-border-radius: 8px;
+    padding: 1px 0px 1px 10px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
 }
 h3 {
     font-size: 120%;
@@ -69,7 +64,6 @@ h3 {
     border-color: #979F9F;
     border-style: solid;
     border-width: 1px;
-/*    border-width: 0px 0px 2px 15px;*/
 }
 h4 {
     font-weight: bold;
@@ -103,12 +97,10 @@ table {
 table tr th{
     padding:3px;
     background:#EEE;
-/*     border-bottom:1px solid gray; */
 }
 
 table tr td {
     padding:3px;
-/*     border-bottom:1px dashed gray; */
 }
 
 #main {
@@ -132,14 +124,9 @@ table tr td {
 
 
 #menu {
-/*     background: #ccc; */
-/*     float: left; */
-/*     width: 100%; */
-/*     border: solid #333 1px; */
     margin-bottom: 2px;
     position:    absolute;
     top:         3px; 
-/*     left:        21em;  */
     right:       0px;
 }
 #menu ul {
@@ -152,20 +139,15 @@ table tr td {
     font-size: 85%;
     margin: 0;
     padding: 0;
-/*     border-left: solid #003F00 1px; */
 }
 #menu a {
-/*     background: #eee bottom right no-repeat; */
     color: #000000;
     display: block;
     float: left;
     margin: 0;
     padding: 0px 5px;
-/*     text-decoration: none; */
 }
 #menu a.current {
-/*     background: #666 bottom center no-repeat; */
-/*     color: #ffffff; */
 }
 #menu a:hover {
     background: #999 bottom center no-repeat;
@@ -181,7 +163,7 @@ div.complete_message {
     -moz-border-radius: 8px;
 }
 #projectmenu {
-    margin: 0px 0px 0px 0px;
+    margin: 0px 5px 0px 5px;
     padding: 0px;
 }
 #projectmenu ul {
@@ -225,14 +207,10 @@ div.complete_message {
 #project_search,
 #project_add {
     padding:0px 10px;
-/*     width: 30%; */
-/*     float: left; */
 }
 #main-content {
     margin:0px;
     padding:0px;
-/*     width: 65%; */
-/*     float: left; */
 }
 #project_list {
     float:left;
@@ -259,8 +237,6 @@ div.complete_message {
 #dashboard {
     margin: 0px;
     padding:0px 10px 0px 390px;
-/*     width: 65%; */
-/*     float: left; */
 }
 #dashboard p {
     padding:0px 10px 0px 20px;
