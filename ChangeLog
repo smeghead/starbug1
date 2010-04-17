@@ -7,7 +7,8 @@
 	* Makefileのwebappターゲットのバグ修正。
 	書き込み権限を付加する部分が機能していなかったのを修正した。
 	* テンプレート「TODO」で項目を追加するとエラーが出るのを修正した。
-	* 
+	* INSTALLファイルのインストール方法をstatic版のインストー
+	ル方法に変更した。にstatic版のインストール方法に変更した。
 
 2010-04-08	smeghead  <smeghead@users.sourceforge.jp>
 

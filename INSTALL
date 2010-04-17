@@ -11,45 +11,8 @@ Ubuntuの場合は、以下のコマンドを実行して必要なソフトウェアをインストールできます
   sudo apt-get install build-essential gettext rsync
 </code>
 
-===== SQLite3のインストール =====
+====== スタティック版 インストール方法 ======
 
-OSに、SQLite3がインストールされている場合(libsqlite3.so, sqlite3.hが 存在する場合)は、SQLite3のインストールは不要です。
-http://www.sqlite.org/ から、 sqlite-3.5.4.tar.gz をダウンロードする。
-
-<code>
-$ wget http://www.sqlite.org/sqlite-3.5.4.tar.gz
-</code>
-
-適当な場所に展開し、コンパイル、インストールする。
-<code>
-$ tar zxf sqlite-3.5.4.tar.gz
-$ mkdir bld
-$ cd bld
-$ ../sqlite-3-5-4/configure --disable-tcl
-$ make
-$ su
-# make install
-</code>
-      
-===== cgicのインストール =====
-
-OSに、cgicl205以上がインストールされている場合は、cgicのインストールは不要です。
-http://www.boutell.com/cgic/ から cgic205.tar.gz をダウンロードする。
-
-<code>
-$ wget http://www.boutell.com/cgic/cgic205.tar.gz
-</code>
-      
-適当な場所に展開し、コンパイル、インストールする。
-
-<code>
-$ tar zxf cgic205.tar.gz
-$ cd cgic205
-$ make  INITIAL_LOCALE=ja_JP
-$ su
-# make install
-</code>
-      
 ===== Starbug1のコンパイル =====
 
 ソースを取得する。
@@ -58,36 +21,35 @@ Downloadから最新ソースを取得する。https://sourceforge.jp/projects/starbug1/
 ==== コンパイル ====
 
 取得したソースを展開しコンパイルします。
+
 <code>
 $ tar zxf starbug1-x.x.x.tar.gz
 $ cd starbug1
-$ make
-$ make webapp
+$ make INITIAL_LOCALE=ja_JP static
 </code>
       
 ※Starbug1をコンパイルする場合は、gnuのmakeが必要です。OSがFreeBSDなどの場合で、makeがgnuのmakeでない場合は、gmakeを使用してコンパイルしてください。
 dist/starbug1 ディレクトリに、webアプリ一式が生成されます。
 
 
-Starbug1 1.3以降の場合、他言語で使用することができます。(1.3.01では、日本語、英語、簡体中国語に対応しています)
+Starbug1 1.3以降の場合、多言語で使用することができます。(1.3.01では、日本語、英語、簡体中国語に対応しています)
 
 === 英語版としてコンパイルする場合 ===
 
 <code>
 $ tar zxf starbug1-x.x.x.tar.gz
 $ cd starbug1
-$ make INITIAL_LOCALE=en_US
-$ make webapp
+$ make INITIAL_LOCALE=en_US webapp
 </code>
 
-=== 英語版としてコンパイルする場合 ===
+=== 簡体中国語版としてコンパイルする場合 ===
 
 <code>
 $ tar zxf starbug1-x.x.x.tar.gz
 $ cd starbug1
-$ make INITIAL_LOCALE=zh_CN
-$ make webapp
+$ make INITIAL_LOCALE=zh_CN webapp
 </code>
+
 ==== Starbug1の配置 ====
 
 Webサーバ(動作確認しているのはapache)のDocumentRoot配下に dist/starbug1 ディレクトリを配置します。下の例は、/var/www/ をDocumentRootとした場合です。
