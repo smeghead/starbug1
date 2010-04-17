@@ -22,16 +22,20 @@
 #define d(...) {\
     char time[20];\
     FILE *fp = fopen("debug.log", "a");\
+    if (fp) { \
     set_date_string(time);\
-    fprintf(fp, "[%s] {%s/%s}\t", time, g_project_code, g_action_name);\
-    fprintf(fp, __VA_ARGS__);\
-    fclose(fp);\
+        fprintf(fp, "[%s] {%s/%s}\t", time, g_project_code, g_action_name);\
+        fprintf(fp, __VA_ARGS__);\
+        fclose(fp);\
+    } \
 }
 #else
 #define d(...) {\
     FILE *fp = fopen("debug.log", "a");\
-    fprintf(fp, __VA_ARGS__);\
-    fclose(fp);\
+    if (fp) { \
+        fprintf(fp, __VA_ARGS__);\
+        fclose(fp);\
+    } \
 }
 #endif
 #define die(msg)    { \
