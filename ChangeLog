@@ -1,8 +1,17 @@
+2010-04-17	smeghead  <smeghead@users.sourceforge.jp>
+
+	* 1.3.12リリース
+
 2010-04-17  smeghead <smeghead@users.sourceforge.jp>
 
 	* Makefileのwebappターゲットのバグ修正。
 	書き込み権限を付加する部分が機能していなかったのを修正した。
 	* テンプレート「TODO」で項目を追加するとエラーが出るのを修正した。
+	* 
+
+2010-04-08	smeghead  <smeghead@users.sourceforge.jp>
+
+	* 1.3.11リリース
 
 2010-04-08  smeghead <smeghead@users.sourceforge.jp>
 
