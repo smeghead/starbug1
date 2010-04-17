@@ -90,7 +90,7 @@ CREATE INDEX index_list_item_0 on list_item (id, sort);
 COMMIT;
 CREATE TABLE ticket( id integer not null primary key,  original_message_id integer not null default 0,  last_message_id integer not null default 0,  registerdate text not null,  closed integer not null default 0);
 CREATE INDEX index_ticket_0 on ticket (id, last_message_id, last_message_id, closed);
-CREATE TABLE message( id integer not null primary key,  ticket_id integer not null,  registerdate text,  field1 text not null default '' ,  field2 text not null default '' ,  field3 text not null default '' ,  field4 text not null default '' ,  field5 text not null default '' ,  field6 text not null default '' ,  field7 text not null default '' ,  field8 text not null default ''  );
+CREATE TABLE message( id integer not null primary key,  ticket_id integer not null,  registerdate text,  field1 text not null default '' ,  field2 text not null default '' ,  field3 text not null default '' ,  field4 text not null default '' ,  field5 text not null default '' ,  field6 text not null default '');
 CREATE TABLE element_file( id integer not null primary key,  message_id integer not null,  element_type_id integer not null,  filename text,  size integer,  mime_type text,  content blob );
 BEGIN TRANSACTION;
 CREATE TABLE wiki(  id integer not null primary key,  name text,  content text,  registerdate text );
