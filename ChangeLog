@@ -1,3 +1,9 @@
+2010-04-17  smeghead <smeghead@users.sourceforge.jp>
+
+	* Makefileのwebappターゲットのバグ修正。
+	書き込み権限を付加する部分が機能していなかったのを修正した。
+
+
 2010-04-08  smeghead <smeghead@users.sourceforge.jp>
 
 	* スタイルシートの調整
@@ -1343,4 +1349,4 @@
 	* 初期alpha版リリース
 
 
- vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8:
+ vim: set ts=4 sw=4 sts=4 noexpandtab fenc=utf-8:

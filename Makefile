@@ -96,7 +96,9 @@ webapp: default
 	rsync -a --exclude=*.po --exclude=CVS js css img script locale template *.html *.cgi COPYING_cgic favicon.ico dist/starbug1/
 	cp .htaccess dist/starbug1/dot.htaccess
 	find dist/starbug1 -name '*.cgi' -exec chmod ugo+x {} \;
-	for f in db debug.log; do chmod ugo+x $f \; done;
+	touch dist/starbug1/debug.log
+	mkdir -p dist/starbug1/db
+	for f in db debug.log; do chmod ugo+w "dist/starbug1/$f"; done 
 	find dist/starbug1 -name '*.pl' -exec chmod ugo+x {} \;
 	@echo "Creating webapp... done."
 	@echo "    webapp may be dist/starbug1 directory."
