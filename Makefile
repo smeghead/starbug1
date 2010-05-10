@@ -89,6 +89,7 @@ clean:
 	rm -rf ./locale/ja
 	rm -rf ./locale/en
 	rm -rf ./locale/zh
+	rm -rf ./locale/zh_TW
 
 webapp: default
 	@echo "Creating webapp..."
@@ -135,8 +136,9 @@ mergeresource:
 	msgmerge -U locale/ja.po locale/messages.po
 	msgmerge -U locale/en.po locale/messages.po
 	msgmerge -U locale/zh.po locale/messages.po
+	msgmerge -U locale/zh_TW.po locale/messages.po
 
-compileresource: locale/ja/LC_MESSAGES/starbug1.mo locale/en/LC_MESSAGES/starbug1.mo locale/zh/LC_MESSAGES/starbug1.mo 
+compileresource: locale/ja/LC_MESSAGES/starbug1.mo locale/en/LC_MESSAGES/starbug1.mo locale/zh/LC_MESSAGES/starbug1.mo locale/zh_TW/LC_MESSAGES/starbug1.mo 
 
 locale/ja/LC_MESSAGES/starbug1.mo: locale/ja.po 
 	mkdir -p locale/ja/LC_MESSAGES
@@ -149,6 +151,10 @@ locale/en/LC_MESSAGES/starbug1.mo: locale/en.po
 locale/zh/LC_MESSAGES/starbug1.mo: locale/zh.po 
 	mkdir -p locale/zh/LC_MESSAGES
 	msgfmt -o locale/zh/LC_MESSAGES/starbug1.mo locale/zh.po 
+
+locale/zh_TW/LC_MESSAGES/starbug1.mo: locale/zh_TW.po 
+	mkdir -p locale/zh_TW/LC_MESSAGES
+	msgfmt -o locale/zh_TW/LC_MESSAGES/starbug1.mo locale/zh_TW.po 
 
 compiledeps:
 	mkdir -p dist
