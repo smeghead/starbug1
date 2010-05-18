@@ -145,7 +145,7 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
         char hook_command[DEFAULT_LENGTH];
         char filename[DEFAULT_LENGTH];
         strcpy(filename, dp->d_name);
-        sprintf(hook_command, "%s/%s", hook_dir, filename);
+        sprintf(hook_command, "%s%s%s", hook_dir, PATH_SEPERATOR, filename);
         stat(hook_command, &fi);
         if (!S_ISDIR(fi.st_mode) &&                        /*ファイルで、 */
                 (fi.st_mode & S_IRUSR) &&                  /*所有者が読取可能で */
@@ -159,7 +159,7 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
             char dlpath[DEFAULT_LENGTH];
 
             result = list_new_element(hook->results);
-            sprintf(dlpath, "%s/%s", get_script_dir(script_dir), hook_command);
+            sprintf(dlpath, "%s%s%s", get_script_dir(script_dir), PATH_SEPERATOR, hook_command);
             handle = dlopen(dlpath, RTLD_LAZY);
             if (!handle) {
                 d("dlopen failed: %s\n", dlerror());

@@ -1,3 +1,8 @@
+2010-05-18  smeghead <smeghead@users.sourceforge.jp>
+
+	* Windows版でのhook実行時にエラーが発生する問題を修正。scriptのパスを生成
+	する際に、/固定だったため、Windowsでは、エラーになっていた。
+
 2010-05-10  smeghead <smeghead@users.sourceforge.jp>
 
 	* 中国語のリソースファイルの修正。newcuteさんによるパッチとりこみ。
