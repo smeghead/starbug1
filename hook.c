@@ -61,7 +61,7 @@ static String* create_json(String* content, Project* project, Message* message, 
     String* base_url_a = string_new();
     base_url_a = get_base_url(base_url_a);
     string_appendf(content, "{project:{name: \"%s\"}, ticket:{id: %d, url: \"%s/%s/ticket/%d\",fields:[",
-            project->name,
+            string_rawstr(project->name),
             message->id,
             string_rawstr(base_url_a),
             g_project_code,
@@ -174,19 +174,15 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
                 } else {
                     String* base_url_a = string_new();
                     base_url_a = get_base_url(base_url_a);
-                    d("execute func\n");
                     ret = func(hook_message_a);
                     string_free(base_url_a);
                     if (ret == 0) {
-                        d("ok\n");
                         sprintf(result->message, _("executed hook process(%s)"), hook_command);
                     } else {
-                        d("ng\n");
                         sprintf(result->message, _("[error] error occured in hook process(%s). (return code: %d)"), hook_command, ret);
                     }
                 }
             }
-            d("dlclose\n");
             dlclose(handle);
             list_add(hook->results, result);
         } else if (!S_ISDIR(fi.st_mode) &&                 /*ファイルで、 */
@@ -196,12 +192,27 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
             int ret;
             char* val_a;
             HOOK_RESULT* result;
+            char tmp_filename[DEFAULT_LENGTH] = "tmp.XXXXXX";
+            FILE* f;
+            sprintf(tmp_filename, "%s", mktemp(tmp_filename));
+            f = fopen(tmp_filename, "w");
+            if (f == NULL) {
+                die("failed to open temporary file.");
+            }
+            d("content_a: %s\n", string_rawstr(content_a));
+            fprintf(f, "%s", string_rawstr(content_a));
+            fclose(f);
             result = list_new_element(hook->results);
             strcpy(result->command, hook_command);
             val_a = xalloc(sizeof(char) * string_len(content_a) + strlen("STARBUG1_CONTENT=") + 1);
             put_env_a("STARBUG1_CONTENT", string_rawstr(content_a), val_a);
+            /* 引数を追加 */
+            strcat(hook_command, " ");
+            strcat(hook_command, tmp_filename);
             ret = system(hook_command);
             xfree(val_a);
+            /* 一時ファイルを削除する */
+            remove(tmp_filename);
             if (ret == 0) {
                 sprintf(result->message, _("executed hook process(%s)"), hook_command);
             } else {

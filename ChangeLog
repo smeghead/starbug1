@@ -1,3 +1,9 @@
+2010-05-24  smeghead <smeghead@users.sourceforge.jp>
+
+	* メール送信用スクリプト実行のhook機能への情報の渡し方を、環境変数経由から
+	、一時ファイル経由に変更した。一時ファイルを作成するディレクトリは検討の余
+	地あり。
+
 2010-05-18  smeghead <smeghead@users.sourceforge.jp>
 
 	* Windows版でのhook実行時にエラーが発生する問題を修正。scriptのパスを生成
