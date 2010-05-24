@@ -72,7 +72,15 @@ $fields_data
 EOD
 }
 sub main {
-    my $info = JSON::Syck::Load($ENV{'STARBUG1_CONTENT'});
+    my $json;
+    if (@ARGV > -1) {
+        open my $f, '<', $ARGV[0] or die 'failed to open file.' . $@;
+        $json = do {local $/; <$f>};
+        close $f;
+    } else {
+        $json = $ENV{'STARBUG1_CONTENT'};
+    }
+    my $info = JSON::Syck::Load($json);
     my $subject = create_subject($info);
     my $content = create_content($info);
     Encode::from_to($subject, 'utf8', 'iso-2022-jp');
