@@ -1,3 +1,7 @@
+2010-05-25  smeghead <smeghead@users.sourceforge.jp>
+
+	* 登録された添付ファイルを一括で抜き出すスクリプトを作成した。
+
 2010-05-24  smeghead <smeghead@users.sourceforge.jp>
 
 	* メール送信用スクリプト実行のhook機能への情報の渡し方を、環境変数経由から
