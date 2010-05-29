@@ -1,4 +1,4 @@
-VERSION = 1.3.12
+VERSION = 1.3.13
 COPYRIGHT = Copyright\ smeghead\ 2007\ -\ 2010
 CC = gcc
 CC_VERSION = ${shell gcc --version | grep 'gcc.*[0-9]\.' | sed -e 's/gcc[^0-9]*\([0-9]\).*/\1/g'}
@@ -95,7 +95,7 @@ webapp: default
 	@echo "Creating webapp..."
 	mkdir -p tmp
 	mkdir -p dist/starbug1
-	rsync -a --exclude=*.po --exclude=CVS js css img script locale template *.html *.cgi COPYING_cgic favicon.ico dist/starbug1/
+	rsync -a --exclude=*.po --exclude=CVS js css img script locale template tmp *.html *.cgi COPYING_cgic favicon.ico dist/starbug1/
 	cp .htaccess dist/starbug1/dot.htaccess
 	find dist/starbug1 -name '*.cgi' -exec chmod ugo+x {} \;
 	touch dist/starbug1/debug.log
@@ -109,7 +109,7 @@ webappwin32: default
 	@echo "Creating webapp win32..."
 	mkdir -p tmp
 	mkdir -p dist/starbug1-${VERSION}-win32-bin/starbug1
-	cp -r js css img script locale template *.html *.cgi COPYING_cgic deps/*.dll favicon.ico dist/starbug1-${VERSION}-win32-bin/starbug1/
+	cp -r js css img script locale template tmp *.html *.cgi COPYING_cgic deps/*.dll favicon.ico dist/starbug1-${VERSION}-win32-bin/starbug1/
 	cp .htaccess dist/starbug1-${VERSION}-win32-bin/starbug1/.htaccess
 	cp README INSTALL dist/starbug1-${VERSION}-win32-bin/
 	@echo "Creating webapp win32... done."

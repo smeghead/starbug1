@@ -2,6 +2,8 @@
 
 	* hook機能で利用する一時ファイルを作成するディクレトリをtmpディレクトリに
 	変更した。
+	* hook機能で外部プログラムに渡すjsonのなかのURLのプロジェクトIDがurlencode
+	されたものになっていなかったのを修正した。
 
 2010-05-25  smeghead <smeghead@users.sourceforge.jp>
 

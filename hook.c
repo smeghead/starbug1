@@ -64,7 +64,7 @@ static String* create_json(String* content, Project* project, Message* message, 
             string_rawstr(project->name),
             message->id,
             string_rawstr(base_url_a),
-            g_project_code,
+            g_project_code_4_url,
             message->id);
     string_free(base_url_a);
     foreach (it, element_types) {
