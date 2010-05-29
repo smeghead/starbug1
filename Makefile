@@ -93,6 +93,7 @@ clean:
 
 webapp: default
 	@echo "Creating webapp..."
+	mkdir -p tmp
 	mkdir -p dist/starbug1
 	rsync -a --exclude=*.po --exclude=CVS js css img script locale template *.html *.cgi COPYING_cgic favicon.ico dist/starbug1/
 	cp .htaccess dist/starbug1/dot.htaccess
@@ -106,6 +107,7 @@ webapp: default
 
 webappwin32: default
 	@echo "Creating webapp win32..."
+	mkdir -p tmp
 	mkdir -p dist/starbug1-${VERSION}-win32-bin/starbug1
 	cp -r js css img script locale template *.html *.cgi COPYING_cgic deps/*.dll favicon.ico dist/starbug1-${VERSION}-win32-bin/starbug1/
 	cp .htaccess dist/starbug1-${VERSION}-win32-bin/starbug1/.htaccess

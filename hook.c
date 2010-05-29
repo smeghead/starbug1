@@ -192,8 +192,9 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
             int ret;
             char* val_a;
             HOOK_RESULT* result;
-            char tmp_filename[DEFAULT_LENGTH] = "tmp.XXXXXX";
+            char tmp_filename[DEFAULT_LENGTH];
             FILE* f;
+            sprintf(tmp_filename, "tmp%stmp.XXXXXX", PATH_SEPERATOR);
             sprintf(tmp_filename, "%s", mktemp(tmp_filename));
             f = fopen(tmp_filename, "w");
             if (f == NULL) {
