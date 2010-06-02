@@ -710,7 +710,7 @@ List* db_get_last_elements_4_list(Database* db, const int ticket_id, List* eleme
     sprintf(sql, "select t.id, org_m.field%d ", ELEM_ID_SENDER);
     strcat(sql, columns);
     sprintf(sql_suf, 
-            "  , substr(t.registerdate, 0, 16), substr(last_m.registerdate, 0, 16),  "
+            "  , substr(t.registerdate, 1, 16), substr(last_m.registerdate, 1, 16),  "
             "  julianday(current_date) - julianday(date(last_m.registerdate)) as passed_date "
             "from ticket as t "
             "inner join message as last_m on last_m.id = t.last_message_id "

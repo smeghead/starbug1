@@ -1,3 +1,8 @@
+2010-06-02  smeghead <smeghead@users.sourceforge.jp>
+
+	* 一覧に表示する時刻の分の桁が表示されない問題を修正した。sqlite3のsubstr
+	関数の使い方の問題。
+
 2010-05-30  smeghead <smeghead@users.sourceforge.jp>
 
 	* Seleniumのテストに問題があったのを修正した。既に存在しているサブプロジェ
