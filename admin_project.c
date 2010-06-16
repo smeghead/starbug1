@@ -43,7 +43,7 @@ void admin_help_action();
 void output_header(Project*, char*, char*, NaviType);
 void output_footer();
 int admin_project_main();
-void update_elements();
+void update_elements(Database*);
 
 void register_actions()
 {
@@ -554,7 +554,7 @@ void items_submit_action()
     Database* db_a;
     db_a = db_init(g_project_code);
     db_begin(db_a);
-    update_elements();
+    update_elements(db_a);
     db_commit(db_a);
     db_finish(db_a);
     redirect("", _("updated."));

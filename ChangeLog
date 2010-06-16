@@ -1,3 +1,12 @@
+2010-06-16  smeghead <smeghead@users.sourceforge.jp>
+
+	* id:argius さんからパッチを取り込んだ。(http://d.hatena.ne.jp/argius/20100605/1275714723)ありがとうございます。
+	* boolが定義されている場合は、再定義しないようにした。
+	* 64bit環境で実行時にsqlite3_prepareでエラーが発生する問題があり、64bit環
+	境でも、32bitでコンパイルしていたが、Starbug1側のバグが原因であることがわ
+	かったので、修正した。update_elementsのプロトタイプ宣言と実装で引数が間違
+	っていたのが、根本原因だった。
+
 2010-06-02  smeghead <smeghead@users.sourceforge.jp>
 
 	* 一覧に表示する時刻の分の桁が表示されない問題を修正した。sqlite3のsubstr

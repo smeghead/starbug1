@@ -14,10 +14,12 @@
 #define LIST_COUNT_PER_LIST_PAGE 15
 #define LIST_COUNT_PER_SEARCH_PAGE 30
 
+#ifndef bool
 typedef enum _bool {
     false = 0,
     true
 } bool;
+#endif
 
 typedef struct {
     int id;

@@ -108,47 +108,33 @@ ElementType* db_get_element_type(Database* db, int id, ElementType* e)
     const char *sql;
     sqlite3_stmt *stmt = NULL;
 
-    d("db_get_element_type 1 id:%d\n", id);
     sql = "select id, type, ticket_property, reply_property, required, name, description, auto_add_item, default_value, display_in_list, sort "
         "from element_type "
         "where id = ? "
         " and deleted = 0 "
-        "order by sort ";
-    d("db_get_element_type 1 sql:%s\n", sql);
-    d("db_get_element_type 1 len:%d\n", strlen(sql));
+        "order by sort";
     if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
-    d("db_get_element_type 1 1\n");
     sqlite3_reset(stmt);
-    d("db_get_element_type 1 2\n");
     sqlite3_bind_int(stmt, 1, id);
-    d("db_get_element_type 1 3\n");
 
-    d("db_get_element_type 2");
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){
         const unsigned char* value;
-    d("db_get_element_type 2 1");
         e->id = sqlite3_column_int(stmt, 0);
         e->type = sqlite3_column_int(stmt, 1);
         e->ticket_property = sqlite3_column_int(stmt, 2);
-    d("db_get_element_type 2 2");
         e->reply_property = sqlite3_column_int(stmt, 3);
         e->required = sqlite3_column_int(stmt, 4);
         string_set(e->name, (char*)sqlite3_column_text(stmt, 5));
-    d("db_get_element_type 2 3");
         string_set(e->description, (char*)sqlite3_column_text(stmt, 6));
         e->auto_add_item = sqlite3_column_int(stmt, 7);
         value = sqlite3_column_text(stmt, 8);
-    d("db_get_element_type 2 4");
         if (value != NULL)
             string_set(e->default_value, (char*)value);
-    d("db_get_element_type 2 5");
         e->display_in_list = sqlite3_column_int(stmt, 9);
         e->sort = sqlite3_column_int(stmt, 10);
-    d("db_get_element_type 2 6");
         break;
     }
 
-    d("db_get_element_type 3");
     sqlite3_finalize(stmt);
 
     return e;
