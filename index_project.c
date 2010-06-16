@@ -57,7 +57,6 @@ void top_action();
 void setting_file_action();
 void output_header(Project*, char*, char*, const NaviType);
 void output_footer();
-int public_main();
 void output_form_element(Database*, List*, ElementType*, Project*);
 void output_form_element_4_condition(Database*, ElementType*, List* conditions);
 ModeType get_mode();

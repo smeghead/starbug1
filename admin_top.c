@@ -20,9 +20,6 @@ void top_update_project_submit_action();
 void top_add_project_submit_action();
 void top_update_project_info_submit_action();
 
-/* prototype declares */
-int index_top_main();
-
 void top_register_actions()
 {
     REG_ACTION(top_top);

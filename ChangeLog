@@ -6,6 +6,7 @@
 	境でも、32bitでコンパイルしていたが、Starbug1側のバグが原因であることがわ
 	かったので、修正した。update_elementsのプロトタイプ宣言と実装で引数が間違
 	っていたのが、根本原因だった。
+	* 警告を回避する修正をした。
 
 2010-06-02  smeghead <smeghead@users.sourceforge.jp>
 

@@ -12,7 +12,6 @@
 void buf_clear();
 void buf_add(unsigned int, char*);
 void buf_flush();
-void text_out(char*);
 void element_out_without_content(char*);
 void element_out(char*, char*);
 

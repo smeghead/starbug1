@@ -74,7 +74,10 @@ List* get_templates(List* templates, String* locale)
             char* template_name;
             char* p;
             memset(first_line, '\0', DEFAULT_LENGTH);
-            fgets(first_line, DEFAULT_LENGTH - 1, fp);
+            if (fgets(first_line, DEFAULT_LENGTH - 1, fp) == NULL) {
+                fclose(fp);
+                die("fail to read template");
+            }
             d("first_line: %s\n", first_line);
             for (p = first_line; *p; p++) {
                 /* 改行文字を消す */
@@ -93,6 +96,7 @@ List* get_templates(List* templates, String* locale)
             string_set(template->name, trim(template_name));
             string_set(template->path, template_filename);
             list_add(templates, template);
+            fclose(fp);
         }
     }
     return templates;
@@ -153,7 +157,10 @@ void pipe_to_file(char* command_str, char* db_name, FILE* out)
     string_free(command_a);
     while (1) {
         char str[DEFAULT_LENGTH];
-        fgets(str, DEFAULT_LENGTH, fp);
+        if (fgets(str, DEFAULT_LENGTH, fp) == NULL) {
+            pclose(fp);
+            die("外部プログラムの実行結果取得に失敗しました。");
+        }
         if(feof(fp)){
             break;
         }

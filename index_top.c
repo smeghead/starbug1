@@ -221,7 +221,7 @@ void top_gettext_js_action()
     cgiFormString("key", key, DEFAULT_LENGTH);
     if (strlen(key)) {
         cgiHeaderContentType("application/x-javascript; charset=utf-8;\n\n");
-        o(_(key));
+        o("%s", _(key));
         return;
     }
     cgiHeaderContentType("application/x-javascript; charset=utf-8;\n\n");
