@@ -88,7 +88,7 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
     o(      "</head>\n"
             "<body>\n"
             "<a name=\"top\"></a>\n"
-            "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.sourceforge.jp/\"><img src=\"%s/../index.%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url);
+            "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://www.starbug1.com/\"><img src=\"%s/../index.%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url);
     o(      "<div id='pankuzu'>\n"
             "<ul>\n");
     o(      "\t<li><a href='%s/top/' title=\"%s\">", cgiScriptName, _("display sub projects list at top page.")); h(string_rawstr(top_project_name)); o("</a> &gt; </li>\n");
@@ -129,7 +129,7 @@ void output_footer()
             "\t</a>\n"
             "</p>\n"
             "<div><address>Powered by cgic &amp; SQLite3.</address></div>\n"
-            "<div><address><a href=\"http://starbug1.sourceforge.jp/\">Starbug1</a> version: %s. %s.</address></div>\n"
+            "<div><address><a href=\"http://www.starbug1.com/\">Starbug1</a> version: %s. %s.</address></div>\n"
             "</div>\n"
             "</div>\n"
             "</body>\n</html>\n", cgiScriptName, VERSION, COPYRIGHT);
@@ -176,7 +176,7 @@ void top_action()
     o("<div class=\"description\">\n");
     o("\t%s\n", _("[mail notify messages]"));
     o("\t<ul>\n"
-      "\t\t<li><a href=\"http://starbug1.sourceforge.jp/\">http://starbug1.sourceforge.jp/</a></li>\n"
+      "\t\t<li><a href=\"http://www.starbug1.com/\">http://www.starbug1.com/</a></li>\n"
       "\t</ul>\n");
     o("</div>\n");
     o("</div>\n");
