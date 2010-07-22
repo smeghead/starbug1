@@ -189,15 +189,14 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
                 (fi.st_mode & S_IXUSR) &&                  /*所有者が実行可能で */
                 (strstr(filename, "hook_") == filename)) { /* ファイル名がhook_から始まる。 */
             /* 外部実行ファイルの実行 */
-            int ret;
+            int ret, fd;
             char* val_a;
             HOOK_RESULT* result;
             char tmp_filename[DEFAULT_LENGTH];
             FILE* f;
             sprintf(tmp_filename, "tmp%stmp.XXXXXX", PATH_SEPERATOR);
-            sprintf(tmp_filename, "%s", mktemp(tmp_filename));
-            f = fopen(tmp_filename, "w");
-            if (f == NULL) {
+            if ((fd = mkstemp(tmp_filename)) == -1 ||
+                   (f = fdopen(fd, "w+")) == NULL) {
                 die("failed to open temporary file.");
             }
             d("content_a: %s\n", string_rawstr(content_a));

@@ -1,3 +1,7 @@
+2010-07-22  smeghead <smeghead@users.sourceforge.jp>
+
+	* Bapt gave me the patch. use mkstemp instead of mktemp. Thank Bapt!
+
 2010-06-30  smeghead <smeghead@users.sourceforge.jp>
 
 	* Starbug1の公式サイトのドメインを取ったので、公式サイトのURLを変更した。
