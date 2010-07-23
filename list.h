@@ -19,7 +19,7 @@ typedef struct _list {
 /* foreach */
 #define foreach(it, list) for(it = get_iterator(list); iterator_has_value(it); it = iterator_next(it))
 
-/* Linked Listの生成 */
+/* create Linked List */
 #define list_alloc(list, type, construct_func, destory_func) \
     list = xalloc(sizeof(List)); \
     list->element_size = sizeof(type); \

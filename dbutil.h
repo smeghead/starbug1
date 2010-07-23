@@ -1,7 +1,7 @@
 #ifndef DBUTIL_H
 #define DBUTIL_H
 /*
- * データベースアクセスユーティリティ
+ * database access utility functions.
  */
 #include <stdio.h>
 #include <sqlite3.h>

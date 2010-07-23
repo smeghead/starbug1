@@ -1,6 +1,6 @@
 #ifndef CONV_H
 #define CONV_H
-/* 文字列変換関数を定義するファイル */
+/* string convert utility functions. */
 int base64_decode(const unsigned char*, unsigned char*);
 void base64_encode(const unsigned char*, unsigned char*);
 unsigned long url_encode(unsigned char*, unsigned char*, unsigned long);

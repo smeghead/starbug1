@@ -1,7 +1,7 @@
 #ifndef ADMIN_PROJECT_H
 #define ADMIN_PROJECT_H
 /*
- * 管理側のプロジェクトの処理
+ * sub project management functions.
  */
 int admin_project_main();
 

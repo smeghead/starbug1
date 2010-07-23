@@ -1,7 +1,7 @@
 #ifndef INDEX_TOP_H
 #define INDEX_TOP_H
 /*
- * 公開側のトップの処理
+ * project public function.
  */
 int index_top_main();
 

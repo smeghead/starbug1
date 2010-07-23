@@ -144,7 +144,7 @@ int admin_project_main() {
     return 0;
 }
 /**
- * 管理メニュー画面をを表示するaction。
+ * action that displays management menu.
  */
 void top_action()
 {
@@ -185,7 +185,7 @@ void top_action()
     db_finish(db_a);
 }
 /**
- * サブプロジェクト設定画面をを表示するaction。
+ * action that displays project information setting.
  */
 void project_action()
 {
@@ -250,7 +250,7 @@ void fill_upload_content_setting_file(SettingFile* sf)
     cgiFormFileClose(file);
 }
 /**
- * サブプロジェクト設定を更新するaction。
+ * action that submits project information setting.
  */
 void project_submit_action()
 {
@@ -270,7 +270,7 @@ void project_submit_action()
     db_update_project(db_a, project_a);
     project_free(project_a);
 
-    /* 画像の更新 */
+    /* update project image. */
     cgiFormFileSize("project.file", &(sf_a->size));
     d("image size %d.\n", sf_a->size);
     if (sf_a->size > 0) {
@@ -284,7 +284,7 @@ void project_submit_action()
     redirect("", _("updated."));
 }
 /**
- * 項目設定画面をを表示するaction。
+ * action that display item settings.
  */
 void items_action()
 {
@@ -532,7 +532,7 @@ void items_action()
           "\t\t\t</tbody>\n"
           "\t\t</table>\n");
         if (et->id > BASIC_ELEMENT_MAX) {
-            /* 基本項目は削除できないようにする。 */
+            /* basic item must not delete.  */
             o("\t\t<div class=\"delete_item\"><a href=\"%s/%s/delete_item/%d\">", cgiScriptName, g_project_code_4_url, et->id);o(_("delete this column("));hs(et->name);o("%s</a></div>\n", _(")(delete this column)"));
         }
         list_free(items_a);
@@ -547,7 +547,7 @@ void items_action()
     db_finish(db_a);
 }
 /**
- * 項目設定を更新するaction。
+ * action that submits item settings.
  */
 void items_submit_action()
 {
@@ -624,7 +624,7 @@ void update_elements(Database* db)
             case ELEM_TYPE_LIST_SINGLE:
             case ELEM_TYPE_LIST_SINGLE_RADIO:
             case ELEM_TYPE_LIST_MULTI:
-                /* 選択要素のあるelementだけ、list_itemの更新を行なう。 */
+                /* only elements has selection, update list_item. */
                 list_alloc(items_a, ListItem, list_item_new, list_item_free);
                 items_a = db_get_list_item(db, et_a->id, items_a);
                 foreach (it, items_a) {
@@ -648,7 +648,7 @@ void update_elements(Database* db)
                         db_update_list_item(db, item);
                 }
                 list_free(items_a);
-                //新しい項目の追加
+                /* insert brand new element. */
                 for (j = 0; j < 100; j++) {
                     strcpy(name, "");
                     strcpy(value, "");
@@ -668,7 +668,7 @@ void update_elements(Database* db)
                         db_register_list_item(db, item_a);
                         xfree(item_a);
                     } else {
-                        //名称が取得できない場合は、追加終了
+                        /* not exists name, break. */
                         break;
                     }
                 }
@@ -936,7 +936,7 @@ void delete_item_submit_action()
     int iid;
     Database* db_a;
 
-    /* postの時以外は処理しない。 */
+    /* request method must be POST. */
     if (strcmp(cgiRequestMethod, "POST") != 0) {
         die(_("it is a invalid request."));
     }
@@ -967,7 +967,7 @@ void style_action()
     o(      "<form id=\"edit_css_form\" action=\"%s/%s/style_submit\" method=\"post\">\n", cgiScriptName, g_project_code_4_url);
     o(      "<textarea name=\"edit_css\" id=\"edit_top\" rows=\"3\" cols=\"10\">");
     {
-        /* user.css の出力 */
+        /* output user.css. */
         SettingFile* file_a = setting_file_new();
         file_a = db_get_setting_file(db_a, "user.css", file_a);
         fwrite(file_a->content, sizeof(char), file_a->size, cgiOut);

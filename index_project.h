@@ -1,7 +1,7 @@
 #ifndef INDEX_PROJECT_H
 #define INDEX_PROJECT_H
 /*
- * 公開側のプロジェクトの処理
+ * sub project public functions.
  */
 int index_project_main();
 

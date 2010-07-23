@@ -16,7 +16,7 @@ void* _xalloc(size_t size, char* file, int line)
 #ifdef MEMORYDEBUG
     d("xalloc: %p (%s:%d)\n", p, file, line);
 #else
-    if (file == NULL || line == 0) {} /* 警告回避 */
+    if (file == NULL || line == 0) {} /* for hide a warning. */
 #endif
     return p;
 }
@@ -25,7 +25,7 @@ void _xfree(void* p, char* file, int line)
 #ifdef MEMORYDEBUG
     d("xfree: %p (%s:%d)\n", p, file, line);
 #else
-    if (file == NULL || line == 0) {} /* 警告回避 */
+    if (file == NULL || line == 0) {} /* for hide a warning. */
 #endif
     alloc_count--;
     free(p);

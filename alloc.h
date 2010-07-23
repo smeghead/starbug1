@@ -1,6 +1,6 @@
 #ifndef ALLOC_H
 #define ALLOC_H
-/* メモリ関連ユーティリティ関数を定義するファイル */
+/* memory utility functions */
 #ifdef MEMORYDEBUG
 #define xalloc(x) _xalloc(x, __FILE__, __LINE__);
 #define xfree(x) _xfree(x, __FILE__, __LINE__);

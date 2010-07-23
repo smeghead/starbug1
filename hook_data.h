@@ -1,6 +1,6 @@
 #ifndef HOOK_DATA_H
 #define HOOK_DATA_H
-/* hook処理で使用するデータ型を定義する */
+/* data types that used when hook process. */
 
 #include <stdio.h>
 

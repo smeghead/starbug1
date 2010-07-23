@@ -1,7 +1,7 @@
 #ifndef ADMIN_TOP_H
 #define ADMIN_TOP_H
 /*
- * 管理側のトップの処理
+ * project management functions.
  */
 int admin_top_main();
 

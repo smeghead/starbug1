@@ -1,6 +1,6 @@
 #ifndef UTIL_H
 #define UTIL_H
-/* ユーティリティ関数を定義するファイル */
+/* define utility functions. */
 #include <sqlite3.h>
 #include <libintl.h>
 #include "list.h"

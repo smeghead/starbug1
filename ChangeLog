@@ -1,3 +1,7 @@
+2010-07-23  smeghead <smeghead@users.sourceforge.jp>
+
+	* translated code comment.
+
 2010-07-22  smeghead <smeghead@users.sourceforge.jp>
 
 	* Bapt gave me the patch. use mkstemp instead of mktemp. Thank Bapt!

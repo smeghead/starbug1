@@ -85,7 +85,7 @@ int admin_top_main() {
     return 0;
 }
 /**
- * デフォルトのaction。
+ * default action.
  */
 void top_top_action()
 {
@@ -163,7 +163,7 @@ void top_top_action()
         Project* project_a;
         char db_name[DEFAULT_LENGTH];
         if (p->id == 1) {
-            /* idが1のプロジェクトはトップなので、表示しない。 */
+            /* the project that id is 1 is top project, so this will be omitted. */
             continue;
         }
         d("1 db id: %d\n", p->id);
@@ -376,7 +376,7 @@ void top_add_project_submit_action()
         string_set(pi_a->project_type, project_type);
         project_id = db_top_register_project_info(db_a, pi_a);
         if (strlen(project_type)) {
-            /* プロジェクトタイプが指定されている場合は、DBを作成する。 */
+            /* if project type is appointed, create project database now. */
             d("create_db_from_template %d %s\n", project_id, project_type);
             create_db_from_template(project_id, project_type);
         }

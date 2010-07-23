@@ -6,7 +6,7 @@
 #include "admin_top.h"
 #include "db_top.h"
 
-/* 繧ｨ繝ｳ繝医Μ繝昴う繝ｳ繝医→縺ｪ繧九ヵ繧｡繧､繝ｫ */
+/* management main */
 int cgiMain() {
     ActionType type = analysis_action();
     int ret = 0;

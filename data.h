@@ -1,6 +1,6 @@
 #ifndef DATA_H
 #define DATA_H
-/* 使用するデータ型を定義する */
+/* define original data types. */
 
 #include <stdio.h>
 #include "list.h"
@@ -114,7 +114,7 @@ enum ELEM_TYPE {
     ELEM_TYPE_DATE,
     ELEM_TYPE_LIST_SINGLE_RADIO,
     ELEM_TYPE_NUM
-    /* DBの値と連動しているので、追加する場合は、後に追加する必要がある。*/
+    /* this values match database value, so, if you add ELEM_TYPE, add list of tail. DBの値と連動しているので、追加する場合は、後に追加する必要がある。*/
 };
 enum ELEM_ID {
     ELEM_ID_ID = -1,
