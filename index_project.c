@@ -1622,18 +1622,24 @@ void ticket_action()
                 hmail(value);
                 break;
             default:
-                if (et->type == ELEM_TYPE_UPLOADFILE) {
-                    if (strlen(value)) {
-                        char* id_str = get_element_value_by_id(elements_a, ELEM_ID_ID);
-                        o("<a href=\"%s/%s/download/%d/", 
-                                cgiScriptName, 
-                                g_project_code_4_url,
-                                db_get_element_file_id(db_a, atoi(id_str), et->id)); 
-                        u(value);
-                        o("\" target=\"_blank\">");h(value); o("</a>\n");
-                    }
-                } else {
-                    hm(value);
+                switch (et->type) {
+                    case ELEM_TYPE_UPLOADFILE:
+                        if (strlen(value)) {
+                            char* id_str = get_element_value_by_id(elements_a, ELEM_ID_ID);
+                            o("<a href=\"%s/%s/download/%d/", 
+                                    cgiScriptName, 
+                                    g_project_code_4_url,
+                                    db_get_element_file_id(db_a, atoi(id_str), et->id)); 
+                            u(value);
+                            o("\" target=\"_blank\">");h(value); o("</a>\n");
+                        }
+                        break;
+                    case ELEM_TYPE_TEXTAREA:
+                        hm(value);
+                        break;
+                    default:
+                        h(value);
+                        break;
                 }
         }
         o("&nbsp;</td>\n"
@@ -1706,23 +1712,29 @@ void ticket_action()
                     hmail(value);
                     break;
                 default:
-                    if (et->type == ELEM_TYPE_UPLOADFILE) {
-                        if (strlen(value)) {
-                            char buf[DEFAULT_LENGTH];
-                            char* mime_type;
-                            int file_id = db_get_element_file_id(db_a, message_ids_a[i], et->id);
-                            o("<a href=\"%s/%s/download/%d/", cgiScriptName, g_project_code_4_url, file_id); 
-                            u(value); o("\" target=\"_blank\">");h(value); o("</a>\n");
-                            mime_type = db_get_element_file_mime_type(db_a, message_ids_a[i], et->id, buf);
-                            if (strstr(mime_type, "image") != NULL) {
-                                o("<div>\n");
-                                o("<img class=\"attachment_image\" src=\"%s/%s/download/%d\" alt=\"attachment file\" />\n",
-                                        cgiScriptName, g_project_code_4_url, file_id);
-                                o("</div>\n");
+                    switch (et->type) {
+                        case ELEM_TYPE_UPLOADFILE:
+                            if (strlen(value)) {
+                                char buf[DEFAULT_LENGTH];
+                                char* mime_type;
+                                int file_id = db_get_element_file_id(db_a, message_ids_a[i], et->id);
+                                o("<a href=\"%s/%s/download/%d/", cgiScriptName, g_project_code_4_url, file_id); 
+                                u(value); o("\" target=\"_blank\">");h(value); o("</a>\n");
+                                mime_type = db_get_element_file_mime_type(db_a, message_ids_a[i], et->id, buf);
+                                if (strstr(mime_type, "image") != NULL) {
+                                    o("<div>\n");
+                                    o("<img class=\"attachment_image\" src=\"%s/%s/download/%d\" alt=\"attachment file\" />\n",
+                                            cgiScriptName, g_project_code_4_url, file_id);
+                                    o("</div>\n");
+                                }
                             }
-                        }
-                    } else {
-                        hm(value);
+                            break;
+                        case ELEM_TYPE_TEXTAREA:
+                            hm(value);
+                            break;
+                        default:
+                            h(value);
+                            break;
                     }
             }
             o(      "&nbsp;</td>\n"

@@ -331,9 +331,9 @@ static cgiFormResultType cgiHtmlEscapeDataMultiLine(char *data, int len)
             if (link_syntax_len == 0) {
                 TRYPUTC(*data);
             } else {
-                o("<a href=\"h%s\">h%s</a>",
-                        link, 
-                        link);
+                o("<a href=\"%c%s\" rel=\"nofollow\">%c%s</a>",
+                        *data, link, 
+                        *data, link);
                 data += link_syntax_len - 1;
                 len -= link_syntax_len - 1;
             }
