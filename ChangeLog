@@ -3,6 +3,7 @@
 	* add rel=nofollow to auto generated hyper links.
 	* only textarea field, generates hyper links. when display other elements,
 	don't generates hyper links.
+	* display remote address. against spamer.
 
 2010-07-23  smeghead <smeghead@users.sourceforge.jp>
 

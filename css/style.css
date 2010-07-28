@@ -753,4 +753,10 @@ form#reply_form table.selection td.checkbox {
     width: 20px;
     text-align: center;
 }
+div.proc-button {
+    padding: 5px 20px;
+}
+div.remote-address {
+    font-weight: bold;
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

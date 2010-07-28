@@ -1544,9 +1544,11 @@ void register_action()
         list_free(element_types_a);
     }
     project_free(project_a);
-    o(      "<input class=\"button\" type=\"submit\" name=\"register\" value=\"%s\" />\n"
-            "<input id=\"save2cookie\" type=\"checkbox\" name=\"save2cookie\" class=\"checkbox\" value=\"1\" %s />\n"
-            "<label for=\"save2cookie\">%s</label>\n"
+    o(      "<div class=\"proc-button\">"
+            "\t<input class=\"button\" type=\"submit\" name=\"register\" value=\"%s\" />\n"
+            "\t<input id=\"save2cookie\" type=\"checkbox\" name=\"save2cookie\" class=\"checkbox\" value=\"1\" %s />\n"
+            "\t<label for=\"save2cookie\">%s</label>\n"
+            "</div>\n"
             "</form>\n"
             "</div>\n", _("register"), strlen(sender) ? "checked=\"checked\"" : "", _("save registerer.(use cookie)"));
     print_field_help();
@@ -1672,7 +1674,7 @@ void ticket_action()
       "\t</tr>\n"
             "</table>\n"
             "</div>"
-            "<div class=\"information\"><a href=\"#reply\">%s</a></div>\n"
+            "<div class=\"proc-button\"><a href=\"#reply\">%s</a></div>\n"
             "<div id=\"ticket_history\">\n"
             "<h3>%s</h3>\n"
             "<div class=\"description\">%s</div>\n", _("go to reply"), _("ticket history"), _("this is ticket histories."));
@@ -1774,6 +1776,9 @@ void ticket_action()
             o("\t\t<div id=\"field%d.numberfield\" class=\"error\"></div>\n", et->id);
         output_form_element(db_a, last_elements, et, project_a);
         o("\t\t<div class=\"description\">");hs(et->description);o("&nbsp;</div>\n");
+        if (et->id == ELEM_ID_SENDER) {
+            o("\t\t\t<div class=\"remote-address description\">[remote address: ");h(cgiRemoteAddr);o("]</div>\n");
+        }
         o("\t</td>\n");
         o("\t</tr>\n");
     }
@@ -1797,14 +1802,19 @@ void ticket_action()
             o("\t\t<div id=\"field%d.datefield\" class=\"error\"></div>\n", et->id);
         output_form_element(db_a, NULL, et, project_a);
         o("\t\t<div class=\"description\">");hs(et->description);o("&nbsp;</div>\n");
+        if (et->id == ELEM_ID_SENDER) {
+            o("\t\t\t<div class=\"remote-address description\">[remote address: ");h(cgiRemoteAddr);o("]</div>\n");
+        }
         o("\t</td>\n");
         o("\t</tr>\n");
     }
     project_free(project_a);
     o(      "</table>\n");
-    o(      "<input class=\"button\" type=\"submit\" name=\"reply\" value=\"%s\" />&nbsp;&nbsp;&nbsp;\n"
-            "<input id=\"save2cookie\" type=\"checkbox\" name=\"save2cookie\" class=\"checkbox\" value=\"1\" %s />\n"
-            "<label for=\"save2cookie\">%s</label>\n"
+    o(      "<div class=\"proc-button\">\n"
+            "\t<input class=\"button\" type=\"submit\" name=\"reply\" value=\"%s\" />&nbsp;&nbsp;&nbsp;\n"
+            "\t<input id=\"save2cookie\" type=\"checkbox\" name=\"save2cookie\" class=\"checkbox\" value=\"1\" %s />\n"
+            "\t<label for=\"save2cookie\">%s</label>\n"
+            "\t</div>\n"
             "</form>\n"
             "</div>\n", _("reply"), strlen(sender) ? "checked=\"checked\"" : "", _("save registerer.(use cookie)"));
     print_field_help();
@@ -2102,6 +2112,7 @@ void register_at_once_confirm_action()
                 o("\t\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
             output_form_element(db_a, NULL, et, project_a);
             o("\t\t\t<div class=\"description\">");hs(et->description);o("&nbsp;</div>\n");
+            o("\t\t\t<div class=\"remote-address description\">[remote address: ");h(cgiRemoteAddr);o("]</div>\n");
             o("\t\t</td>\n");
             o("\t</tr>\n");
         }
