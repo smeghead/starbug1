@@ -1,3 +1,7 @@
+2010-07-30  smeghead <smeghead@users.sourceforge.jp>
+
+	* prepare release.
+
 2010-07-29  smeghead <smeghead@users.sourceforge.jp>
 
 	* fixed generate hyper link bug. in multiple lines fields, make space(' ') end of hyper link character.

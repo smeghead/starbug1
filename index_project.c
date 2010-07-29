@@ -1776,8 +1776,10 @@ void ticket_action()
             o("\t\t<div id=\"field%d.numberfield\" class=\"error\"></div>\n", et->id);
         output_form_element(db_a, last_elements, et, project_a);
         o("\t\t<div class=\"description\">");hs(et->description);o("&nbsp;</div>\n");
-        if (et->id == ELEM_ID_SENDER) {
-            o("\t\t\t<div class=\"remote-address description\">[remote address: ");h(cgiRemoteAddr);o("]</div>\n");
+        if (DISPLAY_REMOTE_HOST && et->id == ELEM_ID_SENDER) {
+            o("\t\t\t<div class=\"remote-address description\">");
+            o(_("[REMOTE_ADDRESS: %s]"), cgiRemoteAddr);
+            o("</div>\n");
         }
         o("\t</td>\n");
         o("\t</tr>\n");
