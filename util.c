@@ -331,12 +331,12 @@ static cgiFormResultType cgiHtmlEscapeDataMultiLine(char *data, int len)
             if (link_syntax_len == 0) {
                 TRYPUTC(*data);
             } else {
-                if (!LINK_IGNORE) {
+                if (!LINK_DISABLED) {
                     o("<a href=\"%c%s\" rel=\"nofollow\">%c%s</a>",
                             *data, link, 
                             *data, link);
                 } else {
-                    o("[link disabled]");
+                    o("<span class=\"link-disabled\">[link disabled]</span>");
                 }
                 data += link_syntax_len - 1;
                 len -= link_syntax_len - 1;

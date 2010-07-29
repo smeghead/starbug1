@@ -6,14 +6,17 @@ CC_VERSION = ${shell gcc --version | grep 'gcc.*[0-9]\.' | sed -e 's/gcc[^0-9]*\
 ALT_LIB_PATH = ${HOME}/usr
 #ALT_LIB_PATH = /s/usr/MinGW
 
+ifndef LINK_DISABLED
+	LINK_DISABLED = 0
+endif
 ifndef INITIAL_LOCALE
 	INITIAL_LOCALE = $(basename ${LANG})
 endif
 ifdef STATIC_LFLAGS
-	CFLAGS = -I${ALT_LIB_PATH}/include -I/usr/include -I/usr/local/include -I. -Idist/cgic205 -Idist/sqlite-3.6.23 -DVERSION=\"${VERSION}\" -DCOPYRIGHT=\"${COPYRIGHT}\" -DINITIAL_LOCALE=\"${INITIAL_LOCALE}\" -O3 -Wall
+	CFLAGS = -I${ALT_LIB_PATH}/include -I/usr/include -I/usr/local/include -I. -Idist/cgic205 -Idist/sqlite-3.6.23 -DVERSION=\"${VERSION}\" -DCOPYRIGHT=\"${COPYRIGHT}\" -DINITIAL_LOCALE=\"${INITIAL_LOCALE}\" -DLINK_DISABLED=${LINK_DISABLED} -O3 -Wall
 	LFLAGS = -L${ALT_LIB_PATH}/lib -L/usr/lib -L/usr/local/lib dist/cgic205/cgic.o dist/sqlite-3.6.23/sqlite3.o
 else
-	CFLAGS = -I${ALT_LIB_PATH}/include -I/usr/include -I/usr/local/include -I. -DVERSION=\"${VERSION}\" -DCOPYRIGHT=\"${COPYRIGHT}\" -DINITIAL_LOCALE=\"${INITIAL_LOCALE}\" -O3 -Wall
+	CFLAGS = -I${ALT_LIB_PATH}/include -I/usr/include -I/usr/local/include -I. -DVERSION=\"${VERSION}\" -DCOPYRIGHT=\"${COPYRIGHT}\" -DINITIAL_LOCALE=\"${INITIAL_LOCALE}\" -DLINK_DISABLED=${LINK_DISABLED} -O3 -Wall
 	LFLAGS = -L${ALT_LIB_PATH}/lib -L/usr/lib -L/usr/local/lib -lsqlite3 -lcgic
 endif
 

@@ -49,10 +49,6 @@
 #define vs(str)      cgi_escape(string_rawstr(str))
 void u(char*);
 #define us(str)      u(string_rawstr(str))
-/* link ignore (for spam comment) */
-#ifndef LINK_IGNORE
-#define LINK_IGNORE 0
-#endif
 
 typedef enum {
     ACTION_TYPE_NONE,
