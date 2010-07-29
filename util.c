@@ -220,7 +220,7 @@ int get_link_syntax_len(char* data, size_t len, char* link)
             if (string[index] == '\0') {
                 break;
             } else {
-                if (string[index] >= ' ' && string[index] <= '~') {
+                if (string[index] > ' ' && string[index] <= '~') {
                     /* 文字を検出した場合 (正常) */
                 } else {
                     /* reached to end. */

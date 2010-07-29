@@ -1,3 +1,7 @@
+2010-07-29  smeghead <smeghead@users.sourceforge.jp>
+
+	* fixed generate hyper link bug. in multiple lines fields, make space(' ') end of hyper link character.
+
 2010-07-28  smeghead <smeghead@users.sourceforge.jp>
 
 	* add rel=nofollow to auto generated hyper links.
