@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2010-07-30 01:01+0900\n"
+"POT-Creation-Date: 2010-07-30 01:10+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: smeghead <smeghead@users.sourceforge.jp>\n"
 "Language-Team: smeghead <smeghead@users.sourceforge.jp>\n"
@@ -1125,8 +1125,7 @@ msgstr ""
 "してください。"
 
 #: index_project.c:1781
-#, c-format
-msgid "[REMOTE_ADDRESS: %s]"
+msgid "[REMOTE ADDRESS: %s]"
 msgstr "[アクセス元: %s]"
 
 #: index_project.c:1791
