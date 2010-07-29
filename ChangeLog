@@ -1,6 +1,8 @@
 2010-07-29  smeghead <smeghead@users.sourceforge.jp>
 
 	* fixed generate hyper link bug. in multiple lines fields, make space(' ') end of hyper link character.
+	* add LINK_IGNORE option. when LINK_IGNORE is not 0, not to generate hyper
+	links.
 
 2010-07-28  smeghead <smeghead@users.sourceforge.jp>
 
