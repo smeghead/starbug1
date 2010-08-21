@@ -1,3 +1,13 @@
+2010-08-21  smeghead <smeghead@users.sourceforge.jp>
+
+	* add SVN connect. when reply, if parameter was not suplied, register last
+	posted value.
+	* add SVN post-commit perl script.
+
+2010-07-30  smeghead <smeghead@users.sourceforge.jp>
+
+	* 1.3.15 released.
+
 2010-07-30  smeghead <smeghead@users.sourceforge.jp>
 
 	* prepare release.

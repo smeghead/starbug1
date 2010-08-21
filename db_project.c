@@ -220,6 +220,7 @@ int db_register_ticket(Database* db, Message* ticket)
 
     set_date_string(registerdate);
 
+    d("1\n");
     if (register_mode) {
         /* 新規の場合は、ticketテーブルにレコードを挿入する。 */
         exec_query(
@@ -231,6 +232,7 @@ int db_register_ticket(Database* db, Message* ticket)
 
         ticket->id = sqlite3_last_insert_rowid(db->handle);
     }
+    d("2\n");
     /* クローズの状態に変更されたかどうかを判定する。 */
     elements = ticket->elements;
     foreach (it, elements) {
@@ -247,6 +249,7 @@ int db_register_ticket(Database* db, Message* ticket)
             break;
         }
     }
+    d("3\n");
     /* クローズ状態に変更されていた場合は、closedに1を設定する。 */
     if (exec_query(
                 db,
@@ -259,6 +262,7 @@ int db_register_ticket(Database* db, Message* ticket)
     elements = ticket->elements;
     create_message_insert_sql(elements, sql);
 
+    d("4\n");
     if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
     i = 1;
@@ -272,6 +276,7 @@ int db_register_ticket(Database* db, Message* ticket)
     message_id = sqlite3_last_insert_rowid(db->handle);
     sqlite3_finalize(stmt);
     /* message_id を更新する。 */
+    d("5\n");
     if (register_mode) {
         exec_query(
                 db,
@@ -290,6 +295,7 @@ int db_register_ticket(Database* db, Message* ticket)
                 COLUMN_TYPE_INT, ticket->id,
                 COLUMN_TYPE_END);
     }
+    d("6\n");
 
     elements = ticket->elements;
     /* 添付ファイルの登録 */
@@ -322,6 +328,7 @@ int db_register_ticket(Database* db, Message* ticket)
             element_file_free(content_a);
         }
     }
+    d("7\n");
     return ticket->id;
 
 ERROR_LABEL(db->handle)

@@ -185,7 +185,7 @@ bool is_enabled_project(char* project_name)
     id = project_info_a->id;
     project_info_free(project_info_a);
     db_finish(db_a);
-    d("id: %d\n", id);
+    d("project id: %d\n", id);
     return id ? 1 : 0;
 }
 int index_project_main() {
@@ -1543,7 +1543,6 @@ void register_action()
             o("\t\t</td>\n");
             o("\t</tr>\n");
         }
-            d("8\n");
         o("</table>\n");
         output_field_information_js(element_types_a);
         list_free(element_types_a);
@@ -1837,6 +1836,19 @@ static void register_list_item(Database* db, int id, char* name)
     db_register_list_item(db, item_a);
     list_item_free(item_a);
 }
+static void set_posted_value_or_last_value(Element* e, char* name, char* value, List* elements, ElementType* et, bool multiline) {
+    cgiFormResultType ret;
+    if (multiline) {
+        ret = cgiFormStringNoNewlines(name, value, VALUE_LENGTH);
+    } else {
+        ret = cgiFormString(name, value, VALUE_LENGTH);
+    }
+    /* if this post is reply and not posted parameter, retrieve last value. */
+    if (elements && ret == cgiFormNotFound) {
+        strcpy(value, get_element_value(elements, et));
+    }
+    set_element_value(e, value);
+}
 /**
  * 登録するaction。
  * 登録モード、編集モードがある。
@@ -1854,7 +1866,9 @@ void register_submit_action()
     char* complete_message = NULL;
     HOOK* hook = NULL;
     Database* db_a;
+    List* elements_a = NULL;
 
+    d("start\n");
     cgiFormStringNoNewlines("save2cookie", save2cookie, 2);
     if (mode == MODE_INVALID)
         die("requested invalid mode.");
@@ -1866,8 +1880,12 @@ void register_submit_action()
     cgiFormStringNoNewlines("ticket_id", ticket_id, NUM_LENGTH);
     if (mode == MODE_REGISTER)
         ticket_a->id = -1;
-    else
+    else {
         ticket_a->id = atoi(ticket_id);
+        d("ticket_id: %d\n", ticket_a->id);
+        list_alloc(elements_a, Element, element_new, element_free);
+        elements_a = db_get_last_elements(db_a, ticket_a->id, elements_a);
+    }
     {
         char* value_a = xalloc(sizeof(char) * VALUE_LENGTH); /* 1M */
         /* register, reply */
@@ -1880,22 +1898,26 @@ void register_submit_action()
             sprintf(name, "field%d", et->id);
             strcpy(value_a, "");
 
+            d("id: %d\n", et->id);
             e->element_type_id = et->id;
             e->is_file = 0;
             switch (et->type) {
                 case ELEM_TYPE_TEXT:
                 case ELEM_TYPE_NUM:
                 case ELEM_TYPE_DATE:
-                    cgiFormStringNoNewlines(name, value_a, VALUE_LENGTH);
-                    set_element_value(e, value_a);
+                    set_posted_value_or_last_value(e, name, value_a, elements_a, et, false);
+/*                    cgiFormStringNoNewlines(name, value_a, VALUE_LENGTH);*/
+/*                    set_element_value(e, value_a);*/
                     break;
                 case ELEM_TYPE_TEXTAREA:
-                    cgiFormString(name, value_a, VALUE_LENGTH);
-                    set_element_value(e, value_a);
+                    set_posted_value_or_last_value(e, name, value_a, elements_a, et, true);
+/*                    cgiFormString(name, value_a, VALUE_LENGTH);*/
+/*                    set_element_value(e, value_a);*/
                     break;
                 case ELEM_TYPE_CHECKBOX:
-                    cgiFormString(name, value_a, VALUE_LENGTH);
-                    set_element_value(e, value_a);
+                    set_posted_value_or_last_value(e, name, value_a, elements_a, et, true);
+/*                    cgiFormString(name, value_a, VALUE_LENGTH);*/
+/*                    set_element_value(e, value_a);*/
                     break;
                 case ELEM_TYPE_LIST_SINGLE:
                 case ELEM_TYPE_LIST_SINGLE_RADIO:
@@ -1906,8 +1928,9 @@ void register_submit_action()
                         /* 新しく選択肢を追加 */
                         register_list_item(db_a, et->id, value_a);
                     } else {
-                        cgiFormString(name, value_a, VALUE_LENGTH);
-                        set_element_value(e, value_a);
+                        set_posted_value_or_last_value(e, name, value_a, elements_a, et, true);
+/*                        cgiFormString(name, value_a, VALUE_LENGTH);*/
+/*                        set_element_value(e, value_a);*/
                     }
                     break;
                 case ELEM_TYPE_LIST_MULTI:
@@ -1931,6 +1954,8 @@ void register_submit_action()
                             }
                             i++;
                         }
+                    } else if (elements_a) {
+                        strcpy(value_a, get_element_value(elements_a, et));
                     }
                     set_element_value(e, value_a);
                     cgiStringArrayFree(multi);
@@ -1956,12 +1981,12 @@ void register_submit_action()
             }
             list_add(ticket_a->elements, e);
         }
+        if (elements_a) /* if elements_a was not initialized, do nothing. */
+            list_free(elements_a);
         xfree(value_a);
         db_begin(db_a);
         ticket_a->id = db_register_ticket(db_a, ticket_a);
-        d("commit\n");
         db_commit(db_a);
-        d("commited\n");
         /* hook */
         hook = init_hook(HOOK_MODE_REGISTERED);
         d("init_hook\n");
@@ -1975,14 +2000,11 @@ void register_submit_action()
         project_free(project_a);
         list_free(element_types_a);
     }
-        d("finish\n");
     db_finish(db_a);
-        d("finished\n");
     message_free(ticket_a);
 
     redirect_with_hook_messages("/list", complete_message, hook->results);
     if (hook) clean_hook(hook);
-        d("end\n");
     return;
 
 file_size_error:
@@ -2721,7 +2743,6 @@ void setting_file_action()
     char name[DEFAULT_LENGTH];
     Database* db_a;
 
-    d("start\n");
     strcpy(name, g_path_info);
 
     db_a = db_init(g_project_code);

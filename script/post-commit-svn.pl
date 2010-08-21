@@ -23,12 +23,7 @@ sub change_status {
         field3 => $status,
     );
     $params{'field' . $starbug1_info->{comment_field_id}} = $commit_info->{log};
-
-    use Data::Dumper;
-    print Dumper(\%params);
-    # POST のパラメータを渡す際に [] を忘れないようにする
     my $request = POST($starbug1_info->{submit_url}, [%params]);
-
     my $ua = LWP::UserAgent->new;
     my $response = $ua->request($request);
 
