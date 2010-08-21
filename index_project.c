@@ -1839,9 +1839,9 @@ static void register_list_item(Database* db, int id, char* name)
 static void set_posted_value_or_last_value(Element* e, char* name, char* value, List* elements, ElementType* et, bool multiline) {
     cgiFormResultType ret;
     if (multiline) {
-        ret = cgiFormStringNoNewlines(name, value, VALUE_LENGTH);
-    } else {
         ret = cgiFormString(name, value, VALUE_LENGTH);
+    } else {
+        ret = cgiFormStringNoNewlines(name, value, VALUE_LENGTH);
     }
     /* if this post is reply and not posted parameter, retrieve last value. */
     if (elements && ret == cgiFormNotFound) {
