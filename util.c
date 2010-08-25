@@ -743,24 +743,24 @@ void get_cookie_string(char* key, char* buf)
 void set_timestamp_string(char* buf)
 {
     struct timeval tv;
-    struct tm *tp;
+    struct tm date;
 
     gettimeofday(&tv, NULL);
-    tp = localtime(&tv.tv_sec);
+    localtime_r(&tv.tv_sec, &date);
     sprintf(buf, "%04d-%02d-%02d-%02d-%02d-%02d",
-            tp->tm_year + 1900, tp->tm_mon + 1, tp->tm_mday,
-            tp->tm_hour, tp->tm_min, tp->tm_sec);
+            date.tm_year + 1900, date.tm_mon + 1, date.tm_mday,
+            date.tm_hour, date.tm_min, date.tm_sec);
 }
 void set_date_string(char* buf)
 {
     struct timeval tv;
-    struct tm *tp;
+    struct tm date;
 
     gettimeofday(&tv, NULL);
-    tp = localtime(&tv.tv_sec);
+    localtime_r(&tv.tv_sec, &date);
     sprintf(buf, "%04d-%02d-%02d %02d:%02d:%02d",
-            tp->tm_year + 1900, tp->tm_mon + 1, tp->tm_mday,
-            tp->tm_hour, tp->tm_min, tp->tm_sec);
+            date.tm_year + 1900, date.tm_mon + 1, date.tm_mday,
+            date.tm_hour, date.tm_min, date.tm_sec);
 }
 /*
  * 引数の文字列から拡張子部分のポインタを返す。

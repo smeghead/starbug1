@@ -47,7 +47,7 @@ endif
 
 export INITIAL_LOCALE
 #debug
-CFLAGS += -DDEBUG
+#CFLAGS += -DDEBUG
 #CFLAGS += -DMEMORYDEBUG
 
 default: index.cgi admin.cgi compileresource
