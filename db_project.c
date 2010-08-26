@@ -298,7 +298,7 @@ int db_register_ticket(Database* db, Message* ticket)
     d("6\n");
 
     elements = ticket->elements;
-    /* 添付ファイルの登録 */
+    /* register attachment file. */
     foreach (it, elements) {
         Element* e = it->element;
         if (e->is_file) {

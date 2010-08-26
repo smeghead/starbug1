@@ -1,3 +1,7 @@
+2010-08-27  smeghead <smeghead@users.sourceforge.jp>
+
+	* translate code comment.
+
 2010-08-25  smeghead <smeghead@users.sourceforge.jp>
 
 	* fixed a bug that date label of burndown chart are all same date.

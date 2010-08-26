@@ -147,11 +147,11 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
         strcpy(filename, dp->d_name);
         sprintf(hook_command, "%s%s%s", hook_dir, PATH_SEPERATOR, filename);
         stat(hook_command, &fi);
-        if (!S_ISDIR(fi.st_mode) &&                        /*ファイルで、 */
-                (fi.st_mode & S_IRUSR) &&                  /*所有者が読取可能で */
-                (strstr(filename, "hook_") == filename) && /* ファイル名がhook_から始まる。 */
-                (strcmp(get_ext(filename), "so") == 0)) {       /* 拡張子がso */
-            /* プラグインの実行 */
+        if (!S_ISDIR(fi.st_mode) &&                        /* target is file and, */
+                (fi.st_mode & S_IRUSR) &&                  /* owner be able to read and */
+                (strstr(filename, "hook_") == filename) && /* file name prefix is 'hook_' and  */
+                (strcmp(get_ext(filename), "so") == 0)) {       /* extention is .so. */
+            /* executte plugin. */
             int ret;
             HOOK_RESULT* result;
             void* handle;
@@ -185,9 +185,9 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
             }
             dlclose(handle);
             list_add(hook->results, result);
-        } else if (!S_ISDIR(fi.st_mode) &&                 /*ファイルで、 */
-                (fi.st_mode & S_IXUSR) &&                  /*所有者が実行可能で */
-                (strstr(filename, "hook_") == filename)) { /* ファイル名がhook_から始まる。 */
+        } else if (!S_ISDIR(fi.st_mode) &&                 /* target is file and, */
+                (fi.st_mode & S_IXUSR) &&                  /* owner be able to read and */
+                (strstr(filename, "hook_") == filename)) { /* file name prefix is 'hook_' */
             /* 外部実行ファイルの実行 */
             int ret, fd;
             char* val_a;
@@ -206,12 +206,12 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
             strcpy(result->command, hook_command);
             val_a = xalloc(sizeof(char) * string_len(content_a) + strlen("STARBUG1_CONTENT=") + 1);
             put_env_a("STARBUG1_CONTENT", string_rawstr(content_a), val_a);
-            /* 引数を追加 */
+            /* append argument */
             strcat(hook_command, " ");
             strcat(hook_command, tmp_filename);
             ret = system(hook_command);
             xfree(val_a);
-            /* 一時ファイルを削除する */
+            /* delete temprary file. */
             remove(tmp_filename);
             if (ret == 0) {
                 sprintf(result->message, _("executed hook process(%s)"), hook_command);

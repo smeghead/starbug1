@@ -304,7 +304,7 @@ void top_update_project_submit_action()
             char sort[DEFAULT_LENGTH];
             char deleted[DEFAULT_LENGTH];
             char param_name[DEFAULT_LENGTH];
-            if (p->id == 1) continue; /* topは更新対象外 */ 
+            if (p->id == 1) continue; /* top project database is ignored. */ 
 
             sprintf(param_name, "project_%d.code", p->id);
             cgiFormString(param_name, code, DEFAULT_LENGTH);

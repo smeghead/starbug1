@@ -3,12 +3,12 @@
 #include "util.h"
 #include "list.h"
 
-/* Iteratorに格納する要素のalloc */
+/* alloc for Iterator's element. */
 void* list_new_element(List* list)
 {
     void* new_element; 
     if (list->construstor) {
-        /* コンストラクタが指定されている場合はそれを利用する */
+        /* appointed constructor, use it. */
         new_element = list->construstor();
     } else {
         new_element = xalloc(list->element_size);

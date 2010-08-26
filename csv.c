@@ -22,25 +22,25 @@ static void decord_csv_field(char* src, char* dist)
     bool quote = false;
     char* p = src;
     char* p_dist = dist;
-    /* 前のスペースを削除する。 */
+    /* delete prefix spaces. */
     while (*p != '\0') {
-        if (!(strlen(dist) == 0 && is_space(*p))) { /* 最初の空白は追加しない */
-            if (strlen(dist) > 0 || *p != '"') { /* 最初の" は追加しない。 */
-                if (strlen(dist) == 0 || !(*p == '"' && *(p - 1) == '"')) { /* 重なった " は追加しない */ 
+        if (!(strlen(dist) == 0 && is_space(*p))) { /* the first space is not adeed. */
+            if (strlen(dist) > 0 || *p != '"') { /* the first quote is not added. */
+                if (strlen(dist) == 0 || !(*p == '"' && *(p - 1) == '"')) { /* the doubled quote is not added. */ 
                     *p_dist++ = *p;
                 }
             } else if (strlen(dist) == 0 && *p == '"') {
-                quote = true; /* " モード */
+                quote = true; /* into quote mode */
             }
         }
         p++;
     }
     p_dist--;
-    /* 後のスペースを削除する。 */
+    /* delete suffix spaces. */
     while (is_space(*p_dist)) {
         *p_dist-- = '\0';
     }
-    /* quoteモードで最後が " なら削除 */
+    /* if quoate mode and last is quote, then delete. */
     if (quote && *p_dist == '"') {
         *p_dist = '\0';
     }
@@ -94,14 +94,14 @@ Csv* csv_new(char* content)
             csv->line_count++;
             field_count = 0;
             line = list_new_element(csv->lines);
-            list_alloc(line->fields, CsvField, NULL, NULL); /* line を初期化 */
+            list_alloc(line->fields, CsvField, NULL, NULL); /* initialize line */
         } else if (*p == '\0') {
             list_add(csv->lines, line);
             csv->line_count++;
             break;
         }
         if (data_end) {
-            mark = p + 1; /* 次のフィールドの開始点をマークする。 */
+            mark = p + 1; /* marking start point for next field.  */
         }
         p++;
     }

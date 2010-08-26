@@ -78,7 +78,7 @@ static int decode_str(int enc_ptr, const unsigned char *src, unsigned char *dest
     Union_data_t bb;
 
     for (i = enc_ptr; i < enc_ptr + 4; i++) {
-        if (src[i] == '\0') return -1; /* '\0'が出現したら終了。 */
+        if (src[i] == '\0') return -1; /* '\0' apeared, and exit. */
         x = codetovalue(src[i]);
         base64 |= x;
         if ((i - enc_ptr) != 3) base64 <<= 6;

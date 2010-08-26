@@ -10,10 +10,10 @@
 #include "util.h"
 #include "hook.h"
 
-/* プロジェクトコード */
+/* Project Code */
 char g_project_code[DEFAULT_LENGTH] = "";
 char g_project_code_4_url[DEFAULT_LENGTH] = "";
-/* アクション名 */
+/* Action Name */
 char g_action_name[DEFAULT_LENGTH] = "";
 /* PATH_INFO */
 char g_path_info[DEFAULT_LENGTH] = "";
@@ -56,7 +56,7 @@ void free_action_actions()
     d("alloc_count: %d\n", get_alloc_count());
 }
 
-/* 復帰できないエラーが発生した場合にエラーページを表示する。 */
+/* when not recoverable error occured, displya error page. */
 void print_error_page(char* file_name, int line_number, char* message)
 {
     o("Status: 500 Starbug1 Internal Error.\r\n");
@@ -68,7 +68,7 @@ void print_error_page(char* file_name, int line_number, char* message)
         "</head>"
         "<body>"
             "<h2>ERROR oops!</h2>"
-            "エラーが発生しましたm(_ _)m"
+            "ERROR OCCURED.m(_ _)m"
             "<h3>detail information</h3>");
     o(      "<p>[%s(%d)] %s</p>",
                 file_name,
@@ -100,23 +100,23 @@ ActionType analysis_action()
         strncpy(g_project_code, path_info + 1, DEFAULT_LENGTH);
     } else {
         redirect_raw("top");
-        return ret; /* ACTION_TYPE_NONE を返却する。 */
+        return ret; /* retreive ACTION_TYPE_NONE */
     }
     if ((index = strchr(g_project_code, '/'))) {
         *index = '\0';
         strncpy(g_action_name, index + 1, DEFAULT_LENGTH - (strlen(g_project_code) + 1));
         if ((index = strchr(g_action_name, '/'))) {
             *index = '\0';
-            /* 残りをpath_infoとする */
+            /* rest char should be path_info. */
             strcpy(g_path_info, index + 1);
         }
     }
-    /* URLとして使われるプロジェクトID。URL encodeする。 */
+    /* project_id used as URL. URL encoded. */
     url_encode((unsigned char*)g_project_code, (unsigned char*)g_project_code_4_url, DEFAULT_LENGTH);
 
     sprintf(index_cgi_file_name, "index.%s", get_ext(cgiScriptName));
     sprintf(admin_cgi_file_name, "admin.%s", get_ext(cgiScriptName));
-    /* 実行するモードの判定 */
+    /* judgement mode. */
     if (strstr(script_name, index_cgi_file_name)) {
         if (strcmp(g_project_code, "top") == 0) {
             d("actiontype top\n");
@@ -152,10 +152,10 @@ void exec_action()
         }
     }
     if (strlen(action_name) != 0) {
-        /* 知らないActionが指定されたら、リダイレクトする。  */
+        /* if unknown action, redirect to top. */
         redirect("", NULL);
     } else {
-        /* path_infoが空なら、top_actionを呼び出す。 */
+        /* if path_info is empty, call top_action. */
         for (a = get_actions(); a != NULL; a = a->next) {
             if (!strcmp("top", a->action_name) || !strcmp("top_top", a->action_name)) {
                 d("=exec_action default_action start: %s\n", a->action_name);
@@ -175,9 +175,9 @@ void exec_action()
 static const char PROJECT_SPLITTER = ':';
 
 /**
- * リンクかどうかの判定を行なう。
- * @return リンクと判定された文字列の長さ。
- *         リンクではないと判定された場合は、0
+ * check hyper link or not.
+ * @return string length(when hyper link)
+ *         0 (when not hyper link)
  */
 int get_link_syntax_len(char* data, size_t len, char* link)
 {
@@ -188,7 +188,7 @@ int get_link_syntax_len(char* data, size_t len, char* link)
 
     memset(string, '\0', 1024);
     strncpy(string, data, MIN(len, 1024 - 1));
-    if (len == 0) return index; /* 最後の文字だった */
+    if (len == 0) return index; /* it was last character. */
 
     block_p = MIN(strchr(string, ' '), strchr(string, '\t'));
     line_p = strchr(string, '\n');
