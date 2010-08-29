@@ -258,4 +258,11 @@ input.button {
 div.navigation {
     margin: 15px;
 }
+div.remote-address {
+    font-weight: bold;
+}
+span.link-disabled {
+    font-weight: bold;
+    color: red;
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
