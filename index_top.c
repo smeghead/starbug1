@@ -156,7 +156,7 @@ void top_edit_top_action()
     o(      "<h2>%s</h2>\n"
             "<div id=\"top\">\n"
             "<h3>%s</h3>\n"
-            "<div id=\"description\">%s</div>\n",
+            "<div class=\"description\">%s</div>\n",
             _("edit page"), _("edit page"), _("[wiki syntax description1]"));
     o(      "<form id=\"edit_top_form\" action=\"%s/%s/top_edit_top_submit\" method=\"post\">\n", cgiScriptName, g_project_code_4_url);
     o(      "<textarea name=\"edit_top\" id=\"edit_top\" rows=\"3\" cols=\"10\">");

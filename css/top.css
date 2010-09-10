@@ -244,6 +244,16 @@ div.complete_message {
 #dashboard ul {
     padding:0px 10px 0px 20px;
 }
+div#main-content {
+    margin: 0px 10px;
+    width: 98%;
+}
+#top textarea {
+    margin: 0px 20px;
+}
+#top input {
+    margin: 0px 20px;
+}
 textarea {
     width: 400px;
     height: 300px;
@@ -254,6 +264,9 @@ input.button {
 #project_add input,
 #project_list input {
     width: 100px;
+}
+div.description {
+    margin-left: 10px;
 }
 div.navigation {
     margin: 15px;
