@@ -153,7 +153,8 @@ void top_edit_top_action()
     project_a = db_get_project(db_a, project_a);
     top_output_header(_("edit page"), project_a);
     project_free(project_a);
-    o(      "<h2>%s</h2>\n"
+    o(      "<div id=\"top_page_edit\">\n"
+            "<h2>%s</h2>\n"
             "<div id=\"top\">\n"
             "<h3>%s</h3>\n"
             "<div class=\"description\">%s</div>\n",
@@ -166,6 +167,7 @@ void top_edit_top_action()
             "<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("update"));
     o(      "</form>");
     print_wiki_help();
+    o(      "</div>");
     db_finish(db_a);
     top_output_footer();
 }

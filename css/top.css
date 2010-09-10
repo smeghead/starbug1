@@ -244,9 +244,9 @@ div.complete_message {
 #dashboard ul {
     padding:0px 10px 0px 20px;
 }
-div#main-content {
+div#top_page_edit {
     margin: 0px 10px;
-    width: 98%;
+    width: 96%;
 }
 #top textarea {
     margin: 0px 20px;
