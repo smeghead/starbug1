@@ -336,13 +336,13 @@ void output_ticket_table_body(Database* db, SearchResult* result, List* element_
 
             o("\t\t<td class=\"field%d", et->id); 
             if (et->type == ELEM_TYPE_LIST_SINGLE || et->type == ELEM_TYPE_LIST_SINGLE_RADIO) {
-                o(" field%d-%d", et->id, db_get_list_item_id(db, et->id, val)); /* 毎回DBアクセスしているので無駄がある。 */
+                o(" field%d-%d", et->id, db_get_list_item_id(db, et->id, val)); /* FIXME: everytime access to database. wasteful. */
             }
             o("\">");
             if (et->id == ELEM_ID_TITLE)
                 o("<a href=\"%s/%s/ticket/%d\">", cgiScriptName, g_project_code_4_url, message->id);
             if (et->id == ELEM_ID_SENDER)
-                hmail(get_element_value_by_id(elements_a, ELEM_ID_ORG_SENDER)); /* 最初の投稿者を表示する。 */
+                hmail(get_element_value_by_id(elements_a, ELEM_ID_ORG_SENDER)); /* display first register name. */
             else
                 h(val);
             if (et->id == ELEM_ID_TITLE)
@@ -401,7 +401,7 @@ void output_ticket_table(Database* db, SearchResult* result, List* element_types
 void output_states(List* states, bool with_new_ticket_link)
 {
     Iterator* it;
-    /* stateの表示 */
+    /* display state. */
     o("<div id=\"state_index\">\n");
     o("\t<ul>\n");
     foreach (it, states) {
@@ -448,7 +448,7 @@ void list_action()
     db_a = db_init(g_project_code);
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("ticket list by status"), NULL, NAVI_LIST);
-    /* メッセージの取得 */
+    /* retrieve messages. */
     if ((cgiFormStringMultiple("message", &multi)) != cgiFormNotFound) {
         int i = 0;
         o("<div class=\"complete_message\">");
@@ -490,7 +490,7 @@ void list_action()
         State* s = it->element;
         SearchResult* result_a = search_result_new();
 
-        /* 検索 */
+        /* search */
         list_alloc(conditions_a, Condition, condition_new, condition_free);
         result_a = db_get_tickets_by_status(db_a, string_rawstr(s->name), result_a);
         list_free(conditions_a);
@@ -554,7 +554,7 @@ List* create_conditions(List* conditions, List* element_types, bool cookie_resto
 
         switch (et->type) {
             case ELEM_TYPE_DATE:
-                /* 日付 from */
+                /* date from */
                 sprintf(name, "field%d_from", et->id);
                 cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                 sprintf(cookie_name,
@@ -565,7 +565,7 @@ List* create_conditions(List* conditions, List* element_types, bool cookie_resto
                 c = list_new_element(conditions);
                 set_condition_values(c, et->id, CONDITION_TYPE_DATE_FROM, value, cookie_value, cookie_restore);
                 list_add(conditions, c);
-                /* 日付 to */
+                /* date to */
                 sprintf(name, "field%d_to", et->id);
                 cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
                 sprintf(cookie_name,
@@ -590,7 +590,7 @@ List* create_conditions(List* conditions, List* element_types, bool cookie_resto
                 list_add(conditions, c);
         }
     }
-    /* 登録日時 */
+    /* register date */
     sprintf(name, "registerdate.from");
     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
     sprintf(cookie_name,
@@ -611,7 +611,7 @@ List* create_conditions(List* conditions, List* element_types, bool cookie_resto
     c = list_new_element(conditions);
     set_condition_values(c, ELEM_ID_REGISTERDATE, CONDITION_TYPE_DATE_TO, value, cookie_value, cookie_restore);
     list_add(conditions, c);
-    /* 更新日時 */
+    /* modify date */
     sprintf(name, "lastregisterdate.from");
     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
     sprintf(cookie_name,
@@ -632,7 +632,7 @@ List* create_conditions(List* conditions, List* element_types, bool cookie_resto
     c = list_new_element(conditions);
     set_condition_values(c, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_TO, value, cookie_value, cookie_restore);
     list_add(conditions, c);
-    /* 最近更新された日数 */
+    /* passed days from last update. */
     sprintf(name, "lastregisterdate.days");
     cgiFormStringNoNewlines(name, value, DEFAULT_LENGTH);
     sprintf(cookie_name,
@@ -715,7 +715,7 @@ static void save_condition2cookie(List* conditions, char* q, bool save)
     }
 }
 /**
- * 検索画面を表示するaction。
+ * search page action。
  */
 void search_action()
 {
@@ -744,7 +744,7 @@ void search_action()
         redirect(uri, NULL);
     }
     
-    /* 検索条件のcookie保存 */
+    /* save search conditions to cookies. */
     cgiFormStringNoNewlines("search_button", search_button, DEFAULT_LENGTH);
     cgiFormStringNoNewlines("save_condition", save_condition, NUM_LENGTH);
     sprintf(cookie_key_save_condition, COOKIE_SAVE_CONDITION_FORMAT, g_project_code_4_url);
@@ -757,7 +757,7 @@ void search_action()
     db_a = db_init(g_project_code);
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_element_types_4_list(db_a, NULL, element_types_a);
-    /* 検索 */
+    /* search */
     list_alloc(conditions_a, Condition, condition_new, condition_free);
     conditions_a = create_conditions(conditions_a, element_types_a, condition_restore);
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
@@ -1036,7 +1036,7 @@ void report_csv_download_action()
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
 
     element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
-    /* 検索 */
+    /* search */
     list_alloc(conditions_a, Condition, condition_new, condition_free);
     conditions_a = create_conditions(conditions_a, element_types_a, false);
     cgiFormStringNoNewlines("q", q, DEFAULT_LENGTH);
@@ -1906,18 +1906,12 @@ void register_submit_action()
                 case ELEM_TYPE_NUM:
                 case ELEM_TYPE_DATE:
                     set_posted_value_or_last_value(e, name, value_a, elements_a, et, false);
-/*                    cgiFormStringNoNewlines(name, value_a, VALUE_LENGTH);*/
-/*                    set_element_value(e, value_a);*/
                     break;
                 case ELEM_TYPE_TEXTAREA:
                     set_posted_value_or_last_value(e, name, value_a, elements_a, et, true);
-/*                    cgiFormString(name, value_a, VALUE_LENGTH);*/
-/*                    set_element_value(e, value_a);*/
                     break;
                 case ELEM_TYPE_CHECKBOX:
                     set_posted_value_or_last_value(e, name, value_a, elements_a, et, true);
-/*                    cgiFormString(name, value_a, VALUE_LENGTH);*/
-/*                    set_element_value(e, value_a);*/
                     break;
                 case ELEM_TYPE_LIST_SINGLE:
                 case ELEM_TYPE_LIST_SINGLE_RADIO:
@@ -1929,15 +1923,13 @@ void register_submit_action()
                         register_list_item(db_a, et->id, value_a);
                     } else {
                         set_posted_value_or_last_value(e, name, value_a, elements_a, et, true);
-/*                        cgiFormString(name, value_a, VALUE_LENGTH);*/
-/*                        set_element_value(e, value_a);*/
                     }
                     break;
                 case ELEM_TYPE_LIST_MULTI:
-                    /* 新規選択肢 */
+                    /* get brand new selection item. */
                     cgiFormString(name_new_item, value_a, VALUE_LENGTH);
                     if (strlen(value_a)) {
-                        /* 新しく選択肢を追加 */
+                        /* insert brand selection item to database. */
                         register_list_item(db_a, et->id, value_a);
                         strcat(value_a, "\t");
                     }
@@ -1946,8 +1938,8 @@ void register_submit_action()
                         int len = 0;
                         while (multi[i]) {
                             len += strlen(multi[i]) + 1;
-                            /* VALUE_LENGTH を超えない範囲で連結していく。
-                             * 通常超えないはず */
+                            /* join selection items till length reach VALUE_LENGTH.
+                             * USUALLY MIGHT NOT REACHE VALUE_LENGTH. */
                             if (len < VALUE_LENGTH) {
                                 strcat(value_a, multi[i]);
                                 strcat(value_a, "\t");
@@ -2058,7 +2050,7 @@ void register_at_once_action()
     o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/%s/register_at_once_confirm\" method=\"post\">\n", cgiScriptName, g_project_code_4_url);
     project_free(project_a);
     {
-        /* 一括用、CSV形式フィールド */
+        /* cvs formated field for register many tickets at onece. */
         o("<table summary=\"input information\">\n"
           "\t<tr>\n"
           "\t\t<th class=\"required\">CSV"
@@ -2078,7 +2070,7 @@ void register_at_once_action()
     output_footer();
 }
 /**
- * 一括登録確認画面を表示するaction。
+ * register many tickets at once. confirm page action.
  */
 void register_at_once_confirm_action()
 {
