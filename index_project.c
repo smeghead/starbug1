@@ -55,6 +55,7 @@ void report_rss_download_action();
 void rss_action();
 void top_action();
 void setting_file_action();
+void delete_file_action();
 void output_header(Project*, char*, char*, const NaviType);
 void output_footer();
 void output_form_element(Database*, List*, ElementType*, Project*);
@@ -96,6 +97,7 @@ void register_actions()
     REG_ACTION(report_rss_download);
     REG_ACTION(top);
     REG_ACTION(setting_file);
+    REG_ACTION(delete_file);
 }
 
 void output_header(Project* project, char* title, char* script_name, const NaviType navi)
@@ -433,7 +435,7 @@ void output_states(List* states, bool with_new_ticket_link)
 }
 
 /**
- * 一覧を表示するaction。
+ * display list page action。
  */
 void list_action()
 {
@@ -1662,14 +1664,17 @@ void ticket_action()
             ElementType* et = it->element;
             if (et->type == ELEM_TYPE_UPLOADFILE) {
                 char* attachment_file_name = get_element_value(attachment_elements_a, et);
+                int file_id = db_get_element_file_id(db_a, message_ids_a[i], et->id);
                 if (strlen(attachment_file_name) == 0) continue;
-                o("\t\t<span>\n");
-                o("<a href=\"%s/%s/download/%d/", 
-                        cgiScriptName, 
-                        g_project_code_4_url,
-                        db_get_element_file_id(db_a, message_ids_a[i], et->id)); 
-                u(attachment_file_name); o("\" target=\"_blank\">");h(attachment_file_name); o("</a>\n");
-                o("\t\t&nbsp;</span>\n");
+                if (!db_get_element_file_deleted(db_a, file_id)) {
+                    o("\t\t<span>\n");
+                    o("<a href=\"%s/%s/download/%d/", 
+                            cgiScriptName, 
+                            g_project_code_4_url,
+                            file_id); 
+                    u(attachment_file_name); o("\" target=\"_blank\">");h(attachment_file_name); o("</a>\n");
+                    o("\t\t&nbsp;</span>\n");
+                }
             }
         }
         list_free(attachment_elements_a);
@@ -1688,7 +1693,9 @@ void ticket_action()
         List* previous = last_elements;
         list_alloc(elements_a, Element, element_new, element_free);
         last_elements = elements_a = db_get_elements(db_a, message_ids_a[i], elements_a);
+        o(      "\t\t<a name=\"%d\">\n", i + 1);
         o(      "\t\t<h4 class=\"title\">%d: ", i + 1);
+        o(      "\t\t</a>\n");
         h(get_element_value_by_id(elements_a, ELEM_ID_SENDER));
         o("&nbsp;<span class=\"date\">("); h(get_element_value_by_id(elements_a, ELEM_ID_LASTREGISTERDATE)); o(")</span>&nbsp;");
         o(      "\t</h4>\n");
@@ -1724,14 +1731,32 @@ void ticket_action()
                                 char buf[DEFAULT_LENGTH];
                                 char* mime_type;
                                 int file_id = db_get_element_file_id(db_a, message_ids_a[i], et->id);
-                                o("<a href=\"%s/%s/download/%d/", cgiScriptName, g_project_code_4_url, file_id); 
-                                u(value); o("\" target=\"_blank\">");h(value); o("</a>\n");
-                                mime_type = db_get_element_file_mime_type(db_a, message_ids_a[i], et->id, buf);
-                                if (strstr(mime_type, "image") != NULL) {
-                                    o("<div>\n");
-                                    o("<img class=\"attachment_image\" src=\"%s/%s/download/%d\" alt=\"attachment file\" />\n",
-                                            cgiScriptName, g_project_code_4_url, file_id);
-                                    o("</div>\n");
+                                bool file_deleted = db_get_element_file_deleted(db_a, file_id);
+                                if (!file_deleted) {
+                                    o("<a href=\"%s/%s/download/%d/", cgiScriptName, g_project_code_4_url, file_id); 
+                                    u(value); o("\" target=\"_blank\">");h(value); o("</a>\n");
+                                } else {
+                                    u(value);
+                                }
+                                o("<form action=\"%s/%s/delete_file\" method=\"post\" class=\"file-hide-button\">\n",
+                                        cgiScriptName, g_project_code_4_url);
+                                o("\t<input type=\"hidden\" name=\"file_id\" value=\"%d\" />\n", file_id);
+                                o("\t<input type=\"hidden\" name=\"ticket_id\" value=\"%d\" />\n", iid);
+                                o("\t<input type=\"hidden\" name=\"reply_id\" value=\"%d\" />\n", i + 1);
+                                if (!file_deleted) {
+                                    o("\t<input type=\"submit\" value=\"%s\" />\n", _("hide this file"));
+                                } else {
+                                    o("\t<input type=\"submit\" value=\"%s\" />\n", _("unhide this file"));
+                                }
+                                o("</form>\n");
+                                if (!file_deleted) {
+                                    mime_type = db_get_element_file_mime_type(db_a, message_ids_a[i], et->id, buf);
+                                    if (strstr(mime_type, "image") != NULL) {
+                                        o("<div>\n");
+                                        o("<img class=\"attachment_image\" src=\"%s/%s/download/%d\" alt=\"attachment file\" />\n",
+                                                cgiScriptName, g_project_code_4_url, file_id);
+                                        o("</div>\n");
+                                    }
                                 }
                             }
                             break;
@@ -2753,5 +2778,32 @@ void setting_file_action()
 error:
     cgiHeaderContentType("text/plain; charset=utf-8;");
     o(_("error: there is no file."));
+}
+void delete_file_action()
+{
+    char* value_a = xalloc(sizeof(char) * VALUE_LENGTH);
+    Database* db_a;
+    int file_id, ticket_id, reply_id, file_deleted;
+    String* redirect_uri = string_new();
+
+    cgiFormStringNoNewlines("file_id", value_a, VALUE_LENGTH);
+    file_id = atoi(value_a);
+    d("file_id: %s\n", value_a);
+    cgiFormStringNoNewlines("ticket_id", value_a, VALUE_LENGTH);
+    ticket_id = atoi(value_a);
+    d("ticket_id: %s\n", value_a);
+    cgiFormStringNoNewlines("reply_id", value_a, VALUE_LENGTH);
+    reply_id = atoi(value_a);
+    d("reply_id: %s\n", value_a);
+    db_a = db_init(g_project_code);
+    file_deleted = db_get_element_file_deleted(db_a, file_id);
+    db_delete_element_file(db_a, file_id, !file_deleted);
+    db_finish(db_a);
+    xfree(value_a);
+
+    string_appendf(redirect_uri, "/ticket/%d#%d", ticket_id, reply_id);
+    d("%s\n", string_rawstr(redirect_uri));
+    redirect(string_rawstr(redirect_uri), NULL);
+    string_free(redirect_uri);
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

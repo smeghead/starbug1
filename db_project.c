@@ -1259,6 +1259,15 @@ ElementFile* db_get_element_file(Database* db, int id, ElementFile* file)
     return file;
 ERROR_LABEL(db->handle)
 }
+void db_delete_element_file(Database* db, const int id, const bool deleted)
+{
+    exec_query(
+            db,
+            "update element_file set deleted = ? where id = ?",
+            COLUMN_TYPE_INT, deleted,
+            COLUMN_TYPE_INT, id,
+            COLUMN_TYPE_END);
+}
 List* db_get_newest_information(Database* db, const int limit, List* messages)
 {
     int r;
@@ -1320,6 +1329,16 @@ char* db_get_element_file_mime_type(Database* db, const int message_id, const in
 
     return buf;
 ERROR_LABEL(db->handle)
+}
+bool db_get_element_file_deleted(Database* db, int file_id)
+{
+    d("db_get_element_file_deleted file_id: %d\n", file_id);
+    return exec_query_scalar_int(
+            db,
+            "select deleted from element_file as ef "
+            "where ef.id = ?",
+            COLUMN_TYPE_INT, file_id,
+            COLUMN_TYPE_END);
 }
 void db_register_wiki(Database* db, Wiki* wiki)
 {

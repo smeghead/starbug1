@@ -1,6 +1,15 @@
 2010-10-08  smeghead <smeghead@users.sourceforge.jp>
 
 	* code comment translations.
+	* add 'deleted' column to element_file. upgrade needs execute sql
+	statement for each sub project's database like below.
+	  $ echo "alter table element_file add column deleted integer not null default 0;" | sqlite3 2.db
+	  or
+	  $ for db in *.db; do
+	      if [ "$db" != "1.db" ]; then
+	        echo "alter table element_file add column deleted integer not null default 0;" | sqlite3 $db
+	      fi
+	    done
 
 2010-09-10  smeghead <smeghead@users.sourceforge.jp>
 
