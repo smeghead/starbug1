@@ -1,27 +1,27 @@
 Starbug1
 
-Starbug1 �ϡ�BTS(�Х��ȥ�å��󥰥����ƥ�)�Ǥ������ܤΥ������ޥ�������ǡ�
-ITS(�����塼�ȥ�å��󥰥����ƥ�)�Ȥ��Ƥ���ѤǤ��ޤ���
+Starbug1 は、BTS(バグトラッキングシステム)です。項目のカスタマイズ次第で、
+ITS(イシュートラッキングシステム)としても使用できます。
 
-���󥹥ȡ��뤹����ϡ�INSTALL�򻲾Ȥ��Ƥ���������
+インストールする場合は、INSTALLを参照してください。
 
 Starbug1
 http://starbug1.sourceforge.jp/
 
 
-�ռ�
- Starbug1�ϡ��ʲ��Υ��եȥ�����(�饤�֥��)����Ѥ�����ĺ���Ƥ���ޤ���
- ���꤬�Ȥ��������ޤ���
+謝辞
+ Starbug1は、以下のソフトウェア(ライブラリ)を使用させて頂いております。
+ ありがとうございます。
 
-  - SQLite3 �ǡ����١���
+  - SQLite3 データベース
    http://www.sqlite.org/
-  - cgic CGI�饤�֥��
+  - cgic CGIライブラリ
    http://www.boutell.com/cgic/
   - gettext
    http://www.gnu.org/software/gettext/gettext.html
   - iconv
    http://www.gnu.org/software/libiconv/
-  - html5jp(JavaScript�饤�֥��) ���������饤�֥��
+  - html5jp(JavaScriptライブラリ) グラフ描画ライブラリ
    http://www.html5.jp/
 
 --
