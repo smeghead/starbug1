@@ -143,7 +143,7 @@ dist:
 
 cvsreleasetag:
 	@echo please tag by manual. 
-	@echo " " cvs tag starbug1-`echo ${VERSION} | sed 's/\./-/g'`
+	@echo " " git tag starbug1-`echo ${VERSION} | sed 's/\./-/g'`
 
 displayinstalldoc:
 	w3m -dump http://starbug1.sourceforge.jp/install
