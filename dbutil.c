@@ -520,7 +520,8 @@ void create_project_tables(Database* db, char* sub_project_name)
             " filename text, "
             " size integer, "
             " mime_type text, "
-            " content blob "
+            " content blob, "
+            " deleted integer "
             ");", COLUMN_TYPE_END);
     exec_query(
             db,

@@ -55,7 +55,8 @@ void report_rss_download_action();
 void rss_action();
 void top_action();
 void setting_file_action();
-void delete_file_action();
+void attachment_file_setting_action();
+void attachment_file_setting_submit_action();
 void output_header(Project*, char*, char*, const NaviType);
 void output_footer();
 void output_form_element(Database*, List*, ElementType*, Project*);
@@ -97,7 +98,8 @@ void register_actions()
     REG_ACTION(report_rss_download);
     REG_ACTION(top);
     REG_ACTION(setting_file);
-    REG_ACTION(delete_file);
+    REG_ACTION(attachment_file_setting);
+    REG_ACTION(attachment_file_setting_submit);
 }
 
 void output_header(Project* project, char* title, char* script_name, const NaviType navi)
@@ -1738,11 +1740,13 @@ void ticket_action()
                                 } else {
                                     u(value);
                                 }
-                                o("<form action=\"%s/%s/delete_file\" method=\"post\" class=\"file-hide-button\">\n",
+                                o("<form action=\"%s/%s/attachment_file_setting\" method=\"post\" class=\"file-hide-button\">\n",
                                         cgiScriptName, g_project_code_4_url);
                                 o("\t<input type=\"hidden\" name=\"file_id\" value=\"%d\" />\n", file_id);
                                 o("\t<input type=\"hidden\" name=\"ticket_id\" value=\"%d\" />\n", iid);
+                                o("\t<input type=\"hidden\" name=\"message_id\" value=\"%d\" />\n", message_ids_a[i]);
                                 o("\t<input type=\"hidden\" name=\"reply_id\" value=\"%d\" />\n", i + 1);
+                                o("\t<input type=\"hidden\" name=\"element_id\" value=\"%d\" />\n", et->id);
                                 if (!file_deleted) {
                                     o("\t<input type=\"submit\" value=\"%s\" />\n", _("hide this file"));
                                 } else {
@@ -1874,6 +1878,111 @@ static void set_posted_value_or_last_value(Element* e, char* name, char* value, 
     }
     set_element_value(e, value);
 }
+int register_or_reply(Database* db, Project* project, Message* ticket, List* element_types, List* elements, HOOK* hook) 
+{
+    Iterator* it;
+    char save2cookie[2];
+    char* value_a = xalloc(sizeof(char) * VALUE_LENGTH); /* 1M */
+
+    cgiFormStringNoNewlines("save2cookie", save2cookie, 2);
+    /* register, reply */
+    foreach (it, element_types) {
+        char** multi;
+        ElementType* et = it->element;
+        Element* e = list_new_element(ticket->elements);
+        char name_new_item[DEFAULT_LENGTH] = "";
+        char name[DEFAULT_LENGTH] = "";
+        sprintf(name_new_item, "field%d.new_item", et->id);
+        sprintf(name, "field%d", et->id);
+        strcpy(value_a, "");
+
+        d("id: %d\n", et->id);
+        e->element_type_id = et->id;
+        e->is_file = 0;
+        switch (et->type) {
+            case ELEM_TYPE_TEXT:
+            case ELEM_TYPE_NUM:
+            case ELEM_TYPE_DATE:
+                set_posted_value_or_last_value(e, name, value_a, elements, et, false);
+                break;
+            case ELEM_TYPE_TEXTAREA:
+                set_posted_value_or_last_value(e, name, value_a, elements, et, true);
+                break;
+            case ELEM_TYPE_CHECKBOX:
+                set_posted_value_or_last_value(e, name, value_a, elements, et, true);
+                break;
+            case ELEM_TYPE_LIST_SINGLE:
+            case ELEM_TYPE_LIST_SINGLE_RADIO:
+                /* 新規選択肢 */
+                cgiFormString(name_new_item, value_a, VALUE_LENGTH);
+                if (strlen(value_a)) {
+                    set_element_value(e, value_a);
+                    /* 新しく選択肢を追加 */
+                    register_list_item(db, et->id, value_a);
+                } else {
+                    set_posted_value_or_last_value(e, name, value_a, elements, et, true);
+                }
+                break;
+            case ELEM_TYPE_LIST_MULTI:
+                /* get brand new selection item. */
+                cgiFormString(name_new_item, value_a, VALUE_LENGTH);
+                if (strlen(value_a)) {
+                    /* insert brand selection item to database. */
+                    register_list_item(db, et->id, value_a);
+                    strcat(value_a, "\t");
+                }
+                if ((cgiFormStringMultiple(name, &multi)) != cgiFormNotFound) {
+                    int i = 0;
+                    int len = 0;
+                    while (multi[i]) {
+                        len += strlen(multi[i]) + 1;
+                        /* join selection items till length reach VALUE_LENGTH.
+                         * USUALLY MIGHT NOT REACHE VALUE_LENGTH. */
+                        if (len < VALUE_LENGTH) {
+                            strcat(value_a, multi[i]);
+                            strcat(value_a, "\t");
+                        }
+                        i++;
+                    }
+                } else if (elements) {
+                    strcpy(value_a, get_element_value(elements, et));
+                }
+                set_element_value(e, value_a);
+                cgiStringArrayFree(multi);
+                break;
+            case ELEM_TYPE_UPLOADFILE:
+                if (get_upload_size(et->id) > (project->upload_max_size * 1024)) {
+                    return -1; /* goto file_size_error;*/
+                }
+                cgiFormFileName(name, value_a, VALUE_LENGTH);
+                string_set(e->str_val, get_filename_without_path(value_a));
+                if (string_len(e->str_val)) {
+                    e->is_file = 1;
+                }
+                break;
+        }
+        if (e->element_type_id == ELEM_ID_SENDER) {
+            if (strcmp(save2cookie, "1") == 0) {
+                d("set cookie: %s, %s, %s\n", string_rawstr(e->str_val), cgiScriptName, cgiServerName);
+                set_cookie(COOKIE_SENDER, string_rawstr(e->str_val));
+            } else {
+                clear_cookie(COOKIE_SENDER);
+            }
+        }
+        list_add(ticket->elements, e);
+    }
+    xfree(value_a);
+    db_begin(db);
+    ticket->id = db_register_ticket(db, ticket);
+    db_commit(db);
+    /* hook */
+    hook = init_hook(HOOK_MODE_REGISTERED);
+    d("init_hook\n");
+    hook = exec_hook(hook, project, ticket, ticket->elements, element_types);
+    d("exec_hook\n");
+    d("finish\n");
+    return 0;
+}
 /**
  * 登録するaction。
  * 登録モード、編集モードがある。
@@ -1882,19 +1991,15 @@ void register_submit_action()
 {
     Project* project_a = project_new();
     List* element_types_a;
-    Iterator* it;
     Message* ticket_a;
     char ticket_id[NUM_LENGTH];
     ModeType mode = get_mode();
-    char** multi;
-    char save2cookie[2];
     char* complete_message = NULL;
     HOOK* hook = NULL;
     Database* db_a;
     List* elements_a = NULL;
 
     d("start\n");
-    cgiFormStringNoNewlines("save2cookie", save2cookie, 2);
     if (mode == MODE_INVALID)
         die("requested invalid mode.");
     ticket_a = message_new();
@@ -1911,112 +2016,18 @@ void register_submit_action()
         list_alloc(elements_a, Element, element_new, element_free);
         elements_a = db_get_last_elements(db_a, ticket_a->id, elements_a);
     }
-    {
-        char* value_a = xalloc(sizeof(char) * VALUE_LENGTH); /* 1M */
-        /* register, reply */
-        foreach (it, element_types_a) {
-            ElementType* et = it->element;
-            Element* e = list_new_element(ticket_a->elements);
-            char name_new_item[DEFAULT_LENGTH] = "";
-            char name[DEFAULT_LENGTH] = "";
-            sprintf(name_new_item, "field%d.new_item", et->id);
-            sprintf(name, "field%d", et->id);
-            strcpy(value_a, "");
-
-            d("id: %d\n", et->id);
-            e->element_type_id = et->id;
-            e->is_file = 0;
-            switch (et->type) {
-                case ELEM_TYPE_TEXT:
-                case ELEM_TYPE_NUM:
-                case ELEM_TYPE_DATE:
-                    set_posted_value_or_last_value(e, name, value_a, elements_a, et, false);
-                    break;
-                case ELEM_TYPE_TEXTAREA:
-                    set_posted_value_or_last_value(e, name, value_a, elements_a, et, true);
-                    break;
-                case ELEM_TYPE_CHECKBOX:
-                    set_posted_value_or_last_value(e, name, value_a, elements_a, et, true);
-                    break;
-                case ELEM_TYPE_LIST_SINGLE:
-                case ELEM_TYPE_LIST_SINGLE_RADIO:
-                    /* 新規選択肢 */
-                    cgiFormString(name_new_item, value_a, VALUE_LENGTH);
-                    if (strlen(value_a)) {
-                        set_element_value(e, value_a);
-                        /* 新しく選択肢を追加 */
-                        register_list_item(db_a, et->id, value_a);
-                    } else {
-                        set_posted_value_or_last_value(e, name, value_a, elements_a, et, true);
-                    }
-                    break;
-                case ELEM_TYPE_LIST_MULTI:
-                    /* get brand new selection item. */
-                    cgiFormString(name_new_item, value_a, VALUE_LENGTH);
-                    if (strlen(value_a)) {
-                        /* insert brand selection item to database. */
-                        register_list_item(db_a, et->id, value_a);
-                        strcat(value_a, "\t");
-                    }
-                    if ((cgiFormStringMultiple(name, &multi)) != cgiFormNotFound) {
-                        int i = 0;
-                        int len = 0;
-                        while (multi[i]) {
-                            len += strlen(multi[i]) + 1;
-                            /* join selection items till length reach VALUE_LENGTH.
-                             * USUALLY MIGHT NOT REACHE VALUE_LENGTH. */
-                            if (len < VALUE_LENGTH) {
-                                strcat(value_a, multi[i]);
-                                strcat(value_a, "\t");
-                            }
-                            i++;
-                        }
-                    } else if (elements_a) {
-                        strcpy(value_a, get_element_value(elements_a, et));
-                    }
-                    set_element_value(e, value_a);
-                    cgiStringArrayFree(multi);
-                    break;
-                case ELEM_TYPE_UPLOADFILE:
-                    if (get_upload_size(et->id) > (project_a->upload_max_size * 1024)) {
-                        goto file_size_error;
-                    }
-                    cgiFormFileName(name, value_a, VALUE_LENGTH);
-                    string_set(e->str_val, get_filename_without_path(value_a));
-                    if (string_len(e->str_val)) {
-                        e->is_file = 1;
-                    }
-                    break;
-            }
-            if (e->element_type_id == ELEM_ID_SENDER) {
-                if (strcmp(save2cookie, "1") == 0) {
-                    d("set cookie: %s, %s, %s\n", string_rawstr(e->str_val), cgiScriptName, cgiServerName);
-                    set_cookie(COOKIE_SENDER, string_rawstr(e->str_val));
-                } else {
-                    clear_cookie(COOKIE_SENDER);
-                }
-            }
-            list_add(ticket_a->elements, e);
-        }
-        if (elements_a) /* if elements_a was not initialized, do nothing. */
-            list_free(elements_a);
-        xfree(value_a);
-        db_begin(db_a);
-        ticket_a->id = db_register_ticket(db_a, ticket_a);
-        db_commit(db_a);
-        /* hook */
-        hook = init_hook(HOOK_MODE_REGISTERED);
-        d("init_hook\n");
-        hook = exec_hook(hook, project_a, ticket_a, ticket_a->elements, element_types_a);
-        d("exec_hook\n");
-        if (mode == MODE_REGISTER)
-            complete_message = _("registerd.");
-        else if (mode == MODE_REPLY)
-            complete_message = _("replyed.");
-        d("finish\n");
-        project_free(project_a);
-        list_free(element_types_a);
+    hook = init_hook(HOOK_MODE_REGISTERED);
+    if (register_or_reply(db_a, project_a, ticket_a, element_types_a, elements_a, hook) != 0) {
+        goto file_size_error;
     }
+    if (mode == MODE_REGISTER)
+        complete_message = _("registerd.");
+    else if (mode == MODE_REPLY)
+        complete_message = _("replyed.");
+    project_free(project_a);
+    if (elements_a) /* if elements_a was not initialized, do nothing. */
+        list_free(elements_a);
+    list_free(element_types_a);
     db_finish(db_a);
     message_free(ticket_a);
 
@@ -2779,12 +2790,126 @@ error:
     cgiHeaderContentType("text/plain; charset=utf-8;");
     o(_("error: there is no file."));
 }
-void delete_file_action()
+void attachment_file_setting_action()
+{
+    int file_id, ticket_id, reply_id, element_id, message_id;
+    char* value_a = xalloc(sizeof(char) * VALUE_LENGTH);
+    Project* project_a = project_new();
+    List* states_a;
+    Database* db_a;
+    char sender[DEFAULT_LENGTH];
+    get_cookie_string(COOKIE_SENDER, sender);
+    bool file_deleted;
+
+    db_a = db_init(g_project_code);
+
+    project_a = db_get_project(db_a, project_a);
+    output_header(project_a, _("attachment file display setting"), "attachment_file_display_setting_submit.js", NAVI_OTHER);
+    o(      "<h2>"); h(string_rawstr(project_a->name));o(" - %s</h2>\n", _("delete attachment files."));
+    list_alloc(states_a, State, state_new, state_free);
+    states_a = db_get_states(db_a, states_a);
+    output_states(states_a, true);
+    list_free(states_a);
+    o(      "<div id=\"input_form\">\n"
+            "<h3>%s</h3>\n"
+            "<div class=\"description\">%s</div>\n"
+            "<noscript><div class=\"description\">%s</div></noscript>\n",
+            _("attachment file display setting"),
+            _("you can appoint if attachment file will be display."),
+            _("note: they are checked by only javascript."));
+    o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/%s/attachment_file_setting_submit\" method=\"post\">\n", cgiScriptName, g_project_code_4_url);
+    o(      "<table summary=\"input information\">\n");
+    {
+        List* element_types_a;
+        Iterator* it;
+        list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
+        element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
+        foreach (it, element_types_a) {
+            ElementType* et = it->element;
+            /* not to display ticket fields. */
+            if (et->ticket_property == 1) continue;
+            /* display sender and not reply-property fields. */
+            if (et->id != ELEM_ID_SENDER) {
+                if (et->reply_property != 1) continue;
+            }
+            o("\t<tr>\n");
+            o("\t\t<th %s>", et->required ? "class=\"required\"" : "");
+            hs(et->name);
+            if (et->required) {
+                o("<span class=\"required\">※</span>");
+            }
+            o("</th><td>\n");
+            if (et->required)
+                o("\t\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
+            output_form_element(db_a, NULL, et, project_a);
+            o("\t\t\t<div class=\"description\">");hs(et->description);o("&nbsp;</div>\n");
+            o("\t\t\t<div class=\"remote-address description\">");
+            o(_("[REMOTE ADDRESS: %s]"), cgiRemoteAddr);
+            o("</div>\n");
+            o("\t\t</td>\n");
+            o("\t</tr>\n");
+        }
+        o("\t<tr>\n");
+        o("\t<th>%s</th>\n", _("attachment file"));
+        o("\t<td>\n");
+        {
+            char buf[DEFAULT_LENGTH];
+            char* mime_type;
+            List* elements_a;
+
+            list_alloc(elements_a, Element, element_new, element_free);
+            cgiFormStringNoNewlines("file_id", value_a, VALUE_LENGTH);
+            file_id = atoi(value_a);
+            d("file_id: %s\n", value_a);
+            cgiFormStringNoNewlines("ticket_id", value_a, VALUE_LENGTH);
+            ticket_id = atoi(value_a);
+            d("ticket_id: %s\n", value_a);
+            cgiFormStringNoNewlines("reply_id", value_a, VALUE_LENGTH);
+            reply_id = atoi(value_a);
+            d("reply_id: %s\n", value_a);
+            cgiFormStringNoNewlines("element_id", value_a, VALUE_LENGTH);
+            element_id = atoi(value_a);
+            d("reply_id: %s\n", value_a);
+            cgiFormStringNoNewlines("message_id", value_a, VALUE_LENGTH);
+            message_id = atoi(value_a);
+            d("reply_id: %s\n", value_a);
+
+            elements_a = db_get_elements(db_a, message_id, elements_a);
+            h(get_element_value_by_id(elements_a, element_id));
+            list_free(elements_a);
+            file_deleted = db_get_element_file_deleted(db_a, file_id);
+            mime_type = db_get_element_file_mime_type(db_a, message_id, element_id, buf);
+            if (strstr(mime_type, "image") != NULL) {
+                o("<div>\n");
+                o("<img class=\"attachment_image\" src=\"%s/%s/download/%d\" alt=\"attachment file\" />\n",
+                        cgiScriptName, g_project_code_4_url, file_id);
+                o("</div>\n");
+            }
+        }
+        o("\t</td>\n");
+        o("\t</table>\n");
+        o("\t<input type=\"hidden\" name=\"file_id\" value=\"%d\" />\n", file_id);
+        o("\t<input type=\"hidden\" name=\"ticket_id\" value=\"%d\" />\n", ticket_id);
+        o("\t<input type=\"hidden\" name=\"reply_id\" value=\"%d\" />\n", reply_id);
+    }
+
+    o(      "<input class=\"button\" type=\"submit\" name=\"register\" value=\"%s\" />\n"
+            "<input id=\"save2cookie\" type=\"checkbox\" name=\"save2cookie\" class=\"checkbox\" value=\"1\" %s />\n"
+            "<label for=\"save2cookie\">%s</label>\n"
+            "</form>\n", file_deleted ? _("display") : _("delete"), strlen(sender) ? "checked=\"checked\"" : "", _("save registerer.(use cookie)"));
+    o(      "<div class=\"description\">\n"
+            "</div>\n");
+    o(      "</div>\n");
+    db_finish(db_a);
+    output_footer();
+}
+void attachment_file_setting_submit_action()
 {
     char* value_a = xalloc(sizeof(char) * VALUE_LENGTH);
     Database* db_a;
     int file_id, ticket_id, reply_id, file_deleted;
     String* redirect_uri = string_new();
+    Project* project_a = project_new();
 
     cgiFormStringNoNewlines("file_id", value_a, VALUE_LENGTH);
     file_id = atoi(value_a);
@@ -2798,6 +2923,30 @@ void delete_file_action()
     db_a = db_init(g_project_code);
     file_deleted = db_get_element_file_deleted(db_a, file_id);
     db_delete_element_file(db_a, file_id, !file_deleted);
+    {
+        List* element_types_a;
+        Message* ticket_a;
+        HOOK* hook = NULL;
+        List* elements_a = NULL;
+
+        d("start\n");
+        ticket_a = message_new();
+        project_a = db_get_project(db_a, project_a);
+        list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
+        element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
+        ticket_a->id = ticket_id;
+        d("ticket_id: %d\n", ticket_a->id);
+        list_alloc(elements_a, Element, element_new, element_free);
+        elements_a = db_get_last_elements(db_a, ticket_a->id, elements_a);
+        hook = init_hook(HOOK_MODE_REGISTERED);
+        if (register_or_reply(db_a, project_a, ticket_a, element_types_a, elements_a, hook) != 0) {
+            goto file_size_error;
+        }
+        if (elements_a) /* if elements_a was not initialized, do nothing. */
+            list_free(elements_a);
+        list_free(element_types_a);
+    }
+    project_free(project_a);
     db_finish(db_a);
     xfree(value_a);
 
@@ -2805,5 +2954,18 @@ void delete_file_action()
     d("%s\n", string_rawstr(redirect_uri));
     redirect(string_rawstr(redirect_uri), NULL);
     string_free(redirect_uri);
+    return;
+
+file_size_error:
+    db_finish(db_a);
+    output_header(project_a, _("error"), NULL, NAVI_OTHER);
+    o("<h1>%s</h1>\n"
+      "<div class=\"message\">%s%d%s</div>\n",
+      _("error occured."),
+      _("file size is too large."),
+      project_a->upload_max_size,
+      _("kb. too large. back by browser's back button."));
+    output_footer();
+    project_free(project_a);
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
