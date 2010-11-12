@@ -109,7 +109,7 @@ webapp: default
 	@echo "Creating webapp..."
 	mkdir -p tmp
 	mkdir -p dist/starbug1
-	rsync -a --exclude=*.po --exclude=CVS js css img script locale template tmp *.html *.cgi COPYING_cgic favicon.ico dist/starbug1/
+	rsync -a --exclude=*.po --exclude=CVS .git js css img script locale template tmp *.html *.cgi COPYING_cgic favicon.ico dist/starbug1/
 	cp .htaccess dist/starbug1/dot.htaccess
 	find dist/starbug1 -name '*.cgi' -exec chmod ugo+x {} \;
 	touch dist/starbug1/debug.log
@@ -132,7 +132,7 @@ webappwin32: default
 dist:
 	mkdir -p dist
 	cd dist && \
-		cvs -d:pserver:anonymous@cvs.sourceforge.jp:/cvsroot/starbug1 export -r HEAD starbug1 && \
+		git clone git://github.com/smeghead/starbug1.git && \
 		rm -rf starbug1/deps && \
 		mv starbug1 starbug1-${VERSION} && \
 		tar zcf starbug1-${VERSION}.tar.gz starbug1-${VERSION} && \

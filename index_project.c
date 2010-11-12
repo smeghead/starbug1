@@ -1750,7 +1750,7 @@ void ticket_action()
                                 if (!file_deleted) {
                                     o("\t<input type=\"submit\" value=\"%s\" />\n", _("hide this file"));
                                 } else {
-                                    o("\t<input type=\"submit\" value=\"%s\" />\n", _("unhide this file"));
+                                    o("\t<input type=\"submit\" value=\"%s\" />\n", _("display this file"));
                                 }
                                 o("</form>\n");
                                 if (!file_deleted) {
@@ -2805,7 +2805,7 @@ void attachment_file_setting_action()
 
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("attachment file display setting"), "attachment_file_display_setting_submit.js", NAVI_OTHER);
-    o(      "<h2>"); h(string_rawstr(project_a->name));o(" - %s</h2>\n", _("delete attachment files."));
+    o(      "<h2>"); h(string_rawstr(project_a->name));o(" - %s</h2>\n", _("attachment file display setting"));
     list_alloc(states_a, State, state_new, state_free);
     states_a = db_get_states(db_a, states_a);
     output_states(states_a, true);
