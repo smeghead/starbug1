@@ -133,6 +133,7 @@ dist:
 	mkdir -p dist
 	cd dist && \
 		git clone git://github.com/smeghead/starbug1.git && \
+		rm -rf starbug1/.git && \
 		rm -rf starbug1/deps && \
 		mv starbug1 starbug1-${VERSION} && \
 		tar zcf starbug1-${VERSION}.tar.gz starbug1-${VERSION} && \
