@@ -766,4 +766,8 @@ span.link-disabled {
 form.file-hide-button {
     display: inline;
 }
+div.tooltip {
+    border: 1px solid #FFD700;
+    background-color: #FFFF99;
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

@@ -82,6 +82,7 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
     o(      "\t<link rel=\"shortcut icon\" type=\"image/x-ico\" href=\"%s/../favicon.ico\" />\n", cgiScriptName);
     if (script_name) {
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/prototype.js\"></script>\n", cgiScriptName);
+        o(  "\t<script type=\"text/javascript\" src=\"%s/../js/tooltip.js\"></script>\n", cgiScriptName);
         o(  "\t<script type=\"text/javascript\" src=\"%s/../index.%s/top/top_gettext_js\"></script>\n", cgiScriptName, get_ext(cgiScriptName));
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/%s\"></script>\n", cgiScriptName, script_name);
     }
@@ -335,43 +336,55 @@ void items_action()
           "\t\t\t\t<td>\n"
           "\t\t\t\t\t<input class=\"text required\" id=\"field%d.name\" type=\"text\" name=\"field%d.name\" ", _("column name"), _("*"), et->id, et->id);
         o(                  "value=\"");hs(et->name);o("\" maxlength=\"1000\" />\n"
-          "\t\t\t\t\t<div class=\"description\">%s</div>\n"
-          "\t\t\t\t\t<div id=\"field%d.name.required\" class=\"error\"></div>\n", _("this is name of ticket column."), et->id);
+          "\t\t\t\t\t<div class=\"description tooltip\" id=\"description%d.name\">%s</div>\n"
+          "\t\t\t\t\t<div id=\"field%d.name.required\" class=\"error\"></div>\n", et->id, _("this is name of ticket column."), et->id);
+        o("\t\t\t\t\t<script type=\"text/javascript\">\n"
+          "\t\t\t\t\t\tnew Tooltip('field%d.name', 'description%d.name');\n"
+          "\t\t\t\t\t</script>\n", et->id, et->id);
         o("\t\t\t\t</td>\n"
           "\t\t\t</tr>\n"
           "\t\t\t<tr>\n"
           "\t\t\t\t<th>%s</th>\n"
           "\t\t\t\t<td>\n"
-          "\t\t\t\t\t<input type=\"text\" class=\"text\" name=\"field%d.description\" ", _("column description"), et->id);
+          "\t\t\t\t\t<input type=\"text\" class=\"text\" id=\"field%d.description\" name=\"field%d.description\" ", _("column description"), et->id, et->id);
         o(                  "value=\"");hs(et->description);o("\" maxlength=\"1000\" />\n"
-          "\t\t\t\t\t<div class=\"description\">%s</div>\n"
-          "\t\t\t\t</td>\n"
+          "\t\t\t\t\t<div class=\"description tooltip\" id=\"description%d.description\">%s</div>\n", et->id, _("this is description of ticket column. when register or replay, it is displayed.")); 
+        o("\t\t\t\t\t<script type=\"text/javascript\">\n"
+          "\t\t\t\t\t\tnew Tooltip('field%d.description', 'description%d.description');\n"
+          "\t\t\t\t\t</script>\n", et->id, et->id);
+        o("\t\t\t\t</td>\n"
           "\t\t\t</tr>\n"
           "\t\t\t<tr>\n"
           "\t\t\t\t<th>%s</th>\n"
-          "\t\t\t\t<td>\n", _("this is description of ticket column. when register or replay, it is displayed."), _("required"));
+          "\t\t\t\t<td>\n", _("required"));
         o("\t\t\t\t\t<input id=\"field%d.required\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.required\" ", et->id, et->id);
         o(                  "value=\"1\" %s />\n", et->required == 1 ? "checked=\"checked\"" : "");
         o("\t\t\t\t\t<label for=\"field%d.required\">%s</label>\n", et->id, _("this column must not be empty."));
-        o("\t\t\t\t\t<div class=\"description\">%s</div>\n"
-          "\t\t\t\t</td>\n"
+        o("\t\t\t\t\t<div class=\"description tooltip\" id=\"description%d.required\">%s</div>\n", et->id, _("[require description]"));
+        o("\t\t\t\t\t<script type=\"text/javascript\">\n"
+          "\t\t\t\t\t\tnew Tooltip('field%d.required', 'description%d.required');\n"
+          "\t\t\t\t\t</script>\n", et->id, et->id);
+        o("\t\t\t\t</td>\n"
           "\t\t\t</tr>\n"
           "\t\t\t<tr>\n"
           "\t\t\t\t<th>%s</th>\n"
           "\t\t\t\t<td>\n"
           "\t\t\t\t\t<input id=\"field%d.ticket_property\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.ticket_property\" ",
-          _("[require description]"),
           _("attribute of ticket"), et->id, et->id);
         o(                  "value=\"1\" %s %s />\n", et->ticket_property == 1 ? "checked=\"checked\"" : "", et->id <= BASIC_ELEMENT_MAX ? "disabled=\"disabled\"" : "");
         o("\t\t\t\t\t<label for=\"field%d.ticket_property\">%s</label>\n", et->id, _("this column will be attribute of ticket."));
-        o("\t\t\t\t\t<div class=\"description\">\n"
+        o("\t\t\t\t\t<div class=\"description tooltip\" id=\"description%d.ticket_property\">\n"
           "\t\t\t\t\t\t%s\n"
           "\t\t\t\t\t\t%s\n"
           "\t\t\t\t\t\t%s\n"
           "\t\t\t\t\t</div>\n",
+          et->id,
           _("[attribute of ticket description1]"),
           _("[attribute of ticket description2]"),
           _("[attribute of ticket description3]"));
+        o("\t\t\t\t\t<script type=\"text/javascript\">\n"
+          "\t\t\t\t\t\tnew Tooltip('field%d.ticket_property', 'description%d.ticket_property');\n"
+          "\t\t\t\t\t</script>\n", et->id, et->id);
         o("\t\t\t\t</td>\n"
           "\t\t\t</tr>\n"
           "\t\t\t<tr>\n"
@@ -380,12 +393,16 @@ void items_action()
           "\t\t\t\t\t<input id=\"field%d.reply_property\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.reply_property\" ", et->id, et->id);
         o(                  "value=\"1\" %s %s />\n", et->reply_property == 1 ? "checked=\"checked\"" : "", et->id <= BASIC_ELEMENT_MAX ? "disabled=\"disabled\"" : "");
         o("\t\t\t\t\t<label for=\"field%d.reply_property\">%s</label>\n", et->id, _("this column will be reply only."));
-        o("\t\t\t\t\t<div class=\"description\">\n"
+        o("\t\t\t\t\t<div class=\"description tooltip\" id=\"description%d.reply_property\">\n"
           "\t\t\t\t\t\t%s\n"
           "\t\t\t\t\t\t%s\n"
           "\t\t\t\t\t</div>\n",
+          et->id,
           _("[reply only description1]"),
           _("[reply only description2]"));
+        o("\t\t\t\t\t<script type=\"text/javascript\">\n"
+          "\t\t\t\t\t\tnew Tooltip('field%d.reply_property', 'description%d.reply_property');\n"
+          "\t\t\t\t\t</script>\n", et->id, et->id);
         o("\t\t\t\t</td>\n"
           "\t\t\t</tr>\n"
           "\t\t\t<tr>\n"
@@ -480,20 +497,26 @@ void items_action()
                   et->id, et->id);
                 o(                  "value=\"1\" %s />\n", et->auto_add_item == 1 ? "checked=\"checked\"" : "");
                 o("\t\t\t\t\t<label for=\"field%d.auto_add_item\">%s</label>\n", et->id, _("when register, you can input new selection element."));
-                o("\t\t\t\t\t<div class=\"description\">%s</div>\n"
-                  "\t\t\t\t</td>\n"
-                  "\t\t\t</tr>\n", _("[add line description]"));
+                o("\t\t\t\t\t<div class=\"description tooltip\" id=\"description%d.auto_add_item\">%s</div>\n", et->id, _("[add line description]"));
+                o("\t\t\t\t\t<script type=\"text/javascript\">\n"
+                  "\t\t\t\t\t\tnew Tooltip('field%d.auto_add_item', 'description%d.auto_add_item');\n"
+                  "\t\t\t\t\t</script>\n", et->id, et->id);
+                o("\t\t\t\t</td>\n"
+                  "\t\t\t</tr>\n");
                 break;
         }
         o("\t\t\t<tr>\n"
           "\t\t\t\t<th>%s</th>\n"
           "\t\t\t\t<td>\n", _("default value"));
         if (et->type == ELEM_TYPE_TEXTAREA) {
-            o("\t\t\t\t\t<textarea name=\"field%d.default_value\" rows=\"2\" cols=\"10\" >", et->id);hs(et->default_value);o("</textarea>\n");
+            o("\t\t\t\t\t<textarea id=\"field%d.default_value\" name=\"field%d.default_value\" rows=\"2\" cols=\"10\" >", et->id, et->id);hs(et->default_value);o("</textarea>\n");
         } else {
-            o("\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field%d.default_value\" value=\"%s\" maxlength=\"1000\" />\n", et->id, string_rawstr(et->default_value));
+            o("\t\t\t\t\t<input class=\"text\" type=\"text\" id=\"field%d.default_value\" name=\"field%d.default_value\" value=\"%s\" maxlength=\"1000\" />\n", et->id, et->id, string_rawstr(et->default_value));
         }
-        o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("this is default value."));
+        o("\t\t\t\t\t<div class=\"description tooltip\" id=\"description%d.default_value\">%s</div>\n", et->id, _("this is default value."));
+        o("\t\t\t\t\t<script type=\"text/javascript\">\n"
+          "\t\t\t\t\t\tnew Tooltip('field%d.default_value', 'description%d.default_value');\n"
+          "\t\t\t\t\t</script>\n", et->id, et->id);
         o("\t\t\t\t</td>\n"
           "\t\t\t</tr>\n"
           "\t\t\t<tr>\n");
@@ -502,17 +525,23 @@ void items_action()
           "\t\t\t\t\t<input id=\"field%d.display_in_list\" class=\"checkbox\" type=\"checkbox\" name=\"field%d.display_in_list\" ", et->id, et->id);
         o(                  "value=\"1\" %s maxlength=\"1000\" />\n", et->display_in_list == 1 ? "checked=\"checked\"" : "");
         o("\t\t\t\t\t<label for=\"field%d.display_in_list\">%s</label>\n", et->id, _("display this column in ticket list."));
-        o("\t\t\t\t\t<div class=\"description\">%s</div>\n", _("[display in ticket list description]"));
+        o("\t\t\t\t\t<div class=\"description tooltip\" id=\"description%d.display_in_list\">%s</div>\n", et->id, _("[display in ticket list description]"));
+        o("\t\t\t\t\t<script type=\"text/javascript\">\n"
+          "\t\t\t\t\t\tnew Tooltip('field%d.display_in_list', 'description%d.display_in_list');\n"
+          "\t\t\t\t\t</script>\n", et->id, et->id);
         o("\t\t\t\t</td>\n"
           "\t\t\t</tr>\n"
           "\t\t\t<tr>\n"
           "\t\t\t\t<th>%s</th>\n", _("sort"));
         o("\t\t\t\t<td>\n"
-          "\t\t\t\t\t<input class=\"number\" type=\"text\" name=\"field%d.sort\" value=\"%d\" maxlength=\"5\" />\n", et->id, et->sort);
-        o("\t\t\t\t\t<div class=\"description\">%s</div>\n"
-          "\t\t\t\t</td>\n"
+          "\t\t\t\t\t<input class=\"number\" type=\"text\" id=\"field%d.sort\" name=\"field%d.sort\" value=\"%d\" maxlength=\"5\" />\n", et->id, et->id, et->sort);
+        o("\t\t\t\t\t<div class=\"description tooltip\" id=\"description%d.sort\">%s</div>\n", et->id, _("sort no in ticket lists."));
+        o("\t\t\t\t\t<script type=\"text/javascript\">\n"
+          "\t\t\t\t\t\tnew Tooltip('field%d.sort', 'description%d.sort');\n"
+          "\t\t\t\t\t</script>\n", et->id, et->id);
+        o("\t\t\t\t</td>\n"
           "\t\t\t</tr>\n"
-          "\t\t</table>\n", _("sort no in ticket lists."));
+          "\t\t</table>\n");
         o("\t\t<table style=\"display:none\">\n"
           "\t\t\t<tbody id=\"row_template\">\n"
           "\t\t\t<tr>\n"
