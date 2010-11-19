@@ -125,6 +125,7 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
     o(      "\t<link rel=\"shortcut icon\" type=\"image/x-ico\" href=\"%s/../favicon.ico\" />\n", cgiScriptName);
     if (script_name) {
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/prototype.js\"></script>\n", cgiScriptName);
+        o(  "\t<script type=\"text/javascript\" src=\"%s/../js/tooltip.js\"></script>\n", cgiScriptName);
         o(  "\t<script type=\"text/javascript\" src=\"%s/top/top_gettext_js\"></script>\n", cgiScriptName);
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/%s\"></script>\n", cgiScriptName, script_name);
     }
@@ -795,32 +796,46 @@ void search_action()
     o("<tr>\n"
       "\t<th>%s</th>\n"
       "\t<td>\n"
-      "\t\t<input type=\"text\" class=\"conditionelement\" name=\"q\" value=\"", _("keyword search")); v(q); o("\" maxlength=\"%d\" />\n", DEFAULT_LENGTH - 1);
-    o("\t\t<div class=\"description\">%s</div>\n"
-      "\t</td>\n"
+      "\t\t<input type=\"text\" class=\"conditionelement\" id=\"q\" name=\"q\" value=\"", _("keyword search")); v(q); o("\" maxlength=\"%d\" />\n", DEFAULT_LENGTH - 1);
+    o("\t\t<div class=\"description tooltip\" id=\"description.q\">%s</div>\n", _("search for all columns includes history."));
+    o("\t\t\t\t\t<script type=\"text/javascript\">\n"
+      "\t\t\t\t\t\tnew Tooltip('q', 'description.q');\n"
+      "\t\t\t\t\t</script>\n");
+    o("\t</td>\n"
       "\t<th>%s</th>\n"
       "\t<td>\n"
       "\t\t<span>\n"
-      "\t\t<input type=\"text\" class=\"calendar\" name=\"registerdate.from\" value=\"", _("search for all columns includes history."), _("register date")); v(get_condition_value(conditions_a, ELEM_ID_REGISTERDATE, CONDITION_TYPE_DATE_FROM)); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
+      "\t\t<input type=\"text\" class=\"calendar\" id=\"registerdate.from\" name=\"registerdate.from\" value=\"", _("register date")); v(get_condition_value(conditions_a, ELEM_ID_REGISTERDATE, CONDITION_TYPE_DATE_FROM)); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
     o("\t\t</span>\n"
       "〜\n"
       "\t\t<span>\n"
-      "\t\t<input type=\"text\" class=\"calendar\" name=\"registerdate.to\" value=\""); v(get_condition_value(conditions_a, ELEM_ID_REGISTERDATE, CONDITION_TYPE_DATE_TO)); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
+      "\t\t<input type=\"text\" class=\"calendar\" id=\"registerdate.to\" name=\"registerdate.to\" value=\""); v(get_condition_value(conditions_a, ELEM_ID_REGISTERDATE, CONDITION_TYPE_DATE_TO)); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
     o("\t\t</span>\n"
-      "\t\t<div class=\"description\">%s</div>\n"
-      "\t</td>\n"
+      "\t\t<div class=\"description tooltip\" id=\"description.registerdate\">%s</div>\n", _("input format: yyyy-mm-dd"));
+    o("\t\t\t\t\t<script type=\"text/javascript\">\n"
+      "\t\t\t\t\t\tnew Tooltip('registerdate.from', 'description.registerdate');\n"
+      "\t\t\t\t\t\tnew Tooltip('registerdate.to', 'description.registerdate');\n"
+      "\t\t\t\t\t</script>\n");
+    o("\t</td>\n"
       "\t<th>%s</th>\n"
       "\t<td>\n"
       "\t\t<span>\n"
-      "\t\t<input type=\"text\" class=\"calendar\" name=\"lastregisterdate.from\" value=\"", _("input format: yyyy-mm-dd"), _("update date")); v(get_condition_value(conditions_a, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_FROM)); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
+      "\t\t<input type=\"text\" class=\"calendar\" id=\"lastregisterdate.from\" name=\"lastregisterdate.from\" value=\"", _("update date")); v(get_condition_value(conditions_a, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_FROM)); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
     o("\t\t</span>\n"
       "〜\n"
       "\t\t<span>\n"
-      "\t\t<input type=\"text\" class=\"calendar\" name=\"lastregisterdate.to\" value=\""); v(get_condition_value(conditions_a, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_TO)); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
+      "\t\t<input type=\"text\" class=\"calendar\" id=\"lastregisterdate.to\"  name=\"lastregisterdate.to\" value=\""); v(get_condition_value(conditions_a, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DATE_TO)); o("\" maxlength=\"%d\" />\n", DATE_LENGTH - 1);
     o("\t\t</span>\n"
-      "\t\t<div class=\"description\">%s</div>\n", _("input format: yyyy-mm-dd"));
-    o("\t\t%s<input type=\"text\" class=\"number\" name=\"lastregisterdate.days\" value=\"", _("after(lastupdate)")); v(get_condition_value(conditions_a, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DAYS)); o("\" maxlength=\"3\" />%s\n", _("days before"));
-    o("\t\t<div class=\"description\">%s</div>\n", _("last updated in days."));
+      "\t\t<div class=\"description tooltip\" id=\"description.lastregisterdate\">%s</div>\n", _("input format: yyyy-mm-dd"));
+    o("\t\t\t\t\t<script type=\"text/javascript\">\n"
+      "\t\t\t\t\t\tnew Tooltip('lastregisterdate.from', 'description.lastregisterdate');\n"
+      "\t\t\t\t\t\tnew Tooltip('lastregisterdate.to', 'description.lastregisterdate');\n"
+      "\t\t\t\t\t</script>\n");
+    o("\t\t%s<input type=\"text\" class=\"number\" id=\"lastregisterdate.days\" name=\"lastregisterdate.days\" value=\"", _("after(lastupdate)")); v(get_condition_value(conditions_a, ELEM_ID_LASTREGISTERDATE, CONDITION_TYPE_DAYS)); o("\" maxlength=\"3\" />%s\n", _("days before"));
+    o("\t\t<div class=\"description tooltip\" id=\"description.lastregisterdate.days\">%s</div>\n", _("last updated in days."));
+    o("\t\t\t\t\t<script type=\"text/javascript\">\n"
+      "\t\t\t\t\t\tnew Tooltip('lastregisterdate.days', 'description.lastregisterdate.days');\n"
+      "\t\t\t\t\t</script>\n");
     o("\t</td>\n"
       "</tr>\n");
     col_index = 1;
