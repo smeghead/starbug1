@@ -456,9 +456,9 @@ void items_action()
                   "\t\t\t\t\t\t</tr>\n", _("selection element"), _("element name"), _("means closed"), _("sort"), _("delete"));
                 foreach (it, items_a) {
                     ListItem* item = it->element;
-                    o("\t\t\t\t\t\t<tr>\n"
+                    o("\t\t\t\t\t\t<tr id=\"row%d.list_item%d\">\n"
                       "\t\t\t\t\t\t\t<td>\n"
-                      "\t\t\t\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field%d.list_item%d.name\" ", et->id, item->id);
+                      "\t\t\t\t\t\t\t\t<input class=\"text\" type=\"text\" name=\"field%d.list_item%d.name\" ", et->id, item->id, et->id, item->id);
                     o(                       "value=\"");hs(item->name);o("\" maxlength=\"1000\" />\n"
                       "\t\t\t\t\t\t\t</td>\n"
                       "\t\t\t\t\t\t\t<td class=\"center\">\n"
@@ -468,7 +468,7 @@ void items_action()
                       "\t\t\t\t\t\t\t\t<input class=\"number\" type=\"text\" name=\"field%d.list_item%d.sort\" value=\"%d\" maxlength=\"1000\" />\n", et->id, item->id, item->sort);
                     o("\t\t\t\t\t\t\t</td>\n"
                       "\t\t\t\t\t\t\t<td class=\"center\">\n"
-                      "\t\t\t\t\t\t\t\t<input class=\"checkbox\" type=\"checkbox\" name=\"field%d.list_item%d.delete\" value=\"1\" />\n", et->id, item->id);
+                      "\t\t\t\t\t\t\t\t<input class=\"checkbox item-delete-checkbox\" type=\"checkbox\" id=\"field%d.list_item%d.delete\" name=\"field%d.list_item%d.delete\" value=\"1\" />\n", et->id, item->id, et->id, item->id);
                     o("\t\t\t\t\t\t\t</td>\n"
                       "\t\t\t\t\t\t</tr>\n");
                 }

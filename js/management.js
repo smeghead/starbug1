@@ -33,5 +33,17 @@ function initPage(e) {
             new Insertion.After(row, row_template);
         });
     });
+    var checkboxes = $$('input.item-delete-checkbox');
+    checkboxes.each(function(c){
+        Event.observe(c, 'click', function(e) {
+            var element = Event.element(e);
+            var rowId = element.id.replace(/field/, 'row').replace(/\.delete.*/, '');
+            if (element.checked) {
+                $(rowId).addClassName('deleted');
+            } else {
+                $(rowId).removeClassName('deleted');
+            }
+        });
+    });
 }
 //  vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8:

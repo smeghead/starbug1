@@ -287,6 +287,12 @@ table.list_item, table.list_item td, table.list_item th {
   margin: 0px;
   border: none;
 }
+table.list_item tr.deleted {
+    background-color: #ccc;
+}
+table.list_item td {
+  border-bottom: 1px dashed gray;
+}
 .list_item input.text {
   width: 150px;
 }

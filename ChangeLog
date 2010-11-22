@@ -1,3 +1,8 @@
+2010-11-22  smeghead <smeghead7@gmail.com>
+
+	* When checked list item delete checkbox in items setting page, deleted
+	row make gray. this makes better clear if deleted or not.
+
 2010-11-19  smeghead <smeghead7@gmail.com>
 
 	* simplified search ticket page. some descriptions display at tooltip window, in search ticket page.
