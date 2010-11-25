@@ -199,7 +199,7 @@ int get_link_syntax_len(char* data, size_t len, char* link)
 
     /* 解析対象の文字列を特定 */
     string[MIN(block_p - string, line_p - string)] = '\0';
-    if (strstr(string, "http://") == NULL && strstr(string, "https://") == NULL) {
+    if (strstr(string, "http://") != string && strstr(string, "https://") != string) {
         /* http://かhttps://で始まっていない場合は、linkではない。 */
         return 0;
     }
