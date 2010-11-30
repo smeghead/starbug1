@@ -1,3 +1,7 @@
+2010-11-30  smeghead <smeghead7@gmail.com>
+
+	* fixed a bug that "make webapp" target fail.
+
 2010-11-25  smeghead <smeghead7@gmail.com>
 
 	* fixed simple wiki's auto link bug.
