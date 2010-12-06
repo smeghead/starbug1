@@ -34,6 +34,10 @@ function check_input_value(fields) {
             var empty = (value.constructor != Array)
                 ? value.empty()
                 : (value.all(function(x){return x.empty();}) && new_item && $F(new_item).empty());
+            if (empty && new_item) {
+                /* if new items is appointed, it will be ok. */
+                empty = $F(new_item).empty();
+            }
             var message = $(f.id + '.required');
             if (empty) {
                 message.innerHTML = _("it will reuqired. please describe.");

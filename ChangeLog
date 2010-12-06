@@ -1,3 +1,10 @@
+2010-12-06  smeghead <smeghead7@gmail.com>
+
+	* fixed a bug that required single selection item with additional new
+	element's validation. in additional element, although value was inputed, the fields
+	still display "required" message.
+	if additinoal element field was filled, It will not be required yet.
+
 2010-12-02  smeghead <smeghead7@gmail.com>
 
 	* prepare release.
