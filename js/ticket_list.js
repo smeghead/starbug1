@@ -9,10 +9,13 @@ function initPage(e) {
             Event.observe(icon, 'click', function(e){
                 var divwin = $('divwin');
                 var id = elm.href.match(/(\d+)$/)[1];
-                divwin.innerHTML = '#' + id + ' ' + elm.innerHTML + '<br>' + elm.href;
+                var divwintext = $('divwintext');
+                divwintext.innerHTML = '#' + id + ' ' + elm.innerHTML + '\n' + elm.href;
                 divwin.style.top = Event.pointerY(e) + 'px';
                 divwin.style.left = Event.pointerX(e) + 'px';
                 divwin.style.display = 'block';
+                divwintext.focus();
+                divwintext.select();
                 var body = $$('body')[0];
                 window.setTimeout(function(){
                     Event.observe(body, 'click', function close_divwin(e){

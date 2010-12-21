@@ -179,7 +179,7 @@ void output_footer()
             "<div><address><a href=\"http://www.starbug1.com/\">Starbug1</a> version: %s. %s.</address></div>\n"
             "</div>\n"
             "</div>\n"
-            "<div id=\"divwin\"></div>\n"
+            "<div id=\"divwin\"><form><textarea id=\"divwintext\"></textarea></form></div>\n"
             "</body>\n</html>\n", cgiScriptName, VERSION, COPYRIGHT);
 }
 bool is_enabled_project(char* project_name)
