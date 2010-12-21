@@ -10,8 +10,8 @@ function initPage(e) {
                 var divwin = $('divwin');
                 var id = elm.href.match(/(\d+)$/)[1];
                 divwin.innerHTML = '#' + id + ' ' + elm.innerHTML + '<br>' + elm.href;
-                divwin.style.top = Event.pointerX(e) + 'px';
-                divwin.style.left = Event.pointerY(e) + 'px';
+                divwin.style.top = Event.pointerY(e) + 'px';
+                divwin.style.left = Event.pointerX(e) + 'px';
                 divwin.style.display = 'block';
                 var body = $$('body')[0];
                 window.setTimeout(function(){
