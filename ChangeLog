@@ -1,3 +1,11 @@
+2010-12-22  smeghead <smeghead7@gmail.com>
+
+	* help to copy link and title text each tickets in ticket list.
+
+2010-12-08  smeghead <smeghead7@gmail.com>
+
+	* fixed a hook bug double initialize hook object.
+
 2010-12-06  smeghead <smeghead7@gmail.com>
 
 	* fixed a bug that required single selection item with additional new

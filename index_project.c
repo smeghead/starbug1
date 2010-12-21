@@ -123,12 +123,13 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/%s/setting_file/user.css\" />\n", cgiScriptName, g_project_code_4_url);
     o(      "\t<link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS\" href=\"%s/rss\" />\n", string_rawstr(base_url_a));
     o(      "\t<link rel=\"shortcut icon\" type=\"image/x-ico\" href=\"%s/../favicon.ico\" />\n", cgiScriptName);
+    o(      "\t<script type=\"text/javascript\" src=\"%s/../js/prototype.js\"></script>\n", cgiScriptName);
     if (script_name) {
-        o(  "\t<script type=\"text/javascript\" src=\"%s/../js/prototype.js\"></script>\n", cgiScriptName);
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/tooltip.js\"></script>\n", cgiScriptName);
         o(  "\t<script type=\"text/javascript\" src=\"%s/top/top_gettext_js\"></script>\n", cgiScriptName);
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/%s\"></script>\n", cgiScriptName, script_name);
     }
+    o(  "\t<script type=\"text/javascript\" src=\"%s/../js/ticket_list.js\"></script>\n", cgiScriptName);
     string_free(base_url_a);
     o(      "</head>\n"
             "<body>\n"
@@ -178,6 +179,7 @@ void output_footer()
             "<div><address><a href=\"http://www.starbug1.com/\">Starbug1</a> version: %s. %s.</address></div>\n"
             "</div>\n"
             "</div>\n"
+            "<div id=\"divwin\"></div>\n"
             "</body>\n</html>\n", cgiScriptName, VERSION, COPYRIGHT);
 }
 bool is_enabled_project(char* project_name)
@@ -345,7 +347,7 @@ void output_ticket_table_body(Database* db, SearchResult* result, List* element_
             }
             o("\">");
             if (et->id == ELEM_ID_TITLE)
-                o("<a href=\"%s/%s/ticket/%d\">", cgiScriptName, g_project_code_4_url, message->id);
+                o("<a href=\"%s/%s/ticket/%d\" class=\"ticket-link\">", cgiScriptName, g_project_code_4_url, message->id);
             if (et->id == ELEM_ID_SENDER)
                 hmail(get_element_value_by_id(elements_a, ELEM_ID_ORG_SENDER)); /* display first register name. */
             else
@@ -1991,8 +1993,6 @@ int register_or_reply(Database* db, Project* project, Message* ticket, List* ele
     ticket->id = db_register_ticket(db, ticket);
     db_commit(db);
     /* hook */
-    hook = init_hook(HOOK_MODE_REGISTERED);
-    d("init_hook\n");
     hook = exec_hook(hook, project, ticket, ticket->elements, element_types);
     d("exec_hook\n");
     d("finish\n");
@@ -2010,7 +2010,7 @@ void register_submit_action()
     char ticket_id[NUM_LENGTH];
     ModeType mode = get_mode();
     char* complete_message = NULL;
-    HOOK* hook = NULL;
+    HOOK* hook_a = NULL;
     Database* db_a;
     List* elements_a = NULL;
 
@@ -2031,8 +2031,8 @@ void register_submit_action()
         list_alloc(elements_a, Element, element_new, element_free);
         elements_a = db_get_last_elements(db_a, ticket_a->id, elements_a);
     }
-    hook = init_hook(HOOK_MODE_REGISTERED);
-    if (register_or_reply(db_a, project_a, ticket_a, element_types_a, elements_a, hook) != 0) {
+    hook_a = init_hook(HOOK_MODE_REGISTERED);
+    if (register_or_reply(db_a, project_a, ticket_a, element_types_a, elements_a, hook_a) != 0) {
         goto file_size_error;
     }
     if (mode == MODE_REGISTER)
@@ -2046,8 +2046,8 @@ void register_submit_action()
     db_finish(db_a);
     message_free(ticket_a);
 
-    redirect_with_hook_messages("/list", complete_message, hook->results);
-    if (hook) clean_hook(hook);
+    redirect_with_hook_messages("/list", complete_message, hook_a->results);
+    if (hook_a) clean_hook(hook_a);
     return;
 
 file_size_error:

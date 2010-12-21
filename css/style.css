@@ -41,8 +41,6 @@ h2 {
     font-size: 150%;
     margin: 10px 13px 3px 3px;
     padding: 5px 3px 3px 15px;
-/*     background-image: url("../img/h2.png"); */
-/*     background-repeat: repeat-x; */
     -moz-border-radius: 20px;
     -webkit-border-radius: 20px;
 }
@@ -775,5 +773,21 @@ form.file-hide-button {
 div.tooltip {
     border: 1px solid #FFD700;
     background-color: #FFFF99;
+}
+div.ticket-link-copy {
+    float: right;
+    cursor: pointer;
+    background-image: url("../img/copy.gif"); 
+    background-repeat: no-repeat; 
+    width: 20px;
+}
+div#divwin {
+    display: none;
+    position: absolute;
+    margin: 0px;
+    padding: 10px;
+    width: 600px;
+    border: 1px solid black;
+    background-color: white;
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
