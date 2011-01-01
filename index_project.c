@@ -1619,10 +1619,10 @@ void ticket_action()
     message_ids_a = db_get_message_ids_a(db_a, iid);
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
-    o("<h2 id=\"subject\">"); h(string_rawstr(project_a->name)); o(" - ");
+    o("<h2 id=\"subject\">"); h(string_rawstr(project_a->name)); o(" - <span id=\"ticket_title\">");
     h(string_rawstr(title_a));
     string_free(title_a);
-    o(" &nbsp;</h2>\n");
+    o("</span>&nbsp;</h2>\n");
     list_alloc(states_a, State, state_new, state_free);
     states_a = db_get_states(db_a, states_a);
     output_states(states_a, true);

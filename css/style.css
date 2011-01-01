@@ -781,6 +781,12 @@ div.ticket-link-copy {
     background-repeat: no-repeat; 
     width: 20px;
 }
+span.ticket-page-ticket-link-copy {
+    cursor: pointer;
+    background-image: url("../img/copy.gif"); 
+    background-repeat: no-repeat; 
+    width: 20px;
+}
 div#divwin {
     display: none;
     position: absolute;
