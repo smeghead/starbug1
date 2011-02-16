@@ -228,6 +228,24 @@ void top_gettext_js_action()
     }
     cgiHeaderContentType("application/x-javascript; charset=utf-8;\n\n");
     o("var _memo = {};\n");
+    o("Event.observe(window, 'load', function(){\n");
+    o("    $$('script').each(function(e){\n");
+    o("        var src = e.src;\n");
+    o("        if (src) {\n");
+    o("            window.setTimeout(function() {\n");
+    o("                new Ajax.Request(src, {method: 'get', onComplete: function(req) {\n");
+    o("                    var text = req.responseText;\n");
+    o("                    var matches = text.match(/_\\(\"([^\"]*)\"\\)/g);\n");
+    o("                    for (var i = 0; i < matches.length; i++) {\n");
+    o("                        var num = i + 1;\n");
+    o("                        _(RegExp['$' + num]);\n");
+    o("                    }\n");
+    o("                }});\n");
+    o("            }, 100);\n");
+    o("        };\n");
+    o("    });\n");
+    o("});\n");
+
     o("function _(key) {");
     o("    try {\n");
     o("        var message = key;\n");
