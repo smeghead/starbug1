@@ -102,6 +102,28 @@ void register_actions()
     REG_ACTION(attachment_file_setting_submit);
 }
 
+void output_preload_message()
+{
+    o(  "\t<script type=\"text/javascript\">\n");
+    o(  "\t\tdocument._PRELOAD_MESSAGES = [];\n");
+    o(  "\t\tdocument._PRELOAD_MESSAGES[0] = 'it is date column. please describe by yyyy-mm-dd format.';\n");
+    o(  "\t\tdocument._PRELOAD_MESSAGES[1] = 'it is number column. please describe number.';\n");
+    o(  "\t\tdocument._PRELOAD_MESSAGES[2] = 'it will added. are you ok?';\n");
+    o(  "\t\tdocument._PRELOAD_MESSAGES[3] = 'it will analyzed. are you ok?';\n");
+    o(  "\t\tdocument._PRELOAD_MESSAGES[4] = 'it will deleted. are you ok?';\n");
+    o(  "\t\tdocument._PRELOAD_MESSAGES[5] = 'it will registered. are you ok?';\n");
+    o(  "\t\tdocument._PRELOAD_MESSAGES[6] = 'it will replied. are you ok?';\n");
+    o(  "\t\tdocument._PRELOAD_MESSAGES[7] = 'it will reuqired. please describe.';\n");
+    o(  "\t\tdocument._PRELOAD_MESSAGES[8] = 'it will updated. are you ok?';\n");
+    o(  "\t\tdocument._PRELOAD_MESSAGES[9] = 'month';\n");
+    o(  "\t\tdocument._PRELOAD_MESSAGES[10] = 'sun,mon,tue,wed,thu,fri,sat';\n");
+    o(  "\t\tdocument._PRELOAD_MESSAGES[11] = 'the error occurred.';\n");
+    o(  "\t\tdocument._PRELOAD_MESSAGES[12] = 'there are some required columns or invalid columns. please check.';\n");
+    o(  "\t\tdocument._PRELOAD_MESSAGES[13] = 'there are some required columns. please check.';\n");
+    o(  "\t\tdocument._PRELOAD_MESSAGES[14] = 'you not modify status, are you ok?';\n");
+    o(  "\t</script>\n");
+}
+
 void output_header(Project* project, char* title, char* script_name, const NaviType navi)
 {
     String* top_project_name_a = string_new();
@@ -128,6 +150,7 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/tooltip.js\"></script>\n", cgiScriptName);
         o(  "\t<script type=\"text/javascript\" src=\"%s/top/top_gettext_js\"></script>\n", cgiScriptName);
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/%s\"></script>\n", cgiScriptName, script_name);
+        output_preload_message();
     }
     o(  "\t<script type=\"text/javascript\" src=\"%s/../js/ticket_list.js\"></script>\n", cgiScriptName);
     string_free(base_url_a);

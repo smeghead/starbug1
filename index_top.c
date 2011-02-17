@@ -230,20 +230,14 @@ void top_gettext_js_action()
     o("var _memo = {};\n");
     o("Event.observe(window, 'load', function(){\n");
     o("    var n = 1;\n");
-    o("    $$('script').each(function(e){\n");
-    o("        var src = e.src;\n");
-    o("        if (!src) return;\n");
-    o("        window.setTimeout(function() {\n");
-    o("            new Ajax.Request(src, {method: 'get', asynchronous: true, onSuccess: function(req) {\n");
-    o("                var text = req.responseText;\n");
-    o("                var regexp = /_\\(\"([^\"]*)\"\\)/g;\n");
-    o("                var m;\n");
-    o("                while ((m = regexp.exec(text)) !== null) {\n");
-    o("                    var result = _(m[1]);\n");
-    o("                }\n");
-    o("            }});\n");
-    o("        }, 1000 * n++);\n");
-    o("    });\n");
+    o("    if (document._PRELOAD_MESSAGES) {\n");
+    o("        $A(document._PRELOAD_MESSAGES).each(function(elm){\n");
+    o("            if (!elm) return;\n");
+    o("            window.setTimeout(function() {\n");
+    o("                var result = _(elm);\n");
+    o("            }, 500 * n++);\n");
+    o("        });\n");
+    o("    }\n");
     o("});\n");
 
     o("function _(key) {");
