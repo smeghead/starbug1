@@ -222,7 +222,7 @@ void top_gettext_js_action()
     char key[DEFAULT_LENGTH];
     cgiFormString("key", key, DEFAULT_LENGTH);
     if (strlen(key)) {
-        o("Cache-Control: max-age=%d\n", 60 * 60 * 24);
+        o("Cache-Control: max-age=%d, s-maxage=%d\n", 60 * 60 * 24, 60 * 60 * 24);
         cgiHeaderContentType("application/x-javascript; charset=utf-8;\n\n");
         o("%s", _(key));
         return;
