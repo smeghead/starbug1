@@ -222,6 +222,7 @@ void top_gettext_js_action()
     char key[DEFAULT_LENGTH];
     cgiFormString("key", key, DEFAULT_LENGTH);
     if (strlen(key)) {
+        o("Cache-Control: max-age=%d\n", 60 * 60 * 24);
         cgiHeaderContentType("application/x-javascript; charset=utf-8;\n\n");
         o("%s", _(key));
         return;
@@ -245,7 +246,7 @@ void top_gettext_js_action()
     o("        var message = key;\n");
     o("        if (_memo[key]) return _memo[key];\n");
     o("        new Ajax.Request('%s/top/top_gettext_js', {\n", cgiScriptName);
-    o("            method: 'post',\n");
+    o("            method: 'get',\n");
     o("            parameters: {'key': key},\n");
     o("            asynchronous: false,\n");
     o("            onComplete: function (http) {\n");
