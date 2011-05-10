@@ -805,6 +805,9 @@ void set_locale(char* locale)
         putenv(envstr);
     }
 #endif
+    d("setlocale: %s\n", setlocale(LC_ALL, locale_utf8));
+    d("bindtextdomain: %s\n", bindtextdomain("starbug1", "locale"));
+    d("textdomain: %s\n", textdomain("starbug1"));
 #ifdef _WIN32
     bind_textdomain_codeset("starbug1", "utf-8");
 #endif

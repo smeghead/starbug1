@@ -2,154 +2,155 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2010-11-12 14:00+0900\n"
+"POT-Creation-Date: 2011-05-10 16:35+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: smeghead <smeghead@users.sourceforge.jp>\n"
 "Language-Team: smeghead <smeghead@users.sourceforge.jp>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: admin_project.c:79 admin_project.c:163 admin_project.c:199
-#: admin_project.c:300 admin_project.c:693 admin_project.c:913
-#: admin_project.c:962 admin_project.c:1057
+#: admin_project.c:79 admin_project.c:164 admin_project.c:200
+#: admin_project.c:301 admin_project.c:719 admin_project.c:939
+#: admin_project.c:988 admin_project.c:1083
 msgid "management tool"
 msgstr "管理工具"
 
-#: admin_project.c:94 admin_project.c:104 index_project.c:138
-#: index_project.c:147
+#: admin_project.c:95 admin_project.c:105 index_project.c:163
+#: index_project.c:172
 msgid "display sub projects list at top page."
 msgstr "顯示首頁的子工程一覽"
 
-#: admin_project.c:105 index_project.c:147
+#: admin_project.c:106 index_project.c:172
 msgid "top page(sub projects list)"
 msgstr "首頁(子工程一覽)"
 
-#: admin_project.c:110 admin_project.c:166
+#: admin_project.c:111 admin_project.c:167
 msgid "management tool menu"
 msgstr "管理工具菜單"
 
-#: admin_project.c:111 admin_project.c:169 admin_project.c:197
-#: admin_project.c:202 admin_project.c:1055
+#: admin_project.c:112 admin_project.c:170 admin_project.c:198
+#: admin_project.c:203 admin_project.c:1081
 msgid "sub project settings"
 msgstr "子工程設置"
 
-#: admin_project.c:112 admin_project.c:170 admin_project.c:298
-#: admin_project.c:308
+#: admin_project.c:113 admin_project.c:171 admin_project.c:299
+#: admin_project.c:309
 msgid "columns settings"
 msgstr "項目設置"
 
-#: admin_project.c:113 admin_project.c:171 admin_project.c:961
+#: admin_project.c:114 admin_project.c:172 admin_project.c:987
 msgid "style settings"
 msgstr "樣式設置"
 
-#: admin_project.c:114 admin_project.c:172 admin_project.c:1060
+#: admin_project.c:115 admin_project.c:173 admin_project.c:1086
 msgid "export settings"
 msgstr "輸入設置"
 
-#: admin_project.c:115 index_project.c:159 index_project.c:2690
+#: admin_project.c:116 index_project.c:184 index_project.c:2726
 msgid "help"
 msgstr "幫助"
 
-#: admin_project.c:116
+#: admin_project.c:117
 msgid "to"
 msgstr " "
 
-#: admin_project.c:116
+#: admin_project.c:117
 msgid "to(suffix)"
 msgstr " "
 
-#: admin_project.c:157
+#: admin_project.c:158
 msgid "menu"
 msgstr "菜單"
 
-#: admin_project.c:169
+#: admin_project.c:170
 msgid "this is basic sub projects settings."
 msgstr "工程的基本信息的設置。"
 
-#: admin_project.c:170
+#: admin_project.c:171
 msgid "this is columns settings of tickets."
 msgstr "任務單項目的設置。"
 
-#: admin_project.c:171
+#: admin_project.c:172
 msgid "this is stylesheet settings."
 msgstr "樣式表的設置。"
 
-#: admin_project.c:172
+#: admin_project.c:173
 msgid "this is export settings."
 msgstr "輸入的設置。"
 
-#: admin_project.c:175
+#: admin_project.c:176
 msgid "about mail notify features"
 msgstr "關于郵件發送功能"
 
-#: admin_project.c:177
+#: admin_project.c:178
 msgid "[mail notify messages]"
 msgstr ""
 "投稿時、回複時的郵件發送可以通過hook功能來實現。hook功能需要在服務器上進行設"
 "置。有關hook功能的設置，請看以下網站的安裝頁面。"
 
-#: admin_project.c:205 admin_top.c:159
+#: admin_project.c:206 admin_top.c:159
 msgid "sub project name"
 msgstr "子工程名"
 
-#: admin_project.c:209
+#: admin_project.c:210
 msgid "icon"
 msgstr "圖片(在頁面最上方顯示的圖片)"
 
-#: admin_project.c:213
+#: admin_project.c:214
 msgid "file upload max size(kb)"
 msgstr "文件上傳的最大尺寸(Kb)"
 
-#: admin_project.c:217 admin_project.c:322 admin_project.c:539
-#: admin_project.c:979 admin_top.c:145 admin_top.c:192 index_project.c:2722
-#: index_top.c:167
+#: admin_project.c:218 admin_project.c:323 admin_project.c:568
+#: admin_project.c:1005 admin_top.c:145 admin_top.c:188 index_project.c:2758
+#: index_top.c:166
 msgid "update"
 msgstr "更新"
 
-#: admin_project.c:284 admin_project.c:560 admin_project.c:1030
-#: admin_project.c:1088 admin_top.c:263 admin_top.c:342
+#: admin_project.c:285 admin_project.c:589 admin_project.c:1056
+#: admin_project.c:1114 admin_top.c:259 admin_top.c:338
 msgid "updated."
 msgstr "已更新"
 
-#: admin_project.c:309
+#: admin_project.c:310
 msgid "[columns setting description]"
 msgstr ""
 "任務單ID、投稿日期和時間不能編輯。作爲基本屬性，主題、投稿者和狀態能編輯的內"
 "容是有限制的。(基本屬性的限制爲不可刪除，並且不可以修改任務單屬性和回複專用屬"
 "性。)"
 
-#: admin_project.c:311 admin_project.c:691 admin_project.c:700
+#: admin_project.c:312 admin_project.c:717 admin_project.c:726
 msgid "add new column"
 msgstr "添加新項目"
 
-#: admin_project.c:336 admin_project.c:704
+#: admin_project.c:337 admin_project.c:730
 msgid "column name"
 msgstr "項目名"
 
-#: admin_project.c:336 index_project.c:1531 index_project.c:1827
+#: admin_project.c:337 index_project.c:1571 index_project.c:1867
 msgid "*"
 msgstr "※"
 
-#: admin_project.c:339 admin_project.c:707
+#: admin_project.c:340 admin_project.c:733
 msgid "this is name of ticket column."
 msgstr "項目名稱。"
 
-#: admin_project.c:345 admin_project.c:712
+#: admin_project.c:349 admin_project.c:738
 msgid "column description"
 msgstr "項目的說明文"
 
-#: admin_project.c:352 admin_project.c:715
+#: admin_project.c:351 admin_project.c:741
 msgid ""
 "this is description of ticket column. when register or replay, it is "
 "displayed."
 msgstr "這是項目的說明文。投稿時顯示。"
 
-#: admin_project.c:352
+#: admin_project.c:359
 msgid "required"
 msgstr "必須項目"
 
-#: admin_project.c:355
+#: admin_project.c:362
 msgid "this column must not be empty."
 msgstr "作爲必須項目。"
 
@@ -157,230 +158,230 @@ msgstr "作爲必須項目。"
 msgid "[require description]"
 msgstr "是否作爲必填屬性。只不過、檢查只在JavaScript中執行。"
 
-#: admin_project.c:364 admin_project.c:719
+#: admin_project.c:373 admin_project.c:745
 msgid "attribute of ticket"
 msgstr "任務單屬性"
 
-#: admin_project.c:366 admin_project.c:723
+#: admin_project.c:375 admin_project.c:749
 msgid "this column will be attribute of ticket."
 msgstr "作爲任務單屬性"
 
-#: admin_project.c:372 admin_project.c:725
+#: admin_project.c:382 admin_project.c:751
 msgid "[attribute of ticket description1]"
 msgstr "是否不作爲回複的屬性，而是作爲任務單本身的屬性來定義。"
 
-#: admin_project.c:373 admin_project.c:726
+#: admin_project.c:383 admin_project.c:752
 msgid "[attribute of ticket description2]"
 msgstr ""
 "當回複重寫了指定了任務單屬性的項目時、重寫的內容會在任務單的最新信息中顯示。"
 
-#: admin_project.c:374 admin_project.c:727
+#: admin_project.c:384 admin_project.c:753
 msgid "[attribute of ticket description3]"
 msgstr ""
 "沒有指定爲任務單屬性的項目，不會在任務單最新信息中顯示。沒有指定爲任務單屬性"
 "的項目可以從任務單履曆中參照。"
 
-#: admin_project.c:378 admin_project.c:732
+#: admin_project.c:391 admin_project.c:758
 msgid "reply only"
 msgstr "回複專用屬性"
 
-#: admin_project.c:382 admin_project.c:736
+#: admin_project.c:395 admin_project.c:762
 msgid "this column will be reply only."
 msgstr "作爲回複專用屬性"
 
-#: admin_project.c:387 admin_project.c:738
+#: admin_project.c:401 admin_project.c:764
 msgid "[reply only description1]"
 msgstr ""
 "是否不作爲新建任務單時的輸入項，如果選中該選項，則不作爲新建任務單時的輸入"
 "項。"
 
-#: admin_project.c:388 admin_project.c:739
+#: admin_project.c:402 admin_project.c:765
 msgid "[reply only description2]"
 msgstr "作爲回複時的輸入項。回複專用屬性，可以減少新建任務單時的無用輸入。"
 
-#: admin_project.c:392 admin_project.c:744
+#: admin_project.c:409 admin_project.c:770
 msgid "column type"
 msgstr "項目種類"
 
-#: admin_project.c:397 admin_project.c:748
+#: admin_project.c:414 admin_project.c:774
 msgid "one line text(input[type=text])"
 msgstr "單行文本框(input[type=text])"
 
-#: admin_project.c:400 admin_project.c:752
+#: admin_project.c:417 admin_project.c:778
 msgid "multi line text(textarea)"
 msgstr "多行文本框(textarea)"
 
-#: admin_project.c:403 admin_project.c:779
+#: admin_project.c:420 admin_project.c:805
 msgid "number(input[type=text])"
 msgstr "數字(input[type=text])"
 
-#: admin_project.c:406 admin_project.c:756
+#: admin_project.c:423 admin_project.c:782
 msgid "boolean(input[type=checkbox])"
 msgstr "複選框(input[type=checkbox])"
 
-#: admin_project.c:409 admin_project.c:760
+#: admin_project.c:426 admin_project.c:786
 msgid "selection list(select)"
 msgstr "下拉框(select)"
 
-#: admin_project.c:412 admin_project.c:764
+#: admin_project.c:429 admin_project.c:790
 msgid "selection list(input[type=radio])"
 msgstr "單選框(input[type=radio])"
 
-#: admin_project.c:415 admin_project.c:768
+#: admin_project.c:432 admin_project.c:794
 msgid "multi selection list(select[multiple=multiple])"
 msgstr "可複選下拉框(select[multiple=multiple])"
 
-#: admin_project.c:418 admin_project.c:772
+#: admin_project.c:435 admin_project.c:798
 msgid "file(input[type=file])"
 msgstr "文件(input[type=file])"
 
-#: admin_project.c:421 admin_project.c:776
+#: admin_project.c:438 admin_project.c:802
 msgid "date(input[type=text])"
 msgstr "日期(input[type=text])"
 
-#: admin_project.c:439 admin_project.c:784
+#: admin_project.c:456 admin_project.c:810
 msgid "selection element"
 msgstr "選擇要素"
 
-#: admin_project.c:439 admin_project.c:788
+#: admin_project.c:456 admin_project.c:814
 msgid "element name"
 msgstr "可選項名"
 
-#: admin_project.c:439 admin_project.c:789
+#: admin_project.c:456 admin_project.c:815
 msgid "means closed"
 msgstr "表示已關閉（不在“按狀態分類的任務單一覽”中顯示）"
 
-#: admin_project.c:439 admin_project.c:509 admin_project.c:790
-#: admin_project.c:822 admin_top.c:159 admin_top.c:203
+#: admin_project.c:456 admin_project.c:535 admin_project.c:816
+#: admin_project.c:848 admin_top.c:159 admin_top.c:199
 msgid "sort"
 msgstr "排列順序"
 
-#: admin_project.c:439 admin_project.c:926 admin_top.c:159
-#: index_project.c:2899
+#: admin_project.c:456 admin_project.c:952 admin_top.c:159
+#: index_project.c:2930
 msgid "delete"
 msgstr "刪除"
 
-#: admin_project.c:473
+#: admin_project.c:490
 msgid "add line"
 msgstr "行添加"
 
-#: admin_project.c:479 admin_project.c:806
+#: admin_project.c:496 admin_project.c:832
 msgid "selection element when this column is selection list."
 msgstr "項目種類是選擇式時的可選項。"
 
-#: admin_project.c:482 admin_project.c:809
+#: admin_project.c:499 admin_project.c:835
 msgid "when register, you can input new selection element."
 msgstr "投稿時，可以添加自定義項目。"
 
-#: admin_project.c:485 admin_project.c:810
+#: admin_project.c:500 admin_project.c:836
 msgid "[add line description]"
 msgstr "選擇框旁是否同時也提供文本輸入框，輸入內容作爲可選項的值的功能。"
 
-#: admin_project.c:490
+#: admin_project.c:510
 msgid "default value"
 msgstr "默認值"
 
-#: admin_project.c:496
+#: admin_project.c:516
 msgid "this is default value."
 msgstr "投稿頁面、回複頁面的項目的初始值。"
 
-#: admin_project.c:500 admin_project.c:814
+#: admin_project.c:523 admin_project.c:840
 msgid "display in ticket list"
 msgstr "任務單一覽顯示"
 
-#: admin_project.c:504 admin_project.c:818
+#: admin_project.c:527 admin_project.c:844
 msgid "display this column in ticket list."
 msgstr "在任務單一覽中顯示該項目。"
 
-#: admin_project.c:505
+#: admin_project.c:528
 msgid "[display in ticket list description]"
 msgstr "是否在任務單一覽中顯示該項目。"
 
-#: admin_project.c:515 admin_project.c:825
+#: admin_project.c:538 admin_project.c:851
 msgid "sort no in ticket lists."
 msgstr "任務單一覽、投稿頁面、回複頁面的項目的排列順序。"
 
-#: admin_project.c:536 admin_project.c:916
+#: admin_project.c:565 admin_project.c:942
 msgid "delete this column("
 msgstr "這個項目("
 
-#: admin_project.c:536 admin_project.c:916
+#: admin_project.c:565 admin_project.c:942
 msgid ")(delete this column)"
 msgstr ")的刪除"
 
-#: admin_project.c:701
+#: admin_project.c:727
 msgid "[ticket add description]"
 msgstr "在任務單中添加新項目。輸入有關添加項目的信息、並請按添加按鈕。"
 
-#: admin_project.c:780
+#: admin_project.c:806
 msgid "[ticket add column type description]"
 msgstr "項目輸入時的輸入形式。項目種類在添加之後是不能修改的。"
 
-#: admin_project.c:829 admin_top.c:231
+#: admin_project.c:855 admin_top.c:227
 msgid "add"
 msgstr "添加"
 
-#: admin_project.c:894 admin_top.c:387
+#: admin_project.c:920 admin_top.c:383
 msgid "added."
 msgstr "已添加"
 
-#: admin_project.c:910
+#: admin_project.c:936
 msgid "column delete"
 msgstr "項目刪除"
 
-#: admin_project.c:923
+#: admin_project.c:949
 msgid "if column has deleted, it's forever gone."
 msgstr "刪除之後不能複原。"
 
-#: admin_project.c:924
+#: admin_project.c:950
 msgid "this will disappear column of exists ticket."
 msgstr "同時，已登錄的該項目的內容也無法再顯示。"
 
-#: admin_project.c:925
+#: admin_project.c:951
 msgid "if you really want to delete, push delete button."
 msgstr "如果可以刪除，請按刪除按鈕。"
 
-#: admin_project.c:941
+#: admin_project.c:967
 msgid "it is a invalid request."
 msgstr "不正當的請求。"
 
-#: admin_project.c:951
+#: admin_project.c:977
 msgid "deleted."
 msgstr "已刪除"
 
-#: admin_project.c:966
+#: admin_project.c:992
 msgid "edit style sheet"
 msgstr "樣式表的編輯"
 
-#: admin_project.c:966
+#: admin_project.c:992
 msgid "edit style sheet setting and push update button."
 msgstr "對樣式表進行編輯，並請按更新按鈕。"
 
-#: admin_project.c:983
+#: admin_project.c:1009
 msgid "below block is sample setting of ticket list table column."
 msgstr "以下是，一覽的背景設置用的樣例。"
 
-#: admin_project.c:995
+#: admin_project.c:1021
 msgid "background-color settings of "
 msgstr "任務單一覽的"
 
-#: admin_project.c:995
+#: admin_project.c:1021
 msgid ".(background-color settings)"
 msgstr "的背景色設置"
 
-#: admin_project.c:1062
+#: admin_project.c:1088
 msgid "this sub project columns settings are able to exported."
 msgstr ""
 
-#: admin_project.c:1063
+#: admin_project.c:1089
 msgid "when you create sub project, you can select exported sub project types."
 msgstr ""
 
-#: admin_project.c:1067
+#: admin_project.c:1093
 msgid "export sub project type name"
 msgstr "輸出子工程名"
 
-#: admin_project.c:1071 index_project.c:1561 index_project.c:2223
+#: admin_project.c:1097 index_project.c:1601 index_project.c:2259
 msgid "register"
 msgstr "登錄"
 
@@ -388,7 +389,7 @@ msgstr "登錄"
 msgid "project management"
 msgstr "工程管理"
 
-#: admin_top.c:56 index_project.c:2382 index_top.c:58
+#: admin_top.c:56 index_project.c:2418 index_top.c:58
 msgid "project top"
 msgstr "工程首頁"
 
@@ -420,49 +421,49 @@ msgstr "子工程一覽"
 msgid "database path"
 msgstr "數據庫路徑"
 
-#: admin_top.c:159 admin_top.c:203
+#: admin_top.c:159 admin_top.c:199
 msgid "sub project id"
 msgstr "子工程ID"
 
-#: admin_top.c:189
+#: admin_top.c:185
 msgid "[project settings description1]"
 msgstr "子工程名請在各子工程的管理工具中進行設置。"
 
-#: admin_top.c:190
+#: admin_top.c:186
 msgid "[project settings description2]"
 msgstr "一旦修改了既存子工程ID的話，子工程的URL也會變掉，所以請注意。"
 
-#: admin_top.c:191
+#: admin_top.c:187
 msgid "[project settings description3]"
 msgstr ""
 "一旦刪除的話，就不會在首頁的一覽中顯示。數據並不刪除，可以再次通過把刪除複選"
 "框的已選狀態除去，就可以恢複使用了。"
 
-#: admin_top.c:196
+#: admin_top.c:192
 msgid "add sub project"
 msgstr "子工程添加"
 
-#: admin_top.c:203
+#: admin_top.c:199
 msgid "sub project type"
 msgstr "子工程類別"
 
-#: admin_top.c:209
+#: admin_top.c:205
 msgid "default bts"
 msgstr "默認BTS"
 
-#: admin_top.c:230
+#: admin_top.c:226
 msgid "[sub project name description]"
 msgstr "子工程名請在各子工程的管理工具中進行設置。"
 
-#: admin_top.c:314 admin_top.c:361
+#: admin_top.c:310 admin_top.c:357
 msgid "[error] projectid top is reserved."
 msgstr "[ERROR] 工程ID top已經被預約。"
 
-#: admin_top.c:321 admin_top.c:368
+#: admin_top.c:317 admin_top.c:364
 msgid "[error] projectid("
 msgstr "[ERROR] 工程ID"
 
-#: admin_top.c:321 admin_top.c:368
+#: admin_top.c:317 admin_top.c:364
 msgid ") is already exists."
 msgstr "已經存在。"
 
@@ -560,7 +561,7 @@ msgstr "主題"
 msgid "please input title that means content correctly."
 msgstr "請輸入能簡潔表達內容的主題。"
 
-#: dbutil.c:378 index_project.c:1007 index_project.c:2507
+#: dbutil.c:378 index_project.c:1047 index_project.c:2543
 msgid "registerer"
 msgstr "投稿者"
 
@@ -576,7 +577,7 @@ msgstr "狀態"
 msgid "please select status."
 msgstr "請選擇狀態。"
 
-#: dbutil.c:388 dbutil.c:443 index_project.c:506
+#: dbutil.c:388 dbutil.c:443 index_project.c:532
 msgid "new"
 msgstr "新建"
 
@@ -789,485 +790,480 @@ msgstr ""
 "背景色進行設置。\n"
 "那時，在頁面的下方，會顯示任務單一覽的背景設置用的樣例，請用來參考。"
 
-#: hook.c:166
+#: hook.c:164
 #, c-format
 msgid "[error] error occured in hook process(%s). failed to load plugin. %s"
 msgstr "[ERROR] hook處理(%s)發生了錯誤。(讀取插件失敗。%s)"
 
-#: hook.c:180 hook.c:217
+#: hook.c:178 hook.c:215
 #, c-format
 msgid "executed hook process(%s)"
 msgstr "已執行hook處理(%s)。"
 
-#: hook.c:182 hook.c:219
+#: hook.c:180 hook.c:217
 #, c-format
 msgid "[error] error occured in hook process(%s). (return code: %d)"
 msgstr "[ERROR] hook處理(%s)發生了錯誤。(return code: %d)"
 
-#: index_project.c:135
+#: index_project.c:160
 msgid "starbug1"
 msgstr "Starbug1"
 
-#: index_project.c:153
+#: index_project.c:178
 msgid "move to top of sub project."
 msgstr "移動到子工程首頁"
 
-#: index_project.c:153
+#: index_project.c:178
 msgid "subproject top"
 msgstr "子工程首頁"
 
-#: index_project.c:154
+#: index_project.c:179
 msgid "this is ticket list by status."
 msgstr "參照按狀態分類的任務單一覽"
 
-#: index_project.c:154 index_project.c:454 index_project.c:474
-#: index_project.c:483
+#: index_project.c:179 index_project.c:480 index_project.c:500
+#: index_project.c:509
 msgid "ticket list by status"
 msgstr "按狀態分類的任務單一覽"
 
-#: index_project.c:155
+#: index_project.c:180
 msgid "register new ticket"
 msgstr "新建時登錄任務單"
 
-#: index_project.c:155 index_project.c:1491 index_project.c:1493
-#: index_project.c:1502
+#: index_project.c:180 index_project.c:1531 index_project.c:1533
+#: index_project.c:1542
 msgid "register ticket"
 msgstr "任務單登錄"
 
-#: index_project.c:156
+#: index_project.c:181
 msgid "search tickets."
 msgstr "檢索任務單"
 
-#: index_project.c:156 index_project.c:781 index_project.c:783
+#: index_project.c:181 index_project.c:807 index_project.c:809
 msgid "search tickets"
 msgstr "任務單檢索"
 
-#: index_project.c:157 index_project.c:2562
+#: index_project.c:182 index_project.c:2598
 msgid "display statictics."
 msgstr "顯示統計信息"
 
-#: index_project.c:157 index_project.c:2553 index_project.c:2562
+#: index_project.c:182 index_project.c:2589 index_project.c:2598
 msgid "statictics"
 msgstr "統計信息"
 
-#: index_project.c:158 index_project.c:2063 index_project.c:2065
-#: index_project.c:2081
+#: index_project.c:183 index_project.c:2099 index_project.c:2101
+#: index_project.c:2117
 msgid "register tickets at once"
 msgstr "任務單批量登錄"
 
-#: index_project.c:159
+#: index_project.c:184
 msgid "display help."
 msgstr "參照幫助"
 
-#: index_project.c:160
+#: index_project.c:185
 msgid "seveal settings."
 msgstr "進行各種設置"
 
-#: index_project.c:160
+#: index_project.c:185
 msgid "management of sub project"
 msgstr "子工程管理"
 
-#: index_project.c:293 index_project.c:312 index_project.c:804
-#: index_project.c:914 index_project.c:956 index_project.c:1010
-#: index_project.c:2510
+#: index_project.c:319 index_project.c:338 index_project.c:833
+#: index_project.c:954 index_project.c:996 index_project.c:1050
+#: index_project.c:2546
 msgid "register date"
 msgstr "投稿日期和時間"
 
-#: index_project.c:293 index_project.c:313 index_project.c:915
-#: index_project.c:958
+#: index_project.c:319 index_project.c:339 index_project.c:955
+#: index_project.c:998
 msgid "last update date"
 msgstr "最後更新日期和時間"
 
-#: index_project.c:293 index_project.c:314 index_project.c:916
-#: index_project.c:960
+#: index_project.c:319 index_project.c:340 index_project.c:956
+#: index_project.c:1000
 msgid "leaved days"
 msgstr "放置天數"
 
-#: index_project.c:303 index_project.c:307 index_project.c:312
-#: index_project.c:313 index_project.c:314
+#: index_project.c:329 index_project.c:333 index_project.c:338
+#: index_project.c:339 index_project.c:340
 msgid "asc or desc sorting."
 msgstr "按之後會進行升序、降序交替排列。"
 
-#: index_project.c:416
+#: index_project.c:442
 msgid "search by status."
 msgstr "按狀態作爲條件進行檢索。"
 
-#: index_project.c:424 index_project.c:2435
+#: index_project.c:450 index_project.c:2471
 msgid "display the ticket on inputed id."
 msgstr "顯示輸入的ID的任務單。"
 
-#: index_project.c:427 index_project.c:2434 index_project.c:2441
+#: index_project.c:453 index_project.c:2470 index_project.c:2477
 msgid "id search"
 msgstr "指定ID顯示"
 
-#: index_project.c:430 index_project.c:2445
+#: index_project.c:456 index_project.c:2481
 msgid "register new ticket."
 msgstr "新建任務單"
 
-#: index_project.c:483
+#: index_project.c:509
 msgid "display unclosed tickets."
 msgstr "顯示未關閉的任務單。"
 
-#: index_project.c:488
+#: index_project.c:514
 msgid "link to part of this page"
 msgstr "頁面內的鏈接"
 
-#: index_project.c:507
+#: index_project.c:533
 msgid "tickets is desplayed."
 msgstr "只顯示任務單"
 
-#: index_project.c:512 index_project.c:521
+#: index_project.c:538 index_project.c:547
 msgid "display tickets that status is "
 msgstr "狀態爲"
 
-#: index_project.c:512 index_project.c:521
+#: index_project.c:538 index_project.c:547
 msgid ".(display status)"
 msgstr "的任務單全部顯示出來"
 
-#: index_project.c:516
+#: index_project.c:542
 msgid "see more..."
 msgstr "更多..."
 
-#: index_project.c:792
+#: index_project.c:818
 msgid "search condition"
 msgstr "檢索條件"
 
-#: index_project.c:792
+#: index_project.c:818
 msgid "input search conditions and push 'search'."
 msgstr "輸入檢索條件之後請按檢索按鈕。"
 
-#: index_project.c:798
+#: index_project.c:824
 msgid "keyword search"
 msgstr "關鍵字檢索"
 
-#: index_project.c:804
+#: index_project.c:825
 msgid "search for all columns includes history."
 msgstr "在所有項目中進行檢索（包含履曆）。"
 
-#: index_project.c:815 index_project.c:821 index_project.c:1422
+#: index_project.c:839 index_project.c:854 index_project.c:1462
 msgid "input format: yyyy-mm-dd"
 msgstr "請以yyyy-mm-dd的形式輸入。"
 
-#: index_project.c:815
+#: index_project.c:848
 msgid "update date"
 msgstr "更新日期和時間"
 
-#: index_project.c:822
+#: index_project.c:859
 msgid "after(lastupdate)"
 msgstr "放置天數"
 
-#: index_project.c:822
+#: index_project.c:859
 msgid "days before"
 msgstr "天以內"
 
-#: index_project.c:823
+#: index_project.c:860
 msgid "last updated in days."
 msgstr "檢索過去幾天更新過的任務單。"
 
-#: index_project.c:856 index_top.c:129 index_top.c:133
+#: index_project.c:896 index_top.c:129 index_top.c:133
 msgid "search"
 msgstr "檢索"
 
-#: index_project.c:857
+#: index_project.c:897
 msgid "save conditions. (use cookie)"
 msgstr "保存檢索條件。(cookie使用)"
 
-#: index_project.c:863 index_top.c:206
+#: index_project.c:903 index_top.c:205
 msgid "search result"
 msgstr "檢索結果"
 
-#: index_project.c:871
+#: index_project.c:911
 #, c-format
 msgid "%d tickets hits."
 msgstr "檢索到%d件。"
 
-#: index_project.c:882
+#: index_project.c:922
 msgid "[cvs format download description]"
 msgstr "以CSV的形式下載檢索結果。"
 
-#: index_project.c:882
+#: index_project.c:922
 msgid "csv format download"
 msgstr "CSV形式"
 
-#: index_project.c:886
+#: index_project.c:926
 msgid "[html format download description]"
 msgstr "以HTML的形式下載檢索結果。(用excel顯示)"
 
-#: index_project.c:886
+#: index_project.c:926
 msgid "html format download(exel)"
 msgstr "EXCEL形式"
 
-#: index_project.c:890
+#: index_project.c:930
 msgid "[rss format download description]"
 msgstr "以RSS的形式下載檢索結果。能通過RSS讀取器來監視檢索結果。"
 
-#: index_project.c:890
+#: index_project.c:930
 msgid "rss format download"
 msgstr "RSS"
 
-#: index_project.c:1413
+#: index_project.c:1453
 msgid "file size must below"
 msgstr "請使文件的尺寸在"
 
-#: index_project.c:1413
+#: index_project.c:1453
 msgid "kb(file size)"
 msgstr "Kb以下。"
 
-#: index_project.c:1433
+#: index_project.c:1473
 msgid "if you want to add selection item, input new item name."
 msgstr "如果要添加可選項，請在文本框輸入。"
 
-#: index_project.c:1503
+#: index_project.c:1543
 msgid "input below form and push register button."
 msgstr "登錄新建任務單時，請填寫以下表單並按登錄按鈕。"
 
-#: index_project.c:1504 index_project.c:1791 index_project.c:2142
-#: index_project.c:2819
+#: index_project.c:1544 index_project.c:1831 index_project.c:2178
+#: index_project.c:2855
 msgid "note: they are checked by only javascript."
 msgstr "※必須項目的輸入檢查在javascript中執行。"
 
-#: index_project.c:1544 index_project.c:1837 index_project.c:2170
-#: index_project.c:2847
+#: index_project.c:1584 index_project.c:1877 index_project.c:2206
+#: index_project.c:2883
 #, c-format
 msgid "[REMOTE ADDRESS: %s]"
 msgstr "[REMOTE ADDRESS: %s]"
 
-#: index_project.c:1561 index_project.c:1851 index_project.c:2223
-#: index_project.c:2899
+#: index_project.c:1601 index_project.c:1891 index_project.c:2259
+#: index_project.c:2930
 msgid "save registerer.(use cookie)"
 msgstr "保存投稿者。(cookie使用)"
 
-#: index_project.c:1587 index_project.c:1594
+#: index_project.c:1627 index_project.c:1634
 msgid "not exists id."
 msgstr "指定的ID不存在。"
 
-#: index_project.c:1619 index_project.c:2389
+#: index_project.c:1659 index_project.c:2425
 msgid "what's new"
 msgstr "任務單最新信息"
 
-#: index_project.c:1619
+#: index_project.c:1659
 msgid "this is latest updated tickets."
 msgstr "任務單的最新信息。"
 
-#: index_project.c:1660
+#: index_project.c:1700
 msgid "all attachments"
 msgstr "所有附件"
 
-#: index_project.c:1691
+#: index_project.c:1731
 msgid "go to reply"
 msgstr "回複"
 
-#: index_project.c:1691
+#: index_project.c:1731
 msgid "ticket history"
 msgstr "任務單履曆"
 
-#: index_project.c:1691
+#: index_project.c:1731
 msgid "this is ticket histories."
 msgstr "任務單的履曆信息。"
 
-#: index_project.c:1751
+#: index_project.c:1791
 msgid "hide this file"
 msgstr ""
 
-#: index_project.c:1753
+#: index_project.c:1793
 #, fuzzy
 msgid "display this file"
 msgstr "參照幫助"
 
-#: index_project.c:1788
+#: index_project.c:1828
 msgid "reply ticket"
 msgstr "任務單回複"
 
-#: index_project.c:1791
+#: index_project.c:1831
 msgid "input form and push reply."
 msgstr "回複時，請填寫以下表單內容並按回複按鈕。"
 
-#: index_project.c:1794
+#: index_project.c:1834
 msgid "update ticket information"
 msgstr "任務單信息的更新"
 
-#: index_project.c:1794
+#: index_project.c:1834
 msgid "[update ticket description]"
 msgstr "需要更新任務單信息(任務單的狀態等)時，請修改以下信息。"
 
-#: index_project.c:1819
+#: index_project.c:1859
 msgid "add reply information"
 msgstr "添加回複"
 
-#: index_project.c:1819
+#: index_project.c:1859
 msgid "input reply information."
 msgstr "請填寫回複信息。"
 
-#: index_project.c:1851
+#: index_project.c:1891
 msgid "reply"
 msgstr "回複"
 
-#: index_project.c:2024
+#: index_project.c:2060
 msgid "registerd."
 msgstr "已登錄。"
 
-#: index_project.c:2026
+#: index_project.c:2062
 msgid "replyed."
 msgstr "已回複。"
 
-#: index_project.c:2040 index_project.c:2961
+#: index_project.c:2076 index_project.c:2986
 msgid "error"
 msgstr "錯誤"
 
-#: index_project.c:2043 index_project.c:2964
+#: index_project.c:2079 index_project.c:2989
 msgid "error occured."
 msgstr "發生錯誤"
 
-#: index_project.c:2044 index_project.c:2965
+#: index_project.c:2080 index_project.c:2990
 msgid "file size is too large."
 msgstr "文件太大。大于"
 
-#: index_project.c:2046 index_project.c:2967
+#: index_project.c:2082 index_project.c:2992
 msgid "kb. too large. back by browser's back button."
 msgstr "kb的文件不能登錄。請按浏覽器的返回按鈕返回。"
 
-#: index_project.c:2082
+#: index_project.c:2118
 msgid "[register ticket at once description1]"
 msgstr ""
 "批量登錄新建任務單時，請在以下表單中以CSV的形式填寫任務單信息並按解析按鈕。以"
 "下爲詳細的登錄步驟。"
 
-#: index_project.c:2083
+#: index_project.c:2119
 msgid "[register ticket at once description2]"
 msgstr ""
 "在批量登錄任務單頁面(本頁面)，以CSV的形式粘貼想登錄的多條任務單的信息，並按解"
 "析按鈕。"
 
-#: index_project.c:2084
+#: index_project.c:2120
 msgid "[register ticket at once description3]"
 msgstr ""
 "在批量任務單登錄頁面，因爲顯示了解析結果，選擇各字段對應的項目，並按登錄按"
 "鈕。"
 
-#: index_project.c:2085
+#: index_project.c:2121
 msgid "register finish."
 msgstr "登錄完成。"
 
-#: index_project.c:2100
+#: index_project.c:2136
 msgid "[register ticket at once description4]"
 msgstr "以CSV的形式粘貼想要登錄的數據。在下一頁面可以對讀取的字段進行設置。"
 
-#: index_project.c:2104
+#: index_project.c:2140
 msgid "analysis"
 msgstr "解析"
 
-#: index_project.c:2129 index_project.c:2131 index_project.c:2140
+#: index_project.c:2165 index_project.c:2167 index_project.c:2176
 msgid "register tickets at once confirm"
 msgstr "任務單批量登錄確認"
 
-#: index_project.c:2141
+#: index_project.c:2177
 msgid "[register ticket at once description5]"
 msgstr ""
 "對于各登錄對象組合框的選擇值，請選擇它的數據的作爲登錄對象的項目，並按登錄按"
 "鈕。"
 
-#: index_project.c:2180
+#: index_project.c:2216
 msgid "register<br />column"
 msgstr "登錄<br />對象"
 
-#: index_project.c:2184
+#: index_project.c:2220
 msgid "ignore"
 msgstr "忽略"
 
-#: index_project.c:2230
+#: index_project.c:2266
 msgid "[register ticket at once description6]"
 msgstr ""
 "對于登錄對象的組合框的選擇值，【忽略】的狀態登錄的話，將不作爲登錄對象。"
 
-#: index_project.c:2231
+#: index_project.c:2267
 msgid "[register ticket at once description7]"
 msgstr "因登錄的各值都將不進行輸入檢查，所以請在登錄前確認。"
 
-#: index_project.c:2360
+#: index_project.c:2396
 msgid " tickets registerd."
 msgstr "件已登錄。"
 
-#: index_project.c:2363
+#: index_project.c:2399
 msgid "no ticket registerd."
 msgstr "沒有被登錄的任務單。請按返回按鈕返回進行確認。"
 
-#: index_project.c:2406
+#: index_project.c:2442
 msgid "there are no latest tickets."
 msgstr "沒有最新信息。"
 
-#: index_project.c:2414
+#: index_project.c:2450
 msgid "ticket counts"
 msgstr "按狀態分類件數"
 
-#: index_project.c:2426
+#: index_project.c:2462
 msgid "there are no ticket informations."
 msgstr "沒有任務單信息。"
 
-#: index_project.c:2446 index_top.c:154 index_top.c:161
+#: index_project.c:2482 index_top.c:153 index_top.c:160
 msgid "edit page"
 msgstr "頁面編輯"
 
-#: index_project.c:2565
+#: index_project.c:2601
 msgid "ticket count chart"
 msgstr "任務單件數"
 
-#: index_project.c:2575 index_project.c:2647
+#: index_project.c:2611 index_project.c:2683
 msgid "[graph description]"
 msgstr "通過JavaScript顯示圖表。請用JavaScript有效的浏覽器查看。"
 
-#: index_project.c:2576 index_project.c:2610
+#: index_project.c:2612 index_project.c:2646
 msgid "days"
 msgstr "日期"
 
-#: index_project.c:2577 index_project.c:2593
+#: index_project.c:2613 index_project.c:2629
 msgid "all tickets count"
 msgstr "任務單件數"
 
-#: index_project.c:2578 index_project.c:2600
+#: index_project.c:2614 index_project.c:2636
 msgid "not yet closed tickets count"
 msgstr "未關閉的任務單。"
 
-#: index_project.c:2619
+#: index_project.c:2655
 msgid "tickets count"
 msgstr "任務單件數"
 
-#: index_project.c:2706 index_project.c:2713 index_project.c:2714
+#: index_project.c:2742 index_project.c:2749 index_project.c:2750
 #: index_top.c:138
 msgid "edit top page"
 msgstr "首頁的編輯"
 
-#: index_project.c:2715 index_top.c:161
+#: index_project.c:2751 index_top.c:160
 msgid "[wiki syntax description1]"
 msgstr "通過簡易wiki的語法來進行首頁內容的編輯，並請按更新按鈕。"
 
-#: index_project.c:2766 index_project.c:2791
+#: index_project.c:2802 index_project.c:2827
 msgid "error: there is no file."
 msgstr "error: 沒有文件。"
 
-#: index_project.c:2807 index_project.c:2817
+#: index_project.c:2843 index_project.c:2844 index_project.c:2853
 msgid "attachment file display setting"
 msgstr ""
 
-#: index_project.c:2808
-#, fuzzy
-msgid "delete attachment files."
-msgstr "所有附件"
-
-#: index_project.c:2818
+#: index_project.c:2854
 msgid "you can appoint if attachment file will be display."
 msgstr ""
 
-#: index_project.c:2853
+#: index_project.c:2889
 #, fuzzy
 msgid "attachment file"
 msgstr "所有附件"
 
-#: index_project.c:2899
+#: index_project.c:2930
 #, fuzzy
 msgid "display"
 msgstr "參照幫助"
 
-#: index_top.c:104 index_top.c:202
+#: index_top.c:104 index_top.c:201
 msgid "top page"
 msgstr "首頁"
 
@@ -1279,23 +1275,23 @@ msgstr "在所有子工程中檢索。"
 msgid "description"
 msgstr "說明"
 
-#: index_top.c:216
+#: index_top.c:215
 msgid "back to top"
 msgstr "返回首頁"
 
-#: util.c:792
+#: util.c:789
 msgid "[ticket form syntax description1]"
 msgstr ""
 "多行文本框項目的內容按照 #1 寫的話，將作爲ID 爲 1 的任務單的任務單詳細頁面的"
 "鏈接。"
 
-#: util.c:793
+#: util.c:790
 msgid "[ticket form syntax description2]"
 msgstr ""
 "多行文本框項目的內容按照 #bts:1 寫的話，將作爲工程ID爲bts的工程的 ID 爲 1 的"
 "任務單的任務單詳細頁面的鏈接。"
 
-#: util.c:794
+#: util.c:791
 msgid "[ticket form syntax description3]"
 msgstr ""
 "多行文本框項目的內容以，從行頭以 >| 開始的行開始，到行頭以 |< 開始的行結束，"
@@ -1353,7 +1349,7 @@ msgstr ""
 
 #: js/attachment_file_display_setting_submit.js:11 js/new_item.js:25
 #: js/register_at_once.js:13 js/register_at_once_submit.js:11
-#: js/validate.js:39
+#: js/validate.js:43
 msgid "it will reuqired. please describe."
 msgstr "必須項目，請輸入。"
 
@@ -1413,10 +1409,14 @@ msgstr "「狀態」沒有被修改，沒問題嗎？"
 msgid "it will replied. are you ok?"
 msgstr "回複，可以嗎？"
 
-#: js/validate.js:57
+#: js/validate.js:61
 msgid "it is date column. please describe by yyyy-mm-dd format."
 msgstr "日期項目，請以yyyy-mm-dd的形式輸入。"
 
-#: js/validate.js:75
+#: js/validate.js:79
 msgid "it is number column. please describe number."
 msgstr "數項目，請寫數。"
+
+#, fuzzy
+#~ msgid "delete attachment files."
+#~ msgstr "所有附件"
