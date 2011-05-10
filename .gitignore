@@ -1,8 +1,8 @@
 debug.log
-zzz.cgi
+*.cgi
+*.o
+*~
 session
-index.cgi
 html
-db*
-admin.cgi
-dump*
+dist
+tags
