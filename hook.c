@@ -104,9 +104,7 @@ static HookMessage* create_hook_project(Project* project, Message* message, List
     string_free(url_a);
     strncpy(hook_message->status, get_element_value_by_id(elements, ELEM_ID_STATUS), DEFAULT_LENGTH - 1);
     strncpy(hook_message->subject, get_element_value_by_id(elements, ELEM_ID_TITLE), DEFAULT_LENGTH - 1);
-    d("create_hook_project 2\n");
     hook_message->elements_count = elements->size;
-    d("create_hook_project 2 %ld\n", sizeof(HookElement));
     hook_message->elements = xalloc(sizeof(HookElement) * elements->size);
 
     foreach (it, element_types) {

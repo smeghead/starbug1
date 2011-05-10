@@ -246,17 +246,6 @@ void condition_free(Condition* c)
     string_free(c->cookie_value);
     xfree(c);
 }
-/*void free_element_list(List* elements)*/
-/*{*/
-/*    Iterator* it;*/
-/*    foreach (it, elements) {*/
-/*        Element* e = it->element;*/
-/*         d("str_val:%s\n", e->str_val); */
-/*        if (e->str_val)*/
-/*            xfree(e->str_val);*/
-/*    }*/
-/*    list_free(elements);*/
-/*}*/
 Wiki* wiki_new()
 {
 /*     d("wiki size: %d\n", sizeof(Wiki)); */

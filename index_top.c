@@ -137,7 +137,6 @@ void top_top_action()
             "\t<h2>%s</h2>\n", _("description"));
     o(      "<a href=\"%s/%s/top_edit_top\">%s</a>\n", cgiScriptName, g_project_code_4_url, _("edit top page"));
     wiki_out(db_a, "top");
-    d("pass wiki_out end\n");
     o(      "</div>\n");
     o(      "<br clear=\"all\" />\n");
     project_free(top_project_a);

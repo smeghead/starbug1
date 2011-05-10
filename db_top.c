@@ -56,7 +56,6 @@ ProjectInfo* db_top_get_project_info(Database* db, ProjectInfo* project_info, ch
     sqlite3_bind_text(stmt, 1, project_name, strlen(project_name), NULL);
 
     while (SQLITE_ROW == sqlite3_step(stmt)) {
-    d("5\n");
         project_info->id = sqlite3_column_int(stmt, 0);
         string_set(project_info->code, (char*)sqlite3_column_text(stmt, 1));
         project_info->sort = sqlite3_column_int(stmt, 2);
@@ -242,7 +241,6 @@ List* db_top_search(Database* db, char* q, List* tickets)
         d("get %d:%d\n", t->project_id, t->id);
         list_add(tickets, t);
     }
-    d("finish \n");
     if (SQLITE_DONE != r)
         goto error;
     sqlite3_finalize(stmt);

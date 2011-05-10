@@ -2017,8 +2017,6 @@ int register_or_reply(Database* db, Project* project, Message* ticket, List* ele
     db_commit(db);
     /* hook */
     hook = exec_hook(hook, project, ticket, ticket->elements, element_types);
-    d("exec_hook\n");
-    d("finish\n");
     return 0;
 }
 /**
@@ -2898,19 +2896,14 @@ void attachment_file_setting_action()
             list_alloc(elements_a, Element, element_new, element_free);
             cgiFormStringNoNewlines("file_id", value_a, VALUE_LENGTH);
             file_id = atoi(value_a);
-            d("file_id: %s\n", value_a);
             cgiFormStringNoNewlines("ticket_id", value_a, VALUE_LENGTH);
             ticket_id = atoi(value_a);
-            d("ticket_id: %s\n", value_a);
             cgiFormStringNoNewlines("reply_id", value_a, VALUE_LENGTH);
             reply_id = atoi(value_a);
-            d("reply_id: %s\n", value_a);
             cgiFormStringNoNewlines("element_id", value_a, VALUE_LENGTH);
             element_id = atoi(value_a);
-            d("reply_id: %s\n", value_a);
             cgiFormStringNoNewlines("message_id", value_a, VALUE_LENGTH);
             message_id = atoi(value_a);
-            d("reply_id: %s\n", value_a);
 
             elements_a = db_get_elements(db_a, message_id, elements_a);
             h(get_element_value_by_id(elements_a, element_id));
@@ -2951,13 +2944,10 @@ void attachment_file_setting_submit_action()
 
     cgiFormStringNoNewlines("file_id", value_a, VALUE_LENGTH);
     file_id = atoi(value_a);
-    d("file_id: %s\n", value_a);
     cgiFormStringNoNewlines("ticket_id", value_a, VALUE_LENGTH);
     ticket_id = atoi(value_a);
-    d("ticket_id: %s\n", value_a);
     cgiFormStringNoNewlines("reply_id", value_a, VALUE_LENGTH);
     reply_id = atoi(value_a);
-    d("reply_id: %s\n", value_a);
     db_a = db_init(g_project_code);
     file_deleted = db_get_element_file_deleted(db_a, file_id);
     db_delete_element_file(db_a, file_id, !file_deleted);
@@ -2967,13 +2957,11 @@ void attachment_file_setting_submit_action()
         HOOK* hook = NULL;
         List* elements_a = NULL;
 
-        d("start\n");
         ticket_a = message_new();
         project_a = db_get_project(db_a, project_a);
         list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
         element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
         ticket_a->id = ticket_id;
-        d("ticket_id: %d\n", ticket_a->id);
         list_alloc(elements_a, Element, element_new, element_free);
         elements_a = db_get_last_elements(db_a, ticket_a->id, elements_a);
         hook = init_hook(HOOK_MODE_REGISTERED);
@@ -2989,7 +2977,6 @@ void attachment_file_setting_submit_action()
     xfree(value_a);
 
     string_appendf(redirect_uri, "/ticket/%d#%d", ticket_id, reply_id);
-    d("%s\n", string_rawstr(redirect_uri));
     redirect(string_rawstr(redirect_uri), NULL);
     string_free(redirect_uri);
     return;

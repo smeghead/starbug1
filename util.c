@@ -143,7 +143,6 @@ void exec_action()
     char action_name[DEFAULT_LENGTH];
     strcpy(action_name, g_action_name);
     for (a = get_actions(); a != NULL; a = a->next) {
-/*         d("action: %s %s\n", a->action_name, action_name); */
         if (!strcmp(action_name, a->action_name)) {
             d("=exec_action start: %s\n", a->action_name);
             a->action_func();
@@ -327,7 +326,6 @@ static cgiFormResultType cgiHtmlEscapeDataMultiLine(char *data, int len)
             memset(link, '\0', DEFAULT_LENGTH);
             /* ループの最初でlenが減っているので、get_ticket_syntax_lenに渡すときは戻して呼び出す。 */
             link_syntax_len = get_link_syntax_len(data, len + 1, link);
-            d("link_syntax_len: %d \n", link_syntax_len);
             if (link_syntax_len == 0) {
                 TRYPUTC(*data);
             } else {
@@ -349,7 +347,6 @@ static cgiFormResultType cgiHtmlEscapeDataMultiLine(char *data, int len)
             memset(ticket_id, '\0', DEFAULT_LENGTH);
             /* ループの最初でlenが減っているので、get_ticket_syntax_lenに渡すときは戻して呼び出す。 */
             ticket_syntax_len = get_ticket_syntax_len(data, len + 1, project_id, ticket_id);
-            d("ticket_syntax_len: %d \n", ticket_syntax_len);
             if (ticket_syntax_len == 0) {
                 TRYPUTC(*data);
             } else {
@@ -808,9 +805,6 @@ void set_locale(char* locale)
         putenv(envstr);
     }
 #endif
-    d("setlocale: %s\n", setlocale(LC_ALL, locale_utf8));
-    d("bindtextdomain: %s\n", bindtextdomain("starbug1", "locale"));
-    d("textdomain: %s\n", textdomain("starbug1"));
 #ifdef _WIN32
     bind_textdomain_codeset("starbug1", "utf-8");
 #endif

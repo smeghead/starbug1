@@ -150,7 +150,6 @@ void pipe_to_file(char* command_str, char* db_name, FILE* out)
 #else
     string_appendf(command_a, "echo '%s' | sqlite3 %s", command_str, db_name);
 #endif
-    d("%s\n", string_rawstr(command_a));
 
     if ((fp = popen(string_rawstr(command_a), "r")) == NULL) {
         die("外部プログラム実行に失敗しました。");

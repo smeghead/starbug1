@@ -51,12 +51,9 @@ void string_append(String* str, const char* addstr)
 void string_set(String* str, const char* newstr)
 {
     /* 存在していた文字列は破棄する。 */
-/*     d("string_set\n"); */
-/*     d("string_set %s\n", string_rawstr(str)); */
     xfree(str->raw_chars);
     string_init(str, str->block_size);
     string_append(str, newstr);
-/*     d("string_set end\n"); */
 }
 char* string_rawstr(String* str)
 {
