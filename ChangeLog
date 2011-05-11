@@ -1,3 +1,12 @@
+2011-05-12  smeghead <smeghead7@gmail.com>
+
+	* 1.4.04 released.
+
+2011-05-12  smeghead <smeghead7@gmail.com>
+
+	* added irc notify sample hook script.
+	* fixed to failed export project setting.
+
 2011-02-22  smeghead <smeghead7@gmail.com>
 
 	* starbug1 official site url changed. www.starbug1.com -> starbug1.com
@@ -9,6 +18,10 @@
 2011-02-16  smeghead <smeghead7@gmail.com>
 
 	* on javascript, memoize message. retrieve Asynchronous.
+
+2011-01-01  smeghead <smeghead7@gmail.com>
+
+	* 1.4.03 released.
 
 2011-01-01  smeghead <smeghead7@gmail.com>
 
