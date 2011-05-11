@@ -6,3 +6,5 @@ session
 html
 dist
 tags
+template
+db
