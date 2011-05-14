@@ -190,22 +190,22 @@ compiledeps:
 
 jsresource: js/lang/en_US.json js/lang/ja_JP.json js/lang/zh_CN.json js/lang/zh_TW.json
 
-js/lang/en_US.json:
+js/lang/en_US.json: locale/en.po
 	echo '{"message": ' > js/lang/en_US.json
 	bin/po2json locale/en.po >> js/lang/en_US.json
 	echo '}' >> js/lang/en_US.json
 
-js/lang/ja_JP.json:
+js/lang/ja_JP.json: locale/ja.po
 	echo '{"message": ' > js/lang/ja_JP.json
 	bin/po2json locale/ja.po >> js/lang/ja_JP.json
 	echo '}' >> js/lang/ja_JP.json
 
-js/lang/zh_CN.json:
+js/lang/zh_CN.json: locale/zh.po
 	echo '{"message": ' > js/lang/zh_CN.json
 	bin/po2json locale/zh.po >> js/lang/zh_CN.json
 	echo '}' >> js/lang/zh_CN.json
 
-js/lang/zh_TW.json:
+js/lang/zh_TW.json: locale/zh_TW.po
 	echo '{"message": ' > js/lang/zh_TW.json
 	bin/po2json locale/zh_TW.po >> js/lang/zh_TW.json
 	echo '}' >> js/lang/zh_TW.json

@@ -9,7 +9,7 @@ function initPage(e) {
                     Event.stop(e);
                     return false;
                 }
-                var dedide = confirm(_("it will added. are you ok?"));
+                var dedide = confirm(_("it will added. it is ok with you?"));
                 if (!dedide)
                     Event.stop(e);
                 return dedide;

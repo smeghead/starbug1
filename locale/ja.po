@@ -1421,7 +1421,7 @@ msgstr ""
 "ださい。"
 
 #: js/attachment_file_display_setting_submit.js:23 js/management.js:13
-msgid "it will updated. are you ok?"
+msgid "it will updated. it is ok with you?"
 msgstr "更新します。よろしいですか？"
 
 #: js/attachment_file_display_setting_submit.js:28 js/management.js:18
@@ -1443,11 +1443,11 @@ msgid "month"
 msgstr "月"
 
 #: js/delete_item.js:6
-msgid "it will deleted. are you ok?"
+msgid "it will deleted. it is ok with you?"
 msgstr "削除します。よろしいですか？"
 
 #: js/edit_top.js:6 js/register.js:17 js/register_at_once_submit.js:23
-msgid "it will registered. are you ok?"
+msgid "it will registered. it is ok with you?"
 msgstr "登録します。よろしいですか？"
 
 #: js/management.js:9
@@ -1455,19 +1455,19 @@ msgid "there are some required columns. please check."
 msgstr "入力されていない必須項目があります。確認してください。"
 
 #: js/new_item.js:12
-msgid "it will added. are you ok?"
+msgid "it will added. it is ok with you?"
 msgstr "追加します。よろしいですか？"
 
 #: js/register_at_once.js:25
-msgid "it will analyzed. are you ok?"
+msgid "it will analyzed. it is ok with you?"
 msgstr "解析します。よろしいですか？"
 
 #: js/reply.js:12
-msgid "you not modify status, are you ok?"
+msgid "you not modify status, it is ok with you?"
 msgstr "「状態」が変更されていませんが、間違いないですか？"
 
 #: js/reply.js:24
-msgid "it will replied. are you ok?"
+msgid "it will replied. it is ok with you?"
 msgstr "返信します。よろしいですか？"
 
 #: js/validate.js:61

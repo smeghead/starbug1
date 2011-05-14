@@ -1357,7 +1357,7 @@ msgid "there are some required columns or invalid columns. please check."
 msgstr "还有必须项目未输入、或者输入了不正确的值，请确认。"
 
 #: js/attachment_file_display_setting_submit.js:23 js/management.js:13
-msgid "it will updated. are you ok?"
+msgid "it will updated. it is ok with you?"
 msgstr "更新，可以吗。"
 
 #: js/attachment_file_display_setting_submit.js:28 js/management.js:18
@@ -1379,11 +1379,11 @@ msgid "month"
 msgstr "月"
 
 #: js/delete_item.js:6
-msgid "it will deleted. are you ok?"
+msgid "it will deleted. it is ok with you?"
 msgstr "删除，可以吗？"
 
 #: js/edit_top.js:6 js/register.js:17 js/register_at_once_submit.js:23
-msgid "it will registered. are you ok?"
+msgid "it will registered. it is ok with you?"
 msgstr "登录，可以吗？"
 
 #: js/management.js:9
@@ -1391,19 +1391,19 @@ msgid "there are some required columns. please check."
 msgstr "还有必须项目未输入。请确认。"
 
 #: js/new_item.js:12
-msgid "it will added. are you ok?"
+msgid "it will added. it is ok with you?"
 msgstr "添加，可以吗？"
 
 #: js/register_at_once.js:25
-msgid "it will analyzed. are you ok?"
+msgid "it will analyzed. it is ok with you?"
 msgstr "解析，可以吗？"
 
 #: js/reply.js:12
-msgid "you not modify status, are you ok?"
+msgid "you not modify status, it is ok with you?"
 msgstr "「状态」没有被修改，没问题吗？"
 
 #: js/reply.js:24
-msgid "it will replied. are you ok?"
+msgid "it will replied. it is ok with you?"
 msgstr "回复，可以吗？"
 
 #: js/validate.js:61

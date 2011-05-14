@@ -9,7 +9,7 @@ function initPage(e) {
         function(e) {
             try {
                 if ($F('field3') == status_original) {
-                    if (!confirm(_("you not modify status, are you ok?"))) {
+                    if (!confirm(_("you not modify status, it is ok with you?"))) {
                         Event.stop(e);
                         return false;
                     }
@@ -21,7 +21,7 @@ function initPage(e) {
                     Event.stop(e);
                     return false;
                 }
-                var dedide = confirm(_("it will replied. are you ok?"));
+                var dedide = confirm(_("it will replied. it is ok with you?"));
                 if (!dedide) 
                     Event.stop(e);
                 return dedide;

@@ -3,7 +3,7 @@ Event.observe(window, 'load', initPage);
 function initPage(e) {
     Event.observe('edit_top_form', 'submit', 
         function(e) {
-            var dedide = confirm(_("it will registered. are you ok?"));
+            var dedide = confirm(_("it will registered. it is ok with you?"));
             if (!dedide) Event.stop(e);
             return dedide;
         }

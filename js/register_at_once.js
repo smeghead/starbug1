@@ -22,7 +22,7 @@ function initPage(e) {
                     Event.stop(e);
                     return false;
                 }
-                var dedide = confirm(_("it will analyzed. are you ok?"));
+                var dedide = confirm(_("it will analyzed. it is ok with you?"));
                 if (!dedide)
                     Event.stop(e);
                 return dedide;

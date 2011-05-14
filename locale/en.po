@@ -1460,8 +1460,8 @@ msgid "there are some required columns or invalid columns. please check."
 msgstr "There are some required columns or invalid columns. please check."
 
 #: js/attachment_file_display_setting_submit.js:23 js/management.js:13
-msgid "it will updated. are you ok?"
-msgstr "It will updated. are you ok?"
+msgid "it will updated. it is ok with you?"
+msgstr "It will updated. it is ok with you?"
 
 #: js/attachment_file_display_setting_submit.js:28 js/management.js:18
 #: js/new_item.js:17 js/register.js:22 js/register_at_once.js:30
@@ -1482,32 +1482,32 @@ msgid "month"
 msgstr " "
 
 #: js/delete_item.js:6
-msgid "it will deleted. are you ok?"
-msgstr "It will deleted. are you ok?"
+msgid "it will deleted. it is ok with you?"
+msgstr "It will deleted. it is ok with you?"
 
 #: js/edit_top.js:6 js/register.js:17 js/register_at_once_submit.js:23
-msgid "it will registered. are you ok?"
-msgstr "It will registered. are you ok?"
+msgid "it will registered. it is ok with you?"
+msgstr "It will registered. it is ok with you?"
 
 #: js/management.js:9
 msgid "there are some required columns. please check."
 msgstr "There are some required columns. please check."
 
 #: js/new_item.js:12
-msgid "it will added. are you ok?"
-msgstr "It will added. are you ok?"
+msgid "it will added. it is ok with you?"
+msgstr "It will added. it is ok with you?"
 
 #: js/register_at_once.js:25
-msgid "it will analyzed. are you ok?"
-msgstr "It will analyzed. are you ok?"
+msgid "it will analyzed. it is ok with you?"
+msgstr "It will analyzed. it is ok with you?"
 
 #: js/reply.js:12
-msgid "you not modify status, are you ok?"
-msgstr "You not modify \"status\", are you ok?"
+msgid "you not modify status, it is ok with you?"
+msgstr "You not modify \"status\", it is ok with you?"
 
 #: js/reply.js:24
-msgid "it will replied. are you ok?"
-msgstr "It will replied. are you ok?"
+msgid "it will replied. it is ok with you?"
+msgstr "It will replied. it is ok with you?"
 
 #: js/validate.js:61
 msgid "it is date column. please describe by yyyy-mm-dd format."
