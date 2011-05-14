@@ -22,7 +22,7 @@ function initPage(e) {
 function checkFields() {
     var f = $('field.name');
     if (!f.value) {
-        $('field.name.required').innerHTML = _("it will reuqired. please describe.");
+        $('field.name.required').innerHTML = _("it will required. please describe.");
         f.focus();
         return false;
     }

@@ -1142,7 +1142,7 @@ msgstr ""
 #: js/attachment_file_display_setting_submit.js:11 js/new_item.js:25
 #: js/register_at_once.js:13 js/register_at_once_submit.js:11
 #: js/validate.js:43
-msgid "it will reuqired. please describe."
+msgid "it will required. please describe."
 msgstr ""
 
 #: js/attachment_file_display_setting_submit.js:19 js/new_item.js:8

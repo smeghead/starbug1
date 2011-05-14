@@ -10,7 +10,7 @@ function initPage(e) {
                 var empty = $F(f).empty();
                 var message = $(f.id + '.required');
                 if (empty) {
-                    message.innerHTML = _("it will reuqired. please describe.");
+                    message.innerHTML = _("it will required. please describe.");
                     message.style.display = "block";
                     f.focus();
                 } else {

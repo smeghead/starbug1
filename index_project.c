@@ -102,32 +102,12 @@ void register_actions()
     REG_ACTION(attachment_file_setting_submit);
 }
 
-void output_preload_message()
-{
-    o(  "\t<script type=\"text/javascript\">\n");
-    o(  "\t\tdocument._PRELOAD_MESSAGES = [];\n");
-    o(  "\t\tdocument._PRELOAD_MESSAGES[0] = 'it is date column. please describe by yyyy-mm-dd format.';\n");
-    o(  "\t\tdocument._PRELOAD_MESSAGES[1] = 'it is number column. please describe number.';\n");
-    o(  "\t\tdocument._PRELOAD_MESSAGES[2] = 'it will added. are you ok?';\n");
-    o(  "\t\tdocument._PRELOAD_MESSAGES[3] = 'it will analyzed. are you ok?';\n");
-    o(  "\t\tdocument._PRELOAD_MESSAGES[4] = 'it will deleted. are you ok?';\n");
-    o(  "\t\tdocument._PRELOAD_MESSAGES[5] = 'it will registered. are you ok?';\n");
-    o(  "\t\tdocument._PRELOAD_MESSAGES[6] = 'it will replied. are you ok?';\n");
-    o(  "\t\tdocument._PRELOAD_MESSAGES[7] = 'it will reuqired. please describe.';\n");
-    o(  "\t\tdocument._PRELOAD_MESSAGES[8] = 'it will updated. are you ok?';\n");
-    o(  "\t\tdocument._PRELOAD_MESSAGES[9] = 'month';\n");
-    o(  "\t\tdocument._PRELOAD_MESSAGES[10] = 'sun,mon,tue,wed,thu,fri,sat';\n");
-    o(  "\t\tdocument._PRELOAD_MESSAGES[11] = 'the error occurred.';\n");
-    o(  "\t\tdocument._PRELOAD_MESSAGES[12] = 'there are some required columns or invalid columns. please check.';\n");
-    o(  "\t\tdocument._PRELOAD_MESSAGES[13] = 'there are some required columns. please check.';\n");
-    o(  "\t\tdocument._PRELOAD_MESSAGES[14] = 'you not modify status, are you ok?';\n");
-    o(  "\t</script>\n");
-}
-
 void output_header(Project* project, char* title, char* script_name, const NaviType navi)
 {
     String* top_project_name_a = string_new();
     String* base_url_a = string_new();
+    String* locale_a = string_new();
+
     base_url_a = get_base_url(base_url_a);
     top_project_name_a = db_top_get_top_project_name(top_project_name_a);
     o("Pragma: no-cache\r\n");
@@ -145,12 +125,18 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/%s/setting_file/user.css\" />\n", cgiScriptName, g_project_code_4_url);
     o(      "\t<link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS\" href=\"%s/rss\" />\n", string_rawstr(base_url_a));
     o(      "\t<link rel=\"shortcut icon\" type=\"image/x-ico\" href=\"%s/../favicon.ico\" />\n", cgiScriptName);
+    locale_a = db_top_get_locale(locale_a);
+    o(      "\t<link rel=\"gettext\" href=\"%s/../js/lang/%s.json\" />\n", cgiScriptName, string_rawstr(locale_a));
+    string_free(locale_a);
+    o(      "\t<script type=\"text/javascript\" src=\"%s/../js/Gettext.js\"></script>\n", cgiScriptName);
+    o(      "\t<script type=\"text/javascript\">\n"
+            "\t\tvar gt = new Gettext({\"domain\": \"starbug1\"});\n"
+            "\t\tfunction _ (msgid) { return gt.gettext(msgid); }\n"
+            "\t</script>\n");
     o(      "\t<script type=\"text/javascript\" src=\"%s/../js/prototype.js\"></script>\n", cgiScriptName);
     if (script_name) {
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/tooltip.js\"></script>\n", cgiScriptName);
-        o(  "\t<script type=\"text/javascript\" src=\"%s/top/top_gettext_js\"></script>\n", cgiScriptName);
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/%s\"></script>\n", cgiScriptName, script_name);
-        output_preload_message();
     }
     o(  "\t<script type=\"text/javascript\" src=\"%s/../js/ticket_list.js\"></script>\n", cgiScriptName);
     string_free(base_url_a);

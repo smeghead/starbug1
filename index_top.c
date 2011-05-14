@@ -18,7 +18,6 @@ void top_top_action();
 void top_edit_top_action();
 void top_edit_top_submit_action();
 void top_search_action();
-void top_gettext_js_action();
 
 /* prototype declares */
 int index_top_main();
@@ -29,7 +28,6 @@ void top_register_actions()
     REG_ACTION(top_edit_top);
     REG_ACTION(top_edit_top_submit);
     REG_ACTION(top_search);
-    REG_ACTION(top_gettext_js);
 }
 
 void top_output_header(char* title, Project* project)
@@ -215,51 +213,5 @@ void top_search_action()
     o(      "<div class=\"navigation\"><a href=\"%s/top/\">%s</a></div>\n", cgiScriptName, _("back to top"));
     top_output_footer();
     db_finish(db_a);
-}
-void top_gettext_js_action()
-{
-    char key[DEFAULT_LENGTH];
-    cgiFormString("key", key, DEFAULT_LENGTH);
-    if (strlen(key)) {
-        o("Cache-Control: max-age=%d, s-maxage=%d\n", 60 * 60 * 24, 60 * 60 * 24);
-        cgiHeaderContentType("application/x-javascript; charset=utf-8;\n\n");
-        o("%s", _(key));
-        return;
-    }
-    cgiHeaderContentType("application/x-javascript; charset=utf-8;\n\n");
-    o("var _memo = {};\n");
-    o("Event.observe(window, 'load', function(){\n");
-    o("    var n = 1;\n");
-    o("    if (document._PRELOAD_MESSAGES) {\n");
-    o("        $A(document._PRELOAD_MESSAGES).each(function(elm){\n");
-    o("            if (!elm) return;\n");
-    o("            window.setTimeout(function() {\n");
-    o("                var result = _(elm);\n");
-    o("            }, 500 * n++);\n");
-    o("        });\n");
-    o("    }\n");
-    o("});\n");
-
-    o("function _(key) {");
-    o("    try {\n");
-    o("        var message = key;\n");
-    o("        if (_memo[key]) return _memo[key];\n");
-    o("        new Ajax.Request('%s/top/top_gettext_js', {\n", cgiScriptName);
-    o("            method: 'get',\n");
-    o("            parameters: {'key': key},\n");
-    o("            asynchronous: false,\n");
-    o("            onComplete: function (http) {\n");
-    o("                if (http.responseText == 0) {\n");
-    o("                    throw new Exception();\n");
-    o("                } else {\n");
-    o("                    message = http.responseText.strip();\n");
-    o("                    _memo[key] = message;\n");
-    o("                }\n");
-    o("            }\n");
-    o("        });\n");
-    o("    } catch (e) {\n");
-    o("    }\n");
-    o("    return message;\n");
-    o("}\n");
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

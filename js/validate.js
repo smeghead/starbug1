@@ -40,7 +40,7 @@ function check_input_value(fields) {
             }
             var message = $(f.id + '.required');
             if (empty) {
-                message.innerHTML = _("it will reuqired. please describe.");
+                message.innerHTML = _("it will required. please describe.");
                 message.style.display = "block";
                 f.focus();
             } else {

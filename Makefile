@@ -50,7 +50,7 @@ export INITIAL_LOCALE
 #CFLAGS += -DDEBUG
 #CFLAGS += -DMEMORYDEBUG
 
-default: index.cgi admin.cgi compileresource
+default: index.cgi admin.cgi compileresource jsresource
 
 static: compiledeps
 	$(MAKE) STATIC_LFLAGS=yes
@@ -104,6 +104,7 @@ clean:
 	rm -rf ./locale/en
 	rm -rf ./locale/zh
 	rm -rf ./locale/zh_TW
+	rm -rf ./js/lang/*.json
 
 webapp: default
 	@echo "Creating webapp..."
@@ -187,4 +188,25 @@ compiledeps:
 		./configure && \
 		$(MAKE) sqlite3.o
 
+jsresource: js/lang/en_US.json js/lang/ja_JP.json js/lang/zh_CN.json js/lang/zh_TW.json
+
+js/lang/en_US.json:
+	echo '{"message": ' > js/lang/en_US.json
+	bin/po2json locale/en.po >> js/lang/en_US.json
+	echo '}' >> js/lang/en_US.json
+
+js/lang/ja_JP.json:
+	echo '{"message": ' > js/lang/ja_JP.json
+	bin/po2json locale/ja.po >> js/lang/ja_JP.json
+	echo '}' >> js/lang/ja_JP.json
+
+js/lang/zh_CN.json:
+	echo '{"message": ' > js/lang/zh_CN.json
+	bin/po2json locale/zh.po >> js/lang/zh_CN.json
+	echo '}' >> js/lang/zh_CN.json
+
+js/lang/zh_TW.json:
+	echo '{"message": ' > js/lang/zh_TW.json
+	bin/po2json locale/zh_TW.po >> js/lang/zh_TW.json
+	echo '}' >> js/lang/zh_TW.json
 
