@@ -83,11 +83,11 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
     if (script_name) {
         String* locale_a = string_new();
         locale_a = db_top_get_locale(locale_a);
-        o(  "\t<link rel=\"gettext\" href=\"%s/../js/lang/%s.json\" />\n", cgiScriptName, string_rawstr(locale_a));
+        o(  "\t<script type=\"text/javascript\" src=\"%s/../js/lang/%s.json\"></script>\n", cgiScriptName, string_rawstr(locale_a));
         string_free(locale_a);
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/Gettext.js\"></script>\n", cgiScriptName);
         o(  "\t<script type=\"text/javascript\">\n"
-            "\t\tvar gt = new Gettext({\"domain\": \"starbug1\"});\n"
+            "\t\tvar gt = new Gettext({\"domain\": \"starbug1\", \"locale_data\": {\"starbug1\": locale_data}});\n"
             "\t\tfunction _ (msgid) { return gt.gettext(msgid); }\n"
             "\t</script>\n");
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/prototype.js\"></script>\n", cgiScriptName);
