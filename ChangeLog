@@ -2,6 +2,10 @@
 
 	* changed to initialize gettext.js.
 
+2011-05-15  smeghead <smeghead7@gmail.com>
+
+	* 1.4.05 released.
+
 2011-05-14  smeghead <smeghead7@gmail.com>
 
 	* use javascript gettext.
