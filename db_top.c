@@ -242,10 +242,30 @@ List* get_result_part(Database* db, List* projects, List* sqls, List* keywords, 
         t->project_id = sqlite3_column_int(stmt, 0);
         t->id = sqlite3_column_int(stmt, 1);
         d("get %d:%d\n", t->project_id, t->id);
+
+        set_project_code_by_ticket(t, projects);
+        t->project_name = db_top_get_project_name(db, t, t->project_name);
+        t->title = db_top_get_title(db, t, t->title);
+
         list_add(tickets, t);
     }
     if (SQLITE_DONE != r)
         goto error;
+
+    /* detatch dbs. */
+
+    foreach (it, projects) {
+        char sql[DEFAULT_LENGTH];
+        ProjectInfo* pi = it->element;
+
+        if (count < start || count > start + offset) continue; /* ignore cause out of target range. */
+        if (pi->id == 1) continue; /* ignore cause top sub project. */
+        if (pi->deleted) continue; /* ignore cause deleted sub project. */
+        sprintf(sql, "detach db%d", pi->id);
+        d("%s\n", sql);
+        exec_query(db, sql, COLUMN_TYPE_END);
+    }
+
     sqlite3_finalize(stmt);
 
     list_free(db_infos_a);
@@ -257,9 +277,9 @@ ERROR_LABEL(db->handle)
 List* db_top_search(Database* db, char* q, List* tickets)
 {
     List* projects_a;
-    Iterator* it;
     List* sqls_a;
     List* keywords_a;
+    int i;
 
     list_alloc(keywords_a, String, string_new, string_free);
     keywords_a = parse_keywords(keywords_a, q);
@@ -268,25 +288,13 @@ List* db_top_search(Database* db, char* q, List* tickets)
     list_alloc(sqls_a, String, string_new, string_free);
     projects_a = db_top_get_all_project_infos(db, projects_a);
 
-
-    tickets = get_result_part(db, projects_a, sqls_a, keywords_a, 0, 10, tickets);
-
-
-
-
-
+    for (i = 0; i < projects_a->size; i += 10) {
+        tickets = get_result_part(db, projects_a, sqls_a, keywords_a, i, 10, tickets);
+    d("aa 0\n");
+    }
 
     list_free(keywords_a);
     list_free(sqls_a);
-
-    /* retrieve title and sub project name of ticket. */
-    foreach (it, tickets) {
-        Ticket* t = it->element;
-        set_project_code_by_ticket(t, projects_a);
-        t->project_name = db_top_get_project_name(db, t, t->project_name);
-        t->title = db_top_get_title(db, t, t->title);
-
-    }
     list_free(projects_a);
     return tickets;
 
