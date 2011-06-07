@@ -20,6 +20,7 @@ void* _xalloc(size_t size, char* file, int line)
 #endif
     return p;
 }
+
 void _xfree(void* p, char* file, int line)
 {
 #ifdef MEMORYDEBUG
@@ -31,8 +32,10 @@ void _xfree(void* p, char* file, int line)
     free(p);
     p = NULL;
 }
+
 int get_alloc_count()
 {
     return alloc_count;
 }
+
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

@@ -28,6 +28,7 @@ void buf_clear() {
         strcpy(text[i], "");
     }
 }
+
 void buf_add(unsigned int type, char* str)
 {
     int i;
@@ -41,6 +42,7 @@ void buf_add(unsigned int type, char* str)
         }
     }
 }
+
 void buf_flush()
 {
     int i;
@@ -78,26 +80,31 @@ void buf_flush()
     }
     buf_clear();
 }
+
 void buf_out(char* str)
 {
     h(str);
     o("\n");
 }
+
 void element_out_without_content(char* tag_name)
 {
     buf_flush();
     printf("<%s />\n", tag_name);
 }
+
 void element_out(char* tag_name, char* content)
 {
     printf("<%s>", tag_name);
     buf_out(content);
     printf("</%s>\n", tag_name);
 }
+
 typedef enum LINE_MODE {
     LINE_MODE_NORMAL,
     LINE_MODE_PRE
 } LineMode;
+
 void wiki_out(Database* db, char* page_name)
 {
     Wiki* wiki_a = wiki_new();
@@ -159,6 +166,7 @@ void wiki_out(Database* db, char* page_name)
     xfree(line_a);
     wiki_free(wiki_a);
 }
+
 void wiki_content_out(Database* db, char* page_name)
 {
     Wiki* wiki_a = wiki_new();
@@ -166,6 +174,7 @@ void wiki_content_out(Database* db, char* page_name)
     h(wiki_a->content);
     wiki_free(wiki_a);
 }
+
 void wiki_save(Database* db, char* page_name, char* content)
 {
     Wiki* wiki_a = wiki_new();
@@ -175,6 +184,7 @@ void wiki_save(Database* db, char* page_name, char* content)
     db_register_wiki(db, wiki_a);
     wiki_free(wiki_a);
 }
+
 void print_wiki_help()
 {
     o(      "<div>\n"

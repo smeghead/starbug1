@@ -19,6 +19,7 @@ void string_init(String* str, size_t block_size)
     strcpy(str->raw_chars, "");
 /*     d("string_init end\n"); */
 }
+
 String* string_new_by_block_size(size_t block_size)
 {
     String* str;
@@ -27,10 +28,12 @@ String* string_new_by_block_size(size_t block_size)
     string_init(str, block_size);
     return str;
 }
+
 String* string_new()
 {
     return string_new_by_block_size(0);
 }
+
 void string_append(String* str, const char* addstr)
 {
     size_t len = strlen(addstr);
@@ -48,6 +51,7 @@ void string_append(String* str, const char* addstr)
     str->current_size += len;
 /*     printf("%d (size: %d)\n", str->current_size, str->buf_size); */
 }
+
 void string_set(String* str, const char* newstr)
 {
     /* 存在していた文字列は破棄する。 */
@@ -55,20 +59,24 @@ void string_set(String* str, const char* newstr)
     string_init(str, str->block_size);
     string_append(str, newstr);
 }
+
 char* string_rawstr(String* str)
 {
     return str->raw_chars;
 }
+
 void string_free(String* str)
 {
     if (str->raw_chars)
         xfree(str->raw_chars);
     xfree(str);
 }
+
 size_t string_len(String* str)
 {
     return str->current_size;
 }
+
 void string_replace(String* str, char target_char, char* newchars)
 {
     String* new_string_a = string_new(str->block_size);
@@ -90,6 +98,7 @@ void string_replace(String* str, char target_char, char* newchars)
     str->current_size = new_string_a->current_size;
     xfree(new_string_a);
 }
+
 void string_appendf(String* str, char* fmt, ...)
 {
     va_list ap;
@@ -139,4 +148,5 @@ void string_appendf(String* str, char* fmt, ...)
     }
     va_end(ap);
 }
+
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

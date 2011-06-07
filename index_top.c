@@ -60,6 +60,7 @@ void top_output_header(char* title, Project* project)
             "<br clear=\"all\" />\n"
             "<div id=\"main-content\">");
 }
+
 void top_output_footer()
 {
     /* Finish up the page */
@@ -78,12 +79,14 @@ void top_output_footer()
             "</div>\n"
             "</body>\n</html>\n", cgiScriptName, cgiScriptName, VERSION, COPYRIGHT);
 }
+
 int index_top_main() {
     top_register_actions();
     exec_action();
     free_action_actions();
     return 0;
 }
+
 /**
  * デフォルトのaction。
  */
@@ -141,6 +144,7 @@ void top_top_action()
     top_output_footer();
     db_finish(db_a);
 }
+
 void top_edit_top_action()
 {
     Database* db_a;
@@ -182,6 +186,7 @@ void top_edit_top_submit_action()
 
     redirect("", NULL);
 }
+
 void top_search_action()
 {
     Database* db_a;
@@ -214,4 +219,5 @@ void top_search_action()
     top_output_footer();
     db_finish(db_a);
 }
+
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

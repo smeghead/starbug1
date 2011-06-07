@@ -126,6 +126,7 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
     o(      "</ul>\n"
             "<br clear=\"all\" />\n");
 }
+
 void output_footer()
 {
     /* Finish up the page */
@@ -143,15 +144,18 @@ void output_footer()
             "</div>\n"
             "</body>\n</html>\n", cgiScriptName, VERSION, COPYRIGHT);
 }
+
 void output_field_information_js() {
     o("<script type=\"text/javascript\" src=\"%s/../js/validate.js\"></script>\n", cgiScriptName); 
 }
+
 int admin_project_main() {
     register_actions();
     exec_action();
     free_action_actions();
     return 0;
 }
+
 /**
  * action that displays management menu.
  */
@@ -193,6 +197,7 @@ void top_action()
     output_footer();
     db_finish(db_a);
 }
+
 /**
  * action that displays project information setting.
  */
@@ -230,6 +235,7 @@ void project_action()
     output_footer();
     db_finish(db_a);
 }
+
 void fill_upload_content_setting_file(SettingFile* sf)
 {
     int got_count = 0;
@@ -258,6 +264,7 @@ void fill_upload_content_setting_file(SettingFile* sf)
     }
     cgiFormFileClose(file);
 }
+
 /**
  * action that submits project information setting.
  */
@@ -292,6 +299,7 @@ void project_submit_action()
     db_finish(db_a);
     redirect("", _("updated."));
 }
+
 /**
  * action that display item settings.
  */
@@ -583,6 +591,7 @@ void items_action()
     output_footer();
     db_finish(db_a);
 }
+
 /**
  * action that submits item settings.
  */
@@ -714,6 +723,7 @@ void update_elements(Database* db)
     }
     cgiStringArrayFree(ids);
 }
+
 void new_item_action()
 {
     Project* project_a = project_new();
@@ -866,6 +876,7 @@ void new_item_action()
     db_finish(db_a);
     output_footer();
 }
+
 void new_item_submit_action()
 {
     ElementType* et_a = element_type_new();
@@ -927,6 +938,7 @@ void new_item_submit_action()
     db_finish(db_a);
     redirect("", _("added."));
 }
+
 void delete_item_action()
 {
     char* e_type_id;
@@ -964,6 +976,7 @@ void delete_item_action()
     output_footer();
     element_type_free(et_a);
 }
+
 void delete_item_submit_action()
 {
     char* e_type_id;
@@ -986,6 +999,7 @@ void delete_item_submit_action()
     db_finish(db_a);
 
 }
+
 void style_action()
 {
     Database* db_a;
@@ -1046,6 +1060,7 @@ void style_action()
     db_finish(db_a);
     output_footer();
 }
+
 void style_submit_action()
 {
     SettingFile* sf_a = setting_file_new();
@@ -1064,6 +1079,7 @@ void style_submit_action()
     redirect("", _("updated."));
     setting_file_free(sf_a);
 }
+
 void admin_help_action()
 {
     Project* project_a = project_new();
@@ -1079,6 +1095,7 @@ void admin_help_action()
     db_finish(db_a);
     output_footer();
 }
+
 void export_action()
 {
     Project* project_a = project_new();
@@ -1109,6 +1126,7 @@ void export_action()
     output_footer();
     db_finish(db_a);
 }
+
 void export_submit_action()
 {
     char project_type_name[DEFAULT_LENGTH];
@@ -1121,4 +1139,5 @@ void export_submit_action()
 
     redirect("", _("updated."));
 }
+
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

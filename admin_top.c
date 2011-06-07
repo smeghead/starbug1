@@ -60,6 +60,7 @@ void top_output_header(char* title, Project* project)
             "<br clear=\"all\" />\n"
             "<div id=\"main-content\">");
 }
+
 void top_output_footer()
 {
     /* Finish up the page */
@@ -78,12 +79,14 @@ void top_output_footer()
             "</div>\n"
             "</body>\n</html>\n", cgiScriptName, VERSION, COPYRIGHT);
 }
+
 int admin_top_main() {
     top_register_actions();
     exec_action();
     free_action_actions();
     return 0;
 }
+
 /**
  * default action.
  */
@@ -230,6 +233,7 @@ void top_top_action()
     top_output_footer();
     db_finish(db_a);
 }
+
 void top_update_project_info_submit_action()
 {
     Database* db_a;
@@ -258,6 +262,7 @@ void top_update_project_info_submit_action()
 
     redirect("", _("updated."));
 }
+
 static bool validate_project_code_exists(Database* db, char* code, int id)
 {
     bool ret = true;
@@ -276,6 +281,7 @@ static bool validate_project_code_exists(Database* db, char* code, int id)
     list_free(project_infos_a);
     return ret;
 }
+
 static bool validate_project_code(char* name)
 {
     if (strcmp(name, "top") == 0) {
@@ -283,6 +289,7 @@ static bool validate_project_code(char* name)
     }
     return true;
 }
+
 void top_update_project_submit_action()
 {
     Database* db_a;
@@ -337,6 +344,7 @@ void top_update_project_submit_action()
 
     redirect("", _("updated."));
 }
+
 void top_add_project_submit_action()
 {
     Database* db_a;
@@ -382,4 +390,5 @@ void top_add_project_submit_action()
 
     redirect("", _("added."));
 }
+
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

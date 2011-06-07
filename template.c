@@ -50,6 +50,7 @@ static char* trim(char* src)
     /* 本来到達しない */
     return src;
 }
+
 List* get_templates(List* templates, String* locale)
 {
     char template_dir[DEFAULT_LENGTH];
@@ -133,6 +134,7 @@ void create_db_from_template(int project_id, char* project_type)
     }
     die("テンプレートの取得に失敗しました。");
 }
+
 void pipe_to_file(char* command_str, char* db_name, FILE* out)
 {
     FILE* fp;
@@ -167,6 +169,7 @@ void pipe_to_file(char* command_str, char* db_name, FILE* out)
     }
     pclose(fp);
 }
+
 void save_template(char* project_type, String* locale)
 {
     String* template_filename_a = string_new();
@@ -195,4 +198,5 @@ void save_template(char* project_type, String* locale)
     pipe_to_file(".dump wiki", db_name, out);
     fclose(out);
 }
+
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

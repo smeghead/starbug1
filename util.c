@@ -29,6 +29,7 @@ static Action* get_actions()
 {
     return actions;
 }
+
 void register_action_actions(char* action_name, void func(void))
 {
     Action* a;
@@ -44,6 +45,7 @@ void register_action_actions(char* action_name, void func(void))
     a->action_func = func;
     a->next = NULL;
 }
+
 void free_action_actions()
 {
     Action* a = actions->next;
@@ -165,6 +167,7 @@ void exec_action()
         }
     }
 }
+
 #define TRYPUTC(ch) \
     { \
         if (putc((ch), cgiOut) == EOF) { \
@@ -235,6 +238,7 @@ int get_link_syntax_len(char* data, size_t len, char* link)
     }
     return index;
 }
+
 /**
  * チケットリンクかどうかの判定を行なう。
  * @return チケットリンクと判定された文字列の長さ。
@@ -425,6 +429,7 @@ void hm(char *s)
 {
     cgiHtmlEscapeDataMultiLine(s, (int) strlen(s));
 }
+
 static cgiFormResultType cgiHtmlEscapeDataMailaddress(char *data, int len)
 {
     while (len--) {
@@ -458,6 +463,7 @@ static cgiFormResultType cgiHtmlEscapeDataMailaddress(char *data, int len)
     }
     return cgiFormSuccess;
 }
+
 static cgiFormResultType cgi_html_escape(char *data, int len)
 {
     while (len--) {
@@ -497,6 +503,7 @@ static cgiFormResultType cgi_html_escape(char *data, int len)
     }
     return cgiFormSuccess;
 }
+
 void cgi_escape(char *s)
 {
     cgi_html_escape(s, (int) strlen(s));
@@ -513,6 +520,7 @@ void u(char* str)
     url_encode((unsigned char*)str, (unsigned char*)buf, DEFAULT_LENGTH);
     fprintf(cgiOut, "%s", buf);
 }
+
 char* get_filename_without_path(char* path)
 {
     char* p = path;
@@ -526,6 +534,7 @@ char* get_filename_without_path(char* path)
     }
     return p;
 }
+
 char* get_upload_filename(const int element_id, char* buf)
 {
     char name[DEFAULT_LENGTH];
@@ -533,6 +542,7 @@ char* get_upload_filename(const int element_id, char* buf)
     cgiFormFileName(name, buf, DEFAULT_LENGTH);
     return buf;
 }
+
 int get_upload_size(const int element_id)
 {
     char name[DEFAULT_LENGTH];
@@ -541,6 +551,7 @@ int get_upload_size(const int element_id)
     cgiFormFileSize(name, &size);
     return size;
 }
+
 char* get_upload_content_type(const int element_id, char* buf)
 {
     char name[DEFAULT_LENGTH];
@@ -548,6 +559,7 @@ char* get_upload_content_type(const int element_id, char* buf)
     cgiFormFileContentType(name, buf, DEFAULT_LENGTH);
     return buf;
 }
+
 ElementFile* get_upload_content(const int element_id)
 {
     int got_count = 0;
@@ -584,6 +596,7 @@ void page_not_found()
     o("Content-Type: text/plain; charset=utf-8;\r\n\r\n");
     o("404 Not Found.\r\n");
 }
+
 void redirect_raw(const char* path)
 {
     char redirecturi[DEFAULT_LENGTH];
@@ -591,6 +604,7 @@ void redirect_raw(const char* path)
     o("Status: 302 Temporary Redirection\r\n");
     cgiHeaderLocation(redirecturi);
 }
+
 void redirect(const char* path, const char* message)
 {
     char redirecturi[DEFAULT_LENGTH];
@@ -609,6 +623,7 @@ void redirect(const char* path, const char* message)
     o("Status: 302 Temporary Redirection\r\n");
     cgiHeaderLocation(redirecturi);
 }
+
 void redirect_with_hook_messages(const char* path, const char* message, List* results)
 {
     char redirecturi[DEFAULT_LENGTH];
@@ -643,6 +658,7 @@ void redirect_with_hook_messages(const char* path, const char* message, List* re
     o("Status: 302 Temporary Redirection\r\n");
     cgiHeaderLocation(redirecturi);
 }
+
 static cgiFormResultType csv_escape(char *data, int len)
 {
     while (len--) {
@@ -656,12 +672,14 @@ static cgiFormResultType csv_escape(char *data, int len)
     }
     return cgiFormSuccess;
 }
+
 void csv_field(char* src)
 {
     o("\"");
     csv_escape(src, strlen(src));
     o("\"");
 }
+
 static cgiFormResultType cgiCssClassName(char *data, int len)
 {
     while (len--) {
@@ -675,6 +693,7 @@ static cgiFormResultType cgiCssClassName(char *data, int len)
     }
     return cgiFormSuccess;
 }
+
 void css_field(char* str)
 {
     char src[DEFAULT_LENGTH];
@@ -691,6 +710,7 @@ void css_field(char* str)
     base64_encode((unsigned char*)src, (unsigned char*)dist);
     cgiCssClassName(dist, strlen(dist));
 }
+
 String* get_base_url(String* buf)
 {
     char* https = getenv("HTTPS");
@@ -706,6 +726,7 @@ String* get_base_url(String* buf)
             cgiScriptName);
     return buf;
 }
+
 bool contains(char* const value, const char* name)
 {
     char* p = value;
@@ -716,6 +737,7 @@ bool contains(char* const value, const char* name)
     } while ((p = strstr(p, "\t")) != NULL);
     return false;
 }
+
 void set_cookie(char* key, char* value)
 {
     char value_base64[DEFAULT_LENGTH];
@@ -723,10 +745,12 @@ void set_cookie(char* key, char* value)
     base64_encode((unsigned char*)value, (unsigned char*)value_base64);
     cgiHeaderCookieSetString(key, value_base64, 86400 * 30, cgiScriptName, cgiServerName);
 }
+
 void clear_cookie(char* key)
 {
     cgiHeaderCookieSetString(key, "", 0, cgiScriptName, cgiServerName);
 }
+
 void get_cookie_string(char* key, char* buf)
 {
     char value[DEFAULT_LENGTH];
@@ -748,6 +772,7 @@ void set_timestamp_string(char* buf)
             date.tm_year + 1900, date.tm_mon + 1, date.tm_mday,
             date.tm_hour, date.tm_min, date.tm_sec);
 }
+
 void set_date_string(char* buf)
 {
     struct timeval tv;
@@ -759,6 +784,7 @@ void set_date_string(char* buf)
             date.tm_year + 1900, date.tm_mon + 1, date.tm_mday,
             date.tm_hour, date.tm_min, date.tm_sec);
 }
+
 /*
  * 引数の文字列から拡張子部分のポインタを返す。
  */
@@ -777,6 +803,7 @@ char* get_ext(char* path)
     }
     return "";
 }
+
 void print_field_help()
 {
     o(      "<div class=\"description\">\n"
@@ -790,6 +817,7 @@ void print_field_help()
             _("[ticket form syntax description2]"),
             _("[ticket form syntax description3]"));
 }
+
 void set_locale(char* locale)
 {
     char locale_utf8[DEFAULT_LENGTH];
@@ -812,4 +840,5 @@ void set_locale(char* locale)
     bind_textdomain_codeset("starbug1", "utf-8");
 #endif
 }
+
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

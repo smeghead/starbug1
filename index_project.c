@@ -68,6 +68,7 @@ void output_calendar_js();
 #define COOKIE_SAVE_CONDITION_FORMAT "starbug1_%s_save_condition"
 #define COOKIE_CONDITION_FORMAT "starbug1_%s_field%d"
 #define COOKIE_CONDITION_KEYWORD_FORMAT "starbug1_%s_keyword"
+
 ModeType get_mode()
 {
     char mode[MODE_LENGTH];
@@ -77,6 +78,7 @@ ModeType get_mode()
     if (strlen(mode) > 0) return MODE_REPLY;
     return MODE_INVALID;
 }
+
 void register_actions()
 {
     REG_ACTION(list);
@@ -173,6 +175,7 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
       "<br class=\"clear\" clear='all' />\n"
       "</div>\n");
 }
+
 void output_footer()
 {
     /* Finish up the page */
@@ -191,6 +194,7 @@ void output_footer()
             "<div id=\"divwin\"><form><textarea id=\"divwintext\"></textarea></form></div>\n"
             "</body>\n</html>\n", cgiScriptName, VERSION, COPYRIGHT);
 }
+
 bool is_enabled_project(char* project_name)
 {
     Database* db_a;
@@ -204,6 +208,7 @@ bool is_enabled_project(char* project_name)
     d("project id: %d\n", id);
     return id ? 1 : 0;
 }
+
 int index_project_main() {
     register_actions();
     if (is_enabled_project(g_project_code) == 0) {
@@ -214,6 +219,7 @@ int index_project_main() {
     free_action_actions();
     return 0;
 }
+
 void output_navigater(SearchResult* result, char* query_string)
 {
     int i;
@@ -233,6 +239,7 @@ void output_navigater(SearchResult* result, char* query_string)
         o("<a href=\"%s/%s/search?p=%d&amp;%s\">&gt;&gt;</a>\n", cgiScriptName, g_project_code_4_url, result->page + 1, query_string);
     o("</div>\n");
 }
+
 String* format_query_string_without_page(String* buffer)
 {
     char **array, **arrayStep;
@@ -259,6 +266,7 @@ String* format_query_string_without_page(String* buffer)
 
     return buffer;
 }
+
 String* format_query_string_without_sort_and_page(String* buffer)
 {
     char **array, **arrayStep;
@@ -287,6 +295,7 @@ String* format_query_string_without_sort_and_page(String* buffer)
 
     return buffer;
 }
+
 void output_ticket_table_header_no_link(List* element_types)
 {
     Iterator* it;
@@ -304,6 +313,7 @@ void output_ticket_table_header_no_link(List* element_types)
       "\t\t<th class=\"leftdate\">%s</th>\n"
       "\t</tr>\n", _("register date"), _("last update date"), _("leaved days"));
 }
+
 void output_ticket_table_header(List* element_types)
 {
     Iterator* it;
@@ -327,6 +337,7 @@ void output_ticket_table_header(List* element_types)
     o("\t</tr>\n");
     string_free(query_string_a);
 }
+
 void output_ticket_table_body(Database* db, SearchResult* result, List* element_types)
 {
     Iterator* it;
@@ -372,6 +383,7 @@ void output_ticket_table_body(Database* db, SearchResult* result, List* element_
         list_free(elements_a);
     }
 }
+
 void output_ticket_table_footer(SearchResult* result, List* element_types)
 {
     Iterator* it;
@@ -397,6 +409,7 @@ void output_ticket_table_footer(SearchResult* result, List* element_types)
         o("\t</tr>\n");
     }
 }
+
 void output_ticket_table_status_index(Database* db, SearchResult* result, List* element_types)
 {
     o("<table summary=\"ticket list\">\n");
@@ -405,6 +418,7 @@ void output_ticket_table_status_index(Database* db, SearchResult* result, List* 
     output_ticket_table_footer(result, element_types);
     o("</table>\n");
 }
+
 void output_ticket_table(Database* db, SearchResult* result, List* element_types)
 {
     o("<table summary=\"ticket list\">\n");
@@ -414,6 +428,7 @@ void output_ticket_table(Database* db, SearchResult* result, List* element_types
     output_ticket_table_footer(result, element_types);
     o("</table>\n");
 }
+
 void output_states(List* states, bool with_new_ticket_link)
 {
     Iterator* it;
@@ -542,6 +557,7 @@ void list_action()
     output_footer();
     db_finish(db_a);
 }
+
 Condition* create_sort_condition(Condition* sort)
 {
     char sortstr[DEFAULT_LENGTH];
@@ -557,6 +573,7 @@ Condition* create_sort_condition(Condition* sort)
     }
     return sort;
 }
+
 List* create_conditions(List* conditions, List* element_types, bool cookie_restore)
 {
     char name[DEFAULT_LENGTH];
@@ -661,6 +678,7 @@ List* create_conditions(List* conditions, List* element_types, bool cookie_resto
     list_add(conditions, c);
     return conditions;
 }
+
 static void save_condition2cookie(List* conditions, char* q, bool save)
 {
     Iterator* it;
@@ -730,6 +748,7 @@ static void save_condition2cookie(List* conditions, char* q, bool save)
         clear_cookie(cookie_key_save_condition);
     }
 }
+
 /**
  * search page action。
  */
@@ -926,6 +945,7 @@ void search_action()
     list_free(element_types_a);
     search_result_free(result_a);
 }
+
 void output_ticket_information_4_csv_report_header(List* element_types)
 {
     Iterator* it;
@@ -941,6 +961,7 @@ void output_ticket_information_4_csv_report_header(List* element_types)
     csv_field(_("last update date")); o(",");
     csv_field(_("leaved days")); o("\r\n");
 }
+
 void output_ticket_information_4_csv_report(Database* db, SearchResult* result, List* element_types)
 {
     Iterator* it;
@@ -966,6 +987,7 @@ void output_ticket_information_4_csv_report(Database* db, SearchResult* result, 
         list_free(elements_a);
     }
 }
+
 void output_ticket_information_4_html_report_header(List* element_types)
 {
     Iterator* it;
@@ -986,6 +1008,7 @@ void output_ticket_information_4_html_report_header(List* element_types)
     h(_("leaved days"));
     o("</td></tr>\r\n");
 }
+
 void output_ticket_information_4_html_report(Database* db, SearchResult* result, List* element_types)
 {
     Iterator* it;
@@ -1012,6 +1035,7 @@ void output_ticket_information_4_html_report(Database* db, SearchResult* result,
         list_free(elements_a);
     }
 }
+
 void output_ticket_information_4_rss_report(Database* db, SearchResult* result, List* element_types, String* base_url)
 {
     Iterator* it;
@@ -1048,6 +1072,7 @@ void output_ticket_information_4_rss_report(Database* db, SearchResult* result, 
                 "\t</item>\n");
     }
 }
+
 /**
  * CSVレポートをダウンロードするaction。
  */
@@ -1087,6 +1112,7 @@ void report_csv_download_action()
     list_free(element_types_a);
     search_result_free(result_a);
 }
+
 /**
  * エクセルで表示するためのHTMLレポートをダウンロードするaction。
  */
@@ -1132,6 +1158,7 @@ void report_html_download_action()
     list_free(element_types_a);
     search_result_free(result_a);
 }
+
 /**
  * RSSレポートをダウンロードするaction。
  */
@@ -1197,6 +1224,7 @@ void report_rss_download_action()
     list_free(element_types_a);
     search_result_free(result_a);
 }
+
 /**
  * form要素を表示する。
  */
@@ -1281,6 +1309,7 @@ void output_form_element_4_condition(Database* db, ElementType* et, List* condit
             break;
     }
 }
+
 /**
  * form要素を表示する。
  */
@@ -1461,14 +1490,17 @@ void output_form_element(Database* db, List* elements, ElementType* et, Project*
             break;
     }
 }
+
 void output_calendar_js() {
     o("<script type=\"text/javascript\" src=\"%s/../js/calendar.js\"></script>\n", cgiScriptName); 
 }
+
 void output_graph_js() {
     o("<script type=\"text/javascript\" src=\"%s/../js/line.js\"></script>\n", cgiScriptName);
     o("<!--[if IE]><script type=\"text/javascript\" src=\"%s/../js/excanvas-compressed.js\"></script><![endif]-->\n", cgiScriptName);
     o("<script type=\"text/javascript\" src=\"%s/../js/circle.js\"></script>\n", cgiScriptName); 
 }
+
 void output_field_information_js(List* element_types) {
     Iterator* it;
     o("<script type=\"text/javascript\" src=\"%s/../js/validate.js\"></script>\n", cgiScriptName); 
@@ -1501,6 +1533,7 @@ void output_field_information_js(List* element_types) {
     o("\t// -->\n");
     o("</script>\n");
 }
+
 /**
  * 登録画面を表示するaction。
  */
@@ -1589,6 +1622,7 @@ void register_action()
     db_finish(db_a);
     output_footer();
 }
+
 /**
  * チケット詳細画面を表示するaction。
  */
@@ -1881,6 +1915,7 @@ void ticket_action()
     output_footer();
     list_free(element_types_a);
 }
+
 static void register_list_item(Database* db, int id, char* name)
 {
     ListItem* item_a = list_item_new();
@@ -1891,6 +1926,7 @@ static void register_list_item(Database* db, int id, char* name)
     db_register_list_item(db, item_a);
     list_item_free(item_a);
 }
+
 static void set_posted_value_or_last_value(Element* e, char* name, char* value, List* elements, ElementType* et, bool multiline) {
     cgiFormResultType ret;
     if (multiline) {
@@ -1904,6 +1940,7 @@ static void set_posted_value_or_last_value(Element* e, char* name, char* value, 
     }
     set_element_value(e, value);
 }
+
 int register_or_reply(Database* db, Project* project, Message* ticket, List* element_types, List* elements, HOOK* hook) 
 {
     Iterator* it;
@@ -2005,6 +2042,7 @@ int register_or_reply(Database* db, Project* project, Message* ticket, List* ele
     hook = exec_hook(hook, project, ticket, ticket->elements, element_types);
     return 0;
 }
+
 /**
  * 登録するaction。
  * 登録モード、編集モードがある。
@@ -2069,6 +2107,7 @@ file_size_error:
     output_footer();
     project_free(project_a);
 }
+
 /**
  * 一括登録画面を表示するaction。
  */
@@ -2127,6 +2166,7 @@ void register_at_once_action()
     db_finish(db_a);
     output_footer();
 }
+
 /**
  * register many tickets at once. confirm page action.
  */
@@ -2256,6 +2296,7 @@ void register_at_once_confirm_action()
     csv_free(csv_a);
     output_footer();
 }
+
 void register_at_once_submit_action()
 {
     int row_count = 0, col_count = 0;
@@ -2388,6 +2429,7 @@ void register_at_once_submit_action()
     return;
 
 }
+
 /**
  * デフォルトのaction。
  */
@@ -2551,6 +2593,7 @@ void rss_action()
     o(      "</rdf:RDF>\n");
     db_finish(db_a);
 }
+
 State* get_statictics(int element_type_id, List* states)
 {
     Iterator* it;
@@ -2561,6 +2604,7 @@ State* get_statictics(int element_type_id, List* states)
     }
     return NULL;
 }
+
 void statistics_action()
 {
     Project* project_a = project_new();
@@ -2702,6 +2746,7 @@ got_item:
     output_footer();
     db_finish(db_a);
 }
+
 void help_action()
 {
     Project* project_a = project_new();
@@ -2718,6 +2763,7 @@ void help_action()
     db_finish(db_a);
     output_footer();
 }
+
 void edit_top_action()
 {
     Project* project_a = project_new();
@@ -2747,6 +2793,7 @@ void edit_top_action()
     db_finish(db_a);
     output_footer();
 }
+
 void edit_top_submit_action()
 {
     char* value_a = xalloc(sizeof(char) * VALUE_LENGTH);
@@ -2760,6 +2807,7 @@ void edit_top_submit_action()
 
     redirect("", NULL);
 }
+
 void download_action()
 {
     ElementFile* file_a = element_file_new();
@@ -2787,6 +2835,7 @@ error:
     cgiHeaderContentType("text/plain; charset=utf-8;");
     o(_("error: there is no file."));
 }
+
 void setting_file_action()
 {
     SettingFile* file_a = setting_file_new();
@@ -2812,6 +2861,7 @@ error:
     cgiHeaderContentType("text/plain; charset=utf-8;");
     o(_("error: there is no file."));
 }
+
 void attachment_file_setting_action()
 {
     int file_id, ticket_id, reply_id, element_id, message_id;
@@ -2920,6 +2970,7 @@ void attachment_file_setting_action()
     db_finish(db_a);
     output_footer();
 }
+
 void attachment_file_setting_submit_action()
 {
     char* value_a = xalloc(sizeof(char) * VALUE_LENGTH);
@@ -2979,4 +3030,5 @@ file_size_error:
     output_footer();
     project_free(project_a);
 }
+
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

@@ -49,12 +49,14 @@ HOOK* init_hook(HOOK_MODE mode)
     hook->results = results;
     return hook;
 }
+
 static void escape_quot(String* dist)
 {
     string_replace(dist, '\\', "\\\\");
     string_replace(dist, '"', "\\\"");
     string_replace(dist, '\n', "\\n");
 }
+
 static String* create_json(String* content, Project* project, Message* message, List* elements, List* element_types)
 {
     Iterator* it;
@@ -88,6 +90,7 @@ static String* create_json(String* content, Project* project, Message* message, 
     string_append(content, "]}}");
     return content;
 }
+
 static HookMessage* create_hook_project(Project* project, Message* message, List* elements, List* element_types)
 {
     Iterator* it;
@@ -116,6 +119,7 @@ static HookMessage* create_hook_project(Project* project, Message* message, List
 
     return hook_message;
 }
+
 char* get_script_dir(char* script_dir)
 {
     char* p;
@@ -125,6 +129,7 @@ char* get_script_dir(char* script_dir)
     }
     return script_dir;
 }
+
 HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, List* element_types)
 {
     char hook_dir[DEFAULT_LENGTH] = "script";
@@ -224,6 +229,7 @@ HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, 
     xfree(hook_message_a);
     return hook;
 }
+
 size_t get_hook_message_size(HOOK* hook)
 {
     Iterator* it;
@@ -234,6 +240,7 @@ size_t get_hook_message_size(HOOK* hook)
     }
     return message_size;
 }
+
 void clean_hook(HOOK* hook)
 {
     if (hook == NULL) return;
@@ -242,4 +249,5 @@ void clean_hook(HOOK* hook)
     }
     xfree(hook);
 }
+
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

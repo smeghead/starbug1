@@ -76,14 +76,17 @@ void db_begin(Database* db)
 {
     exec_query(db, "begin;", COLUMN_TYPE_END);
 }
+
 void db_rollback(Database* db)
 {
     exec_query(db, "rollback;", COLUMN_TYPE_END);
 }
+
 void db_commit(Database* db)
 {
     exec_query(db, "commit;", COLUMN_TYPE_END);
 }
+
 void create_top_tables(Database* db)
 {
     d("create_top_tables\n");
@@ -151,6 +154,7 @@ void create_top_tables(Database* db)
             COLUMN_TYPE_END);
     db_commit(db);
 }
+
 void create_project_tables(Database* db, char* sub_project_name)
 {
     String* text_content_a = string_new();
@@ -598,6 +602,7 @@ int exec_query(Database* db, const char* sql, ...)
 
 ERROR_LABEL(db->handle)
 }
+
 /**
  * 戻り値が単一のint型の数値であるSQLの実行をラップします。
  * 注意:結果が無い場合は、INVALID_INT(-99999)を返却する。
@@ -638,6 +643,7 @@ int exec_query_scalar_int(Database* db, const char* sql, ...)
 
 ERROR_LABEL(db->handle)
 }
+
 List* parse_keywords(List* keywords, char* query)
 {
     char* hit;
@@ -663,6 +669,7 @@ List* parse_keywords(List* keywords, char* query)
     }
     return keywords;
 }
+
 String* create_columns_like_exp(List* element_types, char* table_name, List* keywords, String* buf)
 {
     Iterator* it_keyword;
@@ -679,4 +686,5 @@ String* create_columns_like_exp(List* element_types, char* table_name, List* key
     }
     return buf;
 }
+
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

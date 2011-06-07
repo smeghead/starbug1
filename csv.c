@@ -45,6 +45,7 @@ static void decord_csv_field(char* src, char* dist)
         *p_dist = '\0';
     }
 }
+
 Csv* csv_new(char* content)
 {
     CsvMode mode = CSV_MODE_DATA;
@@ -107,6 +108,7 @@ Csv* csv_new(char* content)
     }
     return csv;
 }
+
 void csv_free(Csv* csv)
 {
     Iterator* it;

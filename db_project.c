@@ -10,7 +10,6 @@
 #include "dbutil.h"
 #include "simple_string.h"
 
-
 void create_columns_exp(List*, char*, char*);
 
 static List* db_get_element_types(Database* db, DbInfo* db_info, bool all, List* element_types)
@@ -69,6 +68,7 @@ static List* db_get_element_types(Database* db, DbInfo* db_info, bool all, List*
 
 ERROR_LABEL(db->handle)
 }
+
 /*
  * 引数のdb_infoは、index_top.cから呼び出すようになったために追加した引数。
  * その他から呼び出す場合は、NULLを指定する。
@@ -77,6 +77,7 @@ List* db_get_element_types_4_list(Database* db, DbInfo* db_info, List* elements)
 {
     return db_get_element_types(db, db_info, false, elements);
 }
+
 /*
  * 引数のdb_infoは、index_top.cから呼び出すようになったために追加した引数。
  * その他から呼び出す場合は、NULLを指定する。
@@ -85,6 +86,7 @@ List* db_get_element_types_all(Database* db, DbInfo* db_info, List* elements)
 {
     return db_get_element_types(db, db_info, true, elements);
 }
+
 static List* db_get_num_element_types(Database* db, DbInfo* db_info, List* elements)
 {
     List* es_a;
@@ -102,6 +104,7 @@ static List* db_get_num_element_types(Database* db, DbInfo* db_info, List* eleme
     list_free(es_a);
     return elements;
 }
+
 ElementType* db_get_element_type(Database* db, int id, ElementType* e)
 {
     int r;
@@ -190,6 +193,7 @@ int db_get_list_item_id(Database* db, const int element_type, char* name)
 
 ERROR_LABEL(db->handle)
 }
+
 void create_message_insert_sql(List* elements, char* buf)
 {
     Iterator* it;
@@ -206,6 +210,7 @@ void create_message_insert_sql(List* elements, char* buf)
     }
     strcat(buf, ")");
 }
+
 int db_register_ticket(Database* db, Message* ticket)
 {
     char registerdate[20];
@@ -451,6 +456,7 @@ static String* get_search_sql_string(Database* db, List* conditions, Condition* 
 
     return sql_string;
 }
+
 int set_conditions(Database* db, sqlite3_stmt* stmt, List* conditions, List* keywords)
 {
     int n = 1;
@@ -479,6 +485,7 @@ int set_conditions(Database* db, sqlite3_stmt* stmt, List* conditions, List* key
     }
     return n;
 }
+
 static void set_tickets_number_sum(Database* db, List* conditions, Condition* sorts, List* keywords, SearchResult* result)
 {
     sqlite3_stmt* stmt = NULL;
@@ -523,6 +530,7 @@ static void set_tickets_number_sum(Database* db, List* conditions, Condition* so
 
 ERROR_LABEL(db->handle)
 }
+
 SearchResult* db_get_tickets_by_status(Database* db, const char* status, SearchResult* result)
 {
     int r, n, hit_count = 0;
@@ -569,6 +577,7 @@ SearchResult* db_get_tickets_by_status(Database* db, const char* status, SearchR
     return result;
 ERROR_LABEL(db->handle)
 }
+
 SearchResult* db_search_tickets(Database* db, List* conditions, char* q, Condition* sorts, const int page, SearchResult* result)
 {
     int r, n;
@@ -664,6 +673,7 @@ SearchResult* db_search_tickets_4_report(Database* db, List* conditions, char* q
     return result;
 ERROR_LABEL(db->handle)
 }
+
 void create_columns_exp(List* element_types, char* table_name, char* buf)
 {
     Iterator* it;
@@ -674,12 +684,14 @@ void create_columns_exp(List* element_types, char* table_name, char* buf)
         strcat(buf, column_name);
     }
 }
+
 static void set_str_val(Element* e, const unsigned char* str_val)
 {
     if (str_val != NULL) {
         string_set(e->str_val, (const char*)str_val);
     }
 }
+
 List* db_get_last_elements_4_list(Database* db, const int ticket_id, List* elements)
 {
     char sql[DEFAULT_LENGTH] = "";
@@ -752,6 +764,7 @@ List* db_get_last_elements_4_list(Database* db, const int ticket_id, List* eleme
     return elements;
 ERROR_LABEL(db->handle)
 }
+
 List* db_get_last_elements(Database* db, const int ticket_id, List* elements)
 {
     char sql[DEFAULT_LENGTH];
@@ -817,6 +830,7 @@ List* db_get_last_elements(Database* db, const int ticket_id, List* elements)
     return elements;
 ERROR_LABEL(db->handle)
 }
+
 List* db_get_elements(Database* db, int message_id, List* elements)
 {
     char sql[DEFAULT_LENGTH] = "";
@@ -863,6 +877,7 @@ List* db_get_elements(Database* db, int message_id, List* elements)
 
 ERROR_LABEL(db->handle)
 }
+
 int* db_get_message_ids_a(Database* db, const int ticket_id)
 {
     int* message_ids = NULL;
@@ -929,6 +944,7 @@ Project* db_get_project(Database* db, Project* project)
     return project;
 ERROR_LABEL(db->handle)
 }
+
 void db_update_project(Database* db, Project* project)
 {
     if (exec_query(
@@ -964,6 +980,7 @@ void db_update_project(Database* db, Project* project)
             COLUMN_TYPE_END) != 1)
         die("no seting to update? or too many?");
 }
+
 void db_update_element_type(Database* db, ElementType* et)
 {
     /* 基本項目の場合、ticket_propertyとreply_propertyは編集させない。 */
@@ -1007,6 +1024,7 @@ void db_update_element_type(Database* db, ElementType* et)
             COLUMN_TYPE_END) != 1)
         die("no element_type to update?");
 }
+
 void db_update_list_item(Database* db, ListItem* item)
 {
     if (exec_query(
@@ -1020,6 +1038,7 @@ void db_update_list_item(Database* db, ListItem* item)
             COLUMN_TYPE_END) != 1)
         die("no list_item to update?");
 }
+
 void db_delete_list_item(Database* db, const int id)
 {
     exec_query(
@@ -1029,6 +1048,7 @@ void db_delete_list_item(Database* db, const int id)
             COLUMN_TYPE_INT, id,
             COLUMN_TYPE_END);
 }
+
 void db_register_list_item(Database* db, ListItem* item)
 {
     exec_query(
@@ -1041,6 +1061,7 @@ void db_register_list_item(Database* db, ListItem* item)
             COLUMN_TYPE_INT, item->sort,
             COLUMN_TYPE_END);
 }
+
 int db_register_element_type(Database* db, ElementType* et)
 {
     char field_name[DEFAULT_LENGTH];
@@ -1070,6 +1091,7 @@ int db_register_element_type(Database* db, ElementType* et)
     exec_query(db, sql, COLUMN_TYPE_END);
     return element_type_id;
 }
+
 void db_delete_element_type(Database* db, const int id)
 {
     exec_query(
@@ -1078,6 +1100,7 @@ void db_delete_element_type(Database* db, const int id)
             COLUMN_TYPE_INT, id,
             COLUMN_TYPE_END);
 }
+
 List* db_get_states_has_not_close(Database* db, List* states)
 {
     int r;
@@ -1113,6 +1136,7 @@ List* db_get_states_has_not_close(Database* db, List* states)
 
 ERROR_LABEL(db->handle)
 }
+
 List* db_get_states(Database* db, List* states)
 {
     int r;
@@ -1146,6 +1170,7 @@ List* db_get_states(Database* db, List* states)
 
 ERROR_LABEL(db->handle)
 }
+
 List* db_get_statictics_multi(Database* db, List* states, const int element_type_id)
 {
     int r;
@@ -1180,6 +1205,7 @@ List* db_get_statictics_multi(Database* db, List* states, const int element_type
 
 ERROR_LABEL(db->handle)
 }
+
 List* db_get_statictics(Database* db, List* states, const int element_type_id)
 {
     int r;
@@ -1214,6 +1240,7 @@ List* db_get_statictics(Database* db, List* states, const int element_type_id)
 
 ERROR_LABEL(db->handle)
 }
+
 ElementFile* db_get_element_file(Database* db, int id, ElementFile* file)
 {
     int r;
@@ -1252,6 +1279,7 @@ ElementFile* db_get_element_file(Database* db, int id, ElementFile* file)
     return file;
 ERROR_LABEL(db->handle)
 }
+
 void db_delete_element_file(Database* db, const int id, const bool deleted)
 {
     exec_query(
@@ -1261,6 +1289,7 @@ void db_delete_element_file(Database* db, const int id, const bool deleted)
             COLUMN_TYPE_INT, id,
             COLUMN_TYPE_END);
 }
+
 List* db_get_newest_information(Database* db, const int limit, List* messages)
 {
     int r;
@@ -1290,6 +1319,7 @@ List* db_get_newest_information(Database* db, const int limit, List* messages)
 
 ERROR_LABEL(db->handle)
 }
+
 int db_get_element_file_id(Database* db, int message_id, int element_type_id)
 {
     return exec_query_scalar_int(
@@ -1300,6 +1330,7 @@ int db_get_element_file_id(Database* db, int message_id, int element_type_id)
             COLUMN_TYPE_INT, element_type_id,
             COLUMN_TYPE_END);
 }
+
 char* db_get_element_file_mime_type(Database* db, const int message_id, const int element_type_id, char* buf)
 {
     int r;
@@ -1323,6 +1354,7 @@ char* db_get_element_file_mime_type(Database* db, const int message_id, const in
     return buf;
 ERROR_LABEL(db->handle)
 }
+
 bool db_get_element_file_deleted(Database* db, int file_id)
 {
     d("db_get_element_file_deleted file_id: %d\n", file_id);
@@ -1333,6 +1365,7 @@ bool db_get_element_file_deleted(Database* db, int file_id)
             COLUMN_TYPE_INT, file_id,
             COLUMN_TYPE_END);
 }
+
 void db_register_wiki(Database* db, Wiki* wiki)
 {
     char registerdate[20];
@@ -1346,6 +1379,7 @@ void db_register_wiki(Database* db, Wiki* wiki)
             COLUMN_TYPE_TEXT, registerdate,
             COLUMN_TYPE_END);
 }
+
 Wiki* db_get_newest_wiki(Database* db, char* page_name, Wiki* wiki)
 {
     int r;
@@ -1378,6 +1412,7 @@ Wiki* db_get_newest_wiki(Database* db, char* page_name, Wiki* wiki)
 
 ERROR_LABEL(db->handle)
 }
+
 void db_setting_file_save(Database* db, SettingFile* sf)
 {
     if (exec_query(
@@ -1397,6 +1432,7 @@ void db_setting_file_save(Database* db, SettingFile* sf)
                 COLUMN_TYPE_END) != 1)
         die("failed to update setting file.");
 }
+
 SettingFile* db_get_setting_file(Database* db, char* name, SettingFile* file)
 {
     int r;
@@ -1435,6 +1471,7 @@ SettingFile* db_get_setting_file(Database* db, char* name, SettingFile* file)
     return file;
 ERROR_LABEL(db->handle)
 }
+
 void db_update_top_image(Database* db, SettingFile* sf)
 {
     if (exec_query(
@@ -1453,6 +1490,7 @@ void db_update_top_image(Database* db, SettingFile* sf)
                 COLUMN_TYPE_END) != 1)
         die("update failed.");
 }
+
 List* db_get_burndownchart(Database* db, List* burndowns)
 {
     int r;
@@ -1499,4 +1537,5 @@ List* db_get_burndownchart(Database* db, List* burndowns)
 
 ERROR_LABEL(db->handle)
 }
+
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

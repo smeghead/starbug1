@@ -41,6 +41,7 @@ void base64_encode(const unsigned char *src, unsigned char *dist)
     }
     if (i) encode_char(bb, i - 1, dist, j);
 }
+
 typedef union {
     unsigned int    data;
     unsigned char   xyz[4];
@@ -70,6 +71,7 @@ static long codetovalue(unsigned char c)
         return -1;
     }
 }
+
 static int decode_str(int enc_ptr, const unsigned char *src, unsigned char *dest)
 {
     int i, j;
@@ -116,6 +118,7 @@ int base64_decode(const unsigned char *src, unsigned char *dest)
 
     return 0;
 }
+
 unsigned long url_encode(unsigned char* csource, unsigned char* cbuffer, unsigned long lbuffersize)
 {
     unsigned long llength;
@@ -161,4 +164,5 @@ unsigned long url_encode(unsigned char* csource, unsigned char* cbuffer, unsigne
     }
     return lresultcount;                                            /* cbuffer に書き込んだ文字列のサイズを返す */
 }
+
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

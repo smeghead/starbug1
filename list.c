@@ -15,24 +15,28 @@ void* list_new_element(List* list)
     }
     return new_element;
 }
+
 /* Iteratorの取得 */
 Iterator* get_iterator(List* list)
 {
 /*     d("get_iterator\n"); */
     return list->head;
 }
+
 /* 要素を持っているか？ */
 int iterator_has_value(Iterator* ite)
 {
 /*     d("iterator_has_value\n"); */
     return ite != NULL;
 }
+
 /* 次の要素を取得する */
 void* iterator_next(Iterator* ite)
 {
 /*     d("iterator_next\n"); */
     return ite->next;
 }
+
 /* Linked Listにオブジェクトを追加する */
 void list_add(List* list, void* new_element)
 {
@@ -47,6 +51,7 @@ void list_add(List* list, void* new_element)
     list->size++;
     list->tail->element = new_element;
 }
+
 /* Linked Listを開放する */
 void list_free(List* list)
 {
@@ -67,3 +72,5 @@ void list_free(List* list)
     }
     xfree(list);
 }
+
+/* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
