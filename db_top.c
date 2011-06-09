@@ -185,11 +185,10 @@ List* get_result_part(Database* db, List* projects, List* sqls, List* keywords, 
         ProjectInfo* pi = it->element;
 
         count++;
-        if (count < start || count > start + offset) continue; /* ignore cause out of target range. */
+        if (count < start || count >= start + offset) continue; /* ignore cause out of target range. */
         if (pi->id == 1) continue; /* ignore cause top sub project. */
         if (pi->deleted) continue; /* ignore cause deleted sub project. */
         sprintf(sql, "attach ? as db%d", pi->id);
-        d("%s\n", sql);
         sprintf(db_name, "db/%d.db", pi->id);
         exec_query(db, sql,
                 COLUMN_TYPE_TEXT, db_name,
@@ -255,7 +254,6 @@ List* get_result_part(Database* db, List* projects, List* sqls, List* keywords, 
         char sql[DEFAULT_LENGTH];
         DbInfo* db_info = it->element;
 
-        d("db_info->id: %d\n", db_info->id);
         sprintf(sql, "detach db%d", db_info->id);
         d("%s\n", sql);
         exec_query(db, sql, COLUMN_TYPE_END);
@@ -269,6 +267,7 @@ List* get_result_part(Database* db, List* projects, List* sqls, List* keywords, 
 
 ERROR_LABEL(db->handle)
 }
+
 List* db_top_search(Database* db, char* q, List* tickets)
 {
     List* projects_a;
