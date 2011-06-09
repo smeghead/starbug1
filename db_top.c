@@ -171,7 +171,7 @@ void set_project_code_by_ticket(Ticket* t, List* projects)
 
 List* get_result_part(Database* db, List* projects, List* sqls, List* keywords, int start, int offset, List* tickets)
 {
-    int r, count = 0;
+    int r, count = -1;
     int index = 1;
     sqlite3_stmt *stmt = NULL;
     Iterator* it;
@@ -184,6 +184,7 @@ List* get_result_part(Database* db, List* projects, List* sqls, List* keywords, 
         char db_name[DEFAULT_LENGTH];
         ProjectInfo* pi = it->element;
 
+        count++;
         if (count < start || count > start + offset) continue; /* ignore cause out of target range. */
         if (pi->id == 1) continue; /* ignore cause top sub project. */
         if (pi->deleted) continue; /* ignore cause deleted sub project. */
@@ -208,7 +209,6 @@ List* get_result_part(Database* db, List* projects, List* sqls, List* keywords, 
             list_add(sqls, s);
         }
         sqlite3_finalize(stmt);
-        count++;
     }
     /* merge sql statements. */
     string_append(sql_search_a, "select project_id, id from (\n");
@@ -231,7 +231,6 @@ List* get_result_part(Database* db, List* projects, List* sqls, List* keywords, 
             String* k = it_k->element;
             for (i = 0; i < db_info->field_count; i++) { /* for each columns. */
                 sqlite3_bind_text(stmt, index++, string_rawstr(k), string_len(k), NULL);
-                d("settext %d:%s\n", index - 1, string_rawstr(k));
             }
         }
     }
@@ -241,7 +240,6 @@ List* get_result_part(Database* db, List* projects, List* sqls, List* keywords, 
         Ticket* t = list_new_element(tickets);
         t->project_id = sqlite3_column_int(stmt, 0);
         t->id = sqlite3_column_int(stmt, 1);
-        d("get %d:%d\n", t->project_id, t->id);
 
         set_project_code_by_ticket(t, projects);
         t->project_name = db_top_get_project_name(db, t, t->project_name);
@@ -253,15 +251,12 @@ List* get_result_part(Database* db, List* projects, List* sqls, List* keywords, 
         goto error;
 
     /* detatch dbs. */
-
-    foreach (it, projects) {
+    foreach (it, db_infos_a) {
         char sql[DEFAULT_LENGTH];
-        ProjectInfo* pi = it->element;
+        DbInfo* db_info = it->element;
 
-        if (count < start || count > start + offset) continue; /* ignore cause out of target range. */
-        if (pi->id == 1) continue; /* ignore cause top sub project. */
-        if (pi->deleted) continue; /* ignore cause deleted sub project. */
-        sprintf(sql, "detach db%d", pi->id);
+        d("db_info->id: %d\n", db_info->id);
+        sprintf(sql, "detach db%d", db_info->id);
         d("%s\n", sql);
         exec_query(db, sql, COLUMN_TYPE_END);
     }
@@ -277,7 +272,6 @@ ERROR_LABEL(db->handle)
 List* db_top_search(Database* db, char* q, List* tickets)
 {
     List* projects_a;
-    List* sqls_a;
     List* keywords_a;
     int i;
 
@@ -285,16 +279,16 @@ List* db_top_search(Database* db, char* q, List* tickets)
     keywords_a = parse_keywords(keywords_a, q);
     /* search for sub projects. */
     list_alloc(projects_a, ProjectInfo, project_info_new, project_info_free);
-    list_alloc(sqls_a, String, string_new, string_free);
     projects_a = db_top_get_all_project_infos(db, projects_a);
 
     for (i = 0; i < projects_a->size; i += 10) {
+        List* sqls_a;
+        list_alloc(sqls_a, String, string_new, string_free);
         tickets = get_result_part(db, projects_a, sqls_a, keywords_a, i, 10, tickets);
-    d("aa 0\n");
+        list_free(sqls_a);
     }
 
     list_free(keywords_a);
-    list_free(sqls_a);
     list_free(projects_a);
     return tickets;
 
