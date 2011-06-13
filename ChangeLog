@@ -2,6 +2,14 @@
 
 	* prepare release.
 
+2011-06-09  smeghead <smeghead7@gmail.com>
+
+	* fixed to search tickats in more than 10 sub projects bug. again.
+
+2011-06-08  smeghead <smeghead7@gmail.com>
+
+	* 1.4.07 released.
+
 2011-06-08  smeghead <smeghead7@gmail.com>
 
 	* fixed to search tickats in more than 10 sub projects bug.
