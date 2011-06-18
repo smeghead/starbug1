@@ -47,17 +47,20 @@ void top_output_header(char* title, Project* project)
     o(      "\t<link rel=\"shortcut icon\" type=\"image/x-ico\" href=\"%s/../favicon.ico\" />\n", cgiScriptName);
     o(      "</head>\n"
             "<body>\n"
+            "<div id=\"header\">\n"
             "<a name=\"top\"></a>\n"
             "<h1 id=\"toptitle\" title=\"Starbug1\">"); h(string_rawstr(project->name)); o("</h1>\n");
 /*             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://www.starbug1.com/\"><img src=\"%s/../img/starbug1.jpg\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName); */
     o(      "<div id=\"projectmenu\">\n"
             "\t<ul>\n"
-            "\t\t<li><a href=\""); h(string_rawstr(project->home_url)); o("\">"); h(string_rawstr(project->home_description)); o("</a></li>\n");
+            "\t\t<li class=\"blank\">&nbsp;</li>\n");
+    o(      "\t\t<li><a href=\""); h(string_rawstr(project->home_url)); o("\">"); h(string_rawstr(project->home_description)); o("</a></li>\n");
     o(      "\t\t<li><a href=\"%s/../index.%s/%s/\">%s</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url, _("project top"));
     o(      "\t\t<li><a href=\"%s/../admin.%s/%s/\">%s</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url, _("project management"));
     o(      "\t</ul>\n");
     o(      "</div>\n"
             "<br clear=\"all\" />\n"
+            "</div>\n"
             "<div id=\"main-content\">");
 }
 
@@ -68,16 +71,16 @@ void top_output_footer()
             "<div id=\"footer\">\n"
             "<hr />\n"
             "<div align=\"right\">\n"
+            "<address>Powered by <a href=\"%s/../COPYING_cgic\">cgic</a> &amp; SQLite3.\n"
+            "<a href=\"http://www.starbug1.com/\">Starbug1</a> version: %s. %s.</address>\n"
             "<p>\n"
             "\t<a href=\"http://validator.w3.org/check?uri=referer\">\n"
             "\t\t<img src=\"%s/../img/valid-xhtml10.gif\" alt=\"Valid XHTML 1.0 Transitional\" height=\"31\" width=\"88\" />\n"
             "\t</a>\n"
             "</p>\n"
-            "<div><address>Powered by <a href=\"%s/../COPYING_cgic\">cgic</a> &amp; SQLite3.</address></div>\n"
-            "<div><address><a href=\"http://www.starbug1.com/\">Starbug1</a> version: %s. %s.</address></div>\n"
             "</div>\n"
             "</div>\n"
-            "</body>\n</html>\n", cgiScriptName, cgiScriptName, VERSION, COPYRIGHT);
+            "</body>\n</html>\n", cgiScriptName, VERSION, COPYRIGHT, cgiScriptName);
 }
 
 int index_top_main() {
@@ -104,7 +107,7 @@ void top_top_action()
     top_project_a = db_get_project(db_a, top_project_a);
     top_output_header(_("top page"), top_project_a);
     o(      "<div id=\"project_list\">\n"
-            "\t<h2>%s</h2>\n"
+            "\t<h2 class=\"radius-right\">%s</h2>\n"
             "\t<ul>\n", _("sub projects list"));
     foreach (it, project_infos_a) {
         ProjectInfo* p = it->element;
@@ -126,7 +129,7 @@ void top_top_action()
     }
     list_free(project_infos_a);
     o(      "\t</ul>\n");
-    o(      "\t<h2>%s</h2>\n"
+    o(      "\t<h2 class=\"radius-right\">%s</h2>\n"
             "\t<form action=\"%s/%s/top_search\" method=\"get\">\n", _("search"), cgiScriptName, g_project_code_4_url);
     o(      "\t\t<div>%s</div>\n", _("search by keyword for all sub projects."));
     o(      "\t\t<input type=\"text\" name=\"q\" />\n"
@@ -135,8 +138,8 @@ void top_top_action()
 
     o(      "</div>\n");
     o(      "<div id=\"dashboard\">\n"
-            "\t<h2>%s</h2>\n", _("description"));
-    o(      "<a href=\"%s/%s/top_edit_top\">%s</a>\n", cgiScriptName, g_project_code_4_url, _("edit top page"));
+            "\t<h2 class=\"radius-left\">%s</h2>\n", _("description"));
+    o(      "<div id=\"top_page_edit_link\"><a href=\"%s/%s/top_edit_top\">%s</a></div>\n", cgiScriptName, g_project_code_4_url, _("edit top page"));
     wiki_out(db_a, "top");
     o(      "</div>\n");
     o(      "<br clear=\"all\" />\n");

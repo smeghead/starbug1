@@ -48,16 +48,19 @@ void top_output_header(char* title, Project* project)
     string_free(base_url_a);
     o(      "</head>\n"
             "<body>\n"
+            "<div id=\"header\">\n"
             "<a name=\"top\"></a>\n"
             "<h1 id=\"toptitle\" title=\"Starbug1\">"); h(string_rawstr(project->name)); o(" %s</h1>\n", _("project management"));
 /*             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://www.starbug1.com/\"><img src=\"%s/../img/starbug1.jpg\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName); */
     o(      "<div id=\"projectmenu\">\n"
-            "\t<ul>\n");
+            "\t<ul>\n"
+            "\t\t<li class=\"blank\">&nbsp;</li>\n");
     o(      "\t\t<li><a href=\"%s/../index.%s/%s/\">%s</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url, _("project top"));
     o(      "\t\t<li><a href=\"%s/../admin.%s/%s/\">%s</a></li>\n", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url, _("project management"));
     o(      "\t</ul>\n"
             "</div>\n"
             "<br clear=\"all\" />\n"
+            "</div>\n"
             "<div id=\"main-content\">");
 }
 
@@ -145,7 +148,9 @@ void top_top_action()
     o(      "\t\t\t\t<td><input type=\"text\" name=\"project.locale\" value=\""); v(string_rawstr(project_a->locale)); o("\" maxlength=\"5\" /></td>\n"
             "\t\t\t</tr>\n");
     o(      "\t\t</table>\n");
-    o(      "\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("update"));
+    o(      "\t\t<div class=\"proc-button\">\n");
+    o(      "\t\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("update"));
+    o(      "\t\t</div>\n");
     o(      "\t</form>\n");
     o(      "</div>\n");
     project_free(project_a);
@@ -188,7 +193,9 @@ void top_top_action()
     o(      "\t\t<p>%s</p>\n", _("[project settings description1]"));
     o(      "\t\t<p>%s</p>\n", _("[project settings description2]"));
     o(      "\t\t<p>%s</p>\n", _("[project settings description3]"));
-    o(      "\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("update"));
+    o(      "\t\t<div class=\"proc-button\">\n");
+    o(      "\t\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("update"));
+    o(      "\t\t</div>\n");
     o(      "\t</form>\n");
     o(      "\t</div>\n");
     o(      "\t<div id=\"project_add\">\n"
@@ -227,7 +234,9 @@ void top_top_action()
     o(      "\t\t\t\t</tr>\n");
     o(      "\t\t\t</table>\n");
     o(      "\t\t\t<p>%s</p>\n", _("[sub project name description]"));
+    o(      "\t\t<div class=\"proc-button\">\n");
     o(      "\t\t\t<input class=\"button\" type=\"submit\" value=\"%s\" />\n", _("add"));
+    o(      "\t\t</div>\n");
     o(      "\t\t</form>\n");
     o(      "\t</div>\n");
     top_output_footer();
