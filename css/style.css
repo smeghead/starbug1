@@ -11,6 +11,10 @@
 /* ---------------------- */
 /* end of initialize rule */
 /* ---------------------- */
+body {
+    margin: 0px 0px 0px 0px;
+    width: 100%;
+}
 
 a:link {
     color: #0051E9;
@@ -26,279 +30,302 @@ a:hover {
 select:focus,
 input:focus,
 textarea:focus {
-/*     background-color: #ffffe0; */
 }
 h1 {
+    color: #eeeeee;
+    background-color: #444444;
     margin: 0px 0px 0px 0px;
-    padding: 0px 0px 0px 0px;
-    text-align: center;
-    vertical-align: middle;
-}
-h2 {
-    color: #E7EFFF;
-    background-color: #30305C;
+    padding: 0px 0px 0px 15px;
     font-weight: bold;
     font-size: 150%;
-    margin: 10px 13px 3px 3px;
-    padding: 5px 3px 3px 15px;
-    -moz-border-radius: 20px;
-    -webkit-border-radius: 20px;
+}
+h1 a {
+    text-decoration: none;
+    color: #eeeeee;
+}
+h1 a:hover {
+    text-decoration: underline;
+    color: #eeeeee;
+}
+h1 a:visited {
+    color: #eeeeee;
+}
+h2 {
+    font-weight: bold;
+    font-size: 110%;
+    background-color: #454545;
+    color: white;
+    margin: 10px 0px 10px 0px;
+    padding: 3px 0px 1px 10px;
 }
 h3 {
-    font-size: 120%;
-    color: white;
-    background-color: #33447C;
-    padding: 1px 3px 1px 10px;
-    margin: 10px 0px 10px 0px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-/*    border-color: #979F9F;*/
-/*    border-style: solid;*/
-/*    border-width: 1px;*/
-}
-div#main_body h4 {
+    font-size: 105%;
     font-weight: bold;
-    font-size: 95%;
-    margin: 2px 10px;
-}
-div#input_form h4,
-div#top h4,
-div#ticket_list h4.status  {
-    padding: 0px 2px 0px 3px;
-    margin: 13px 0px 13px 5px;
-    border-color: #00108C;
+    color: #eee;
+    background-color: #555555;
+    padding: 3px 3px 0px 10px;
+    margin: 5px 0px 5px 10px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-color: #979F9F;
     border-style: solid;
-    border-width: 0px 0px 2px 0px;
-    font-weight: bold;
+    border-width: 1px;
 }
-div#ticket_history h4 {
-    width: 98%;
-    padding: 0px 2px 0px 10px;
-    margin: 8px 0px 3px 3px;
-    border-color: #00108C;
-    border-style: solid;
-    border-width: 0px 0px 2px 0px;
-    font-weight: bold;
+.radius-right {
+    -moz-border-top-right-radius: 7px;
+    -webkit-border-top-right-radius: 7px;
+    -moz-border-bottom-right-radius: 7px;
+    -webkit-border-bottom-right-radius: 7px;
 }
-/* チケット一覧 ID */
-div#ticket_list table th.id {
-    width: 30px;
+.radius-left {
+    -moz-border-top-left-radius: 7px;
+    -webkit-border-top-left-radius: 7px;
+    -moz-border-bottom-left-radius: 7px;
+    -webkit-border-bottom-left-radius: 7px;
 }
-/* チケット一覧 件名 */
-div#ticket_list table th.field1 {
-    width: 30%;
-}
-div#main_body h4 {
-    font-weight: bold;
-    font-size: 120%;
-    margin: 2px 10px;
-    padding: 3px 10px;
-}
-div#main_body h5 {
-    font-weight: bold;
-    font-size: 110%;
-    margin: 0px 0px 3px 5px;
-    padding: 3px 20px;
-}
-div#main_body h6 {
-    color: #00108C;
-    font-size: 95%;
-    font-weight: bold;
-    margin: 0px 0px 3px 8px;
-    padding: 3px 20px;
-}
-div#main_body p {
-    padding:0px 10px 0px 20px;
-}
-div#main_body ul {
-    padding:0px 10px 0px 20px;
-}
-/* |+チケット一覧 投稿者+| */
-/* div#ticket_list table th.field2 { */
+/* div#main_body h4 { */
+/*     font-weight: bold; */
+/*     font-size: 95%; */
+/*     margin: 2px 10px; */
+/* } */
+/* div#input_form h4, */
+/* div#top h4, */
+/* div#ticket_list h4.status  { */
+/*     padding: 0px 2px 0px 3px; */
+/*     margin: 13px 0px 13px 5px; */
+/*     border-color: #00108C; */
+/*     border-style: solid; */
+/*     border-width: 0px 0px 2px 0px; */
+/*     font-weight: bold; */
+/* } */
+/* div#ticket_history h4 { */
+/*     width: 98%; */
+/*     padding: 0px 2px 0px 10px; */
+/*     margin: 8px 0px 3px 3px; */
+/*     border-color: #00108C; */
+/*     border-style: solid; */
+/*     border-width: 0px 0px 2px 0px; */
+/*     font-weight: bold; */
+/* } */
+/* |+チケット一覧 ID+| */
+/* div#ticket_list table th.id { */
+/*     width: 30px; */
+/* } */
+/* |+チケット一覧 件名+| */
+/* div#ticket_list table th.field1 { */
+/*     width: 30%; */
+/* } */
+/* div#main_body h4 { */
+/*     font-weight: bold; */
+/*     font-size: 120%; */
+/*     margin: 2px 10px; */
+/*     padding: 3px 10px; */
+/* } */
+/* div#main_body h5 { */
+/*     font-weight: bold; */
+/*     font-size: 110%; */
+/*     margin: 0px 0px 3px 5px; */
+/*     padding: 3px 20px; */
+/* } */
+/* div#main_body h6 { */
+/*     color: #00108C; */
+/*     font-size: 95%; */
+/*     font-weight: bold; */
+/*     margin: 0px 0px 3px 8px; */
+/*     padding: 3px 20px; */
+/* } */
+/* div#main_body p { */
+/*     padding:0px 10px 0px 20px; */
+/* } */
+/* div#main_body ul { */
+/*     padding:0px 10px 0px 20px; */
+/* } */
+/* |+|+チケット一覧 投稿者+|+| */
+/* |+div#ticket_list table th.field2 {+| */
+/* |+    width: 80px;+| */
+/* |+}+| */
+/* |+チケット一覧 状態+| */
+/* |+div#ticket_list table th.field3 {+| */
+/* |+    width: 45px;+| */
+/* |+}+| */
+/* |+チケット一覧 ID+| */
+/* div#ticket_list table td.id { */
+/*     text-align: center; */
+/* } */
+/* |+放置日数+| */
+/* div#ticket_list table td.passed { */
+/*     text-align: right; */
+/* } */
+/* div#ticket_list table tr.odd { */
+/*     background-color: #f9f9f9; */
+/* } */
+/* div#ticket_list table tr.even { */
+/*     background-color: #ffffff; */
+/* } */
+/* h5 { */
+/*     font-weight: bold; */
+/*     margin: 0px 0px 3px 5px; */
+/* } */
+/* h6 { */
+/*     color: #00108C; */
+/*     font-size: 90%; */
+/*     font-weight: bold; */
+/*     margin: 0px 0px 3px 8px; */
+/* } */
+/* hr { */
+/*     width: 100%; */
+/* } */
+/* .message { */
+/*     margin: 0px 0px 0px 30px; */
+/* } */
+
+/* table { */
+/*     margin:10px; */
+/* } */
+
+/* table tr th{ */
+/*     padding:3px; */
+/*     background:#ddd; */
+/* |+    border-bottom:1px solid gray;+| */
+/* } */
+
+/* table tr td { */
+/*     padding:3px; */
+/* |+    border-bottom:1px dashed gray;+| */
+/* } */
+/* textarea { */
+/*     width: 400px; */
+/* } */
+/* input.checkbox, input.radio { */
+/*     width: 20px; */
+/* } */
+
+/* input.text { */
+/*     width: 400px; */
+/* } */
+/* input.calendar { */
 /*     width: 80px; */
 /* } */
-/* チケット一覧 状態 */
-/* div#ticket_list table th.field3 { */
-/*     width: 45px; */
+/* input.number { */
+/*     width: 40px; */
 /* } */
-/* チケット一覧 ID */
-div#ticket_list table td.id {
-    text-align: center;
-}
-/* 放置日数 */
-div#ticket_list table td.passed {
-    text-align: right;
-}
-div#ticket_list table tr.odd {
-    background-color: #f9f9f9;
-}
-div#ticket_list table tr.even {
-    background-color: #ffffff;
-}
-h5 {
-    font-weight: bold;
-    margin: 0px 0px 3px 5px;
-}
-h6 {
-    color: #00108C;
-    font-size: 90%;
-    font-weight: bold;
-    margin: 0px 0px 3px 8px;
-}
-hr {
-    width: 100%;
-}
-.message {
-    margin: 0px 0px 0px 30px;
-}
+/* input.project_id { */
+/*     width: 100px; */
+/* } */
+/* input.button { */
+/*     width: 100px; */
+/* } */
+/* input:hover.button { */
+/*     cursor: pointer; */
+/* } */
+/* br.clear { */
+/*     height: 10px; */
+/* } */
 
-table {
-    margin:10px;
-}
+/* #mainmenu { */
+/*     width:100%; */
+/*     margin:0px 0px 0px 0px; */
+/*     text-align: center; */
+/* } */
 
-table tr th{
-    padding:3px;
-    background:#ddd;
-/*     border-bottom:1px solid gray; */
-}
-
-table tr td {
-    padding:3px;
-/*     border-bottom:1px dashed gray; */
-}
-textarea {
-    width: 400px;
-}
-input.checkbox, input.radio {
-    width: 20px;
-}
-
-input.text {
-    width: 400px;
-}
-input.calendar {
-    width: 80px;
-}
-input.number {
-    width: 40px;
-}
-input.project_id {
-    width: 100px;
-}
-input.button {
-    width: 100px;
-}
-input:hover.button {
-    cursor: pointer;
-}
-br.clear {
-    height: 10px;
-}
-
-#mainmenu {
-    width:100%;
-    margin:0px 0px 0px 0px;
-    text-align: center;
-}
-
-#mainmenu li {
-    margin:0px 0px 0px 0px;
-    list-style:none;
-    padding:3px 10px;
-    float:left;
-}
-#subject {
-}
-#ticket_list table {
-    padding-left: 10px;
-    width: 98%;
-}
-#ticket_history table {
-    width: 95%;
-}
-#ticket_history td.title {
-    color: #00108C;
-    font-size: 110%;
-    font-weight: bold;
-    background-color: #d9d9d9;
-    border-bottom:1px solid #808080;
-    white-space: nowrap;
-}
-#ticket_history td.title span.date {
-    margin-left: 8px;
-    color: #000000;
-    font-weight: normal;
-}
-#ticket_history th {
-    white-space: nowrap;
-    width: 120px;
-}
-#ticket_history td {
-    vertical-align: top;
-}
-#input_form table {
-    width: 75%;
-}
-#input_form th {
-    vertical-align: top;
-    width: 120px;
-}
-#input_form textarea {
-    height: 200px;
-}
-div {
-}
-#new_item,
-#ticket_list,
-#ticket_history,
-#input_form,
-#setting_form,
-#condition_form {
-    margin: 10px;
-    width: 95%;
-}
-#new_item table th,
-#input_form table th,
-#setting_form table th,
-#condition_form table th {
-    background-color: lavender;
-    vertical-align: top;
-}
-#new_item table td,
-#input_form table td,
-#setting_form table td,
-#condition_form table td {
-    vertical-align: top;
-}
-#input_form table.reply_table th.ticket_property {
-    background-color: lightyellow;
-}
-#condition_form table div.description, 
-#setting_form table div.description, 
-#input_form table div.description {
-    margin-left: 0px;
-}
-table.list_item {
-    width: 90%;
-}
-table.list_item, table.list_item td, table.list_item th {
-  margin: 0px;
-  border: none;
-}
-table.list_item tr.deleted {
-    background-color: #ccc;
-}
-table.list_item td {
-  border-bottom: 1px dashed gray;
-}
-.list_item input.text {
-  width: 150px;
-}
-.list_item input.checkbox {
-}
-input.conditionelement {
-    width: 150px;
-}
+/* #mainmenu li { */
+/*     margin:0px 0px 0px 0px; */
+/*     list-style:none; */
+/*     padding:3px 10px; */
+/*     float:left; */
+/* } */
+/* #subject { */
+/* } */
+/* #ticket_list table { */
+/*     padding-left: 10px; */
+/*     width: 98%; */
+/* } */
+/* #ticket_history table { */
+/*     width: 95%; */
+/* } */
+/* #ticket_history td.title { */
+/*     color: #00108C; */
+/*     font-size: 110%; */
+/*     font-weight: bold; */
+/*     background-color: #d9d9d9; */
+/*     border-bottom:1px solid #808080; */
+/*     white-space: nowrap; */
+/* } */
+/* #ticket_history td.title span.date { */
+/*     margin-left: 8px; */
+/*     color: #000000; */
+/*     font-weight: normal; */
+/* } */
+/* #ticket_history th { */
+/*     white-space: nowrap; */
+/*     width: 120px; */
+/* } */
+/* #ticket_history td { */
+/*     vertical-align: top; */
+/* } */
+/* #input_form table { */
+/*     width: 75%; */
+/* } */
+/* #input_form th { */
+/*     vertical-align: top; */
+/*     width: 120px; */
+/* } */
+/* #input_form textarea { */
+/*     height: 200px; */
+/* } */
+/* div { */
+/* } */
+/* #new_item, */
+/* #ticket_list, */
+/* #ticket_history, */
+/* #input_form, */
+/* #setting_form, */
+/* #condition_form { */
+/*     margin: 10px; */
+/*     width: 95%; */
+/* } */
+/* #new_item table th, */
+/* #input_form table th, */
+/* #setting_form table th, */
+/* #condition_form table th { */
+/*     background-color: lavender; */
+/*     vertical-align: top; */
+/* } */
+/* #new_item table td, */
+/* #input_form table td, */
+/* #setting_form table td, */
+/* #condition_form table td { */
+/*     vertical-align: top; */
+/* } */
+/* #input_form table.reply_table th.ticket_property { */
+/*     background-color: lightyellow; */
+/* } */
+/* #condition_form table div.description,  */
+/* #setting_form table div.description,  */
+/* #input_form table div.description { */
+/*     margin-left: 0px; */
+/* } */
+/* table.list_item { */
+/*     width: 90%; */
+/* } */
+/* table.list_item, table.list_item td, table.list_item th { */
+/*   margin: 0px; */
+/*   border: none; */
+/* } */
+/* table.list_item tr.deleted { */
+/*     background-color: #ccc; */
+/* } */
+/* table.list_item td { */
+/*   border-bottom: 1px dashed gray; */
+/* } */
+/* .list_item input.text { */
+/*   width: 150px; */
+/* } */
+/* .list_item input.checkbox { */
+/* } */
+/* input.conditionelement { */
+/*     width: 150px; */
+/* } */
 #info,
 #top_new_ticket_link,
 #top_state_index,
@@ -363,6 +390,9 @@ input.conditionelement {
 #main h3 {
     width: 95%;
 }
+#header {
+    background-color: #444444;
+}
 #footer {
     clear : both;
 }
@@ -370,156 +400,156 @@ input.conditionelement {
     margin:0px;
     padding:0px;
 }
-#info ul,
-#info li {
-    margin:0px 0px 0px 0px;
-}
-#new_item {
-    margin: 10px;
-    width: 95%;
-}
-.top_edit {
-    width: 95%;
-    text-align: right;
-}
-#edit_top {
-    width: 95%;
-    height: 300px;
-}
-.ticket_property {
-    color: #00108C;
-}
+/* #info ul, */
+/* #info li { */
+/*     margin:0px 0px 0px 0px; */
+/* } */
+/* #new_item { */
+/*     margin: 10px; */
+/*     width: 95%; */
+/* } */
+/* .top_edit { */
+/*     width: 95%; */
+/*     text-align: right; */
+/* } */
+/* #edit_top { */
+/*     width: 95%; */
+/*     height: 300px; */
+/* } */
+/* .ticket_property { */
+/*     color: #00108C; */
+/* } */
 
-#ticket_newest {
-    margin: 10px;
-    width: 95%;
-}
-#ticket_newest table {
-    width: 95%;
-}
-#ticket_newest th {
-    white-space: nowrap;
-    width: 120px;
-    background-color: #F0DB8C;
-}
-#ticket_newest td {
-    background-color: #ffffe0;
-}
-th.required {
-    border-left-color: #DE1439 !important;
-    border-left-width: 3px;
-}
-span.required {
-    color: #ff0000;
-}
-.error {
-    color: #ff0000;
-    font-weight: bold;
-}
-#state_index {
-    width:100%;
-    margin:0px 0px 0px 0px;
-    text-align: center;
-}
-
-#state_index li {
-    margin:0px 0px 0px 0px;
-    list-style:none;
-    padding:0px 10px 0px 10px;
-    float:left;
-}
-#state_index form {
-    display:inline;
-}
-/* #state_index_anchor { */
+/* #ticket_newest { */
+/*     margin: 10px; */
+/*     width: 95%; */
+/* } */
+/* #ticket_newest table { */
+/*     width: 95%; */
+/* } */
+/* #ticket_newest th { */
+/*     white-space: nowrap; */
+/*     width: 120px; */
+/*     background-color: #F0DB8C; */
+/* } */
+/* #ticket_newest td { */
+/*     background-color: #ffffe0; */
+/* } */
+/* th.required { */
+/*     border-left-color: #DE1439 !important; */
+/*     border-left-width: 3px; */
+/* } */
+/* span.required { */
+/*     color: #ff0000; */
+/* } */
+/* .error { */
+/*     color: #ff0000; */
+/*     font-weight: bold; */
+/* } */
+/* #state_index { */
 /*     width:100%; */
 /*     margin:0px 0px 0px 0px; */
 /*     text-align: center; */
-/*     height: 20px; */
 /* } */
 
-/* #state_index_anchor li { */
+/* #state_index li { */
 /*     margin:0px 0px 0px 0px; */
 /*     list-style:none; */
 /*     padding:0px 10px 0px 10px; */
 /*     float:left; */
 /* } */
-/* #state_index_anchor form { */
+/* #state_index form { */
 /*     display:inline; */
 /* } */
-#field_list {
-    width:100%;
-    height:30px;
-    margin:0px 0px 0px 0px;
-    text-align: center;
-}
+/* |+#state_index_anchor {+| */
+/* |+    width:100%;+| */
+/* |+    margin:0px 0px 0px 0px;+| */
+/* |+    text-align: center;+| */
+/* |+    height: 20px;+| */
+/* |+}+| */
 
-#field_list li {
-    margin:0px 0px 0px 0px;
-    list-style:none;
-    padding:3px 10px;
-    float:left;
-}
-div.complete_message {
-    border: 1px #228B22 solid;
-    margin: 15px 3px 15px 3px;
-    padding: 5px 5px 5px 20px;
-    background-color: #DDFFDD;
-    width: 80%;
-    -moz-border-radius: 8px;
-    -webkit-border-radius: 8px;
-}
-div.item_navigation {
-    width: 95%;
-    font-size: 80%;
-    text-align: right;
-}
-#ticket_list th {
-    white-space: nowrap;
-}
-#ticket_list th a {
-    font-weight: bold;
-    text-decoration: none;
-}
-#ticket_list th a:hover {
-    text-decoration: underline;
-}
-#ticket_list table tr:hover td {
-    background-color: #E9FEEE;
-    border-bottom: solid #004000 1px;
-}
-#ticket_list td.registerdate,
-#ticket_list td.lastregisterdate {
+/* |+#state_index_anchor li {+| */
+/* |+    margin:0px 0px 0px 0px;+| */
+/* |+    list-style:none;+| */
+/* |+    padding:0px 10px 0px 10px;+| */
+/* |+    float:left;+| */
+/* |+}+| */
+/* |+#state_index_anchor form {+| */
+/* |+    display:inline;+| */
+/* |+}+| */
+/* #field_list { */
+/*     width:100%; */
+/*     height:30px; */
+/*     margin:0px 0px 0px 0px; */
+/*     text-align: center; */
+/* } */
+
+/* #field_list li { */
+/*     margin:0px 0px 0px 0px; */
+/*     list-style:none; */
+/*     padding:3px 10px; */
+/*     float:left; */
+/* } */
+/* div.complete_message { */
+/*     border: 1px #228B22 solid; */
+/*     margin: 15px 3px 15px 3px; */
+/*     padding: 5px 5px 5px 20px; */
+/*     background-color: #DDFFDD; */
+/*     width: 80%; */
+/*     -moz-border-radius: 8px; */
+/*     -webkit-border-radius: 8px; */
+/* } */
+/* div.item_navigation { */
+/*     width: 95%; */
+/*     font-size: 80%; */
+/*     text-align: right; */
+/* } */
+/* #ticket_list th { */
 /*     white-space: nowrap; */
-}
-#ticket_list th {
-    border-color: #777;
-}
-#ticket_list td {
-    border-color: #999;
-/*     border-color: #efefef #dce0e3 #dce0e3 #efefef; */
-}
+/* } */
+/* #ticket_list th a { */
+/*     font-weight: bold; */
+/*     text-decoration: none; */
+/* } */
+/* #ticket_list th a:hover { */
+/*     text-decoration: underline; */
+/* } */
+/* #ticket_list table tr:hover td { */
+/*     background-color: #E9FEEE; */
+/*     border-bottom: solid #004000 1px; */
+/* } */
+/* #ticket_list td.registerdate, */
+/* #ticket_list td.lastregisterdate { */
+/* |+    white-space: nowrap;+| */
+/* } */
+/* #ticket_list th { */
+/*     border-color: #777; */
+/* } */
+/* #ticket_list td { */
+/*     border-color: #999; */
+/* |+    border-color: #efefef #dce0e3 #dce0e3 #efefef;+| */
+/* } */
 
-div.navigater {
-    font-weight: bold;
-    padding: 5px 50px 5px 50px;
-    text-align: right;
-}
-div.navigater a {
-    font-weight: bold;
-}
-table.item_table {
-    width: 90%;
-}
-table.item_table th {
-    width: 120px;
-}
-table.item_table textarea {
-    height: 40px;
-}
-.element_new_item {
-    width: 80px;
-}
+/* div.navigater { */
+/*     font-weight: bold; */
+/*     padding: 5px 50px 5px 50px; */
+/*     text-align: right; */
+/* } */
+/* div.navigater a { */
+/*     font-weight: bold; */
+/* } */
+/* table.item_table { */
+/*     width: 90%; */
+/* } */
+/* table.item_table th { */
+/*     width: 120px; */
+/* } */
+/* table.item_table textarea { */
+/*     height: 40px; */
+/* } */
+/* .element_new_item { */
+/*     width: 80px; */
+/* } */
 
 #menu {
 /*     background: #ccc; */
@@ -607,29 +637,35 @@ table.item_table textarea {
 }
 
 #projectmenu {
-    background: #ccc;
+    margin: 0px 0px 0px 0px;
+    padding: 0px;
+}
+#projectmenu ul {
+    background: transparent;
     float: left;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    width: 99%;
-    border: solid #333 1px;
-    margin-bottom: 8px;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    border: solid #444 1px;
+    margin-bottom: 0px;
 }
 #projectmenu li {
+    list-style: none;
     float: left;
     font-size: 85%;
-    margin: 0;
-    padding: 0;
+    margin: 0px;
+    padding: 0px;
     border-right: solid #003F00 1px;
 }
+#projectmenu li.blank {
+    width: 5px;
+}
 #projectmenu a {
-    background: #eee bottom right no-repeat;
+    background: #aaa bottom right no-repeat;
     color: #000000;
     display: block;
     float: left;
     margin: 0;
-    padding: 3px 8px;
+    padding: 1px 8px;
     text-decoration: none;
 }
 #projectmenu a.current {
@@ -637,156 +673,190 @@ table.item_table textarea {
     color: #ffffff;
 }
 #projectmenu a:hover {
-    background: #999 bottom center no-repeat;
+    background: #666 bottom center no-repeat;
     color: #ffffff;
 }
-#calendar {
-    position:absolute;
-    margin: 0px;
-    padding: 0px;
-    width: 200px;
-}
-#calendar table {
-    border-collapse: collapse;
-    border: solid #0838A5 1px;
-}
-#calendar tbody {
-    font-weight: bold;
-    font-size: 12px;
-    text-align: right;
-}
-#calendar table th,
-#calendar table td {
-    border: 0px;
-    padding: 3px;
-    width: 20px;
-    background-color: #F7F3F7;
-}
-#calendar table tr td.out {
-    color: #808080;
-}
-#calendar tr.title th {
-    color: #ffffff;
-    background-color: #0838A5;
-}
-#calendar tr th {
-    background-color: #AFDBFF;
-}
-#calendar tr.title th.title {
-    text-align: center;
-    width: auto;
-}
-#calendar .day_0 {
-    color: #ff0000;
-}
-#calendar .day_6 {
-    color: #0000ff;
-}
-#calendar .selected {
-    background-color: #FFDEAE;
-}
-#calendar .onmouse {
-    background-color: #FF9A31;
-    cursor: pointer;
-}
-/* div.graph { */
-/*     width: 100%; */
-/*     height: 300px; */
+/* #projectmenu { */
+/*     background: #ccc; */
+/*     float: left; */
+/*     list-style: none; */
+/*     margin: 0; */
+/*     padding: 0; */
+/*     width: 99%; */
+/*     border: solid #333 1px; */
+/*     margin-bottom: 8px; */
 /* } */
-/* div.graph canvas { */
-/*     width: 600px; */
-/*     height: 300px; */
+/* #projectmenu li { */
+/*     float: left; */
+/*     font-size: 85%; */
+/*     margin: 0; */
+/*     padding: 0; */
+/*     border-right: solid #003F00 1px; */
 /* } */
-div.delete_item {
-    margin: 10px;
-}
-div.description {
-    margin-left: 10px;
-}
-div.information {
-    margin-left: 10px;
-}
-img.attachment_image {
-    width: 200px;
-}
-#input_form textarea {
-    height: 200px;
-}
-table#register_at_once_confirm tr td textarea {
-    width: 100px;
-    height: 40px;
-}
-textarea#csvdata {
-    width: 95%;
-    height: 300px;
-    overflow: scroll;
-}
-table#register_at_once_confirm {
-}
-table#register_at_once_confirm th {
-    white-space: nowrap;
-}
-a#new_ticket_link {
-    font-size: 100%;
-    color: white;
-    background-color: #FF5110;
-    border: 1px white solid;
-    font-weight: bold;
-    padding: 3px 10px;
-}
-a#new_ticket_link:hover {
-    border: 1px #FF5110 solid;
-    color: #EFEFEF;
-}
-td.center {
-    text-align: center;
-}
-input.add_new_row {
-    width: 50px;
-}
-form#register_form table.selection,
-form#reply_form table.selection {
-    width: 200px;
-}
-form#register_form table.selection label,
-form#reply_form table.selection label {
-    display: block;
-}
-form#register_form table.selection td.checkbox,
-form#reply_form table.selection td.checkbox {
-    width: 20px;
-    text-align: center;
-}
-div.proc-button {
-    padding: 5px 20px;
-}
-div.remote-address {
-    font-weight: bold;
-}
-span.link-disabled {
-    font-weight: bold;
-    color: red;
-}
-form.file-hide-button {
-    display: inline;
-}
-div.tooltip {
-    border: 1px solid #FFD700;
-    background-color: #FFFF99;
-}
-div.ticket-link-copy {
-    float: right;
-    cursor: pointer;
-    background-image: url("../img/copy.gif"); 
-    background-repeat: no-repeat; 
-    width: 20px;
-}
-span.ticket-page-ticket-link-copy {
-    cursor: pointer;
-    background-image: url("../img/copy.gif"); 
-    background-repeat: no-repeat; 
-    width: 20px;
-}
+/* #projectmenu a { */
+/*     background: #eee bottom right no-repeat; */
+/*     color: #000000; */
+/*     display: block; */
+/*     float: left; */
+/*     margin: 0; */
+/*     padding: 3px 8px; */
+/*     text-decoration: none; */
+/* } */
+/* #projectmenu a.current { */
+/*     background: #666 bottom center no-repeat; */
+/*     color: #ffffff; */
+/* } */
+/* #projectmenu a:hover { */
+/*     background: #999 bottom center no-repeat; */
+/*     color: #ffffff; */
+/* } */
+/* #calendar { */
+/*     position:absolute; */
+/*     margin: 0px; */
+/*     padding: 0px; */
+/*     width: 200px; */
+/* } */
+/* #calendar table { */
+/*     border-collapse: collapse; */
+/*     border: solid #0838A5 1px; */
+/* } */
+/* #calendar tbody { */
+/*     font-weight: bold; */
+/*     font-size: 12px; */
+/*     text-align: right; */
+/* } */
+/* #calendar table th, */
+/* #calendar table td { */
+/*     border: 0px; */
+/*     padding: 3px; */
+/*     width: 20px; */
+/*     background-color: #F7F3F7; */
+/* } */
+/* #calendar table tr td.out { */
+/*     color: #808080; */
+/* } */
+/* #calendar tr.title th { */
+/*     color: #ffffff; */
+/*     background-color: #0838A5; */
+/* } */
+/* #calendar tr th { */
+/*     background-color: #AFDBFF; */
+/* } */
+/* #calendar tr.title th.title { */
+/*     text-align: center; */
+/*     width: auto; */
+/* } */
+/* #calendar .day_0 { */
+/*     color: #ff0000; */
+/* } */
+/* #calendar .day_6 { */
+/*     color: #0000ff; */
+/* } */
+/* #calendar .selected { */
+/*     background-color: #FFDEAE; */
+/* } */
+/* #calendar .onmouse { */
+/*     background-color: #FF9A31; */
+/*     cursor: pointer; */
+/* } */
+/* |+div.graph {+| */
+/* |+    width: 100%;+| */
+/* |+    height: 300px;+| */
+/* |+}+| */
+/* |+div.graph canvas {+| */
+/* |+    width: 600px;+| */
+/* |+    height: 300px;+| */
+/* |+}+| */
+/* div.delete_item { */
+/*     margin: 10px; */
+/* } */
+/* div.description { */
+/*     margin-left: 10px; */
+/* } */
+/* div.information { */
+/*     margin-left: 10px; */
+/* } */
+/* img.attachment_image { */
+/*     width: 200px; */
+/* } */
+/* #input_form textarea { */
+/*     height: 200px; */
+/* } */
+/* table#register_at_once_confirm tr td textarea { */
+/*     width: 100px; */
+/*     height: 40px; */
+/* } */
+/* textarea#csvdata { */
+/*     width: 95%; */
+/*     height: 300px; */
+/*     overflow: scroll; */
+/* } */
+/* table#register_at_once_confirm { */
+/* } */
+/* table#register_at_once_confirm th { */
+/*     white-space: nowrap; */
+/* } */
+/* a#new_ticket_link { */
+/*     font-size: 100%; */
+/*     color: white; */
+/*     background-color: #FF5110; */
+/*     border: 1px white solid; */
+/*     font-weight: bold; */
+/*     padding: 3px 10px; */
+/* } */
+/* a#new_ticket_link:hover { */
+/*     border: 1px #FF5110 solid; */
+/*     color: #EFEFEF; */
+/* } */
+/* td.center { */
+/*     text-align: center; */
+/* } */
+/* input.add_new_row { */
+/*     width: 50px; */
+/* } */
+/* form#register_form table.selection, */
+/* form#reply_form table.selection { */
+/*     width: 200px; */
+/* } */
+/* form#register_form table.selection label, */
+/* form#reply_form table.selection label { */
+/*     display: block; */
+/* } */
+/* form#register_form table.selection td.checkbox, */
+/* form#reply_form table.selection td.checkbox { */
+/*     width: 20px; */
+/*     text-align: center; */
+/* } */
+/* div.proc-button { */
+/*     padding: 5px 20px; */
+/* } */
+/* div.remote-address { */
+/*     font-weight: bold; */
+/* } */
+/* span.link-disabled { */
+/*     font-weight: bold; */
+/*     color: red; */
+/* } */
+/* form.file-hide-button { */
+/*     display: inline; */
+/* } */
+/* div.tooltip { */
+/*     border: 1px solid #FFD700; */
+/*     background-color: #FFFF99; */
+/* } */
+/* div.ticket-link-copy { */
+/*     float: right; */
+/*     cursor: pointer; */
+/*     background-image: url("../img/copy.gif");  */
+/*     background-repeat: no-repeat;  */
+/*     width: 20px; */
+/* } */
+/* span.ticket-page-ticket-link-copy { */
+/*     cursor: pointer; */
+/*     background-image: url("../img/copy.gif");  */
+/*     background-repeat: no-repeat;  */
+/*     width: 20px; */
+/* } */
 div#divwin {
     display: none;
     position: absolute;

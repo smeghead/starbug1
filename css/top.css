@@ -16,24 +16,24 @@ body {
     width: 100%;
 }
 
-/* a:link { */
-/*     color: #0051E9; */
-/* } */
+a:link {
+    color: #0051E9;
+}
 
-/* a:visited { */
-/*     color: #005585; */
-/* } */
+a:visited {
+    color: #005585;
+}
 
-/* a:hover { */
-/*     color: #80af00; */
-/* } */
-/* select:focus, */
-/* input:focus, */
-/* textarea:focus { */
-/* } */
+a:hover {
+    color: #80af00;
+}
+select:focus,
+input:focus,
+textarea:focus {
+}
 h1 {
-    color: #eee;
-    background-color: #444;
+    color: #eeeeee;
+    background-color: #444444;
     margin: 0px 0px 0px 0px;
     padding: 0px 0px 0px 15px;
     font-weight: bold;
@@ -42,7 +42,7 @@ h1 {
 h2 {
     font-weight: bold;
     font-size: 110%;
-    background-color: #334;
+    background-color: #454545;
     color: white;
     margin: 10px 0px 10px 0px;
     padding: 3px 0px 1px 10px;
@@ -50,8 +50,8 @@ h2 {
 h3 {
     font-size: 105%;
     font-weight: bold;
-    color: #ccc;
-    background-color: #445;
+    color: #eee;
+    background-color: #555555;
     padding: 3px 3px 0px 10px;
     margin: 5px 0px 5px 10px;
     -moz-border-radius: 3px;

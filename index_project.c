@@ -140,40 +140,42 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/tooltip.js\"></script>\n", cgiScriptName);
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/%s\"></script>\n", cgiScriptName, script_name);
     }
-    o(  "\t<script type=\"text/javascript\" src=\"%s/../js/ticket_list.js\"></script>\n", cgiScriptName);
+    o(      "\t<script type=\"text/javascript\" src=\"%s/../js/ticket_list.js\"></script>\n", cgiScriptName);
     string_free(base_url_a);
     o(      "</head>\n"
             "<body>\n"
-            "<a name=\"top\"></a>\n"
-            "<h1 id=\"toptitle\" title=\"%s\"><a href=\"http://starbug1.com/\"><img src=\"%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n", _("starbug1"), cgiScriptName, g_project_code_4_url);
-    o("<div id='pankuzu'>\n"
-      "<ul>\n");
-    o("\t<li><a href='%s/top/' title=\"%s\">", cgiScriptName, _("display sub projects list at top page.")); h(string_rawstr(top_project_name_a)); o("</a> &gt; </li>\n");
+            "<div id=\"header\">\n"
+            "\t<a name=\"top\"></a>\n");
+/*             "\t<h1 id=\"toptitle\" title=\"%s\"><a href=\"http://starbug1.com/\"><img src=\"%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n", _("starbug1"), cgiScriptName, g_project_code_4_url); */
+    o(      "\t<h1>\n");
+    o(      "\t\t<a href='%s/top/' title=\"%s\">", cgiScriptName, _("display sub projects list at top page.")); h(string_rawstr(top_project_name_a)); o("</a>\n");
     string_free(top_project_name_a);
-    o("\t<li><a href='%s/../index.%s/%s'>", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url); h(string_rawstr(project->name)); o("</a></li>\n"); 
-    o("</ul>\n"
-      "<br class=\"clear\" clear='all' />\n"
-      "</div>\n");
-    o("<div id='menu'>\n"
-      "<ul>\n");
-    o("\t<li><a href='%s/%s/rss' title=\"RSS Feed\"><img src=\"%s/../img/rss.png\" alt=\"rss\" /></a></li>\n", cgiScriptName, g_project_code_4_url, cgiScriptName);
-    o("\t<li><a href='%s/top/' title=\"%s\">%s</a></li>\n", cgiScriptName, _("display sub projects list at top page."), _("top page(sub projects list)"));
-    o("</ul>\n"
-      "<br class=\"clear\" clear='all' />\n"
-      "</div>\n");
-    o("<div>\n"
-      "<ul id='projectmenu'>\n");
-    o("\t<li><a %s href='%s/%s/' title=\"%s\">%s</a></li>\n", navi == NAVI_TOP ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("move to top of sub project."), _("subproject top"));
-    o("\t<li><a %s href='%s/%s/list' title=\"%s\">%s</a></li>\n", navi == NAVI_LIST ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("this is ticket list by status."), _("ticket list by status"));
-    o("\t<li><a %s href='%s/%s/register' title=\"%s\">%s</a></li>\n", navi == NAVI_REGISTER ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("register new ticket"), _("register ticket"));
-    o("\t<li><a %s href='%s/%s/search' title=\"%s\">%s</a></li>\n", navi == NAVI_SEARCH ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("search tickets."), _("search tickets"));
-    o("\t<li><a %s href='%s/%s/statistics' title=\"%s\">%s</a></li>\n", navi == NAVI_STATISTICS ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("display statictics."), _("statictics"));
-    o("\t<li><a %s href='%s/%s/register_at_once' title=\"%s\">%s</a></li>\n", navi == NAVI_REGISTER_AT_ONCE ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("register tickets at once"), _("register tickets at once"));
-    o("\t<li><a %s href='%s/%s/help' title=\"%s\">%s</a></li>\n", navi == NAVI_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("display help."), _("help"));
-    o("\t<li><a %s href='%s/../admin.%s/%s' title=\"%s\">%s</a></li>\n", navi == NAVI_MANAGEMENT ? "class=\"current\"" : "", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url, _("seveal settings."), _("management of sub project"));
-    o("</ul>\n"
-      "<br class=\"clear\" clear='all' />\n"
-      "</div>\n");
+    o(      "\t\t<a href='%s/../index.%s/%s'>", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url); h(string_rawstr(project->name)); o("</a>\n"); 
+    o(      "\t</h1>\n");
+    o(      "\t<div id='menu'>\n"
+            "\t<ul>\n");
+    o(      "\t\t<li><a href='%s/%s/rss' title=\"RSS Feed\"><img src=\"%s/../img/rss.png\" alt=\"rss\" /></a></li>\n", cgiScriptName, g_project_code_4_url, cgiScriptName);
+    o(      "\t\t<li><a href='%s/top/' title=\"%s\">%s</a></li>\n", cgiScriptName, _("display sub projects list at top page."), _("top page(sub projects list)"));
+    o(      "\t</ul>\n"
+            "\t</div>\n"
+            //"\t<br class=\"clear\" clear='all' />\n"
+            );
+    o(      "\t<div id=\"projectmenu\">\n");
+    o(      "\t\t<ul>\n");
+    o(      "\t\t\t<li class=\"blank\">&nbsp;</li>\n");
+    o(      "\t\t\t<li><a %s href='%s/%s/' title=\"%s\">%s</a></li>\n", navi == NAVI_TOP ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("move to top of sub project."), _("subproject top"));
+    o(      "\t\t\t<li><a %s href='%s/%s/list' title=\"%s\">%s</a></li>\n", navi == NAVI_LIST ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("this is ticket list by status."), _("ticket list by status"));
+    o(      "\t\t\t<li><a %s href='%s/%s/register' title=\"%s\">%s</a></li>\n", navi == NAVI_REGISTER ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("register new ticket"), _("register ticket"));
+    o(      "\t\t\t<li><a %s href='%s/%s/search' title=\"%s\">%s</a></li>\n", navi == NAVI_SEARCH ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("search tickets."), _("search tickets"));
+    o(      "\t\t\t<li><a %s href='%s/%s/statistics' title=\"%s\">%s</a></li>\n", navi == NAVI_STATISTICS ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("display statictics."), _("statictics"));
+    o(      "\t\t\t<li><a %s href='%s/%s/register_at_once' title=\"%s\">%s</a></li>\n", navi == NAVI_REGISTER_AT_ONCE ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("register tickets at once"), _("register tickets at once"));
+    o(      "\t\t\t<li><a %s href='%s/%s/help' title=\"%s\">%s</a></li>\n", navi == NAVI_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("display help."), _("help"));
+    o(      "\t\t\t<li><a %s href='%s/../admin.%s/%s' title=\"%s\">%s</a></li>\n", navi == NAVI_MANAGEMENT ? "class=\"current\"" : "", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url, _("seveal settings."), _("management of sub project"));
+    o(      "\t\t</ul>\n"
+            "<br clear='all' />\n"
+            "\t</div>\n"
+            "</div>\n"
+            );
 }
 
 void output_footer()
