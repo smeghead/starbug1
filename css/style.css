@@ -40,6 +40,7 @@ h1 {
     font-size: 150%;
 }
 h1 a {
+    font-weight: bold;
     text-decoration: none;
     color: #eeeeee;
 }
@@ -61,15 +62,19 @@ h2 {
 h3 {
     font-size: 105%;
     font-weight: bold;
-    color: #eee;
-    background-color: #555555;
+    color: #fff;
+    background-color: #555;
     padding: 3px 3px 0px 10px;
-    margin: 5px 0px 5px 10px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
+    margin: 5px 0px 5px 0px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
     border-color: #979F9F;
     border-style: solid;
     border-width: 1px;
+}
+h4 {
+    font-size: 110%;
+    font-weight: bold;
 }
 .radius-right {
     -moz-border-top-right-radius: 7px;
@@ -83,214 +88,197 @@ h3 {
     -moz-border-bottom-left-radius: 7px;
     -webkit-border-bottom-left-radius: 7px;
 }
-/* div#main_body h4 { */
-/*     font-weight: bold; */
-/*     font-size: 95%; */
-/*     margin: 2px 10px; */
-/* } */
-/* div#input_form h4, */
-/* div#top h4, */
-/* div#ticket_list h4.status  { */
-/*     padding: 0px 2px 0px 3px; */
-/*     margin: 13px 0px 13px 5px; */
-/*     border-color: #00108C; */
-/*     border-style: solid; */
-/*     border-width: 0px 0px 2px 0px; */
-/*     font-weight: bold; */
-/* } */
-/* div#ticket_history h4 { */
-/*     width: 98%; */
-/*     padding: 0px 2px 0px 10px; */
-/*     margin: 8px 0px 3px 3px; */
-/*     border-color: #00108C; */
-/*     border-style: solid; */
-/*     border-width: 0px 0px 2px 0px; */
-/*     font-weight: bold; */
-/* } */
-/* |+チケット一覧 ID+| */
-/* div#ticket_list table th.id { */
-/*     width: 30px; */
-/* } */
-/* |+チケット一覧 件名+| */
-/* div#ticket_list table th.field1 { */
-/*     width: 30%; */
-/* } */
-/* div#main_body h4 { */
-/*     font-weight: bold; */
-/*     font-size: 120%; */
-/*     margin: 2px 10px; */
-/*     padding: 3px 10px; */
-/* } */
-/* div#main_body h5 { */
-/*     font-weight: bold; */
-/*     font-size: 110%; */
-/*     margin: 0px 0px 3px 5px; */
-/*     padding: 3px 20px; */
-/* } */
-/* div#main_body h6 { */
-/*     color: #00108C; */
-/*     font-size: 95%; */
-/*     font-weight: bold; */
-/*     margin: 0px 0px 3px 8px; */
-/*     padding: 3px 20px; */
-/* } */
-/* div#main_body p { */
-/*     padding:0px 10px 0px 20px; */
-/* } */
-/* div#main_body ul { */
-/*     padding:0px 10px 0px 20px; */
-/* } */
-/* |+|+チケット一覧 投稿者+|+| */
-/* |+div#ticket_list table th.field2 {+| */
-/* |+    width: 80px;+| */
-/* |+}+| */
-/* |+チケット一覧 状態+| */
-/* |+div#ticket_list table th.field3 {+| */
-/* |+    width: 45px;+| */
-/* |+}+| */
-/* |+チケット一覧 ID+| */
-/* div#ticket_list table td.id { */
-/*     text-align: center; */
-/* } */
-/* |+放置日数+| */
-/* div#ticket_list table td.passed { */
-/*     text-align: right; */
-/* } */
-/* div#ticket_list table tr.odd { */
-/*     background-color: #f9f9f9; */
-/* } */
-/* div#ticket_list table tr.even { */
-/*     background-color: #ffffff; */
-/* } */
-/* h5 { */
-/*     font-weight: bold; */
-/*     margin: 0px 0px 3px 5px; */
-/* } */
-/* h6 { */
-/*     color: #00108C; */
-/*     font-size: 90%; */
-/*     font-weight: bold; */
-/*     margin: 0px 0px 3px 8px; */
-/* } */
-/* hr { */
-/*     width: 100%; */
-/* } */
-/* .message { */
-/*     margin: 0px 0px 0px 30px; */
-/* } */
+div#main_body h4 {
+    font-weight: bold;
+    font-size: 95%;
+    margin: 2px 10px;
+}
+div#input_form h4,
+div#top h4,
+div#ticket_list h4.status  {
+    padding: 0px 2px 0px 3px;
+    margin: 13px 0px 13px 10px;
+    border-color: #333;
+    border-style: solid;
+    border-width: 0px 0px 2px 0px;
+    font-weight: bold;
+}
+div#ticket_history h4 {
+    width: 98%;
+    padding: 0px 2px 0px 10px;
+    margin: 8px 0px 3px 3px;
+    border-color: #00108C;
+    border-style: solid;
+    border-width: 0px 0px 2px 0px;
+    font-weight: bold;
+}
+/* チケット一覧 ID */
+div#ticket_list table th.id {
+    width: 30px;
+}
+/* チケット一覧 件名 */
+div#ticket_list table th.field1 {
+    width: 30%;
+}
+div#main_body h4 {
+    font-weight: bold;
+    font-size: 120%;
+    margin: 2px 10px;
+    padding: 3px 10px;
+}
+div#main_body h5 {
+    font-weight: bold;
+    font-size: 110%;
+    margin: 0px 0px 3px 5px;
+    padding: 3px 20px;
+}
+div#main_body h6 {
+    color: #00108C;
+    font-size: 95%;
+    font-weight: bold;
+    margin: 0px 0px 3px 8px;
+    padding: 3px 20px;
+}
+div#main_body p {
+    padding:0px 10px 0px 20px;
+}
+div#main_body ul {
+    padding:0px 10px 0px 20px;
+}
+/* チケット一覧 投稿者 */
+div#ticket_list table th.field2 {
+    width: 80px;
+}
+/* チケット一覧 状態 */
+div#ticket_list table th.field3 {
+    width: 45px;
+}
+/* チケット一覧 ID */
+div#ticket_list table td.id {
+    text-align: center;
+}
+/* 放置日数 */
+div#ticket_list table td.passed {
+    text-align: right;
+}
+div#ticket_list table tr.odd {
+    background-color: #eee;
+}
+div#ticket_list table tr.even {
+    background-color: #ffffff;
+}
+h5 {
+    font-weight: bold;
+    margin: 0px 0px 3px 5px;
+}
+h6 {
+    color: #00108C;
+    font-size: 90%;
+    font-weight: bold;
+    margin: 0px 0px 3px 8px;
+}
+hr {
+    width: 100%;
+}
+.message {
+    margin: 0px 0px 0px 30px;
+}
 
-/* table { */
-/*     margin:10px; */
-/* } */
+table {
+    margin:10px;
+}
 
-/* table tr th{ */
-/*     padding:3px; */
-/*     background:#ddd; */
-/* |+    border-bottom:1px solid gray;+| */
-/* } */
+table tr th{
+    padding:3px;
+    background:#ccc;
+/*     border-bottom:1px solid gray; */
+}
 
-/* table tr td { */
-/*     padding:3px; */
-/* |+    border-bottom:1px dashed gray;+| */
-/* } */
-/* textarea { */
-/*     width: 400px; */
-/* } */
-/* input.checkbox, input.radio { */
-/*     width: 20px; */
-/* } */
+table tr td {
+    padding:3px;
+/*     border-bottom:1px dashed gray; */
+}
+textarea {
+    width: 400px;
+}
+input.checkbox, input.radio {
+    width: 20px;
+}
 
-/* input.text { */
-/*     width: 400px; */
-/* } */
-/* input.calendar { */
-/*     width: 80px; */
-/* } */
-/* input.number { */
-/*     width: 40px; */
-/* } */
-/* input.project_id { */
-/*     width: 100px; */
-/* } */
-/* input.button { */
-/*     width: 100px; */
-/* } */
-/* input:hover.button { */
-/*     cursor: pointer; */
-/* } */
-/* br.clear { */
-/*     height: 10px; */
-/* } */
+input.text {
+    width: 400px;
+}
+input.calendar {
+    width: 80px;
+}
+input.number {
+    width: 40px;
+}
+input.project_id {
+    width: 100px;
+}
+input.button {
+    width: 100px;
+}
+input:hover.button {
+    cursor: pointer;
+}
+br.clear {
+    height: 10px;
+}
 
-/* #mainmenu { */
-/*     width:100%; */
-/*     margin:0px 0px 0px 0px; */
-/*     text-align: center; */
-/* } */
-
-/* #mainmenu li { */
-/*     margin:0px 0px 0px 0px; */
-/*     list-style:none; */
-/*     padding:3px 10px; */
-/*     float:left; */
-/* } */
-/* #subject { */
-/* } */
-/* #ticket_list table { */
-/*     padding-left: 10px; */
-/*     width: 98%; */
-/* } */
-/* #ticket_history table { */
-/*     width: 95%; */
-/* } */
-/* #ticket_history td.title { */
-/*     color: #00108C; */
-/*     font-size: 110%; */
-/*     font-weight: bold; */
-/*     background-color: #d9d9d9; */
-/*     border-bottom:1px solid #808080; */
-/*     white-space: nowrap; */
-/* } */
-/* #ticket_history td.title span.date { */
-/*     margin-left: 8px; */
-/*     color: #000000; */
-/*     font-weight: normal; */
-/* } */
-/* #ticket_history th { */
-/*     white-space: nowrap; */
-/*     width: 120px; */
-/* } */
-/* #ticket_history td { */
-/*     vertical-align: top; */
-/* } */
-/* #input_form table { */
-/*     width: 75%; */
-/* } */
-/* #input_form th { */
-/*     vertical-align: top; */
-/*     width: 120px; */
-/* } */
-/* #input_form textarea { */
-/*     height: 200px; */
-/* } */
-/* div { */
-/* } */
-/* #new_item, */
-/* #ticket_list, */
-/* #ticket_history, */
-/* #input_form, */
-/* #setting_form, */
-/* #condition_form { */
-/*     margin: 10px; */
-/*     width: 95%; */
-/* } */
-/* #new_item table th, */
-/* #input_form table th, */
-/* #setting_form table th, */
-/* #condition_form table th { */
-/*     background-color: lavender; */
-/*     vertical-align: top; */
-/* } */
+#ticket_list table {
+    padding-left: 10px;
+    width: 98%;
+}
+#ticket_history table {
+    width: 95%;
+}
+#ticket_history td.title {
+    color: #00108C;
+    font-size: 110%;
+    font-weight: bold;
+    background-color: #d9d9d9;
+    border-bottom:1px solid #808080;
+    white-space: nowrap;
+}
+#ticket_history td.title span.date {
+    margin-left: 8px;
+    color: #000000;
+    font-weight: normal;
+}
+#ticket_history th {
+    white-space: nowrap;
+    width: 120px;
+}
+#ticket_history td {
+    vertical-align: top;
+}
+#input_form table {
+    width: 75%;
+}
+#input_form th {
+    vertical-align: top;
+    width: 120px;
+}
+#input_form textarea {
+    height: 200px;
+}
+#new_item,
+#ticket_list,
+#ticket_history,
+#input_form,
+#setting_form,
+#condition_form {
+    margin: 10px;
+}
+#new_item table th,
+#input_form table th,
+#setting_form table th,
+#condition_form table th {
+    background-color: lavender;
+    vertical-align: top;
+}
 /* #new_item table td, */
 /* #input_form table td, */
 /* #setting_form table td, */
@@ -349,15 +337,13 @@ h3 {
 #top_id_search {
     margin: 10px 0px;
     padding: 0px;
-    border: #ff5500 solid 1px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
+    border: #666 solid 1px;
 }
 #top_new_ticket_link h4,
 #top_newest h4,
 #top_state_index h4,
 #top_id_search h4 {
-    background-color: #ff5500;
+    background-color: #666;
     color: #ffffff;
     margin: 0px;
     padding: 0px;
@@ -367,8 +353,8 @@ h3 {
 #top_new_ticket_link li,
 #top_newest li,
 #top_state_index li {
-    margin: 5px;
-    padding: 5px;
+    margin: 0px;
+    padding: 0px;
 }
 #top_id_search form {
     margin: 8px;
@@ -408,17 +394,17 @@ h3 {
 /*     margin: 10px; */
 /*     width: 95%; */
 /* } */
-/* .top_edit { */
-/*     width: 95%; */
-/*     text-align: right; */
-/* } */
-/* #edit_top { */
-/*     width: 95%; */
-/*     height: 300px; */
-/* } */
-/* .ticket_property { */
-/*     color: #00108C; */
-/* } */
+.top_edit {
+    width: 95%;
+    text-align: right;
+}
+#edit_top {
+    width: 95%;
+    height: 300px;
+}
+.ticket_property {
+    color: #00108C;
+}
 
 /* #ticket_newest { */
 /*     margin: 10px; */
@@ -446,37 +432,37 @@ h3 {
 /*     color: #ff0000; */
 /*     font-weight: bold; */
 /* } */
-/* #state_index { */
+#state_index {
+    width:100%;
+    margin:0px 0px 0px 0px;
+    text-align: center;
+}
+
+#state_index li {
+    margin:0px 0px 0px 0px;
+    list-style:none;
+    padding:0px 10px 0px 10px;
+    float:left;
+}
+#state_index form {
+    display:inline;
+}
+/* #state_index_anchor { */
 /*     width:100%; */
 /*     margin:0px 0px 0px 0px; */
 /*     text-align: center; */
+/*     height: 20px; */
 /* } */
 
-/* #state_index li { */
+/* #state_index_anchor li { */
 /*     margin:0px 0px 0px 0px; */
 /*     list-style:none; */
 /*     padding:0px 10px 0px 10px; */
 /*     float:left; */
 /* } */
-/* #state_index form { */
+/* #state_index_anchor form { */
 /*     display:inline; */
 /* } */
-/* |+#state_index_anchor {+| */
-/* |+    width:100%;+| */
-/* |+    margin:0px 0px 0px 0px;+| */
-/* |+    text-align: center;+| */
-/* |+    height: 20px;+| */
-/* |+}+| */
-
-/* |+#state_index_anchor li {+| */
-/* |+    margin:0px 0px 0px 0px;+| */
-/* |+    list-style:none;+| */
-/* |+    padding:0px 10px 0px 10px;+| */
-/* |+    float:left;+| */
-/* |+}+| */
-/* |+#state_index_anchor form {+| */
-/* |+    display:inline;+| */
-/* |+}+| */
 /* #field_list { */
 /*     width:100%; */
 /*     height:30px; */
@@ -576,7 +562,7 @@ h3 {
 }
 #menu a {
 /*     background: #eee bottom right no-repeat; */
-    color: #000000;
+    color: #eee;
     display: block;
     float: left;
     margin: 0;
@@ -767,110 +753,110 @@ h3 {
 /* |+    width: 600px;+| */
 /* |+    height: 300px;+| */
 /* |+}+| */
-/* div.delete_item { */
-/*     margin: 10px; */
-/* } */
-/* div.description { */
-/*     margin-left: 10px; */
-/* } */
-/* div.information { */
-/*     margin-left: 10px; */
-/* } */
-/* img.attachment_image { */
-/*     width: 200px; */
-/* } */
-/* #input_form textarea { */
-/*     height: 200px; */
-/* } */
-/* table#register_at_once_confirm tr td textarea { */
-/*     width: 100px; */
-/*     height: 40px; */
-/* } */
-/* textarea#csvdata { */
-/*     width: 95%; */
-/*     height: 300px; */
-/*     overflow: scroll; */
-/* } */
-/* table#register_at_once_confirm { */
-/* } */
-/* table#register_at_once_confirm th { */
-/*     white-space: nowrap; */
-/* } */
-/* a#new_ticket_link { */
-/*     font-size: 100%; */
-/*     color: white; */
-/*     background-color: #FF5110; */
-/*     border: 1px white solid; */
-/*     font-weight: bold; */
-/*     padding: 3px 10px; */
-/* } */
-/* a#new_ticket_link:hover { */
-/*     border: 1px #FF5110 solid; */
-/*     color: #EFEFEF; */
-/* } */
-/* td.center { */
-/*     text-align: center; */
-/* } */
-/* input.add_new_row { */
-/*     width: 50px; */
-/* } */
-/* form#register_form table.selection, */
-/* form#reply_form table.selection { */
-/*     width: 200px; */
-/* } */
-/* form#register_form table.selection label, */
-/* form#reply_form table.selection label { */
-/*     display: block; */
-/* } */
-/* form#register_form table.selection td.checkbox, */
-/* form#reply_form table.selection td.checkbox { */
-/*     width: 20px; */
-/*     text-align: center; */
-/* } */
-/* div.proc-button { */
-/*     padding: 5px 20px; */
-/* } */
-/* div.remote-address { */
-/*     font-weight: bold; */
-/* } */
-/* span.link-disabled { */
-/*     font-weight: bold; */
-/*     color: red; */
-/* } */
-/* form.file-hide-button { */
-/*     display: inline; */
-/* } */
-/* div.tooltip { */
-/*     border: 1px solid #FFD700; */
-/*     background-color: #FFFF99; */
-/* } */
-/* div.ticket-link-copy { */
-/*     float: right; */
-/*     cursor: pointer; */
-/*     background-image: url("../img/copy.gif");  */
-/*     background-repeat: no-repeat;  */
-/*     width: 20px; */
-/* } */
-/* span.ticket-page-ticket-link-copy { */
-/*     cursor: pointer; */
-/*     background-image: url("../img/copy.gif");  */
-/*     background-repeat: no-repeat;  */
-/*     width: 20px; */
-/* } */
+div.delete_item {
+    margin: 10px;
+}
+div.description {
+    margin-left: 10px;
+}
+div.information {
+    margin-left: 10px;
+}
+img.attachment_image {
+    width: 200px;
+}
+#input_form textarea {
+    height: 200px;
+}
+table#register_at_once_confirm tr td textarea {
+    width: 100px;
+    height: 40px;
+}
+textarea#csvdata {
+    width: 95%;
+    height: 300px;
+    overflow: scroll;
+}
+table#register_at_once_confirm {
+}
+table#register_at_once_confirm th {
+    white-space: nowrap;
+}
+a#new_ticket_link {
+    font-size: 100%;
+    color: white;
+    background-color: #FF5110;
+    border: 1px white solid;
+    font-weight: bold;
+    padding: 3px 10px;
+}
+a#new_ticket_link:hover {
+    border: 1px #FF5110 solid;
+    color: #EFEFEF;
+}
+td.center {
+    text-align: center;
+}
+input.add_new_row {
+    width: 50px;
+}
+form#register_form table.selection,
+form#reply_form table.selection {
+    width: 200px;
+}
+form#register_form table.selection label,
+form#reply_form table.selection label {
+    display: block;
+}
+form#register_form table.selection td.checkbox,
+form#reply_form table.selection td.checkbox {
+    width: 20px;
+    text-align: center;
+}
+div.proc-button {
+    padding: 5px 20px;
+}
+div.remote-address {
+    font-weight: bold;
+}
+span.link-disabled {
+    font-weight: bold;
+    color: red;
+}
+form.file-hide-button {
+    display: inline;
+}
+div.tooltip {
+    border: 1px solid #FFD700;
+    background-color: #FFFF99;
+}
+div.ticket-link-copy {
+    float: right;
+    cursor: pointer;
+    background-image: url("../img/copy.gif"); 
+    background-repeat: no-repeat; 
+    width: 20px;
+}
+span.ticket-page-ticket-link-copy {
+    cursor: pointer;
+    background-image: url("../img/copy.gif"); 
+    background-repeat: no-repeat; 
+    width: 20px;
+}
 div#divwin {
     display: none;
     position: absolute;
     margin: 0px;
     padding: 0px;
     width: 600px;
-    border: 1px solid black;
-    background-color: white;
+    border: 2px solid #666;
 }
 textarea#divwintext {
     width: 580px;
     height: 80px;
     padding: 10px;
     border: none;
+    background-color: #ccc;
 }
 
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

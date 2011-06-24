@@ -184,17 +184,18 @@ void output_footer()
     o(      "<div id=\"footer\">\n"
             "<hr />\n"
             "<div align=\"right\">\n"
+            "<div><address>Powered by cgic &amp; SQLite3.\n"
+            "<a href=\"http://starbug1.com/\">Starbug1</a> version: %s. %s.</address>\n"
+            "</div>\n"
             "<p>\n"
             "\t<a href=\"http://validator.w3.org/check?uri=referer\">\n"
             "\t\t<img src=\"%s/../img/valid-xhtml10.gif\" alt=\"Valid XHTML 1.0 Transitional\" height=\"31\" width=\"88\" />\n"
             "\t</a>\n"
             "</p>\n"
-            "<div><address>Powered by cgic &amp; SQLite3.</address></div>\n"
-            "<div><address><a href=\"http://starbug1.com/\">Starbug1</a> version: %s. %s.</address></div>\n"
             "</div>\n"
             "</div>\n"
             "<div id=\"divwin\"><form><textarea id=\"divwintext\"></textarea></form></div>\n"
-            "</body>\n</html>\n", cgiScriptName, VERSION, COPYRIGHT);
+            "</body>\n</html>\n", VERSION, COPYRIGHT, cgiScriptName);
 }
 
 bool is_enabled_project(char* project_name)
@@ -2504,11 +2505,16 @@ void top_action()
             "</div>\n"
             "</div>\n"
             "<div id=\"main\">\n"
-            "<h2>", _("id search"));h(string_rawstr(project_a->name));o("&nbsp;</h2>\n");
+            "<h2 class=\"radius-right\">", _("id search"));h(string_rawstr(project_a->name));o("&nbsp;</h2>\n");
     project_free(project_a);
+
+    list_alloc(states_a, State, state_new, state_free);
+    states_a = db_get_states(db_a, states_a);
+    output_states(states_a, true);
+    list_free(states_a);
+
     o(      "<div id=\"main_body\">\n"
-            "<div class=\"top_edit\">\n"
-            "<a id=\"new_ticket_link\" href=\"%s/%s/register\">%s</a>&nbsp;\n", cgiScriptName, g_project_code_4_url, _("register new ticket."));
+            "<div class=\"top_edit\">\n");
     o(      "<a href=\"%s/%s/edit_top\">%s</a>\n", cgiScriptName, g_project_code_4_url, _("edit page"));
     o(      "</div>\n");
     wiki_out(db_a, "top");
