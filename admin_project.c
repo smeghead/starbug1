@@ -65,10 +65,10 @@ void register_actions()
 
 void output_header(Project* project, char* title, char* script_name, NaviType navi)
 {
-    String* top_project_name = string_new();
+    String* top_project_name_a = string_new();
 
     cgiHeaderContentType("text/html; charset=utf-8;");
-    top_project_name = db_top_get_top_project_name(top_project_name);
+    top_project_name_a = db_top_get_top_project_name(top_project_name_a);
     /* Top of the page */
     o(      "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"
             "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
@@ -76,7 +76,7 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
             "\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n"
             "\t<meta http-equiv=\"Content-Script-Type\" content=\"text/javascript\" />\n"
             "\t<meta http-equiv=\"Content-Style-type\" content=\"text/css\" />");
-    o(        "\t<title>%s - ", _("management tool")); h(string_rawstr(project->name)); o(" - "); h(title); o("</title>\n");
+    o(        "\t<title>%s - ", _("management of sub project")); h(string_rawstr(project->name)); o(" - "); h(title); o("</title>\n");
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../css/style.css\" />\n", cgiScriptName);
     o(      "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"%s/../index.%s/%s/setting_file/user.css\" />\n", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url);
     o(      "\t<link rel=\"shortcut icon\" type=\"image/x-ico\" href=\"%s/../favicon.ico\" />\n", cgiScriptName);
@@ -96,35 +96,36 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
     }
     o(      "</head>\n"
             "<body>\n"
-            "<a name=\"top\"></a>\n"
-            "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.com/\"><img src=\"%s/../index.%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url);
-    o(      "<div id='pankuzu'>\n"
-            "<ul>\n");
-    o(      "\t<li><a href='%s/top/' title=\"%s\">", cgiScriptName, _("display sub projects list at top page.")); h(string_rawstr(top_project_name)); o("</a> &gt; </li>\n");
-    string_free(top_project_name);
-    o(      "\t<li><a href='%s/../index.%s/%s'>", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url); h(string_rawstr(project->name)); o("</a></li>\n"); 
-    o(      "</ul>\n"
-            "<br clear='all' />\n"
-            "</div>\n");
-    o(      "<div id='menu'>\n"
-            "<ul>\n");
-    o(      "\t<li><a href=\"%s/../index.%s/top/\" title=\"%s\">%s</a></li>\n",
+            "<div id=\"header\">\n"
+            "\t<a name=\"top\"></a>\n");
+/*             "\t<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://starbug1.com/\"><img src=\"%s/../index.%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url); */
+    o(      "\t<h1>\n");
+    o(      "\t\t<a href='%s/top/' title=\"%s\">", cgiScriptName, _("display sub projects list at top page.")); h(string_rawstr(top_project_name_a)); o("</a>\n");
+    string_free(top_project_name_a);
+    o(      "\t\t<a href='%s/../index.%s/%s'>", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url); h(string_rawstr(project->name)); o("</a>\n"); 
+    o(      "\t\t%s\n", _("management of sub project"));
+    o(      "\t</h1>\n");
+    o(      "\t<div id='menu'>\n"
+            "\t<ul>\n");
+    o(      "\t\t<li><a href=\"%s/../index.%s/top/\" title=\"%s\">%s</a></li>\n",
             cgiScriptName, get_ext(cgiScriptName),
             _("display sub projects list at top page."),
             _("top page(sub projects list)"));
-    o(      "</ul>\n"
-            "<br clear=\"all\" />\n"
-            "</div>\n");
-    o(      "<ul id=\"projectmenu\">\n");
-    o(      "\t<li><a %s href=\"%s/%s/\">%s</a></li>\n", navi == NAVI_MENU ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("management tool menu"));
+    o(      "\t</ul>\n"
+            "\t<br clear=\"all\" />\n"
+            "\t</div>\n");
+    o(      "\t<ul id=\"projectmenu\">\n");
+    o(      "\t\t<li class=\"blank\">&nbsp;</li>\n");
+    o(      "\t\t<li><a %s href=\"%s/%s/\">%s</a></li>\n", navi == NAVI_MENU ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("management tool menu"));
     o(      "\t\t<li><a %s href=\"%s/%s/project\">%s</a></li>\n", navi == NAVI_PROJECT ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("sub project settings"));
     o(      "\t\t<li><a %s href=\"%s/%s/items\">%s</a></li>\n", navi == NAVI_ITEM ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("columns settings"));
     o(      "\t\t<li><a %s href=\"%s/%s/style\">%s</a></li>\n", navi == NAVI_STYLE ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("style settings"));
     o(      "\t\t<li><a %s href=\"%s/%s/export\">%s</a></li>\n", navi == NAVI_EXPORT ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("export settings"));
     o(      "\t\t<li><a %s href=\"%s/%s/admin_help\">%s</a></li>\n", navi == NAVI_ADMIN_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("help"));
-    o(      "\t<li><a href=\"%s/../index.%s/%s/\">%s", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url, _("to"));h(string_rawstr(project->name)); o("%s</a></li>\n", _("to(suffix)"));
-    o(      "</ul>\n"
-            "<br clear=\"all\" />\n");
+    o(      "\t\t<li><a href=\"%s/../index.%s/%s/\">%s", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url, _("to"));h(string_rawstr(project->name)); o("%s</a></li>\n", _("to(suffix)"));
+    o(      "\t</ul>\n"
+            "\t<br clear=\"all\" />\n"
+            "</div>\n");
 }
 
 void output_footer()
@@ -133,16 +134,16 @@ void output_footer()
     o(      "<div id=\"footer\">\n"
             "<hr />\n"
             "<div align=\"right\">\n"
+            "<div><address>Powered by cgic &amp; SQLite3.\n"
+            "<a href=\"http://starbug1.com/\">Starbug1</a> version: %s. %s.</address></div>\n"
             "<p>\n"
             "\t<a href=\"http://validator.w3.org/check?uri=referer\">\n"
             "\t\t<img src=\"%s/../img/valid-xhtml10.gif\" alt=\"Valid XHTML 1.0 Transitional\" height=\"31\" width=\"88\" />\n"
             "\t</a>\n"
             "</p>\n"
-            "<div><address>Powered by cgic &amp; SQLite3.</address></div>\n"
-            "<div><address><a href=\"http://starbug1.com/\">Starbug1</a> version: %s. %s.</address></div>\n"
             "</div>\n"
             "</div>\n"
-            "</body>\n</html>\n", cgiScriptName, VERSION, COPYRIGHT);
+            "</body>\n</html>\n", VERSION, COPYRIGHT, cgiScriptName);
 }
 
 void output_field_information_js() {
@@ -173,7 +174,7 @@ void top_action()
     if (strlen(message) > 0) {
         o("<div class=\"complete_message\">"); h(message); o("&nbsp;</div>\n");
     }
-    o("<h2>"); h(string_rawstr(project_a->name)); o(" %s</h2>", _("management tool"));
+    o("<h2>"); h(string_rawstr(project_a->name)); o(" %s</h2>", _("management of sub project"));
     project_free(project_a);
     o("<div id=\"main_body\">\n");
     o("<h3>%s</h3>\n", _("management tool menu"));
@@ -210,7 +211,7 @@ void project_action()
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("sub project settings"), "management.js", NAVI_PROJECT);
 
-    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("management tool"));
+    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("management of sub project"));
     o("<div id=\"setting_form\">\n");
     o("\t<form id=\"management_form\" action=\"%s/%s/project_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName, g_project_code_4_url);
     o("\t\t<h3>%s</h3>\n", _("sub project settings"));
@@ -314,7 +315,7 @@ void items_action()
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("columns settings"), "management.js", NAVI_ITEM);
 
-    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("management tool"));
+    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("management of sub project"));
     o("<div id=\"top\">\n");
     project_free(project_a);
     o("<div id=\"setting_form\">\n"
@@ -734,7 +735,7 @@ void new_item_action()
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("add new column"), "new_item.js", NAVI_OTHER);
 
-    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("management tool"));
+    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("management of sub project"));
     project_free(project_a);
     o(      "<div id=\"new_item\">\n"
             "<h3>%s</h3>\n"
@@ -956,7 +957,7 @@ void delete_item_action()
     output_header(project_a, _("column delete"), "delete_item.js", NAVI_OTHER);
 
     et_a = db_get_element_type(db_a, iid, et_a);
-    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("management tool"));
+    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("management of sub project"));
     project_free(project_a);
     o(      "<div id=\"delete_item/%d\">\n", iid);
     o(      "<h3>%s", _("delete this column("));hs(et_a->name);o("%s</h3>\n", _(")(delete this column)"));
@@ -1007,7 +1008,7 @@ void style_action()
     db_a = db_init(g_project_code);
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("style settings"), "style.js", NAVI_STYLE);
-    o(      "<h2>%s %s</h2>", string_rawstr(project_a->name), _("management tool"));
+    o(      "<h2>%s %s</h2>", string_rawstr(project_a->name), _("management of sub project"));
     project_free(project_a);
     o(      "<div id=\"top\">\n"
             "<h3>%s</h3>\n"
@@ -1105,7 +1106,7 @@ void export_action()
     project_a = db_get_project(db_a, project_a);
     output_header(project_a, _("sub project settings"), "management.js", NAVI_PROJECT);
 
-    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("management tool"));
+    o("<h2>%s %s</h2>", string_rawstr(project_a->name), _("management of sub project"));
     o("<div id=\"setting_form\">\n");
     o("\t<form id=\"management_form\" action=\"%s/%s/export_submit\" method=\"post\">\n", cgiScriptName, g_project_code_4_url);
     o("\t\t<h3>%s</h3>\n", _("export settings"));
