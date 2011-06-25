@@ -122,7 +122,11 @@ h3 {
     background-color: #444;
 }
 #footer {
+    margin-top: 30px;
+    padding: 15px 10px;
     clear : both;
+    background-color: #444;
+    color: #aaa;
 }
 #footer div address {
     margin:0px;

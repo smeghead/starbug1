@@ -5,6 +5,9 @@
     margin: 0px;
     padding: 0px; 
 }
+html {
+    background-color: #444;
+}
 body,tbody {
     margin: 0px 5px 0px 5px;
     font-size: 90%;

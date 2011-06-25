@@ -134,16 +134,15 @@ void output_footer()
 {
     /* Finish up the page */
     o(      "<div id=\"footer\">\n"
-            "<hr />\n"
-            "<div align=\"right\">\n"
-            "<div><address>Powered by cgic &amp; SQLite3.\n"
-            "<a href=\"http://starbug1.com/\">Starbug1</a> version: %s. %s.</address></div>\n"
-            "<p>\n"
-            "\t<a href=\"http://validator.w3.org/check?uri=referer\">\n"
-            "\t\t<img src=\"%s/../img/valid-xhtml10.gif\" alt=\"Valid XHTML 1.0 Transitional\" height=\"31\" width=\"88\" />\n"
-            "\t</a>\n"
-            "</p>\n"
-            "</div>\n"
+            "\t<div align=\"right\">\n"
+            "\t<div><address>Powered by cgic &amp; SQLite3.\n"
+            "\t<a href=\"http://starbug1.com/\">Starbug1</a> version: %s. %s.</address></div>\n"
+            "\t<p>\n"
+            "\t\t<a href=\"http://validator.w3.org/check?uri=referer\">\n"
+            "\t\t\t<img src=\"%s/../img/valid-xhtml10.gif\" alt=\"Valid XHTML 1.0 Transitional\" height=\"31\" width=\"88\" />\n"
+            "\t\t</a>\n"
+            "\t</p>\n"
+            "\t</div>\n"
             "</div>\n"
             "</body>\n</html>\n", VERSION, COPYRIGHT, cgiScriptName);
 }
