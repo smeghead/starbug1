@@ -114,16 +114,18 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
     o(      "\t</ul>\n"
             "\t<br clear=\"all\" />\n"
             "\t</div>\n");
-    o(      "\t<ul id=\"projectmenu\">\n");
-    o(      "\t\t<li class=\"blank\">&nbsp;</li>\n");
-    o(      "\t\t<li><a %s href=\"%s/%s/\">%s</a></li>\n", navi == NAVI_MENU ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("management tool menu"));
-    o(      "\t\t<li><a %s href=\"%s/%s/project\">%s</a></li>\n", navi == NAVI_PROJECT ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("sub project settings"));
-    o(      "\t\t<li><a %s href=\"%s/%s/items\">%s</a></li>\n", navi == NAVI_ITEM ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("columns settings"));
-    o(      "\t\t<li><a %s href=\"%s/%s/style\">%s</a></li>\n", navi == NAVI_STYLE ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("style settings"));
-    o(      "\t\t<li><a %s href=\"%s/%s/export\">%s</a></li>\n", navi == NAVI_EXPORT ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("export settings"));
-    o(      "\t\t<li><a %s href=\"%s/%s/admin_help\">%s</a></li>\n", navi == NAVI_ADMIN_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("help"));
-    o(      "\t\t<li><a href=\"%s/../index.%s/%s/\">%s", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url, _("to"));h(string_rawstr(project->name)); o("%s</a></li>\n", _("to(suffix)"));
-    o(      "\t</ul>\n"
+    o(      "\t<div id=\"projectmenu\">\n");
+    o(      "\t\t<ul>\n");
+    o(      "\t\t\t<li class=\"blank\">&nbsp;</li>\n");
+    o(      "\t\t\t<li><a %s href=\"%s/%s/\">%s</a></li>\n", navi == NAVI_MENU ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("management tool menu"));
+    o(      "\t\t\t<li><a %s href=\"%s/%s/project\">%s</a></li>\n", navi == NAVI_PROJECT ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("sub project settings"));
+    o(      "\t\t\t<li><a %s href=\"%s/%s/items\">%s</a></li>\n", navi == NAVI_ITEM ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("columns settings"));
+    o(      "\t\t\t<li><a %s href=\"%s/%s/style\">%s</a></li>\n", navi == NAVI_STYLE ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("style settings"));
+    o(      "\t\t\t<li><a %s href=\"%s/%s/export\">%s</a></li>\n", navi == NAVI_EXPORT ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("export settings"));
+    o(      "\t\t\t<li><a %s href=\"%s/%s/admin_help\">%s</a></li>\n", navi == NAVI_ADMIN_HELP ? "class=\"current\"" : "", cgiScriptName, g_project_code_4_url, _("help"));
+    o(      "\t\t\t<li><a href=\"%s/../index.%s/%s/\">%s", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url, _("to"));h(string_rawstr(project->name)); o("%s</a></li>\n", _("to(suffix)"));
+    o(      "\t\t</ul>\n"
+            "\t</div>\n"
             "\t<br clear=\"all\" />\n"
             "</div>\n");
 }

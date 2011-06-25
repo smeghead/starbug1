@@ -50,7 +50,7 @@ void top_output_header(char* title, Project* project)
             "<div id=\"header\">\n"
             "<a name=\"top\"></a>\n"
             "<h1 id=\"toptitle\" title=\"Starbug1\">"); h(string_rawstr(project->name)); o("</h1>\n");
-/*             "<h1 id=\"toptitle\" title=\"Starbug1\"><a href=\"http://www.starbug1.com/\"><img src=\"%s/../img/starbug1.jpg\" alt=\"Starbug1\" /></a></h1>\n", cgiScriptName); */
+    o(      "<div id=\"icon\"><a href=\"http://starbug1.com/\"><img src=\"%s/../img/starbug1.jpg\" alt=\"Starbug1\" /></a></div>\n", cgiScriptName);
     o(      "<div id=\"projectmenu\">\n"
             "\t<ul>\n"
             "\t\t<li class=\"blank\">&nbsp;</li>\n");

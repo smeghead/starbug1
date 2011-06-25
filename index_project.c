@@ -146,8 +146,8 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
             "<body>\n"
             "<div id=\"header\">\n"
             "\t<a name=\"top\"></a>\n");
-/*             "\t<h1 id=\"toptitle\" title=\"%s\"><a href=\"http://starbug1.com/\"><img src=\"%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></h1>\n", _("starbug1"), cgiScriptName, g_project_code_4_url); */
     o(      "\t<h1>\n");
+    o(      "\t<div id=\"icon\"><a href=\"http://starbug1.com/\"><img src=\"%s/%s/setting_file/top_image\" alt=\"Starbug1\" /></a></div>\n", cgiScriptName, g_project_code_4_url);
     o(      "\t\t<a href='%s/top/' title=\"%s\">", cgiScriptName, _("display sub projects list at top page.")); h(string_rawstr(top_project_name_a)); o("</a>\n");
     string_free(top_project_name_a);
     o(      "\t\t<a href='%s/../index.%s/%s'>", cgiScriptName, get_ext(cgiScriptName), g_project_code_4_url); h(string_rawstr(project->name)); o("</a>\n"); 
@@ -158,7 +158,6 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
     o(      "\t\t<li><a href='%s/top/' title=\"%s\">%s</a></li>\n", cgiScriptName, _("display sub projects list at top page."), _("top page(sub projects list)"));
     o(      "\t</ul>\n"
             "\t</div>\n"
-            //"\t<br class=\"clear\" clear='all' />\n"
             );
     o(      "\t<div id=\"projectmenu\">\n");
     o(      "\t\t<ul>\n");

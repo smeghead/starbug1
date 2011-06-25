@@ -177,9 +177,6 @@ h6 {
     font-weight: bold;
     margin: 0px 0px 3px 8px;
 }
-hr {
-    width: 100%;
-}
 .message {
     margin: 0px 0px 0px 30px;
 }
@@ -224,7 +221,7 @@ input:hover.button {
     cursor: pointer;
 }
 br.clear {
-    height: 10px;
+/*     height: 10px; */
 }
 
 #ticket_list table {
@@ -377,6 +374,7 @@ input.conditionelement {
     width: 95%;
 }
 #header {
+    position: relative;
     background-color: #444444;
 }
 #footer {
@@ -542,7 +540,7 @@ table.item_table textarea {
 /*     float: left; */
 /*     width: 100%; */
 /*     border: solid #333 1px; */
-    margin-bottom: 2px;
+    margin-bottom: 1px;
     position:    absolute;
     top:         3px; 
 /*     left:        21em;  */
@@ -646,7 +644,7 @@ table.item_table textarea {
     width: 5px;
 }
 #projectmenu a {
-    background: #aaa bottom right no-repeat;
+    background: #bbb bottom right no-repeat;
     color: #000000;
     display: block;
     float: left;
@@ -659,43 +657,9 @@ table.item_table textarea {
     color: #ffffff;
 }
 #projectmenu a:hover {
-    background: #666 bottom center no-repeat;
+    background: #999 bottom center no-repeat;
     color: #ffffff;
 }
-/* #projectmenu { */
-/*     background: #ccc; */
-/*     float: left; */
-/*     list-style: none; */
-/*     margin: 0; */
-/*     padding: 0; */
-/*     width: 99%; */
-/*     border: solid #333 1px; */
-/*     margin-bottom: 8px; */
-/* } */
-/* #projectmenu li { */
-/*     float: left; */
-/*     font-size: 85%; */
-/*     margin: 0; */
-/*     padding: 0; */
-/*     border-right: solid #003F00 1px; */
-/* } */
-/* #projectmenu a { */
-/*     background: #eee bottom right no-repeat; */
-/*     color: #000000; */
-/*     display: block; */
-/*     float: left; */
-/*     margin: 0; */
-/*     padding: 3px 8px; */
-/*     text-decoration: none; */
-/* } */
-/* #projectmenu a.current { */
-/*     background: #666 bottom center no-repeat; */
-/*     color: #ffffff; */
-/* } */
-/* #projectmenu a:hover { */
-/*     background: #999 bottom center no-repeat; */
-/*     color: #ffffff; */
-/* } */
 #calendar {
     position:absolute;
     margin: 0px;
@@ -789,10 +753,12 @@ a#new_ticket_link {
     border: 1px white solid;
     font-weight: bold;
     padding: 3px 10px;
+    text-decoration: none;
 }
 a#new_ticket_link:hover {
     border: 1px #FF5110 solid;
     color: #EFEFEF;
+    text-decoration: none;
 }
 td.center {
     text-align: center;
@@ -857,6 +823,14 @@ textarea#divwintext {
     padding: 10px;
     border: none;
     background-color: #ccc;
+}
+div#icon {
+    position: absolute;
+    right: 1px;
+    bottom: 1px;
+}
+div#icon img {
+    height: 25px;
 }
 
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

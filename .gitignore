@@ -1,6 +1,7 @@
 debug.log
 *.cgi
 *.o
+*.so
 *~
 session
 html
