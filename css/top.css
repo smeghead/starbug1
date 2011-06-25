@@ -94,21 +94,21 @@ h3 {
 /* hr { */
 /*     width: 100%; */
 /* } */
-/* .message { */
-/*     margin: 0px 0px 0px 30px; */
-/* } */
-/* table { */
-/*     margin:10px; */
-/* } */
+.message {
+    margin: 0px 0px 0px 30px;
+}
+table {
+    margin:10px;
+}
 
-/* table tr th{ */
-/*     padding:3px; */
-/*     background:#EEE; */
-/* } */
+table tr th{
+    padding:3px;
+    background:#EEE;
+}
 
-/* table tr td { */
-/*     padding:3px; */
-/* } */
+table tr td {
+    padding:3px;
+}
 
 /* #main { */
 /*     width: 75%; */
@@ -132,10 +132,10 @@ h3 {
     margin:0px;
     padding:0px;
 }
-/* #info ul, */
-/* #info li { */
-/*     margin:0px 0px 0px 0px; */
-/* } */
+#info ul,
+#info li {
+    margin:0px 0px 0px 0px;
+}
 
 
 /* #menu { */
@@ -169,14 +169,14 @@ h3 {
 /*     color: #ffffff; */
 /*     padding-bottom: 0px; */
 /* } */
-/* div.complete_message { */
-/*     border: 1px #228B22 solid; */
-/*     margin: 15px 3px 15px 3px; */
-/*     padding: 5px 5px 5px 20px; */
-/*     background-color: #DDFFDD; */
-/*     width: 80%; */
-/*     -moz-border-radius: 8px; */
-/* } */
+div.complete_message {
+    border: 1px #228B22 solid;
+    margin: 15px 3px 15px 3px;
+    padding: 5px 5px 5px 20px;
+    background-color: #DDFFDD;
+    width: 80%;
+    -moz-border-radius: 8px;
+}
 #projectmenu {
     margin: 0px 0px 0px 0px;
     padding: 0px;
