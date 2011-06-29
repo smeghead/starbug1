@@ -1,7 +1,6 @@
 if (typeof document.activeElement == "undefined") {
     Event.observe(document, "focus",
         function(e) {
-        alert
             document.activeElement = (e.target.nodeType == Node.TEXT_NODE) ? e.target.parentNode : e.target;
         }, false);
 }

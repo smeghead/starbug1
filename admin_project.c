@@ -87,6 +87,9 @@ void output_header(Project* project, char* title, char* script_name, NaviType na
         string_free(locale_a);
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/Gettext.js\"></script>\n", cgiScriptName);
         o(  "\t<script type=\"text/javascript\">\n"
+            "\t\tif (typeof locale_data == 'undefined') {\n"
+            "\t\t\tlocale_data = {\"\":{}};\n"
+            "\t\t}\n"
             "\t\tvar gt = new Gettext({\"domain\": \"starbug1\", \"locale_data\": {\"starbug1\": locale_data}});\n"
             "\t\tfunction _ (msgid) { return gt.gettext(msgid); }\n"
             "\t</script>\n");
