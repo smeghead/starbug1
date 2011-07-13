@@ -98,5 +98,9 @@ extern char g_path_info[DEFAULT_LENGTH];
 void cgi_escape(char*);
 void print_field_help();
 void set_locale(char*);
+#ifdef _WIN32
+struct tm* localtime_r(const time_t* timer, struct tm* result);
+#define mkstemp(p) mktemp(p)
+#endif
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

@@ -841,4 +841,15 @@ void set_locale(char* locale)
 #endif
 }
 
+#ifdef _WIN32
+struct tm* localtime_r(const time_t *timer, struct tm *result)
+{
+    struct tm *r = localtime (timer);
+    if (r == NULL || result == NULL)
+        return NULL; 
+    memcpy(result, r, sizeof(result));
+    return result;
+}
+#endif
+
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
