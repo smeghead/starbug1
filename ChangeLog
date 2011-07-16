@@ -1,3 +1,8 @@
+2011-07-16  smeghead <smeghead7@gmail.com>
+
+	* added libsqlite3-0.dll for windows dependences libraries.
+	* added dependences library in INSTALL document.
+
 2011-06-26  smeghead <smeghead7@gmail.com>
 
 	* 1.5.00 released.
