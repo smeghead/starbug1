@@ -139,6 +139,7 @@ void output_header(Project* project, char* title, char* script_name, const NaviT
             "\t\tfunction _ (msgid) { return gt.gettext(msgid); }\n"
             "\t</script>\n");
     o(      "\t<script type=\"text/javascript\" src=\"%s/../js/prototype.js\"></script>\n", cgiScriptName);
+    o(      "\t<script type=\"text/javascript\" src=\"%s/../js/form_changed.js\"></script>\n", cgiScriptName);
     if (script_name) {
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/tooltip.js\"></script>\n", cgiScriptName);
         o(  "\t<script type=\"text/javascript\" src=\"%s/../js/%s\"></script>\n", cgiScriptName, script_name);
@@ -1539,7 +1540,7 @@ void output_field_information_js(List* element_types) {
 }
 
 /**
- * 登録画面を表示するaction。
+ * show register page action.
  */
 void register_action()
 {
@@ -1565,7 +1566,7 @@ void register_action()
             _("register ticket"),
             _("input below form and push register button."),
             _("note: they are checked by only javascript."));
-    o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName, g_project_code_4_url);
+    o(      "<form id=\"register_form\" class=\"changed_check\" name=\"register_form\" action=\"%s/%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", cgiScriptName, g_project_code_4_url);
     o(      "<table summary=\"input information\">\n");
     {
         List* element_types_a;
@@ -1575,7 +1576,7 @@ void register_action()
         foreach (it, element_types_a) {
             ElementType* et = it->element;
             char class_name[32] = "";
-            /* 返信専用属性は表示しない。 */
+            /* do not show reply only attributes. */
             if (et->reply_property == 1) continue;
             o("\t<tr>\n");
             if (et->required)
@@ -1628,7 +1629,7 @@ void register_action()
 }
 
 /**
- * チケット詳細画面を表示するaction。
+ * show ticket detail page action.
  */
 void ticket_action()
 {
@@ -1845,9 +1846,9 @@ void ticket_action()
     }
     xfree(message_ids_a);
     o(  "</div>\n");
-    /* フォームの表示 */
+    /* show form. */
     o(      "<a name=\"reply\"></a>\n"
-            "<div id=\"input_form\">\n"
+            "<div id=\"input_form\" class=\"changed_check\">\n"
             "<h3>%s</h3>\n"
             "<form id=\"reply_form\" name=\"reply_form\" action=\"%s/%s/register_submit\" method=\"post\" enctype=\"multipart/form-data\">\n", _("reply ticket"), cgiScriptName, g_project_code_4_url);
     o(      "<input type=\"hidden\" name=\"ticket_id\" value=\"%s\" />\n", ticket_id);
@@ -2113,7 +2114,7 @@ file_size_error:
 }
 
 /**
- * 一括登録画面を表示するaction。
+ * show register at once page action.
  */
 void register_at_once_action()
 {
@@ -2148,7 +2149,7 @@ void register_at_once_action()
             _("[register ticket at once description2]"),
             _("[register ticket at once description3]"),
             _("register finish."));
-    o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/%s/register_at_once_confirm\" method=\"post\">\n", cgiScriptName, g_project_code_4_url);
+    o(      "<form id=\"register_form\" name=\"register_form\" class=\"changed_check\" action=\"%s/%s/register_at_once_confirm\" method=\"post\">\n", cgiScriptName, g_project_code_4_url);
     project_free(project_a);
     {
         /* cvs formated field for register many tickets at onece. */
@@ -2206,7 +2207,7 @@ void register_at_once_confirm_action()
             _("register tickets at once confirm"),
             _("[register ticket at once description5]"),
             _("note: they are checked by only javascript."));
-    o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/%s/register_at_once_submit\" method=\"post\">\n", cgiScriptName, g_project_code_4_url);
+    o(      "<form id=\"register_form\" name=\"register_form\" action=\"%s/%s/register_at_once_submit\" class=\"changed_check\" method=\"post\">\n", cgiScriptName, g_project_code_4_url);
     o(      "<table summary=\"input information\">\n");
     {
         int line_count = 0;
@@ -2496,7 +2497,7 @@ void top_action()
     list_free(states_a);
     o(      "\t</ul>\n"
             "</div>\n");
-    /* ID検索フォームの表示 */
+    /* show id search form. */
     o(      "<div id=\"top_id_search\">\n"
             "<h4>%s</h4>\n"
             "\t<form action=\"%s/%s/search\" method=\"get\">\n", _("id search"), cgiScriptName, g_project_code_4_url);
@@ -2786,7 +2787,7 @@ void edit_top_action()
             "<div id=\"top\">\n"
             "<h3>%s</h3>\n"
             "<div id=\"description\">%s</div>\n"
-            "<form id=\"edit_top_form\" action=\"%s/%s/edit_top_submit\" method=\"post\">\n",
+            "<form id=\"edit_top_form\" action=\"%s/%s/edit_top_submit\" class=\"changed_check\" method=\"post\">\n",
             _("edit top page"),
             _("edit top page"),
             _("[wiki syntax description1]"),
