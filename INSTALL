@@ -8,7 +8,7 @@ gcc, gettext, rsyncをインストールして下さい。
 Ubuntuの場合は、以下のコマンドを実行して必要なソフトウェアをインストールできます。
 
 <code>
-  sudo apt-get install build-essential gettext rsync
+  sudo apt-get install build-essential gettext rsync libjson-perl liblocale-po-perl
 </code>
 
 ====== スタティック版 インストール方法 ======
