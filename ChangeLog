@@ -1,5 +1,6 @@
 2011-07-16  smeghead <smeghead7@gmail.com>
 
+	* mattn gave me a patch that fix build error of windows version. thanks!
 	* added libsqlite3-0.dll for windows dependences libraries.
 	* added dependences library in INSTALL document.
 
