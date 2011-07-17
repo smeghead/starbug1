@@ -852,4 +852,10 @@ struct tm* localtime_r(const time_t *timer, struct tm *result)
 }
 #endif
 
+double get_microseconds()
+{
+    struct timeval t;
+    gettimeofday(&t, NULL);
+    return t.tv_sec + t.tv_usec * 1e-6;
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

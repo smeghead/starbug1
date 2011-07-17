@@ -7,8 +7,9 @@
 #include "index_project.h"
 #include "db_top.h"
 
-/* index.cgi縺ｮ繧ｨ繝ｳ繝医Μ繝昴う繝ｳ繝医↓縺ｪ繧矩未謨ｰ  */
+/* index.cgi */
 int cgiMain() {
+    double start = get_microseconds();
     ActionType type = analysis_action();
     int ret = 0;
     db_top_set_locale();
@@ -23,6 +24,7 @@ int cgiMain() {
         default:
             break;
     }
+    d("time: %f\n", get_microseconds() - start);
     return ret;
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
