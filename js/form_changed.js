@@ -1,5 +1,10 @@
 Event.observe(window, 'load', function (e) {
     var changed = false;
+    $$('form.changed_check').each(function(form){
+        Event.observe(form, 'submit', function(e) {
+            changed = false; //when form submit, clear flag.
+        });
+    });
     $$('form.changed_check input,form.changed_check select,form.changed_check textarea').each(function(element){
         var elm = element;
         Event.observe(elm, 'change', function(e) {
