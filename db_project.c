@@ -1538,4 +1538,93 @@ List* db_get_burndownchart(Database* db, List* burndowns)
 ERROR_LABEL(db->handle)
 }
 
+List* db_get_statictics_register_user(Database* db, List* users)
+{
+    int r;
+    char sql[DEFAULT_LENGTH];
+    sqlite3_stmt *stmt = NULL;
+
+    sprintf(sql, 
+            "select m.field2, count(m.id) from message m "
+            "inner join ticket t on t.original_message_id = m.id "
+            "group by m.field2 "
+            "order by count(m.id) desc ");
+    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    sqlite3_reset(stmt);
+
+    while (SQLITE_ROW == (r = sqlite3_step(stmt))){
+        UserRanking* u = list_new_element(users);
+        string_set(u->name, (char*)sqlite3_column_text(stmt, 0));
+        u->count = sqlite3_column_int(stmt, 1);
+        list_add(users, u);
+    }
+    if (SQLITE_DONE != r)
+        goto error;
+
+    sqlite3_finalize(stmt);
+
+    return users;
+
+ERROR_LABEL(db->handle)
+}
+
+List* db_get_statictics_update_user(Database* db, List* users)
+{
+    int r;
+    char sql[DEFAULT_LENGTH];
+    sqlite3_stmt *stmt = NULL;
+
+    sprintf(sql, 
+            "select m.field2, count(m.id) from message m "
+            "group by m.field2 "
+            "order by count(m.id) desc ");
+    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    sqlite3_reset(stmt);
+
+    while (SQLITE_ROW == (r = sqlite3_step(stmt))){
+        UserRanking* u = list_new_element(users);
+        string_set(u->name, (char*)sqlite3_column_text(stmt, 0));
+        u->count = sqlite3_column_int(stmt, 1);
+        list_add(users, u);
+    }
+    if (SQLITE_DONE != r)
+        goto error;
+
+    sqlite3_finalize(stmt);
+
+    return users;
+
+ERROR_LABEL(db->handle)
+}
+
+List* db_get_statictics_close_user(Database* db, List* users)
+{
+    int r;
+    char sql[DEFAULT_LENGTH];
+    sqlite3_stmt *stmt = NULL;
+
+    sprintf(sql, 
+            "select m.field2, count(m.id) from message m "
+            "left join list_item li on li.name = m.field3 "
+            "where li.close = 1 "
+            "group by m.field2 "
+            "order by count(m.id) desc ");
+    if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
+    sqlite3_reset(stmt);
+
+    while (SQLITE_ROW == (r = sqlite3_step(stmt))){
+        UserRanking* u = list_new_element(users);
+        string_set(u->name, (char*)sqlite3_column_text(stmt, 0));
+        u->count = sqlite3_column_int(stmt, 1);
+        list_add(users, u);
+    }
+    if (SQLITE_DONE != r)
+        goto error;
+
+    sqlite3_finalize(stmt);
+
+    return users;
+
+ERROR_LABEL(db->handle)
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

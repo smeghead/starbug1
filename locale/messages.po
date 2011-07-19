@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2011-07-17 02:42+0900\n"
+"POT-Creation-Date: 2011-07-19 12:17+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,7 +55,7 @@ msgstr ""
 msgid "export settings"
 msgstr ""
 
-#: admin_project.c:128 index_project.c:175 index_project.c:2767
+#: admin_project.c:128 index_project.c:175 index_project.c:2828
 msgid "help"
 msgstr ""
 
@@ -108,7 +108,7 @@ msgid "file upload max size(kb)"
 msgstr ""
 
 #: admin_project.c:236 admin_project.c:344 admin_project.c:589
-#: admin_project.c:1032 admin_top.c:151 admin_top.c:196 index_project.c:2800
+#: admin_project.c:1032 admin_top.c:151 admin_top.c:196 index_project.c:2861
 #: index_top.c:170
 msgid "update"
 msgstr ""
@@ -254,7 +254,7 @@ msgid "sort"
 msgstr ""
 
 #: admin_project.c:477 admin_project.c:977 admin_top.c:166
-#: index_project.c:2976
+#: index_project.c:3037
 msgid "delete"
 msgstr ""
 
@@ -836,18 +836,18 @@ msgid "input below form and push register button."
 msgstr ""
 
 #: index_project.c:1568 index_project.c:1856 index_project.c:2209
-#: index_project.c:2901
+#: index_project.c:2962
 msgid "note: they are checked by only javascript."
 msgstr ""
 
 #: index_project.c:1608 index_project.c:1902 index_project.c:2237
-#: index_project.c:2929
+#: index_project.c:2990
 #, c-format
 msgid "[REMOTE ADDRESS: %s]"
 msgstr ""
 
 #: index_project.c:1625 index_project.c:1916 index_project.c:2290
-#: index_project.c:2976
+#: index_project.c:3037
 msgid "save registerer.(use cookie)"
 msgstr ""
 
@@ -923,19 +923,19 @@ msgstr ""
 msgid "replyed."
 msgstr ""
 
-#: index_project.c:2105 index_project.c:3033
+#: index_project.c:2105 index_project.c:3094
 msgid "error"
 msgstr ""
 
-#: index_project.c:2108 index_project.c:3036
+#: index_project.c:2108 index_project.c:3097
 msgid "error occured."
 msgstr ""
 
-#: index_project.c:2109 index_project.c:3037
+#: index_project.c:2109 index_project.c:3098
 msgid "file size is too large."
 msgstr ""
 
-#: index_project.c:2111 index_project.c:3039
+#: index_project.c:2111 index_project.c:3100
 msgid "kb. too large. back by browser's back button."
 msgstr ""
 
@@ -1031,36 +1031,53 @@ msgstr ""
 msgid "not yet closed tickets count"
 msgstr ""
 
-#: index_project.c:2695
+#: index_project.c:2695 index_project.c:2765 index_project.c:2784
+#: index_project.c:2803
 msgid "tickets count"
 msgstr ""
 
-#: index_project.c:2784 index_project.c:2791 index_project.c:2792
+#: index_project.c:2760
+msgid "register user ranking"
+msgstr ""
+
+#: index_project.c:2764 index_project.c:2783 index_project.c:2802
+msgid "user name"
+msgstr ""
+
+#: index_project.c:2779
+msgid "update user ranking"
+msgstr ""
+
+#: index_project.c:2798
+msgid "close user ranking"
+msgstr ""
+
+#: index_project.c:2845 index_project.c:2852 index_project.c:2853
 #: index_top.c:141
 msgid "edit top page"
 msgstr ""
 
-#: index_project.c:2793 index_top.c:164
+#: index_project.c:2854 index_top.c:164
 msgid "[wiki syntax description1]"
 msgstr ""
 
-#: index_project.c:2846 index_project.c:2872
+#: index_project.c:2907 index_project.c:2933
 msgid "error: there is no file."
 msgstr ""
 
-#: index_project.c:2889 index_project.c:2890 index_project.c:2899
+#: index_project.c:2950 index_project.c:2951 index_project.c:2960
 msgid "attachment file display setting"
 msgstr ""
 
-#: index_project.c:2900
+#: index_project.c:2961
 msgid "you can appoint if attachment file will be display."
 msgstr ""
 
-#: index_project.c:2935
+#: index_project.c:2996
 msgid "attachment file"
 msgstr ""
 
-#: index_project.c:2976
+#: index_project.c:3037
 msgid "display"
 msgstr ""
 
@@ -1174,7 +1191,7 @@ msgstr ""
 msgid "it will registered. it is ok with you?"
 msgstr ""
 
-#: js/form_changed.js:11
+#: js/form_changed.js:16
 msgid "form edited. leave this page?"
 msgstr ""
 

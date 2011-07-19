@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2011-07-17 02:42+0900\n"
+"POT-Creation-Date: 2011-07-19 12:17+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: smeghead <smeghead@users.sourceforge.jp>\n"
 "Language-Team: smeghead <smeghead@users.sourceforge.jp>\n"
@@ -49,7 +49,7 @@ msgstr "樣式設置"
 msgid "export settings"
 msgstr "輸入設置"
 
-#: admin_project.c:128 index_project.c:175 index_project.c:2767
+#: admin_project.c:128 index_project.c:175 index_project.c:2828
 msgid "help"
 msgstr "幫助"
 
@@ -104,7 +104,7 @@ msgid "file upload max size(kb)"
 msgstr "文件上傳的最大尺寸(Kb)"
 
 #: admin_project.c:236 admin_project.c:344 admin_project.c:589
-#: admin_project.c:1032 admin_top.c:151 admin_top.c:196 index_project.c:2800
+#: admin_project.c:1032 admin_top.c:151 admin_top.c:196 index_project.c:2861
 #: index_top.c:170
 msgid "update"
 msgstr "更新"
@@ -258,7 +258,7 @@ msgid "sort"
 msgstr "排列順序"
 
 #: admin_project.c:477 admin_project.c:977 admin_top.c:166
-#: index_project.c:2976
+#: index_project.c:3037
 msgid "delete"
 msgstr "刪除"
 
@@ -1016,18 +1016,18 @@ msgid "input below form and push register button."
 msgstr "登錄新建任務單時，請填寫以下表單並按登錄按鈕。"
 
 #: index_project.c:1568 index_project.c:1856 index_project.c:2209
-#: index_project.c:2901
+#: index_project.c:2962
 msgid "note: they are checked by only javascript."
 msgstr "※必須項目的輸入檢查在javascript中執行。"
 
 #: index_project.c:1608 index_project.c:1902 index_project.c:2237
-#: index_project.c:2929
+#: index_project.c:2990
 #, c-format
 msgid "[REMOTE ADDRESS: %s]"
 msgstr "[REMOTE ADDRESS: %s]"
 
 #: index_project.c:1625 index_project.c:1916 index_project.c:2290
-#: index_project.c:2976
+#: index_project.c:3037
 msgid "save registerer.(use cookie)"
 msgstr "保存投稿者。(cookie使用)"
 
@@ -1104,19 +1104,19 @@ msgstr "已登錄。"
 msgid "replyed."
 msgstr "已回複。"
 
-#: index_project.c:2105 index_project.c:3033
+#: index_project.c:2105 index_project.c:3094
 msgid "error"
 msgstr "錯誤"
 
-#: index_project.c:2108 index_project.c:3036
+#: index_project.c:2108 index_project.c:3097
 msgid "error occured."
 msgstr "發生錯誤"
 
-#: index_project.c:2109 index_project.c:3037
+#: index_project.c:2109 index_project.c:3098
 msgid "file size is too large."
 msgstr "文件太大。大于"
 
-#: index_project.c:2111 index_project.c:3039
+#: index_project.c:2111 index_project.c:3100
 msgid "kb. too large. back by browser's back button."
 msgstr "kb的文件不能登錄。請按浏覽器的返回按鈕返回。"
 
@@ -1221,37 +1221,56 @@ msgstr "任務單件數"
 msgid "not yet closed tickets count"
 msgstr "未關閉的任務單。"
 
-#: index_project.c:2695
+#: index_project.c:2695 index_project.c:2765 index_project.c:2784
+#: index_project.c:2803
 msgid "tickets count"
 msgstr "任務單件數"
 
-#: index_project.c:2784 index_project.c:2791 index_project.c:2792
+#: index_project.c:2760
+#, fuzzy
+msgid "register user ranking"
+msgstr "投稿者"
+
+#: index_project.c:2764 index_project.c:2783 index_project.c:2802
+#, fuzzy
+msgid "user name"
+msgstr "項目名"
+
+#: index_project.c:2779
+msgid "update user ranking"
+msgstr ""
+
+#: index_project.c:2798
+msgid "close user ranking"
+msgstr ""
+
+#: index_project.c:2845 index_project.c:2852 index_project.c:2853
 #: index_top.c:141
 msgid "edit top page"
 msgstr "首頁的編輯"
 
-#: index_project.c:2793 index_top.c:164
+#: index_project.c:2854 index_top.c:164
 msgid "[wiki syntax description1]"
 msgstr "通過簡易wiki的語法來進行首頁內容的編輯，並請按更新按鈕。"
 
-#: index_project.c:2846 index_project.c:2872
+#: index_project.c:2907 index_project.c:2933
 msgid "error: there is no file."
 msgstr "error: 沒有文件。"
 
-#: index_project.c:2889 index_project.c:2890 index_project.c:2899
+#: index_project.c:2950 index_project.c:2951 index_project.c:2960
 msgid "attachment file display setting"
 msgstr ""
 
-#: index_project.c:2900
+#: index_project.c:2961
 msgid "you can appoint if attachment file will be display."
 msgstr ""
 
-#: index_project.c:2935
+#: index_project.c:2996
 #, fuzzy
 msgid "attachment file"
 msgstr "所有附件"
 
-#: index_project.c:2976
+#: index_project.c:3037
 #, fuzzy
 msgid "display"
 msgstr "參照幫助"
@@ -1385,7 +1404,7 @@ msgstr "刪除，可以嗎？"
 msgid "it will registered. it is ok with you?"
 msgstr "登錄，可以嗎？"
 
-#: js/form_changed.js:11
+#: js/form_changed.js:16
 msgid "form edited. leave this page?"
 msgstr ""
 
@@ -1420,6 +1439,10 @@ msgstr "日期項目，請以yyyy-mm-dd的形式輸入。"
 #: js/validate.js:79
 msgid "it is number column. please describe number."
 msgstr "數項目，請寫數。"
+
+#, fuzzy
+#~ msgid "ticket count"
+#~ msgstr "按狀態分類件數"
 
 #~ msgid "management tool"
 #~ msgstr "管理工具"

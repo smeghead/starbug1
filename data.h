@@ -202,5 +202,12 @@ typedef struct {
 BurndownChartPoint* burndown_chart_point_new();
 void burndown_chart_point_free(BurndownChartPoint*);
 
+typedef struct {
+    String* name;
+    int count;
+} UserRanking;
+UserRanking* user_ranking_new();
+void user_ranking_free(UserRanking*);
+
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

@@ -833,4 +833,12 @@ div#icon img {
     height: 25px;
 }
 
+div#attr_statistics {
+    float: left;
+    width: 48%;
+}
+div#user_statistics {
+    float: right;
+    width: 48%;
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

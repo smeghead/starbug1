@@ -2698,6 +2698,7 @@ void statistics_action()
             "\t\t</script>\n");
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_element_types_all(db_a, NULL, element_types_a);
+    o("<div id=\"attr_statistics\">\n");
     foreach (it, element_types_a) {
         ElementType* et = it->element;
         List* items_a;
@@ -2717,20 +2718,20 @@ got_item:
                 all_items_a = db_get_list_item(db_a, et->id, all_items_a);
                 o(      "\t<h4 class=\"item\">");
                 hs(et->name);
-                o(      "\t</h4>"
-                  "<div class=\"graph\">\n"
-                  "<noscript>%s\n"
-                        "\t<ul>\n", _("[graph description]"));
+                o(      "\t</h4>\n"
+                  "\t<div class=\"graph\">\n"
+                  "\t<noscript>%s\n"
+                        "\t\t<ul>\n", _("[graph description]"));
                 foreach (it_item, all_items_a) {
                     ListItem* item = it_item->element;
                     State* s = get_statictics(item->id, items_a);
-                    o(      "\t\t<li>");
+                    o(      "\t\t\t<li>");
                     hs(item->name);
                     o(      "(%d)", s == NULL ? 0 : s->count);
-                    o(      "\t\t</li>\n");
+                    o(      "\t\t\t</li>\n");
                 }
-                o(      "\t</ul>\n"
-                        "</noscript>\n"
+                o(      "\t\t</ul>\n"
+                        "\t</noscript>\n"
                         "\t\t<script type=\"text/javascript\">\n"
                         "\t\t<!--\n"
                         "\t\tvar graph_%d = [\n", et->id);
@@ -2745,14 +2746,79 @@ got_item:
                         "\t\tdocument.write('<canvas class=\"circle\" width=\"400\" height=\"250\" id=\"graph_%d\"></canvas>');\n"
                         "\t\t// -->\n"
                         "\t\t</script>\n", et->id);
-                o("</div>\n");
+                o("\t</div>\n");
                 break;
         }
         list_free(items_a);
         list_free(all_items_a);
     }
     list_free(element_types_a);
-    o(      "</div>\n");
+    o("</div>\n");
+    o("<div id=\"user_statistics\">\n");
+    {
+        Iterator* it;
+        List* rankings_a;
+        list_alloc(rankings_a, UserRanking, user_ranking_new, user_ranking_free);
+        db_get_statictics_register_user(db_a, rankings_a);
+        o(      "\t<h4>%s</h4>\n", _("register user ranking"));
+        o(      "\t<div class=\"user_ranking\">\n");
+        o(      "\t\t<table>\n");
+        o(      "\t\t\t<tr>\n");
+        o(      "\t\t\t\t<th>%s</th>\n", _("user name"));
+        o(      "\t\t\t\t<th>%s</th>\n", _("tickets count"));
+        o(      "\t\t\t</tr>\n");
+        foreach (it, rankings_a) {
+            UserRanking* u = it->element;
+            o(      "\t\t\t<tr>\n");
+            o(      "\t\t\t\t<td>%s</td>\n", string_rawstr(u->name));
+            o(      "\t\t\t\t<td>%d</td>\n", u->count);
+            o(      "\t\t\t</tr>\n");
+        }
+        list_free(rankings_a);
+        list_alloc(rankings_a, UserRanking, user_ranking_new, user_ranking_free);
+        db_get_statictics_update_user(db_a, rankings_a);
+        o(      "\t\t</table>\n");
+        o(      "\t</div>\n");
+        o(      "\t<h4>%s</h4>\n", _("update user ranking"));
+        o(      "\t<div class=\"user_ranking\">\n");
+        o(      "\t\t<table>\n");
+        o(      "\t\t\t<tr>\n");
+        o(      "\t\t\t\t<th>%s</th>\n", _("user name"));
+        o(      "\t\t\t\t<th>%s</th>\n", _("tickets count"));
+        o(      "\t\t\t</tr>\n");
+        foreach (it, rankings_a) {
+            UserRanking* u = it->element;
+            o(      "\t\t\t<tr>\n");
+            o(      "\t\t\t\t<td>%s</td>\n", string_rawstr(u->name));
+            o(      "\t\t\t\t<td>%d</td>\n", u->count);
+            o(      "\t\t\t</tr>\n");
+        }
+        list_free(rankings_a);
+        list_alloc(rankings_a, UserRanking, user_ranking_new, user_ranking_free);
+        db_get_statictics_close_user(db_a, rankings_a);
+        o(      "\t\t</table>\n");
+        o(      "\t</div>\n");
+        o(      "\t<h4>%s</h4>\n", _("close user ranking"));
+        o(      "\t<div class=\"user_ranking\">\n");
+        o(      "\t\t<table>\n");
+        o(      "\t\t\t<tr>\n");
+        o(      "\t\t\t\t<th>%s</th>\n", _("user name"));
+        o(      "\t\t\t\t<th>%s</th>\n", _("tickets count"));
+        o(      "\t\t\t</tr>\n");
+        foreach (it, rankings_a) {
+            UserRanking* u = it->element;
+            o(      "\t\t\t<tr>\n");
+            o(      "\t\t\t\t<td>%s</td>\n", string_rawstr(u->name));
+            o(      "\t\t\t\t<td>%d</td>\n", u->count);
+            o(      "\t\t\t</tr>\n");
+        }
+        list_free(rankings_a);
+        o(      "\t\t</table>\n");
+        o(      "\t</div>\n");
+    }
+    o("</div>\n");
+    o("<br clear=\"all\">\n");
+    o("</div>\n");
     output_footer();
     db_finish(db_a);
 }

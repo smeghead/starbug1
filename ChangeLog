@@ -1,3 +1,7 @@
+2011-07-19  smeghead <smeghead7@gmail.com>
+
+	* added user ranking.
+
 2011-07-16  smeghead <smeghead7@gmail.com>
 
 	* added form changed check. if form edited, show confirm dialog.

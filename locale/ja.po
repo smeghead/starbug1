@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2011-07-17 02:42+0900\n"
+"POT-Creation-Date: 2011-07-19 12:17+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: smeghead <smeghead@users.sourceforge.jp>\n"
 "Language-Team: smeghead <smeghead@users.sourceforge.jp>\n"
@@ -49,7 +49,7 @@ msgstr "スタイル設定"
 msgid "export settings"
 msgstr "エクスポート設定"
 
-#: admin_project.c:128 index_project.c:175 index_project.c:2767
+#: admin_project.c:128 index_project.c:175 index_project.c:2828
 msgid "help"
 msgstr "ヘルプ"
 
@@ -105,7 +105,7 @@ msgid "file upload max size(kb)"
 msgstr "ファイルアップロードの最大サイズ(Kb)"
 
 #: admin_project.c:236 admin_project.c:344 admin_project.c:589
-#: admin_project.c:1032 admin_top.c:151 admin_top.c:196 index_project.c:2800
+#: admin_project.c:1032 admin_top.c:151 admin_top.c:196 index_project.c:2861
 #: index_top.c:170
 msgid "update"
 msgstr "更新"
@@ -264,7 +264,7 @@ msgid "sort"
 msgstr "並び順"
 
 #: admin_project.c:477 admin_project.c:977 admin_top.c:166
-#: index_project.c:2976
+#: index_project.c:3037
 msgid "delete"
 msgstr "削除"
 
@@ -1062,18 +1062,18 @@ msgstr ""
 "い。"
 
 #: index_project.c:1568 index_project.c:1856 index_project.c:2209
-#: index_project.c:2901
+#: index_project.c:2962
 msgid "note: they are checked by only javascript."
 msgstr "※必須項目の入力チェックは、javascriptで行なっています。"
 
 #: index_project.c:1608 index_project.c:1902 index_project.c:2237
-#: index_project.c:2929
+#: index_project.c:2990
 #, c-format
 msgid "[REMOTE ADDRESS: %s]"
 msgstr "[アクセス元: %s]"
 
 #: index_project.c:1625 index_project.c:1916 index_project.c:2290
-#: index_project.c:2976
+#: index_project.c:3037
 msgid "save registerer.(use cookie)"
 msgstr "投稿者を保存する。(cookie使用)"
 
@@ -1155,19 +1155,19 @@ msgstr "登録しました。"
 msgid "replyed."
 msgstr "返信しました。"
 
-#: index_project.c:2105 index_project.c:3033
+#: index_project.c:2105 index_project.c:3094
 msgid "error"
 msgstr "エラー"
 
-#: index_project.c:2108 index_project.c:3036
+#: index_project.c:2108 index_project.c:3097
 msgid "error occured."
 msgstr "エラー発生"
 
-#: index_project.c:2109 index_project.c:3037
+#: index_project.c:2109 index_project.c:3098
 msgid "file size is too large."
 msgstr "ファイルサイズが大きすぎます。"
 
-#: index_project.c:2111 index_project.c:3039
+#: index_project.c:2111 index_project.c:3100
 msgid "kb. too large. back by browser's back button."
 msgstr ""
 "kbより大きいファイルは登録できません。ブラウザの戻るボタンで戻ってください。"
@@ -1280,38 +1280,57 @@ msgstr "全チケット数"
 msgid "not yet closed tickets count"
 msgstr "未クローズチケット数"
 
-#: index_project.c:2695
+#: index_project.c:2695 index_project.c:2765 index_project.c:2784
+#: index_project.c:2803
 msgid "tickets count"
 msgstr "チケット数"
 
-#: index_project.c:2784 index_project.c:2791 index_project.c:2792
+#: index_project.c:2760
+#, fuzzy
+msgid "register user ranking"
+msgstr "投稿ユーザランキング"
+
+#: index_project.c:2764 index_project.c:2783 index_project.c:2802
+#, fuzzy
+msgid "user name"
+msgstr "ユーザ名"
+
+#: index_project.c:2779
+msgid "update user ranking"
+msgstr "更新ユーザランキング"
+
+#: index_project.c:2798
+msgid "close user ranking"
+msgstr "クローズユーザランキング"
+
+#: index_project.c:2845 index_project.c:2852 index_project.c:2853
 #: index_top.c:141
 msgid "edit top page"
 msgstr "トップページの編集"
 
-#: index_project.c:2793 index_top.c:164
+#: index_project.c:2854 index_top.c:164
 msgid "[wiki syntax description1]"
 msgstr ""
 "簡易wikiの文法でページのコンテンツの編集を行ない、更新ボタンを押してくださ"
 "い。"
 
-#: index_project.c:2846 index_project.c:2872
+#: index_project.c:2907 index_project.c:2933
 msgid "error: there is no file."
 msgstr "error: ファイルがありません。"
 
-#: index_project.c:2889 index_project.c:2890 index_project.c:2899
+#: index_project.c:2950 index_project.c:2951 index_project.c:2960
 msgid "attachment file display setting"
 msgstr "添付ファイル 表示設定"
 
-#: index_project.c:2900
+#: index_project.c:2961
 msgid "you can appoint if attachment file will be display."
 msgstr "添付ファイルの表示するかどうかを設定します。"
 
-#: index_project.c:2935
+#: index_project.c:2996
 msgid "attachment file"
 msgstr "添付ファイル"
 
-#: index_project.c:2976
+#: index_project.c:3037
 msgid "display"
 msgstr "表示"
 
@@ -1443,7 +1462,7 @@ msgstr "削除します。よろしいですか？"
 msgid "it will registered. it is ok with you?"
 msgstr "登録します。よろしいですか？"
 
-#: js/form_changed.js:11
+#: js/form_changed.js:16
 msgid "form edited. leave this page?"
 msgstr "内容が保存されていません。ページを移動しますか？"
 
@@ -1474,3 +1493,7 @@ msgstr "日付項目です。yyyy-mm-dd形式で入力してください。"
 #: js/validate.js:79
 msgid "it is number column. please describe number."
 msgstr "数値項目です。数字を入力してください。"
+
+#, fuzzy
+#~ msgid "ticket count"
+#~ msgstr "状態別件数"

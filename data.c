@@ -321,4 +321,16 @@ void burndown_chart_point_free(BurndownChartPoint* b)
     xfree(b);
 }
 
+UserRanking* user_ranking_new()
+{
+    UserRanking* u = xalloc(sizeof(UserRanking));
+    u->name = string_new();
+    return u;
+}
+
+void user_ranking_free(UserRanking* u)
+{
+    string_free(u->name);
+    xfree(u);
+}
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

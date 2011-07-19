@@ -43,5 +43,9 @@ void db_setting_file_save(Database*, SettingFile*);
 SettingFile* db_get_setting_file(Database*, char*, SettingFile*);
 void db_update_top_image(Database*, SettingFile*);
 List* db_get_burndownchart(Database*, List*);
+List* db_get_statictics_register_user(Database* db, List* users);
+List* db_get_statictics_update_user(Database* db, List* users);
+List* db_get_statictics_close_user(Database* db, List* users);
+
 #endif
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */
