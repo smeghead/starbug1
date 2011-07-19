@@ -210,7 +210,6 @@ bool is_enabled_project(char* project_name)
     id = project_info_a->id;
     project_info_free(project_info_a);
     db_finish(db_a);
-    d("project id: %d\n", id);
     return id ? 1 : 0;
 }
 

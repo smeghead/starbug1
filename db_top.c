@@ -117,7 +117,6 @@ char* db_top_get_project_db_name(char* project_name, char* buffer)
     Database* top_db_a = db_init("top");
     ProjectInfo* project_info_a = project_info_new();
 
-    d("project_name: %s\n", project_name);
     project_info_a = db_top_get_project_info(top_db_a, project_info_a, project_name, true);
     if (!project_info_a->id) {
         die("ERROR: no such project found.");

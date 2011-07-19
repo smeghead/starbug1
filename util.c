@@ -822,7 +822,6 @@ void set_locale(char* locale)
 {
     char locale_utf8[DEFAULT_LENGTH];
     sprintf(locale_utf8, "%s.UTF-8", locale);
-    d("locale: %s\n", locale_utf8);
 #ifndef _WIN32
     setenv("LANG", locale_utf8, 1); /* FreeBSD(さくらインターネット)でsetlocaleが動作しない場合があったため、環境変数を書き換える。 */
 #else
@@ -833,9 +832,9 @@ void set_locale(char* locale)
         putenv(envstr);
     }
 #endif
-    d("setlocale: %s\n", setlocale(LC_ALL, locale_utf8));
-    d("bindtextdomain: %s\n", bindtextdomain("starbug1", "locale"));
-    d("textdomain: %s\n", textdomain("starbug1"));
+    setlocale(LC_ALL, locale_utf8);
+    bindtextdomain("starbug1", "locale");
+    textdomain("starbug1");
 #ifdef _WIN32
     bind_textdomain_codeset("starbug1", "utf-8");
 #endif
