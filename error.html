@@ -2,10 +2,48 @@
 <html xml:lang="ja" lang="ja" xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript" src="./js/prototype.js"></script> 
+    <script type="text/javascript">
+      Event.observe(window, 'load', function(e){
+        check('db_initialized', function(mes) {
+          //if not db initialized, execute install check.
+          check('execute_cgi', function(mes) {
+            display_error(mes);
+          });
+          check('able_to_write_db', function(mes) {
+            display_error(mes);
+          });
+        });
+      });
+      function display_error(mes) {
+        var box = $('initialize_check');
+        if (box.innerHTML == '') {
+          var h2 = document.createElement('h2');
+          h2.innerHTML = 'Install problems check.';
+          box.appendChild(h2);
+          var ul = document.createElement('ul');
+          ul.id = 'errors';
+          box.appendChild(ul);
+        }
+        var li = document.createElement('li');
+        li.innerHTML = mes;
+        $('errors').appendChild(li);
+      }
+      function check(mode, callback) {
+        new Ajax.Request('check.cgi', {
+          method: 'get',
+          parameters: 'm=' + mode,
+          onFailure: function(request){
+            callback(request.responseText);
+          },
+        });
+      }
+    </script>
   </head>
   <body>
     <h2>ERROR oops!</h2>
     エラーが発生しましたm(_ _)m
+    <div id="initialize_check"></div>
     <hr />
     <div align="right">
       <address>Copyright smeghead 2007 - 2010.</address>
