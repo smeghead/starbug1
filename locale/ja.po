@@ -1286,12 +1286,10 @@ msgid "tickets count"
 msgstr "チケット数"
 
 #: index_project.c:2760
-#, fuzzy
 msgid "register user ranking"
 msgstr "投稿ユーザランキング"
 
 #: index_project.c:2764 index_project.c:2783 index_project.c:2802
-#, fuzzy
 msgid "user name"
 msgstr "ユーザ名"
 
@@ -1494,6 +1492,3 @@ msgstr "日付項目です。yyyy-mm-dd形式で入力してください。"
 msgid "it is number column. please describe number."
 msgstr "数値項目です。数字を入力してください。"
 
-#, fuzzy
-#~ msgid "ticket count"
-#~ msgstr "状態別件数"
