@@ -76,6 +76,9 @@ void print_error_page(char* file_name, int line_number, char* message)
                 file_name,
                 line_number,
                 message);
+    o(      "<div>\n"
+            "   if you are setting up Starbug1 now, <a href=\"%s/../env-check.html\">check environment.</a>\n"
+            "</div>\n", cgiScriptName);
     o(      "<hr />"
             "<div align=\"right\">"
             "<address>%s.</address>"

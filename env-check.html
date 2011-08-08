@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xml:lang="ja" lang="ja" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>check starbug1 environment</title>
+    <script type="text/javascript" src="./js/prototype.js"></script> 
+    <script type="text/javascript">
+      Event.observe(window, 'load', function(e){
+        check('db_initialized', '', function(description, mes) {
+          var box = $('initialize_check');
+          if (box.innerHTML == '') {
+            var h2 = document.createElement('h2');
+            h2.innerHTML = 'Install problems check.';
+            box.appendChild(h2);
+            var ul = document.createElement('ul');
+            ul.id = 'errors';
+            box.appendChild(ul);
+          }
+          //if not db initialized, execute install check.
+          check('execute_cgi', 'In this directory, Can execute CGI?', function(description, mes) {
+            display_result(description, mes);
+          });
+          check('able_to_write_db', 'Is database directory writable?', function(description, mes) {
+            display_result(description, mes);
+          });
+        });
+      });
+      function display_result(description, mes) {
+        var li = document.createElement('li');
+        var message = 'ok';
+        if (mes != 'ok') {
+          message = '<span class="error">' + mes + '</span>';
+        }
+        li.innerHTML = description + ' ... ' + message;
+        $('errors').appendChild(li);
+      }
+      function check(mode, description, callback) {
+        new Ajax.Request('check.cgi', {
+          method: 'get',
+          parameters: 'm=' + mode,
+          onSuccess: function(request){
+            callback(description, 'ok');
+          },
+          onFailure: function(request){
+            callback(description, request.responseText);
+          },
+        });
+      }
+    </script>
+    <style>
+      .error {
+        font-weight: bold;
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Starbug1 environment check</h2>
+    <div id="initialize_check"></div>
+    <hr />
+    <div align="right">
+      <address>Copyright smeghead 2007 - 2010.</address>
+    </div>
+  </body>
+</html>
