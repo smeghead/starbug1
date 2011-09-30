@@ -35,7 +35,7 @@ ifeq ($(CC_VERSION), 3)
 	CFLAGS += -W
 endif
 ifeq ($(CC_VERSION), 4)
-	CFLAGS += -Wextra
+	CFLAGS += -Wall -Wextra
 endif
 OS = ${shell uname}
 ifeq ($(OS), Linux)
@@ -49,6 +49,7 @@ export INITIAL_LOCALE
 #debug
 #CFLAGS += -DDEBUG
 #CFLAGS += -DMEMORYDEBUG
+#CFLAGS += -ansi
 
 default: index.cgi admin.cgi compileresource jsresource
 

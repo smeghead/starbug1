@@ -1510,7 +1510,7 @@ List* db_get_burndownchart(Database* db, List* burndowns)
 
     time(&timer);
     now = timer;
-    ; /* 30日前 */
+    /* 30日前 */
     for (timer -= 60 * 60 * 24 * 30; timer <= now; timer += 60 * 60 * 24) {
         localtime_r(&timer, &date);
         sprintf(date_string, "%04d-%02d-%02d 23:59:59", date.tm_year + 1900, date.tm_mon + 1, date.tm_mday);

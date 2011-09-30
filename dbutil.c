@@ -593,9 +593,9 @@ int exec_query(Database* db, const char* sql, ...)
     }
     va_end(ap);
 
-    // stmtのSQLを実行
+    /* stmtのSQLを実行 */
     if (exec_and_wait_4_done(stmt) != SQLITE_RETURN_OK) goto error;
-    // stmt を開放
+    /* stmt を開放 */
     sqlite3_finalize(stmt);
 
     return sqlite3_changes(db->handle);

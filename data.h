@@ -176,7 +176,7 @@ void wiki_free(Wiki*);
 
 char* get_element_value_by_id(List*, const int);
 char* get_element_value(List*, ElementType*);
-// int get_element_lid_by_id(List*, int);
+/* int get_element_lid_by_id(List*, int); */
 void set_element_value(Element*, const char*);
 
 typedef struct {
