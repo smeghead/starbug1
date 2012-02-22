@@ -21,7 +21,7 @@
 #ifdef DEBUG
 #define d(...) {\
     char time[20];\
-    FILE *fp = fopen("debug.log", "a");\
+    FILE *fp = fopen(get_log_filename(), "a");\
     if (fp) { \
     set_date_string(time);\
         fprintf(fp, "[%s] {%s/%s}\t", time, g_project_code, g_action_name);\
@@ -31,7 +31,7 @@
 }
 #else
 #define d(...) {\
-    FILE *fp = fopen("debug.log", "a");\
+    FILE *fp = fopen(get_log_filename(), "a");\
     if (fp) { \
         fprintf(fp, __VA_ARGS__);\
         fclose(fp);\
@@ -91,6 +91,9 @@ void page_not_found();
 #define MIN(a,b) (((a)<(b))?(a):(b)) 
 #define MAX(a,b) (((a)>(b))?(a):(b))
 double get_microseconds();
+char* get_script_dir(char*);
+char* get_log_filename();
+
 
 extern char g_project_code[DEFAULT_LENGTH];
 extern char g_project_code_4_url[DEFAULT_LENGTH];

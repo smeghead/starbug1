@@ -823,7 +823,10 @@ void print_field_help()
 
 void set_locale(char* locale)
 {
+    char locale_dir[DEFAULT_LENGTH];
+    char dir_name[DEFAULT_LENGTH];
     char locale_utf8[DEFAULT_LENGTH];
+    sprintf(locale_dir, "%s/locale", get_script_dir(dir_name));
     sprintf(locale_utf8, "%s.UTF-8", locale);
 #ifndef _WIN32
     setenv("LANG", locale_utf8, 1); /* FreeBSD(さくらインターネット)でsetlocaleが動作しない場合があったため、環境変数を書き換える。 */
@@ -836,7 +839,7 @@ void set_locale(char* locale)
     }
 #endif
     setlocale(LC_ALL, locale_utf8);
-    bindtextdomain("starbug1", "locale");
+    bindtextdomain("starbug1", locale_dir);
     textdomain("starbug1");
 #ifdef _WIN32
     bind_textdomain_codeset("starbug1", "utf-8");
@@ -859,5 +862,23 @@ double get_microseconds()
     struct timeval t;
     gettimeofday(&t, NULL);
     return t.tv_sec + t.tv_usec * 1e-6;
+}
+
+char* get_script_dir(char* script_dir)
+{
+    char* p;
+    strcpy(script_dir, getenv("SCRIPT_FILENAME"));
+    if ((p = strrchr(script_dir, '/'))) {
+        *p = '\0';
+    }
+    return script_dir;
+}
+
+char log_filename[DEFAULT_LENGTH];
+char* get_log_filename()
+{
+    char dir_name[DEFAULT_LENGTH];
+    sprintf(log_filename, "%s/debug.log", get_script_dir(dir_name));
+    return log_filename;
 }
 /* vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8: */

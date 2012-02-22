@@ -35,11 +35,12 @@ static int fexist(const char *filename)
 Database* db_init(char* sub_project_name)
 {
     char db_name[DEFAULT_LENGTH];
+    char dir_name[DEFAULT_LENGTH];
     bool exists_db_file;
     Database* db;
 
     if (strcmp(sub_project_name, "top") == 0) {
-        strcpy(db_name, "db/1.db");
+        sprintf(db_name, "%s/db/1.db", get_script_dir(dir_name));
     } else {
         db_top_get_project_db_name(sub_project_name, db_name);
     }
