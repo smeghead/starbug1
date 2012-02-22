@@ -55,7 +55,7 @@ Database* db_init(char* sub_project_name)
 
     if (!exists_db_file) {
         d("db_name: %s\n", db_name);
-        if (strcmp(db_name, "db/1.db") == 0) {
+        if (strstr(db_name, "db/1.db") != NULL) {
             /* トップ プロジェクト全体の情報を格納するデータベース */
             create_top_tables(db);
         } else {

@@ -48,6 +48,7 @@ ProjectInfo* db_top_get_project_info(Database* db, ProjectInfo* project_info, ch
     String* sql_a = string_new();
     sqlite3_stmt *stmt = NULL;
 
+    d("project_name: %s\n", project_name);
     string_appendf(sql_a,
             "select id, name, sort, deleted from project_info where name = ? %s",
             all ? "" : "and deleted = 0");
