@@ -1,3 +1,7 @@
+2012-02-22  smeghead <smeghead7@gmail.com>
+
+	* supported nginx(web server) using fastcgi.
+
 2011-08-08  smeghead <smeghead7@gmail.com>
 
 	* when you are installing starbug1, be able to check environment by check script.
