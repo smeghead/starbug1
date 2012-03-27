@@ -766,26 +766,24 @@ void get_cookie_string(char* key, char* buf)
 
 void set_timestamp_string(char* buf)
 {
-    struct timeval tv;
-    struct tm date;
+    time_t timer;
+    struct tm *date;
 
-    gettimeofday(&tv, NULL);
-    localtime_r(&tv.tv_sec, &date);
-    sprintf(buf, "%04d-%02d-%02d-%02d-%02d-%02d",
-            date.tm_year + 1900, date.tm_mon + 1, date.tm_mday,
-            date.tm_hour, date.tm_min, date.tm_sec);
+    timer = time(NULL);
+    date = localtime(&timer);
+
+    strftime(buf, 255, "%Y-%m-%d-%H-%M-%S", date);
 }
 
 void set_date_string(char* buf)
 {
-    struct timeval tv;
-    struct tm date;
+    time_t timer;
+    struct tm *date;
 
-    gettimeofday(&tv, NULL);
-    localtime_r(&tv.tv_sec, &date);
-    sprintf(buf, "%04d-%02d-%02d %02d:%02d:%02d",
-            date.tm_year + 1900, date.tm_mon + 1, date.tm_mday,
-            date.tm_hour, date.tm_min, date.tm_sec);
+    timer = time(NULL);
+    date = localtime(&timer);
+
+    strftime(buf, 255, "%Y-%m-%d %H:%M:%S", date);
 }
 
 /*
