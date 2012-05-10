@@ -120,16 +120,6 @@ static HookMessage* create_hook_project(Project* project, Message* message, List
     return hook_message;
 }
 
-char* get_script_dir(char* script_dir)
-{
-    char* p;
-    strcpy(script_dir, getenv("SCRIPT_FILENAME"));
-    if ((p = strrchr(script_dir, '/'))) {
-        *p = '\0';
-    }
-    return script_dir;
-}
-
 HOOK* exec_hook(HOOK* hook, Project* project, Message* message, List* elements, List* element_types)
 {
     char hook_dir[DEFAULT_LENGTH] = "script";

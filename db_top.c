@@ -48,6 +48,7 @@ ProjectInfo* db_top_get_project_info(Database* db, ProjectInfo* project_info, ch
     String* sql_a = string_new();
     sqlite3_stmt *stmt = NULL;
 
+    d("project_name: %s\n", project_name);
     string_appendf(sql_a,
             "select id, name, sort, deleted from project_info where name = ? %s",
             all ? "" : "and deleted = 0");
@@ -114,6 +115,7 @@ int db_top_register_project_info(Database* db, ProjectInfo* project_info)
 
 char* db_top_get_project_db_name(char* project_name, char* buffer)
 {
+    char dir_name[DEFAULT_LENGTH];
     Database* top_db_a = db_init("top");
     ProjectInfo* project_info_a = project_info_new();
 
@@ -121,7 +123,7 @@ char* db_top_get_project_db_name(char* project_name, char* buffer)
     if (!project_info_a->id) {
         die("ERROR: no such project found.");
     }
-    sprintf(buffer, "db/%d.db", project_info_a->id);
+    sprintf(buffer, "%s/db/%d.db", get_script_dir(dir_name), project_info_a->id);
     project_info_free(project_info_a);
     db_finish(top_db_a);
     return buffer;
