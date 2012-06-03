@@ -10,3 +10,7 @@ tags
 template
 db
 js/lang
+locale/en
+locale/ja
+locale/zh
+locale/zh_TW
