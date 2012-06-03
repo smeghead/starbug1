@@ -9,12 +9,16 @@ function setup_copy_icon(e, text) {
     divwin.style.display = 'block';
     divwintext.focus();
     divwintext.select();
+    var board = document.createElement('div');
+    board.setAttribute('id', 'board');
     var body = $$('body')[0];
+    body.appendChild(board);
     window.setTimeout(function(){
-        Event.observe(body, 'click', function close_divwin(e){
+        Event.observe(board, 'click', function close_divwin(e){
             $('divwin').style.display = 'none';
-            Event.stopObserving(body, 'click', close_divwin);
-        });
+            Element.remove(board);
+            e.preventDefault();
+        }, true);
     }, 1000);
 }
 function initPage(e) {
