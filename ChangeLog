@@ -1,3 +1,9 @@
+2012-11-28  smeghead <smeghead7@gmail.com>
+
+	* fixed javascript error occurs when reply a ticket has
+	reply-property-number-field.
+	* Makino gave me the patch. Thanks
+
 2012-02-22  smeghead <smeghead7@gmail.com>
 
 	* supported nginx(web server) using fastcgi.

@@ -1894,6 +1894,8 @@ void ticket_action()
             o("\t\t<div id=\"field%d.required\" class=\"error\"></div>\n", et->id);
         if (et->type == ELEM_TYPE_DATE)
             o("\t\t<div id=\"field%d.datefield\" class=\"error\"></div>\n", et->id);
+        if (et->type == ELEM_TYPE_NUM)
+            o("\t\t<div id=\"field%d.numberfield\" class=\"error\"></div>\n", et->id);
         output_form_element(db_a, NULL, et, project_a);
         o("\t\t<div class=\"description\">");hs(et->description);o("&nbsp;</div>\n");
         if (DISPLAY_REMOTE_HOST && et->id == ELEM_ID_SENDER) {
