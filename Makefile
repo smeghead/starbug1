@@ -216,5 +216,5 @@ js/lang/zh_TW.json: locale/zh_TW.po
 	echo ';' >> js/lang/zh_TW.json
 
 release-notify:
-	release-support.pl ${VERSION}
+	release-support.pl starbug1 ${VERSION}
 
