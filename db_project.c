@@ -1113,7 +1113,7 @@ List* db_get_states_has_not_close(Database* db, List* states)
             "inner join message as m "
             " on m.id = t.last_message_id "
             "inner join list_item as l "
-            " on l.name = m.m.field%d "
+            " on l.name = m.field%d "
             "where l.close = 0 "
             "group by l.id, m.field%d "
             "order by l.sort ", ELEM_ID_STATUS, ELEM_ID_STATUS, ELEM_ID_STATUS);
@@ -1149,7 +1149,7 @@ List* db_get_states(Database* db, List* states)
             "inner join message as m "
             " on m.id = t.last_message_id "
             "inner join list_item as l "
-            " on l.element_type_id = %d and l.name = m.m.field%d "
+            " on l.element_type_id = %d and l.name = m.field%d "
             "group by m.field%d "
             "order by l.sort ", ELEM_ID_STATUS, ELEM_ID_STATUS, ELEM_ID_STATUS, ELEM_ID_STATUS);
     if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
@@ -1183,7 +1183,7 @@ List* db_get_statictics_multi(Database* db, List* states, const int element_type
             "inner join message as m "
             " on m.id = t.last_message_id "
             "inner join list_item as l "
-            " on l.element_type_id = %d and m.m.field%d like '%%' || l.name || '\t%%' "
+            " on l.element_type_id = %d and m.field%d like '%%' || l.name || '\t%%' "
             "group by l.id "
             "order by l.sort ", element_type_id, element_type_id);
     if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
@@ -1218,7 +1218,7 @@ List* db_get_statictics(Database* db, List* states, const int element_type_id)
             "inner join message as m "
             " on m.id = t.last_message_id "
             "inner join list_item as l "
-            " on l.element_type_id = %d and l.name = m.m.field%d "
+            " on l.element_type_id = %d and l.name = m.field%d "
             "group by m.field%d "
             "order by l.sort ", element_type_id, element_type_id, element_type_id);
     if (sqlite3_prepare(db->handle, sql, strlen(sql), &stmt, NULL) == SQLITE_ERROR) goto error;
