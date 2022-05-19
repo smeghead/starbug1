@@ -439,6 +439,9 @@ void output_states(List* states, bool with_new_ticket_link)
     /* display state. */
     o("<div id=\"state_index\">\n");
     o("\t<ul>\n");
+    o("\t\t<li>\n");
+    o("\t\t\t<a href=\"%s/%s/search?rsort=-3\" title=\"%s\" class=\"newest-link\">%s</a>", cgiScriptName, g_project_code_4_url, _("list of last updated tickets"), _("newest"));
+    o("\t\t</li>\n");
     foreach (it, states) {
         State* s = it->element;
         o("\t\t<li>\n");

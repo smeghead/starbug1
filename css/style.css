@@ -435,6 +435,9 @@ span.required {
     margin:0px 0px 0px 0px;
     text-align: center;
 }
+#state_index .newest-link {
+    color: #FF5110;
+}
 
 #state_index li {
     margin:0px 0px 0px 0px;

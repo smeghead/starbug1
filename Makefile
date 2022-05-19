@@ -1,5 +1,5 @@
-VERSION = 1.6.01
-COPYRIGHT = Copyright\ smeghead\ 2007\ -\ 2012
+VERSION = 1.6.02
+COPYRIGHT = Copyright\ smeghead\ 2007\ -\ 2014
 CC = gcc
 CC_VERSION = ${shell gcc --version | grep 'gcc.*[0-9]\.' | sed -e 's/gcc[^0-9]*\([0-9]\).*/\1/g'}
 
@@ -152,6 +152,7 @@ displayinstalldoc:
 
 mergeresource:
 	xgettext --from-code=utf-8 -k_ --msgid-bugs-address=smeghead@users.sourceforge.jp -L C -p locale  *.c js/*.js
+	sed -i 's/charset=CHARSET/charset=UTF-8/g' locale/messages.po
 	msgmerge -U locale/ja.po locale/messages.po
 	msgmerge -U locale/en.po locale/messages.po
 	msgmerge -U locale/zh.po locale/messages.po

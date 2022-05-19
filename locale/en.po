@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: starbug 1\n"
 "Report-Msgid-Bugs-To: smeghead@users.sourceforge.jp\n"
-"POT-Creation-Date: 2011-07-19 12:17+0900\n"
+"POT-Creation-Date: 2022-05-19 15:27+0000\n"
 "PO-Revision-Date: 2009-07-02 22:23+0900\n"
 "Last-Translator: smeghead <smeghead@sourceforge.jp>\n"
 "Language-Team: English\n"
@@ -50,7 +50,7 @@ msgstr "Style Settings"
 msgid "export settings"
 msgstr "Export Settings"
 
-#: admin_project.c:128 index_project.c:175 index_project.c:2828
+#: admin_project.c:128 index_project.c:175 index_project.c:2837
 msgid "help"
 msgstr "Help"
 
@@ -103,7 +103,7 @@ msgid "file upload max size(kb)"
 msgstr "File upload max size(Kb)"
 
 #: admin_project.c:236 admin_project.c:344 admin_project.c:589
-#: admin_project.c:1032 admin_top.c:151 admin_top.c:196 index_project.c:2861
+#: admin_project.c:1032 admin_top.c:151 admin_top.c:196 index_project.c:2870
 #: index_top.c:170
 msgid "update"
 msgstr "Update"
@@ -125,7 +125,7 @@ msgstr "Add new column"
 msgid "column name"
 msgstr "Column Name"
 
-#: admin_project.c:358 index_project.c:1595 index_project.c:1892
+#: admin_project.c:358 index_project.c:1597 index_project.c:1894
 msgid "*"
 msgstr "*"
 
@@ -266,8 +266,7 @@ msgstr "Means closed"
 msgid "sort"
 msgstr "Sort"
 
-#: admin_project.c:477 admin_project.c:977 admin_top.c:166
-#: index_project.c:3037
+#: admin_project.c:477 admin_project.c:977 admin_top.c:166 index_project.c:3046
 msgid "delete"
 msgstr "Delete"
 
@@ -397,7 +396,7 @@ msgstr ""
 msgid "export sub project type name"
 msgstr "export sub project type name"
 
-#: admin_project.c:1127 index_project.c:1625 index_project.c:2290
+#: admin_project.c:1127 index_project.c:1627 index_project.c:2294
 msgid "register"
 msgstr "Register"
 
@@ -405,7 +404,7 @@ msgstr "Register"
 msgid "project management"
 msgstr "Project Management"
 
-#: admin_top.c:58 index_project.c:2451 index_top.c:58
+#: admin_top.c:58 index_project.c:2455 index_top.c:58
 msgid "project top"
 msgstr "Project Top"
 
@@ -490,22 +489,22 @@ msgstr "[ERROR] projectid("
 msgid ") is already exists."
 msgstr ") is already exists."
 
-#: dbutil.c:106
+#: dbutil.c:107
 msgid "main project"
 msgstr "Main Project"
 
-#: dbutil.c:112 dbutil.c:178
+#: dbutil.c:113 dbutil.c:179
 msgid "home"
 msgstr "Home"
 
-#: dbutil.c:153 dbutil.c:541 wiki.c:217
+#: dbutil.c:154 dbutil.c:542 wiki.c:217
 msgid "[wiki syntax example]"
 msgstr ""
 "*Editable Area \n"
 "It is possible to edit it freely. Please edit it from the link of 'Edit' "
 "above. Please use it for various usages."
 
-#: dbutil.c:197
+#: dbutil.c:198
 msgid "[style sheet default value]"
 msgstr ""
 " @charset \"utf-8\";\n"
@@ -570,134 +569,134 @@ msgstr ""
 "        /* background-color:    lightcyan; */\n"
 "}"
 
-#: dbutil.c:374
+#: dbutil.c:375
 msgid "title"
 msgstr "Title"
 
-#: dbutil.c:375
+#: dbutil.c:376
 msgid "please input title that means content correctly."
 msgstr "Please input title that means content correctly."
 
-#: dbutil.c:382 index_project.c:1062 index_project.c:2581
+#: dbutil.c:383 index_project.c:1064 index_project.c:2585
 msgid "registerer"
 msgstr "Registerer"
 
-#: dbutil.c:383
+#: dbutil.c:384
 msgid "please input your name."
 msgstr "Please input your name."
 
-#: dbutil.c:390
+#: dbutil.c:391
 msgid "status"
 msgstr "Status"
 
-#: dbutil.c:391
+#: dbutil.c:392
 msgid "please select status."
 msgstr "Please select status."
 
-#: dbutil.c:392 dbutil.c:447 index_project.c:538
+#: dbutil.c:393 dbutil.c:448 index_project.c:540
 msgid "new"
 msgstr "new"
 
-#: dbutil.c:399
+#: dbutil.c:400
 msgid "category"
 msgstr "Category"
 
-#: dbutil.c:400
+#: dbutil.c:401
 msgid "please select category."
 msgstr "Please select category."
 
-#: dbutil.c:407
+#: dbutil.c:408
 msgid "priority"
 msgstr "Priority"
 
-#: dbutil.c:408
+#: dbutil.c:409
 msgid "please select priority."
 msgstr "Please select priority."
 
-#: dbutil.c:415
+#: dbutil.c:416
 msgid "detail"
 msgstr "Detail"
 
-#: dbutil.c:416
+#: dbutil.c:417
 msgid "please describe the detail."
 msgstr "Please describe the detail."
 
-#: dbutil.c:423
+#: dbutil.c:424
 msgid "reproduction procedure"
 msgstr "Reproduction procedure"
 
-#: dbutil.c:424
+#: dbutil.c:425
 msgid ""
 "please describe the condition and the procedure to reproduce the problem."
 msgstr ""
 "Please describe the condition and the procedure to reproduce the problem."
 
-#: dbutil.c:431
+#: dbutil.c:432
 msgid "comment"
 msgstr "Comment"
 
-#: dbutil.c:432
+#: dbutil.c:433
 msgid "please describe the comment."
 msgstr "Please describe the comment."
 
-#: dbutil.c:450
+#: dbutil.c:451
 msgid "accepted"
 msgstr "accepted"
 
-#: dbutil.c:453
+#: dbutil.c:454
 msgid "fixed"
 msgstr "fixed"
 
-#: dbutil.c:456
+#: dbutil.c:457
 msgid "reservation"
 msgstr "reservation"
 
-#: dbutil.c:459
+#: dbutil.c:460
 msgid "complete"
 msgstr "complete"
 
-#: dbutil.c:462
+#: dbutil.c:463
 msgid "wontfix"
 msgstr "wontfix"
 
-#: dbutil.c:465
+#: dbutil.c:466
 msgid "specification"
 msgstr "specification"
 
-#: dbutil.c:468
+#: dbutil.c:469
 #, fuzzy
 msgid "deleted"
 msgstr "Deleted."
 
-#: dbutil.c:471
+#: dbutil.c:472
 msgid "page"
 msgstr "page"
 
-#: dbutil.c:474
+#: dbutil.c:475
 msgid "batch process"
 msgstr "batch process"
 
-#: dbutil.c:477
+#: dbutil.c:478
 msgid "document"
 msgstr "document"
 
-#: dbutil.c:480
+#: dbutil.c:481
 msgid "emergency"
 msgstr "emergency"
 
-#: dbutil.c:483
+#: dbutil.c:484
 msgid "high"
 msgstr "high"
 
-#: dbutil.c:486
+#: dbutil.c:487
 msgid "middle"
 msgstr "middle"
 
-#: dbutil.c:489
+#: dbutil.c:490
 msgid "low"
 msgstr "low"
 
-#: dbutil.c:546
+#: dbutil.c:547
 msgid "[help content]"
 msgstr ""
 "*A reversely discounted help\n"
@@ -828,7 +827,7 @@ msgstr ""
 "\n"
 "    * http://starbug1.sourceforge.jp/"
 
-#: dbutil.c:551
+#: dbutil.c:552
 msgid "[admin help content]"
 msgstr ""
 "*Explanation for management users\n"
@@ -878,17 +877,17 @@ msgstr ""
 "refer to it on this occasion because a sample for the background setting of "
 "the list of tickets is displayed by the lower part of the page."
 
-#: hook.c:169
+#: hook.c:159
 #, c-format
 msgid "[error] error occured in hook process(%s). failed to load plugin. %s"
 msgstr "[ERROR] error occured in hook process(%s). failed to load plugin. %s"
 
-#: hook.c:183 hook.c:220
+#: hook.c:173 hook.c:210
 #, c-format
 msgid "executed hook process(%s)"
 msgstr "Executed hook process(%s)"
 
-#: hook.c:185 hook.c:222
+#: hook.c:175 hook.c:212
 #, c-format
 msgid "[error] error occured in hook process(%s). (return code: %d)"
 msgstr "[ERROR] error occured in hook process(%s). (return code: %d)"
@@ -905,8 +904,8 @@ msgstr "SubProject Top"
 msgid "this is ticket list by status."
 msgstr "This is ticket list by status."
 
-#: index_project.c:170 index_project.c:486 index_project.c:506
-#: index_project.c:515
+#: index_project.c:170 index_project.c:488 index_project.c:508
+#: index_project.c:517
 msgid "ticket list by status"
 msgstr "Ticket List by Status"
 
@@ -914,8 +913,8 @@ msgstr "Ticket List by Status"
 msgid "register new ticket"
 msgstr "Register New Ticket"
 
-#: index_project.c:171 index_project.c:1555 index_project.c:1557
-#: index_project.c:1566
+#: index_project.c:171 index_project.c:1557 index_project.c:1559
+#: index_project.c:1568
 msgid "register ticket"
 msgstr "Register Ticket"
 
@@ -923,20 +922,20 @@ msgstr "Register Ticket"
 msgid "search tickets."
 msgstr "Search Tickets."
 
-#: index_project.c:172 index_project.c:817 index_project.c:819
+#: index_project.c:172 index_project.c:819 index_project.c:821
 msgid "search tickets"
 msgstr "Search Tickets"
 
-#: index_project.c:173 index_project.c:2638
+#: index_project.c:173 index_project.c:2642
 msgid "display statictics."
 msgstr "Display Statictics."
 
-#: index_project.c:173 index_project.c:2629 index_project.c:2638
+#: index_project.c:173 index_project.c:2633 index_project.c:2642
 msgid "statictics"
 msgstr "Statictics"
 
-#: index_project.c:174 index_project.c:2129 index_project.c:2131
-#: index_project.c:2147
+#: index_project.c:174 index_project.c:2133 index_project.c:2135
+#: index_project.c:2151
 msgid "register tickets at once"
 msgstr "Register Tickets at Once"
 
@@ -948,361 +947,370 @@ msgstr "Display Help."
 msgid "seveal settings."
 msgstr "Seveal Settings."
 
-#: index_project.c:319 index_project.c:339 index_project.c:843
-#: index_project.c:965 index_project.c:1009 index_project.c:1065
-#: index_project.c:2584
+#: index_project.c:318 index_project.c:338 index_project.c:845
+#: index_project.c:967 index_project.c:1011 index_project.c:1067
+#: index_project.c:2588
 msgid "register date"
 msgstr "Register Date"
 
-#: index_project.c:319 index_project.c:340 index_project.c:966
-#: index_project.c:1011
+#: index_project.c:318 index_project.c:339 index_project.c:968
+#: index_project.c:1013
 msgid "last update date"
 msgstr "Last Update Date"
 
-#: index_project.c:319 index_project.c:341 index_project.c:967
-#: index_project.c:1013
+#: index_project.c:318 index_project.c:340 index_project.c:969
+#: index_project.c:1015
 msgid "leaved days"
 msgstr "Leaved Days"
 
-#: index_project.c:330 index_project.c:334 index_project.c:339
-#: index_project.c:340 index_project.c:341
+#: index_project.c:329 index_project.c:333 index_project.c:338
+#: index_project.c:339 index_project.c:340
 msgid "asc or desc sorting."
 msgstr "Asc or desc sorting."
 
-#: index_project.c:448
+#: index_project.c:443
+#, fuzzy
+msgid "list of last updated tickets"
+msgstr "This is latest updated tickets."
+
+#: index_project.c:443
+msgid "newest"
+msgstr ""
+
+#: index_project.c:450
 msgid "search by status."
 msgstr "Search by status."
 
-#: index_project.c:456 index_project.c:2504
+#: index_project.c:458 index_project.c:2508
 msgid "display the ticket on inputed id."
 msgstr "Display the ticket on inputed id."
 
-#: index_project.c:459 index_project.c:2503 index_project.c:2510
+#: index_project.c:461 index_project.c:2507 index_project.c:2514
 msgid "id search"
 msgstr "ID search"
 
-#: index_project.c:462
+#: index_project.c:464
 msgid "register new ticket."
 msgstr "Register new ticket."
 
-#: index_project.c:515
+#: index_project.c:517
 msgid "display unclosed tickets."
 msgstr "Display unclosed tickets."
 
-#: index_project.c:520
+#: index_project.c:522
 msgid "link to part of this page"
 msgstr "Link to part of this page"
 
-#: index_project.c:539
+#: index_project.c:541
 msgid "tickets is desplayed."
 msgstr "Tickets is desplayed."
 
-#: index_project.c:544 index_project.c:553
+#: index_project.c:546 index_project.c:555
 msgid "display tickets that status is "
 msgstr "Display tickets that status is "
 
-#: index_project.c:544 index_project.c:553
+#: index_project.c:546 index_project.c:555
 msgid ".(display status)"
 msgstr "."
 
-#: index_project.c:548
+#: index_project.c:550
 msgid "see more..."
 msgstr "See more..."
 
-#: index_project.c:828
+#: index_project.c:830
 msgid "search condition"
 msgstr "Search Condition"
 
-#: index_project.c:828
+#: index_project.c:830
 msgid "input search conditions and push 'search'."
 msgstr "Input search conditions and push 'search'."
 
-#: index_project.c:834
+#: index_project.c:836
 msgid "keyword search"
 msgstr "Keyword Search"
 
-#: index_project.c:835
+#: index_project.c:837
 msgid "search for all columns includes history."
 msgstr "Search for all columns includes history."
 
-#: index_project.c:849 index_project.c:864 index_project.c:1482
+#: index_project.c:851 index_project.c:866 index_project.c:1484
 msgid "input format: yyyy-mm-dd"
 msgstr "Input format: yyyy-mm-dd"
 
-#: index_project.c:858
+#: index_project.c:860
 msgid "update date"
 msgstr "Update date"
 
-#: index_project.c:869
+#: index_project.c:871
 msgid "after(lastupdate)"
 msgstr "after"
 
-#: index_project.c:869
+#: index_project.c:871
 msgid "days before"
 msgstr ""
 
-#: index_project.c:870
+#: index_project.c:872
 msgid "last updated in days."
 msgstr "Last Update Date"
 
-#: index_project.c:906 index_top.c:132 index_top.c:136
+#: index_project.c:908 index_top.c:132 index_top.c:136
 msgid "search"
 msgstr "Search"
 
-#: index_project.c:907
+#: index_project.c:909
 msgid "save conditions. (use cookie)"
 msgstr "Save conditions. (use cookie)"
 
-#: index_project.c:913 index_top.c:210
+#: index_project.c:915 index_top.c:210
 msgid "search result"
 msgstr "Search Result"
 
-#: index_project.c:921
+#: index_project.c:923
 #, c-format
 msgid "%d tickets hits."
 msgstr "%d tickets hits."
 
-#: index_project.c:932
+#: index_project.c:934
 msgid "[cvs format download description]"
 msgstr "CVS format download"
 
-#: index_project.c:932
+#: index_project.c:934
 msgid "csv format download"
 msgstr "CVS format download"
 
-#: index_project.c:936
+#: index_project.c:938
 msgid "[html format download description]"
 msgstr "HTML format download(exel)"
 
-#: index_project.c:936
+#: index_project.c:938
 msgid "html format download(exel)"
 msgstr "HTML format download(exel)"
 
-#: index_project.c:940
+#: index_project.c:942
 msgid "[rss format download description]"
 msgstr ""
 "The retrieval result is downloaded by the RSS form. The retrieval result can "
 "be observed with the RSS reader."
 
-#: index_project.c:940
+#: index_project.c:942
 msgid "rss format download"
 msgstr "RSS format download"
 
-#: index_project.c:1473
+#: index_project.c:1475
 msgid "file size must below"
 msgstr "File size must below"
 
-#: index_project.c:1473
+#: index_project.c:1475
 msgid "kb(file size)"
 msgstr "Kb(file size)"
 
-#: index_project.c:1493
+#: index_project.c:1495
 msgid "if you want to add selection item, input new item name."
 msgstr "If you want to add selection item, input new item name."
 
-#: index_project.c:1567
+#: index_project.c:1569
 msgid "input below form and push register button."
 msgstr "Input below form and push register button."
 
-#: index_project.c:1568 index_project.c:1856 index_project.c:2209
-#: index_project.c:2962
+#: index_project.c:1570 index_project.c:1858 index_project.c:2213
+#: index_project.c:2971
 msgid "note: they are checked by only javascript."
 msgstr "NOTE: they are checked by only javascript."
 
-#: index_project.c:1608 index_project.c:1902 index_project.c:2237
-#: index_project.c:2990
+#: index_project.c:1610 index_project.c:1906 index_project.c:2241
+#: index_project.c:2999
 #, c-format
 msgid "[REMOTE ADDRESS: %s]"
 msgstr "[REMOTE ADDRESS: %s]"
 
-#: index_project.c:1625 index_project.c:1916 index_project.c:2290
-#: index_project.c:3037
+#: index_project.c:1627 index_project.c:1920 index_project.c:2294
+#: index_project.c:3046
 msgid "save registerer.(use cookie)"
 msgstr "Save registerer.(use cookie)"
 
-#: index_project.c:1652 index_project.c:1659
+#: index_project.c:1654 index_project.c:1661
 msgid "not exists id."
 msgstr "not exists id."
 
-#: index_project.c:1684 index_project.c:2458
+#: index_project.c:1686 index_project.c:2462
 msgid "what's new"
 msgstr "What's New"
 
-#: index_project.c:1684
+#: index_project.c:1686
 msgid "this is latest updated tickets."
 msgstr "This is latest updated tickets."
 
-#: index_project.c:1725
+#: index_project.c:1727
 msgid "all attachments"
 msgstr "All attachments"
 
-#: index_project.c:1756
+#: index_project.c:1758
 msgid "go to reply"
 msgstr "Reply"
 
-#: index_project.c:1756
+#: index_project.c:1758
 msgid "ticket history"
 msgstr "Ticket History"
 
-#: index_project.c:1756
+#: index_project.c:1758
 msgid "this is ticket histories."
 msgstr "This is ticket histories."
 
-#: index_project.c:1816
+#: index_project.c:1818
 msgid "hide this file"
 msgstr ""
 
-#: index_project.c:1818
+#: index_project.c:1820
 msgid "display this file"
 msgstr "Display this file."
 
-#: index_project.c:1853
+#: index_project.c:1855
 msgid "reply ticket"
 msgstr "Reply Ticket"
 
-#: index_project.c:1856
+#: index_project.c:1858
 msgid "input form and push reply."
 msgstr "Input form and push reply."
 
-#: index_project.c:1859
+#: index_project.c:1861
 msgid "update ticket information"
 msgstr "Update ticket information"
 
-#: index_project.c:1859
+#: index_project.c:1861
 msgid "[update ticket description]"
 msgstr " "
 
-#: index_project.c:1884
+#: index_project.c:1886
 msgid "add reply information"
 msgstr "Add reply information"
 
-#: index_project.c:1884
+#: index_project.c:1886
 msgid "input reply information."
 msgstr "Input reply information."
 
-#: index_project.c:1916
+#: index_project.c:1920
 msgid "reply"
 msgstr "Reply"
 
-#: index_project.c:2089
+#: index_project.c:2093
 msgid "registerd."
 msgstr "Registerd."
 
-#: index_project.c:2091
+#: index_project.c:2095
 msgid "replyed."
 msgstr "Replyed."
 
-#: index_project.c:2105 index_project.c:3094
+#: index_project.c:2109 index_project.c:3103
 msgid "error"
 msgstr "error"
 
-#: index_project.c:2108 index_project.c:3097
+#: index_project.c:2112 index_project.c:3106
 msgid "error occured."
 msgstr "Error occured."
 
-#: index_project.c:2109 index_project.c:3098
+#: index_project.c:2113 index_project.c:3107
 msgid "file size is too large."
 msgstr "File size is too large."
 
-#: index_project.c:2111 index_project.c:3100
+#: index_project.c:2115 index_project.c:3109
 msgid "kb. too large. back by browser's back button."
 msgstr "Kb. too large. back by browser's back button."
 
-#: index_project.c:2148
+#: index_project.c:2152
 msgid "[register ticket at once description1]"
 msgstr ""
 "Please fill in ticket information on the following forms by Comma Separated "
 "Value and push an analytical button when you register a new ticket in the "
 "lump. Details of the procedure of registration are as follows. "
 
-#: index_project.c:2149
+#: index_project.c:2153
 msgid "[register ticket at once description2]"
 msgstr ""
 "Information on two or more tickets that register is put by Comma Separated "
 "Value on the page of the registration of the batch of the ticket (this "
 "page), and an analytical button is pushed."
 
-#: index_project.c:2150
+#: index_project.c:2154
 msgid "[register ticket at once description3]"
 msgstr ""
 "Because the analytical result is displayed on the confirmation of the "
 "registration of the batch of the ticket page, the item corresponding to each "
 "field is selected, and the registration button is pushed."
 
-#: index_project.c:2151
+#: index_project.c:2155
 msgid "register finish."
 msgstr "Register finish."
 
-#: index_project.c:2166
+#: index_project.c:2170
 msgid "[register ticket at once description4]"
 msgstr ""
 "Please put the data that registers by Comma Separated Value. The field taken "
 "on the following screen can be set."
 
-#: index_project.c:2170
+#: index_project.c:2174
 msgid "analysis"
 msgstr "Analysis"
 
-#: index_project.c:2196 index_project.c:2198 index_project.c:2207
+#: index_project.c:2200 index_project.c:2202 index_project.c:2211
 msgid "register tickets at once confirm"
 msgstr "Register tickets at once confirm"
 
-#: index_project.c:2208
+#: index_project.c:2212
 msgid "[register ticket at once description5]"
 msgstr ""
 "The selection value of the box of the combo for registration of each digit "
 "is pushed, and please select the item that registers the data of the digit, "
 "and push the registration button."
 
-#: index_project.c:2247
+#: index_project.c:2251
 msgid "register<br />column"
 msgstr "Register<br />column"
 
-#: index_project.c:2251
+#: index_project.c:2255
 msgid "ignore"
 msgstr "Ignore"
 
-#: index_project.c:2297
+#: index_project.c:2301
 msgid "[register ticket at once description6]"
 msgstr ""
 "When the selection value of the box of the combo for registration is "
 "registered like 'Disregard', it is omitted from the registration object."
 
-#: index_project.c:2298
+#: index_project.c:2302
 msgid "[register ticket at once description7]"
 msgstr ""
 "The input check is not done as for the registered each value, and confirm "
 "it, please before it registers."
 
-#: index_project.c:2428
+#: index_project.c:2432
 msgid " tickets registerd."
 msgstr " tickets registerd."
 
-#: index_project.c:2431
+#: index_project.c:2435
 msgid "no ticket registerd."
 msgstr "No ticket registerd."
 
-#: index_project.c:2475
+#: index_project.c:2479
 msgid "there are no latest tickets."
 msgstr "There are no no latest tickets."
 
-#: index_project.c:2483
+#: index_project.c:2487
 msgid "ticket counts"
 msgstr "Ticket counts"
 
-#: index_project.c:2495
+#: index_project.c:2499
 msgid "there are no ticket informations."
 msgstr "There are no ticket informations."
 
-#: index_project.c:2520 index_top.c:157 index_top.c:164
+#: index_project.c:2524 index_top.c:157 index_top.c:164
 msgid "edit page"
 msgstr "Edit page"
 
-#: index_project.c:2641
+#: index_project.c:2645
 msgid "ticket count chart"
 msgstr "Ticket counts"
 
-#: index_project.c:2651 index_project.c:2723
+#: index_project.c:2655 index_project.c:2728
 msgid "[graph description]"
 msgstr ""
 "The input check is not done as for the registered each value, and confirm "
@@ -1310,67 +1318,67 @@ msgstr ""
 "The graph is displayed with JavaScript. Please look in a browser that "
 "JavaScript is effective."
 
-#: index_project.c:2652 index_project.c:2686
+#: index_project.c:2656 index_project.c:2690
 msgid "days"
 msgstr ""
 
-#: index_project.c:2653 index_project.c:2669
+#: index_project.c:2657 index_project.c:2673
 msgid "all tickets count"
 msgstr "All ticket counts"
 
-#: index_project.c:2654 index_project.c:2676
+#: index_project.c:2658 index_project.c:2680
 msgid "not yet closed tickets count"
 msgstr "Not yet closed tickets count"
 
-#: index_project.c:2695 index_project.c:2765 index_project.c:2784
-#: index_project.c:2803
+#: index_project.c:2699 index_project.c:2772 index_project.c:2791
+#: index_project.c:2810
 msgid "tickets count"
 msgstr "Ticket counts"
 
-#: index_project.c:2760
+#: index_project.c:2767
 msgid "register user ranking"
 msgstr "Register User Ranking"
 
-#: index_project.c:2764 index_project.c:2783 index_project.c:2802
+#: index_project.c:2771 index_project.c:2790 index_project.c:2809
 msgid "user name"
 msgstr "User Name"
 
-#: index_project.c:2779
+#: index_project.c:2786
 msgid "update user ranking"
 msgstr "Update User Ranking"
 
-#: index_project.c:2798
+#: index_project.c:2805
 msgid "close user ranking"
 msgstr "Close User Ranking"
 
-#: index_project.c:2845 index_project.c:2852 index_project.c:2853
+#: index_project.c:2854 index_project.c:2861 index_project.c:2862
 #: index_top.c:141
 msgid "edit top page"
 msgstr "Edit top page"
 
-#: index_project.c:2854 index_top.c:164
+#: index_project.c:2863 index_top.c:164
 msgid "[wiki syntax description1]"
 msgstr ""
 " Please edit contents on the page by the grammar of simple wiki, and push "
 "the update button."
 
-#: index_project.c:2907 index_project.c:2933
+#: index_project.c:2916 index_project.c:2942
 msgid "error: there is no file."
 msgstr "ERROR: There is no file."
 
-#: index_project.c:2950 index_project.c:2951 index_project.c:2960
+#: index_project.c:2959 index_project.c:2960 index_project.c:2969
 msgid "attachment file display setting"
 msgstr "attachment file display setting"
 
-#: index_project.c:2961
+#: index_project.c:2970
 msgid "you can appoint if attachment file will be display."
 msgstr "you can appoint if attachment file will be display."
 
-#: index_project.c:2996
+#: index_project.c:3005
 msgid "attachment file"
 msgstr "Attachment file"
 
-#: index_project.c:3037
+#: index_project.c:3046
 msgid "display"
 msgstr "Display"
 
@@ -1390,20 +1398,20 @@ msgstr "Description"
 msgid "back to top"
 msgstr "Back to top"
 
-#: util.c:816
+#: util.c:817
 msgid "[ticket form syntax description1]"
 msgstr ""
 "In the content of two or more-line text item, ID becomes a link of the "
 "ticket of one to a ticket detailed page if it writes like #1."
 
-#: util.c:817
+#: util.c:818
 msgid "[ticket form syntax description2]"
 msgstr ""
 "In the content of two or more-line text item, ID of the project whose "
 "project ID is bts becomes a link of the ticket of one to a ticket detailed "
 "page if it writes like # bts:1."
 
-#: util.c:818
+#: util.c:819
 msgid "[ticket form syntax description3]"
 msgstr ""
 "In the content of two or more-line text item, everything from the line where "
@@ -1458,14 +1466,13 @@ msgstr ""
 "|<"
 
 #: js/attachment_file_display_setting_submit.js:11 js/new_item.js:25
-#: js/register_at_once.js:13 js/register_at_once_submit.js:11
-#: js/validate.js:43
+#: js/register_at_once.js:13 js/register_at_once_submit.js:11 js/validate.js:43
 msgid "it will required. please describe."
 msgstr "It will required. please describe."
 
 #: js/attachment_file_display_setting_submit.js:19 js/new_item.js:8
-#: js/register.js:13 js/register_at_once.js:21
-#: js/register_at_once_submit.js:19 js/reply.js:20
+#: js/register.js:13 js/register_at_once.js:21 js/register_at_once_submit.js:19
+#: js/reply.js:20
 msgid "there are some required columns or invalid columns. please check."
 msgstr "There are some required columns or invalid columns. please check."
 
