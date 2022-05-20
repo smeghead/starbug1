@@ -20,7 +20,7 @@ ENV APACHE_LOG_DIR /var/log/apache2
 ENV APACHE_LOCK_DIR /var/lock/apache2
 
 RUN apt-get update && apt-get upgrade -y && \
-  apt-get install -y locales apache2 \
+  apt-get install -y locales apache2 sqlite3 \
   gettext libjson-perl liblocale-po-perl && \
   apt-get clean && rm -rf /var/lib/apt/lists/*
 

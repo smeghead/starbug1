@@ -785,6 +785,9 @@ form#reply_form table.selection td.checkbox {
 div.proc-button {
     padding: 5px 20px;
 }
+div.proc-button .newest-link {
+    color: #FF5110;
+}
 div.remote-address {
     font-weight: bold;
 }

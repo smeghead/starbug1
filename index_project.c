@@ -1752,10 +1752,15 @@ void ticket_action()
       "\t</tr>\n"
             "</table>\n"
             "</div>"
-            "<div class=\"proc-button\"><a href=\"#reply\">%s</a></div>\n"
+            "<div class=\"proc-button\"><a href=\"#reply\">%s</a>&nbsp;<a href=\"#%d\" class=\"newest-link\">%s</a></div>\n"
             "<div id=\"ticket_history\">\n"
             "<h3>%s</h3>\n"
-            "<div class=\"description\">%s</div>\n", _("go to reply"), _("ticket history"), _("this is ticket histories."));
+            "<div class=\"description\">%s</div>\n",
+            _("go to reply"),
+            i, /* 上で、message_ids_a をforで回しているので、i がmessage_ids_aの要素数となっている。 */
+            _("go to newest reply"),
+            _("ticket history"),
+            _("this is ticket histories."));
     list_free(elements_a);
     /* 履歴の表示 */
     for (i = 0; message_ids_a[i] != 0; i++) {
