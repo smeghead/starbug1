@@ -1,27 +1,28 @@
 Event.observe(window, 'load', initPage);
 
 function setup_copy_icon(e, text) {
-    var divwin = $('divwin');
-    var divwintext = $('divwintext');
-    divwintext.innerHTML = text;
-    divwin.style.top = Event.pointerY(e) + 'px';
-    divwin.style.left = Event.pointerX(e) + 'px';
-    divwin.style.display = 'block';
-    divwintext.focus();
-    divwintext.select();
-    var board = document.createElement('div');
-    board.setAttribute('id', 'board');
-    var body = $$('body')[0];
-    body.appendChild(board);
-    window.setTimeout(function(){
-        Event.observe(board, 'click', function close_divwin(e){
-            $('divwin').style.display = 'none';
-            Element.remove(board);
-            e.preventDefault();
-        }, true);
-    }, 1000);
+    navigator.clipboard.writeText(text)
+        .then(() => {
+            var body = $$('body')[0];
+            var message = document.createElement('div');
+            message.setAttribute('class', 'copied-message');
+            message.innerHTML = 'Copied!';
+            message.style.top = (Event.pointerY(e) - 40) + 'px';
+            message.style.left = (Event.pointerX(e) - 20) + 'px';
+            body.appendChild(message);
+            setTimeout(function(){
+                Element.remove(message);
+            }, 1000);
+        })
+        .catch(err => {
+            console.log(err);
+            alert('ERROR: Something went wrong');
+        });
 }
 function initPage(e) {
+    if ( ! navigator.clipboard) {
+        return;
+    }
     // create copy icon into ticket list subjects.
     var links = $$('a.ticket-link');
     links.each(function(elm){

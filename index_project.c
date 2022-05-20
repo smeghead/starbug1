@@ -196,7 +196,6 @@ void output_footer()
             "\t</p>\n"
             "\t</div>\n"
             "</div>\n"
-            "<div id=\"divwin\"><form><textarea id=\"divwintext\"></textarea></form></div>\n"
             "</body>\n</html>\n", VERSION, COPYRIGHT, cgiScriptName);
 }
 
