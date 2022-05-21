@@ -1,5 +1,5 @@
-VERSION = 1.6.02
-COPYRIGHT = Copyright\ smeghead\ 2007\ -\ 2014
+VERSION = 1.6.03
+COPYRIGHT = Copyright\ smeghead\ 2007\ -\ 2022
 CC = gcc
 CC_VERSION = ${shell gcc --version | grep 'gcc.*[0-9]\.' | sed -e 's/gcc[^0-9]*\([0-9]\).*/\1/g'}
 
@@ -179,7 +179,7 @@ locale/zh_TW/LC_MESSAGES/starbug1.mo: locale/zh_TW.po
 compiledeps:
 	mkdir -p dist
 	cd dist && \
-		wget http://www.boutell.com/cgic/cgic205.tar.gz && \
+		wget --trust-server-names http://repository.timesys.com/buildsources/l/libcgic/libcgic-205/cgic205.tar.gz && \
 		tar zxf cgic205.tar.gz && \
 		cd cgic205 && \
 		$(MAKE) cgic.o && \

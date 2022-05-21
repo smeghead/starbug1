@@ -813,6 +813,8 @@ span.ticket-page-ticket-link-copy {
     cursor: pointer;
     background-image: url("../img/copy.gif"); 
     background-repeat: no-repeat; 
+    background-position-y: 3px;
+    display: inline-block;
     width: 20px;
 }
 div.copied-message {

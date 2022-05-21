@@ -40,7 +40,7 @@ function initPage(e) {
     if (subject) {
         var icon = document.createElement('span');
         icon.setAttribute('class', 'ticket-page-ticket-link-copy');
-        icon.innerHTML = '&nbsp;&nbsp;&nbsp;';
+        icon.innerHTML = '&nbsp;';
         Event.observe(icon, 'click', function(e){
             var title = $('ticket_title') ? $('ticket_title').innerHTML : '';
             setup_copy_icon(e, title + '\n' + document.location.href);
