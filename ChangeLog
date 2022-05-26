@@ -1,7 +1,16 @@
+2022-05-26  smeghead <smeghead7@gmail.com>
+
+	* 1.6.03 release.
+
+2022-05-26  smeghead <smeghead7@gmail.com>
+
+	* Fixed test script to work with Selenium IDE version 3.17.4.
+
 2022-05-20  smeghead <smeghead7@gmail.com>
 
 	* add link to list of last updated tickets.
 	* add link to newest reply in ticket page.
+	* Changed to use Clipboard API to implement title copy function.
 
 2012-11-28  smeghead <smeghead7@gmail.com>
 
