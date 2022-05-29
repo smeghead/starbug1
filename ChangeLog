@@ -1,3 +1,7 @@
+2022-05-26  smeghead <smeghead7@gmail.com>
+
+	* 1.6.03-win32-bin release.
+
 2022-05-29  smeghead <smeghead7@gmail.com>
 
 	* Added `# include <time.h>` to `util.h` in Windows version to avoid compilation errors.
