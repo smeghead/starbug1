@@ -1,5 +1,17 @@
 2022-05-26  smeghead <smeghead7@gmail.com>
 
+	* 1.6.03-win32-bin release.
+
+2022-05-29  smeghead <smeghead7@gmail.com>
+
+	* Added `# include <time.h>` to `util.h` in Windows version to avoid compilation errors.
+
+2022-05-27  smeghead <smeghead7@gmail.com>
+
+	* hohei0715 gave me a patch that fix hook output json invalid bug. Thanks!  `https://ja.osdn.net/projects/starbug1/ticket/33680`
+
+2022-05-26  smeghead <smeghead7@gmail.com>
+
 	* 1.6.03 release.
 
 2022-05-26  smeghead <smeghead7@gmail.com>

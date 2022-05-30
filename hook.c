@@ -62,7 +62,7 @@ static String* create_json(String* content, Project* project, Message* message, 
     Iterator* it;
     String* base_url_a = string_new();
     base_url_a = get_base_url(base_url_a);
-    string_appendf(content, "{project:{name: \"%s\"}, ticket:{id: %d, url: \"%s/%s/ticket/%d\",fields:[",
+    string_appendf(content, "{\"project\":{\"name\": \"%s\"}, \"ticket\":{\"id\": %d, \"url\": \"%s/%s/ticket/%d\",\"fields\":[",
             string_rawstr(project->name),
             message->id,
             string_rawstr(base_url_a),
@@ -78,7 +78,7 @@ static String* create_json(String* content, Project* project, Message* message, 
         escape_quot(name_a);
         string_append(value_a, get_element_value(elements, et));
         escape_quot(value_a);
-        string_appendf(field_a, "{name:\"%s\", value:\"%s\"}",
+        string_appendf(field_a, "{\"name\":\"%s\", \"value\":\"%s\"}",
                 string_rawstr(name_a),
                 string_rawstr(value_a));
         string_free(name_a);

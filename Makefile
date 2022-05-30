@@ -3,8 +3,8 @@ COPYRIGHT = Copyright\ smeghead\ 2007\ -\ 2022
 CC = gcc
 CC_VERSION = ${shell gcc --version | grep 'gcc.*[0-9]\.' | sed -e 's/gcc[^0-9]*\([0-9]\).*/\1/g'}
 
-ALT_LIB_PATH = ${HOME}/usr
-#ALT_LIB_PATH = /s/usr/MinGW
+#ALT_LIB_PATH = ${HOME}/usr
+ALT_LIB_PATH = c:/MinGW
 
 #FOR COMMENT SPAM SETTINGS
 ifndef LINK_DISABLED

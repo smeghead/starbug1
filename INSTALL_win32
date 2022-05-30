@@ -1,0 +1,39 @@
+# Windows版のコンパイル #
+
+MinGWを使用してコンパイルを行ないます。
+
+## コンパイラーのインストール ##
+
+以下のサイトから、mingw-get-setup.exe をダウンロードして実行します。
+
+MinGW - Minimalist GNU for Windows
+https://ja.osdn.net/projects/mingw/
+
+インストール中に以下のパッケージをインストールします。
+
+ * mingw-developer-toolkit-bin
+ * mingw-base-bin
+ * mingw32-gcc-g++-bin
+ * msys-base-bin
+
+## 依存するライブラリのインストール ##
+
+### cgic ###
+
+http://repository.timesys.com/buildsources/l/libcgic/libcgic-205/cgic205.tar.gz
+
+make install は、インストール先がlinuxのパスであるため失敗するので、MinGWのlib と includeに手動でコピーする。
+
+### sqlite3 ###
+
+wget http://www.sqlite.org/sqlite-amalgamation-3.6.23.tar.gz
+tar zxf sqlite-amalgamation-3.6.23.tar.gz
+cd sqlite-3.6.23
+sh configure
+make
+make install
+
+
+## Starbug1 のコンパイル ##
+
+make INITIAL_LOCALE=ja_JP webappwin32
