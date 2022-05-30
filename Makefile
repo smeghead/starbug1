@@ -134,7 +134,7 @@ webappwin32: default
 dist:
 	mkdir -p dist
 	cd dist && \
-		git clone git://github.com/smeghead/starbug1.git && \
+		git clone git@github.com:smeghead/starbug1.git && \
 		rm -rf starbug1/.git && \
 		rm -rf starbug1/deps && \
 		mv starbug1 starbug1-${VERSION} && \
