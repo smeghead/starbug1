@@ -305,11 +305,9 @@ int db_register_ticket(Database* db, Message* ticket)
             char filename[DEFAULT_LENGTH];
             char mime_type[DEFAULT_LENGTH];
             char* fname;
-            char* ctype;
             ElementFile* content_a;
             fname = get_upload_filename(e->element_type_id, filename);
             size = get_upload_size(e->element_type_id);
-            ctype = get_upload_content_type(e->element_type_id, mime_type);
             content_a = get_upload_content(e->element_type_id);
             if (exec_query(
                         db,
@@ -494,7 +492,7 @@ static void set_tickets_number_sum(Database* db, List* conditions, Condition* so
     list_alloc(element_types_a, ElementType, element_type_new, element_type_free);
     element_types_a = db_get_num_element_types(db, NULL, element_types_a);
     if (element_types_a->size) {
-        int n, r;
+        int r;
         string_append(s_a, "select ");
         /* 数値項目の合計値を取得するためのカラムリストを付加する。 */
         Iterator* it;
@@ -512,7 +510,7 @@ static void set_tickets_number_sum(Database* db, List* conditions, Condition* so
         sqlite3_finalize(stmt);
         if (sqlite3_prepare(db->handle, string_rawstr(s_a), string_len(s_a), &stmt, NULL) == SQLITE_ERROR) goto error;
         sqlite3_reset(stmt);
-        n = set_conditions(db, stmt, conditions, keywords);
+        set_conditions(db, stmt, conditions, keywords);
         if (SQLITE_ROW == (r = sqlite3_step(stmt))) {
             foreach (it, element_types_a) {
                 ElementType* et = it->element;
@@ -643,7 +641,7 @@ ERROR_LABEL(db->handle)
 
 SearchResult* db_search_tickets_4_report(Database* db, List* conditions, char* q, Condition* sorts, SearchResult* result)
 {
-    int r, n;
+    int r;
     String* sql_a = string_new();
     sqlite3_stmt *stmt = NULL;
     List* keywords_a;
@@ -654,7 +652,7 @@ SearchResult* db_search_tickets_4_report(Database* db, List* conditions, char* q
 
     if (sqlite3_prepare(db->handle, string_rawstr(sql_a), string_len(sql_a), &stmt, NULL) == SQLITE_ERROR) goto error;
     sqlite3_reset(stmt);
-    n = set_conditions(db, stmt, conditions, keywords_a);
+    set_conditions(db, stmt, conditions, keywords_a);
 
     /* ticket_idを取得する。 */
     while (SQLITE_ROW == (r = sqlite3_step(stmt))){

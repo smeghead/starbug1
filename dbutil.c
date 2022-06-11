@@ -68,8 +68,7 @@ Database* db_init(char* sub_project_name)
 
 void db_finish(Database* db)
 {
-    int ret;
-    ret = sqlite3_close(db->handle);
+    sqlite3_close(db->handle);
     xfree(db);
 }
 

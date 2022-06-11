@@ -10,7 +10,7 @@ typedef struct _iterator {
 typedef struct _list {
     int element_size;
     int size;
-    void* (*construstor)();
+    void* (*constructor)();
     void (*destructor)(void*);
     struct _iterator* head;
     struct _iterator* tail;
@@ -23,7 +23,7 @@ typedef struct _list {
 #define list_alloc(list, type, construct_func, destory_func) \
     list = xalloc(sizeof(List)); \
     list->element_size = sizeof(type); \
-    list->construstor = (void*)construct_func; \
+    list->constructor = (void*)construct_func; \
     list->destructor = (void*)destory_func;
 
 void* list_new_element(List*);
