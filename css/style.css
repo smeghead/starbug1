@@ -39,7 +39,8 @@ h1 {
     font-weight: bold;
     font-size: 150%;
 }
-h1 a {
+h1 a,
+h1 a:link {
     font-weight: bold;
     text-decoration: none;
     color: #eeeeee;
@@ -220,6 +221,16 @@ input.button {
 input:hover.button {
     cursor: pointer;
 }
+
+/* file Drug&Drop */
+div.file-upload {
+    padding: 10px;
+    border: 2px dashed #999;
+}
+div.file-upload.select {
+    background-color: lavender;
+}
+
 br.clear {
 /*     height: 10px; */
 }

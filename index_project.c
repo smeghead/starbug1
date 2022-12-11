@@ -1469,8 +1469,11 @@ void output_form_element(Database* db, List* elements, ElementType* et, Project*
 
             break;
         case ELEM_TYPE_UPLOADFILE:
-            o("<input type=\"file\" class=\"element\" id=\"field%d\" name=\"field%d\" />\n",
+            o("<div class=\"file-upload\">\n");
+            o("\t<div class=\"description\">%s</div>\n", _("drug and drop here."));
+            o("\t<input type=\"file\" class=\"element file-field\" id=\"field%d\" name=\"field%d\" />\n",
                     et->id, et->id);
+            o("</div>\n");
             o("<div class=\"description\">%s %d %s</div>\n", _("file size must below"), project->upload_max_size, _("kb(file size)"));
             break;
         case ELEM_TYPE_DATE:
@@ -1510,6 +1513,7 @@ void output_graph_js() {
 void output_field_information_js(List* element_types) {
     Iterator* it;
     o("<script type=\"text/javascript\" src=\"%s/../js/validate.js\"></script>\n", cgiScriptName); 
+    o("<script type=\"text/javascript\" src=\"%s/../js/file_upload.js\"></script>\n", cgiScriptName); 
     o("<script type=\"text/javascript\">\n"
       "\t<!--\n"
       "\tvar required_field_indexs = [\n");

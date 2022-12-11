@@ -1,5 +1,4 @@
 Event.observe(window, 'load', initPage);
-
 function initPage(e) {
     var required_fields = new Array();
     var date_fields = new Array();
@@ -34,5 +33,6 @@ function initPage(e) {
     register_required_fields(required_fields, required_field_indexs);
     register_date_fields(date_fields, date_field_indexs);
     register_number_fields(number_fields, number_field_indexs);
+    register_file_fields();
 }
 //  vim: set ts=4 sw=4 sts=4 expandtab fenc=utf-8:
