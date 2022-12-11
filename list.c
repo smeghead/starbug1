@@ -7,9 +7,9 @@
 void* list_new_element(List* list)
 {
     void* new_element; 
-    if (list->construstor) {
+    if (list->constructor) {
         /* appointed constructor, use it. */
-        new_element = list->construstor();
+        new_element = list->constructor();
     } else {
         new_element = xalloc(list->element_size);
     }
