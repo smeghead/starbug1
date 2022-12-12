@@ -1,4 +1,4 @@
-VERSION = 1.6.03
+VERSION = 1.6.04
 COPYRIGHT = Copyright\ smeghead\ 2007\ -\ 2022
 CC = gcc
 CC_VERSION = ${shell gcc --version | grep 'gcc.*[0-9]\.' | sed -e 's/gcc[^0-9]*\([0-9]\).*/\1/g'}
