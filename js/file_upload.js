@@ -19,8 +19,7 @@ function register_file_fields() {
             e.stopPropagation();
             e.preventDefault();
             this.classList.remove('select');
-            var files = e.dataTransfer.files;
-            file.files = [files[0]];
+            file.files = e.dataTransfer.files;
         }, false);
     });
 }
