@@ -1,8 +1,8 @@
-# Starbug1, Fast BTS.
+# Starbug1, Fast BugTrackingSystem.
 
 ## What is Starbug1?
 
-Starbug1 is BTS(Bug Tracking System wikipedia:Bug tracking system). Starbug1 is faster than recently BTS. You can use as ITS(Issue Tracking System). Starbug1 runs Web server on Windows, Linux OS, FreeBSD, MacOSX as CGI. If you want to use on Windows, you can download windows binary version.
+Starbug1 is Bug Tracking System. Starbug1 is faster than recently BugTrackingSystem. You can use as ITS(Issue Tracking System). Starbug1 runs Web server on Windows, Linux OS, FreeBSD, MacOSX as CGI. If you want to use on Windows, you can download windows binary version.
 
 ## Starbug1 for who?
 
@@ -12,7 +12,7 @@ I recommend adopting Starbug1 to people that like below.
 
 You can use Starbug1 as Bug Tracking and Request Management for general small development teams.
 
-### Projects do not have time to prepare for the new BTS server.
+### Projects do not have time to prepare for the new BugTrackingSystem server.
 
 If you have some old Web Server, you can run on it. needs less CPU and memory.
 
@@ -66,25 +66,22 @@ GPL
 
 https://hub.docker.com/r/smeghead7/starbug1
 
-
-
 ## Mailing List(GoogleGroup)
 
-It is a group for the user of Starbug1(BTS). I want to use it as a place of the intelligence sharing of the question on the installation method and use, the bug reports, demands, and impressions, etc.Release Note is thrown.
+It is a group for the user of Starbug1(BugTrackingSystem). I want to use it as a place of the intelligence sharing of the question on the installation method and use, the bug reports, demands, and impressions, etc.Release Note is thrown.
 
  * Starbug1-users http://groups.google.com/group/starbug1-users
 
 ## Developer
 
- * smeghead 週記くらい
+ * smeghead 週記くらい https://blog.starbug1.com/
 
 ## Link
 
-### BTS
+### BugTrackingSystem
 
  * kagemai
  * Mantis
-
 
 ### Project Management System
 
