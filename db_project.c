@@ -303,12 +303,12 @@ int db_register_ticket(Database* db, Message* ticket)
         if (e->is_file) {
             int size;
             char filename[DEFAULT_LENGTH];
-            char mime_type[DEFAULT_LENGTH];
             char* fname;
             ElementFile* content_a;
             fname = get_upload_filename(e->element_type_id, filename);
             size = get_upload_size(e->element_type_id);
             content_a = get_upload_content(e->element_type_id);
+
             if (exec_query(
                         db,
                         "insert into element_file("
@@ -318,7 +318,7 @@ int db_register_ticket(Database* db, Message* ticket)
                         COLUMN_TYPE_INT, e->element_type_id,
                         COLUMN_TYPE_TEXT, fname,
                         COLUMN_TYPE_INT, size,
-                        COLUMN_TYPE_TEXT, mime_type,
+                        COLUMN_TYPE_TEXT, string_rawstr(content_a->mime_type),
                         COLUMN_TYPE_BLOB_ELEMENT_FILE, content_a,
                         COLUMN_TYPE_END) == 0)
                 die("insert failed.");

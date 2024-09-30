@@ -1,3 +1,7 @@
+2024-09-30  smeghead <smeghead7@gmail.com>
+
+	* Fix a bug to failed to save mime_type when attachment uploaded.
+
 2022-12-11  smeghead <smeghead7@gmail.com>
 
 	* Files to be uploaded can be selected by drag & drop.
