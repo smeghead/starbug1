@@ -570,6 +570,8 @@ ElementFile* get_upload_content(const int element_id)
     char* buffer;
     char b[DEFAULT_LENGTH];
     char name[DEFAULT_LENGTH];
+    char mime_type[DEFAULT_LENGTH];
+
     cgiFilePtr file;
     ElementFile* content = element_file_new();
     content->size = get_upload_size(element_id);
@@ -578,6 +580,8 @@ ElementFile* get_upload_content(const int element_id)
     if (cgiFormFileOpen(name, &file) != cgiFormSuccess) {
         die("Could not open the file.");
     }
+    cgiFormFileContentType(name, mime_type, DEFAULT_LENGTH);
+    string_set(content->mime_type, mime_type);
 
     while (cgiFormFileRead(file, b, sizeof(b), &got_count) == cgiFormSuccess) {
         char* p = b;
